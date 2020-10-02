@@ -13,6 +13,8 @@ defmodule LiveDj.Application do
       LiveDjWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: LiveDj.PubSub},
+      # Start our Presence module.
+      LiveDjWeb.Presence,
       # Start the Endpoint (http/https)
       LiveDjWeb.Endpoint
       # Start a worker by calling: LiveDj.Worker.start_link(arg)

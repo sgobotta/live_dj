@@ -14,10 +14,15 @@ defmodule LiveDjWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", LiveDjWeb do
+  scope "/", LiveDjWeb.Room do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    # live "/", PageLive, :index
+    live "/", NewLive, :new
+    live "/room/:slug", ShowLive, :show
+  end
+
+  scope "/room" do
   end
 
   # Other scopes may use custom stacks.
