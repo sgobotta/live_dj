@@ -51,6 +51,10 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def handle_info(%Broadcast{event: "presence_diff"}, socket) do
+    # opts = [maxResults: 3]
+    # res = Tubex.Video.search_by_query("Cooking", opts)
+    # IO.inspect ":::: TUBEX QUERY ::::\n"
+    # IO.inspect res
     {:noreply,
       socket
       |> assign(:connected_users, list_present(socket))}
