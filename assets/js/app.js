@@ -19,6 +19,8 @@ import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import VideoPlayingHook from "./hooks/video-playing";
 
+const request = require('superagent');
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")
@@ -37,6 +39,43 @@ const liveSocket = new LiveSocket("/live", Socket, {
   hooks: Hooks,
   params: {_csrf_token: csrfToken}
 })
+
+
+function handleSubmit(q, hdOnly) {
+  var that = this,
+      videoDef = hdOnly ? 'high' : 'any';
+
+  request
+    .get('https://www.googleapis.com/youtube/v3/search')
+    .query({
+      key: '',
+      part: 'snippet',
+      q: q,
+      type: 'video',
+      maxResults: 20,
+      videoDefinition: videoDef
+    })
+    .end(function(err, response){
+      console.log(response)
+      response.body.items.forEach(i => {
+        const tr = document.createElement('tr')
+        const td = document.createElement('td')
+        const a = document.createElement('a')
+        const img = document.createElement('img')
+        img.src = i.snippet.thumbnails.medium.url
+        a.appendChild(img)
+        td.appendChild(a)
+        tr.appendChild(td)
+        document.body.appendChild(tr)
+      })
+    });
+}
+const query = 'Usted Señalemelo'
+const button = document.createElement('button')
+button.innerHTML = "CLICK ME";
+button.onclick = () => handleSubmit(query)
+
+document.body.appendChild(button)
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
