@@ -36,7 +36,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:ok,
           socket
           |> put_flash(:error, "That room does not exist.")
-          |> push_redirect(to: Routes.room_new_path(socket, :new))
+          |> push_redirect(to: Routes.new_path(socket, :new))
         }
       room ->
         {:ok,

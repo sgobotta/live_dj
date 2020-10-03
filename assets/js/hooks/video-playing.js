@@ -4,7 +4,7 @@ export const VideoPlayingHook = (playerContainer) => ({
   mounted() {
     // const { videoId, videoTime } = this.el.dataset
     Video.init(playerContainer, '1FMSAeNG9us', (player) => {
-      player.target.playVideo()
+      // player.target.playVideo()
       // player.target.seekTo(videoTime)
 
       // setInterval(() => {

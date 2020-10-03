@@ -5,8 +5,18 @@ defmodule LiveDj.Organizer do
 
   import Ecto.Query, warn: false
   alias LiveDj.Repo
-
   alias LiveDj.Organizer.Room
+  alias LiveDjWeb.Presence
+
+  def list_present(slug) do
+    Presence.list("room:" <> slug)
+    # Check extra metadata needed from Presence
+    |> Enum.map(fn {k, _} -> k end)
+  end
+
+  def subscribe() do
+    Phoenix.PubSub.subscribe(LiveDj.PubSub, "rooms")
+  end
 
   @doc """
   Returns the list of rooms.
@@ -105,5 +115,9 @@ defmodule LiveDj.Organizer do
   """
   def change_room(%Room{} = room, attrs \\ %{}) do
     Room.changeset(room, attrs)
+  end
+
+  def viewers_quantity(room) do
+    list_present(room.slug) |> length()
   end
 end
