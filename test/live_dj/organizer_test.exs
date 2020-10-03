@@ -31,7 +31,7 @@ defmodule LiveDj.OrganizerTest do
 
     test "create_room/1 with valid data creates a room" do
       assert {:ok, %Room{} = room} = Organizer.create_room(@valid_attrs)
-      assert room.slug == "some slug"
+      assert room.slug == "some-slug"
       assert room.title == "some title"
     end
 
@@ -42,7 +42,7 @@ defmodule LiveDj.OrganizerTest do
     test "update_room/2 with valid data updates the room" do
       room = room_fixture()
       assert {:ok, %Room{} = room} = Organizer.update_room(room, @update_attrs)
-      assert room.slug == "some updated slug"
+      assert room.slug == "some-updated-slug"
       assert room.title == "some updated title"
     end
 
