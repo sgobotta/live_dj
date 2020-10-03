@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :live_dj, LiveDj.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "live_dj_dev",
-  hostname: "localhost",
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  database: System.get_env("DB_DATABASE"),
+  hostname: System.get_env("DB_HOSTNAME"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
