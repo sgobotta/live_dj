@@ -1,6 +1,7 @@
 // We need to import the CSS so that webpack will load it.
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
+import "regenerator-runtime/runtime"
 import "../css/app.scss"
 
 // webpack automatically bundles all modules in your
@@ -16,13 +17,26 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
+import VideoPlayingHook from "./hooks/video-playing";
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let csrfToken = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content")
 
 // Show progress bar on live navigation and form submits
-window.addEventListener("phx:page-loading-start", info => NProgress.start())
-window.addEventListener("phx:page-loading-stop", info => NProgress.done())
+// window.addEventListener("phx:page-loading-start", info => NProgress.start())
+// window.addEventListener("phx:page-loading-stop", info => NProgress.done())
+
+const playerContainer = document.getElementById("video-player");
+
+const Hooks = {
+  VideoPlaying: VideoPlayingHook(playerContainer),
+}
+
+const liveSocket = new LiveSocket("/live", Socket, {
+  hooks: Hooks,
+  params: {_csrf_token: csrfToken}
+})
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

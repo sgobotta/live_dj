@@ -13,15 +13,15 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def render(assigns) do
     ~L"""
-    <h1><%= @room.title %></h1>
-    +   <h3>Connected Users:</h3>
-    <ul>
-    <%= for uuid <- @connected_users do %>
-      <li><%= uuid %></li>
-    <% end %>
-    </ul>
-    <%= content_tag :div, id: 'video-player', 'phx-hook': "VideoPlaying", data: [] do %>
-    <% end %>
+      <h1><%= @room.title %></h1>
+        <h3>Connected Users:</h3>
+      <ul>
+      <%= for uuid <- @connected_users do %>
+        <li><%= uuid %></li>
+      <% end %>
+      </ul>
+      <%= content_tag :div, id: 'video-player-data', 'phx-hook': "VideoPlaying", data: [video_id: "test"] do %>
+      <% end %>
     """
   end
 
