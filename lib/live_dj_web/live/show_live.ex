@@ -20,6 +20,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       <li><%= uuid %></li>
     <% end %>
     </ul>
+    <%= content_tag :div, id: 'video-player', 'phx-hook': "VideoPlaying", data: [] do %>
+    <% end %>
     """
   end
 
