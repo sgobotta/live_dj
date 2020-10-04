@@ -58,6 +58,7 @@ reset: ecto.reset
 
 #server: @ Starts an interactive elixir shell
 server: SHELL:=/bin/bash
+server: docker.services
 server:
 	source .env && iex --name $(APP_NAME)@127.0.0.1 -S mix phx.server
 
