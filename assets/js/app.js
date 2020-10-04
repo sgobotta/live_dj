@@ -29,10 +29,8 @@ let csrfToken = document
 // window.addEventListener("phx:page-loading-start", info => NProgress.start())
 // window.addEventListener("phx:page-loading-stop", info => NProgress.done())
 
-const playerContainer = document.getElementById("video-player");
-
 const Hooks = {
-  VideoPlaying: VideoPlayingHook(playerContainer),
+  VideoPlaying: VideoPlayingHook(),
 }
 
 const liveSocket = new LiveSocket("/live", Socket, {
