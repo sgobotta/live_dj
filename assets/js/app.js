@@ -19,6 +19,8 @@ import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import VideoPlayingHook from "./hooks/video-playing";
 
+const request = require('superagent');
+
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")

@@ -20,7 +20,7 @@ defmodule LiveDj.MixProject do
   def application do
     [
       mod: {LiveDj.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:tubex, :logger, :runtime_tools]
     ]
   end
 
@@ -47,7 +47,8 @@ defmodule LiveDj.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:tubex, "~> 0.0.8", github: "sgobotta/tubex"}
     ]
   end
 

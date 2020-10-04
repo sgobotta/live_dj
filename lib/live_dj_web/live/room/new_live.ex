@@ -2,30 +2,38 @@ defmodule LiveDjWeb.Room.NewLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Repo
+  alias LiveDj.Organizer
   alias LiveDj.Organizer.Room
 
   @impl true
-  def render(assigns) do
-    ~L"""
-    <h1>Create a New Room</h1>
-    <div>
-      <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save"], fn f -> %>
-        <%= text_input f, :title, placeholder: "Title" %>
-        <%= error_tag f, :title %>
-        <%= text_input f, :slug, placeholder: "room-slug" %>
-        <%= error_tag f, :slug %>
-        <%= submit "Save" %>
-      <% end %>
-    </div>
-    """
+  def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Organizer.subscribe()
+      :timer.send_interval(1000, self(), :reload_room_list)
+    end
+
+    public_rooms = Organizer.list_rooms()
+    viewers_quantity = for room <- public_rooms, do: {String.to_atom(room.title), Organizer.viewers_quantity(room)}
+
+    socket =
+      socket
+      |> assign(:public_rooms, public_rooms)
+      |> assign(:viewers_quantity, viewers_quantity)
+      |> put_changeset()
+
+
+    {:ok, socket}
   end
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok,
-      socket
-      |> put_changeset()
-    }
+  def handle_info(:reload_room_list, socket) do
+    socket =
+      update(
+        socket,
+        :viewers_quantity,
+        fn _viewers_quantity -> for room <- socket.assigns.public_rooms, do: {String.to_atom(room.title), Organizer.viewers_quantity(room)} end
+      )
+    {:noreply, socket}
   end
 
   @impl true
