@@ -31,6 +31,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
           |> assign(:search_result, fake_search_data())
+          |> assign(:video_queue, fake_video_queue())
         }
     end
   end
@@ -42,11 +43,26 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> assign(:connected_users, list_present(socket))}
   end
 
+  def handle_info({:queue, params}, socket) do
+    {:noreply,
+     socket
+     |> push_event("queue", %{params: params})}
+  end
+
   @impl true
   def handle_event("search", %{"search_field" => %{"query" => query}}, socket) do
     opts = [maxResults: 3]
     {:ok, videos, _pagination_options} = Tubex.Video.search_by_query(query, opts)
     {:noreply, assign(socket, :search_result, videos)}
+  end
+
+  @impl true
+  def handle_event("queue", params, socket) do
+    IO.inspect(params)
+
+    Phoenix.PubSub.broadcast(LiveDj.PubSub, "room:" <> socket.assigns.slug, { :queue, params })
+
+    {:noreply, socket}
   end
 
   defp list_present(socket) do
@@ -56,6 +72,27 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   defp create_connected_user do
     %ConnectedUser{uuid: UUID.uuid4()}
+  end
+
+  defp fake_video_queue do
+    [
+      %{
+        "img-height" => "90",
+        "img-url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
+        "img-width" => "120",
+        "title" => "VULFPECK /// Wait for the Moment",
+        "value" => "queue",
+        "video-id" => "r4G0nbpLySI"
+      },
+      %{
+        "img-height" => "90",
+        "img-url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
+        "img-width" => "120",
+        "title" => "VULFPECK /// Wait for the Moment",
+        "value" => "queue",
+        "video-id" => "r4G0nbpLySI"
+      }
+    ]
   end
 
   defp fake_search_data do
