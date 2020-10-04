@@ -1,17 +1,40 @@
 <div id="show-live">
 
   <div class="section-container col">
+
     <div class="col-container">
       <h1><%= @room.title %></h1>
     </div>
+
     <div class="col-container">
       <h3>Connected Users:</h3>
       <ul>
         <%= for uuid <- @connected_users do %>
-          <li><%= uuid %></li>
+          <li style="list-style: none;">
+            <p>
+              <%= uuid %>
+            </p>
+          </li>
         <% end %>
       </ul>
     </div>
+
+    <div class="col-container" id="video-queuing-data" phx-hook="VideoQueuing">
+      <h3>Queue</h3>
+      <ul>
+        <%= for video <- @video_queue do %>
+          <li>
+            <div class="container">
+              <div class="row">
+                <%= img_tag(video["img-url"], class: "queue-thumb") %>
+                <p><%= video["title"] %></p>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
   </div>
 
   <div class="section-container col">
@@ -29,13 +52,13 @@
         <table>
           <thead>
             <tr>
-              <th colspan="3"><%= video.title %></th>
+              <th colspan="3"><p><%= video.title %></p></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <%= img_tag(video.thumbnails["medium"]["url"]) %>
+                <%= img_tag(video.thumbnails["medium"]["url"], width: video.thumbnails["medium"]["width"]) %>
               </td>
               <td>
                 <p>
@@ -48,7 +71,16 @@
                 </p>
               </td>
               <td>
-                <input type="button" value="queue" />
+                <input
+                  type="button"
+                  value="queue"
+                  phx-click="queue"
+                  phx-value-video-id="<%= video.video_id %>"
+                  phx-value-title="<%= video.title %>"
+                  phx-value-img-url="<%= video.thumbnails["default"]["url"] %>"
+                  phx-value-img-height="<%= video.thumbnails["default"]["height"] %>"
+                  phx-value-img-width="<%= video.thumbnails["default"]["width"] %>"
+                />
               </td>
             </tr>
           </tbody>
