@@ -1,6 +1,6 @@
 import Video from "../lib/video";
 
-export const VideoPlayingHook = () => ({
+const VideoPlayingHook = () => ({
   mounted() {
     const playerContainer = document.getElementById("video-player");
     // const { videoId, videoTime } = this.el.dataset

@@ -18,6 +18,7 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import VideoPlayingHook from "./hooks/video-playing";
+import VideoQueuingHook from "./hooks/video-queuing";
 
 const request = require('superagent');
 
@@ -31,6 +32,7 @@ let csrfToken = document
 
 const Hooks = {
   VideoPlaying: VideoPlayingHook(),
+  VideoQueuing: VideoQueuingHook()
 }
 
 const liveSocket = new LiveSocket("/live", Socket, {
