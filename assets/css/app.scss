@@ -89,3 +89,20 @@
   display: block;
   margin: -1rem 0 2rem;
 }
+
+.section-container {
+  padding: 25px;
+  margin: 12px auto;
+  clear:left;
+  border: dotted rgba(0, 255, 0, 0.1) 1px;
+}
+
+.col {
+  width: 50%;
+  display: table-cell; /* Make elements inside the container behave like table cells */
+}
+
+.col-container {
+  display: table; /* Make the container element behave like a table */
+  width: 100%; /* Set full-width to expand the whole page */
+}

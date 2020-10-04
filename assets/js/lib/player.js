@@ -10,7 +10,8 @@ export default {
   },
   onIframeReady(videoContainer, videoId, onReady) {
     this.player = new YT.Player(videoContainer, {
-      height: "360",
+      height: "420",
+      width: "100%",
       videoId: videoId,
       events: {
         onReady: (event) => onReady(event),
