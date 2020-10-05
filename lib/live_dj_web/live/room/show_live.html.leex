@@ -1,14 +1,19 @@
-<div id="show-live">
+<div id="show-live" class="row">
 
-  <div class="section-container col">
+  <div class="column">
 
-    <div class="col-container">
+    <div class="section-container">
       <h1><%= @room.title %></h1>
     </div>
 
-    <div class="col-container">
-      <h3>Connected Users:</h3>
+    <div class="section-container">
+      <h3>Peers:</h3>
       <ul>
+        <li style="list-style: none;">
+          <p class="highlight">
+            <%= @user.uuid %>
+          </p>
+        </li>
         <%= for uuid <- @connected_users do %>
           <li style="list-style: none;">
             <p>
@@ -19,15 +24,15 @@
       </ul>
     </div>
 
-    <div class="col-container" id="video-queuing-data" phx-hook="VideoQueuing">
+    <div class="section-container" id="video-queuing-data" phx-hook="VideoQueuing">
       <h3>Queue</h3>
       <ul>
         <%= for video <- @video_queue do %>
           <li>
             <div class="container">
-              <div class="row">
-                <%= img_tag(video["img-url"], class: "queue-thumb") %>
-                <p><%= video["title"] %></p>
+              <div class="row pill">
+                <%= img_tag(video["img_url"], class: "queue-thumb") %>
+                <p class="pill-text"><%= video["title"] %></p>
               </div>
             </div>
           </li>
@@ -37,17 +42,15 @@
 
   </div>
 
-  <div class="section-container col">
+  <div class="column section-container">
 
-    <div class="col-container">
-      <h3>Search video:</h3>
-  
+    <div class="container">
       <form phx-submit="search" class="search-form">
-        <%= text_input :search_field, :query, placeholder: "Search for application name, web url or custom domain", autofocus: true, "phx-debounce": "300" %>
+        <%= text_input :search_field, :query, placeholder: "Search videos", autofocus: true, "phx-debounce": "300" %>
       </form>
     </div>
 
-    <div class="col-container">
+    <div class="">
       <%= for video <- @search_result do %>
         <table>
           <thead>
@@ -72,14 +75,16 @@
               </td>
               <td>
                 <input
+                  <%= video.is_queued %>
                   type="button"
                   value="queue"
                   phx-click="queue"
-                  phx-value-video-id="<%= video.video_id %>"
+                  phx-value-video_id="<%= video.video_id %>"
                   phx-value-title="<%= video.title %>"
-                  phx-value-img-url="<%= video.thumbnails["default"]["url"] %>"
-                  phx-value-img-height="<%= video.thumbnails["default"]["height"] %>"
-                  phx-value-img-width="<%= video.thumbnails["default"]["width"] %>"
+                  phx-value-img_url="<%= video.thumbnails["default"]["url"] %>"
+                  phx-value-img_height="<%= video.thumbnails["default"]["height"] %>"
+                  phx-value-img_width="<%= video.thumbnails["default"]["width"] %>"
+                  phx-value-is_queued="false"
                 />
               </td>
             </tr>

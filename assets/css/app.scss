@@ -97,19 +97,15 @@
   border: dotted rgba(0, 255, 0, 0.1) 1px;
 }
 
-// borrar
-
-.col {
-  width: 50%;
-  display: table-cell; /* Make elements inside the container behave like table cells */
+.search-form {
+  margin: 2rem;
 }
 
-.col-container {
-  display: table; /* Make the container element behave like a table */
-  width: 100%; /* Set full-width to expand the whole page */
+.highlight {
+  color: #31708f;
 }
 
-.row {
+.pill {
   background-color: #31708f;
   border: 10px black;
   border-top-left-radius: 25px;
@@ -123,4 +119,11 @@
   border-radius: 50px;
   width: 50px;
   height: 50px;
+}
+
+.pill-text {
+  max-width: 250px; /* or some value */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

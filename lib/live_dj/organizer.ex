@@ -18,6 +18,24 @@ defmodule LiveDj.Organizer do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "rooms")
   end
 
+  def subscribe(:request_queue, slug) do
+    empty_map = %{}
+    Presence.list("room:" <> slug)
+    |> case do
+      ^empty_map -> nil
+      _   ->
+        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request-queue")
+    end
+  end
+
+  def unsubscribe(:request_queue, slug) do
+    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request-queue")
+  end
+
+  def is_connected(user, presence_payload) do
+    Enum.any?(Map.to_list(presence_payload.joins), fn {x,_} -> x == user.uuid end)
+  end
+
   @doc """
   Returns the list of rooms.
 

@@ -14,6 +14,8 @@ defmodule LiveDjWeb.Room.ShowLive do
   def mount(%{"slug" => slug}, _session, socket) do
     user = create_connected_user()
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
+    Organizer.subscribe(:request_queue, slug)
+
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, %{})
 
     case Organizer.get_room(slug) do
@@ -30,22 +32,45 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:search_result, fake_search_data())
           |> assign(:video_queue, fake_video_queue())
+          |> assign(:search_result, [])
         }
     end
   end
 
   @impl true
-  def handle_info(%Broadcast{event: "presence_diff"}, socket) do
-    {:noreply,
-      socket
-      |> assign(:connected_users, list_present(socket))}
+  def handle_info(
+    %Broadcast{event: "presence_diff", payload: payload},
+    %{assigns: %{user: user}} = socket
+  ) do
+
+    case Organizer.is_connected(user, payload) do
+      false ->
+        {:noreply,
+          socket
+          |> assign(:connected_users, list_present(socket))
+          |> push_event("presence-changed", %{ presence: list_present(socket) })
+        }
+      true ->
+        {:noreply,
+          socket
+          |> assign(:connected_users, list_present(socket))
+        }
+    end
   end
 
   def handle_info({:queue, params}, socket) do
     {:noreply,
      socket
+     |> assign(:video_queue, params)
+     |> push_event("queue", %{params: params})}
+  end
+
+  def handle_info({:sync_queue, params}, socket) do
+    Organizer.unsubscribe(:request_queue, socket.assigns.slug)
+    {:noreply,
+     socket
+     |> assign(:video_queue, params)
      |> push_event("queue", %{params: params})}
   end
 
@@ -53,44 +78,88 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("search", %{"search_field" => %{"query" => query}}, socket) do
     opts = [maxResults: 3]
     {:ok, videos, _pagination_options} = Tubex.Video.search_by_query(query, opts)
-    {:noreply, assign(socket, :search_result, videos)}
+
+    search_result = Enum.map(videos, fn video ->
+      mark_as_queued(video, socket.assigns.video_queue)
+    end)
+    {:noreply, assign(socket, :search_result, search_result)}
   end
 
   @impl true
   def handle_event("queue", params, socket) do
-    IO.inspect(params)
+    video_queue = socket.assigns.video_queue ++ [params]
+    search_result = Enum.map(socket.assigns.search_result, fn search ->
+      mark_as_queued(search, video_queue)
+    end)
+    Phoenix.PubSub.broadcast(LiveDj.PubSub, "room:" <> socket.assigns.slug, {:queue, video_queue })
+    {:noreply,
+      socket
+      |> assign(:search_result, search_result)
+    }
+  end
 
-    Phoenix.PubSub.broadcast(LiveDj.PubSub, "room:" <> socket.assigns.slug, { :queue, params })
-
+  @impl true
+  def handle_event("sync_queue", _params, socket) do
+    Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug <> ":request-queue",
+      {:sync_queue, socket.assigns.video_queue
+    })
     {:noreply, socket}
   end
 
   defp list_present(socket) do
     Presence.list("room:" <> socket.assigns.slug)
-    |> Enum.map(fn {k, _} -> k end) # Phoenix Presence provides nice metadata, but we don't need it.
+    |> Enum.filter(fn {k, _} -> k !== socket.assigns.user.uuid end)
+    |> Enum.map(fn {k, _} -> k end)
   end
 
   defp create_connected_user do
     %ConnectedUser{uuid: UUID.uuid4()}
   end
 
+  defp is_queued(video, video_queue) do
+    Enum.any?(video_queue, fn qv -> qv["video_id"] == video.video_id end)
+  end
+
+  defp mark_as_queued(video, video_queue) do
+    case is_queued(video, video_queue) do
+      true -> %{
+        title: video.title,
+        thumbnails: video.thumbnails,
+        channel_title: video.channel_title,
+        description: video.description,
+        video_id: video.video_id,
+        is_queued: "disabled"
+      }
+      false -> %{
+        title: video.title,
+        thumbnails: video.thumbnails,
+        channel_title: video.channel_title,
+        description: video.description,
+        video_id: video.video_id,
+        is_queued: ""
+      }
+    end
+  end
+
   defp fake_video_queue do
     [
       %{
-        "img-height" => "90",
-        "img-url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
-        "img-width" => "120",
+        "img_height" => "90",
+        "img_url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
+        "img_width" => "120",
         "title" => "VULFPECK /// Wait for the Moment",
         "value" => "queue",
-        "video-id" => "r4G0nbpLySI"
+        "video_id" => "r4G0nbpLySI"
       },
       %{
-        "img-height" => "90",
-        "img-url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
-        "img-width" => "120",
-        "title" => "VULFPECK /// Wait for the Moment",
+        "img_height" => "90",
+        "img_url" => "https://i.ytimg.com/vi/myzNf5kW1kQ/default.jpg",
+        "img_width" => "120",
+        "title" => "wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth",
         "value" => "queue",
-        "video-id" => "r4G0nbpLySI"
+        "video_id" => "myzNf5kW1kQ"
       }
     ]
   end
