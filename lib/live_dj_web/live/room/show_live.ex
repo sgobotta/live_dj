@@ -66,6 +66,13 @@ defmodule LiveDjWeb.Room.ShowLive do
      |> push_event("queue", %{params: params})}
   end
 
+  def handle_info({:cue, params}, socket) do
+    IO.inspect("called cue")
+    {:noreply,
+     socket
+     |> push_event("cue", %{params: params})}
+  end
+
   def handle_info({:sync_queue, params}, socket) do
     Organizer.unsubscribe(:request_queue, socket.assigns.slug)
     {:noreply,
@@ -96,6 +103,12 @@ defmodule LiveDjWeb.Room.ShowLive do
       socket
       |> assign(:search_result, search_result)
     }
+  end
+
+  @impl true
+  def handle_event("cue", params, socket) do
+    Phoenix.PubSub.broadcast(LiveDj.PubSub, "room:" <> socket.assigns.slug, {:cue, params })
+    {:noreply, socket}
   end
 
   @impl true
@@ -152,6 +165,14 @@ defmodule LiveDjWeb.Room.ShowLive do
         "title" => "VULFPECK /// Wait for the Moment",
         "value" => "queue",
         "video_id" => "r4G0nbpLySI"
+      },
+      %{
+        "img_height" => "90",
+        "img_url" => "https://i.ytimg.com/vi/Qh3tnj13BiI/default.jpg",
+        "img_width" => "120",
+        "title" => "Charly García 25 Grandes Exitos Sus Mejores Canciones",
+        "value" => "queue",
+        "video_id" => "Qh3tnj13BiI"
       },
       %{
         "img_height" => "90",

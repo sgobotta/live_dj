@@ -19,13 +19,8 @@ defmodule LiveDj.Organizer do
   end
 
   def subscribe(:request_queue, slug) do
-    empty_map = %{}
     Presence.list("room:" <> slug)
-    |> case do
-      ^empty_map -> nil
-      _   ->
-        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request-queue")
-    end
+    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request-queue")
   end
 
   def unsubscribe(:request_queue, slug) do

@@ -1,8 +1,7 @@
-const QueueSyncing = () => ({
+const QueueSyncing = (player) => ({
   mounted() {
-    this.handleEvent("presence-changed", ({ presence }) => {
-      console.log("Presence changed ::: ", presence)
-      this.pushEvent("sync_queue");
+    this.handleEvent("queue", ({params: videos}) => {
+      console.log('Event [queue] ::: Videos: ', videos)
     })
   }
 })

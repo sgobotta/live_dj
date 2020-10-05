@@ -1,29 +1,40 @@
-export default {
-  player: null,
-  init(videoContainer, videoId, onReady) {
-    window.onYouTubeIframeAPIReady = () => {
-      this.onIframeReady(videoContainer, videoId, onReady)
+export default (videoContainer, callbacks = []) => {
+
+  return new Promise((resolve, reject) => {
+    function init() {
+      window.onYouTubeIframeAPIReady = () => {
+        onIframeReady(videoContainer, '')
+      }
+      const youtubeScriptTag = document.createElement("script")
+      youtubeScriptTag.src = "//www.youtube.com/iframe_api"
+      document.head.appendChild(youtubeScriptTag)
     }
-    const youtubeScriptTag = document.createElement("script")
-    youtubeScriptTag.src = "//www.youtube.com/iframe_api"
-    document.head.appendChild(youtubeScriptTag)
-  },
-  onIframeReady(videoContainer, videoId, onReady) {
-    this.player = new YT.Player(videoContainer, {
-      height: "210",
-      width: "100%",
-      videoId: videoId,
-      events: {
-        onReady: (event) => onReady(event),
-        onStateChange: (event) => this.onPlayerStateChange(event),
-      },
-    })
-  },
-  onPlayerStateChange(event) {},
-  getCurrentTime() {
-    return Math.floor(this.player.getCurrentTime() * 1000)
-  },
-  seekTo(millsec) {
-    return this.player.seekTo(millsec / 1000)
-  },
+  
+    function onIframeReady(videoContainer, videoId) {
+      return new YT.Player(videoContainer, {
+        height: "210",
+        width: "100%",
+        videoId,
+        events: {
+          onReady: (event) => {
+            resolve(event.target)
+          },
+          onStateChange: (event) => {
+            event.target.playVideo()
+            callbacks.forEach(c => c(event))
+          },
+        },
+      })
+    }
+  
+    function getCurrentTime() {
+      return Math.floor(this.player.getCurrentTime() * 1000)
+    }
+  
+    function seekTo(millsec) {
+      return this.player.seekTo(millsec / 1000)
+    }
+
+    init()
+  })
 }

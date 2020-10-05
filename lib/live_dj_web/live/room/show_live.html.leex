@@ -6,7 +6,7 @@
       <h1><%= @room.title %></h1>
     </div>
 
-    <div class="section-container">
+    <div class="section-container" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
       <ul>
         <li style="list-style: none;">
@@ -49,6 +49,13 @@
         <%= text_input :search_field, :query, placeholder: "Search videos", autofocus: true, "phx-debounce": "300" %>
       </form>
     </div>
+
+    <input
+      type="button"
+      value="cue video"
+      phx-click="cue"
+      phx-value-video_id="Qh3tnj13BiI"
+    />
 
     <div class="">
       <%= for video <- @search_result do %>
