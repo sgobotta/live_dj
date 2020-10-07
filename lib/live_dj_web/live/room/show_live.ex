@@ -106,8 +106,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug <> ":request_player_sync",
-      {:request_player_sync, socket.assigns.video_queue
-    })
+      {:request_player_sync, socket.assigns.video_queue})
     {:noreply, socket}
   end
 
