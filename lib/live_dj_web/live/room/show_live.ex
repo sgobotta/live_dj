@@ -44,18 +44,21 @@ defmodule LiveDjWeb.Room.ShowLive do
     %Broadcast{event: "presence_diff", payload: payload},
     %{assigns: %{user: user}} = socket
   ) do
-
-    case Organizer.is_connected(user, payload) do
+    slug = socket.assigns.slug
+    IO.inspect("presence_diff")
+    IO.inspect(Organizer.list_filtered_present(slug, user.uuid))
+    connected_users = Organizer.list_present(slug)
+    case Organizer.is_my_presence(user, payload) do
       false ->
         {:noreply,
           socket
-          |> assign(:connected_users, list_present(socket))
-          |> push_event("presence-changed", %{ presence: list_present(socket) })
+          |> assign(:connected_users, connected_users)
+          |> push_event("presence-changed", %{})
         }
       true ->
         {:noreply,
           socket
-          |> assign(:connected_users, list_present(socket))
+          |> assign(:connected_users, connected_users)
         }
     end
   end
@@ -108,12 +111,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       "room:" <> socket.assigns.slug <> ":request_player_sync",
       {:request_player_sync, socket.assigns.video_queue})
     {:noreply, socket}
-  end
-
-  defp list_present(socket) do
-    Presence.list("room:" <> socket.assigns.slug)
-    |> Enum.filter(fn {k, _} -> k !== socket.assigns.user.uuid end)
-    |> Enum.map(fn {k, _} -> k end)
   end
 
   defp create_connected_user do

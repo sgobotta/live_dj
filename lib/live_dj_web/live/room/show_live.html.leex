@@ -9,16 +9,17 @@
     <div class="section-container" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
       <ul>
-        <li style="list-style: none;">
-          <p class="highlight">
-            <%= @user.uuid %>
-          </p>
-        </li>
         <%= for uuid <- @connected_users do %>
           <li style="list-style: none;">
-            <p>
-              <%= uuid %>
-            </p>
+            <%= if uuid == @user.uuid do %>
+              <p class="highlight">
+                <%= uuid %>
+              </p>
+            <% else %>
+              <p>
+                <%= uuid %>
+              </p>
+            <% end %>
           </li>
         <% end %>
       </ul>
