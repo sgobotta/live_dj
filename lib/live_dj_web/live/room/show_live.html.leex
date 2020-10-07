@@ -24,7 +24,7 @@
       </ul>
     </div>
 
-    <div class="section-container" id="video-queuing-data" phx-hook="VideoQueuing">
+    <div class="section-container" id="player-syncing-data" phx-hook="PlayerSyncing">
       <h3>Queue</h3>
       <ul>
         <%= for video <- @video_queue do %>
@@ -85,7 +85,7 @@
                   <%= video.is_queued %>
                   type="button"
                   value="queue"
-                  phx-click="queue"
+                  phx-click="add_to_queue"
                   phx-value-video_id="<%= video.video_id %>"
                   phx-value-title="<%= video.title %>"
                   phx-value-img_url="<%= video.thumbnails["default"]["url"] %>"

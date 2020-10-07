@@ -14,7 +14,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def mount(%{"slug" => slug}, _session, socket) do
     user = create_connected_user()
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
-    Organizer.subscribe(:request_queue, slug)
+    Organizer.subscribe(:request_player_sync, slug)
 
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, %{})
 
@@ -34,6 +34,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:connected_users, [])
           |> assign(:video_queue, fake_video_queue())
           |> assign(:search_result, [])
+          |> assign(:current_video, %{video_id: "", time: 0 })
         }
     end
   end
@@ -59,26 +60,24 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_info({:queue, params}, socket) do
+  def handle_info({:refresh_queue, %{queued_video: queued_video}}, socket) do
+    video_queue = socket.assigns.video_queue ++ [queued_video]
+    search_result = Enum.map(socket.assigns.search_result, fn search ->
+      mark_as_queued(search, video_queue)
+    end)
+
+    {:noreply,
+     socket
+     |> assign(:search_result, search_result)
+     |> assign(:video_queue, video_queue)}
+  end
+
+  def handle_info({:request_player_sync, params}, socket) do
+    Organizer.unsubscribe(:request_player_sync, socket.assigns.slug)
     {:noreply,
      socket
      |> assign(:video_queue, params)
-     |> push_event("queue", %{params: params})}
-  end
-
-  def handle_info({:cue, params}, socket) do
-    IO.inspect("called cue")
-    {:noreply,
-     socket
-     |> push_event("cue", %{params: params})}
-  end
-
-  def handle_info({:sync_queue, params}, socket) do
-    Organizer.unsubscribe(:request_queue, socket.assigns.slug)
-    {:noreply,
-     socket
-     |> assign(:video_queue, params)
-     |> push_event("queue", %{params: params})}
+     |> push_event("receive_current_video", %{params: hd params})}
   end
 
   @impl true
@@ -93,30 +92,21 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("queue", params, socket) do
-    video_queue = socket.assigns.video_queue ++ [params]
-    search_result = Enum.map(socket.assigns.search_result, fn search ->
-      mark_as_queued(search, video_queue)
-    end)
-    Phoenix.PubSub.broadcast(LiveDj.PubSub, "room:" <> socket.assigns.slug, {:queue, video_queue })
-    {:noreply,
-      socket
-      |> assign(:search_result, search_result)
-    }
-  end
-
-  @impl true
-  def handle_event("cue", params, socket) do
-    Phoenix.PubSub.broadcast(LiveDj.PubSub, "room:" <> socket.assigns.slug, {:cue, params })
+  def handle_event("add_to_queue", params, socket) do
+    Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:refresh_queue, %{queued_video: params}}
+    )
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event("sync_queue", _params, socket) do
+  def handle_event("request_player_sync", _params, socket) do
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
-      "room:" <> socket.assigns.slug <> ":request-queue",
-      {:sync_queue, socket.assigns.video_queue
+      "room:" <> socket.assigns.slug <> ":request_player_sync",
+      {:request_player_sync, socket.assigns.video_queue
     })
     {:noreply, socket}
   end
