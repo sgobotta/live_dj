@@ -118,6 +118,16 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:reply, message, socket}
   end
 
+  def handle_event("player-signal-playing", _, socket) do
+    IO.inspect("RECEIVES A 'PLAYING' SIGNAL FROM CLIENT")
+    {:noreply, socket}
+  end
+
+  def handle_event("player-signal-paused", _, socket) do
+    IO.inspect("RECEIVES A 'PAUSED' SIGNAL FROM CLIENT")
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event("search", %{"search_field" => %{"query" => query}}, socket) do
     opts = [maxResults: 3]

@@ -1,4 +1,4 @@
-const onStateChange = pushEvent => event => {
+const onStateChange = hookContext => event => {
   switch (event.data) {
     case -1: {
       console.log('unstarted')
@@ -10,10 +10,12 @@ const onStateChange = pushEvent => event => {
     }
     case 1: {
       console.log('playing')
+      hookContext.pushEvent('player-signal-playing', {})
       break
     }
     case 2: {
       console.log('paused')
+      hookContext.pushEvent('player-signal-paused', {})
       break
     }
     case 3: {
@@ -29,7 +31,7 @@ const onStateChange = pushEvent => event => {
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const player = await initPlayer(onStateChange(this.pushEvent))
+    const player = await initPlayer(onStateChange(this))
     this.pushEvent('player-signal-ready', null, reply => {
       const {shouldPlay, videoId, startSeconds} = reply
       shouldPlay && player.loadVideoById({
