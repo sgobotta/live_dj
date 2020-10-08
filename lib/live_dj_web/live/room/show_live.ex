@@ -98,7 +98,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("player-is-ready", _, socket) do
+  def handle_event("player-signal-ready", _, socket) do
     current_video = socket.assigns.current_video
     message = %{
       shouldPlay: current_video.video_id != "",

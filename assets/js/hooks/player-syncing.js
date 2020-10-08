@@ -1,7 +1,37 @@
-const PlayerSyncing = player => ({
-  mounted() {
-    this.pushEvent('player-is-ready', null, reply => {
-      console.log('Reply: ', reply)
+const onStateChange = pushEvent => event => {
+  switch (event.data) {
+    case -1: {
+      console.log('unstarted')
+      break
+    }
+    case 0: {
+      console.log('ended')
+      break
+    }
+    case 1: {
+      console.log('playing')
+      pushEvent('')
+      break
+    }
+    case 2: {
+      console.log('paused')
+      break
+    }
+    case 3: {
+      console.log('buffering')
+      break
+    }
+    case 5: {
+      console.log('video cued')
+      break
+    }
+  }
+}
+
+const PlayerSyncing = initPlayer => ({
+  async mounted() {
+    const player = await initPlayer(onStateChange(this.pushEvent))
+    this.pushEvent('player-signal-ready', null, reply => {
       const {shouldPlay, videoId, startSeconds} = reply
       shouldPlay && player.loadVideoById({
         videoId,
@@ -10,8 +40,8 @@ const PlayerSyncing = player => ({
     })
 
     setInterval(() => {
-      const currentTime = player.getCurrentTime()
-      console.log('CURRENT TIME ::: ', currentTime)
+      // const currentTime = player.getCurrentTime()
+      // console.log('CURRENT TIME ::: ', currentTime)
       // this.pushEvent('video-time-sync', currentTime)
     }, 1000)
   }
