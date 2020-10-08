@@ -11,15 +11,10 @@
       <ul>
         <%= for uuid <- @connected_users do %>
           <li style="list-style: none;">
-            <%= if uuid == @user.uuid do %>
-              <p class="highlight">
-                <%= uuid %>
-              </p>
-            <% else %>
-              <p>
-                <%= uuid %>
-              </p>
-            <% end %>
+            <p class="<%= if uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+              <%= uuid %>
+              <%= if uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
+            </p>
           </li>
         <% end %>
       </ul>
@@ -50,13 +45,6 @@
         <%= text_input :search_field, :query, placeholder: "Search videos", autofocus: true, "phx-debounce": "300" %>
       </form>
     </div>
-
-    <input
-      type="button"
-      value="cue video"
-      phx-click="cue"
-      phx-value-video_id="Qh3tnj13BiI"
-    />
 
     <div class="">
       <%= for video <- @search_result do %>

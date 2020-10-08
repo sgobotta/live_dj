@@ -13,12 +13,13 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def mount(%{"slug" => slug}, _session, socket) do
     user = create_connected_user()
+    room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
     Organizer.subscribe(:request_player_sync, slug)
 
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, %{})
 
-    case Organizer.get_room(slug) do
+    case room do
       nil ->
         {:ok,
           socket
@@ -28,13 +29,13 @@ defmodule LiveDjWeb.Room.ShowLive do
       room ->
         {:ok,
           socket
-          |> assign(:room, room)
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
           |> assign(:video_queue, fake_video_queue())
           |> assign(:search_result, [])
           |> assign(:current_video, %{video_id: "", time: 0 })
+          |> assign_tracker(room)
         }
     end
   end
@@ -42,24 +43,26 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_info(
     %Broadcast{event: "presence_diff", payload: payload},
-    %{assigns: %{user: user}} = socket
+    %{assigns: %{slug: slug, user: user}} = socket
   ) do
-    slug = socket.assigns.slug
-    IO.inspect("presence_diff")
-    IO.inspect(Organizer.list_filtered_present(slug, user.uuid))
     connected_users = Organizer.list_present(slug)
+
+    room = handle_video_tracker_activity(slug, connected_users, payload)
+
+    updated_socket = socket
+    |> assign(:connected_users, connected_users)
+    |> assign(:room, room)
+
+    # TODO: refactor, there should be a way to receive the diff event only when
+    # others joined
     case Organizer.is_my_presence(user, payload) do
       false ->
         {:noreply,
-          socket
-          |> assign(:connected_users, connected_users)
+          updated_socket
           |> push_event("presence-changed", %{})
         }
       true ->
-        {:noreply,
-          socket
-          |> assign(:connected_users, connected_users)
-        }
+        {:noreply, updated_socket}
     end
   end
 
@@ -113,6 +116,25 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply, socket}
   end
 
+  defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
+    room = Organizer.get_room(slug)
+    video_tracker = room.video_tracker
+
+    case video_tracker in Map.keys(leaves) do
+      false -> room
+      true  ->
+        case presence do
+          [] ->
+            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: ""})
+            updated_room
+          presences ->
+            first_presence = hd presences
+            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: first_presence})
+            updated_room
+        end
+    end
+  end
+
   defp create_connected_user do
     %ConnectedUser{uuid: UUID.uuid4()}
   end
@@ -122,23 +144,30 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   defp mark_as_queued(video, video_queue) do
+    video = %{
+      title: video.title,
+      thumbnails: video.thumbnails,
+      channel_title: video.channel_title,
+      description: video.description,
+      video_id: video.video_id,
+      is_queued: ""
+    }
     case is_queued(video, video_queue) do
-      true -> %{
-        title: video.title,
-        thumbnails: video.thumbnails,
-        channel_title: video.channel_title,
-        description: video.description,
-        video_id: video.video_id,
-        is_queued: "disabled"
-      }
-      false -> %{
-        title: video.title,
-        thumbnails: video.thumbnails,
-        channel_title: video.channel_title,
-        description: video.description,
-        video_id: video.video_id,
-        is_queued: ""
-      }
+      true -> Map.merge(video, %{is_queued: "disabled"})
+      false -> video
+    end
+  end
+
+  defp assign_tracker(socket, room) do
+    current_user = socket.assigns.user.uuid
+    case Organizer.list_filtered_present(room.slug, current_user) do
+      []  ->
+        {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: current_user})
+        socket
+        |> assign(:room, updated_room)
+      _xs ->
+        socket
+        |> assign(:room, room)
     end
   end
 
