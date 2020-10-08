@@ -5,11 +5,12 @@ defmodule LiveDj.Organizer.Room do
   schema "rooms" do
     field :slug, :string
     field :title, :string
+    field :video_tracker, :string, default: ""
 
     timestamps()
   end
 
-  @fields [:title, :slug]
+  @fields [:title, :slug, :video_tracker]
 
   @doc false
   def changeset(room, attrs) do

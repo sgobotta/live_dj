@@ -89,3 +89,41 @@
   display: block;
   margin: -1rem 0 2rem;
 }
+
+.section-container {
+  padding: 25px;
+  margin: 12px auto;
+  clear:left;
+  border: dotted rgba(0, 255, 0, 0.1) 1px;
+}
+
+.search-form {
+  margin: 2rem;
+}
+
+.highlight {
+  color: #31708f;
+}
+
+.pill {
+  background-color: #31708f;
+  border: 10px black;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  align-items: center;
+}
+
+.queue-thumb {
+  border-radius: 50px;
+  width: 50px;
+  height: 50px;
+}
+
+.pill-text {
+  max-width: 250px; /* or some value */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

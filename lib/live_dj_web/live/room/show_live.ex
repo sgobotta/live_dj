@@ -13,10 +13,12 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def mount(%{"slug" => slug}, _session, socket) do
     user = create_connected_user()
+    room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
+
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, %{})
 
-    case Organizer.get_room(slug) do
+    case room do
       nil ->
         {:ok,
           socket
@@ -26,36 +28,214 @@ defmodule LiveDjWeb.Room.ShowLive do
       room ->
         {:ok,
           socket
-          |> assign(:room, room)
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:search_result, fake_search_data())
+          |> assign(:video_queue, [])
+          |> assign(:search_result, [])
+          |> assign(:current_video, %{video_id: "", time: 0 })
+          |> assign_tracker(room)
         }
     end
   end
 
   @impl true
-  def handle_info(%Broadcast{event: "presence_diff"}, socket) do
+  def handle_info(
+    %Broadcast{event: "presence_diff", payload: payload},
+    %{assigns: %{slug: slug, user: user}} = socket
+  ) do
+    connected_users = Organizer.list_present(slug)
+
+    room = handle_video_tracker_activity(slug, connected_users, payload)
+
+    updated_socket = socket
+    |> assign(:connected_users, connected_users)
+    |> assign(:room, room)
+
+    # TODO: refactor, there should be a way to receive the diff event only when
+    # others joined
+    case Organizer.is_my_presence(user, payload) do
+      false ->
+        {:noreply,
+          updated_socket
+          |> push_event("presence-changed", %{})
+        }
+      true ->
+        {:noreply, updated_socket}
+    end
+  end
+
+  def handle_info({:refresh_queue, %{selected_video: selected_video}}, socket) do
+    video_queue = socket.assigns.video_queue ++ [selected_video]
+    search_result = Enum.map(socket.assigns.search_result, fn search ->
+      mark_as_queued(search, video_queue)
+    end)
+
+    {:noreply,
+     socket
+     |> assign(:search_result, search_result)
+     |> assign(:video_queue, video_queue)}
+  end
+
+  def handle_info({:request_initial_state, _params}, socket) do
+    :ok = Phoenix.PubSub.broadcast_from(
+      LiveDj.PubSub,
+      self(),
+      "room:" <> socket.assigns.slug <> ":request_initial_state",
+      {:receive_initial_state, %{current_queue: socket.assigns.video_queue}}
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:receive_initial_state, %{current_queue: current_queue}}, socket) do
+    Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
+
     {:noreply,
       socket
-      |> assign(:connected_users, list_present(socket))}
+      |> assign(:video_queue, current_queue)
+    }
+  end
+
+  @impl true
+  def handle_event("player-is-ready", _, socket) do
+    current_video = socket.assigns.current_video
+    message = %{
+      shouldPlay: current_video.video_id != "",
+      startTime: current_video.time,
+      videoId: current_video.video_id
+    }
+
+    Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+
+    :ok = Phoenix.PubSub.broadcast_from(
+      LiveDj.PubSub,
+      self(),
+      "room:" <> socket.assigns.slug,
+      {:request_initial_state, %{}}
+    )
+
+    {:reply, message, socket}
   end
 
   @impl true
   def handle_event("search", %{"search_field" => %{"query" => query}}, socket) do
     opts = [maxResults: 3]
     {:ok, videos, _pagination_options} = Tubex.Video.search_by_query(query, opts)
-    {:noreply, assign(socket, :search_result, videos)}
+
+    search_result = Enum.map(videos, fn video ->
+      mark_as_queued(video, socket.assigns.video_queue)
+    end)
+    {:noreply, assign(socket, :search_result, search_result)}
   end
 
-  defp list_present(socket) do
-    Presence.list("room:" <> socket.assigns.slug)
-    |> Enum.map(fn {k, _} -> k end) # Phoenix Presence provides nice metadata, but we don't need it.
+  @impl true
+  def handle_event("add_to_queue", selected_video, socket) do
+    Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:refresh_queue, %{selected_video: selected_video}}
+    )
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("video-time-sync", current_time, socket) do
+    slug = socket.assigns.room.slug
+    room = Organizer.get_room(slug)
+    current_user = socket.assigns.user.uuid
+
+    case current_user == room.video_tracker do
+      true ->
+        {:ok, _updated_room} = Organizer.update_room(room, %{video_time: current_time})
+        {:noreply, socket}
+      false ->
+        {:noreply, socket}
+    end
+  end
+
+  defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
+    room = Organizer.get_room(slug)
+    video_tracker = room.video_tracker
+
+    case video_tracker in Map.keys(leaves) do
+      false -> room
+      true  ->
+        case presence do
+          [] ->
+            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: ""})
+            updated_room
+          presences ->
+            first_presence = hd presences
+            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: first_presence})
+            updated_room
+        end
+    end
   end
 
   defp create_connected_user do
     %ConnectedUser{uuid: UUID.uuid4()}
+  end
+
+  defp is_queued(video, video_queue) do
+    Enum.any?(video_queue, fn qv -> qv["video_id"] == video.video_id end)
+  end
+
+  defp mark_as_queued(video, video_queue) do
+    video = %{
+      title: video.title,
+      thumbnails: video.thumbnails,
+      channel_title: video.channel_title,
+      description: video.description,
+      video_id: video.video_id,
+      is_queued: ""
+    }
+    case is_queued(video, video_queue) do
+      true -> Map.merge(video, %{is_queued: "disabled"})
+      false -> video
+    end
+  end
+
+  defp assign_tracker(socket, room) do
+    current_user = socket.assigns.user.uuid
+    case Organizer.list_filtered_present(room.slug, current_user) do
+      []  ->
+        {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: current_user})
+        socket
+        |> assign(:room, updated_room)
+      _xs ->
+        socket
+        |> assign(:room, room)
+    end
+  end
+
+  defp fake_video_queue do
+    [
+      %{
+        "img_height" => "90",
+        "img_url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
+        "img_width" => "120",
+        "title" => "VULFPECK /// Wait for the Moment",
+        "value" => "queue",
+        "video_id" => "r4G0nbpLySI"
+      },
+      %{
+        "img_height" => "90",
+        "img_url" => "https://i.ytimg.com/vi/Qh3tnj13BiI/default.jpg",
+        "img_width" => "120",
+        "title" => "Charly García 25 Grandes Exitos Sus Mejores Canciones",
+        "value" => "queue",
+        "video_id" => "Qh3tnj13BiI"
+      },
+      %{
+        "img_height" => "90",
+        "img_url" => "https://i.ytimg.com/vi/myzNf5kW1kQ/default.jpg",
+        "img_width" => "120",
+        "title" => "wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth",
+        "value" => "queue",
+        "video_id" => "myzNf5kW1kQ"
+      }
+    ]
   end
 
   defp fake_search_data do

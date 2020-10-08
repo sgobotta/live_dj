@@ -14,8 +14,28 @@ defmodule LiveDj.Organizer do
     |> Enum.map(fn {k, _} -> k end)
   end
 
+
+  def list_filtered_present(slug, uuid) do
+    Presence.list("room:" <> slug)
+    |> Enum.filter(fn {k, _} -> k !== uuid end)
+    |> Enum.map(fn {k, _} -> k end)
+  end
+
   def subscribe() do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "rooms")
+  end
+
+  def subscribe(:request_initial_state, slug) do
+    Presence.list("room:" <> slug)
+    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+  end
+
+  def unsubscribe(:request_initial_state, slug) do
+    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+  end
+
+  def is_my_presence(user, presence_payload) do
+    Enum.any?(Map.to_list(presence_payload.joins), fn {x,_} -> x == user.uuid end)
   end
 
   @doc """
