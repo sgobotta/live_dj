@@ -15,7 +15,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     user = create_connected_user()
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
-    Organizer.subscribe(:request_player_sync, slug)
 
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, %{})
 
@@ -78,15 +77,6 @@ defmodule LiveDjWeb.Room.ShowLive do
      |> assign(:video_queue, video_queue)}
   end
 
-  def handle_info({:request_player_sync, params}, socket) do
-    Organizer.unsubscribe(:request_player_sync, socket.assigns.slug)
-
-    {:noreply,
-     socket
-     |> assign(:video_queue, params)
-     |> push_event("receive_current_video", %{params: params})}
-  end
-
   def handle_info({:request_initial_state, _params}, socket) do
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
@@ -146,17 +136,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       "room:" <> socket.assigns.slug,
       {:refresh_queue, %{selected_video: selected_video}}
     )
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("request_player_sync", _params, socket) do
-    IO.inspect("SOCKET")
-    # IO.inspect(socket.assigns)
-    Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug <> ":request_player_sync",
-      {:request_player_sync, socket.assigns.video_queue})
     {:noreply, socket}
   end
 

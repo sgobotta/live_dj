@@ -9,12 +9,6 @@ const PlayerSyncing = player => ({
       })
     })
 
-    this.handleEvent("receive_current_video", ({params: video}) => {
-      console.log('Event [receive_current_video] ::: Video: ', video)
-      const v = player.getVolume()
-      console.log('Volume: ', v)
-    })
-
     setInterval(() => {
       const currentTime = player.getCurrentTime()
       console.log('CURRENT TIME ::: ', currentTime)
