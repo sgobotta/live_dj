@@ -32,7 +32,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:video_queue, fake_video_queue())
+          |> assign(:video_queue, [])
           |> assign(:search_result, [])
           |> assign(:current_video, %{video_id: "", time: 0 })
           |> assign_tracker(room)
@@ -66,8 +66,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_info({:refresh_queue, %{queued_video: queued_video}}, socket) do
-    video_queue = socket.assigns.video_queue ++ [queued_video]
+  def handle_info({:refresh_queue, %{selected_video: selected_video}}, socket) do
+    video_queue = socket.assigns.video_queue ++ [selected_video]
     search_result = Enum.map(socket.assigns.search_result, fn search ->
       mark_as_queued(search, video_queue)
     end)
@@ -80,10 +80,52 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:request_player_sync, params}, socket) do
     Organizer.unsubscribe(:request_player_sync, socket.assigns.slug)
+
     {:noreply,
      socket
      |> assign(:video_queue, params)
-     |> push_event("receive_current_video", %{params: hd params})}
+     |> push_event("receive_current_video", %{params: params})}
+  end
+
+  def handle_info({:request_initial_state, _params}, socket) do
+    :ok = Phoenix.PubSub.broadcast_from(
+      LiveDj.PubSub,
+      self(),
+      "room:" <> socket.assigns.slug <> ":request_initial_state",
+      {:receive_initial_state, %{current_queue: socket.assigns.video_queue}}
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:receive_initial_state, %{current_queue: current_queue}}, socket) do
+    Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
+
+    {:noreply,
+      socket
+      |> assign(:video_queue, current_queue)
+    }
+  end
+
+  @impl true
+  def handle_event("player-is-ready", _, socket) do
+    current_video = socket.assigns.current_video
+    message = %{
+      shouldPlay: current_video.video_id != "",
+      startTime: current_video.time,
+      videoId: current_video.video_id
+    }
+
+    Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+
+    :ok = Phoenix.PubSub.broadcast_from(
+      LiveDj.PubSub,
+      self(),
+      "room:" <> socket.assigns.slug,
+      {:request_initial_state, %{}}
+    )
+
+    {:reply, message, socket}
   end
 
   @impl true
@@ -98,22 +140,39 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("add_to_queue", params, socket) do
+  def handle_event("add_to_queue", selected_video, socket) do
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
-      {:refresh_queue, %{queued_video: params}}
+      {:refresh_queue, %{selected_video: selected_video}}
     )
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("request_player_sync", _params, socket) do
+    IO.inspect("SOCKET")
+    # IO.inspect(socket.assigns)
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug <> ":request_player_sync",
       {:request_player_sync, socket.assigns.video_queue})
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("video-time-sync", current_time, socket) do
+    slug = socket.assigns.room.slug
+    room = Organizer.get_room(slug)
+    current_user = socket.assigns.user.uuid
+
+    case current_user == room.video_tracker do
+      true ->
+        {:ok, _updated_room} = Organizer.update_room(room, %{video_time: current_time})
+        {:noreply, socket}
+      false ->
+        {:noreply, socket}
+    end
   end
 
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do

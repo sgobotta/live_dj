@@ -30,8 +30,17 @@ defmodule LiveDj.Organizer do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request_player_sync")
   end
 
+  def subscribe(:request_initial_state, slug) do
+    Presence.list("room:" <> slug)
+    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+  end
+
   def unsubscribe(:request_player_sync, slug) do
     Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request_player_sync")
+  end
+
+  def unsubscribe(:request_initial_state, slug) do
+    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
   end
 
   def is_my_presence(user, presence_payload) do
