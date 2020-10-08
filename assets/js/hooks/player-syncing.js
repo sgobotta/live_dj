@@ -10,7 +10,6 @@ const onStateChange = pushEvent => event => {
     }
     case 1: {
       console.log('playing')
-      pushEvent('')
       break
     }
     case 2: {
