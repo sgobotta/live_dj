@@ -33,7 +33,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:connected_users, [])
           |> assign(:video_queue, [])
           |> assign(:search_result, [])
-          |> assign(:current_video, %{video_id: "", time: 0 })
+          |> assign(:player, %{state: "paused", video_id: "myzNf5kW1kQ", time: 0})
           |> assign_tracker(room)
         }
     end
@@ -82,31 +82,71 @@ defmodule LiveDjWeb.Room.ShowLive do
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{current_queue: socket.assigns.video_queue}}
+      {:receive_initial_state, %{
+        current_queue: socket.assigns.video_queue,
+        player: socket.assigns.player}}
     )
 
     {:noreply, socket}
   end
 
-  def handle_info({:receive_initial_state, %{current_queue: current_queue}}, socket) do
+  def handle_info({:receive_initial_state, params}, socket) do
+    %{current_queue: current_queue, player: player} = params
     Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
 
     {:noreply,
       socket
       |> assign(:video_queue, current_queue)
-    }
+      |> assign(:player, player)
+      |> push_event("receive_current_time_signal", %{
+        shouldPlay: player.state == "playing",
+        videoId: player.video_id,
+        time: player.time
+        })}
+  end
+
+  def handle_info({:player_signal_playing, %{state: state, time: time}}, socket) do
+    %{player: player} = socket.assigns
+    {:noreply,
+      socket
+      |> assign(:player, Map.merge(player, %{state: state, time: time}))
+      |> push_event("receive_playing_signal", %{time: time})}
+  end
+
+  def handle_info({:player_signal_paused, %{state: state, time: time}}, socket) do
+    %{player: player} = socket.assigns
+    {:noreply,
+    socket
+      |> assign(:player, Map.merge(player, %{state: state, time: time}))
+      |> push_event("receive_paused_signal", %{time: time})}
+  end
+
+  def handle_info({:player_signal_current_time, %{time: time}}, socket) do
+    %{player: player} = socket.assigns
+    {:noreply,
+    socket
+      |> assign(:player, Map.merge(player, %{time: time}))}
   end
 
   @impl true
-  def handle_event("player-is-ready", _, socket) do
-    current_video = socket.assigns.current_video
+  def handle_event("player-signal-ready", _, socket) do
+    %{player: player, room: room, user: user} = socket.assigns
     message = %{
-      shouldPlay: current_video.video_id != "",
-      startTime: current_video.time,
-      videoId: current_video.video_id
+      shouldPlay: player.state == "playing",
+      startTime: player.time,
+      videoId: player.video_id
     }
+    presence = Organizer.list_filtered_present(room.slug, user.uuid)
 
-    Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+    # When the list is empty, you wouldn want to subscribe, because there is
+    # nobody present to cast an initial event. If this is the first connection,
+    # then when another connection begins, this first connection would still be
+    # subscribed and an outdated initial state would be triggered by that new
+    # connection
+    case presence do
+      []  -> nil
+      _xs -> Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+    end
 
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
@@ -116,6 +156,26 @@ defmodule LiveDjWeb.Room.ShowLive do
     )
 
     {:reply, message, socket}
+  end
+
+  def handle_event("player_signal_playing", params, socket) do
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:player_signal_playing, %{state: "playing", time: params["time"]}}
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("player_signal_paused", params, socket) do
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:player_signal_paused, %{state: "paused", time: params["time"]}}
+    )
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -140,14 +200,17 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("video-time-sync", current_time, socket) do
-    slug = socket.assigns.room.slug
-    room = Organizer.get_room(slug)
+  def handle_event("player_signal_current_time", current_time, socket) do
+    %{room: room} = socket.assigns
     current_user = socket.assigns.user.uuid
 
     case current_user == room.video_tracker do
       true ->
-        {:ok, _updated_room} = Organizer.update_room(room, %{video_time: current_time})
+        Phoenix.PubSub.broadcast(
+          LiveDj.PubSub,
+          "room:" <> socket.assigns.slug,
+          {:player_signal_current_time, %{time: current_time}}
+        )
         {:noreply, socket}
       false ->
         {:noreply, socket}

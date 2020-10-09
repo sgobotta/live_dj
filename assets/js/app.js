@@ -21,20 +21,19 @@ function onIframeReady() {
   initLiveview()
 }
 
-function initPlayer() {
+function initPlayer(onStateChange) {
   const playerContainer = document.getElementById("video-player");
-  return createPlayer(playerContainer)
+  return createPlayer(playerContainer, {onStateChange})
 }
 
-async function initLiveview() {
+function initLiveview() {
   let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")
 
-  const player = await initPlayer()
   const Hooks = {
-    PlayerSyncing: PlayerSyncing(player),
-    PresenceSyncing: PresenceSyncing(player),
+    PlayerSyncing: PlayerSyncing(initPlayer),
+    PresenceSyncing: PresenceSyncing(),
   }
 
   const liveSocket = new LiveSocket("/live", Socket, {
