@@ -10,12 +10,15 @@ const onStateChange = hookContext => event => {
     }
     case 1: {
       console.log('playing')
-      hookContext.pushEvent('player-signal-playing', {})
+      console.log('State ', event.target.getPlayerState())
+      const time = event.target.getCurrentTime()
+      // hookContext.pushEvent('player_signal_playing', {time})
       break
     }
     case 2: {
       console.log('paused')
-      hookContext.pushEvent('player-signal-paused', {})
+      const time = event.target.getCurrentTime()
+      // hookContext.pushEvent('player_signal_paused', {time})
       break
     }
     case 3: {
@@ -31,20 +34,35 @@ const onStateChange = hookContext => event => {
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const player = await initPlayer(onStateChange(this))
+    const player = await initPlayer()
     this.pushEvent('player-signal-ready', null, reply => {
       const {shouldPlay, videoId, startSeconds} = reply
-      shouldPlay && player.loadVideoById({
+      player.loadVideoById({
         videoId,
         startSeconds
+      })
+      !shouldPlay && player.pauseVideo()
+    })
+
+    this.handleEvent('receive_playing_signal', () => {
+      player.playVideo()
+    })
+
+    this.handleEvent('receive_paused_signal', () => {
+      player.pauseVideo()
+    })
+
+    this.handleEvent('receive_current_time_signal', ({time, videoId, shouldPlay}) => {
+      shouldPlay && player.loadVideoById({
+        videoId,
+        startSeconds: time + 2
       })
     })
 
     setInterval(() => {
-      // const currentTime = player.getCurrentTime()
-      // console.log('CURRENT TIME ::: ', currentTime)
-      // this.pushEvent('video-time-sync', currentTime)
-    }, 1000)
+      const currentTime = player.getCurrentTime()
+      this.pushEvent('player_signal_current_time', currentTime)
+    }, 1500)
   }
 })
 
