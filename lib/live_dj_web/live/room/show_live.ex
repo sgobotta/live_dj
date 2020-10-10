@@ -7,6 +7,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Player
+  alias LiveDj.Organizer.Video
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
@@ -81,7 +82,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     case video_queue do
       [] ->
         %{slug: slug} = socket.assigns
-        selected_video_id = selected_video["video_id"]
+        selected_video_id = selected_video.video_id
         Organizer.subscribe(:play_next_of, slug, selected_video_id)
         props = %{video_id: selected_video_id, time: 0}
         player = Player.update(player, props)
@@ -160,7 +161,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     Organizer.unsubscribe(:play_next_of, slug, player.video_id)
     case tl(video_queue) do
       []  ->
-        player = Player.get_initial_state()
+        player = Player.update(player, %{state: "paused"})
         {:noreply,
           socket
           |> assign(:player, player)
@@ -264,7 +265,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
-      {:add_to_queue, %{selected_video: selected_video}}
+      {:add_to_queue, %{selected_video: Video.create(selected_video)}}
     )
     {:noreply, socket}
   end
@@ -311,7 +312,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   defp is_queued(video, video_queue) do
-    Enum.any?(video_queue, fn qv -> qv["video_id"] == video.video_id end)
+    Enum.any?(video_queue, fn qv -> qv.video_id == video.video_id end)
   end
 
   defp mark_as_queued(video, video_queue) do
