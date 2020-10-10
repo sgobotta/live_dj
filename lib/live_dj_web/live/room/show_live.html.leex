@@ -2,6 +2,12 @@
 
   <div class="row section-container">
     <div class="column">
+      <%= if @player_controls.play_button_state == "disabled" &&
+             @player_controls.pause_button_state == "disabled" do%>
+        <a disabled>
+          <i class="fas fa-spinner rotating"></i>
+        </a>
+      <% else %>
       <%= if @player.state == "paused" do %>
         <a
           <%= @player_controls.play_button_state %>
@@ -17,6 +23,7 @@
         >
           <i class="fas fa-pause-circle clickeable"></i>
         </a>
+      <% end %>
       <% end %>
     </div>
     <div class="column">

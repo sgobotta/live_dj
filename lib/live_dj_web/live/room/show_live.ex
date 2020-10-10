@@ -33,10 +33,10 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:video_queue, fake_video_queue())
+          |> assign(:video_queue, [])
           |> assign(:search_result, fake_search_data())
           |> assign(:player, player)
-          |> assign(:player_controls, Player.get_controls_state(player.state))
+          |> assign(:player_controls, Player.get_controls_state(player))
           |> assign_tracker(room)
         }
     end
@@ -85,6 +85,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:noreply,
           socket
           |> assign(:player, player)
+          |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))
         }
       _xs ->
@@ -94,14 +95,11 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:request_initial_state, _params}, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
-    player = Player.update(player, %{video_id: hd(video_queue)["video_id"]})
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{
-        current_queue: video_queue,
-        player: player}}
+      {:receive_initial_state, %{ current_queue: video_queue, player: player}}
     )
     {:noreply, socket}
   end
@@ -109,9 +107,12 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_info({:receive_initial_state, params}, socket) do
     Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
     %{current_queue: current_queue, player: player} = params
+    IO.inspect("Player")
+    IO.inspect(player)
     socket = socket
       |> assign(:video_queue, current_queue)
       |> assign(:player, player)
+      |> assign(:player_controls, Player.get_controls_state(player))
     case current_queue do
       []  -> {:noreply, socket}
       _xs ->
@@ -123,19 +124,21 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:player_signal_playing, %{state: state, time: time}}, socket) do
     %{player: player} = socket.assigns
+    player = Player.update(player, %{state: state, time: time})
     {:noreply,
       socket
-      |> assign(:player, Player.update(player, %{state: state, time: time}))
-      |> assign(:player_controls, Player.get_controls_state(state))
+      |> assign(:player, player)
+      |> assign(:player_controls, Player.get_controls_state(player))
       |> push_event("receive_playing_signal", %{time: time})}
   end
 
   def handle_info({:player_signal_paused, %{state: state, time: time}}, socket) do
     %{player: player} = socket.assigns
+    player = Player.update(player, %{state: state, time: time})
     {:noreply,
     socket
-      |> assign(:player, Player.update(player, %{state: state, time: time}))
-      |> assign(:player_controls, Player.get_controls_state(state))
+      |> assign(:player, player)
+      |> assign(:player_controls, Player.get_controls_state(player))
       |> push_event("receive_paused_signal", %{time: time})}
   end
 
@@ -149,19 +152,29 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_event("player_signal_ready", _, socket) do
     %{player: player, room: room, user: user} = socket.assigns
-    Organizer.subscribe(:request_initial_state, socket.assigns.slug)
 
     presence = Organizer.list_filtered_present(room.slug, user.uuid)
 
     case presence do
       []  ->
-        {:noreply,
-        socket
-          |> push_event("receive_player_state", Player.create_response(player))
-        }
+        %{video_queue: video_queue} = socket.assigns
+        case video_queue do
+          [] -> {:noreply,
+              socket
+                |> assign(:player_controls, Player.get_controls_state(player))
+            }
+          _xs  ->
+            player = Player.update(player, %{video_id: hd(video_queue)["video_id"]})
+            {:noreply,
+            socket
+              |> assign(:video_queue, video_queue)
+              |> assign(:player_controls, player)
+              |> push_event("receive_player_state", Player.create_response(player))
+            }
+        end
       _xs ->
         Organizer.subscribe(:request_initial_state, socket.assigns.slug)
-        # Tells every node somebody needs an initial state
+        # Tells every node the requester node needs an initial state
         :ok = Phoenix.PubSub.broadcast_from(
           LiveDj.PubSub,
           self(),
