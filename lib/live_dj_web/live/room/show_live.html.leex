@@ -2,20 +2,22 @@
 
   <div class="row section-container">
     <div class="column">
-      <input
-        <%= @player_controls.play_button_state %>
-        type="button"
-        value="Play"
-        phx-click="player_signal_playing"
-      />
-    </div>
-    <div class="column">
-      <input
-        <%= @player_controls.pause_button_state %>
-        type="button"
-        value="Pause"
-        phx-click="player_signal_paused"
-      />
+      <%= if @player.state == "paused" do %>
+        <a
+          <%= @player_controls.play_button_state %>
+          phx-click="player_signal_playing"
+        >
+          <i class="far fa-play-circle clickeable"></i>
+        </a>
+      <% end %>
+      <%= if @player.state == "playing" do %>
+        <a
+          <%= @player_controls.pause_button_state %>
+          phx-click="player_signal_paused"
+        >
+          <i class="far fa-pause-circle clickeable"></i>
+        </a>
+      <% end %>
     </div>
   </div>
 

@@ -29,6 +29,8 @@ input {
   color: #eaeaea
 }
 
+i{color:#eaeaea;font-size: 3.6rem;}
+
 .container{
   margin: 0 auto;
   max-width: 80.0rem;
