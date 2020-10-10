@@ -53,7 +53,7 @@ const PlayerSyncing = initPlayer => ({
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
-      shouldPlay && player.loadVideoById({
+      player.loadVideoById({
         videoId,
         startSeconds: time + 1
       })

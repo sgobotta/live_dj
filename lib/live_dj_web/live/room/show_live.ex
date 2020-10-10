@@ -33,8 +33,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:video_queue, [])
-          |> assign(:search_result, [])
+          |> assign(:video_queue, fake_video_queue())
+          |> assign(:search_result, fake_search_data())
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player.state))
           |> assign_tracker(room)
@@ -68,37 +68,57 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_info({:refresh_queue, %{selected_video: selected_video}}, socket) do
-    video_queue = socket.assigns.video_queue ++ [selected_video]
+  def handle_info({:add_to_queue, %{selected_video: selected_video}}, socket) do
+    %{player: player, video_queue: video_queue} = socket.assigns
+    updated_video_queue = video_queue ++ [selected_video]
     search_result = Enum.map(socket.assigns.search_result, fn search ->
-      mark_as_queued(search, video_queue)
+      mark_as_queued(search, updated_video_queue)
     end)
-    {:noreply,
-     socket
-     |> assign(:search_result, search_result)
-     |> assign(:video_queue, video_queue)}
+    socket = socket
+      |> assign(:search_result, search_result)
+      |> assign(:video_queue, updated_video_queue)
+
+    case video_queue do
+      [] ->
+        props = %{video_id: selected_video["video_id"], time: 0}
+        player = Player.update(player, props)
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> push_event("receive_player_state", Player.create_response(player))
+        }
+      _xs ->
+        {:noreply, socket}
+    end
   end
 
   def handle_info({:request_initial_state, _params}, socket) do
+    %{video_queue: video_queue, player: player} = socket.assigns
+    player = Player.update(player, %{video_id: hd(video_queue)["video_id"]})
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
       {:receive_initial_state, %{
-        current_queue: socket.assigns.video_queue,
-        player: socket.assigns.player}}
+        current_queue: video_queue,
+        player: player}}
     )
     {:noreply, socket}
   end
 
   def handle_info({:receive_initial_state, params}, socket) do
-    %{current_queue: current_queue, player: player} = params
     Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
-    {:noreply,
-      socket
+    %{current_queue: current_queue, player: player} = params
+    socket = socket
       |> assign(:video_queue, current_queue)
       |> assign(:player, player)
-      |> push_event("receive_player_state", Player.create_response(player))}
+    case current_queue do
+      []  -> {:noreply, socket}
+      _xs ->
+        {:noreply,
+          socket
+            |> push_event("receive_player_state", Player.create_response(player))}
+    end
   end
 
   def handle_info({:player_signal_playing, %{state: state, time: time}}, socket) do
@@ -186,7 +206,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
-      {:refresh_queue, %{selected_video: selected_video}}
+      {:add_to_queue, %{selected_video: selected_video}}
     )
     {:noreply, socket}
   end
@@ -294,7 +314,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   defp fake_search_data do
-    [
+    search_data = [
       %Tubex.Video{
         channel_id: "UCtWuB1D_E3mcyYThA9iKggQ",
         channel_title: "Vulf",
@@ -377,5 +397,6 @@ defmodule LiveDjWeb.Room.ShowLive do
         video_id: "ZxjrWgUn0Wo"
       }
     ]
+    Enum.map(search_data, fn e -> Map.merge(e, %{is_queued: false}) end)
   end
 end
