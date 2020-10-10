@@ -1,5 +1,3 @@
-import { start } from "nprogress"
-
 const onStateChange = hookContext => event => {
   switch (event.data) {
     case -1: {
@@ -34,6 +32,11 @@ const onStateChange = hookContext => event => {
   }
 }
 
+function setVolume(player) {
+  const volumeControl = document.getElementById("volume-control")
+  volumeControl.value = player.getVolume()
+}
+
 const PlayerSyncing = initPlayer => ({
   async mounted() {
     const player = await initPlayer()
@@ -53,6 +56,7 @@ const PlayerSyncing = initPlayer => ({
         startSeconds: time + 1
       })
       !shouldPlay && player.pauseVideo()
+      setVolume(player)
     })
 
     setInterval(() => {

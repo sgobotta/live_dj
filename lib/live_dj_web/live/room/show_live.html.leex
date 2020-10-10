@@ -7,7 +7,7 @@
           <%= @player_controls.play_button_state %>
           phx-click="player_signal_playing"
         >
-          <i class="far fa-play-circle clickeable"></i>
+          <i class="fas fa-play-circle clickeable"></i>
         </a>
       <% end %>
       <%= if @player.state == "playing" do %>
@@ -15,9 +15,12 @@
           <%= @player_controls.pause_button_state %>
           phx-click="player_signal_paused"
         >
-          <i class="far fa-pause-circle clickeable"></i>
+          <i class="fas fa-pause-circle clickeable"></i>
         </a>
       <% end %>
+    </div>
+    <div class="column">
+      <input class="slider" id="volume-control" type="range" min="0" max="100" step="1"></input>
     </div>
   </div>
 
