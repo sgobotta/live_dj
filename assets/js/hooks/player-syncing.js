@@ -6,6 +6,7 @@ const onStateChange = hookContext => event => {
     }
     case 0: {
       console.log('ended')
+      hookContext.pushEvent('player_signal_play_next')
       break
     }
     case 1: {
@@ -39,7 +40,7 @@ function setVolume(player) {
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const player = await initPlayer()
+    const player = await initPlayer(onStateChange(this))
     this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {

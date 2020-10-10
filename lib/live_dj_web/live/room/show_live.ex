@@ -80,7 +80,10 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     case video_queue do
       [] ->
-        props = %{video_id: selected_video["video_id"], time: 0}
+        %{slug: slug} = socket.assigns
+        selected_video_id = selected_video["video_id"]
+        Organizer.subscribe(:play_next_of, slug, selected_video_id)
+        props = %{video_id: selected_video_id, time: 0}
         player = Player.update(player, props)
         {:noreply,
           socket
@@ -110,8 +113,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_info({:receive_initial_state, params}, socket) do
     Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
     %{current_queue: current_queue, player: player} = params
-    IO.inspect("Player")
-    IO.inspect(player)
     socket = socket
       |> assign(:video_queue, current_queue)
       |> assign(:player, player)
@@ -119,6 +120,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     case current_queue do
       []  -> {:noreply, socket}
       _xs ->
+        %{slug: slug} = socket.assigns
+        Organizer.subscribe(:play_next_of, slug, player.video_id)
         {:noreply,
           socket
             |> push_event("receive_player_state", Player.create_response(player))}
@@ -150,6 +153,32 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
     socket
       |> assign(:player, Player.update(player, %{time: time}))}
+  end
+
+  def handle_info({:player_signal_play_next, _params}, socket) do
+    %{slug: slug, video_queue: video_queue, player: player} = socket.assigns
+    Organizer.unsubscribe(:play_next_of, slug, player.video_id)
+    case tl(video_queue) do
+      []  ->
+        player = Player.get_initial_state()
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> assign(:video_queue, [])
+          |> assign(:player_controls, Player.get_controls_state(player))
+        }
+      _xs ->
+        next_video_id = hd(tl(video_queue))["video_id"]
+        Organizer.subscribe(:play_next_of, slug, next_video_id)
+        player = Player.update(player, %{video_id: next_video_id, time: 0})
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> assign(:video_queue, tl(video_queue))
+          |> assign(:player_controls, Player.get_controls_state(player))
+          |> push_event("receive_player_state", Player.create_response(player))
+        }
+    end
   end
 
   @impl true
@@ -202,6 +231,19 @@ defmodule LiveDjWeb.Room.ShowLive do
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
       {:player_signal_paused, %{state: "paused", time: params["time"]}}
+    )
+    {:noreply, socket}
+  end
+
+  def handle_event("player_signal_play_next", _params, socket) do
+    # Fix me: second and further consequent calls will broadcast with an outdated
+    # video_id. There should not be more than one broadcast call for the same
+    # video_id
+    video_id = socket.assigns.player.video_id
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug <> ":play_next_of:" <> video_id,
+      {:player_signal_play_next, %{}}
     )
     {:noreply, socket}
   end
