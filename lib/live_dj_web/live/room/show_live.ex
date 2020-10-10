@@ -6,6 +6,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Organizer
+  alias LiveDj.Organizer.Player
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
@@ -26,6 +27,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> push_redirect(to: Routes.new_path(socket, :new))
         }
       room ->
+        player = Player.get_initial_state()
         {:ok,
           socket
           |> assign(:user, user)
@@ -33,7 +35,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:connected_users, [])
           |> assign(:video_queue, [])
           |> assign(:search_result, [])
-          |> assign(:player, %{state: "paused", video_id: "myzNf5kW1kQ", time: 0})
+          |> assign(:player, player)
+          |> assign(:player_controls, Player.get_controls_state(player.state))
           |> assign_tracker(room)
         }
     end
@@ -70,7 +73,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     search_result = Enum.map(socket.assigns.search_result, fn search ->
       mark_as_queued(search, video_queue)
     end)
-
     {:noreply,
      socket
      |> assign(:search_result, search_result)
@@ -86,30 +88,25 @@ defmodule LiveDjWeb.Room.ShowLive do
         current_queue: socket.assigns.video_queue,
         player: socket.assigns.player}}
     )
-
     {:noreply, socket}
   end
 
   def handle_info({:receive_initial_state, params}, socket) do
     %{current_queue: current_queue, player: player} = params
     Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
-
     {:noreply,
       socket
       |> assign(:video_queue, current_queue)
       |> assign(:player, player)
-      |> push_event("receive_current_time_signal", %{
-        shouldPlay: player.state == "playing",
-        videoId: player.video_id,
-        time: player.time
-        })}
+      |> push_event("receive_player_state", Player.create_response(player))}
   end
 
   def handle_info({:player_signal_playing, %{state: state, time: time}}, socket) do
     %{player: player} = socket.assigns
     {:noreply,
       socket
-      |> assign(:player, Map.merge(player, %{state: state, time: time}))
+      |> assign(:player, Player.update(player, %{state: state, time: time}))
+      |> assign(:player_controls, Player.get_controls_state(state))
       |> push_event("receive_playing_signal", %{time: time})}
   end
 
@@ -117,7 +114,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{player: player} = socket.assigns
     {:noreply,
     socket
-      |> assign(:player, Map.merge(player, %{state: state, time: time}))
+      |> assign(:player, Player.update(player, %{state: state, time: time}))
+      |> assign(:player_controls, Player.get_controls_state(state))
       |> push_event("receive_paused_signal", %{time: time})}
   end
 
@@ -125,37 +123,33 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{player: player} = socket.assigns
     {:noreply,
     socket
-      |> assign(:player, Map.merge(player, %{time: time}))}
+      |> assign(:player, Player.update(player, %{time: time}))}
   end
 
   @impl true
-  def handle_event("player-signal-ready", _, socket) do
+  def handle_event("player_signal_ready", _, socket) do
     %{player: player, room: room, user: user} = socket.assigns
-    message = %{
-      shouldPlay: player.state == "playing",
-      startTime: player.time,
-      videoId: player.video_id
-    }
+    Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+
     presence = Organizer.list_filtered_present(room.slug, user.uuid)
 
-    # When the list is empty, you wouldn want to subscribe, because there is
-    # nobody present to cast an initial event. If this is the first connection,
-    # then when another connection begins, this first connection would still be
-    # subscribed and an outdated initial state would be triggered by that new
-    # connection
     case presence do
-      []  -> nil
-      _xs -> Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+      []  ->
+        {:noreply,
+        socket
+          |> push_event("receive_player_state", Player.create_response(player))
+        }
+      _xs ->
+        Organizer.subscribe(:request_initial_state, socket.assigns.slug)
+        # Tells every node somebody needs an initial state
+        :ok = Phoenix.PubSub.broadcast_from(
+          LiveDj.PubSub,
+          self(),
+          "room:" <> socket.assigns.slug,
+          {:request_initial_state, %{}}
+        )
+        {:noreply, socket}
     end
-
-    :ok = Phoenix.PubSub.broadcast_from(
-      LiveDj.PubSub,
-      self(),
-      "room:" <> socket.assigns.slug,
-      {:request_initial_state, %{}}
-    )
-
-    {:reply, message, socket}
   end
 
   def handle_event("player_signal_playing", params, socket) do
@@ -164,7 +158,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       "room:" <> socket.assigns.slug,
       {:player_signal_playing, %{state: "playing", time: params["time"]}}
     )
-
     {:noreply, socket}
   end
 
@@ -174,7 +167,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       "room:" <> socket.assigns.slug,
       {:player_signal_paused, %{state: "paused", time: params["time"]}}
     )
-
     {:noreply, socket}
   end
 

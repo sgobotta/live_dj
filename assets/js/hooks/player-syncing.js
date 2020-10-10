@@ -1,3 +1,5 @@
+import { start } from "nprogress"
+
 const onStateChange = hookContext => event => {
   switch (event.data) {
     case -1: {
@@ -35,14 +37,7 @@ const onStateChange = hookContext => event => {
 const PlayerSyncing = initPlayer => ({
   async mounted() {
     const player = await initPlayer()
-    this.pushEvent('player-signal-ready', null, reply => {
-      const {shouldPlay, videoId, startSeconds} = reply
-      player.loadVideoById({
-        videoId,
-        startSeconds
-      })
-      !shouldPlay && player.pauseVideo()
-    })
+    this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {
       player.playVideo()
@@ -52,11 +47,12 @@ const PlayerSyncing = initPlayer => ({
       player.pauseVideo()
     })
 
-    this.handleEvent('receive_current_time_signal', ({time, videoId, shouldPlay}) => {
-      shouldPlay && player.loadVideoById({
+    this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
+      player.loadVideoById({
         videoId,
-        startSeconds: time + 2
+        startSeconds: time + 1
       })
+      !shouldPlay && player.pauseVideo()
     })
 
     setInterval(() => {
