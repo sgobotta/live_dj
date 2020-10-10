@@ -32,17 +32,15 @@ const onStateChange = hookContext => event => {
   }
 }
 
+function setVolume(player) {
+  const volumeControl = document.getElementById("volume-control")
+  volumeControl.value = player.getVolume()
+}
+
 const PlayerSyncing = initPlayer => ({
   async mounted() {
     const player = await initPlayer()
-    this.pushEvent('player-signal-ready', null, reply => {
-      const {shouldPlay, videoId, startSeconds} = reply
-      player.loadVideoById({
-        videoId,
-        startSeconds
-      })
-      !shouldPlay && player.pauseVideo()
-    })
+    this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {
       player.playVideo()
@@ -52,11 +50,13 @@ const PlayerSyncing = initPlayer => ({
       player.pauseVideo()
     })
 
-    this.handleEvent('receive_current_time_signal', ({time, videoId, shouldPlay}) => {
-      shouldPlay && player.loadVideoById({
+    this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
+      player.loadVideoById({
         videoId,
-        startSeconds: time + 2
+        startSeconds: time + 1
       })
+      !shouldPlay && player.pauseVideo()
+      setVolume(player)
     })
 
     setInterval(() => {

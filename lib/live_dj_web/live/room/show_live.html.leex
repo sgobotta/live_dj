@@ -2,18 +2,25 @@
 
   <div class="row section-container">
     <div class="column">
-      <input
-        type="button"
-        value="Play"
-        phx-click="player_signal_playing"
-      />
+      <%= if @player.state == "paused" do %>
+        <a
+          <%= @player_controls.play_button_state %>
+          phx-click="player_signal_playing"
+        >
+          <i class="fas fa-play-circle clickeable"></i>
+        </a>
+      <% end %>
+      <%= if @player.state == "playing" do %>
+        <a
+          <%= @player_controls.pause_button_state %>
+          phx-click="player_signal_paused"
+        >
+          <i class="fas fa-pause-circle clickeable"></i>
+        </a>
+      <% end %>
     </div>
     <div class="column">
-      <input
-        type="button"
-        value="Pause"
-        phx-click="player_signal_paused"
-      />
+      <input class="slider" id="volume-control" type="range" min="0" max="100" step="1"></input>
     </div>
   </div>
 
