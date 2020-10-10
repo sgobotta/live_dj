@@ -1,7 +1,7 @@
 defmodule LiveDj.Organizer.Player do
 
   def get_initial_state do
-    %{state: "paused", video_id: "myzNf5kW1kQ", time: 0}
+    %{state: "paused", video_id: "", time: 0}
   end
 
   def get_controls_state("playing") do

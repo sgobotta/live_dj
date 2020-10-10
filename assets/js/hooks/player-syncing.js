@@ -43,15 +43,17 @@ const PlayerSyncing = initPlayer => ({
     this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {
+      setVolume(player)
       player.playVideo()
     })
 
     this.handleEvent('receive_paused_signal', () => {
+      setVolume(player)
       player.pauseVideo()
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
-      player.loadVideoById({
+      shouldPlay && player.loadVideoById({
         videoId,
         startSeconds: time + 1
       })
