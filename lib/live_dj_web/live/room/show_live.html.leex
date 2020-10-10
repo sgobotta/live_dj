@@ -3,6 +3,7 @@
   <div class="row section-container">
     <div class="column">
       <input
+        <%= @player_controls.play_button_state %>
         type="button"
         value="Play"
         phx-click="player_signal_playing"
@@ -10,6 +11,7 @@
     </div>
     <div class="column">
       <input
+        <%= @player_controls.pause_button_state %>
         type="button"
         value="Pause"
         phx-click="player_signal_paused"
