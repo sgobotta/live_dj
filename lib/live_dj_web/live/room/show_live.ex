@@ -89,7 +89,10 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> push_event("receive_player_state", Player.create_response(player))
         }
       _xs ->
-        {:noreply, socket}
+        {:noreply,
+          socket
+          |> push_event("receive_queue_changed", %{})
+        }
     end
   end
 

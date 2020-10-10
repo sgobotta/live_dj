@@ -53,11 +53,15 @@ const PlayerSyncing = initPlayer => ({
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
+      setVolume(player)
       player.loadVideoById({
         videoId,
         startSeconds: time + 1
       })
       !shouldPlay && player.pauseVideo()
+    })
+
+    this.handleEvent('receive_queue_changed', () => {
       setVolume(player)
     })
 
