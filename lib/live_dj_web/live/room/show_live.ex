@@ -69,22 +69,22 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_info({:add_to_queue, %{selected_video: selected_video}}, socket) do
-    %{player: player, video_queue: video_queue} = socket.assigns
-    updated_video_queue = video_queue ++ [selected_video]
-    search_result = Enum.map(socket.assigns.search_result, fn search ->
-      mark_as_queued(search, updated_video_queue)
-    end)
+  def handle_info(
+    {:add_to_queue, %{updated_video_queue: updated_video_queue}},
+    %{assigns: %{player: player, search_result: search_result, slug: slug}} = socket
+  ) do
+    search_result = search_result
+      |> Enum.map(fn search -> mark_as_queued(search, updated_video_queue) end)
+
     socket = socket
       |> assign(:search_result, search_result)
       |> assign(:video_queue, updated_video_queue)
 
-    case video_queue do
-      [] ->
-        %{slug: slug} = socket.assigns
-        selected_video_id = selected_video.video_id
-        Organizer.subscribe(:play_next_of, slug, selected_video_id)
-        props = %{video_id: selected_video_id, time: 0}
+    case length(updated_video_queue) do
+      1 ->
+        selected_video = hd(updated_video_queue)
+        Organizer.subscribe(:play_next_of, slug, selected_video.video_id)
+        props = %{time: 0, video_id: selected_video.video_id}
         player = Player.update(player, props)
         {:noreply,
           socket
@@ -92,7 +92,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))
         }
-      _xs ->
+      _n ->
         {:noreply,
           socket
           |> push_event("receive_queue_changed", %{})
@@ -250,22 +250,29 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("search", %{"search_field" => %{"query" => query}}, socket) do
+  def handle_event(
+    "search",
+    %{"search_field" => %{"query" => query}},
+    %{video_queue: video_queue} = socket
+    ) do
     opts = [maxResults: 3]
-    {:ok, videos, _pagination_options} = Tubex.Video.search_by_query(query, opts)
+    {:ok, search, _pagination_options} = Tubex.Video.search_by_query(query, opts)
 
-    search_result = Enum.map(videos, fn video ->
-      mark_as_queued(video, socket.assigns.video_queue)
-    end)
+    search_result = search
+      |> Enum.map(fn search -> Video.from_tubex_video(search) end)
+      |> Enum.map(fn video -> mark_as_queued(video, video_queue) end)
     {:noreply, assign(socket, :search_result, search_result)}
   end
 
   @impl true
   def handle_event("add_to_queue", selected_video, socket) do
+    %{assigns: %{video_queue: video_queue}} = socket
+    selected_video = Enum.find(socket.assigns.search_result, fn search -> search.video_id == selected_video["video_id"] end)
+    updated_video_queue = Player.add_to_queue(video_queue, selected_video)
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
-      {:add_to_queue, %{selected_video: Video.create(selected_video)}}
+      {:add_to_queue, %{updated_video_queue: updated_video_queue}}
     )
     {:noreply, socket}
   end
@@ -315,18 +322,10 @@ defmodule LiveDjWeb.Room.ShowLive do
     Enum.any?(video_queue, fn qv -> qv.video_id == video.video_id end)
   end
 
-  defp mark_as_queued(video, video_queue) do
-    video = %{
-      title: video.title,
-      thumbnails: video.thumbnails,
-      channel_title: video.channel_title,
-      description: video.description,
-      video_id: video.video_id,
-      is_queued: ""
-    }
-    case is_queued(video, video_queue) do
-      true -> Map.merge(video, %{is_queued: "disabled"})
-      false -> video
+  defp mark_as_queued(search, video_queue) do
+    case is_queued(search, video_queue) do
+      true -> Video.update(search, %{is_queued: "disabled"})
+      false -> search
     end
   end
 
@@ -456,6 +455,6 @@ defmodule LiveDjWeb.Room.ShowLive do
         video_id: "ZxjrWgUn0Wo"
       }
     ]
-    Enum.map(search_data, fn e -> Map.merge(e, %{is_queued: false}) end)
+    Enum.map(search_data, fn e -> Video.from_tubex_video(e) end)
   end
 end

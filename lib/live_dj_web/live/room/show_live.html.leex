@@ -90,7 +90,7 @@
             <tbody>
               <tr>
                 <td>
-                  <%= img_tag(video.thumbnails["medium"]["url"], width: video.thumbnails["medium"]["width"]) %>
+                  <%= img_tag(video.img_url, width: video.img_width) %>
                 </td>
                 <td>
                   <p>
@@ -109,11 +109,6 @@
                     value="queue"
                     phx-click="add_to_queue"
                     phx-value-video_id="<%= video.video_id %>"
-                    phx-value-title="<%= video.title %>"
-                    phx-value-img_url="<%= video.thumbnails["default"]["url"] %>"
-                    phx-value-img_height="<%= video.thumbnails["default"]["height"] %>"
-                    phx-value-img_width="<%= video.thumbnails["default"]["width"] %>"
-                    phx-value-is_queued="false"
                   />
                 </td>
               </tr>
