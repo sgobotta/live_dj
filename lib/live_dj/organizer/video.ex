@@ -2,18 +2,24 @@ defmodule LiveDj.Organizer.Video do
 
   alias LiveDj.Organizer.Video
 
-  defstruct img_height: "", img_url: "", img_width: "", is_queued: false, title: "", video_id: "", previous: "", next: ""
+  defstruct channel_title: "", description: "", img_height: "", img_url: "", img_width: "", is_queued: "", title: "", video_id: "", previous: "", next: ""
 
-  def create(props) do
+  def update(video, props) do
+    Map.merge(video, props)
+  end
+
+  def from_tubex_video(tubex_video) do
     %Video{
-      img_height: props["img_height"],
-      img_url: props["img_url"],
-      img_width: props["img_width"],
-      is_queued: false,
-      title: props["title"],
-      video_id: props["video_id"],
+      channel_title: tubex_video.channel_title,
+      img_url: tubex_video.thumbnails["default"]["url"],
+      img_height: tubex_video.thumbnails["default"]["height"],
+      img_width: tubex_video.thumbnails["default"]["width"],
+      is_queued: "",
+      description: tubex_video.description,
+      title: tubex_video.title,
+      video_id: tubex_video.video_id,
       previous: "",
-      next: ""
+      next: "",
     }
   end
 end
