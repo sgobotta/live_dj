@@ -21,17 +21,17 @@ docker.services:
 #ecto.create: @ Creates the storage for the repo
 ecto.create: SHELL:=/bin/bash
 ecto.create: 
-	source .env && mix ecto.create
+	source .env && docker-compose up -d && mix ecto.create
 
 #ecto.reset: @ Drops your current database, recreates and migrates it again
 ecto.reset: SHELL:=/bin/bash
 ecto.reset:
-	source .env && mix ecto.reset
+	source .env && docker-compose up -d && mix ecto.reset
 
 #ecto.setup: @ Creates and migrates the database
 ecto.setup: SHELL:=/bin/bash
 ecto.setup:
-	source .env && mix ecto.setup
+	source .env && docker-compose up -d && mix ecto.setup
 
 #help: @ Shows help topics
 help:
