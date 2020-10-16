@@ -113,6 +113,10 @@
   border-top-right-radius: 12px;
   border-bottom-right-radius: 12px;
   align-items: center;
+
+  &.current-video {
+    background-color: #8558af;
+  }
 }
 
 .queue-thumb {

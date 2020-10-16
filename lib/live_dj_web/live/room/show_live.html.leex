@@ -59,7 +59,7 @@
           <%= for video <- @video_queue do %>
             <li>
               <div class="container">
-                <div class="row pill">
+                <div class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %>">
                   <%= img_tag(video.img_url, class: "queue-thumb") %>
                   <p class="pill-text"><%= video.title %></p>
                 </div>
