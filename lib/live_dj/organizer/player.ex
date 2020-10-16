@@ -14,6 +14,10 @@ defmodule LiveDj.Organizer.Player do
     %{play_button_state: "", pause_button_state: "disabled"}
   end
 
+  def get_controls_state(%{video_id: _, state: "stopped"}) do
+    %{play_button_state: "", pause_button_state: "disabled"}
+  end
+
   def get_controls_state(%{video_id: _, state: "playing"}) do
     %{play_button_state: "disabled", pause_button_state: ""}
   end
