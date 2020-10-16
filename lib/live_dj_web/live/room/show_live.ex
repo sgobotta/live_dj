@@ -71,7 +71,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info(
     {:add_to_queue, %{updated_video_queue: updated_video_queue}},
-    %{assigns: %{player: player, search_result: search_result, slug: slug}} = socket
+    %{assigns: %{player: player, search_result: search_result}} = socket
   ) do
     search_result = search_result
       |> Enum.map(fn search -> mark_as_queued(search, updated_video_queue) end)
@@ -83,7 +83,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     case length(updated_video_queue) do
       1 ->
         selected_video = hd(updated_video_queue)
-        Organizer.subscribe(:play_next_of, slug, selected_video.video_id)
         props = %{time: 0, video_id: selected_video.video_id}
         player = Player.update(player, props)
         {:noreply,
@@ -106,47 +105,49 @@ defmodule LiveDjWeb.Room.ShowLive do
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{ current_queue: video_queue, player: player}}
+      {:receive_initial_state, %{current_queue: video_queue, player: player}}
     )
     {:noreply, socket}
   end
 
   def handle_info({:receive_initial_state, params}, socket) do
-    Organizer.unsubscribe(:request_initial_state, socket.assigns.slug)
+    %{search_result: search_result, slug: slug} = socket.assigns
+    Organizer.unsubscribe(:request_initial_state, slug)
     %{current_queue: current_queue, player: player} = params
+    search_result = search_result
+      |> Enum.map(fn search -> mark_as_queued(search, current_queue) end)
     socket = socket
       |> assign(:video_queue, current_queue)
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
+      |> assign(:search_result, search_result)
     case current_queue do
       []  -> {:noreply, socket}
       _xs ->
-        %{slug: slug} = socket.assigns
-        Organizer.subscribe(:play_next_of, slug, player.video_id)
         {:noreply,
           socket
-            |> push_event("receive_player_state", Player.create_response(player))}
+          |> push_event("receive_player_state", Player.create_response(player))}
     end
   end
 
-  def handle_info({:player_signal_playing, %{state: state, time: time}}, socket) do
+  def handle_info({:player_signal_playing, %{state: state}}, socket) do
     %{player: player} = socket.assigns
-    player = Player.update(player, %{state: state, time: time})
+    player = Player.update(player, %{state: state})
     {:noreply,
       socket
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
-      |> push_event("receive_playing_signal", %{time: time})}
+      |> push_event("receive_playing_signal", %{})}
   end
 
-  def handle_info({:player_signal_paused, %{state: state, time: time}}, socket) do
+  def handle_info({:player_signal_paused, %{state: state}}, socket) do
     %{player: player} = socket.assigns
-    player = Player.update(player, %{state: state, time: time})
+    player = Player.update(player, %{state: state})
     {:noreply,
     socket
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
-      |> push_event("receive_paused_signal", %{time: time})}
+      |> push_event("receive_paused_signal", %{})}
   end
 
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
@@ -154,32 +155,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
     socket
       |> assign(:player, Player.update(player, %{time: time}))}
-  end
-
-  def handle_info({:player_signal_play_next, _params}, socket) do
-    %{slug: slug, video_queue: video_queue, player: player} = socket.assigns
-    Organizer.unsubscribe(:play_next_of, slug, player.video_id)
-    case tl(video_queue) do
-      []  ->
-        player = Player.update(player, %{state: "paused"})
-        {:noreply,
-          socket
-          |> assign(:player, player)
-          |> assign(:video_queue, [])
-          |> assign(:player_controls, Player.get_controls_state(player))
-        }
-      _xs ->
-        next_video_id = hd(tl(video_queue))["video_id"]
-        Organizer.subscribe(:play_next_of, slug, next_video_id)
-        player = Player.update(player, %{video_id: next_video_id, time: 0})
-        {:noreply,
-          socket
-          |> assign(:player, player)
-          |> assign(:video_queue, tl(video_queue))
-          |> assign(:player_controls, Player.get_controls_state(player))
-          |> push_event("receive_player_state", Player.create_response(player))
-        }
-    end
   end
 
   @impl true
@@ -192,18 +167,17 @@ defmodule LiveDjWeb.Room.ShowLive do
       []  ->
         %{video_queue: video_queue} = socket.assigns
         case video_queue do
-          [] -> {:noreply,
-              socket
-                |> assign(:player_controls, Player.get_controls_state(player))
-            }
-          _xs  ->
-            player = Player.update(player, %{video_id: hd(video_queue)["video_id"]})
+          [] ->
             {:noreply,
-            socket
+              socket
+              |> assign(:player_controls, Player.get_controls_state(player))}
+          [v|_vs]  ->
+            player = Player.update(player, %{video_id: v.video_id})
+            {:noreply,
+              socket
               |> assign(:video_queue, video_queue)
               |> assign(:player_controls, player)
-              |> push_event("receive_player_state", Player.create_response(player))
-            }
+              |> push_event("receive_player_state", Player.create_response(player))}
         end
       _xs ->
         Organizer.subscribe(:request_initial_state, socket.assigns.slug)
@@ -218,44 +192,55 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_event("player_signal_playing", params, socket) do
+  def handle_event("player_signal_playing", _params, socket) do
     :ok = Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
-      {:player_signal_playing, %{state: "playing", time: params["time"]}}
+      {:player_signal_playing, %{state: "playing"}}
     )
     {:noreply, socket}
   end
 
-  def handle_event("player_signal_paused", params, socket) do
+  def handle_event("player_signal_paused", _params, socket) do
     :ok = Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
-      {:player_signal_paused, %{state: "paused", time: params["time"]}}
+      {:player_signal_paused, %{state: "paused"}}
     )
     {:noreply, socket}
   end
 
   def handle_event("player_signal_play_next", _params, socket) do
-    # Fix me: second and further consequent calls will broadcast with an outdated
-    # video_id. There should not be more than one broadcast call for the same
-    # video_id
-    video_id = socket.assigns.player.video_id
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug <> ":play_next_of:" <> video_id,
-      {:player_signal_play_next, %{}}
-    )
-    {:noreply, socket}
+    %{video_queue: video_queue, player: player} = socket.assigns
+    %{video_id: current_video_id} = player
+
+    next_video = Enum.find(video_queue, fn video -> video.previous == current_video_id end)
+
+    case next_video do
+      nil ->
+        player = Player.update(player, %{state: "paused"})
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> assign(:player_controls, Player.get_controls_state(player))}
+      video ->
+        %{video_id: video_id} = video
+        player = Player.update(player, %{video_id: video_id, time: 0, state: "playing"})
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> assign(:player_controls, Player.get_controls_state(player))
+          |> push_event("receive_player_state", Player.create_response(player))}
+    end
   end
 
   @impl true
   def handle_event(
     "search",
     %{"search_field" => %{"query" => query}},
-    %{video_queue: video_queue} = socket
+    %{assigns: %{video_queue: video_queue}} = socket
     ) do
-    opts = [maxResults: 3]
+    opts = [maxResults: 10]
     {:ok, search, _pagination_options} = Tubex.Video.search_by_query(query, opts)
 
     search_result = search
@@ -276,6 +261,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     )
     {:noreply, socket}
   end
+
 
   @impl true
   def handle_event("player_signal_current_time", current_time, socket) do
@@ -374,85 +360,85 @@ defmodule LiveDjWeb.Room.ShowLive do
   defp fake_search_data do
     search_data = [
       %Tubex.Video{
-        channel_id: "UCtWuB1D_E3mcyYThA9iKggQ",
-        channel_title: "Vulf",
-        description: "VULFPECK /// Wait for the Moment (feat. Antwaun Stanley) buy on bandcamp → https://vulfpeck.bandcamp.com Antwaun Stanley — vocals Jack Stratton ...",
+        channel_id: "UCK5zTxgu4T8xLs0z5VBoIhg",
+        channel_title: "Bảo Anh",
+        description: "",
         etag: nil,
         playlist_id: nil,
-        published_at: "2013-08-06T07:24:31Z",
+        published_at: "2012-12-23T09:47:11Z",
         thumbnails: %{
           "default" => %{
             "height" => 90,
-            "url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
+            "url" => "https://i.ytimg.com/vi/dyp2mLYhRkw/default.jpg",
             "width" => 120
           },
           "high" => %{
             "height" => 360,
-            "url" => "https://i.ytimg.com/vi/r4G0nbpLySI/hqdefault.jpg",
+            "url" => "https://i.ytimg.com/vi/dyp2mLYhRkw/hqdefault.jpg",
             "width" => 480
           },
           "medium" => %{
             "height" => 180,
-            "url" => "https://i.ytimg.com/vi/r4G0nbpLySI/mqdefault.jpg",
+            "url" => "https://i.ytimg.com/vi/dyp2mLYhRkw/mqdefault.jpg",
             "width" => 320
           }
         },
-        title: "VULFPECK /// Wait for the Moment",
-        video_id: "r4G0nbpLySI"
+        title: "Video Countdown 20 Old  3 seconds",
+        video_id: "dyp2mLYhRkw"
       },
       %Tubex.Video{
-        channel_id: "UC-2JUs_G21BrJ0efehwGkUw",
-        channel_title: "Scary Pockets",
-        description: "Subscribe to stories: https://www.youtube.com/channel/UC-yUK_2HT9rxQSsweAjjNiA Spotify: https://tinyurl.com/rooupcg iTunes: https://tinyurl.com/wdgfsd9 Ok, ...",
+        channel_id: "UCLoZ-xYlaY7udYHFjgm55Hw",
+        channel_title: "DiaryBela",
+        description: "If you read this far down the description I love you. Please Hit that ▷ SUBSCRIBE button and LIKE my video and also turn ON notifications BELL! FOLLOW ...",
         etag: nil,
         playlist_id: nil,
-        published_at: "2019-11-28T16:00:14Z",
+        published_at: "2019-06-21T15:09:53Z",
         thumbnails: %{
           "default" => %{
             "height" => 90,
-            "url" => "https://i.ytimg.com/vi/myzNf5kW1kQ/default.jpg",
+            "url" => "https://i.ytimg.com/vi/FJ5pRIZXVks/default.jpg",
             "width" => 120
           },
           "high" => %{
             "height" => 360,
-            "url" => "https://i.ytimg.com/vi/myzNf5kW1kQ/hqdefault.jpg",
+            "url" => "https://i.ytimg.com/vi/FJ5pRIZXVks/hqdefault.jpg",
             "width" => 480
           },
           "medium" => %{
             "height" => 180,
-            "url" => "https://i.ytimg.com/vi/myzNf5kW1kQ/mqdefault.jpg",
+            "url" => "https://i.ytimg.com/vi/FJ5pRIZXVks/mqdefault.jpg",
             "width" => 320
           }
         },
-        title: "wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth",
-        video_id: "myzNf5kW1kQ"
+        title: "#1 Countdown | 3 seconds with sound effect",
+        video_id: "FJ5pRIZXVks"
       },
       %Tubex.Video{
-        channel_id: "UCWuBpAte4YHm_oELpzoM2qg",
-        channel_title: "Vulfpeck - Topic",
-        description: "Provided to YouTube by TuneCore Wait for the Moment (Live at Madison Square Garden) · Vulfpeck · Antwaun Stanley Live at Madison Square Garden ℗ 2019 ...",
+        channel_id: "UC-5mG3KEnJ4WUFXrGVUTHXw",
+        channel_title: "bvbb",
+        description: "my cat is epic.",
         etag: nil,
         playlist_id: nil,
-        published_at: "2019-12-09T10:00:22Z",
+        published_at: "2017-04-09T18:42:40Z",
         thumbnails: %{
           "default" => %{
             "height" => 90,
-            "url" => "https://i.ytimg.com/vi/ZxjrWgUn0Wo/default.jpg",
+            "url" => "https://i.ytimg.com/vi/wUF9DeWJ0Dk/default.jpg",
             "width" => 120
           },
           "high" => %{
             "height" => 360,
-            "url" => "https://i.ytimg.com/vi/ZxjrWgUn0Wo/hqdefault.jpg",
+            "url" => "https://i.ytimg.com/vi/wUF9DeWJ0Dk/hqdefault.jpg",
             "width" => 480
           },
           "medium" => %{
             "height" => 180,
-            "url" => "https://i.ytimg.com/vi/ZxjrWgUn0Wo/mqdefault.jpg",
+            "url" => "https://i.ytimg.com/vi/wUF9DeWJ0Dk/mqdefault.jpg",
             "width" => 320
           }
         },
-        title: "Wait for the Moment (Live at Madison Square Garden)",
-        video_id: "ZxjrWgUn0Wo"
+        title: "Video Countdown 3 seconds",
+        video_id: "wUF9DeWJ0Dk"
       }
     ]
     Enum.map(search_data, fn e -> Video.from_tubex_video(e) end)
