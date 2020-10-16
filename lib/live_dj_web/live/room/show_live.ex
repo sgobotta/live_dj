@@ -265,10 +265,9 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def handle_event("player_signal_current_time", current_time, socket) do
-    %{room: room} = socket.assigns
-    current_user = socket.assigns.user.uuid
+    %{room: room, user: %{uuid: uuid}} = socket.assigns
 
-    case current_user == room.video_tracker do
+    case uuid == room.video_tracker do
       true ->
         Phoenix.PubSub.broadcast(
           LiveDj.PubSub,
@@ -292,9 +291,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           [] ->
             {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: ""})
             updated_room
-          presences ->
-            first_presence = hd presences
-            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: first_presence})
+          [p|_ps] ->
+            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: p})
             updated_room
         end
     end

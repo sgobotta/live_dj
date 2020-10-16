@@ -57,7 +57,7 @@ const PlayerSyncing = initPlayer => ({
       setVolume(player)
       player.loadVideoById({
         videoId,
-        startSeconds: time + 1
+        startSeconds: time
       })
       !shouldPlay && player.pauseVideo()
     })
