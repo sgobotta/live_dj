@@ -80,10 +80,10 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> assign(:search_result, search_result)
       |> assign(:video_queue, updated_video_queue)
 
-    case length(updated_video_queue) do
-      1 ->
-        selected_video = hd(updated_video_queue)
-        props = %{time: 0, video_id: selected_video.video_id}
+    case updated_video_queue do
+      [v] ->
+        selected_video = v
+        props = %{time: 0, video_id: selected_video.video_id, state: "playing"}
         player = Player.update(player, props)
         {:noreply,
           socket
@@ -91,11 +91,23 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))
         }
-      _n ->
-        {:noreply,
-          socket
-          |> push_event("receive_queue_changed", %{})
-        }
+      [_v|_vs] ->
+        case player.state do
+          "stopped" ->
+            %{video_id: video_id} = player
+            next_video = Enum.find(updated_video_queue, fn video -> video.previous == video_id end)
+            %{video_id: video_id} = next_video
+            player = Player.update(player, %{state: "playing", time: 0, video_id: video_id})
+            {:noreply,
+              socket
+              |> assign(:player, player)
+              |> assign(:player_controls, Player.get_controls_state(player))
+              |> push_event("receive_player_state", Player.create_response(player))}
+          _ ->
+            {:noreply,
+              socket
+              |> push_event("receive_queue_changed", %{})}
+        end
     end
   end
 
@@ -218,7 +230,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     case next_video do
       nil ->
-        player = Player.update(player, %{state: "paused"})
+        player = Player.update(player, %{state: "stopped", time: 0})
         {:noreply,
           socket
           |> assign(:player, player)
@@ -242,7 +254,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     ) do
     opts = [maxResults: 10]
     {:ok, search, _pagination_options} = Tubex.Video.search_by_query(query, opts)
-
     search_result = search
       |> Enum.map(fn search -> Video.from_tubex_video(search) end)
       |> Enum.map(fn video -> mark_as_queued(video, video_queue) end)
@@ -251,8 +262,8 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def handle_event("add_to_queue", selected_video, socket) do
-    %{assigns: %{video_queue: video_queue}} = socket
-    selected_video = Enum.find(socket.assigns.search_result, fn search -> search.video_id == selected_video["video_id"] end)
+    %{assigns: %{search_result: search_result, video_queue: video_queue}} = socket
+    selected_video = Enum.find(search_result, fn search -> search.video_id == selected_video["video_id"] end)
     updated_video_queue = Player.add_to_queue(video_queue, selected_video)
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
@@ -437,6 +448,33 @@ defmodule LiveDjWeb.Room.ShowLive do
         },
         title: "Video Countdown 3 seconds",
         video_id: "wUF9DeWJ0Dk"
+      },
+      %Tubex.Video{
+        channel_id: "UCtWuB1D_E3mcyYThA9iKggQ",
+        channel_title: "Vulf",
+        description: "VULFPECK /// Dean Town buy on bandcamp → https://vulfpeck.bandcamp.com Jack Stratton — kick & snare, mixing, video Theo Katzman — sock cymbal ...",
+        etag: nil,
+        playlist_id: nil,
+        published_at: "2016-10-11T17:01:52Z",
+        thumbnails: %{
+          "default" => %{
+            "height" => 90,
+            "url" => "https://i.ytimg.com/vi/le0BLAEO93g/default.jpg",
+            "width" => 120
+          },
+          "high" => %{
+            "height" => 360,
+            "url" => "https://i.ytimg.com/vi/le0BLAEO93g/hqdefault.jpg",
+            "width" => 480
+          },
+          "medium" => %{
+            "height" => 180,
+            "url" => "https://i.ytimg.com/vi/le0BLAEO93g/mqdefault.jpg",
+            "width" => 320
+          }
+        },
+        title: "VULFPECK /// Dean Town",
+        video_id: "le0BLAEO93g"
       }
     ]
     Enum.map(search_data, fn e -> Video.from_tubex_video(e) end)
