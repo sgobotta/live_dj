@@ -235,7 +235,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply, socket}
   end
 
-  def handle_event("player_signal_play_next", _params, socket) do
+  def handle_event("player_signal_video_ended", _params, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
     %{video_id: current_video_id} = player
 
