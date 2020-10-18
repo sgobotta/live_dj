@@ -6,6 +6,7 @@ const onStateChange = hookContext => event => {
     }
     case 0: {
       console.log('ended')
+      hookContext.pushEvent('player_signal_play_next')
       break
     }
     case 1: {
@@ -39,7 +40,7 @@ function setVolume(player) {
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const player = await initPlayer()
+    const player = await initPlayer(onStateChange(this))
     this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {
@@ -53,11 +54,15 @@ const PlayerSyncing = initPlayer => ({
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
-      shouldPlay && player.loadVideoById({
+      setVolume(player)
+      player.loadVideoById({
         videoId,
-        startSeconds: time + 1
+        startSeconds: time
       })
       !shouldPlay && player.pauseVideo()
+    })
+
+    this.handleEvent('receive_queue_changed', () => {
       setVolume(player)
     })
 

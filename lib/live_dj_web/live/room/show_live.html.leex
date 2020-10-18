@@ -2,7 +2,13 @@
 
   <div class="row section-container">
     <div class="column">
-      <%= if @player.state == "paused" do %>
+      <%= if @player_controls.play_button_state == "disabled" &&
+             @player_controls.pause_button_state == "disabled" do%>
+        <a>
+          <i class="fas fa-spinner rotating"></i>
+        </a>
+      <% else %>
+      <%= if @player.state == "paused" || @player.state == "stopped" do %>
         <a
           <%= @player_controls.play_button_state %>
           phx-click="player_signal_playing"
@@ -17,6 +23,7 @@
         >
           <i class="fas fa-pause-circle clickeable"></i>
         </a>
+      <% end %>
       <% end %>
     </div>
     <div class="column">
@@ -52,9 +59,9 @@
           <%= for video <- @video_queue do %>
             <li>
               <div class="container">
-                <div class="row pill">
-                  <%= img_tag(video["img_url"], class: "queue-thumb") %>
-                  <p class="pill-text"><%= video["title"] %></p>
+                <div class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %>">
+                  <%= img_tag(video.img_url, class: "queue-thumb") %>
+                  <p class="pill-text"><%= video.title %></p>
                 </div>
               </div>
             </li>
@@ -66,52 +73,39 @@
 
     <div class="column section-container">
 
-      <div class="container">
+      <div>
         <form phx-submit="search" class="search-form">
           <%= text_input :search_field, :query, placeholder: "Search videos", autofocus: true, "phx-debounce": "300" %>
         </form>
       </div>
 
-      <div class="">
+      <div>
         <%= for video <- @search_result do %>
-          <table>
-            <thead>
-              <tr>
-                <th colspan="3"><p><%= video.title %></p></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <%= img_tag(video.thumbnails["medium"]["url"], width: video.thumbnails["medium"]["width"]) %>
-                </td>
-                <td>
-                  <p>
-                    <%= video.description %>
-                  </p>
-                  <p>
-                    <strong>
-                      <%= video.channel_title %>
-                    </strong>
-                  </p>
-                </td>
-                <td>
-                  <input
-                    <%= video.is_queued %>
-                    type="button"
-                    value="queue"
-                    phx-click="add_to_queue"
-                    phx-value-video_id="<%= video.video_id %>"
-                    phx-value-title="<%= video.title %>"
-                    phx-value-img_url="<%= video.thumbnails["default"]["url"] %>"
-                    phx-value-img_height="<%= video.thumbnails["default"]["height"] %>"
-                    phx-value-img_width="<%= video.thumbnails["default"]["width"] %>"
-                    phx-value-is_queued="false"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="row search-result separator">
+            <div class="column-offset-25">
+              <%= img_tag(video.img_url, width: video.img_width) %>
+            </div>
+            <div class="column">
+              <p><%= video.title %></p>
+              <p><%= video.description %></p>
+              <p>
+                <strong>
+                  <%= video.channel_title %>
+                </strong>
+              </p>
+            </div>
+            <div class="column-offset-25 align-center">
+              <%= if video.is_queued == true do %>
+                <a class="disabled">
+                  <i class="fas fa-check-circle"></i>
+                </a>
+              <% else %>
+                <a class="btn" phx-click="add_to_queue" phx-value-video_id="<%= video.video_id %>">
+                  <i class="fas fa-plus-circle"></i>
+                </a>
+              <% end %>
+            </div>
+          </div>
         <% end %>
       </div>
 

@@ -26,12 +26,19 @@ defmodule LiveDj.Organizer do
   end
 
   def subscribe(:request_initial_state, slug) do
-    Presence.list("room:" <> slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+  end
+
+  def subscribe(:play_next_of, slug, video_id) do
+    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":play_next_of:" <> video_id)
   end
 
   def unsubscribe(:request_initial_state, slug) do
     Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+  end
+
+  def unsubscribe(:play_next_of, slug, video_id) do
+    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":play_next_of:" <> video_id)
   end
 
   def is_my_presence(user, presence_payload) do

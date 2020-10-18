@@ -90,6 +90,27 @@
   margin: -1rem 0 2rem;
 }
 
+a.disabled i {
+  color: grey
+}
+
+a.btn:hover {
+  cursor: pointer
+}
+
+.row {
+
+  &.search-result {
+    padding: 1rem;
+  }
+
+  &.separator {
+    border-top-style: dashed;
+    border-top-width: 1px;
+    border-top-color: #31708f;
+  }
+}
+
 .section-container {
   padding: 25px;
   margin: 12px auto;
@@ -97,8 +118,12 @@
   border: dotted rgba(0, 255, 0, 0.1) 1px;
 }
 
+.align-center {
+  align-self: center;
+}
+
 .search-form {
-  margin: 2rem;
+  margin: 1.2rem;
 }
 
 .highlight {
@@ -113,6 +138,10 @@
   border-top-right-radius: 12px;
   border-bottom-right-radius: 12px;
   align-items: center;
+
+  &.current-video {
+    background-color: #8558af;
+  }
 }
 
 .queue-thumb {
@@ -225,4 +254,44 @@ how to remove the virtical space around the range input in IE*/
     margin: 0;
     /*Edge starts the margin from the thumb, not the track as other browsers do*/
   }
+}
+
+/**
+ * Animations
+ */
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotating {
+  -webkit-animation: rotating 2s linear infinite;
+  -moz-animation: rotating 2s linear infinite;
+  -ms-animation: rotating 2s linear infinite;
+  -o-animation: rotating 2s linear infinite;
+  animation: rotating 2s linear infinite;
 }
