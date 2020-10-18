@@ -2,6 +2,10 @@ defmodule LiveDj.Organizer.Queue do
 
   alias LiveDj.Organizer.Video
 
+  def get_initial_controls do
+    %{is_save_enabled: false}
+  end
+
   def add_to_queue(queue, video) do
     case queue do
       []  -> [video]

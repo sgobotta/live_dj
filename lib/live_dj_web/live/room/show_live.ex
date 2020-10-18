@@ -36,6 +36,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
           |> assign(:video_queue, [])
+          |> assign(:video_queue_controls, Queue.get_initial_controls())
           |> assign(:search_result, fake_search_data())
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
@@ -271,6 +272,14 @@ defmodule LiveDjWeb.Room.ShowLive do
       {:add_to_queue, %{updated_video_queue: updated_video_queue}}
     )
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("save_queue", _params, socket) do
+
+    {:noreply,
+      socket
+      |> assign(:video_queue_controls, %{is_save_enabled: false})}
   end
 
 

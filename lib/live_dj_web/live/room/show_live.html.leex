@@ -53,8 +53,17 @@
         </ul>
       </div>
 
-      <div class="section-container" id="player-syncing-data" phx-hook="PlayerSyncing">
-        <h3>Queue</h3>
+      <div class="row section-container" id="player-syncing-data" phx-hook="PlayerSyncing">
+        <div class="column">
+          <h3>Queue</h3>
+        </div>
+        <div class="column">
+          <a class="btn" phx-click="save_queue">
+            <i class="fas fa-save"></i>
+          </a>
+        </div>
+      </div>
+      <div class="row section-container">
         <ul>
           <%= for video <- @video_queue do %>
             <li>
