@@ -6,6 +6,14 @@ defmodule LiveDj.Organizer.Queue do
     %{is_save_enabled: false}
   end
 
+  def mark_as_saved(queue_controls) do
+    Map.merge(queue_controls, %{is_save_enabled: false})
+  end
+
+  def mark_as_unsaved(queue_controls) do
+    Map.merge(queue_controls, %{is_save_enabled: true})
+  end
+
   def add_to_queue(queue, video) do
     case queue do
       []  -> [video]
