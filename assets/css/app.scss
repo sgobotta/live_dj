@@ -90,6 +90,27 @@
   margin: -1rem 0 2rem;
 }
 
+a.disabled i {
+  color: grey
+}
+
+a.btn:hover {
+  cursor: pointer
+}
+
+.row {
+
+  &.search-result {
+    padding: 1rem;
+  }
+
+  &.separator {
+    border-top-style: dashed;
+    border-top-width: 1px;
+    border-top-color: #31708f;
+  }
+}
+
 .section-container {
   padding: 25px;
   margin: 12px auto;
@@ -97,8 +118,12 @@
   border: dotted rgba(0, 255, 0, 0.1) 1px;
 }
 
+.align-center {
+  align-self: center;
+}
+
 .search-form {
-  margin: 2rem;
+  margin: 1.2rem;
 }
 
 .highlight {
