@@ -3,6 +3,7 @@ defmodule LiveDj.Organizer.Room do
   import Ecto.Changeset
 
   schema "rooms" do
+    field :queue, {:array, :map}, default: "[]"
     field :slug, :string
     field :title, :string
     field :video_tracker, :string, default: ""
@@ -10,7 +11,7 @@ defmodule LiveDj.Organizer.Room do
     timestamps()
   end
 
-  @fields [:title, :slug, :video_tracker]
+  @fields [:queue, :slug, :title, :video_tracker]
 
   @doc false
   def changeset(room, attrs) do
