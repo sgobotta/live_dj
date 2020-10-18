@@ -31,28 +31,29 @@
     </div>
   </div>
 
+  <div class="row section-container">
+    <div class="column">
+      <h1><%= @room.title %></h1>
+    </div>
+
+    <div class="column" id="presence-data" phx-hook="PresenceSyncing">
+      <h3>Peers:</h3>
+      <ul>
+        <%= for uuid <- @connected_users do %>
+          <li style="list-style: none;">
+            <p class="<%= if uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+              <%= uuid %>
+              <%= if uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
   <div class="row">
 
     <div class="column">
-
-      <div class="section-container">
-        <h1><%= @room.title %></h1>
-      </div>
-
-      <div class="section-container" id="presence-data" phx-hook="PresenceSyncing">
-        <h3>Peers:</h3>
-        <ul>
-          <%= for uuid <- @connected_users do %>
-            <li style="list-style: none;">
-              <p class="<%= if uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                <%= uuid %>
-                <%= if uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
-              </p>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-
       <div class="section-container">
         <div class="row container" id="player-syncing-data" phx-hook="PlayerSyncing">
           <div class="column">
