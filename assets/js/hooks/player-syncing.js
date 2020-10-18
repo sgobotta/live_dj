@@ -66,6 +66,14 @@ const PlayerSyncing = initPlayer => ({
       setVolume(player)
     })
 
+    this.handleEvent('receive_queue_saved', () => {
+      setVolume(player)
+    })
+
+    this.handleEvent('receive_search_result', () => {
+      setVolume(player)
+    })
+
     setInterval(() => {
       const currentTime = player.getCurrentTime()
       this.pushEvent('player_signal_current_time', currentTime)
