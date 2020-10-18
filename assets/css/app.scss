@@ -90,6 +90,17 @@
   margin: -1rem 0 2rem;
 }
 
+/**
+ * Custom Styles
+ */
+
+.container{
+  margin: 0 auto;
+  padding: 0 2.0rem;
+  position: relative;
+  width: 100%
+}
+
 a.disabled i {
   color: grey
 }
@@ -151,8 +162,7 @@ a.btn:hover {
 }
 
 .pill-text {
-  max-width: 250px; /* or some value */
-  white-space: nowrap;
+  white-space: pre-wrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
