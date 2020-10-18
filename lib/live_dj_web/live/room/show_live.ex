@@ -75,7 +75,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   ) do
     search_result = search_result
       |> Enum.map(fn search -> mark_as_queued(search, updated_video_queue) end)
-
     socket = socket
       |> assign(:search_result, search_result)
       |> assign(:video_queue, updated_video_queue)
@@ -319,7 +318,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   defp mark_as_queued(search, video_queue) do
     case is_queued(search, video_queue) do
-      true -> Video.update(search, %{is_queued: "disabled"})
+      true -> Video.update(search, %{is_queued: true})
       false -> search
     end
   end
