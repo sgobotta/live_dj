@@ -7,6 +7,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Player
+  alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
@@ -263,7 +264,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("add_to_queue", selected_video, socket) do
     %{assigns: %{search_result: search_result, video_queue: video_queue}} = socket
     selected_video = Enum.find(search_result, fn search -> search.video_id == selected_video["video_id"] end)
-    updated_video_queue = Player.add_to_queue(video_queue, selected_video)
+    updated_video_queue = Queue.add_to_queue(video_queue, selected_video)
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
