@@ -196,6 +196,30 @@ defmodule LiveDjWeb.Room.ShowLive do
 #
 # ===========================================================================
 
+  def handle_info({:player_signal_play_by_id, %{video_id: video_id}}, socket) do
+    %{video_queue: video_queue, player: player} = socket.assigns
+
+    selected_video = Queue.get_video_by_id(video_queue, video_id)
+
+    case selected_video do
+      nil -> {:noreply, socket}
+      video ->
+        params = %{
+          next_id: video.next,
+          previous_id: video.previous,
+          time: 0,
+          video_id: video.video_id,
+        }
+        player = Player.update(player, params)
+        player_controls = Player.get_controls_state(player)
+        {:noreply,
+          socket
+          |> assign(:player, player)
+          |> assign(:player_controls, player_controls)
+          |> push_event("receive_player_state", Player.create_response(player))}
+    end
+  end
+
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
     %{player: player} = socket.assigns
     {:noreply,
@@ -338,6 +362,16 @@ defmodule LiveDjWeb.Room.ShowLive do
 
 #
 # ===========================================================================
+
+  @impl true
+  def handle_event("player_signal_play_by_id", params, socket) do
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:player_signal_play_by_id, %{video_id: params["video_id"]}}
+    )
+    {:noreply, socket}
+  end
 
   @impl true
   def handle_event(
