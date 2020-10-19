@@ -6,7 +6,7 @@ const onStateChange = hookContext => event => {
     }
     case 0: {
       console.log('ended')
-      hookContext.pushEvent('player_signal_play_next')
+      hookContext.pushEvent('player_signal_video_ended')
       break
     }
     case 1: {
