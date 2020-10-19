@@ -96,8 +96,17 @@
             <%= for video <- @video_queue do %>
               <li>
                 <div class="container">
-                  <div class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %>">
-                    <%= img_tag(video.img_url, class: "queue-thumb") %>
+                  <div
+                    class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> clickeable"
+                  >
+                    <div
+                      class="queue-thumb row"
+                      phx-click="player_signal_play_by_id"
+                      phx-value-video_id="<%= video.video_id %>"
+                    >
+                      <img src="<%= video.img_url %>" class="queue-thumb"></img>
+                      <i class="fas fa-play-circle queue-thumb-icon"></i>
+                    </div>
                     <p class="pill-text"><%= video.title %></p>
                   </div>
                 </div>

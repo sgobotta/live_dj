@@ -161,6 +161,23 @@ a.btn:hover {
   height: 50px;
 }
 
+.queue-thumb-icon {
+  font-size: 50px !important; // It's not a default <i> element
+}
+
+div.row.pill i.queue-thumb-icon {
+  font-size: 100px;
+  display: none;
+}
+
+div.row.pill:hover i.queue-thumb-icon {
+  display: block;
+}
+
+div.row.pill:hover img.queue-thumb {
+  display: none;
+}
+
 .pill-text {
   white-space: pre-wrap;
   overflow: hidden;
@@ -169,6 +186,14 @@ a.btn:hover {
 
 .clickeable {
   cursor: pointer;
+}
+
+.row.pill.clickeable:hover {
+  background-color: rgb(233, 110, 171);
+
+  p {
+    color: #000
+  }
 }
 
 /**
