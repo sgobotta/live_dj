@@ -26,4 +26,11 @@ defmodule LiveDj.Organizer.Queue do
     end
   end
 
+  def get_next_video(video_queue, current_video_id) do
+    Enum.find(video_queue, fn video -> video.previous == current_video_id end)
+  end
+
+  def get_previous_video(video_queue, current_video_id) do
+    Enum.find(video_queue, fn video -> video.next == current_video_id end)
+  end
 end
