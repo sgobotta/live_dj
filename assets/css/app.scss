@@ -144,10 +144,7 @@ a.btn:hover {
 .pill {
   background-color: #31708f;
   border: 10px black;
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-radius: 25px;
   align-items: center;
 
   &.current-video {
@@ -165,17 +162,68 @@ a.btn:hover {
   font-size: 50px !important; // It's not a default <i> element
 }
 
+div.row.pill:hover img.queue-thumb {
+  display: none;
+}
+
 div.row.pill i.queue-thumb-icon {
   font-size: 100px;
   display: none;
 }
 
 div.row.pill:hover i.queue-thumb-icon {
+  -webkit-animation: zoom-in 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: zoom-in 0.5s forwards;
+  animation-delay: 0.1s;
   display: block;
 }
 
-div.row.pill:hover img.queue-thumb {
-  display: none;
+@-webkit-keyframes zoom-in {
+  0% { transform: scale(1) }
+  25% { transform: scale(1.1) }
+  100% { transform: scale(1.2) }
+}
+
+@keyframes zoom-in {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  100% { transform: scale(1.2); }
+}
+
+div.row.pill:hover p.pill-text {
+  -webkit-animation: slide 0.3s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: slide 0.3s forwards;
+  animation-delay: 0.1s;
+}
+
+@-webkit-keyframes slide {
+  0% { padding-left: 5px; }
+  10% { padding-left: 6px; }
+  20% { padding-left: 7px; }
+  30% { padding-left: 8px; }
+  40% { padding-left: 9px; }
+  50% { padding-left: 10px; }
+  60% { padding-left: 11px; }
+  70% { padding-left: 12px; }
+  80% { padding-left: 13px; }
+  90% { padding-left: 14px; }
+  100% { padding-left: 15px; }
+}
+
+@keyframes slide {
+  0% { padding-left: 5px; }
+  10% { padding-left: 6px; }
+  20% { padding-left: 7px; }
+  30% { padding-left: 8px; }
+  40% { padding-left: 9px; }
+  50% { padding-left: 10px; }
+  60% { padding-left: 11px; }
+  70% { padding-left: 12px; }
+  80% { padding-left: 13px; }
+  90% { padding-left: 14px; }
+  100% { padding-left: 15px; }
 }
 
 .pill-text {
@@ -189,7 +237,7 @@ div.row.pill:hover img.queue-thumb {
 }
 
 .row.pill.clickeable:hover {
-  background-color: rgb(233, 110, 171);
+  background-color: #e96eab;
 
   p {
     color: #000
