@@ -97,17 +97,28 @@
               <li>
                 <div class="container">
                   <div
-                    class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> clickeable"
+                    class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> draggable"
                   >
                     <div
-                      class="queue-thumb row"
+                      class="queue-thumb row column-offset-2"
                       phx-click="player_signal_play_by_id"
                       phx-value-video_id="<%= video.video_id %>"
                     >
                       <img src="<%= video.img_url %>" class="queue-thumb"></img>
-                      <i class="fas fa-play-circle queue-thumb-icon"></i>
+                      <i class="fas fa-play-circle queue-thumb-icon clickeable"></i>
                     </div>
-                    <p class="pill-text"><%= video.title %></p>
+                    <div class="column">
+                      <div class="row">
+                        <div class="column align-center">
+                          <p class="pill-text"><%= video.title %></p>
+                        </div>
+                        <div class="column-offset-1" style="padding: 12px">
+                          <a class="btn" phx-click="remove_track" phx-value-video_id="<%= video.video_id %>">
+                            <i class="fas fa-trash clickeable"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </li>
