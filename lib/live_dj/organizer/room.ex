@@ -3,7 +3,7 @@ defmodule LiveDj.Organizer.Room do
   import Ecto.Changeset
 
   schema "rooms" do
-    field :queue, {:array, :map}, default: "[]"
+    field :queue, {:array, :map}, default: []
     field :slug, :string
     field :title, :string
     field :video_tracker, :string, default: ""
