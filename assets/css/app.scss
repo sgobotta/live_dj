@@ -109,6 +109,10 @@ a.btn:hover {
   cursor: pointer
 }
 
+a.btn i {
+  font-size: 2rem;
+}
+
 .row {
 
   &.search-result {
@@ -232,12 +236,24 @@ div.row.pill:hover p.pill-text {
   text-overflow: ellipsis;
 }
 
+div p.pill-text {
+  align-items: center;
+}
+
 .clickeable {
   cursor: pointer;
 }
 
-.row.pill.clickeable:hover {
-  background-color: #e96eab;
+.draggable {
+  cursor: grabbing
+}
+
+.fa-trash.clickeable:hover {
+  color: #e65252;
+}
+
+.row.pill.draggable:hover {
+  background-color: #fa84bf;
 
   p {
     color: #000
