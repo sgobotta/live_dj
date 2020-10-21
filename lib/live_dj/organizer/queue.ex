@@ -26,6 +26,21 @@ defmodule LiveDj.Organizer.Queue do
     end
   end
 
+  def remove_video_by_id(video_queue, video_id) do
+    video = get_video_by_id(video_queue, video_id)
+    video_queue = Enum.filter(video_queue, fn video -> video.video_id != video_id end)
+    Enum.map(video_queue, fn v ->
+      case v.next == video.video_id do
+        true -> Video.update(v, %{next: video.next})
+        false ->
+          case v.previous == video.video_id do
+            true -> Video.update(v, %{previous: video.previous})
+            false -> v
+          end
+      end
+    end)
+  end
+
   def get_video_by_id(video_queue, video_id) do
     Enum.find(video_queue, fn video -> video.video_id == video_id end)
   end
