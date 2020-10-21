@@ -220,6 +220,14 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
+  def handle_info({:remove_track, %{video_id: video_id}}, socket) do
+    %{video_queue: video_queue} = socket.assigns
+
+    video_queue = Queue.remove_video_by_id(video_queue, video_id)
+
+    {:noreply, socket |> assign(:video_queue, video_queue)}
+  end
+
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
     %{player: player} = socket.assigns
     {:noreply,
@@ -242,8 +250,6 @@ defmodule LiveDjWeb.Room.ShowLive do
               socket
               |> assign(:player_controls, Player.get_controls_state(player))}
           [v|_vs]  ->
-            IO.inspect("VIDEO ::: ")
-            IO.inspect(v)
             player = Player.update(player, %{video_id: v.video_id, previous_id: v.previous, next_id: v.next})
             {:noreply,
               socket
@@ -362,6 +368,16 @@ defmodule LiveDjWeb.Room.ShowLive do
 
 #
 # ===========================================================================
+
+  @impl true
+  def handle_event("remove_track", params, socket) do
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:remove_track, %{video_id: params["video_id"]}}
+    )
+    {:noreply, socket}
+  end
 
   @impl true
   def handle_event("player_signal_play_by_id", params, socket) do
