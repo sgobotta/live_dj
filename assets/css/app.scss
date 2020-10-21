@@ -109,8 +109,12 @@ a.btn:hover {
   cursor: pointer
 }
 
-a.btn i {
-  font-size: 2rem;
+a.btn i.trash {
+  font-size: 1.5rem;
+}
+
+.remove-track-btn-container {
+  padding: 12px
 }
 
 .row {

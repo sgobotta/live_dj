@@ -112,10 +112,16 @@
                         <div class="column align-center">
                           <p class="pill-text"><%= video.title %></p>
                         </div>
-                        <div class="column-offset-1" style="padding: 12px">
-                          <a class="btn" phx-click="remove_track" phx-value-video_id="<%= video.video_id %>">
-                            <i class="fas fa-trash clickeable"></i>
-                          </a>
+                        <div class="remove-track-btn-container column-offset-1">
+                          <%= if @player.video_id != video.video_id do %>
+                            <a
+                              class="btn"
+                              phx-click="remove_track"
+                              phx-value-video_id="<%= video.video_id %>"
+                            >
+                              <i class="fas fa-trash trash clickeable"></i>
+                            </a>
+                          <% end %>
                         </div>
                       </div>
                     </div>
