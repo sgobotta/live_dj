@@ -221,11 +221,14 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info({:remove_track, %{video_id: video_id}}, socket) do
-    %{video_queue: video_queue} = socket.assigns
+    %{video_queue: video_queue, video_queue_controls: video_queue_controls} = socket.assigns
 
     video_queue = Queue.remove_video_by_id(video_queue, video_id)
 
-    {:noreply, socket |> assign(:video_queue, video_queue)}
+    {:noreply,
+      socket
+      |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
+      |> assign(:video_queue, video_queue)}
   end
 
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
