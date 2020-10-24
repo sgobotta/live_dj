@@ -38,7 +38,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:video_queue, parsed_queue)
+          |> assign(:video_queue, Enum.with_index(parsed_queue))
           |> assign(:video_queue_controls, Queue.get_initial_controls())
           |> assign(:search_result, fake_search_data(parsed_queue))
           |> assign(:player, player)
@@ -82,11 +82,11 @@ defmodule LiveDjWeb.Room.ShowLive do
       Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}) end)
     socket = socket
       |> assign(:search_result, search_result)
-      |> assign(:video_queue, updated_video_queue)
+      |> assign(:video_queue, Enum.with_index(updated_video_queue))
       |> assign(:video_queue_controls, video_queue_controls)
 
     case updated_video_queue do
-      [v] ->
+      [{v, _}] ->
         selected_video = v
         props = %{time: 0, video_id: selected_video.video_id, state: "playing", previous_id: "", next_id: ""}
         player = Player.update(player, props)
@@ -138,10 +138,11 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{search_result: search_result, slug: slug} = socket.assigns
     Organizer.unsubscribe(:request_initial_state, slug)
     %{current_queue: current_queue, player: player} = params
+    current_queue = Enum.map(current_queue, fn {v, _} -> v end)
     search_result = Enum.map(search_result, fn video ->
       Video.update(video, %{is_queued: Queue.is_queued(video, current_queue)}) end)
     socket = socket
-      |> assign(:video_queue, current_queue)
+      |> assign(:video_queue, Enum.with_index(current_queue))
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
       |> assign(:search_result, search_result)
@@ -198,7 +199,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:player_signal_play_by_id, %{video_id: video_id}}, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
-
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     selected_video = Queue.get_video_by_id(video_queue, video_id)
 
     case selected_video do
@@ -227,14 +228,16 @@ defmodule LiveDjWeb.Room.ShowLive do
       video_queue_controls: video_queue_controls
     } = socket.assigns
 
-    video_queue = Queue.remove_video_by_id(video_queue, video_id)
+    video_queue = video_queue
+    |> Enum.map(fn {v, _} -> v end)
+    |> Queue.remove_video_by_id(video_id)
 
     {:noreply,
       socket
       |> assign(:search_result, Enum.map(search_data, fn video ->
         Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end))
       |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
-      |> assign(:video_queue, video_queue)}
+      |> assign(:video_queue, Enum.with_index(video_queue))}
   end
 
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
@@ -258,7 +261,7 @@ defmodule LiveDjWeb.Room.ShowLive do
             {:noreply,
               socket
               |> assign(:player_controls, Player.get_controls_state(player))}
-          [v|_vs]  ->
+          [{v, _}|_vs]  ->
             player = Player.update(player, %{video_id: v.video_id, previous_id: v.previous, next_id: v.next})
             {:noreply,
               socket
@@ -301,7 +304,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("player_signal_video_ended", _params, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
     %{video_id: current_video_id} = player
-
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     next_video = Queue.get_next_video(video_queue, current_video_id)
 
     case next_video do
@@ -330,7 +333,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("player_signal_play_next", _params, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
     %{video_id: current_video_id} = player
-
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     next_video = Queue.get_next_video(video_queue, current_video_id)
 
     case next_video do
@@ -354,7 +357,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("player_signal_play_previous", _params, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
     %{video_id: current_video_id} = player
-
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     previous_video = Queue.get_previous_video(video_queue, current_video_id)
 
     case previous_video do
@@ -403,7 +406,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     "search",
     %{"search_field" => %{"query" => query}},
     %{assigns: %{video_queue: video_queue}} = socket
-    ) do
+  ) do
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     opts = [maxResults: 10]
     {:ok, search_result, _pagination_options} = Tubex.Video.search_by_query(query, opts)
     search_result = Enum.map(search_result, fn search ->
@@ -419,6 +423,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("add_to_queue", selected_video, socket) do
     %{assigns: %{search_result: search_result, video_queue: video_queue, video_queue_controls: video_queue_controls}} = socket
     selected_video = Enum.find(search_result, fn search -> search.video_id == selected_video["video_id"] end)
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     updated_video_queue = Queue.add_to_queue(video_queue, selected_video)
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
@@ -433,7 +438,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_event("save_queue", _params, socket) do
     %{assigns: %{room: room, slug: slug, video_queue: video_queue, video_queue_controls: video_queue_controls}} = socket
-
+    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     {:ok, _room} = Organizer.update_room(room, %{queue: video_queue})
 
     Phoenix.PubSub.broadcast(

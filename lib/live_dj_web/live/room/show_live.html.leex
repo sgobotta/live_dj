@@ -92,9 +92,9 @@
           </div>
         </div>
         <div>
-          <ul>
-            <%= for video <- @video_queue do %>
-              <li>
+          <ul class="playlist">
+            <%= for {video, index} <- @video_queue do %>
+              <li draggable="true" id="drag-data-<%= video.video_id %>" data-position="<%= index %>" phx-hook="DragAndDropping">
                 <div class="container">
                   <div
                     class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> draggable"
@@ -127,6 +127,7 @@
                     </div>
                   </div>
                 </div>
+                <span class="drop-zone"></span>
               </li>
             <% end %>
           </ul>
