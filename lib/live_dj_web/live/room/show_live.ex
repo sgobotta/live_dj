@@ -78,8 +78,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:add_to_queue, %{updated_video_queue: updated_video_queue, video_queue_controls: video_queue_controls}},
     %{assigns: %{player: player, search_result: search_result}} = socket
   ) do
-    search_result = search_result
-      |> Enum.map(fn search -> mark_as_queued(search, updated_video_queue) end)
+    search_result = Enum.map(search_result, fn video ->
+      Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}) end)
     socket = socket
       |> assign(:search_result, search_result)
       |> assign(:video_queue, updated_video_queue)
@@ -138,8 +138,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{search_result: search_result, slug: slug} = socket.assigns
     Organizer.unsubscribe(:request_initial_state, slug)
     %{current_queue: current_queue, player: player} = params
-    search_result = search_result
-      |> Enum.map(fn search -> mark_as_queued(search, current_queue) end)
+    search_result = Enum.map(search_result, fn video ->
+      Video.update(video, %{is_queued: Queue.is_queued(video, current_queue)}) end)
     socket = socket
       |> assign(:video_queue, current_queue)
       |> assign(:player, player)
@@ -221,12 +221,18 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info({:remove_track, %{video_id: video_id}}, socket) do
-    %{video_queue: video_queue, video_queue_controls: video_queue_controls} = socket.assigns
+    %{
+      search_result: search_data,
+      video_queue: video_queue,
+      video_queue_controls: video_queue_controls
+    } = socket.assigns
 
     video_queue = Queue.remove_video_by_id(video_queue, video_id)
 
     {:noreply,
       socket
+      |> assign(:search_result, Enum.map(search_data, fn video ->
+        Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end))
       |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
       |> assign(:video_queue, video_queue)}
   end
@@ -399,10 +405,10 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{assigns: %{video_queue: video_queue}} = socket
     ) do
     opts = [maxResults: 10]
-    {:ok, search, _pagination_options} = Tubex.Video.search_by_query(query, opts)
-    search_result = search
-      |> Enum.map(fn search -> Video.from_tubex_video(search) end)
-      |> Enum.map(fn video -> mark_as_queued(video, video_queue) end)
+    {:ok, search_result, _pagination_options} = Tubex.Video.search_by_query(query, opts)
+    search_result = Enum.map(search_result, fn search ->
+      video = Video.from_tubex_video(search)
+      Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end)
     {:noreply,
       socket
       |> assign(:search_result, search_result)
@@ -477,17 +483,6 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   defp create_connected_user do
     %ConnectedUser{uuid: UUID.uuid4()}
-  end
-
-  defp is_queued(video, video_queue) do
-    Enum.any?(video_queue, fn qv -> qv.video_id == video.video_id end)
-  end
-
-  defp mark_as_queued(search, video_queue) do
-    case is_queued(search, video_queue) do
-      true -> Video.update(search, %{is_queued: true})
-      false -> search
-    end
   end
 
   defp assign_tracker(socket, room) do
@@ -643,7 +638,8 @@ defmodule LiveDjWeb.Room.ShowLive do
         video_id: "le0BLAEO93g"
       }
     ]
-    search_data = Enum.map(search_data, fn e -> Video.from_tubex_video(e) end)
-    Enum.map(search_data, fn search -> mark_as_queued(search, video_queue) end)
+    Enum.map(search_data, fn search ->
+      video = Video.from_tubex_video(search)
+      Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end)
   end
 end
