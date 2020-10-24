@@ -498,35 +498,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  defp fake_video_queue do
-    [
-      %{
-        "img_height" => "90",
-        "img_url" => "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
-        "img_width" => "120",
-        "title" => "VULFPECK /// Wait for the Moment",
-        "value" => "queue",
-        "video_id" => "r4G0nbpLySI"
-      },
-      %{
-        "img_height" => "90",
-        "img_url" => "https://i.ytimg.com/vi/Qh3tnj13BiI/default.jpg",
-        "img_width" => "120",
-        "title" => "Charly García 25 Grandes Exitos Sus Mejores Canciones",
-        "value" => "queue",
-        "video_id" => "Qh3tnj13BiI"
-      },
-      %{
-        "img_height" => "90",
-        "img_url" => "https://i.ytimg.com/vi/myzNf5kW1kQ/default.jpg",
-        "img_width" => "120",
-        "title" => "wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth wait for the moment | vulfpeck | ‘stories’ acoustic cover ft. hunter elizabeth",
-        "value" => "queue",
-        "video_id" => "myzNf5kW1kQ"
-      }
-    ]
-  end
-
   defp fake_search_data(video_queue) do
     search_data = [
       %Tubex.Video{
