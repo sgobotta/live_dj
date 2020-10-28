@@ -249,7 +249,7 @@ div p.pill-text {
 }
 
 .draggable {
-  cursor: grabbing
+  cursor: ns-resize
 }
 
 .fa-trash.clickeable:hover {
@@ -397,4 +397,61 @@ how to remove the virtical space around the range input in IE*/
   -ms-animation: rotating 2s linear infinite;
   -o-animation: rotating 2s linear infinite;
   animation: rotating 2s linear infinite;
+}
+
+/**
+ * Drag & Drop
+ */
+
+ul.playlist {
+
+  display: block;
+
+  li {
+    display: block;
+    position: relative;
+
+    &.hide {
+      display: none !important;
+    }
+
+    &.show {
+      display: block !important;
+    }
+
+    span.over-zone {
+      display: inline-block;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      height: 40px;
+      bottom: 0px;
+
+      &.expand {
+        bottom: -30px;
+        height: 80px;
+        background-color: transparent;
+        z-index: 90;
+      }
+    }
+
+    &.animate-margin {
+      transition: margin-bottom 250ms ease-out, height 300ms ease-out;
+    }
+
+    &.dragged {
+      opacity: 0.5;
+      overflow: hidden;
+    }
+
+    &.ghost-slot {
+      display: block;
+      position: relative;
+      height: 50px;
+      background-color: transparent;
+      border: 3px solid #fa84bf;
+      border-style: dashed;
+      border-radius: 50px;
+    }
+  }
 }
