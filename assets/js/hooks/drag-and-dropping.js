@@ -67,8 +67,9 @@ const DragAndDropping = () => ({
       e.dataTransfer.dropEffect = 'move'
       const { tagName } = e.target
       if (tagName === "SPAN" && e.target.classList.contains('over-zone')) {
-        const from = e.dataTransfer.getData('text/plain')
-        const { dataset: { position: to }} = this.el
+        const from = parseInt(e.dataTransfer.getData('text/plain'))
+        const { dataset: { position: _to }} = this.el
+        const to = parseInt(_to)
 
         const { dataset: { overSlot: position } } = e.target
         const ghostLi = document.getElementById(`drag-data-ghost-${position}`)
@@ -78,11 +79,14 @@ const DragAndDropping = () => ({
           ghostLi.classList.remove('dragged-over')
         }, 30)
 
-        const dropsOnItself = (parseInt(from) === parseInt(to))
-        const dropsFirstElement = (parseInt(from) === 1) && (parseInt(to) === 0)
+        const dropsOnItself = (from === to)
+        const dropsFirstElement = (from === 1) && (to === 0)
         if (dropsOnItself || dropsFirstElement) return
 
-        this.pushEvent('player_signal_sort_video', {from, to })
+        this.pushEvent(
+          'player_signal_sort_video',
+          { from: from - 1, to: from < to ? to-1 : to }
+        )
       }
     })
 
