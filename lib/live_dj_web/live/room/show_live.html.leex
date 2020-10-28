@@ -93,8 +93,27 @@
         </div>
         <div>
           <ul class="playlist">
+            <li
+              id="drag-data-xxxxxxxxxxx"
+              data-position="<%= 0 %>"
+              phx-hook="DragAndDropping"
+            >
+              <span data-over-slot="<%= 0 %>" class="over-zone" />
+            </li>
+            <li
+              id="drag-data-ghost-<%= 0 %>"
+              data-ghost-slot="<%= 0 %>"
+              phx-hook="DragAndDropping"
+            >
+              <span data-ghost-slot="<%= 0 %>" class="" />
+            </li>
             <%= for {video, index} <- @video_queue do %>
-              <li draggable="true" id="drag-data-<%= video.video_id %>" data-position="<%= index %>" phx-hook="DragAndDropping">
+              <li
+                draggable="true"
+                id="drag-data-<%= index %>"
+                data-position="<%= index + 1 %>"
+                phx-hook="DragAndDropping"
+              >
                 <div class="container">
                   <div
                     class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> draggable"
@@ -104,7 +123,7 @@
                       phx-click="player_signal_play_by_id"
                       phx-value-video_id="<%= video.video_id %>"
                     >
-                      <img src="<%= video.img_url %>" class="queue-thumb"></img>
+                      <img src="<%= video.img_url %>" class="queue-thumb" />
                       <i class="fas fa-play-circle queue-thumb-icon clickeable"></i>
                     </div>
                     <div class="column">
@@ -127,7 +146,14 @@
                     </div>
                   </div>
                 </div>
-                <span class="drop-zone"></span>
+                <span data-over-slot="<%= index + 1 %>" class="over-zone" />
+              </li>
+              <li
+                id="drag-data-ghost-<%= index + 1 %>"
+                data-ghost-slot="<%= index + 1 %>"
+                phx-hook="DragAndDropping"
+              >
+                <span data-ghost-slot="<%= index + 1 %>" />
               </li>
             <% end %>
           </ul>
