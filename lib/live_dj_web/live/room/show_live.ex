@@ -242,11 +242,15 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:player_signal_sort_video, params}, socket) do
     %{
+      player: player,
+      player_controls: player_controls,
       video_queue: video_queue,
       video_queue_controls: video_queue_controls
     } = params
     {:noreply,
     socket
+      |> assign(:player, player)
+      |> assign(:player_controls, player_controls)
       |> assign(:video_queue, video_queue)
       |> assign(:video_queue_controls, video_queue_controls)}
   end
@@ -405,6 +409,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_event("player_signal_sort_video", %{"from" => from, "to" => to}, socket) do
     %{
+      player: player,
       video_queue: video_queue,
       video_queue_controls: video_queue_controls
     } = socket.assigns
@@ -416,10 +421,18 @@ defmodule LiveDjWeb.Room.ShowLive do
     |> Enum.with_index()
     |> Queue.link_tracks(from, to)
 
+    {%{previous: previous, next: next}, _} = Enum.find(video_queue, fn {v,_} ->
+      v.video_id == player.video_id
+    end)
+
+    player = Player.update(player, %{previous_id: previous, next_id: next})
+
     :ok = Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
       {:player_signal_sort_video, %{
+        player: player,
+        player_controls: Player.get_controls_state(player),
         video_queue: video_queue,
         video_queue_controls: Queue.mark_as_unsaved(video_queue_controls)}}
     )
