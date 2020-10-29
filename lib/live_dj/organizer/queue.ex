@@ -45,6 +45,37 @@ defmodule LiveDj.Organizer.Queue do
     end)
   end
 
+  def take_from_indexed_queue(queue, index) do
+    Enum.reduce(queue, {nil,[]}, fn ({v,i}, {e, q}) ->
+      case i do
+        ^index -> {v, q}
+        _ -> {e, q ++ [v]}
+      end
+    end)
+  end
+
+  def link_by_prop(queue, prop, from, to) do
+    {_, queue} = Enum.reduce(queue, {"", []}, fn ({v,i}, {link_id, vs_acc}) ->
+      video = case i do
+        ^from                -> Video.update(v, %{prop => link_id})
+        ^to                  -> Video.update(v, %{prop => link_id})
+        i when (from-1) == i -> Video.update(v, %{prop => link_id})
+        i when (from+1) == i -> Video.update(v, %{prop => link_id})
+        i when (to-1)   == i -> Video.update(v, %{prop => link_id})
+        i when (to+1)   == i -> Video.update(v, %{prop => link_id})
+        _                    -> v
+      end
+      {video.video_id, vs_acc ++ [{video,i}]}
+    end)
+    queue
+  end
+
+  def link_tracks(queue, from, to) do
+    queue = link_by_prop(queue, :previous, from, to)
+    link_by_prop(Enum.reverse(queue), :next, from, to)
+    |> Enum.reverse()
+  end
+
   def get_video_by_id(queue, video_id) do
     Enum.find(queue, fn video -> video.video_id == video_id end)
   end
