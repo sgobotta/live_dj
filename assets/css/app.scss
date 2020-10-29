@@ -98,7 +98,7 @@
   margin: 0 auto;
   padding: 0 2.0rem;
   position: relative;
-  width: 100%
+  width: 100%;
 }
 
 a.disabled i {
@@ -180,23 +180,11 @@ div.row.pill i.queue-thumb-icon {
 }
 
 div.row.pill:hover i.queue-thumb-icon {
-  -webkit-animation: zoom-in 0.5s forwards;
+  -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
-  animation: zoom-in 0.5s forwards;
+  animation: slight-zoom-in 0.5s forwards;
   animation-delay: 0.1s;
   display: block;
-}
-
-@-webkit-keyframes zoom-in {
-  0% { transform: scale(1) }
-  25% { transform: scale(1.1) }
-  100% { transform: scale(1.2) }
-}
-
-@keyframes zoom-in {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.1); }
-  100% { transform: scale(1.2); }
 }
 
 div.row.pill:hover p.pill-text {
@@ -204,34 +192,6 @@ div.row.pill:hover p.pill-text {
   -webkit-animation-delay: 0.1s;
   animation: slide 0.3s forwards;
   animation-delay: 0.1s;
-}
-
-@-webkit-keyframes slide {
-  0% { padding-left: 5px; }
-  10% { padding-left: 6px; }
-  20% { padding-left: 7px; }
-  30% { padding-left: 8px; }
-  40% { padding-left: 9px; }
-  50% { padding-left: 10px; }
-  60% { padding-left: 11px; }
-  70% { padding-left: 12px; }
-  80% { padding-left: 13px; }
-  90% { padding-left: 14px; }
-  100% { padding-left: 15px; }
-}
-
-@keyframes slide {
-  0% { padding-left: 5px; }
-  10% { padding-left: 6px; }
-  20% { padding-left: 7px; }
-  30% { padding-left: 8px; }
-  40% { padding-left: 9px; }
-  50% { padding-left: 10px; }
-  60% { padding-left: 11px; }
-  70% { padding-left: 12px; }
-  80% { padding-left: 13px; }
-  90% { padding-left: 14px; }
-  100% { padding-left: 15px; }
 }
 
 .pill-text {
@@ -248,12 +208,32 @@ div p.pill-text {
   cursor: pointer;
 }
 
+.player-control:hover {
+  color: #fa84bf;
+  -webkit-animation: slight-zoom-in 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: slight-zoom-in 0.5s forwards;
+  animation-delay: 0.1s;
+}
+
+.queue-control:hover {
+  color: #8558af;
+  -webkit-animation: slight-zoom-in 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: slight-zoom-in 0.5s forwards;
+  animation-delay: 0.1s;
+}
+
 .draggable {
   cursor: ns-resize
 }
 
 .fa-trash.clickeable:hover {
   color: #e65252;
+  -webkit-animation: moderate-zoom-in 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: moderate-zoom-in 0.5s forwards;
+  animation-delay: 0.1s;
 }
 
 .row.pill.draggable:hover {
@@ -278,12 +258,17 @@ input[type=range]:focus {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  background: #3271a9;
+  background: #fa84bf;
   border: 1.6px solid #3271a9;
   border-radius: 25px;
   width: 100%;
   height: 4px;
   cursor: pointer;
+}
+input[type=range]::-webkit-slider-runnable-track:hover {
+  height: 6px;
+  border-color: #a1577c;
+  background-color: #1b5385;
 }
 input[type=range]::-webkit-slider-thumb {
   margin-top: -12.1px;
@@ -295,8 +280,16 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
 }
+input[type=range]::-webkit-slider-thumb:hover {
+  width: 27px;
+  height: 27px;
+  border-color: #fa84bf;
+  background-color: #fa84bf;
+}
+
+
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #387ebd;
+  background-color: #fa84bf;
 }
 input[type=range]::-moz-range-track {
   background: #3271a9;
@@ -308,7 +301,7 @@ input[type=range]::-moz-range-track {
 }
 input[type=range]::-moz-range-thumb {
   width: 25px;
-  height: 25px;
+  height: 5px;
   background: #3271a9;
   border: 3.2px solid #0571a9;
   border-radius: 25px;
@@ -360,7 +353,7 @@ how to remove the virtical space around the range input in IE*/
 }
 
 /**
- * Animations
+ * Animation: Rotating
  */
 
 @-webkit-keyframes rotating /* Safari and Chrome */ {
@@ -400,6 +393,170 @@ how to remove the virtical space around the range input in IE*/
 }
 
 /**
+ * Animation: Zooming
+ */
+
+@-webkit-keyframes moderate-size-in {
+  0% { width: 25px; height: 25px }
+  25% { width: 35px; height: 35px }
+  100% { width: 45px; height: 45px }
+}
+
+@keyframes moderate-size-in {
+  0% { width: 25px; height: 25px }
+  25% { width: 35px; height: 35px }
+  100% { width: 45px; height: 45px }
+}
+
+@-webkit-keyframes moderate-zoom-in {
+  0% { transform: scale(1) }
+  25% { transform: scale(1.3) }
+  100% { transform: scale(1.6) }
+}
+
+@keyframes moderate-zoom-in {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  100% { transform: scale(1.6); }
+}
+
+@-webkit-keyframes slight-zoom-in {
+  0% { transform: scale(1) }
+  25% { transform: scale(1.1) }
+  100% { transform: scale(1.2) }
+}
+
+@keyframes slight-zoom-in {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  100% { transform: scale(1.2); }
+}
+
+/**
+ * Animation: Sliding
+ */
+
+ @-webkit-keyframes slide {
+  0% { padding-left: 5px; }
+  10% { padding-left: 6px; }
+  20% { padding-left: 7px; }
+  30% { padding-left: 8px; }
+  40% { padding-left: 9px; }
+  50% { padding-left: 10px; }
+  60% { padding-left: 11px; }
+  70% { padding-left: 12px; }
+  80% { padding-left: 13px; }
+  90% { padding-left: 14px; }
+  100% { padding-left: 15px; }
+}
+
+@keyframes slide {
+  0% { padding-left: 5px; }
+  10% { padding-left: 6px; }
+  20% { padding-left: 7px; }
+  30% { padding-left: 8px; }
+  40% { padding-left: 9px; }
+  50% { padding-left: 10px; }
+  60% { padding-left: 11px; }
+  70% { padding-left: 12px; }
+  80% { padding-left: 13px; }
+  90% { padding-left: 14px; }
+  100% { padding-left: 15px; }
+}
+
+/**
+ * Animation: Drag and Drop
+ */
+
+@keyframes begindrag {
+  0% {
+    transform: rotate(0deg)
+  }
+  10% {
+    transform: rotate(-3deg)
+  }
+  30% {
+    transform: rotate(-2deg)
+  }
+  55% {
+    transform: rotate(-1deg)
+  }
+  80% {
+    transform: rotate(1deg)
+  }
+  100% {
+    transform: rotate(0deg)
+  }
+}
+
+@-webkit-keyframes begindrag {
+  0% {
+    transform: rotate(0deg)
+  }
+  10% {
+    transform: rotate(-3deg)
+  }
+  30% {
+    transform: rotate(-2deg)
+  }
+  55% {
+    transform: rotate(-1deg)
+  }
+  80% {
+    transform: rotate(1deg)
+  }
+  100% {
+    transform: rotate(0deg)
+  }
+}
+
+/**
+ * Animation: Opacity
+ */
+
+@keyframes opacity {
+  0% {
+    opacity: 0
+  }
+  10% {
+    opacity: 0.2
+  }
+  30% {
+    opacity: 0.4
+  }
+  55% {
+    opacity: 0.6
+  }
+  80% {
+    opacity: 0.8
+  }
+  100% {
+    opacity: 1.0
+  }
+}
+
+@-webkit-keyframes opacity {
+  0% {
+    opacity: 0
+  }
+  10% {
+    opacity: 0.2
+  }
+  30% {
+    opacity: 0.4
+  }
+  55% {
+    opacity: 0.6
+  }
+  80% {
+    opacity: 0.8
+  }
+  100% {
+    opacity: 1.0
+  }
+}
+
+/**
  * Drag & Drop
  */
 
@@ -422,10 +579,11 @@ ul.playlist {
     span.over-zone {
       display: inline-block;
       position: absolute;
-      width: 85%;
-      left: 0;
+      width: 70%;
+      left: 40px;
       height: 40px;
       bottom: 0px;
+      cursor: ns-resize;
 
       &.expand {
         bottom: -30px;
@@ -442,6 +600,7 @@ ul.playlist {
     &.dragged {
       opacity: 0.5;
       overflow: hidden;
+      animation: begindrag .8s ease forwards;
     }
 
     &.ghost-slot {
@@ -452,6 +611,7 @@ ul.playlist {
       border: 3px solid #fa84bf;
       border-style: dashed;
       border-radius: 50px;
+      animation: opacity .4s ease forwards
     }
   }
 }
