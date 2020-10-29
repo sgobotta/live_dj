@@ -31,7 +31,6 @@ const DragAndDropping = () => ({
           e.target.classList.add('expand')
           ghostLi.classList.remove('over-zone')
           ghostLi.classList.add('ghost-slot')
-          ghostLi.classList.add('dragged-over')
         }, 30)
       }
     })
@@ -45,7 +44,6 @@ const DragAndDropping = () => ({
         setTimeout(() => {
           ghostLi.classList.add('over-zone')
           ghostLi.classList.remove('ghost-slot')
-          ghostLi.classList.remove('dragged-over')
         }, 30)
       }
     })
@@ -76,7 +74,6 @@ const DragAndDropping = () => ({
         setTimeout(() => {
           ghostLi.classList.add('over-zone')
           ghostLi.classList.remove('ghost-slot')
-          ghostLi.classList.remove('dragged-over')
         }, 30)
 
         const dropsOnItself = (from === to)
