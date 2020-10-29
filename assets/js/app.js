@@ -13,6 +13,7 @@ import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import PlayerSyncing from "./hooks/player-syncing";
 import PresenceSyncing from "./hooks/presence-syncing";
+import DragAndDropping from "./hooks/drag-and-dropping";
 import LoadYTIframeAPI from './deps/yt-iframe-api'
 import createPlayer from './lib/player'
 
@@ -34,6 +35,7 @@ function initLiveview() {
   const Hooks = {
     PlayerSyncing: PlayerSyncing(initPlayer),
     PresenceSyncing: PresenceSyncing(),
+    DragAndDropping: DragAndDropping(),
   }
 
   const liveSocket = new LiveSocket("/live", Socket, {
