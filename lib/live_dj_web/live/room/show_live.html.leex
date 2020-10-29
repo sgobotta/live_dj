@@ -8,7 +8,7 @@
         </a>
       <% else %>
         <a phx-click="player_signal_play_previous">
-          <i class="fas fa-step-backward clickeable"></i>
+          <i class="fas fa-step-backward player-control clickeable"></i>
         </a>
       <% end %>
 
@@ -23,7 +23,7 @@
             <%= @player_controls.play_button_state %>
             phx-click="player_signal_playing"
           >
-            <i class="fas fa-play-circle clickeable"></i>
+            <i class="fas fa-play-circle player-control clickeable"></i>
           </a>
         <% end %>
         <%= if @player.state == "playing" do %>
@@ -31,7 +31,7 @@
             <%= @player_controls.pause_button_state %>
             phx-click="player_signal_paused"
           >
-            <i class="fas fa-pause-circle clickeable"></i>
+            <i class="fas fa-pause-circle player-control clickeable"></i>
           </a>
         <% end %>
       <% end %>
@@ -42,7 +42,7 @@
         </a>
       <% else %>
         <a phx-click="player_signal_play_next">
-          <i class="fas fa-step-forward clickeable"></i>
+          <i class="fas fa-step-forward player-control clickeable"></i>
         </a>
       <% end %>
     </div>
@@ -82,7 +82,7 @@
           <div class="column">
             <%= if @video_queue_controls.is_save_enabled do %>
               <a class="btn" phx-click="save_queue">
-                <i class="fas fa-save"></i>
+                <i class="fas fa-save queue-control"></i>
               </a>
             <% else %>
               <a class="disabled">
