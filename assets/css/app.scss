@@ -252,15 +252,20 @@ div p.pill-text {
   }
 }
 
-.fade-in {
-  border-color: #fa84bf;
-  border-width: 0px;
-  border-style: none;
+.adds-track {
   border-radius: 50px;
-  -webkit-animation: track-fade-in 1.5s forwards;
-  -webkit-animation-delay: 0.1s;
-  animation: track-fade-in 1.5s forwards;
-  animation-delay: 0.1s;
+  -webkit-animation: track-fade-in 0.5s forwards;
+  -webkit-animation-delay: 0s;
+  animation: track-fade-in 0.5s forwards;
+  animation-delay: 0s;
+}
+
+.sorts-track {
+  border-radius: 50px;
+  -webkit-animation: track-expand-in 0.3s forwards;
+  -webkit-animation-delay: 0s;
+  animation: track-expand-in 0.3s forwards;
+  animation-delay: 0s;
 }
 
 /**
@@ -499,22 +504,10 @@ how to remove the virtical space around the range input in IE*/
 
 @keyframes begindrag {
   0% {
-    transform: rotate(0deg)
-  }
-  10% {
-    transform: rotate(-3deg)
-  }
-  30% {
-    transform: rotate(-2deg)
-  }
-  55% {
-    transform: rotate(-1deg)
-  }
-  80% {
-    transform: rotate(1deg)
+    opacity: 1.0;
   }
   100% {
-    transform: rotate(0deg)
+    opacity: 0.4;
   }
 }
 
@@ -578,41 +571,54 @@ how to remove the virtical space around the range input in IE*/
 @-webkit-keyframes track-fade-in {
   0% {
     transform: scale(0.75);
-    border: 0rem dotted #8558af;
     opacity: 0.4
   }
   12% {
-    border: 0.05rem dotted #8558af;
     opacity: 0.45
   }
   24% {
-    border: 0.1rem dotted #8558af;
     opacity: 0.5
   }
   36% {
-    border: 0.05rem double #8558af;
     opacity: 0.55
   }
   48% {
-    border: 0.04rem double #8558af;
     opacity: 0.6
   }
   60% {
-    border: 0.03rem double #8558af;
     opacity: 0.7
   }
   72% {
-    border: 0.02rem double #8558af;
     opacity: 0.75
   }
   85% {
-    border: 0.01rem double #8558af;
     opacity: 0.9
   }
   100% {
     transform: scale(1);
-    border: 0.0rem double #8558af;
     opacity: 1.0
+  }
+}
+
+/**
+ * Animation: Track slide in
+ */
+
+@keyframes track-expand-in {
+  0% {
+    transform: scaleX(0)
+  }
+  100% {
+    transform: scaleX(1)
+  }
+}
+
+@-webkit-keyframes track-expand-in {
+  0% {
+    transform: scaleX(0)
+  }
+  100% {
+    transform: scaleX(1)
   }
 }
 
@@ -706,7 +712,7 @@ ul.playlist {
     &.dragged {
       opacity: 0.5;
       overflow: hidden;
-      animation: begindrag .8s ease forwards;
+      animation: begindrag .2s ease forwards;
     }
 
     &.ghost-slot {
