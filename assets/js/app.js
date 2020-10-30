@@ -14,6 +14,7 @@ import {LiveSocket} from "phoenix_live_view"
 import PlayerSyncing from "./hooks/player-syncing";
 import PresenceSyncing from "./hooks/presence-syncing";
 import DragAndDropping from "./hooks/drag-and-dropping";
+import UiFeedback from "./hooks/ui-feedback";
 import LoadYTIframeAPI from './deps/yt-iframe-api'
 import createPlayer from './lib/player'
 
@@ -35,6 +36,7 @@ function initLiveview() {
   const Hooks = {
     PlayerSyncing: PlayerSyncing(initPlayer),
     PresenceSyncing: PresenceSyncing(),
+    UiFeedback: UiFeedback(),
     DragAndDropping: DragAndDropping(),
   }
 
