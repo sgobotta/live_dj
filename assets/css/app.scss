@@ -224,6 +224,14 @@ div p.pill-text {
   animation-delay: 0.1s;
 }
 
+.search-control:hover {
+  color: #438b73;
+  -webkit-animation: slight-zoom-in 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: slight-zoom-in 0.5s forwards;
+  animation-delay: 0.1s;
+}
+
 .draggable {
   cursor: ns-resize
 }
@@ -242,6 +250,17 @@ div p.pill-text {
   p {
     color: #000
   }
+}
+
+.fade-in {
+  border-color: #fa84bf;
+  border-width: 0px;
+  border-style: none;
+  border-radius: 50px;
+  -webkit-animation: track-fade-in 1.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: track-fade-in 1.5s forwards;
+  animation-delay: 0.1s;
 }
 
 /**
@@ -286,26 +305,36 @@ input[type=range]::-webkit-slider-thumb:hover {
   border-color: #fa84bf;
   background-color: #fa84bf;
 }
-
-
 input[type=range]:focus::-webkit-slider-runnable-track {
   background-color: #fa84bf;
 }
 input[type=range]::-moz-range-track {
-  background: #3271a9;
+  background: #fa84bf;
   border: 1.6px solid #3271a9;
   border-radius: 25px;
   width: 100%;
   height: 4px;
   cursor: pointer;
 }
+input[type=range]:hover::-moz-range-track {
+  height: 6px;
+  border-color: #a1577c;
+}
 input[type=range]::-moz-range-thumb {
+  margin-top: -12.1px;
   width: 25px;
-  height: 5px;
+  height: 25px;
   background: #3271a9;
   border: 3.2px solid #0571a9;
   border-radius: 25px;
   cursor: pointer;
+  -webkit-appearance: none;
+}
+input[type=range]::-moz-range-thumb:hover {
+  width: 27px;
+  height: 27px;
+  border-color: #fa84bf;
+  background-color: #fa84bf;
 }
 input[type=range]::-ms-track {
   background: transparent;
@@ -507,6 +536,83 @@ how to remove the virtical space around the range input in IE*/
   }
   100% {
     transform: rotate(0deg)
+  }
+}
+
+/**
+ * Animation: Track fade in
+ */
+
+@keyframes track-fade-in {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.4
+  }
+  12% {
+    opacity: 0.45
+  }
+  24% {
+    opacity: 0.5
+  }
+  36% {
+    opacity: 0.55
+  }
+  48% {
+    opacity: 0.6
+  }
+  60% {
+    opacity: 0.7
+  }
+  72% {
+    opacity: 0.75
+  }
+  85% {
+    opacity: 0.9
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1.0
+  }
+}
+
+@-webkit-keyframes track-fade-in {
+  0% {
+    transform: scale(0.75);
+    border: 0rem dotted #8558af;
+    opacity: 0.4
+  }
+  12% {
+    border: 0.05rem dotted #8558af;
+    opacity: 0.45
+  }
+  24% {
+    border: 0.1rem dotted #8558af;
+    opacity: 0.5
+  }
+  36% {
+    border: 0.05rem double #8558af;
+    opacity: 0.55
+  }
+  48% {
+    border: 0.04rem double #8558af;
+    opacity: 0.6
+  }
+  60% {
+    border: 0.03rem double #8558af;
+    opacity: 0.7
+  }
+  72% {
+    border: 0.02rem double #8558af;
+    opacity: 0.75
+  }
+  85% {
+    border: 0.01rem double #8558af;
+    opacity: 0.9
+  }
+  100% {
+    transform: scale(1);
+    border: 0.0rem double #8558af;
+    opacity: 1.0
   }
 }
 
