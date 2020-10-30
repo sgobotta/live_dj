@@ -2,12 +2,20 @@
 const UiFeedback = () => ({
   mounted() {
 
-    this.handleEvent('single-video-effect', ({pos}) => {
-      const element = document.querySelector(`[data-position="${pos}"] > div > div.pill`)
-      element.classList.add('fade-in')
+    function applyAnimationClass(querySelector, className) {
+      const element = document.querySelector(querySelector)
+      element.classList.add(className)
       setTimeout(() => {
-        element.classList.remove('fade-in')
+        element.classList.remove(className)
       }, 2000)
+    }
+
+    this.handleEvent('video_sorted_to_queue', ({pos}) => {
+      applyAnimationClass(`[data-position="${pos}"] > div > div.pill`, 'sorts-track')
+    })
+
+    this.handleEvent('video_added_to_queue', ({pos}) => {
+      applyAnimationClass(`[data-position="${pos}"] > div > div.pill`, 'adds-track')
     })
   }
 })
