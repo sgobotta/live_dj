@@ -4,7 +4,7 @@ const DragAndDropping = () => ({
     function updateGhostsStyles(position, className) {
       Array.from(Array(2).keys()).forEach(index => {
         const p = position - index
-        const ghostLi = document.querySelector(`[data-ghost-slot="${p}"`)
+        const ghostLi = document.querySelector(`[data-ghost-slot="${p}"]`)
         ghostLi.classList.add(className)
       })
     }
