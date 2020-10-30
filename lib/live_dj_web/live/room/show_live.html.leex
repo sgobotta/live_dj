@@ -1,4 +1,4 @@
-<div id="show-live">
+<div id="show-live" phx-hook="UiFeedback">
 
   <div class="row section-container">
     <div class="column">
@@ -191,7 +191,7 @@
                 </a>
               <% else %>
                 <a class="btn" phx-click="add_to_queue" phx-value-video_id="<%= video.video_id %>">
-                  <i class="fas fa-plus-circle"></i>
+                  <i class="fas fa-plus-circle search-control"></i>
                 </a>
               <% end %>
             </div>
