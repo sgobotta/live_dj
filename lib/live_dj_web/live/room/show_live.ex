@@ -75,7 +75,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info(
-    {:add_to_queue, %{updated_video_queue: updated_video_queue, video_queue_controls: video_queue_controls}},
+    {:add_to_queue, %{added_video_position: added_video_position, updated_video_queue: updated_video_queue, video_queue_controls: video_queue_controls}},
     %{assigns: %{player: player, search_result: search_result}} = socket
   ) do
     search_result = Enum.map(search_result, fn video ->
@@ -95,6 +95,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))
+          |> push_event("single-video-effect", %{pos: added_video_position})
         }
       [_v|_vs] ->
         case player.state do
@@ -107,11 +108,13 @@ defmodule LiveDjWeb.Room.ShowLive do
               socket
               |> assign(:player, player)
               |> assign(:player_controls, Player.get_controls_state(player))
-              |> push_event("receive_player_state", Player.create_response(player))}
+              |> push_event("receive_player_state", Player.create_response(player))
+              |> push_event("single-video-effect", %{pos: added_video_position})}
           _ ->
             {:noreply,
               socket
-              |> push_event("receive_queue_changed", %{})}
+              |> push_event("receive_queue_changed", %{})
+              |> push_event("single-video-effect", %{pos: added_video_position})}
         end
     end
   end
@@ -242,6 +245,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:player_signal_sort_video, params}, socket) do
     %{
+      sorted_video_position: sorted_video_position,
       player: player,
       player_controls: player_controls,
       video_queue: video_queue,
@@ -252,7 +256,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> assign(:player, player)
       |> assign(:player_controls, player_controls)
       |> assign(:video_queue, video_queue)
-      |> assign(:video_queue_controls, video_queue_controls)}
+      |> assign(:video_queue_controls, video_queue_controls)
+      |> push_event("single-video-effect", %{pos: sorted_video_position})}
   end
 
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
@@ -434,7 +439,8 @@ defmodule LiveDjWeb.Room.ShowLive do
         player: player,
         player_controls: Player.get_controls_state(player),
         video_queue: video_queue,
-        video_queue_controls: Queue.mark_as_unsaved(video_queue_controls)}}
+        video_queue_controls: Queue.mark_as_unsaved(video_queue_controls),
+        sorted_video_position: to+1}}
     )
     {:noreply, socket}
   end
@@ -478,7 +484,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       "room:" <> socket.assigns.slug,
       {:add_to_queue, %{
         updated_video_queue: updated_video_queue,
-        video_queue_controls: Queue.mark_as_unsaved(video_queue_controls)}}
+        video_queue_controls: Queue.mark_as_unsaved(video_queue_controls),
+        added_video_position: length(updated_video_queue)}}
     )
     {:noreply, socket}
   end
