@@ -32,7 +32,7 @@ const onVolumeChange = hookContext => player => {
   const volumeControl = document.getElementById("volume-control")
 
   function sendVolumeChangedNotification(value) {
-    hookContext.pushEvent('volume_level_changed', value, ({level}) => {
+    hookContext.pushEvent('volume_level_changed', parseInt(value), ({level}) => {
       player.setVolume(level)
     })
   }
