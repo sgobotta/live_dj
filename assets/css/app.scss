@@ -105,6 +105,14 @@ a.disabled i {
   color: grey
 }
 
+i.success-feedback {
+  color: #438b73 !important;
+  -webkit-animation: success-fade-in-out 2s forwards;
+  -webkit-animation-delay: 0s;
+  animation: success-fade-in-out 2s forwards;
+  animation-delay: 0s;
+}
+
 a.btn:hover {
   cursor: pointer
 }
@@ -498,6 +506,28 @@ how to remove the virtical space around the range input in IE*/
   100% { padding-left: 15px; }
 }
 
+
+
+/**
+ * Animation: Success fade in/out
+ */
+
+@keyframes success-fade-in-out {
+  0% { transform: scale(0) }
+  25% { transform: scale(1) }
+  50% { transform: scale(1) }
+  75% { transform: scale(1) }
+  100% { transform: scale(0) }
+}
+
+@-webkit-keyframes success-fade-in-out {
+  0% { transform: scale(0) }
+  25% { transform: scale(1) }
+  50% { transform: scale(1) }
+  75% { transform: scale(1) }
+  100% { transform: scale(0) }
+}
+
 /**
  * Animation: Drag and Drop
  */
@@ -513,22 +543,10 @@ how to remove the virtical space around the range input in IE*/
 
 @-webkit-keyframes begindrag {
   0% {
-    transform: rotate(0deg)
-  }
-  10% {
-    transform: rotate(-3deg)
-  }
-  30% {
-    transform: rotate(-2deg)
-  }
-  55% {
-    transform: rotate(-1deg)
-  }
-  80% {
-    transform: rotate(1deg)
+    opacity: 1.0;
   }
   100% {
-    transform: rotate(0deg)
+    opacity: 0.4;
   }
 }
 
