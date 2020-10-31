@@ -121,7 +121,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
       socket
       |> assign(:video_queue_controls, video_queue_controls)
-      |> push_event("receive_queue_saved", %{})}
+      |> push_event("receive_queue_saved", %{})
+      |> push_event("queue_saved", %{})}
   end
 
   def handle_info({:request_initial_state, _params}, socket) do
