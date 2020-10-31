@@ -43,6 +43,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:search_result, fake_search_data(parsed_queue))
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
+          |> assign(:volume_controls, %{level: 100})
           |> assign_tracker(room)
         }
     end
@@ -110,9 +111,7 @@ defmodule LiveDjWeb.Room.ShowLive do
               |> assign(:player_controls, Player.get_controls_state(player))
               |> push_event("receive_player_state", Player.create_response(player))}
           _ ->
-            {:noreply,
-              socket
-              |> push_event("receive_queue_changed", %{})}
+            {:noreply, socket}
         end
     end
   end
@@ -121,7 +120,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
       socket
       |> assign(:video_queue_controls, video_queue_controls)
-      |> push_event("receive_queue_saved", %{})
       |> push_event("queue_saved", %{})}
   end
 
@@ -455,6 +453,13 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
+  def handle_event("volume_level_changed", volume_level, socket) do
+    {:reply, %{level: volume_level},
+      socket
+      |> assign(:volume_controls, %{level: volume_level})}
+  end
+
+  @impl true
   def handle_event(
     "search",
     %{"search_field" => %{"query" => query}},
@@ -468,8 +473,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end)
     {:noreply,
       socket
-      |> assign(:search_result, search_result)
-      |> push_event("receive_search_result", %{})}
+      |> assign(:search_result, search_result)}
   end
 
   @impl true
