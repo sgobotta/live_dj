@@ -47,7 +47,13 @@
       <% end %>
     </div>
     <div class="column">
-      <input class="slider" id="volume-control" value="<%= @volume_controls.level %>" type="range" min="0" max="100" step="1"></input>
+      <input
+        class="slider"
+        id="volume-control"
+        value="<%= @volume_controls.volume_level %>"
+        type="range"
+        min="0" max="100" step="1"
+      />
     </div>
   </div>
 
@@ -59,11 +65,12 @@
     <div class="column" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
       <ul>
-        <%= for uuid <- @connected_users do %>
+        <%= for user <- @connected_users do %>
           <li style="list-style: none;">
-            <p class="<%= if uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-              <%= uuid %>
-              <%= if uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
+            <p class="<%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+              <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
+              <%= user.uuid %>
+              <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
             </p>
           </li>
         <% end %>
