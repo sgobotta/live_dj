@@ -11,15 +11,10 @@ const onStateChange = hookContext => event => {
     }
     case 1: {
       console.log('playing')
-      console.log('State ', event.target.getPlayerState())
-      const time = event.target.getCurrentTime()
-      // hookContext.pushEvent('player_signal_playing', {time})
       break
     }
     case 2: {
-      console.log('paused')
-      const time = event.target.getCurrentTime()
-      // hookContext.pushEvent('player_signal_paused', {time})
+      console.log('paused: ', event)
       break
     }
     case 3: {
@@ -33,45 +28,44 @@ const onStateChange = hookContext => event => {
   }
 }
 
-function setVolume(player) {
+const onVolumeChange = hookContext => player => {
   const volumeControl = document.getElementById("volume-control")
-  volumeControl.value = player.getVolume()
+
+  function sendVolumeChangedNotification(value) {
+    hookContext.pushEvent('volume_level_changed', value, ({level}) => {
+      player.setVolume(level)
+    })
+  }
+
+  sendVolumeChangedNotification(player.getVolume())
+
+  volumeControl.oninput = ({target: {value}}) => {
+    sendVolumeChangedNotification(value)
+  }
+  volumeControl.onmouseenter = () => {
+    volumeControl.focus()
+  }
 }
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const player = await initPlayer(onStateChange(this))
+    const player = await initPlayer(onStateChange(this), onVolumeChange(this))
     this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {
-      setVolume(player)
       player.playVideo()
     })
 
     this.handleEvent('receive_paused_signal', () => {
-      setVolume(player)
       player.pauseVideo()
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
-      setVolume(player)
       player.loadVideoById({
         videoId,
         startSeconds: time
       })
       !shouldPlay && player.pauseVideo()
-    })
-
-    this.handleEvent('receive_queue_changed', () => {
-      setVolume(player)
-    })
-
-    this.handleEvent('receive_queue_saved', () => {
-      setVolume(player)
-    })
-
-    this.handleEvent('receive_search_result', () => {
-      setVolume(player)
     })
 
     setInterval(() => {

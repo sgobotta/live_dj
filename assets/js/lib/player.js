@@ -1,18 +1,4 @@
-export default (container, {onStateChange}) => {
-  function configureVolume(player) {
-    const volumeControl = document.getElementById("volume-control")
-    volumeControl.value = player.getVolume()
-    volumeControl.onchange = event => {
-      player.setVolume(event.target.value)
-    }
-    volumeControl.oninput = event => {
-      player.setVolume(event.target.value)
-    }
-    volumeControl.onmouseenter = () => {
-      volumeControl.focus()
-    }
-  }
-
+export default (container, {onStateChange, onVolumeChange}) => {
   return new Promise((resolve) => {
     new YT.Player(container, {
       height: "210",
@@ -22,7 +8,7 @@ export default (container, {onStateChange}) => {
       events: {
         onReady: event => {
           const player = event.target
-          configureVolume(player)
+          onVolumeChange(player)
           resolve(player)
         },
         onStateChange,
