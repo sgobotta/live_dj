@@ -53,11 +53,11 @@ const PlayerSyncing = initPlayer => ({
     this.pushEvent('player_signal_ready')
 
     this.handleEvent('receive_playing_signal', () => {
-      player.playVideo(true)
+      player.playVideo()
     })
 
     this.handleEvent('receive_paused_signal', () => {
-      player.pauseVideo(false)
+      player.pauseVideo()
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
