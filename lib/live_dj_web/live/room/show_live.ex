@@ -19,7 +19,9 @@ defmodule LiveDjWeb.Room.ShowLive do
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
-    {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, %{})
+    volume_data = %{volume_level: 100}
+
+    {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, Map.merge(volume_data, %{volume_icon: "fa-volume-up"}))
 
     parsed_queue = room.queue
     |> Enum.map(fn track -> Video.from_jsonb(track) end)
@@ -43,7 +45,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:search_result, fake_search_data(parsed_queue))
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
-          |> assign(:volume_controls, %{level: 100})
+          |> assign(:volume_controls, volume_data)
           |> assign_tracker(room)
         }
     end
@@ -54,7 +56,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     %Broadcast{event: "presence_diff", payload: payload},
     %{assigns: %{slug: slug, user: user}} = socket
   ) do
-    connected_users = Organizer.list_present(slug)
+
+    connected_users = Organizer.list_present_with_metas(slug)
 
     room = handle_video_tracker_activity(slug, connected_users, payload)
 
@@ -219,6 +222,21 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, player_controls)
           |> push_event("receive_player_state", Player.create_response(player))}
     end
+  end
+
+  def handle_info({:volume_level_changed, params}, socket) do
+    %{uuid: uuid, volume_level: volume_level, volume_icon: volume_icon} = params
+    %{slug: slug} = socket.assigns
+
+    Presence.update(self(), "room:" <> slug, uuid, fn m ->
+      Map.merge(m, %{volume_level: volume_level, volume_icon: volume_icon})
+    end)
+
+    connected_users = Organizer.list_present_with_metas(slug)
+
+    {:noreply,
+      socket
+      |> assign(:connected_users, connected_users)}
   end
 
   def handle_info({:remove_track, %{video_id: video_id}}, socket) do
@@ -454,9 +472,21 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def handle_event("volume_level_changed", volume_level, socket) do
+    volume_icon = case volume_level do
+      l when l > 70 -> "fa-volume-up"
+      l when l > 30 -> "fa-volume-down"
+      l when l > 0 -> "fa-volume-off"
+      l when l == 0 -> "fa-volume-mute"
+    end
+
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:volume_level_changed, %{uuid: socket.assigns.user.uuid, volume_level: volume_level, volume_icon: volume_icon}}
+    )
     {:reply, %{level: volume_level},
       socket
-      |> assign(:volume_controls, %{level: volume_level})}
+      |> assign(:volume_controls, %{volume_level: volume_level})}
   end
 
   @impl true
@@ -538,7 +568,7 @@ defmodule LiveDjWeb.Room.ShowLive do
             {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: ""})
             updated_room
           [p|_ps] ->
-            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: p})
+            {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: p.uuid})
             updated_room
         end
     end
