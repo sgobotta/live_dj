@@ -14,6 +14,10 @@ defmodule LiveDj.Organizer do
     |> Enum.map(fn {k, _} -> k end)
   end
 
+  def list_present_with_metas(slug) do
+    Presence.list("room:" <> slug)
+    |> Enum.map(fn {uuid, %{metas: metas}} -> %{uuid: uuid, metas: metas} end)
+  end
 
   def list_filtered_present(slug, uuid) do
     Presence.list("room:" <> slug)
