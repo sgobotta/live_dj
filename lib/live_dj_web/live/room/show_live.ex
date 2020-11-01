@@ -472,6 +472,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def handle_event("volume_level_changed", volume_level, socket) do
+    %{slug: slug, user: %{uuid: uuid}} = socket.assigns
     volume_icon = case volume_level do
       l when l > 70 -> "fa-volume-up"
       l when l > 30 -> "fa-volume-down"
@@ -481,8 +482,8 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     :ok = Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:volume_level_changed, %{uuid: socket.assigns.user.uuid, volume_level: volume_level, volume_icon: volume_icon}}
+      "room:" <> slug,
+      {:volume_level_changed, %{uuid: uuid, volume_level: volume_level, volume_icon: volume_icon}}
     )
     {:reply, %{level: volume_level},
       socket
