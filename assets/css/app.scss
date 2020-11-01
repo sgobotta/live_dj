@@ -306,6 +306,49 @@ div p.pill-text {
 }
 
 /**
+ * Chat Scrollbar
+ */
+
+.scrollbar {
+  scrollbar-color: #3271a9 #fa84bf;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #3271a9;
+  border: 26px none #3271a9;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3271a9;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #3f90d8;
+}
+::-webkit-scrollbar-track {
+  background: #a1577c;
+  border: 48px none #a1577c;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #fa84bf;
+}
+::-webkit-scrollbar-track:active {
+  background: #f891c4;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/**
  * Volume Control
  */
 
