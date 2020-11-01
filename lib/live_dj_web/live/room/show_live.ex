@@ -40,6 +40,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
+          |> assign(:new_message, "")
+          |> assign(:messages, [])
           |> assign(:video_queue, Enum.with_index(parsed_queue))
           |> assign(:video_queue_controls, Queue.get_initial_controls())
           |> assign(:search_result, fake_search_data(parsed_queue))
@@ -127,12 +129,12 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info({:request_initial_state, _params}, socket) do
-    %{video_queue: video_queue, player: player} = socket.assigns
+    %{messages: messages, video_queue: video_queue, player: player} = socket.assigns
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{current_queue: video_queue, player: player}}
+      {:receive_initial_state, %{current_queue: video_queue, messages: messages, player: player}}
     )
     {:noreply, socket}
   end
@@ -140,11 +142,12 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_info({:receive_initial_state, params}, socket) do
     %{search_result: search_result, slug: slug} = socket.assigns
     Organizer.unsubscribe(:request_initial_state, slug)
-    %{current_queue: current_queue, player: player} = params
+    %{current_queue: current_queue, messages: messages, player: player} = params
     current_queue = Enum.map(current_queue, fn {v, _} -> v end)
     search_result = Enum.map(search_result, fn video ->
       Video.update(video, %{is_queued: Queue.is_queued(video, current_queue)}) end)
     socket = socket
+      |> assign(:messages, messages)
       |> assign(:video_queue, Enum.with_index(current_queue))
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
@@ -280,6 +283,14 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
     socket
       |> assign(:player, Player.update(player, %{time: time}))}
+  end
+
+  def handle_info({:receive_messages, %{messages: messages}}, socket) do
+    {:noreply,
+      socket
+      |> assign(:messages, messages)
+      |> push_event("receive_new_message", %{})
+    }
   end
 
   @impl true
@@ -554,6 +565,33 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:noreply, socket}
       false ->
         {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event(
+    "new_message",
+    %{"new_message" => %{"message" => message}},
+    socket
+  ) do
+    socket = socket |> assign(:new_message, "")
+    case String.trim(message) do
+      "" ->
+        {:noreply, socket}
+      _ ->
+        %{messages: messages, slug: slug, user: %{uuid: uuid}} = socket.assigns
+        {_, {h, m, _}} = :calendar.universal_time
+        messages = messages ++ [%{username: uuid, message: message, timestamp: "#{h}:#{m}"}]
+        Phoenix.PubSub.broadcast_from(
+          LiveDj.PubSub,
+          self(),
+          "room:" <> slug,
+          {:receive_messages, %{messages: messages}}
+        )
+        {:noreply,
+          socket
+          |> assign(:messages, messages)
+          |> push_event("receive_new_message", %{})}
     end
   end
 
