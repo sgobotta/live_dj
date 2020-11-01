@@ -59,7 +59,21 @@
 
   <div class="row section-container">
     <div class="column">
-      <h1><%= @room.title %></h1>
+      <div id="chat-data" phx-hook="ChatSyncing">
+        <h1><%= @room.title %></h1>
+        <div id="chat" class="panel-messages scrollbar">
+          <%= for message <- @messages do %>
+            <div>
+              <p class="chat-message">
+                [<%= message.timestamp %>] <b><%= message.username %>: </b><i><%= message.message %></i>
+              </p>
+            </div>
+          <% end %>
+        </div>
+        <form phx-submit="new_message" class="chat-form">
+          <%= text_input :new_message, :message, value: @new_message, placeholder: "Write something...", class: "new-message-input" %>
+        </form>
+      </div>
     </div>
 
     <div class="column" id="presence-data" phx-hook="PresenceSyncing">
