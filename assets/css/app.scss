@@ -94,6 +94,16 @@
  * Custom Styles
  */
 
+b {
+  color: white;
+}
+
+#chat {
+  min-height: 400px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
 .container{
   margin: 0 auto;
   padding: 0 2.0rem;
@@ -155,6 +165,21 @@ a.btn i.trash {
 
 .search-form {
   margin: 1.2rem;
+}
+
+.chat-form {
+  height: 300px !important;
+  margin-top: 8px;
+}
+
+// It's not a default <input> element
+.new-message-input {
+  border-style: dashed !important;
+  border-color: #31708f !important;
+}
+
+.chat-message {
+  font-size: 1.6rem;
 }
 
 .highlight {
