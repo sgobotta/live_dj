@@ -1,3 +1,5 @@
+import debounce from 'lodash.debounce'
+
 const onStateChange = hookContext => event => {
   switch (event.data) {
     case -1: {
@@ -29,7 +31,7 @@ const onStateChange = hookContext => event => {
 }
 
 const onVolumeChange = hookContext => player => {
-  const volumeControl = document.getElementById("volume-control")
+  const volumeControl = document.getElementById('volume-control')
 
   function sendVolumeChangedNotification(value) {
     hookContext.pushEvent('volume_level_changed', parseInt(value), ({level}) => {
@@ -39,9 +41,12 @@ const onVolumeChange = hookContext => player => {
 
   sendVolumeChangedNotification(player.getVolume())
 
-  volumeControl.oninput = ({target: {value}}) => {
+  const _sendVolumeChangedNotification = debounce(({target: {value}}) => {
     sendVolumeChangedNotification(value)
-  }
+  }, 500)
+
+  volumeControl.oninput = _sendVolumeChangedNotification
+
   volumeControl.onmouseenter = () => {
     volumeControl.focus()
   }
