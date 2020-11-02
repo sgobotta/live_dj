@@ -571,7 +571,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_event(
     "new_message",
-    %{"new_message" => %{"message" => message}},
+    %{"submit" => %{"message" => message}},
     socket
   ) do
     socket = socket |> assign(:new_message, "")

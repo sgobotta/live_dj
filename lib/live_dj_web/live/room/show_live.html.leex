@@ -71,7 +71,13 @@
           <% end %>
         </div>
         <form phx-submit="new_message" class="chat-form">
-          <%= text_input :new_message, :message, value: @new_message, placeholder: "Write something...", class: "new-message-input" %>
+          <%=
+            text_input :submit,
+            :message,
+            value: @new_message,
+            placeholder: "Write something...",
+            class: "text-input"
+          %>
         </form>
       </div>
     </div>
@@ -186,7 +192,14 @@
 
       <div>
         <form phx-submit="search" class="search-form">
-          <%= text_input :search_field, :query, placeholder: "Search videos", autofocus: true, "phx-debounce": "300" %>
+          <%=
+            text_input :search_field,
+            :query,
+            placeholder: "Search videos",
+            class: "text-input",
+            autofocus: false,
+            "phx-debounce": "300"
+          %>
         </form>
       </div>
 
