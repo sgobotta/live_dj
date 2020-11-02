@@ -4,6 +4,12 @@ const ChatSyncing = () => ({
     const chat = document.getElementById('chat')
     chat.scrollTop = chat.scrollHeight
 
+    const input = document.getElementById('submit_message')
+
+    chat.onmouseenter = () => {
+      input.focus()
+    }
+
     this.handleEvent('receive_new_message', () => {
       chat.scrollTop = chat.scrollHeight
     })
