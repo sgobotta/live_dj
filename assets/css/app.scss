@@ -164,18 +164,37 @@ a.btn i.trash {
 }
 
 .search-form {
-  margin: 1.2rem;
+  margin-top: 8px;
 }
 
 .chat-form {
-  height: 300px !important;
   margin-top: 8px;
 }
 
 // It's not a default <input> element
-.new-message-input {
+.text-input {
+  border: 0.1rem;
   border-style: dashed !important;
   border-color: #31708f !important;
+}
+
+input.text-input:focus {
+  border-style: solid !important;
+  border-color: #8558af !important;
+  -webkit-animation: input-highlight 0.1s forwards;
+  animation: input-highlight 0.1s forwards;
+  -webkit-transition: border-color 1500ms ease-in;
+  transition: border-color 1500ms ease-in;
+}
+
+@-webkit-keyframes input-highlight {
+  0% { border: 0.1rem; }
+  100% { border: 0.15rem; }
+}
+
+@keyframes input-highlight {
+  0% { border: 0.1rem; }
+  100% { border: 0.15rem }
 }
 
 .chat-message {
@@ -510,13 +529,13 @@ how to remove the virtical space around the range input in IE*/
  * Animation: Zooming
  */
 
-@-webkit-keyframes moderate-size-in {
+@-webkit-keyframes moderate-icon-size-in {
   0% { width: 25px; height: 25px }
   25% { width: 35px; height: 35px }
   100% { width: 45px; height: 45px }
 }
 
-@keyframes moderate-size-in {
+@keyframes moderate-icon-size-in {
   0% { width: 25px; height: 25px }
   25% { width: 35px; height: 35px }
   100% { width: 45px; height: 45px }
