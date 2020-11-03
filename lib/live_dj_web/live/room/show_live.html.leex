@@ -66,11 +66,16 @@
             <%= message %>
           <% end %>
         </div>
-        <form phx-submit="new_message" class="chat-form">
+        <form
+          phx-change="<%= :typing %>"
+          phx-submit="new_message"
+          class="chat-form"
+        >
           <%=
             text_input :submit,
             :message,
             value: @new_message,
+            phx_blur: "stop_typing",
             placeholder: "Write something...",
             class: "text-input"
           %>
@@ -83,10 +88,13 @@
       <ul>
         <%= for user <- @connected_users do %>
           <li style="list-style: none;">
-            <p class="<%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+            <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
               <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
               <%= user.uuid %>
               <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
+              <%= if hd(user.metas).typing do %>
+                <span class="typing-message">is typing</span>
+              <% end %>
             </p>
           </li>
         <% end %>

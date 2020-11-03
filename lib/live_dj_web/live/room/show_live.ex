@@ -21,8 +21,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
     volume_data = %{volume_level: 100}
-
-    {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, Map.merge(volume_data, %{volume_icon: "fa-volume-up"}))
+    presence_meta = Map.merge(volume_data, %{volume_icon: "fa-volume-up", typing: false})
+    {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
     parsed_queue = room.queue
     |> Enum.map(fn track -> Video.from_jsonb(track) end)
@@ -574,6 +574,25 @@ defmodule LiveDjWeb.Room.ShowLive do
       false ->
         {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event(
+    "typing",
+    _value,
+    socket = %{assigns: %{user: %{uuid: uuid}, slug: slug}}
+  )do
+    Chat.start_typing(slug, uuid)
+    {:noreply, socket}
+  end
+
+  def handle_event(
+    "stop_typing",
+    %{"value" => message},
+    socket = %{assigns: %{user: %{uuid: uuid}, slug: slug}}
+  ) do
+    Chat.stop_typing(slug, uuid)
+    {:noreply, assign(socket, new_message: message)}
   end
 
   @impl true
