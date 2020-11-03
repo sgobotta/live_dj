@@ -61,13 +61,9 @@
     <div class="column">
       <div id="chat-data" phx-hook="ChatSyncing">
         <h1><%= @room.title %></h1>
-        <div id="chat" class="panel-messages scrollbar">
+        <div id="chat" class="panel-messages">
           <%= for message <- @messages do %>
-            <div>
-              <p class="chat-message">
-                [<%= message.timestamp %>] <b><%= message.username %>: </b><i><%= message.message %></i>
-              </p>
-            </div>
+            <%= message %>
           <% end %>
         </div>
         <form phx-submit="new_message" class="chat-form">

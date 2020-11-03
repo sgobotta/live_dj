@@ -56,14 +56,14 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_info(
     %Broadcast{event: "presence_diff", payload: payload},
-    %{assigns: %{slug: slug, user: user}} = socket
+    %{assigns: %{messages: messages, slug: slug, user: user}} = socket
   ) do
 
     connected_users = Organizer.list_present_with_metas(slug)
 
     room = handle_video_tracker_activity(slug, connected_users, payload)
 
-    updated_socket = socket
+    socket = socket
     |> assign(:connected_users, connected_users)
     |> assign(:room, room)
 
@@ -71,12 +71,31 @@ defmodule LiveDjWeb.Room.ShowLive do
     # others joined
     case Organizer.is_my_presence(user, payload) do
       false ->
+        %{joins: joins, leaves: leaves} = payload
+        joins = Map.to_list(joins)
+          |> Enum.map(fn {uuid, _} ->
+            ~E"""
+              <div class="chat-presence">
+                <p class="chat-message"><b><%= uuid %></b> has connected</p>
+              </div>
+            """
+          end)
+        leaves = Map.to_list(leaves)
+          |> Enum.map(fn {uuid, _} ->
+            ~E"""
+              <div class="chat-presence">
+                <p class="chat-message"><b><%= uuid %></b> has disconnected</p>
+              </div>
+            """
+          end)
+
         {:noreply,
-          updated_socket
+          socket
+          |> assign(:messages, messages ++ joins ++ leaves)
           |> push_event("presence-changed", %{})
         }
       true ->
-        {:noreply, updated_socket}
+        {:noreply, socket}
     end
   end
 
@@ -581,7 +600,14 @@ defmodule LiveDjWeb.Room.ShowLive do
       _ ->
         %{messages: messages, slug: slug, user: %{uuid: uuid}} = socket.assigns
         {_, {h, m, _}} = :calendar.universal_time
-        messages = messages ++ [%{username: uuid, message: message, timestamp: "#{h}:#{m}"}]
+        timestamp = "#{h}:#{m}"
+        message = ~E"""
+          <div>
+            <p class="chat-message">[<%= timestamp %>] <b><%= uuid %>: </b><i><%= message %></i></p>
+          </div>
+        """
+        # message = %{username: uuid, message: message, timestamp: "#{h}:#{m}"}
+        messages = messages ++ [message]
         Phoenix.PubSub.broadcast_from(
           LiveDj.PubSub,
           self(),
