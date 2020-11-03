@@ -46,7 +46,8 @@ defmodule LiveDj.Organizer do
   end
 
   def is_my_presence(user, presence_payload) do
-    Enum.any?(Map.to_list(presence_payload.joins), fn {x,_} -> x == user.uuid end)
+    Enum.any?(Map.to_list(presence_payload.joins), fn {x,_} -> x == user.uuid end) ||
+    Enum.any?(Map.to_list(presence_payload.leaves), fn {x,_} -> x == user.uuid end)
   end
 
   @doc """
