@@ -6,6 +6,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Organizer
+  alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
@@ -73,21 +74,9 @@ defmodule LiveDjWeb.Room.ShowLive do
       false ->
         %{joins: joins, leaves: leaves} = payload
         joins = Map.to_list(joins)
-          |> Enum.map(fn {uuid, _} ->
-            ~E"""
-              <div class="chat-presence">
-                <p class="chat-message"><b><%= uuid %></b> has connected</p>
-              </div>
-            """
-          end)
+          |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_joins, %{uuid: uuid}) end)
         leaves = Map.to_list(leaves)
-          |> Enum.map(fn {uuid, _} ->
-            ~E"""
-              <div class="chat-presence">
-                <p class="chat-message"><b><%= uuid %></b> has disconnected</p>
-              </div>
-            """
-          end)
+          |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_leaves, %{uuid: uuid}) end)
 
         {:noreply,
           socket
@@ -599,14 +588,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:noreply, socket}
       _ ->
         %{messages: messages, slug: slug, user: %{uuid: uuid}} = socket.assigns
-        {_, {h, m, _}} = :calendar.universal_time
-        timestamp = "#{h}:#{m}"
-        message = ~E"""
-          <div>
-            <p class="chat-message">[<%= timestamp %>] <b><%= uuid %>: </b><i><%= message %></i></p>
-          </div>
-        """
-        # message = %{username: uuid, message: message, timestamp: "#{h}:#{m}"}
+        message = Chat.create_message(:new, %{message: message, uuid: uuid})
         messages = messages ++ [message]
         Phoenix.PubSub.broadcast_from(
           LiveDj.PubSub,
