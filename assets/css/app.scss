@@ -201,6 +201,12 @@ input.text-input:focus {
   font-size: 1.6rem;
 }
 
+.chat-presence {
+  margin-bottom: 6px;
+  margin-top: 6px;
+  text-align: center;
+}
+
 .highlight {
   color: #31708f;
 }
@@ -289,7 +295,7 @@ div p.pill-text {
 }
 
 .draggable {
-  cursor: ns-resize
+  cursor: pointer
 }
 
 .fa-trash.clickeable:hover {
@@ -814,7 +820,7 @@ ul.playlist {
       left: 40px;
       height: 40px;
       bottom: 0px;
-      cursor: ns-resize;
+      cursor: pointer;
 
       &.expand {
         bottom: -30px;
