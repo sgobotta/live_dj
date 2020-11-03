@@ -202,9 +202,14 @@ input.text-input:focus {
 }
 
 .chat-presence {
+  color: #333;
   margin-bottom: 6px;
   margin-top: 6px;
   text-align: center;
+}
+
+.chat-presence p b {
+  color: #666;
 }
 
 .highlight {
