@@ -1,7 +1,7 @@
 <div id="<%= @id %>">
   <%= if @state == "OPEN" do %>
   <div
-    phx-hook="InitModal"
+    phx-hook="ModalInteracting"
     id="modal-data"
     phx-target="#<%= @id %>"
     x-data="{ open: false }"

@@ -85,6 +85,7 @@
 
     <div class="column" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
+      <%= live_component @socket, LiveDjWeb.Components.ModalSimple, id: "change-username-modal" %>
       <ul>
         <%= for user <- @connected_users do %>
           <li style="list-style: none;">
@@ -92,7 +93,7 @@
               <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
               <%= user.uuid %>
               <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
-              <%= if hd(user.metas).typing do %>
+              <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
                 <span class="typing-message">is typing</span>
               <% end %>
             </p>
@@ -106,7 +107,7 @@
 
     <div class="column">
       <div class="section-container">
-        <div class="row container" id="player-syncing-data" phx-hook="PlayerSyncing">
+        <div class="row container queue-controls" id="player-syncing-data" phx-hook="PlayerSyncing">
           <div class="column">
             <h3>Queue</h3>
           </div>
