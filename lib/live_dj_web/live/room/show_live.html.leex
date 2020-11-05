@@ -90,8 +90,8 @@
         <%= for user <- @connected_users do %>
           <li style="list-style: none;">
             <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-              <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
-              <%= user.uuid %>
+              <span><i class="mini fas <%= hd(user.metas).volume_icon %>"></i></span>
+              <span class="username"><%= user.uuid %></span>
               <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
               <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
                 <span class="typing-message">is typing</span>
