@@ -103,7 +103,7 @@
                   <% end %>
                 <% else %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                    <span><%= @user.uuid %></span>
+                    <span><%= user.uuid %></span>
                   </p>
                 <% end %>
                 <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
