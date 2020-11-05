@@ -11,7 +11,7 @@
     }"
     x-show="open"
     @close-modal="setTimeout(() => open = false, 100)"
-    class="z-50 fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0"
+    class="modal"
     >
 
     <!-- BACKDROP -->
@@ -23,9 +23,9 @@
       x-transition:leave="ease-in duration-200"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
-      class="fixed inset-0 transition-opacity"
+      class="backdrop"
     >
-      <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
+      <div></div>
     </div>
 
     <!-- MODAL DIALOG -->
@@ -35,20 +35,24 @@
       x-transition:enter-start="opacity-0 mb-2 sm:mb-8 sm:mt-2 sm:scale-95"
       x-transition:enter-end="opacity-100 mb-8 sm:mt-8 sm:scale-100"
       x-transition:leave="ease-in duration-200"
-      x-transition:leave-start="opacity-100  mb-8 sm:mt-8  sm:scale-100"
-      x-transition:leave-end="opacity-0  mb-2 sm:mb-8 sm:mt-2  sm:scale-95"
-      class="relative w-full max-w-lg my-8 mx-auto px-4 sm:px-0 shadow-lg">
+      x-transition:leave-start="opacity-100 mb-8 sm:mt-8 sm:scale-100"
+      x-transition:leave-end="opacity-0 mb-2 sm:mb-8 sm:mt-2 sm:scale-95"
+      class="modal-dialog">
 
-      <div @click.away="open = false" class="relative flex flex-col bg-white border border-gray-200 rounded-lg">
+      <div @click.away="open = false" class="modal-window">
         <!-- MODAL HEADER -->
-        <div class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t">
-          <h5 class="mb-0 text-base font-semibold text-gray-500 uppercase"><%= assigns[:title] %></h5>
-          <button type="button" @click="open = false" class="text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150">
+        <div class="modal-header">
+          <h5 class="modal-title"><%= assigns[:title] %></h5>
+          <button
+            type="button"
+            @click="open = false"
+            class="modal-close-icon"
+          >
             &times;
           </button>
         </div>
         <!-- MODAL BODY -->
-        <div class="relative flex-auto p-4">
+        <div class="modal-body">
           <%= @inner_content.([]) %>
         </div>
       </div>

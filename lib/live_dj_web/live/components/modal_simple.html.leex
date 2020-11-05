@@ -2,10 +2,24 @@
 
   <%= @inner_content.([]) %>
 
-  <%= live_component @socket, LiveDjWeb.Components.Modal, id: "modal-1", title: "Basic Modal With Alpine js" do %>
-    <p class="text-gray-800">This is an animated modal that uses Tailwind and Alpine js for the transitions.</p>
-    <div class="mt-8 text-right">
-      <button @click="open = false" type="button" class="inline-flex justify-center rounded-md border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">
+  <%= live_component @socket, LiveDjWeb.Components.Modal, id: "modal-1", title: "Change username" do %>
+    <p>Choose a username of your liking</p>
+    <form phx-change="<%= :change_username %>" phx-submit="submit_username" class="search-form">
+      <%=
+        text_input :submit,
+        :username,
+        value: @value,
+        placeholder: "Choose a username...",
+        class: "text-input",
+        autofocus: false,
+        "phx-debounce": "300"
+      %>
+    </form>
+    <div class="modal-button-container">
+      <button
+        @click="open = false"
+        class="modal-close-button"
+      >
         Close
       </button>
     </div>
