@@ -57,7 +57,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def handle_info(
     %Broadcast{event: "presence_diff", payload: payload},
-    %{assigns: %{messages: messages, slug: slug, user: user}} = socket
+    %{assigns: %{slug: slug, user: user}} = socket
   ) do
 
     connected_users = Organizer.list_present_with_metas(slug)
@@ -72,15 +72,15 @@ defmodule LiveDjWeb.Room.ShowLive do
     # others joined
     case Organizer.is_my_presence(user, payload) do
       false ->
-        %{joins: joins, leaves: leaves} = payload
-        joins = Map.to_list(joins)
-          |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_joins, %{uuid: uuid}) end)
-        leaves = Map.to_list(leaves)
-          |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_leaves, %{uuid: uuid}) end)
+        # %{joins: joins, leaves: leaves} = payload
+        # joins = Map.to_list(joins)
+        #   |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_joins, %{uuid: uuid}) end)
+        # leaves = Map.to_list(leaves)
+        #   |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_leaves, %{uuid: uuid}) end)
 
         {:noreply,
           socket
-          |> assign(:messages, messages ++ joins ++ leaves)
+          # |> assign(:messages, messages ++ joins ++ leaves)
           |> push_event("presence-changed", %{})
         }
       true ->
