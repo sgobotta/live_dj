@@ -83,20 +83,33 @@
       </div>
     </div>
 
-    <div class="column" id="presence-data" phx-hook="PresenceSyncing">
+    <div class="column" style="padding: 20px;" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
-      <%= live_component @socket, LiveDjWeb.Components.ModalSimple, id: "change-username-modal" %>
       <ul>
         <%= for user <- @connected_users do %>
           <li style="list-style: none;">
-            <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-              <span><i class="mini fas <%= hd(user.metas).volume_icon %>"></i></span>
-              <span class="username"><%= user.uuid %></span>
-              <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
-              <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
-                <span class="typing-message">is typing</span>
-              <% end %>
-            </p>
+            <div class="row">
+              <div class="column-offset-1">
+                <span><i class="mini fas <%= hd(user.metas).volume_icon %>"></i></span>
+                <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
+              </div>
+                <%= if user.uuid == @user.uuid do %>
+                  <%= live_component @socket, LiveDjWeb.Components.ModalSimple, id: "change-username-modal", user: @user do %>
+                  <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                    <span class="clickeable" phx-click="open" phx-target="#modal-1">
+                      <%= @user.uuid %>
+                    </span>
+                  </p>
+                  <% end %>
+                <% else %>
+                  <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                    <span><%= @user.uuid %></span>
+                  </p>
+                <% end %>
+                <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
+                  <p class="peer"><span class="typing-message">is typing</span></p>
+                <% end %>
+            </div>
           </li>
         <% end %>
       </ul>
