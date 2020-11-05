@@ -1,5 +1,4 @@
 @import "tailwindcss/base";
-@import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
 /* This file is for your main application css. */
@@ -333,13 +332,156 @@ input.text-input:focus {
  * Modal window
  */
 
-.close-button {
-  border: 0px;
+ @media (min-width: 640px) {
+   .modal {
+     top: 0px;
+     bottom: 0px;
+     right: 0px;
+     left: 0px;
+   }
+ }
+
+.modal {
+  z-index: 50;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
 }
 
-.close-button:hover {
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition-property: opacity;
+
+  div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    background-color: #1a202c;
+  }
+}
+
+
+@media (min-width: 640px) {
+  .modal-dialog {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.modal-dialog {
+  width: 100%;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-width: 32rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.modal-window {
+  background-color: #000;
+  opacity: 0.85;
+  border-color: #3271a9;
+  border-width: 1px;
+  border-style: dashed;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom-width: 1px;
+  border-bottom-color: #3271a9;
+  border-bottom-style: dashed;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #a0aec0;
+}
+
+.modal-body {
+  flex: 1 1 auto;
+  padding: 1rem;
+  position: relative;
+}
+
+.modal-button-container {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.modal-close-icon {
+  border: 0px;
+  color: #a0aec0;
+  transition-duration: 150ms;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transforma;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-close-icon:hover {
   background-color: transparent;
   border: 0px;
+  color: #cbd5e0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.modal-close-button {
+  align-items: center;
+  color: #fff;
+  border-color: #8558af;
+  display: inline-flex;
+  justify-content: center;
+  background-color: #8558af;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  opacity: 0.8;
+  font-size: 1.250rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+}
+
+.modal-close-button:hover {
+  color: #fff;
+  background-color: #fda4d1;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: #fda4d1
+}
+
+.modal-close-button:active {
+  color: #2d3748
 }
 
 @keyframes ellipsis {
