@@ -21,7 +21,10 @@ defmodule LiveDjWeb.Room.ShowLive do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
     volume_data = %{volume_level: 100}
-    presence_meta = Map.merge(volume_data, %{volume_icon: "fa-volume-up", typing: false})
+    presence_meta = Map.merge(
+      volume_data,
+      %{volume_icon: "fa-volume-up", typing: false, username: user.username}
+    )
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
     parsed_queue = room.queue
@@ -49,6 +52,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
+          |> assign(:username_input, user.username)
           |> assign_tracker(room)
         }
     end
@@ -622,6 +626,23 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
+  @impl true
+  def handle_event("change_username", %{"submit" => %{"username" => username}}, socket) do
+    {:noreply, socket |> assign(:username_input, username)}
+  end
+
+  @impl true
+  def handle_event(
+    "submit_username",
+    %{"submit" => %{"username" => username}},
+    socket = %{assigns: %{slug: slug, user: %{uuid: uuid}}}
+  ) do
+    Presence.update(self(), "room:" <> slug, uuid, fn m ->
+      Map.merge(m, %{username_input: username})
+    end)
+    {:noreply, socket}
+  end
+
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
     room = Organizer.get_room(slug)
     video_tracker = room.video_tracker
@@ -641,7 +662,8 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   defp create_connected_user do
-    %ConnectedUser{uuid: UUID.uuid4()}
+    uuid = UUID.uuid4()
+    %ConnectedUser{uuid: uuid, username: uuid}
   end
 
   defp assign_tracker(socket, room) do

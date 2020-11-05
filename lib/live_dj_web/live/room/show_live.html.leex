@@ -94,7 +94,7 @@
                 <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
               </div>
                 <%= if user.uuid == @user.uuid do %>
-                  <%= live_component @socket, LiveDjWeb.Components.ModalSimple, id: "change-username-modal", user: @user do %>
+                  <%= live_component @socket, LiveDjWeb.Components.ModalSimple, id: "change-username-modal", user: @user, value: @username_input do  %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
                     <span class="clickeable" phx-click="open" phx-target="#modal-1">
                       <%= @user.uuid %>
@@ -213,7 +213,7 @@
           <%=
             text_input :search_field,
             :query,
-            placeholder: "Search videos",
+            placeholder: "Search videos...",
             class: "text-input",
             autofocus: false,
             "phx-debounce": "300"
