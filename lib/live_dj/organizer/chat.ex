@@ -20,14 +20,18 @@ defmodule LiveDj.Organizer.Chat do
     """
   end
 
-  def create_message(:new, %{message: message, uuid: uuid}) do
+  def create_message(:new, %{message: message, username: username}) do
     timestamp = Time.to_string(NaiveDateTime.local_now())
+    highlight_style = case timestamp =~ "04:20:" || timestamp =~ "16:20:" do
+      true -> "highlight-timestamp"
+      false -> "timestamp-message"
+    end
     ~E"""
       <div>
         <p class="chat-message">
-          <span class="timestamp">
+          <span class="timestamp <%= highlight_style %>">
             [<%= timestamp %>]
-            <b><%= uuid %>> </b>
+            <b><%= username %>> </b>
           </span>
           <i><%= message %></i>
         </p>
