@@ -94,16 +94,20 @@
                 <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
               </div>
                 <%= if user.uuid == @user.uuid do %>
-                  <%= live_component @socket, LiveDjWeb.Components.ModalSimple, id: "change-username-modal", user: @user, value: @username_input do  %>
-                  <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                    <span class="clickeable" phx-click="open" phx-target="#modal-1">
-                      <%= @user.uuid %>
-                    </span>
-                  </p>
+                  <%= live_component @socket, LiveDjWeb.Components.ModalSimple,
+                    id: "change-username-modal",
+                    user: @user,
+                    account_changeset: @account_changeset
+                  do %>
+                    <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                      <span class="clickeable" phx-click="open" phx-target="#modal-1">
+                        <%= hd(user.metas).username %>
+                      </span>
+                    </p>
                   <% end %>
                 <% else %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                    <span><%= user.uuid %></span>
+                    <span><%= hd(user.metas).username %></span>
                   </p>
                 <% end %>
                 <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
