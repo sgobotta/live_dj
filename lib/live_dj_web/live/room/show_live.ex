@@ -51,7 +51,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:messages, [])
           |> assign(:video_queue, Enum.with_index(parsed_queue))
           |> assign(:video_queue_controls, Queue.get_initial_controls())
-          |> assign(:search_result, fake_search_data(parsed_queue))
+          |> assign(:search_result, [])
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
