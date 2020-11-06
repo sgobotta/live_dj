@@ -88,7 +88,7 @@
       <ul>
         <%= for user <- @connected_users do %>
           <li style="list-style: none;">
-            <div class="row">
+            <div class="row" style="align-items: center;">
               <div class="column-offset-1">
                 <span><i class="mini fas <%= hd(user.metas).volume_icon %>"></i></span>
                 <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
