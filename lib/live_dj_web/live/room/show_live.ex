@@ -535,7 +535,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{assigns: %{video_queue: video_queue}} = socket
   ) do
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    opts = [maxResults: 10]
+    opts = [maxResults: 25]
     {:ok, search_result, _pagination_options} = Tubex.Video.search_by_query(query, opts)
     search_result = Enum.map(search_result, fn search ->
       video = Video.from_tubex_video(search)
@@ -625,8 +625,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       "" ->
         {:noreply, socket}
       _ ->
-        %{messages: messages, slug: slug, user: %{uuid: uuid}} = socket.assigns
-        message = Chat.create_message(:new, %{message: message, uuid: uuid})
+        %{messages: messages, slug: slug, user: %{username: username}} = socket.assigns
+        message = Chat.create_message(:new, %{message: message, username: username})
         messages = messages ++ [message]
         Phoenix.PubSub.broadcast_from(
           LiveDj.PubSub,
@@ -657,7 +657,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event(
     "submit_username",
     %{"account" => %{"username" => username}},
-    socket = %{assigns: %{account_changeset: account_changeset, slug: slug, user: %{uuid: uuid}}}
+    socket = %{assigns: %{account_changeset: account_changeset, slug: slug, user: %{uuid: uuid} = user }}
   ) do
     case Repo.insert(
       account_changeset,
@@ -669,7 +669,9 @@ defmodule LiveDjWeb.Room.ShowLive do
           "room:" <> slug,
           {:username_changed, %{uuid: uuid, username: username}}
         )
-        {:noreply, socket }
+        {:noreply,
+          socket
+          |> assign(:user, Map.merge(user, %{username: username}))}
       {:error, changeset} ->
         {:noreply,
           socket
