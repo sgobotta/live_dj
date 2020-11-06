@@ -14,7 +14,7 @@ config :live_dj, LiveDjWeb.Endpoint,
   url: [scheme: "https", host: {:system, "APP_HOST"}, port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  check_origin: [{:system, "APP_HOST"}]
+  check_origin: false
 
 config :tubex, Tubex,
   api_key: System.get_env("YOUTUBE_API_KEY")
