@@ -212,6 +212,63 @@ b {
   width: 100%;
 }
 
+.new-room-form {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.new-room-form form button {
+  align-items: center;
+  color: #fff;
+  border-color: #8558af;
+  display: inline-flex;
+  justify-content: center;
+  background-color: #8558af;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  opacity: 0.8;
+  font-size: 1.250rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+}
+
+.new-room-form form button:hover {
+  color: #fff;
+  background-color: #fda4d1;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: #fda4d1
+}
+
+.rooms-container {
+  border: 0.1rem;
+  border-style: dashed !important;
+  border-color: #31708f !important;
+  border-radius: 0.5rem;
+}
+
+.room-item {
+  color: #8558af;
+}
+.room-item a:hover {
+  color: #fda4d1;
+  -webkit-animation: text-highlight 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: text-highlight 0.5s forwards;
+  animation-delay: 0.1s;
+}
+
+.room-peers {
+  color: #fff
+}
+
 a.disabled i {
   color: grey
 }

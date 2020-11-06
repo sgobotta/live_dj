@@ -21,7 +21,7 @@ defmodule LiveDj.Organizer.Chat do
   end
 
   def create_message(:new, %{message: message, username: username}) do
-    timestamp = Time.to_string(NaiveDateTime.local_now())
+    timestamp = Time.to_string(:erlang.system_time(:second) |> DateTime.from_unix!())
     highlight_style = case timestamp =~ "04:20:" || timestamp =~ "16:20:" do
       true -> "highlight-timestamp"
       false -> "timestamp-message"
