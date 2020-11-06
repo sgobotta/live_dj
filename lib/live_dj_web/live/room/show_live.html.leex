@@ -33,10 +33,9 @@
           >
             <i class="fas fa-pause-circle player-control clickeable"></i>
           </a>
-        <% else %>
-
         <% end %>
       <% end %>
+
       <%= if @player_controls.next_button_state == "disabled" do %>
         <a class="disabled">
           <i class="fas fa-step-forward"></i>
