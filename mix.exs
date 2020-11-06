@@ -48,7 +48,8 @@ defmodule LiveDj.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:uuid, "~> 1.1"},
-      {:tubex, "~> 0.0.8", github: "sgobotta/tubex"}
+      {:tubex, "~> 0.0.8", github: "sgobotta/tubex"},
+      {:tzdata, "~> 1.0.4"}
     ]
   end
 
