@@ -4,17 +4,14 @@
 
   <%= live_component @socket, LiveDjWeb.Components.Modal, id: "modal-1", title: "Change username" do %>
     <p>Choose a username of your liking</p>
-    <form phx-change="<%= :change_username %>" phx-submit="submit_username" class="search-form">
-      <%=
-        text_input :submit,
-        :username,
-        value: @value,
-        placeholder: "Choose a username...",
-        class: "text-input",
-        autofocus: false,
-        "phx-debounce": "300"
-      %>
-    </form>
+
+    <%= form_for @account_changeset, "#", [phx_change: "change_username", phx_submit: "submit_username", class: "search_form"], fn f -> %>
+
+      <%= text_input f, :username, placeholder: "Choose a username...", class: "text-input", "phx-debounce": "300" %>
+      <%= error_tag f, :username %>
+
+    <% end %>
+
     <div class="modal-button-container">
       <button
         @click="open = false"
