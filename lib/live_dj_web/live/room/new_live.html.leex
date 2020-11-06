@@ -1,17 +1,17 @@
 <div class="col-container">
-  <div class="section-container col">
+  <div class="col new-room-form">
     <h2 class="like-atom">Create a new room</h2>
     <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save"], fn f -> %>
 
-    <div class="container">
+    <div style="margin-top: 8px; margin-bottom: 8px;">
       <!-- <span class="blink">|> </span> -->
-      <%= text_input f, :title, placeholder: "insert a title" %>
+      <%= text_input f, :title, placeholder: "insert a title", class: "text-input" %>
       <%= error_tag f, :title %>
     </div>
 
-    <div class="container">
+    <div style="margin-top: 8px; margin-bottom: 8px;">
       <!-- <span class="blink">|> </span> -->
-      <%= text_input f, :slug, placeholder: "insert a room slug" %>
+      <%= text_input f, :slug, placeholder: "insert a room slug", class: "text-input" %>
       <%= error_tag f, :slug %>
     </div>
 
@@ -19,26 +19,25 @@
 
     <% end %>
   </div>
-  
-  <div class="section-container col">
+
+  <div class="section-container col rooms-container">
     <%= if @public_rooms != [] do %>
-  
+
     <div class="list">
         <h2 class="like-atom">Rooms</h2>
         <span><span>
         <ul class="like-list">
         <%= for room <- @public_rooms do %>
           <li>
-            <%= live_redirect room.title, to: Routes.show_path(@socket, :show, room.slug) %>
-            (<%= @viewers_quantity[String.to_atom(room.title)] %>)
+            <span class="room-item"><%= live_redirect room.title, to: Routes.show_path(@socket, :show, room.slug) %></span>
+            <span class="room-peers">(<%= @viewers_quantity[String.to_atom(room.title)] %>)</span>
           </li>
         <% end %>
         </ul>
     </div>
-    
+
     <% else %>
     <p><span class="like-atom">no_rooms_yet_:(</span></p>
     <% end %>
   </div>
 </div>
-  
