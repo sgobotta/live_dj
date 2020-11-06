@@ -83,19 +83,37 @@
       </div>
     </div>
 
-    <div class="column" id="presence-data" phx-hook="PresenceSyncing">
+    <div class="column" style="padding: 20px;" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
       <ul>
         <%= for user <- @connected_users do %>
           <li style="list-style: none;">
-            <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-              <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
-              <%= user.uuid %>
-              <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
-              <%= if hd(user.metas).typing do %>
-                <span class="typing-message">is typing</span>
-              <% end %>
-            </p>
+            <div class="row" style="align-items: center;">
+              <div class="column-offset-1">
+                <span><i class="mini fas <%= hd(user.metas).volume_icon %>"></i></span>
+                <%= if user.uuid == @room.video_tracker do %><span>🕑</span><% else %><% end %>
+              </div>
+                <%= if user.uuid == @user.uuid do %>
+                  <%= live_component @socket, LiveDjWeb.Components.ModalSimple,
+                    id: "change-username-modal",
+                    user: @user,
+                    account_changeset: @account_changeset
+                  do %>
+                    <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                      <span class="clickeable" phx-click="open" phx-target="#modal-1">
+                        <%= hd(user.metas).username %>
+                      </span>
+                    </p>
+                  <% end %>
+                <% else %>
+                  <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                    <span><%= hd(user.metas).username %></span>
+                  </p>
+                <% end %>
+                <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
+                  <p class="peer"><span class="typing-message">is typing</span></p>
+                <% end %>
+            </div>
           </li>
         <% end %>
       </ul>
@@ -106,7 +124,7 @@
 
     <div class="column">
       <div class="section-container">
-        <div class="row container" id="player-syncing-data" phx-hook="PlayerSyncing">
+        <div class="row container queue-controls" id="player-syncing-data" phx-hook="PlayerSyncing">
           <div class="column">
             <h3>Queue</h3>
           </div>
@@ -199,7 +217,7 @@
           <%=
             text_input :search_field,
             :query,
-            placeholder: "Search videos",
+            placeholder: "Search videos...",
             class: "text-input",
             autofocus: false,
             "phx-debounce": "300"

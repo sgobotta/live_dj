@@ -1,3 +1,3 @@
 defmodule LiveDj.ConnectedUser do
-  defstruct uuid: ""
+  defstruct uuid: "", username: ""
 end

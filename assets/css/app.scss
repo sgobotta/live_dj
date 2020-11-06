@@ -1,6 +1,107 @@
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+
 /* This file is for your main application css. */
 @import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
+
+body {
+  background-color: #000000;
+}
+
+h1{font-size: 3.6rem; line-height: 1.25; color: #eaeaea}
+h2{font-size: 2.8rem; line-height: 1.3; color: #eaeaea}
+h3{font-size: 2.2rem; letter-spacing: -.08rem; line-height: 1.35; color: #eaeaea}
+h4{font-size: 1.8rem; letter-spacing: -.05rem; line-height: 1.5; color: #eaeaea}
+h5{font-size: 1.6rem; letter-spacing: 0; line-height: 1.4; color: #eaeaea}
+h6{font-size: 1.4rem; letter-spacing: 0; line-height: 1.2; color: #eaeaea}
+pre{padding: 1em;; color: #eaeaea}
+
+p{font-size: 1.2rem; letter-spacing: 0; line-height: 1.2; margin-bottom: 0rem; padding: 0.4rem; color: #eaeaea}
+
+li{list-style: none;}
+
+input {
+  color: #eaeaea
+}
+
+i.fas{color:#eaeaea;font-size: 2.8rem;}
+
+select {
+  width: auto;
+}
+
+/* Phoenix promo and logo */
+.phx-hero {
+  text-align: center;
+  border-bottom: 1px solid #e3e3e3;
+  background: #eee;
+  border-radius: 6px;
+  padding: 3em 3em 1em;
+  margin-bottom: 3rem;
+  font-weight: 200;
+  font-size: 120%;
+}
+.phx-hero input {
+  background: #ffffff;
+}
+.phx-logo {
+  min-width: 300px;
+  margin: 1rem;
+  display: block;
+}
+.phx-logo img {
+  width: auto;
+  display: block;
+}
+
+/* Headers */
+header {
+  width: 100%;
+  background: #fdfdfd;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 2rem;
+}
+header section {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+header section :first-child {
+  order: 2;
+}
+header section :last-child {
+  order: 1;
+}
+header nav ul,
+header nav li {
+  margin: 0;
+  padding: 0;
+  display: block;
+  text-align: right;
+  white-space: nowrap;
+}
+header nav ul {
+  margin: 1rem;
+  margin-top: 0;
+}
+header nav a {
+  display: block;
+}
+
+@media (min-width: 40.0rem) { /* Small devices (landscape phones, 576px and up) */
+  header section {
+    flex-direction: row;
+  }
+  header nav ul {
+    margin: 1rem;
+  }
+  .phx-logo {
+    flex-basis: 527px;
+    margin: 2rem 1rem;
+  }
+}
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
@@ -87,7 +188,7 @@
 .invalid-feedback {
   color: #a94442;
   display: block;
-  margin: -1rem 0 2rem;
+  margin: 1rem 0 2rem;
 }
 
 /**
@@ -170,12 +271,14 @@ a.btn i.trash {
 .chat-form {
   margin-top: 8px;
 }
-
-// It's not a default <input> element
+/**
+ * It's not a default <input> element
+ */
 .text-input {
   border: 0.1rem;
   border-style: dashed !important;
   border-color: #31708f !important;
+  font-size: 1.4rem;
 }
 
 input.text-input:focus {
@@ -201,6 +304,10 @@ input.text-input:focus {
   font-size: 1.6rem;
 }
 
+.timestamp {
+  font-family: monospace
+}
+
 .chat-presence {
   color: #333;
   margin-bottom: 6px;
@@ -222,6 +329,168 @@ input.text-input:focus {
   width: 0px;
 }
 
+/**
+ * Modal window
+ */
+
+ @media (min-width: 640px) {
+   .modal {
+     top: 0px;
+     bottom: 0px;
+     right: 0px;
+     left: 0px;
+   }
+ }
+
+.modal {
+  z-index: 50;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition-property: opacity;
+
+  div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    background-color: #1a202c;
+  }
+}
+
+
+@media (min-width: 640px) {
+  .modal-dialog {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.modal-dialog {
+  width: 100%;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-width: 32rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.modal-window {
+  background-color: #000;
+  opacity: 0.85;
+  border-color: #3271a9;
+  border-width: 1px;
+  border-style: dashed;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom-width: 1px;
+  border-bottom-color: #3271a9;
+  border-bottom-style: dashed;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #a0aec0;
+}
+
+.modal-body {
+  font-size: 1.4rem;
+  flex: 1 1 auto;
+  padding: 1rem;
+  position: relative;
+}
+
+.modal-body-content {
+  margin-top: 6px;
+  margin-bottom: 6px
+}
+
+.modal-button-container {
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.modal-close-icon {
+  border: 0px;
+  color: #a0aec0;
+  transition-duration: 150ms;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transforma;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-close-icon:hover {
+  background-color: transparent;
+  border: 0px;
+  color: #cbd5e0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.modal-close-button {
+  align-items: center;
+  color: #fff;
+  border-color: #8558af;
+  display: inline-flex;
+  justify-content: center;
+  background-color: #8558af;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  opacity: 0.8;
+  font-size: 1.250rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+}
+
+.modal-close-button:hover {
+  color: #fff;
+  background-color: #fda4d1;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: #fda4d1
+}
+
+.modal-close-button:active {
+  color: #2d3748
+}
+
 @keyframes ellipsis {
   to {
     width: 1.25em;    
@@ -238,8 +507,29 @@ input.text-input:focus {
   font-size: 1.6rem;
 }
 
+.username {
+  font-family: monospace
+}
+
 .highlight {
-  color: #31708f;
+  color: #8558af;
+}
+.highlight:hover span {
+  color: #fa84bf;
+  -webkit-animation: text-highlight 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: text-highlight 0.5s forwards;
+  animation-delay: 0.1s;
+}
+
+@-webkit-keyframes text-highlight {
+  0% { font-size: 1.6rem; }
+  100% { font-size: 1.7rem; font-weight: bold; }
+}
+
+@keyframes text-highlight {
+  0% { font-size: 1.6rem; }
+  100% { font-size: 1.7rem; font-weight: bold }
 }
 
 .pill {
@@ -253,6 +543,10 @@ input.text-input:focus {
   }
 }
 
+.queue-controls {
+  margin-bottom: 40px;
+}
+
 .queue-thumb {
   border-radius: 50px;
   width: 50px;
@@ -260,7 +554,10 @@ input.text-input:focus {
 }
 
 .queue-thumb-icon {
-  font-size: 50px !important; // It's not a default <i> element
+  /**
+   * It's not a default <i> element
+   */
+  font-size: 50px !important;
 }
 
 div.row.pill:hover img.queue-thumb {
@@ -420,7 +717,6 @@ html {
 
 input[type=range] {
   width: 70%;
-  // margin: 10.5px 0;
   background-color: transparent;
   -webkit-appearance: none;
 }

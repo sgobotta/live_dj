@@ -25,7 +25,11 @@ defmodule LiveDj.Organizer.Chat do
     ~E"""
       <div>
         <p class="chat-message">
-          [<%= timestamp %>] <b><%= uuid %>> </b><i><%= message %></i>
+          <span class="timestamp">
+            [<%= timestamp %>]
+            <b><%= uuid %>> </b>
+          </span>
+          <i><%= message %></i>
         </p>
       </div>
     """

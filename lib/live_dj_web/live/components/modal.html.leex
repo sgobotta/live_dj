@@ -1,0 +1,62 @@
+<div id="<%= @id %>">
+  <%= if @state == "OPEN" do %>
+  <div
+    phx-hook="ModalInteracting"
+    id="modal-data"
+    phx-target="#<%= @id %>"
+    x-data="{ open: false }"
+    x-init="() => {
+      setTimeout(() => open = true, 100);
+      $watch('open', isOpen => $dispatch('modal-change', { open: isOpen, id: '#<%= @id %>' }))
+    }"
+    x-show="open"
+    @close-modal="setTimeout(() => open = false, 100)"
+    class="modal"
+    >
+
+    <!-- BACKDROP -->
+    <div
+      x-show="open"
+      x-transition:enter="ease-out duration-300"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="backdrop"
+    >
+      <div></div>
+    </div>
+
+    <!-- MODAL DIALOG -->
+    <div
+      x-show="open"
+      x-transition:enter="ease-out duration-300"
+      x-transition:enter-start="opacity-0 mb-2 sm:mb-8 sm:mt-2 sm:scale-95"
+      x-transition:enter-end="opacity-100 mb-8 sm:mt-8 sm:scale-100"
+      x-transition:leave="ease-in duration-200"
+      x-transition:leave-start="opacity-100 mb-8 sm:mt-8 sm:scale-100"
+      x-transition:leave-end="opacity-0 mb-2 sm:mb-8 sm:mt-2 sm:scale-95"
+      class="modal-dialog">
+
+      <div @click.away="open = false" class="modal-window">
+        <!-- MODAL HEADER -->
+        <div class="modal-header">
+          <h5 class="modal-title"><%= assigns[:title] %></h5>
+          <button
+            type="button"
+            @click="open = false"
+            class="modal-close-icon"
+          >
+            &times;
+          </button>
+        </div>
+        <!-- MODAL BODY -->
+        <div class="modal-body">
+          <%= @inner_content.([]) %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

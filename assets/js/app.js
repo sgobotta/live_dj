@@ -3,6 +3,7 @@ import "regenerator-runtime/runtime"
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
 import "../css/app.scss"
+import 'alpinejs'
 
 // Webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -15,6 +16,7 @@ import PlayerSyncing from "./hooks/player-syncing";
 import PresenceSyncing from "./hooks/presence-syncing";
 import DragAndDropping from "./hooks/drag-and-dropping";
 import ChatSyncing from "./hooks/chat-syncing";
+import ModalInteracting from "./hooks/modal-interacting";
 import UiFeedback from "./hooks/ui-feedback";
 import LoadYTIframeAPI from './deps/yt-iframe-api'
 import createPlayer from './lib/player'
@@ -35,6 +37,7 @@ function initLiveview() {
   .getAttribute("content")
 
   const Hooks = {
+    ModalInteracting: ModalInteracting(),
     PlayerSyncing: PlayerSyncing(initPlayer),
     PresenceSyncing: PresenceSyncing(),
     UiFeedback: UiFeedback(),
@@ -43,6 +46,13 @@ function initLiveview() {
   }
 
   const liveSocket = new LiveSocket("/live", Socket, {
+    dom: {
+      onBeforeElUpdated(from, to) {
+        if (from.__x) {
+          window.Alpine.clone(from.__x, to)
+        }
+      }
+    },
     hooks: Hooks,
     params: {_csrf_token: csrfToken}
   })
