@@ -14,8 +14,7 @@ defmodule LiveDj.Organizer.Account do
   def changeset(account, attrs) do
     account
     |> cast(attrs, @fields)
-    |> validate_required([:uuid])
+    |> validate_required([:uuid, :username])
     |> unique_constraint(:uuid)
   end
-
 end
