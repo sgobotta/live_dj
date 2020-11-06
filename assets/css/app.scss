@@ -278,6 +278,7 @@ a.btn i.trash {
   border: 0.1rem;
   border-style: dashed !important;
   border-color: #31708f !important;
+  font-size: 1.4rem;
 }
 
 input.text-input:focus {
@@ -424,9 +425,15 @@ input.text-input:focus {
 }
 
 .modal-body {
+  font-size: 1.4rem;
   flex: 1 1 auto;
   padding: 1rem;
   position: relative;
+}
+
+.modal-body-content {
+  margin-top: 6px;
+  margin-bottom: 6px
 }
 
 .modal-button-container {
@@ -505,7 +512,24 @@ input.text-input:focus {
 }
 
 .highlight {
-  color: #31708f;
+  color: #8558af;
+}
+.highlight:hover span {
+  color: #fa84bf;
+  -webkit-animation: text-highlight 0.5s forwards;
+  -webkit-animation-delay: 0.1s;
+  animation: text-highlight 0.5s forwards;
+  animation-delay: 0.1s;
+}
+
+@-webkit-keyframes text-highlight {
+  0% { font-size: 1.6rem; }
+  100% { font-size: 1.7rem; font-weight: bold; }
+}
+
+@keyframes text-highlight {
+  0% { font-size: 1.6rem; }
+  100% { font-size: 1.7rem; font-weight: bold }
 }
 
 .pill {
