@@ -1,0 +1,44 @@
+<div>
+  <div>
+    <form phx-submit="search" class="search-form">
+      <%=
+        text_input :search_field,
+        :query,
+        placeholder: "Search videos...",
+        class: "text-input",
+        autofocus: false,
+        "phx-debounce": "300"
+      %>
+    </form>
+  </div>
+
+  <div>
+    <%= for video <- @search_result do %>
+      <div class="row search-result separator">
+        <div class="column-offset-25">
+          <%= img_tag(video.img_url, width: video.img_width) %>
+        </div>
+        <div class="column">
+          <p><%= video.title %></p>
+          <p><%= video.description %></p>
+          <p>
+            <strong>
+              <%= video.channel_title %>
+            </strong>
+          </p>
+        </div>
+        <div class="column-offset-25 align-center">
+          <%= if video.is_queued == true do %>
+            <a class="disabled">
+              <i class="fas fa-check-circle"></i>
+            </a>
+          <% else %>
+            <a class="btn" phx-click="add_to_queue" phx-value-video_id="<%= video.video_id %>">
+              <i class="fas fa-plus-circle search-control"></i>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
