@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="column">
+    <%= if @player_controls.previous_button_state == "disabled" do %>
+      <a class="disabled">
+        <i class="fas fa-step-backward"></i>
+      </a>
+    <% else %>
+      <a phx-click="player_signal_play_previous">
+        <i class="fas fa-step-backward player-control clickeable"></i>
+      </a>
+    <% end %>
+
+    <%= if @player_controls.play_button_state == "disabled" &&
+          @player_controls.pause_button_state == "disabled" do %>
+      <a>
+        <i class="fas fa-spinner rotating"></i>
+      </a>
+    <% else %>
+      <%= if @player.state == "paused" || @player.state == "stopped" do %>
+        <a
+          <%= @player_controls.play_button_state %>
+          phx-click="player_signal_playing"
+        >
+          <i class="fas fa-play-circle player-control clickeable"></i>
+        </a>
+      <% end %>
+      <%= if @player.state == "playing" do %>
+        <a
+          <%= @player_controls.pause_button_state %>
+          phx-click="player_signal_paused"
+        >
+          <i class="fas fa-pause-circle player-control clickeable"></i>
+        </a>
+      <% end %>
+    <% end %>
+
+    <%= if @player_controls.next_button_state == "disabled" do %>
+      <a class="disabled">
+        <i class="fas fa-step-forward"></i>
+      </a>
+    <% else %>
+      <a phx-click="player_signal_play_next">
+        <i class="fas fa-step-forward player-control clickeable"></i>
+      </a>
+    <% end %>
+  </div>
+  <div class="column">
+    <input
+      class="slider"
+      id="volume-control"
+      value="<%= @volume_controls.volume_level %>"
+      type="range"
+      min="0" max="100" step="1"
+    />
+  </div>
+</div>
