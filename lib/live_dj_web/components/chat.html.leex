@@ -1,0 +1,24 @@
+<div class="column">
+  <div id="chat-data" phx-hook="ChatSyncing">
+    <h1><%= @room.title %></h1>
+    <div id="chat" class="panel-messages">
+      <%= for message <- @messages do %>
+        <%= message %>
+      <% end %>
+    </div>
+    <form
+      phx-change="<%= :typing %>"
+      phx-submit="new_message"
+      class="chat-form"
+    >
+      <%=
+        text_input :submit,
+        :message,
+        value: @new_message,
+        phx_blur: "stop_typing",
+        placeholder: "Write something...",
+        class: "text-input"
+      %>
+    </form>
+  </div>
+</div>

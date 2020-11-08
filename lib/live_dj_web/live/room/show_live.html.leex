@@ -58,30 +58,12 @@
   </div>
 
   <div class="row section-container">
-    <div class="column">
-      <div id="chat-data" phx-hook="ChatSyncing">
-        <h1><%= @room.title %></h1>
-        <div id="chat" class="panel-messages">
-          <%= for message <- @messages do %>
-            <%= message %>
-          <% end %>
-        </div>
-        <form
-          phx-change="<%= :typing %>"
-          phx-submit="new_message"
-          class="chat-form"
-        >
-          <%=
-            text_input :submit,
-            :message,
-            value: @new_message,
-            phx_blur: "stop_typing",
-            placeholder: "Write something...",
-            class: "text-input"
-          %>
-        </form>
-      </div>
-    </div>
+    <%= live_component @socket, LiveDjWeb.Components.Chat,
+      id: "live-dj-chat",
+      messages: @messages,
+      new_message: @new_message,
+      room: @room
+    %>
 
     <div class="column" style="padding: 20px;" id="presence-data" phx-hook="PresenceSyncing">
       <h3>Peers:</h3>
