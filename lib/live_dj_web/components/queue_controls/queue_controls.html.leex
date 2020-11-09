@@ -1,0 +1,16 @@
+<div class="row container queue-controls" id="player-syncing-data" phx-hook="PlayerSyncing">
+  <div class="column">
+    <h3>Queue</h3>
+  </div>
+  <div class="column">
+    <%= if @video_queue_controls.is_save_enabled do %>
+      <a class="btn" phx-click="save_queue">
+        <i class="fas fa-save queue-control"></i>
+      </a>
+    <% else %>
+      <a class="disabled">
+        <i class="fas fa-save save-btn"></i>
+      </a>
+    <% end %>
+  </div>
+</div>
