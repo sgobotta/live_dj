@@ -1,0 +1,67 @@
+<div>
+  <ul class="playlist">
+    <li
+      id="drag-data-xxxxxxxxxxx"
+      data-position="<%= 0 %>"
+      phx-hook="DragAndDropping"
+    >
+      <span data-over-slot="<%= 0 %>" class="over-zone" />
+    </li>
+    <li
+      id="drag-data-ghost-<%= 0 %>"
+      data-ghost-slot="<%= 0 %>"
+      phx-hook="DragAndDropping"
+    >
+      <span data-ghost-slot="<%= 0 %>" class="" />
+    </li>
+    <%= for {video, index} <- @video_queue do %>
+      <li
+        draggable="true"
+        id="drag-data-<%= index %>"
+        data-position="<%= index + 1 %>"
+        phx-hook="DragAndDropping"
+      >
+        <div class="container">
+          <div
+            class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> draggable"
+          >
+            <div
+              class="queue-thumb row column-offset-2"
+              phx-click="player_signal_play_by_id"
+              phx-value-video_id="<%= video.video_id %>"
+            >
+              <img src="<%= video.img_url %>" class="queue-thumb" />
+              <i class="fas fa-play-circle queue-thumb-icon clickeable"></i>
+            </div>
+            <div class="column">
+              <div class="row">
+                <div class="column align-center">
+                  <p class="pill-text"><%= video.title %></p>
+                </div>
+                <div class="remove-track-btn-container column-offset-1">
+                  <%= if @player.video_id != video.video_id do %>
+                    <a
+                      class="btn"
+                      phx-click="remove_track"
+                      phx-value-video_id="<%= video.video_id %>"
+                    >
+                      <i class="fas fa-trash trash clickeable"></i>
+                    </a>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span data-over-slot="<%= index + 1 %>" class="over-zone" />
+      </li>
+      <li
+        id="drag-data-ghost-<%= index + 1 %>"
+        data-ghost-slot="<%= index + 1 %>"
+        phx-hook="DragAndDropping"
+      >
+        <span data-ghost-slot="<%= index + 1 %>" />
+      </li>
+    <% end %>
+  </ul>
+</div>
