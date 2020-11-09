@@ -14,7 +14,9 @@
       id: "live-dj-chat",
       messages: @messages,
       new_message: @new_message,
-      room: @room
+      user: @user,
+      room: @room,
+      slug: @slug
     %>
 
     <%= live_component @socket, LiveDjWeb.Components.Peers,
