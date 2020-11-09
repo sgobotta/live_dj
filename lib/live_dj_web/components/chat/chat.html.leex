@@ -7,8 +7,9 @@
       <% end %>
     </div>
     <form
-      phx-change="<%= :typing %>"
+      phx-change="typing"
       phx-submit="new_message"
+      phx-target="<%= @myself %>"
       class="chat-form"
     >
       <%=
@@ -16,6 +17,7 @@
         :message,
         value: @new_message,
         phx_blur: "stop_typing",
+        phx_target: @myself,
         placeholder: "Write something...",
         class: "text-input"
       %>

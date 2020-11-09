@@ -31,6 +31,23 @@ select {
   width: auto;
 }
 
+.header {
+  align-items: center;
+  border: 0.1rem;
+  border-color: #31708f;
+  border-style: dashed;
+  bottom: 0;
+  color: white;
+  display: flex;
+  height: 40px;
+  justify-content: flex-end;
+  left: 0;
+  margin: 0;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
 /* Phoenix promo and logo */
 .phx-hero {
   text-align: center;
@@ -57,9 +74,13 @@ select {
 
 /* Headers */
 header {
+  background-color: #222;
+  border: 0.1rem;
+  border-right-width: 0rem;
+  border-color: #31708f;
+  border-style: dashed;
   width: 100%;
-  background: #fdfdfd;
-  border-bottom: 1px solid #eaeaea;
+  color: #fff;
   margin-bottom: 2rem;
 }
 header section {

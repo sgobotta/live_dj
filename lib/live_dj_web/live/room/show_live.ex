@@ -7,7 +7,6 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Account
-  alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
@@ -564,22 +563,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("save_queue", _params, socket) do
-    %{assigns: %{room: room, slug: slug, video_queue: video_queue, video_queue_controls: video_queue_controls}} = socket
-    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    {:ok, _room} = Organizer.update_room(room, %{queue: video_queue})
-
-    Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> slug,
-      {:save_queue, %{video_queue_controls: Queue.mark_as_saved(video_queue_controls)}}
-    )
-
-    {:noreply, socket}
-  end
-
-
-  @impl true
   def handle_event("player_signal_current_time", current_time, socket) do
     %{room: room, user: %{uuid: uuid}} = socket.assigns
 
@@ -593,52 +576,6 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:noreply, socket}
       false ->
         {:noreply, socket}
-    end
-  end
-
-  @impl true
-  def handle_event(
-    "typing",
-    _value,
-    socket = %{assigns: %{user: %{uuid: uuid}, slug: slug}}
-  )do
-    Chat.start_typing(slug, uuid)
-    {:noreply, socket}
-  end
-
-  def handle_event(
-    "stop_typing",
-    %{"value" => message},
-    socket = %{assigns: %{user: %{uuid: uuid}, slug: slug}}
-  ) do
-    Chat.stop_typing(slug, uuid)
-    {:noreply, assign(socket, new_message: message)}
-  end
-
-  @impl true
-  def handle_event(
-    "new_message",
-    %{"submit" => %{"message" => message}},
-    socket
-  ) do
-    socket = socket |> assign(:new_message, "")
-    case String.trim(message) do
-      "" ->
-        {:noreply, socket}
-      _ ->
-        %{messages: messages, slug: slug, user: %{username: username}} = socket.assigns
-        message = Chat.create_message(:new, %{message: message, username: username})
-        messages = messages ++ [message]
-        Phoenix.PubSub.broadcast_from(
-          LiveDj.PubSub,
-          self(),
-          "room:" <> slug,
-          {:receive_messages, %{messages: messages}}
-        )
-        {:noreply,
-          socket
-          |> assign(:messages, messages)
-          |> push_event("receive_new_message", %{})}
     end
   end
 
