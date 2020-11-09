@@ -32,6 +32,9 @@
 
         <%= live_component @socket, LiveDjWeb.Components.QueueControls,
           id: "live-dj-queue-controls",
+          room: @room,
+          slug: @slug,
+          video_queue: @video_queue,
           video_queue_controls: @video_queue_controls
         %>
 

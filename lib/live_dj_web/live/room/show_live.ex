@@ -137,7 +137,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_info({:save_queue, %{video_queue_controls: video_queue_controls}}, socket) do
+  def handle_info({:save_queue, params}, socket) do
+    %{video_queue_controls: video_queue_controls} = params
     {:noreply,
       socket
       |> assign(:video_queue_controls, video_queue_controls)

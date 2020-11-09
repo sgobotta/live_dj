@@ -4,7 +4,7 @@
   </div>
   <div class="column">
     <%= if @video_queue_controls.is_save_enabled do %>
-      <a class="btn" phx-click="save_queue">
+      <a class="btn" phx-click="save_queue" phx-target="<%= @myself %>">
         <i class="fas fa-save queue-control"></i>
       </a>
     <% else %>
