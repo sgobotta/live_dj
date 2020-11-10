@@ -1,7 +1,7 @@
 <div class="column">
   <div id="chat-data" phx-hook="ChatSyncing">
     <h1><%= @room.title %></h1>
-    <div id="chat" class="panel-messages">
+    <div id="chat" class="scrollable-panel">
       <%= for message <- @messages do %>
         <%= message %>
       <% end %>
