@@ -220,10 +220,17 @@ b {
   color: white;
 }
 
-#chat {
+.scrollable-panel {
   min-height: 400px;
   max-height: 400px;
   overflow-y: scroll;
+
+  &.higher {
+    min-height: 446px;
+    border-bottom-color: #3271a9;
+    border-bottom-width: 0.1rem;
+    border-style: dashed;
+  }
 }
 
 .container{
@@ -319,6 +326,8 @@ a.btn i.trash {
 }
 
 .row {
+
+  margin-left: 0rem;
 
   &.search-result {
     padding: 1rem;
