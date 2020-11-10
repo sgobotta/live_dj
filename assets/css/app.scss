@@ -337,6 +337,11 @@ a.btn i.trash {
     border-top-style: dashed;
     border-top-width: 1px;
     border-top-color: #31708f;
+    width: 100%;
+  }
+
+  &.margin-fix {
+    margin-left: -1rem;
   }
 }
 
