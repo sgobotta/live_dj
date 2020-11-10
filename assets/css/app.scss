@@ -649,8 +649,8 @@ input.text-input:focus {
   }
 }
 
-.queue-controls {
-  margin-bottom: 40px;
+.extra-margin-top {
+  margin-top: 40px;
 }
 
 .queue-thumb {
@@ -1234,6 +1234,7 @@ ul.playlist {
 
 
   display: block;
+  padding: 0 2.0rem;
 
   li {
     display: block;
