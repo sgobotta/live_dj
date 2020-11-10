@@ -1,4 +1,4 @@
-<div>
+<div class="scrollable-panel higher extra-margin-top">
   <ul class="playlist">
     <li
       id="drag-data-xxxxxxxxxxx"
@@ -21,7 +21,7 @@
         data-position="<%= index + 1 %>"
         phx-hook="DragAndDropping"
       >
-        <div class="container">
+        <div>
           <div
             class="row pill <%= if video.video_id == @player.video_id do %> current-video <% end %> draggable"
           >
