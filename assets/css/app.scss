@@ -1232,11 +1232,13 @@ how to remove the virtical space around the range input in IE*/
 
 ul.playlist {
 
+
   display: block;
 
   li {
     display: block;
     position: relative;
+    padding-right: 20px;
 
     &.hide {
       display: none !important;
