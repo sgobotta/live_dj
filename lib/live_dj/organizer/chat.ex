@@ -4,48 +4,14 @@ defmodule LiveDj.Organizer.Chat do
 
   alias LiveDjWeb.Presence
 
-  def render_timestamp(timestamp, username) do
-    ~E"""
-      <span class="timestamp <%= timestamp.class %>">
-        [<%= timestamp.value %>]
-        <%= username %>
-      </span>
-    """
-  end
-
-  def render_username(username) do
-    ~E"""
-      <b><%= username %>> </b>
-    """
-  end
-
-  def render_message(message) do
-    ~E"""
-      <i><%= message %></i>
-    """
-  end
-
-  def create_message(:presence_joins, %{uuid: uuid}) do
-    ~E"""
-      <div class="chat-presence">
-        <p class="chat-message"><b><%= uuid %></b> has connected</p>
-      </div>
-    """
-  end
-
-  def create_message(:presence_leaves, %{uuid: uuid}) do
-    ~E"""
-      <div class="chat-presence">
-        <p class="chat-message"><b><%= uuid %></b> has disconnected</p>
-      </div>
-    """
-  end
-
-  def create_message(:new, %{message: message, username: username}) do
-    %{
-      text: message,
-      timestamp: create_timestamp(),
-      username: username
+  def create_message(:chat_message, %{message: message, username: username}) do
+    {:chat_message,
+      %{
+        text: message,
+        timestamp: create_timestamp(),
+        type: :chat_message,
+        username: username,
+      }
     }
   end
 

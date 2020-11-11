@@ -29,7 +29,7 @@ defmodule LiveDjWeb.Components.Chat do
         %{assigns: assigns} = socket
         %{messages: messages, slug: slug, user: %{username: username}} = assigns
         new_message = %{message: message, username: username}
-        message = Chat.create_message(:new, new_message)
+        message = Chat.create_message(:chat_message, new_message)
         messages = messages ++ [message]
         Phoenix.PubSub.broadcast_from(
           LiveDj.PubSub,
@@ -55,5 +55,33 @@ defmodule LiveDjWeb.Components.Chat do
     %{assigns: %{user: %{uuid: uuid}, slug: slug}} = socket
     Chat.stop_typing(slug, uuid)
     {:noreply, assign(socket, new_message: message)}
+  end
+
+  defp render_timestamp(timestamp, username) do
+    ~E"""
+      <span class="timestamp <%= timestamp.class %>">
+        [<%= timestamp.value %>]
+        <%= username %>
+      </span>
+    """
+  end
+
+  defp render_username(username) do
+    ~E"""
+      <b><%= username %>> </b>
+    """
+  end
+
+  defp render_text(message) do
+    ~E"""
+      <i><%= message %></i>
+    """
+  end
+
+  def render_message({:chat_message, message}) do
+    ~E"""
+      <%= render_timestamp(message.timestamp, render_username(message.username)) %>
+      <%= render_text(message.text) %>
+    """
   end
 end

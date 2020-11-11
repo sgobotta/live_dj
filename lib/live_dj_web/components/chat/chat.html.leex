@@ -5,11 +5,7 @@
       <%= for message <- @messages do %>
         <div>
           <p class="chat-message">
-            <%= LiveDj.Organizer.Chat.render_timestamp(
-              message.timestamp,
-              LiveDj.Organizer.Chat.render_username(message.username)
-            ) %>
-            <%= LiveDj.Organizer.Chat.render_message(message.text) %>
+            <%= render_message(message) %>
           </p>
         </div>
       <% end %>
