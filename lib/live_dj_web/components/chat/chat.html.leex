@@ -3,7 +3,15 @@
     <h1><%= @room.title %></h1>
     <div id="chat" class="scrollable-panel">
       <%= for message <- @messages do %>
-        <%= message %>
+        <div>
+          <p class="chat-message">
+            <%= LiveDj.Organizer.Chat.render_timestamp(
+              message.timestamp,
+              LiveDj.Organizer.Chat.render_username(message.username)
+            ) %>
+            <%= LiveDj.Organizer.Chat.render_message(message.text) %>
+          </p>
+        </div>
       <% end %>
     </div>
     <form
