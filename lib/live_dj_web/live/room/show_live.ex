@@ -375,7 +375,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_event("player_signal_video_ended", _params, socket) do
-    %{video_queue: video_queue, player: player} = socket.assigns
+    %{player: player, video_queue: video_queue, user: user} = socket.assigns
     %{video_id: current_video_id} = player
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     next_video = Queue.get_next_video(video_queue, current_video_id)
@@ -546,19 +546,31 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("add_to_queue", selected_video, socket) do
-    %{assigns: %{search_result: search_result, video_queue: video_queue, video_queue_controls: video_queue_controls}} = socket
-    selected_video = Enum.find(search_result, fn search -> search.video_id == selected_video["video_id"] end)
-    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    updated_video_queue = Queue.add_to_queue(video_queue, selected_video)
+  def handle_event("add_to_queue", selected_video, %{assigns: assigns} = socket) do
+    %{
+      search_result: search_result,
+      video_queue: video_queue,
+      video_queue_controls: video_queue_controls,
+      user: user
+    } = assigns
+
+    selected_video = Enum.find(
+      search_result,
+      fn search -> search.video_id == selected_video["video_id"] end
+    ) |> Video.assign_user(user)
+    video_queue = video_queue
+      |> Enum.map(fn {v, _} -> v end)
+      |> Queue.add_to_queue(selected_video)
+
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
       {:add_to_queue, %{
-        updated_video_queue: updated_video_queue,
+        updated_video_queue: video_queue,
         video_queue_controls: Queue.mark_as_unsaved(video_queue_controls),
-        added_video_position: length(updated_video_queue)}}
+        added_video_position: length(video_queue)}}
     )
+
     {:noreply, socket}
   end
 
