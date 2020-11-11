@@ -4,6 +4,27 @@ defmodule LiveDj.Organizer.Chat do
 
   alias LiveDjWeb.Presence
 
+  def render_timestamp(timestamp, username) do
+    ~E"""
+      <span class="timestamp <%= timestamp.class %>">
+        [<%= timestamp.value %>]
+        <%= username %>
+      </span>
+    """
+  end
+
+  def render_username(username) do
+    ~E"""
+      <b><%= username %>> </b>
+    """
+  end
+
+  def render_message(message) do
+    ~E"""
+      <i><%= message %></i>
+    """
+  end
+
   def create_message(:presence_joins, %{uuid: uuid}) do
     ~E"""
       <div class="chat-presence">
@@ -21,26 +42,11 @@ defmodule LiveDj.Organizer.Chat do
   end
 
   def create_message(:new, %{message: message, username: username}) do
-    timestamp = DateTime.now(System.get_env("TZ"), Tzdata.TimeZoneDatabase)
-    |> elem(1)
-    |> Time.to_string()
-    |> String.split(".")
-    |> hd
-    highlight_style = case timestamp =~ "04:20:" || timestamp =~ "16:20:" do
-      true -> "highlight-timestamp"
-      false -> "timestamp-message"
-    end
-    ~E"""
-      <div>
-        <p class="chat-message">
-          <span class="timestamp <%= highlight_style %>">
-            [<%= timestamp %>]
-            <b><%= username %>> </b>
-          </span>
-          <i><%= message %></i>
-        </p>
-      </div>
-    """
+    %{
+      text: message,
+      timestamp: create_timestamp(),
+      username: username
+    }
   end
 
   def start_typing(slug, uuid) do
@@ -64,5 +70,22 @@ defmodule LiveDj.Organizer.Chat do
       |> Map.merge(payload)
 
     Presence.update(self(), topic, key, metas)
+  end
+
+  defp create_timestamp do
+    timestamp = DateTime.now(System.get_env("TZ"), Tzdata.TimeZoneDatabase)
+    |> elem(1)
+    |> Time.to_string()
+    |> String.split(".")
+    |> hd
+    highlight_style =
+      case timestamp =~ "04:20:" || timestamp =~ "16:20:" do
+        true -> "highlight-timestamp"
+        false -> "timestamp-message"
+      end
+    %{
+      value: timestamp,
+      class: highlight_style
+    }
   end
 end
