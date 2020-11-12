@@ -1,3 +1,4 @@
+// Used to support async/wait functions
 import "regenerator-runtime/runtime"
 // We need to import the CSS so that webpack will load it.
 // The MiniCssExtractPlugin is used to separate it out into
@@ -12,13 +13,16 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
-import PlayerSyncing from "./hooks/player-syncing";
-import PresenceSyncing from "./hooks/presence-syncing";
-import DragAndDropping from "./hooks/drag-and-dropping";
-import ChatSyncing from "./hooks/chat-syncing";
-import ModalInteracting from "./hooks/modal-interacting";
-import UiFeedback from "./hooks/ui-feedback";
+
+import ChatSyncing from "./hooks/chat-syncing"
+import DragAndDropping from "./hooks/drag-and-dropping"
+import ModalInteracting from "./hooks/modal-interacting"
+import PlayerSyncing from "./hooks/player-syncing"
+import PresenceSyncing from "./hooks/presence-syncing"
+import UiFeedback from "./hooks/ui-feedback"
+
 import LoadYTIframeAPI from './deps/yt-iframe-api'
+
 import createPlayer from './lib/player'
 
 function onIframeReady() {
@@ -27,7 +31,7 @@ function onIframeReady() {
 }
 
 function initPlayer(onStateChange, onVolumeChange) {
-  const playerContainer = document.getElementById("video-player");
+  const playerContainer = document.getElementById("video-player")
   return createPlayer(playerContainer, {onStateChange, onVolumeChange})
 }
 
