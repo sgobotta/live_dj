@@ -3,7 +3,11 @@
     <h1><%= @room.title %></h1>
     <div id="chat" class="scrollable-panel">
       <%= for message <- @messages do %>
-        <%= message %>
+        <div>
+          <p class="chat-message">
+            <%= render_message(message) %>
+          </p>
+        </div>
       <% end %>
     </div>
     <form

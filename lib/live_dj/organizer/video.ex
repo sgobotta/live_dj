@@ -4,10 +4,29 @@ defmodule LiveDj.Organizer.Video do
 
   @derive Jason.Encoder
 
-  defstruct channel_title: "", description: "", img_height: "", img_url: "", img_width: "", is_queued: false, title: "", video_id: "", previous: "", next: ""
+  defstruct [
+    channel_title: "",
+    description: "",
+    img_height: "",
+    img_url: "",
+    img_width: "",
+    is_queued: false,
+    title: "",
+    video_id: "",
+    previous: "",
+    next: "",
+    added_by: %{
+      uuid: "",
+      username: ""
+    }
+  ]
 
   def update(video, props) do
     Map.merge(video, props)
+  end
+
+  def assign_user(video, user) do
+    update(video, %{added_by: %{uuid: user.uuid, username: user.username}})
   end
 
   def from_jsonb(jsonb_video) do
