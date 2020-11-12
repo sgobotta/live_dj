@@ -9,8 +9,20 @@ defmodule LiveDj.Organizer.Chat do
       %{
         text: message,
         timestamp: create_timestamp(),
-        type: :chat_message,
         username: username,
+      }
+    }
+  end
+
+  def create_message(:track_notification, %{user: user, video: video}) do
+    %{title: title} = video
+    %{username: username} = user
+    {:track_notification,
+      %{
+        added_by: username,
+        video_title: title,
+        timestamp: create_timestamp(),
+        username: "info"
       }
     }
   end
