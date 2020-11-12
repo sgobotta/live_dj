@@ -7,6 +7,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Account
+  alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
@@ -377,21 +378,33 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event("player_signal_video_ended", _params, socket) do
     %{player: player, video_queue: video_queue, user: user} = socket.assigns
     %{video_id: current_video_id} = player
+
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     next_video = Queue.get_next_video(video_queue, current_video_id)
 
     case next_video do
       nil ->
         player = Player.update(player, %{state: "stopped", time: 0})
+
         {:noreply,
           socket
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))}
       video ->
+        %{messages: messages} = socket.assigns
         %{video_id: video_id} = video
-        player = Player.update(player, %{video_id: video_id, time: 0, state: "playing"})
+
+        player_props = %{video_id: video_id, time: 0, state: "playing"}
+        player = Player.update(player, player_props)
+        message = Chat.create_message(:track_notification, %{
+          user: user,
+          video: next_video
+        })
+        messages = messages ++ [message]
+
         {:noreply,
           socket
+          |> assign(:messages, messages)
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))}
