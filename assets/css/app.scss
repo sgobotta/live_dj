@@ -414,6 +414,26 @@ input.text-input:focus {
   font-family: monospace
 }
 
+.chat-username {
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.highlight-username {
+  color: #3271a9;
+}
+
+.highlight-video-title {
+  color: #fa84bf;
+}
+
+.use-prompt:after {
+  color: #8558af;
+  content: ">";
+  margin-left: -4px;
+  font-weight: bold;
+}
+
 .chat-presence {
   color: #333;
   margin-bottom: 6px;
