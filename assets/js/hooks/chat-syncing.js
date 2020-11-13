@@ -6,7 +6,7 @@ const ChatSyncing = () => ({
 
     const input = document.getElementById('submit_message')
 
-    chat.onmouseenter = () => {
+    input.onmouseenter = () => {
       input.focus()
     }
 
