@@ -1,7 +1,7 @@
 export default (container, {onStateChange, onVolumeChange}) => {
   return new Promise((resolve) => {
     new YT.Player(container, {
-      height: "210",
+      height: "420",
       width: "100%",
       videoId: '',
       playerVars: { 'controls': 0 },
