@@ -98,8 +98,7 @@ defmodule LiveDjWeb.Components.Chat do
     text = ~E"""
       Playing
       <%= video_title %>
-      track, added by
-      <%= render_username(added_by, "highlight-username") %>
+      track
     """
 
     ~E"""
