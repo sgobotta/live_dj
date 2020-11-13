@@ -1,51 +1,62 @@
-<div class="col-container">
-  <div class="col new-room-form">
-    <h2 class="like-atom">Create a new room</h2>
-    <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save"], fn f -> %>
+<div class="new-live-view">
+  <div class="col-container">
+    <div class="col new-room-form">
+      <h2 class="like-atom">Create a new room</h2>
+      <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save"], fn f -> %>
 
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      <!-- <span class="blink">|> </span> -->
-      <%= text_input f, :title, placeholder: "insert a title", class: "text-input" %>
-      <%= error_tag f, :title %>
+      <div style="margin-top: 8px; margin-bottom: 8px;">
+        <!-- <span class="blink">|> </span> -->
+        <%= text_input f, :title, placeholder: "insert a title", class: "text-input" %>
+        <%= error_tag f, :title %>
+      </div>
+
+      <div style="margin-top: 8px; margin-bottom: 8px;">
+        <!-- <span class="blink">|> </span> -->
+        <%= text_input f, :slug, placeholder: "insert a room slug", class: "text-input" %>
+        <%= error_tag f, :slug %>
+      </div>
+
+      <%= submit "save" %>
+
+      <% end %>
+
+      <p class="alert alert-info" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+
+      <p class="alert alert-danger" role="alert"
+        phx-click="lv:clear-flash"
+        phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+
     </div>
 
-    <div style="margin-top: 8px; margin-bottom: 8px;">
-      <!-- <span class="blink">|> </span> -->
-      <%= text_input f, :slug, placeholder: "insert a room slug", class: "text-input" %>
-      <%= error_tag f, :slug %>
+    <div class="section-container col rooms-container">
+      <%= if @public_rooms != [] do %>
+
+      <div class="list">
+          <h2 class="like-atom">Rooms</h2>
+          <span><span>
+          <ul class="like-list">
+          <%= for room <- @public_rooms do %>
+            <li>
+              <span class="room-item">
+                <a
+                  class="clickeable"
+                  phx-click="redirect_room"
+                  phx-value-slug="<%= room.slug %>"
+                >
+                  <%= room.title %>
+                </a>
+              </span>
+              <span class="room-peers">(<%= @viewers_quantity[String.to_atom(room.title)] %>)</span>
+            </li>
+          <% end %>
+          </ul>
+      </div>
+
+      <% else %>
+      <p><span class="like-atom">no_rooms_yet_:(</span></p>
+      <% end %>
     </div>
-
-    <%= submit "save" %>
-
-    <% end %>
-  </div>
-
-  <div class="section-container col rooms-container">
-    <%= if @public_rooms != [] do %>
-
-    <div class="list">
-        <h2 class="like-atom">Rooms</h2>
-        <span><span>
-        <ul class="like-list">
-        <%= for room <- @public_rooms do %>
-          <li>
-            <span class="room-item">
-              <a
-                class="clickeable"
-                phx-click="redirect_room"
-                phx-value-slug="<%= room.slug %>"
-              >
-                <%= room.title %>
-              </a>
-            </span>
-            <span class="room-peers">(<%= @viewers_quantity[String.to_atom(room.title)] %>)</span>
-          </li>
-        <% end %>
-        </ul>
-    </div>
-
-    <% else %>
-    <p><span class="like-atom">no_rooms_yet_:(</span></p>
-    <% end %>
   </div>
 </div>
