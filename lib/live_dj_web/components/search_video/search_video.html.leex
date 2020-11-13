@@ -1,6 +1,6 @@
 <div>
   <div>
-    <form phx-submit="search" class="search-form">
+    <form id="search-video-form" phx-submit="search" class="search-form">
       <%=
         text_input :search_field,
         :query,
@@ -12,7 +12,19 @@
     </form>
   </div>
 
-  <div class="scrollable-panel higher">
+  <div
+    phx-hook="SearchSyncing"
+    id="search-data"
+    class="scrollable-panel higher"
+  >
+
+    <div class="loader-container">
+      <div class="loading">
+        <p>Searching...</p>
+      <span></span>
+    </div>
+
+    </div>
     <%= for video <- @search_result do %>
       <div class="row search-result separator">
         <div class="column-offset-25">
