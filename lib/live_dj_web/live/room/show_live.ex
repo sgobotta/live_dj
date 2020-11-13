@@ -44,6 +44,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         player = Player.get_initial_state()
         {:ok,
           socket
+          |> assign(:is_state_loaded, false)
           |> assign(:user, user)
           |> assign(:slug, slug)
           |> assign(:connected_users, [])
@@ -169,6 +170,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
       |> assign(:search_result, search_result)
+      |> assign(:is_state_loaded, true)
     case current_queue do
       []  -> {:noreply, socket}
       _xs ->
@@ -330,6 +332,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     case presence do
       []  ->
         %{video_queue: video_queue} = socket.assigns
+        socket = socket |> assign(:is_state_loaded, true)
         case video_queue do
           [] ->
             {:noreply,
