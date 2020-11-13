@@ -1,0 +1,185 @@
+.launcher-container {
+  display: flex;
+  position: fixed;
+  z-index: 999;
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  left: 0;
+  top: 0;
+  align-items: center;
+  background-color: #000;
+}
+
+.launcher-loader-container *, .launcher-loader-container *:before, .launcher-loader-container *:after{
+	box-sizing: border-box;
+		-o-box-sizing: border-box;
+		-ms-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+}
+
+.launcher-loader-container {
+	margin: 42px auto;
+	width: 110px;
+	height: 75px;
+}
+.launcher-loader-container > div {
+  border-radius: 50px;
+	float: left;
+	background: $primary;
+	height: 100%;
+	width: 10px;
+	margin-right: 1px;
+}
+
+.launcher-loader-container .launcher-loader-shaft1 {
+	animation-delay: 0.06s;
+		-o-animation-delay: 0.06s;
+		-ms-animation-delay: 0.06s;
+		-webkit-animation-delay: 0.06s;
+		-moz-animation-delay: 0.06s;
+}
+.launcher-loader-container .launcher-loader-shaft2 {
+	animation-delay: 0.12s;
+		-o-animation-delay: 0.12s;
+		-ms-animation-delay: 0.12s;
+		-webkit-animation-delay: 0.12s;
+		-moz-animation-delay: 0.12s;
+}
+.launcher-loader-container .launcher-loader-shaft3 {
+	animation-delay: 0.17s;
+		-o-animation-delay: 0.17s;
+		-ms-animation-delay: 0.17s;
+		-webkit-animation-delay: 0.17s;
+		-moz-animation-delay: 0.17s;
+}
+.launcher-loader-container .launcher-loader-shaft4 {
+	animation-delay: 0.23s;
+		-o-animation-delay: 0.23s;
+		-ms-animation-delay: 0.23s;
+		-webkit-animation-delay: 0.23s;
+		-moz-animation-delay: 0.23s;
+}
+.launcher-loader-container .launcher-loader-shaft5 {
+	animation-delay: 0.29s;
+		-o-animation-delay: 0.29s;
+		-ms-animation-delay: 0.29s;
+		-webkit-animation-delay: 0.29s;
+		-moz-animation-delay: 0.29s;
+}
+.launcher-loader-container .launcher-loader-shaft6 {
+	animation-delay: 0.35s;
+		-o-animation-delay: 0.35s;
+		-ms-animation-delay: 0.35s;
+		-webkit-animation-delay: 0.35s;
+		-moz-animation-delay: 0.35s;
+}
+.launcher-loader-container .launcher-loader-shaft7 {
+	animation-delay: 0.4s;
+		-o-animation-delay: 0.4s;
+		-ms-animation-delay: 0.4s;
+		-webkit-animation-delay: 0.4s;
+		-moz-animation-delay: 0.4s;
+}
+.launcher-loader-container .launcher-loader-shaft8 {
+	animation-delay: 0.46s;
+		-o-animation-delay: 0.46s;
+		-ms-animation-delay: 0.46s;
+		-webkit-animation-delay: 0.46s;
+		-moz-animation-delay: 0.46s;
+}
+.launcher-loader-container .launcher-loader-shaft9 {
+	animation-delay: 0.52s;
+		-o-animation-delay: 0.52s;
+		-ms-animation-delay: 0.52s;
+		-webkit-animation-delay: 0.52s;
+		-moz-animation-delay: 0.52s;
+}
+.launcher-loader-container .launcher-loader-shaft10 {
+	animation-delay: 0.58s;
+		-o-animation-delay: 0.58s;
+		-ms-animation-delay: 0.58s;
+		-webkit-animation-delay: 0.58s;
+		-moz-animation-delay: 0.58s;
+}
+
+.launcher-loader-container > div {
+	animation: cssload-jellyfish 1.73s infinite ease-in-out;
+		-o-animation: cssload-jellyfish 1.73s infinite ease-in-out;
+		-ms-animation: cssload-jellyfish 1.73s infinite ease-in-out;
+		-webkit-animation: cssload-jellyfish 1.73s infinite ease-in-out;
+		-moz-animation: cssload-jellyfish 1.73s infinite ease-in-out;
+	transform: scaleY(0.05) translateX(-4px);
+		-o-transform: scaleY(0.05) translateX(-4px);
+		-ms-transform: scaleY(0.05) translateX(-4px);
+		-webkit-transform: scaleY(0.05) translateX(-4px);
+		-moz-transform: scaleY(0.05) translateX(-4px);
+}
+
+
+
+@keyframes cssload-jellyfish {
+	10% {
+		background: $primary;
+	}
+	15% {
+		transform: scaleY(1.2) translateX(8px);
+		background: $secondary;
+	}
+	90%, 100% {
+		transform: scaleY(0.05) translateX(-4px);
+	}
+}
+
+@-o-keyframes cssload-jellyfish {
+	10% {
+		background: $primary;
+	}
+	15% {
+		-o-transform: scaleY(1.2) translateX(8px);
+		background: $secondary;
+	}
+	90%, 100% {
+		-o-transform: scaleY(0.05) translateX(-4px);
+	}
+}
+
+@-ms-keyframes cssload-jellyfish {
+	10% {
+		background: $primary;
+	}
+	15% {
+		-ms-transform: scaleY(1.2) translateX(8px);
+		background: $secondary;
+	}
+	90%, 100% {
+		-ms-transform: scaleY(0.05) translateX(-4px);
+	}
+}
+
+@-webkit-keyframes cssload-jellyfish {
+	10% {
+		background: $primary;
+	}
+	15% {
+		-webkit-transform: scaleY(1.2) translateX(8px);
+		background: $secondary;
+	}
+	90%, 100% {
+		-webkit-transform: scaleY(0.05) translateX(-4px);
+	}
+}
+
+@-moz-keyframes cssload-jellyfish {
+	10% {
+		background: $primary;
+	}
+	15% {
+		-moz-transform: scaleY(1.2) translateX(8px);
+		background: $secondary;
+	}
+	90%, 100% {
+		-moz-transform: scaleY(0.05) translateX(-4px);
+	}
+}
