@@ -7,7 +7,8 @@
 
 $primary: #3271a9;
 $secondary: #8558af;
-$secondary-highlight: #fa84bf;
+$secondary-highlight-1: #fa84bf;
+$secondary-highlight-2: #fda4d1;
 
 @import "./search-loader.scss";
 
@@ -275,10 +276,10 @@ b {
 
 .new-room-form form button:hover {
   color: #fff;
-  background-color: #fda4d1;
+  background-color: $secondary-highlight-2;
   outline: 2px solid transparent;
   outline-offset: 2px;
-  border-color: #fda4d1
+  border-color: $secondary-highlight-2;
 }
 
 .rooms-container {
@@ -292,7 +293,7 @@ b {
   color: $secondary;
 }
 .room-item a:hover {
-  color: #fda4d1;
+  color: $secondary-highlight-2;
   -webkit-animation: text-highlight 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: text-highlight 0.5s forwards;
@@ -434,7 +435,7 @@ input.text-input:focus {
 }
 
 .highlight-video-title {
-  color: $secondary-highlight;
+  color: $secondary-highlight-1;
 }
 
 .use-prompt:after {
@@ -617,14 +618,14 @@ input.text-input:focus {
 
 .modal-close-button:hover {
   color: #fff;
-  background-color: #fda4d1;
+  background-color: $secondary-highlight-2;
   outline: 2px solid transparent;
   outline-offset: 2px;
-  border-color: #fda4d1
+  border-color: $secondary-highlight-2;
 }
 
 .modal-close-button:active {
-  color: #2d3748
+  color: #2d3748;
 }
 
 @keyframes ellipsis {
@@ -651,7 +652,7 @@ input.text-input:focus {
   color: $secondary;
 }
 .highlight:hover span {
-  color: $secondary-highlight;
+  color: $secondary-highlight-1;
   -webkit-animation: text-highlight 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: text-highlight 0.5s forwards;
@@ -735,7 +736,7 @@ div p.pill-text {
 }
 
 .player-control:hover {
-  color: $secondary-highlight;
+  color: $secondary-highlight-1;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
@@ -771,7 +772,7 @@ div p.pill-text {
 }
 
 .row.pill.draggable:hover {
-  background-color: $secondary-highlight;
+  background-color: $secondary-highlight-1;
 
   p {
     color: #000
@@ -818,12 +819,12 @@ html {
   border-radius: 50px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  border: 1px solid $secondary-highlight;
-  background: $secondary-highlight;
+  border: 1px solid $secondary-highlight-1;
+  background: $secondary-highlight-1;
 }
 ::-webkit-scrollbar-thumb:active {
-  border: 1px double #fda4d1;
-  background: $secondary-highlight;
+  border: 1px double $secondary-highlight-2;
+  background: $secondary-highlight-1;
 }
 ::-webkit-scrollbar-track {
   border-style: dashed;
@@ -860,7 +861,7 @@ input[type=range]:focus {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  background: $secondary-highlight;
+  background: $secondary-highlight-1;
   border: 1.6px solid $primary;
   border-radius: 25px;
   width: 100%;
@@ -885,14 +886,14 @@ input[type=range]::-webkit-slider-thumb {
 input[type=range]::-webkit-slider-thumb:hover {
   width: 27px;
   height: 27px;
-  border-color: $secondary-highlight;
-  background-color: $secondary-highlight;
+  border-color: $secondary-highlight-1;
+  background-color: $secondary-highlight-1;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background-color: $secondary-highlight;
+  background-color: $secondary-highlight-1;
 }
 input[type=range]::-moz-range-track {
-  background: $secondary-highlight;
+  background: $secondary-highlight-1;
   border: 1.6px solid $primary;
   border-radius: 25px;
   width: 100%;
@@ -916,8 +917,8 @@ input[type=range]::-moz-range-thumb {
 input[type=range]::-moz-range-thumb:hover {
   width: 27px;
   height: 27px;
-  border-color: $secondary-highlight;
-  background-color: $secondary-highlight;
+  border-color: $secondary-highlight-1;
+  background-color: $secondary-highlight-1;
 }
 input[type=range]::-ms-track {
   background: transparent;
@@ -1355,7 +1356,7 @@ ul.playlist {
       position: relative;
       height: 50px;
       background-color: transparent;
-      border: 3px solid $secondary-highlight;
+      border: 3px solid $secondary-highlight-1;
       border-style: dashed;
       border-radius: 50px;
       animation: opacity .4s ease forwards
