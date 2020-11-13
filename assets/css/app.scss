@@ -4,6 +4,7 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
+@import "./search-loader.scss";
 
 body {
   background-color: #000000;
@@ -999,6 +1000,30 @@ how to remove the virtical space around the range input in IE*/
 }
 
 /**
+ * Animations
+ */
+
+.anim-fade-in {
+  div.row.search-result {
+    -webkit-animation: opacity-in 1s forwards;
+    animation: opacity-in 1s forwards;
+  }
+}
+
+.anim-fade-out {
+  div.row.search-result {
+    -webkit-animation: opacity-out 150ms forwards;
+    animation: opacity-out 150ms forwards;
+  }
+}
+
+.hidden-elements {
+  div.row.search-result {
+    display: none;
+  }
+}
+
+/**
  * Animation: Zooming
  */
 
@@ -1209,44 +1234,64 @@ how to remove the virtical space around the range input in IE*/
  */
 
 @keyframes opacity {
-  0% {
-    opacity: 0
+  from {
+    opacity: 0.0;
   }
-  10% {
-    opacity: 0.2
-  }
-  30% {
-    opacity: 0.4
-  }
-  55% {
-    opacity: 0.6
-  }
-  80% {
-    opacity: 0.8
-  }
-  100% {
-    opacity: 1.0
+  to {
+    opacity: 1.0;
   }
 }
 
 @-webkit-keyframes opacity {
-  0% {
-    opacity: 0
+  from {
+    opacity: 0.0;
   }
-  10% {
-    opacity: 0.2
+  to {
+    opacity: 1.0;
   }
-  30% {
-    opacity: 0.4
+}
+ 
+@keyframes opacity-in {
+  from {
+    opacity: 1.0;
+    display: flex;
   }
-  55% {
-    opacity: 0.6
+  to {
+    opacity: 0.0;
+    visibility: hidden;
   }
-  80% {
-    opacity: 0.8
+}
+
+@-webkit-keyframes opacity-in {
+  from {
+    opacity: 1.0;
+    visibility: visible;
   }
-  100% {
-    opacity: 1.0
+  to {
+    opacity: 0.0;
+    visibility: hidden;
+  }
+}
+ 
+@keyframes opacity-out {
+  from {
+    opacity: 0.0;
+    display: hidden;
+  }
+  to {
+    opacity: 1.0;
+    visibility: visible;
+  }
+}
+
+@-webkit-keyframes opacity-out {
+  from {
+    opacity: 0.0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1.0;
+    visibility: visible;
   }
 }
 
