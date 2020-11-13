@@ -49,7 +49,7 @@ defmodule LiveDjWeb.Room.NewLive do
       {:ok, room} ->
         {:noreply,
           socket
-          |> push_redirect(to: Routes.show_path(socket, :show, room.slug))
+          |> redirect(to: Routes.show_path(socket, :show, room.slug))
         }
       {:error, changeset} ->
         {:noreply,
@@ -58,6 +58,12 @@ defmodule LiveDjWeb.Room.NewLive do
           |> put_flash(:error, "Could not save the room.")
         }
     end
+  end
+
+  def handle_event("redirect_room", %{"slug" => slug}, socket) do
+    {:noreply,
+      socket
+      |> redirect(to: Routes.show_path(socket, :show, slug))}
   end
 
   defp put_changeset(socket, params \\ %{}) do
