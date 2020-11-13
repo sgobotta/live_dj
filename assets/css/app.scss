@@ -82,6 +82,20 @@ select {
   display: block;
 }
 
+#nprogress {
+  div.spinner {
+    left: 50%;
+
+    div.spinner-icon {
+      border-color: $primary transparent transparent $primary;
+    }
+  }
+
+  div.bar {
+    background: $primary;
+  }
+}
+
 /* Headers */
 header {
   background-color: #222;
@@ -92,6 +106,7 @@ header {
   width: 100%;
   color: #fff;
   margin-bottom: 2rem;
+  border-bottom-left-radius: 23px;
 }
 header section {
   align-items: center;
@@ -270,11 +285,15 @@ b {
   max-height: 400px;
   overflow-y: scroll;
 
+  border-left-width: 0.1rem;
+  border-left-color: $primary;
+  border-style: dashed;
+
   &.higher {
     min-height: 446px;
     border-bottom-color: $primary;
     border-bottom-width: 0.1rem;
-    border-style: dashed;
+    border-bottom-left-radius: 23px;
   }
 }
 
