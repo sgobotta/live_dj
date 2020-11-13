@@ -555,7 +555,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end)
     {:noreply,
       socket
-      |> assign(:search_result, search_result)}
+      |> assign(:search_result, search_result)
+      |> push_event("receive_search_completed_signal", %{})}
   end
 
   @impl true
