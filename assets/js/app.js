@@ -19,6 +19,7 @@ import DragAndDropping from "./hooks/drag-and-dropping"
 import ModalInteracting from "./hooks/modal-interacting"
 import PlayerSyncing from "./hooks/player-syncing"
 import PresenceSyncing from "./hooks/presence-syncing"
+import SearchSyncing from "./hooks/search-syncing"
 import UiFeedback from "./hooks/ui-feedback"
 
 import LoadYTIframeAPI from './deps/yt-iframe-api'
@@ -41,12 +42,13 @@ function initLiveview() {
   .getAttribute("content")
 
   const Hooks = {
+    ChatSyncing: ChatSyncing(),
+    DragAndDropping: DragAndDropping(),
     ModalInteracting: ModalInteracting(),
     PlayerSyncing: PlayerSyncing(initPlayer),
     PresenceSyncing: PresenceSyncing(),
+    SearchSyncing: SearchSyncing(),
     UiFeedback: UiFeedback(),
-    DragAndDropping: DragAndDropping(),
-    ChatSyncing: ChatSyncing(),
   }
 
   const liveSocket = new LiveSocket("/live", Socket, {
