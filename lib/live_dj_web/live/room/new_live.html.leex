@@ -29,7 +29,15 @@
         <ul class="like-list">
         <%= for room <- @public_rooms do %>
           <li>
-            <span class="room-item"><%= live_redirect room.title, to: Routes.show_path(@socket, :show, room.slug) %></span>
+            <span class="room-item">
+              <a
+                class="clickeable"
+                phx-click="redirect_room"
+                phx-value-slug="<%= room.slug %>"
+              >
+                <%= room.title %>
+              </a>
+            </span>
             <span class="room-peers">(<%= @viewers_quantity[String.to_atom(room.title)] %>)</span>
           </li>
         <% end %>
