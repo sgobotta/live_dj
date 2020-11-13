@@ -4,6 +4,11 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
+
+$primary: #3271a9;
+$secondary: #8558af;
+$secondary-highlight: #fa84bf;
+
 @import "./search-loader.scss";
 
 body {
@@ -228,7 +233,7 @@ b {
 
   &.higher {
     min-height: 446px;
-    border-bottom-color: #3271a9;
+    border-bottom-color: $primary;
     border-bottom-width: 0.1rem;
     border-style: dashed;
   }
@@ -249,10 +254,10 @@ b {
 .new-room-form form button {
   align-items: center;
   color: #fff;
-  border-color: #8558af;
+  border-color: $secondary;
   display: inline-flex;
   justify-content: center;
-  background-color: #8558af;
+  background-color: $secondary;
   border-radius: 0.375rem;
   border-width: 1px;
   padding-left: 1rem;
@@ -284,7 +289,7 @@ b {
 }
 
 .room-item {
-  color: #8558af;
+  color: $secondary;
 }
 .room-item a:hover {
   color: #fda4d1;
@@ -382,7 +387,7 @@ a.btn i.trash {
 
 input.text-input:focus {
   border-style: solid !important;
-  border-color: #8558af !important;
+  border-color: $secondary !important;
   -webkit-animation: input-highlight 0.1s forwards;
   animation: input-highlight 0.1s forwards;
   -webkit-transition: border-color 1500ms ease-in;
@@ -404,7 +409,7 @@ input.text-input:focus {
 }
 
 .timestamp-message {
-  color: #8558af;
+  color: $secondary;
 }
 
 .highlight-timestamp {
@@ -425,15 +430,15 @@ input.text-input:focus {
 }
 
 .highlight-username {
-  color: #3271a9;
+  color: $primary;
 }
 
 .highlight-video-title {
-  color: #fa84bf;
+  color: $secondary-highlight;
 }
 
 .use-prompt:after {
-  color: #8558af;
+  color: $secondary;
   content: ">";
   margin-left: -4px;
   font-weight: bold;
@@ -526,7 +531,7 @@ input.text-input:focus {
 .modal-window {
   background-color: #000;
   opacity: 0.85;
-  border-color: #3271a9;
+  border-color: $primary;
   border-width: 1px;
   border-style: dashed;
   position: relative;
@@ -541,7 +546,7 @@ input.text-input:focus {
   justify-content: space-between;
   padding: 1rem;
   border-bottom-width: 1px;
-  border-bottom-color: #3271a9;
+  border-bottom-color: $primary;
   border-bottom-style: dashed;
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
@@ -591,10 +596,10 @@ input.text-input:focus {
 .modal-close-button {
   align-items: center;
   color: #fff;
-  border-color: #8558af;
+  border-color: $secondary;
   display: inline-flex;
   justify-content: center;
-  background-color: #8558af;
+  background-color: $secondary;
   border-radius: 0.375rem;
   border-width: 1px;
   padding-left: 1rem;
@@ -643,10 +648,10 @@ input.text-input:focus {
 }
 
 .highlight {
-  color: #8558af;
+  color: $secondary;
 }
 .highlight:hover span {
-  color: #fa84bf;
+  color: $secondary-highlight;
   -webkit-animation: text-highlight 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: text-highlight 0.5s forwards;
@@ -670,7 +675,7 @@ input.text-input:focus {
   align-items: center;
 
   &.current-video {
-    background-color: #8558af;
+    background-color: $secondary;
   }
 }
 
@@ -730,7 +735,7 @@ div p.pill-text {
 }
 
 .player-control:hover {
-  color: #fa84bf;
+  color: $secondary-highlight;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
@@ -738,7 +743,7 @@ div p.pill-text {
 }
 
 .queue-control:hover {
-  color: #8558af;
+  color: $secondary;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
@@ -766,7 +771,7 @@ div p.pill-text {
 }
 
 .row.pill.draggable:hover {
-  background-color: #fa84bf;
+  background-color: $secondary-highlight;
 
   p {
     color: #000
@@ -795,7 +800,7 @@ div p.pill-text {
 
 /* General style */
 html {
-  scrollbar-color: #8558af #3271a9;
+  scrollbar-color: $secondary $primary;
   scrollbar-width: thin;
 }
 
@@ -808,34 +813,34 @@ html {
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #8558af;
-  border: 1px solid #8558af;
+  background: $secondary;
+  border: 1px solid $secondary;
   border-radius: 50px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  border: 1px solid #fa84bf;
-  background: #fa84bf;
+  border: 1px solid $secondary-highlight;
+  background: $secondary-highlight;
 }
 ::-webkit-scrollbar-thumb:active {
   border: 1px double #fda4d1;
-  background: #fa84bf;
+  background: $secondary-highlight;
 }
 ::-webkit-scrollbar-track {
   border-style: dashed;
   border-width: 1px;
-  border-color: #3271a9;
+  border-color: $primary;
   background: transparent;
 }
 ::-webkit-scrollbar-track:hover {
   border-style: dashed;
   border-width: 1px;
-  border-color: #3271a9;
+  border-color: $primary;
   background: transparent;
 }
 ::-webkit-scrollbar-track:active {
   border-style: dashed;
   border-width: 1px;
-  border-color: #3271a9;
+  border-color: $primary;
   background: transparent;;
 }
 ::-webkit-scrollbar-corner {
@@ -855,8 +860,8 @@ input[type=range]:focus {
   outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  background: #fa84bf;
-  border: 1.6px solid #3271a9;
+  background: $secondary-highlight;
+  border: 1.6px solid $primary;
   border-radius: 25px;
   width: 100%;
   height: 4px;
@@ -871,7 +876,7 @@ input[type=range]::-webkit-slider-thumb {
   margin-top: -12.1px;
   width: 25px;
   height: 25px;
-  background: #3271a9;
+  background: $primary;
   border: 3.2px solid #0571a9;
   border-radius: 25px;
   cursor: pointer;
@@ -880,15 +885,15 @@ input[type=range]::-webkit-slider-thumb {
 input[type=range]::-webkit-slider-thumb:hover {
   width: 27px;
   height: 27px;
-  border-color: #fa84bf;
-  background-color: #fa84bf;
+  border-color: $secondary-highlight;
+  background-color: $secondary-highlight;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background-color: #fa84bf;
+  background-color: $secondary-highlight;
 }
 input[type=range]::-moz-range-track {
-  background: #fa84bf;
-  border: 1.6px solid #3271a9;
+  background: $secondary-highlight;
+  border: 1.6px solid $primary;
   border-radius: 25px;
   width: 100%;
   height: 4px;
@@ -902,7 +907,7 @@ input[type=range]::-moz-range-thumb {
   margin-top: -12.1px;
   width: 25px;
   height: 25px;
-  background: #3271a9;
+  background: $primary;
   border: 3.2px solid #0571a9;
   border-radius: 25px;
   cursor: pointer;
@@ -911,8 +916,8 @@ input[type=range]::-moz-range-thumb {
 input[type=range]::-moz-range-thumb:hover {
   width: 27px;
   height: 27px;
-  border-color: #fa84bf;
-  background-color: #fa84bf;
+  border-color: $secondary-highlight;
+  background-color: $secondary-highlight;
 }
 input[type=range]::-ms-track {
   background: transparent;
@@ -925,18 +930,18 @@ input[type=range]::-ms-track {
 }
 input[type=range]::-ms-fill-lower {
   background: #2c6495;
-  border: 1.6px solid #3271a9;
+  border: 1.6px solid $primary;
   border-radius: 50px;
 }
 input[type=range]::-ms-fill-upper {
-  background: #3271a9;
-  border: 1.6px solid #3271a9;
+  background: $primary;
+  border: 1.6px solid $primary;
   border-radius: 50px;
 }
 input[type=range]::-ms-thumb {
   width: 25px;
   height: 25px;
-  background: #3271a9;
+  background: $primary;
   border: 3.2px solid #0571a9;
   border-radius: 25px;
   cursor: pointer;
@@ -944,7 +949,7 @@ input[type=range]::-ms-thumb {
   /*Needed to keep the Edge thumb centred*/
 }
 input[type=range]:focus::-ms-fill-lower {
-  background: #3271a9;
+  background: $primary;
 }
 input[type=range]:focus::-ms-fill-upper {
   background: #387ebd;
@@ -1350,7 +1355,7 @@ ul.playlist {
       position: relative;
       height: 50px;
       background-color: transparent;
-      border: 3px solid #fa84bf;
+      border: 3px solid $secondary-highlight;
       border-style: dashed;
       border-radius: 50px;
       animation: opacity .4s ease forwards
