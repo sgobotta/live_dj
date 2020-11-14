@@ -48,4 +48,13 @@ defmodule LiveDjWeb.Router do
       live_dashboard "/dashboard", metrics: LiveDjWeb.Telemetry
     end
   end
+
+  ## Authentication routes
+
+  scope "/", LiveDjWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    get "/users/register", UserRegistrationController, :new
+    post "/users/register", UserRegistrationController, :create
+  end
 end
