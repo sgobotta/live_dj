@@ -89,6 +89,7 @@ defmodule LiveDjWeb do
 
       import LiveDjWeb.ErrorHelpers
       import LiveDjWeb.Gettext
+      import LiveDjWeb.MountHelpers
       alias LiveDjWeb.Router.Helpers, as: Routes
     end
   end
