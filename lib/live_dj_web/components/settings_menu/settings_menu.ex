@@ -5,10 +5,29 @@ defmodule LiveDjWeb.Components.SettingsMenu do
 
   use LiveDjWeb, :live_component
 
-  def update(assigns, socket) do
+  alias LiveDj.Accounts
+  alias LiveDj.Accounts.User
+
+  def update(assigns, conn) do
     {:ok,
-      socket
+      conn
       |> assign(assigns)
     }
+  end
+
+  def handle_event("submit_changeset", %{"user" => user_params}, conn) do
+    case Accounts.register_user(user_params) do
+      {:ok, _user} ->
+
+        conn
+        |> put_flash(:info, "User created successfully.")
+        {:noreply, conn}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+
+        {:noreply,
+          conn
+          |> assign(:account_changeset, changeset)}
+    end
   end
 end
