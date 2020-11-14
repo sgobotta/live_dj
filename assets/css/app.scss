@@ -51,6 +51,14 @@ select {
   width: 100%
 }
 
+.title-pill {
+  background-color: $primary;
+}
+
+/**
+ * End of Helpers
+ */
+
 .header {
   align-items: center;
   border: 0.1rem;
