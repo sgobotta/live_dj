@@ -43,6 +43,14 @@ select {
   width: auto;
 }
 
+/**
+ * Helpers
+ */
+
+.full-width {
+  width: 100%
+}
+
 .header {
   align-items: center;
   border: 0.1rem;
