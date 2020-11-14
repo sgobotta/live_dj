@@ -114,12 +114,6 @@ header section {
   flex-direction: column;
   justify-content: space-between;
 }
-header section :first-child {
-  order: 2;
-}
-header section :last-child {
-  order: 1;
-}
 header nav ul,
 header nav li {
   margin: 0;
