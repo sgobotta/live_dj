@@ -2,7 +2,11 @@
 
   <%= @inner_content.([]) %>
 
-  <%= live_component @socket, LiveDjWeb.Components.Modal, id: "modal-1", title: "Change username" do %>
+  <%= live_component @socket, LiveDjWeb.Components.Modal,
+    id: "modal-1",
+    title: "Change username",
+    extra_classes: ""
+    do %>
 
     <p class="modal-body-content">Choose a username of your liking</p>
 
@@ -16,7 +20,7 @@
     <div class="modal-button-container">
       <button
         @click="open = false"
-        class="modal-close-button"
+        class="modal-button modal-close-button"
       >
         Close
       </button>
