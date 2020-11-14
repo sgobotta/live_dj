@@ -18,7 +18,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias Phoenix.Socket.Broadcast
 
   @impl true
-  def mount(%{"slug" => slug}, _session, socket) do
+  def mount(%{"slug" => slug} = params, session, socket) do
     user = create_connected_user()
 
     room = Organizer.get_room(slug)
@@ -33,6 +33,10 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     parsed_queue = room.queue
     |> Enum.map(fn track -> Video.from_jsonb(track) end)
+
+    socket =
+      socket
+      |> assign_defaults(params, session)
 
     case room do
       nil ->
