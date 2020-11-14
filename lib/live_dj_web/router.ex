@@ -56,5 +56,13 @@ defmodule LiveDjWeb.Router do
 
     get "/users/register", UserRegistrationController, :new
     post "/users/register", UserRegistrationController, :create
+    get "/users/log_in", UserSessionController, :new
+    post "/users/log_in", UserSessionController, :create
+  end
+
+  scope "/", LiveDjWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
   end
 end
