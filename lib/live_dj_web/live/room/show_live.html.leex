@@ -1,10 +1,5 @@
 <div id="show-live" phx-hook="UiFeedback">
 
-  <%= live_component @socket, LiveDjWeb.Components.Header,
-    id: "live-dj-header",
-    account_changeset: @account_changeset
-  %>
-
   <%= if !connected?(@socket) do %>
 
     <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,
