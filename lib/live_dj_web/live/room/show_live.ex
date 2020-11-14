@@ -5,8 +5,9 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   use LiveDjWeb, :live_view
 
+  alias LiveDj.Accounts
+  alias LiveDj.Accounts.User
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.Account
   alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
@@ -56,7 +57,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
           |> assign(:username_input, user.username)
-          |> put_account_changeset(%{"uuid" => user.uuid, "username" => user.username})
+          |> put_account_changeset()
           |> assign_tracker(room)
         }
     end
@@ -613,7 +614,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   ) do
     {:noreply,
       socket
-      |> put_account_changeset(Map.merge(%{"uuid" => uuid}, account_params))
       |> assign(:username_input, username)}
   end
 
@@ -679,9 +679,9 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  defp put_account_changeset(socket, params) do
+  defp put_account_changeset(socket) do
     socket
-    |> assign(:account_changeset, Account.changeset(%Account{}, params))
+    |> assign(:account_changeset, Accounts.change_user_registration(%User{}))
   end
 
   defp fake_search_data(video_queue) do
