@@ -15,11 +15,11 @@ defmodule LiveDjWeb.UserSettingsController do
 
     case Accounts.apply_user_email(user, password, user_params) do
       {:ok, applied_user} ->
-        # Accounts.deliver_update_email_instructions(
-        #   applied_user,
-        #   user.email,
-        #   &Routes.user_settings_url(conn, :confirm_email, &1)
-        # )
+        Accounts.deliver_update_email_instructions(
+          applied_user,
+          user.email,
+          &Routes.user_settings_url(conn, :confirm_email, &1)
+        )
 
         conn
         |> put_flash(
