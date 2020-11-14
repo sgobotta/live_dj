@@ -1,6 +1,8 @@
 defmodule LiveDjWeb.Router do
   use LiveDjWeb, :router
 
+  import LiveDjWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule LiveDjWeb.Router do
     plug :put_root_layout, {LiveDjWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
