@@ -1,0 +1,67 @@
+<div class="flex flex-wrap justify-center items-stretch mx-auto">
+  <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update_email), [class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4"], fn f -> %>
+    <div class="flex items-start">
+      <span class="bg-purple-600 rounded text-white p-2 leading-none flex items-center">
+        Change Email
+      </span>
+    </div>
+
+    <div class="flex flex-col items-center text-white px-4 py-6">
+      <%= if @email_changeset.action do %>
+        <p class="mb-4">Oops, something went wrong! Please check the errors below.</p>
+      <% end %>
+
+      <div class="mb-4">
+        <%= label f, :email, class: "" %>
+        <%= email_input f, :email, required: true, class: "text-input" %>
+        <%= error_tag f, :email %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :current_password, for: "current_password_for_email", class: "block font-bold pr-4" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", class: "text-input" %>
+        <%= error_tag f, :current_password %>
+      </div>
+    </div>
+
+    <div class="mt-auto flex items-center justify-end">
+      <%= submit "Change email", class: "modal-button modal-submit-button full-width" %>
+    </div>
+  <% end %>
+
+  <%= form_for @password_changeset, Routes.user_settings_path(@conn, :update_password), [class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4"], fn f -> %>
+    <div class="flex items-start">
+      <span class="bg-purple-600 rounded text-white p-2 leading-none flex items-center">
+        Change Password
+      </span>
+    </div>
+
+    <div class="flex flex-col items-center text-white px-4 py-6">
+      <%= if @password_changeset.action do %>
+        <p class="mb-4">Oops, something went wrong! Please check the errors below.</p>
+      <% end %>
+
+      <div class="mb-4">
+        <%= label f, :password, "New password", class: "block font-bold pr-4" %>
+        <%= password_input f, :password, required: true, class: "text-input" %>
+        <%= error_tag f, :password %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :password_confirmation, "Confirm new password", class: "block font-bold pr-4" %>
+        <%= password_input f, :password_confirmation, required: true, class: "text-input" %>
+        <%= error_tag f, :password_confirmation %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :current_password, for: "current_password_for_password", class: "block font-bold pr-4" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", class: "text-input" %>
+        <%= error_tag f, :current_password %>
+      </div>
+    </div>
+
+    <div class="mt-auto flex items-center justify-end">
+      <%= submit "Change password", class: "modal-button modal-submit-button full-width" %>
+    </div>
+  <% end %>
+</div>

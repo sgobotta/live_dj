@@ -3,7 +3,11 @@ defmodule LiveDjWeb.UserAuth do
   import Phoenix.Controller
 
   alias LiveDj.Accounts
+  alias LiveDjWeb.Router.Helpers, as: Routes
 
+  # Make the remember me cookie valid for 60 days.
+  # If you want bump or reduce this value, also change
+  # the token expiry itself in UserToken.
   @max_age 60 * 60 * 24 * 60
   @remember_me_cookie "user_remember_me"
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
@@ -117,6 +121,32 @@ defmodule LiveDjWeb.UserAuth do
       conn
     end
   end
+
+  @doc """
+  Used for routes that require the user to be authenticated.
+
+  If you want to enforce the user email is confirmed before
+  they use the application at all, here would be a good place.
+  """
+  def require_authenticated_user(conn, _opts) do
+    if conn.assigns[:current_user] do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must log in to access this page.")
+      |> maybe_store_return_to()
+      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> halt()
+    end
+  end
+
+  defp maybe_store_return_to(%{method: "GET"} = conn) do
+    %{request_path: request_path, query_string: query_string} = conn
+    return_to = if query_string == "", do: request_path, else: request_path <> "?" <> query_string
+    put_session(conn, :user_return_to, return_to)
+  end
+
+  defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: "/"
 end

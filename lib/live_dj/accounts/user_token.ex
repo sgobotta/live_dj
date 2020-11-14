@@ -51,9 +51,42 @@ defmodule LiveDj.Accounts.UserToken do
   end
 
   @doc """
+  Checks if the token is valid and returns its underlying lookup query.
+
+  The query returns the user token record.
+  """
+  def verify_change_email_token_query(token, context) do
+    case Base.url_decode64(token, padding: false) do
+      {:ok, decoded_token} ->
+        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+
+        query =
+          from token in token_and_context_query(hashed_token, context),
+            where: token.inserted_at > ago(@change_email_validity_in_days, "day")
+
+        {:ok, query}
+
+      :error ->
+        :error
+    end
+  end
+
+  @doc """
   Returns the given token with the given context.
   """
   def token_and_context_query(token, context) do
     from LiveDj.Accounts.UserToken, where: [token: ^token, context: ^context]
+  end
+
+  @doc """
+  Gets all tokens for the given user for the given contexts.
+  """
+  def user_and_contexts_query(user, :all) do
+    from t in LiveDj.Accounts.UserToken, where: t.user_id == ^user.id
+  end
+
+  def user_and_contexts_query(user, [_ | _] = contexts) do
+    from t in LiveDj.Accounts.UserToken,
+      where: t.user_id == ^user.id and t.context in ^contexts
   end
 end
