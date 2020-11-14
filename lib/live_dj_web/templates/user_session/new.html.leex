@@ -1,9 +1,9 @@
 <div class="flex flex-wrap justify-center items-stretch mx-auto">
-  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "search_form"], fn f -> %>
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: ""], fn f -> %>
 
     <div class="flex flex-col items-center text-white px-4 py-6">
-      <%= if @changeset.action do %>
-        <p class="mb-4">Oops, something went wrong! Please check the errors below.</p>
+      <%= if @error_message do %>
+        <p class="mb-4"><%= @error_message %>%></p>
       <% end %>
 
       <div class="mb-4">
@@ -17,10 +17,15 @@
         <%= password_input f, :password, required: true, class: "text-input" %>
         <%= error_tag f, :password %>
       </div>
+
+      <div class="mb-4">
+        <%= label f, :remember_me, "Remember me", class: "inline font-bold pr-4" %>
+        <%= checkbox f, :remember_me, class: "align-middle" %>
+      </div>
     </div>
 
-    <div class="mt-auto flex items-center px-4">
-      <%= submit "Register", class: "modal-button modal-submit-button full-width" %>
+    <div class="mt-auto flex items-center px-4" style="width: 100%">
+      <%= submit "Log in", class: "modal-button modal-submit-button full-width" %>
     </div>
   <% end %>
 </div>
