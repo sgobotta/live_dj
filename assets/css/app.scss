@@ -128,7 +128,12 @@ header nav li {
   text-align: right;
   white-space: nowrap;
 }
+header nav li {
+  padding: 0px 12px;
+  float: right;
+}
 header nav ul {
+  overflow: hidden;
   margin: 1rem;
   margin-top: 0;
 }
