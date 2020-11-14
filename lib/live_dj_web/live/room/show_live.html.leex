@@ -1,72 +1,72 @@
 <div id="show-live" phx-hook="UiFeedback">
 
-  <%= if !@is_state_loaded do %>
+  <%= if !connected?(@socket) do %>
 
     <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,
-      id: "live-dj-launching",
-      loading: !@is_state_loaded
+      id: "live-dj-launching"
     %>
 
-  <% end %>
+  <% else %>
 
+    <div class="section-container">
+      <%= live_component @socket, LiveDjWeb.Components.PlayerControls,
+        id: "live-dj-player-controls",
+        player: @player,
+        player_controls: @player_controls,
+        volume_controls: @volume_controls
+      %>
+    </div>
 
-  <div class="section-container">
-    <%= live_component @socket, LiveDjWeb.Components.PlayerControls,
-      id: "live-dj-player-controls",
-      player: @player,
-      player_controls: @player_controls,
-      volume_controls: @volume_controls
-    %>
-  </div>
+    <div class="row section-container">
+      <%= live_component @socket, LiveDjWeb.Components.Chat,
+        id: "live-dj-chat",
+        messages: @messages,
+        new_message: @new_message,
+        user: @user,
+        room: @room,
+        slug: @slug
+      %>
 
-  <div class="row section-container">
-    <%= live_component @socket, LiveDjWeb.Components.Chat,
-      id: "live-dj-chat",
-      messages: @messages,
-      new_message: @new_message,
-      user: @user,
-      room: @room,
-      slug: @slug
-    %>
+      <%= live_component @socket, LiveDjWeb.Components.Peers,
+        id: "live-dj-peers-list",
+        account_changeset: @account_changeset,
+        connected_users: @connected_users,
+        room: @room,
+        user: @user
+      %>
+    </div>
 
-    <%= live_component @socket, LiveDjWeb.Components.Peers,
-      id: "live-dj-peers-list",
-      account_changeset: @account_changeset,
-      connected_users: @connected_users,
-      room: @room,
-      user: @user
-    %>
-  </div>
+    <div class="row section-container">
+      <div class="column">
+        <div>
 
-  <div class="row section-container">
-    <div class="column">
-      <div>
+          <%= live_component @socket, LiveDjWeb.Components.QueueControls,
+            id: "live-dj-queue-controls",
+            room: @room,
+            slug: @slug,
+            video_queue: @video_queue,
+            video_queue_controls: @video_queue_controls
+          %>
 
-        <%= live_component @socket, LiveDjWeb.Components.QueueControls,
-          id: "live-dj-queue-controls",
-          room: @room,
-          slug: @slug,
-          video_queue: @video_queue,
-          video_queue_controls: @video_queue_controls
-        %>
+          <%= live_component @socket, LiveDjWeb.Components.Queue,
+            id: "live-dj-queue",
+            video_queue: @video_queue,
+            player: @player
+          %>
 
-        <%= live_component @socket, LiveDjWeb.Components.Queue,
-          id: "live-dj-queue",
-          video_queue: @video_queue,
-          player: @player
+        </div>
+      </div>
+
+      <div class="column section-container">
+
+        <%= live_component @socket, LiveDjWeb.Components.SearchVideo,
+          id: "live-dj-video-search",
+          search_result: @search_result
         %>
 
       </div>
     </div>
 
-    <div class="column section-container">
-
-      <%= live_component @socket, LiveDjWeb.Components.SearchVideo,
-        id: "live-dj-video-search",
-        search_result: @search_result
-      %>
-
-    </div>
-  </div>
+  <% end %>
 
 </div>
