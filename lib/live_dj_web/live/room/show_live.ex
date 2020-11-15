@@ -5,14 +5,11 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   use LiveDjWeb, :live_view
 
-  alias LiveDj.Accounts
-  alias LiveDj.Accounts.User
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
-  alias LiveDj.Repo
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
@@ -611,17 +608,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       false ->
         {:noreply, socket}
     end
-  end
-
-  @impl true
-  def handle_event(
-    "change_username",
-    %{"account" => %{"username" => username} = account_params},
-    %{assigns: %{user: %{uuid: uuid}}} = socket
-  ) do
-    {:noreply,
-      socket
-      |> assign(:username_input, username)}
   end
 
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
