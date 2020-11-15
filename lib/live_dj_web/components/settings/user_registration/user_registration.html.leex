@@ -1,0 +1,46 @@
+<div class="flex flex-wrap justify-center items-stretch mx-auto">
+  <%= form_for @username_changeset, "#",
+    [
+      phx_submit: "submit_changeset",
+      phx_target: @myself,
+      class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4"
+    ],
+    fn f -> %>
+
+    <div class="flex items-start">
+      <span class="rounded text-white p-2 leading-none flex items-center title-pill">
+        Register
+      </span>
+    </div>
+
+    <div class="flex flex-col items-center text-white px-4 py-6">
+      <%= if @username_changeset.action do %>
+        <p class="mb-4">Oops, something went wrong!</p>
+        <p class="mb-4">Please check the errors below.</p>
+      <% end %>
+
+      <div class="mb-4">
+        <%= label f, :username, class: "" %>
+        <%= text_input f, :username, required: true, class: "text-input" %>
+        <%= error_tag f, :username %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :email, class: "" %>
+        <%= email_input f, :email, required: true, class: "text-input" %>
+        <%= error_tag f, :email %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :password, class: "" %>
+        <%= password_input f, :password, required: true, class: "text-input" %>
+        <%= error_tag f, :password %>
+      </div>
+    </div>
+
+    <div class="mt-auto flex items-center px-4">
+      <%= submit "Register", class: "modal-button modal-submit-button full-width" %>
+    </div>
+
+  <% end %>
+</div>

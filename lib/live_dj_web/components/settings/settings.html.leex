@@ -14,6 +14,11 @@
         id: "settings-username-edit",
         username_changeset: @username_changeset
       %>
+    <% else %>
+      <%= live_component @socket, LiveDjWeb.Components.Settings.UserRegistration,
+        id: "settings-user-registration",
+        username_changeset: @username_changeset
+      %>
     <% end %>
 
   <% end %>
