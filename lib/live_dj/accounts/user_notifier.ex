@@ -1,13 +1,20 @@
 defmodule LiveDj.Accounts.UserNotifier do
+
+  alias LiveDj.{Email, Mailer}
+
   # For simplicity, this module simply logs messages to the terminal.
   # You should replace it by a proper email or notification tool, such as:
   #
   #   * Swoosh - https://hexdocs.pm/swoosh
   #   * Bamboo - https://hexdocs.pm/bamboo
   #
-  defp deliver(to, body) do
+  defp deliver(to, body, subject) do
     require Logger
     Logger.debug(body)
+
+    Email.new(to, body, subject)
+    |> Mailer.deliver_now()
+
     {:ok, %{to: to, body: body}}
   end
 
@@ -28,7 +35,7 @@ defmodule LiveDj.Accounts.UserNotifier do
     If you didn't create an account with us, please ignore this.
 
     ==============================
-    """)
+    """, "LiveDj: Account confirmation")
   end
 
   @doc """
@@ -48,7 +55,7 @@ defmodule LiveDj.Accounts.UserNotifier do
     If you didn't request this change, please ignore this.
 
     ==============================
-    """)
+    """, "LiveDj: Password reset request")
   end
 
   @doc """
@@ -68,6 +75,6 @@ defmodule LiveDj.Accounts.UserNotifier do
     If you didn't request this change, please ignore this.
 
     ==============================
-    """)
+    """, "LiveDj: Email update verification")
   end
 end
