@@ -65,7 +65,6 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
           |> assign(:username_input, user.username)
-          |> put_account_changeset()
           |> assign_tracker(room)
         }
     end
@@ -629,10 +628,10 @@ defmodule LiveDjWeb.Room.ShowLive do
   def handle_event(
     "submit_username",
     %{"account" => %{"username" => username}},
-    socket = %{assigns: %{account_changeset: account_changeset, slug: slug, user: %{uuid: uuid} = user }}
+    socket = %{assigns: %{username_changeset: username_changeset, slug: slug, user: %{uuid: uuid} = user }}
   ) do
     case Repo.insert(
-      account_changeset,
+      username_changeset,
       on_conflict: {:replace, [:username, :updated_at]}, conflict_target: :uuid
     ) do
       {:ok, _} ->
@@ -647,7 +646,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       {:error, changeset} ->
         {:noreply,
           socket
-          |> assign(:account_changeset, changeset)}
+          |> assign(:username_changeset, changeset)}
     end
   end
 
@@ -685,11 +684,6 @@ defmodule LiveDjWeb.Room.ShowLive do
         socket
         |> assign(:room, room)
     end
-  end
-
-  defp put_account_changeset(socket) do
-    socket
-    |> assign(:account_changeset, Accounts.change_user_registration(%User{}))
   end
 
   defp fake_search_data(video_queue) do
