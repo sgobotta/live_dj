@@ -1,9 +1,19 @@
 defmodule LiveDjWeb.MountHelpers do
   import Phoenix.LiveView
 
+  alias LiveDj.Accounts
+  alias LiveDj.Accounts.User
+
   def assign_defaults(socket, _params, session) do
     socket
     |> assign_current_user(session)
+    |> assign_initial_changesets()
+  end
+
+  defp assign_initial_changesets(socket) do
+    %{current_user: current_user} = socket.assigns
+    socket
+    |> assign(:username_changeset, Accounts.change_user_registration(%User{username: current_user.username}))
   end
 
   defp assign_current_user(socket, session) do
