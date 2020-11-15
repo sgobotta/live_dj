@@ -97,8 +97,7 @@ defmodule LiveDjWeb.Components.Chat do
 
     text = ~E"""
       Playing
-      <%= video_title %>
-      track
+      <%= video_title %>.
     """
 
     ~E"""
