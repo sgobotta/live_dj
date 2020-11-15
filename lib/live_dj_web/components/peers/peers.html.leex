@@ -2,7 +2,11 @@
   class="column"
   id="peers-list-data" phx-hook="PresenceSyncing"
 >
-  <h1>Peers (<%= length(@connected_users) %>)</h1>
+  <div class="flex items-start">
+    <span class="rounded text-white p-2 leading-none flex title-pill mt-4 mb-4">
+      Peers (<%= length(@connected_users) %>)
+    </span>
+  </div>
   <div class="scrollable-panel higher" style="padding: 20px;">
     <ul>
       <%= for user <- @connected_users do %>
