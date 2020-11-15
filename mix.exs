@@ -20,7 +20,7 @@ defmodule LiveDj.MixProject do
   def application do
     [
       mod: {LiveDj.Application, []},
-      extra_applications: [:tubex, :logger, :runtime_tools]
+      extra_applications: [:tubex, :logger, :runtime_tools, :bamboo]
     ]
   end
 
@@ -33,6 +33,7 @@ defmodule LiveDj.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bamboo, "~> 1.6"},
       {:bcrypt_elixir, "~> 2.0"},
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
