@@ -37,6 +37,10 @@ input {
   color: $text
 }
 
+input:-internal-autofill-selected {
+  background-color: transparent !important;
+}
+
 i.fas{color:$text;font-size: 2.8rem;}
 
 select {
@@ -174,6 +178,10 @@ header nav a {
     flex-basis: 527px;
     margin: 2rem 1rem;
   }
+}
+
+li.navbar-link:hover a {
+  color: $secondary-highlight-1;
 }
 
 /* LiveView specific classes for your customizations */
