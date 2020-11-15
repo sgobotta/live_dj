@@ -15,12 +15,13 @@
         current_user: @current_user,
         room: @room,
         user: @user,
-        username_changeset: @username_changeset
+        user_changeset: @user_changeset
       %>
     <% else %>
       <%= live_component @socket, LiveDjWeb.Components.Settings.UserRegistration,
         id: "settings-user-registration",
-        username_changeset: @username_changeset
+        room: @room,
+        user_changeset: @user_changeset
       %>
     <% end %>
 

@@ -8,7 +8,12 @@ defmodule LiveDjWeb.Components.Settings.UserRegistration do
   def update(assigns, conn) do
     {:ok,
       conn
+      |> assign(:trigger_submit, true)
       |> assign(assigns)
     }
+  end
+
+  def handle_event("submit_changeset", user, socket) do
+    {:noreply, assign(socket, user_changeset: user)}
   end
 end

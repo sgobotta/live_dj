@@ -37,10 +37,10 @@ defmodule LiveDjWeb.Components.Settings.UsernameEdit do
               |> put_flash(:info, "Username updated successfully.")}
 
           {:error, changeset} ->
-            {:noreply, assign(socket, :username_changeset, changeset)}
+            {:noreply, assign(socket, :user_changeset, changeset)}
         end
       {:error, changeset} ->
-        {:noreply, assign(socket, :username_changeset, changeset)}
+        {:noreply, assign(socket, :user_changeset, changeset)}
     end
   end
 end

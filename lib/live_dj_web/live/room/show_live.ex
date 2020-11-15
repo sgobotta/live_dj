@@ -624,32 +624,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> assign(:username_input, username)}
   end
 
-  @impl true
-  def handle_event(
-    "submit_username",
-    %{"account" => %{"username" => username}},
-    socket = %{assigns: %{username_changeset: username_changeset, slug: slug, user: %{uuid: uuid} = user }}
-  ) do
-    case Repo.insert(
-      username_changeset,
-      on_conflict: {:replace, [:username, :updated_at]}, conflict_target: :uuid
-    ) do
-      {:ok, _} ->
-        :ok = Phoenix.PubSub.broadcast(
-          LiveDj.PubSub,
-          "room:" <> slug,
-          {:username_changed, %{uuid: uuid, username: username}}
-        )
-        {:noreply,
-          socket
-          |> assign(:user, Map.merge(user, %{username: username}))}
-      {:error, changeset} ->
-        {:noreply,
-          socket
-          |> assign(:username_changeset, changeset)}
-    end
-  end
-
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
     room = Organizer.get_room(slug)
     video_tracker = room.video_tracker

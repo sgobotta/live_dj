@@ -1,8 +1,9 @@
 <div class="flex flex-wrap justify-center items-stretch mx-auto">
-  <%= form_for @username_changeset, "#",
+  <%= form_for @user_changeset, Routes.user_registration_path(@socket, :create),
     [
       phx_submit: "submit_changeset",
       phx_target: @myself,
+      phx_trigger_action: @trigger_submit,
       class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4"
     ],
     fn f -> %>
@@ -14,7 +15,7 @@
     </div>
 
     <div class="flex flex-col items-center text-white px-4 py-6">
-      <%= if @username_changeset.action do %>
+      <%= if @user_changeset.action do %>
         <p class="mb-4">Oops, something went wrong!</p>
         <p class="mb-4">Please check the errors below.</p>
       <% end %>
