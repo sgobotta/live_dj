@@ -104,13 +104,14 @@ defmodule LiveDjWeb.UserAuthTest do
 
       assert get_session(conn, :user_token) == user_token
       assert conn.assigns.current_user.id == user.id
+      assert conn.assigns.visitor == false
     end
 
     test "does not authenticate if data is missing", %{conn: conn, user: user} do
       _ = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
       refute get_session(conn, :user_token)
-      refute conn.assigns.current_user
+      assert conn.assigns.visitor == true
     end
   end
 
