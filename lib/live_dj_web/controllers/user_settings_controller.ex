@@ -88,7 +88,7 @@ defmodule LiveDjWeb.UserSettingsController do
       false -> conn.assigns.current_user
     end
     conn
-    |> assign(:username_changeset, Accounts.change_user_email(user))
+    |> assign(:username_changeset, Accounts.change_user_username(user))
     |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
   end
