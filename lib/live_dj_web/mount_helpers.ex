@@ -11,9 +11,15 @@ defmodule LiveDjWeb.MountHelpers do
   end
 
   defp assign_initial_changesets(socket) do
-    %{current_user: current_user} = socket.assigns
-    socket
-    |> assign(:username_changeset, Accounts.change_user_registration(%User{username: current_user.username}))
+    %{current_user: current_user, visitor: visitor} = socket.assigns
+    case visitor do
+      true ->
+        socket
+        |> assign(:username_changeset, Accounts.change_user_registration(%User{}, current_user))
+      false ->
+        socket
+        |> assign(:username_changeset, Accounts.change_user_username(current_user))
+    end
   end
 
   defp assign_current_user(socket, session) do
