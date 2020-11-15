@@ -33,7 +33,7 @@ defmodule LiveDjWeb.UserRegistrationControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ email
+      assert response =~ username
     end
 
     test "render errors for invalid data", %{conn: conn} do
