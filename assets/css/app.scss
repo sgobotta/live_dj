@@ -55,6 +55,10 @@ select {
   background-color: $primary;
 }
 
+.primary {
+  color: $primary !important;
+}
+
 /**
  * End of Helpers
  */
