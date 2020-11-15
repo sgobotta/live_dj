@@ -24,7 +24,7 @@
                   visitor: @visitor
                 do %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                    <span class="clickeable" phx-click="open" phx-target="#modal-1">
+                    <span class="clickeable" phx-click="open" phx-target="#settings-menu">
                       <%= hd(user.metas).username %>
                     </span>
                   </p>
