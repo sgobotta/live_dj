@@ -19,6 +19,8 @@
               <%= if user.uuid == @user.uuid do %>
                 <%= live_component @socket, LiveDjWeb.Components.Settings,
                   id: "change-username-modal",
+                  current_user: @current_user,
+                  room: @room,
                   user: @user,
                   username_changeset: @username_changeset,
                   visitor: @visitor
