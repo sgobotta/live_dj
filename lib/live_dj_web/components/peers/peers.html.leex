@@ -17,10 +17,11 @@
               <% end %>
             </div>
               <%= if user.uuid == @user.uuid do %>
-                <%= live_component @socket, LiveDjWeb.Components.ModalSimple,
+                <%= live_component @socket, LiveDjWeb.Components.Settings,
                   id: "change-username-modal",
                   user: @user,
-                  account_changeset: @account_changeset
+                  username_changeset: @username_changeset,
+                  visitor: @visitor
                 do %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
                     <span class="clickeable" phx-click="open" phx-target="#modal-1">
