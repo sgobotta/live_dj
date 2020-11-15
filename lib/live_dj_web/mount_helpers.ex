@@ -18,7 +18,7 @@ defmodule LiveDjWeb.MountHelpers do
         |> assign(:user_changeset, Accounts.change_user_registration(%User{}, current_user))
       false ->
         socket
-        |> assign(:user_changeset, Accounts.change_user_username(current_user))
+        |> assign(:user_changeset, Accounts.change_user_username(%User{}))
     end
   end
 
