@@ -19,7 +19,10 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
-    user = create_connected_user()
+    socket = assign_defaults(socket, params, session)
+
+    %{current_user: current_user, visitor: visitor} = socket.assigns
+    user = create_connected_user(current_user.username)
 
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
@@ -27,16 +30,17 @@ defmodule LiveDjWeb.Room.ShowLive do
     volume_data = %{volume_level: 100}
     presence_meta = Map.merge(
       volume_data,
-      %{volume_icon: "fa-volume-up", typing: false, username: user.username}
+      %{
+        volume_icon: "fa-volume-up",
+        typing: false,
+        username: user.username,
+        visitor: visitor
+      }
     )
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
     parsed_queue = room.queue
     |> Enum.map(fn track -> Video.from_jsonb(track) end)
-
-    socket =
-      socket
-      |> assign_defaults(params, session)
 
     case room do
       nil ->
@@ -665,9 +669,9 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  defp create_connected_user do
+  defp create_connected_user(username) do
     uuid = UUID.uuid4()
-    %ConnectedUser{uuid: uuid, username: uuid}
+    %ConnectedUser{uuid: uuid, username: username}
   end
 
   defp assign_tracker(socket, room) do
