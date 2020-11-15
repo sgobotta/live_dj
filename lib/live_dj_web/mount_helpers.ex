@@ -7,8 +7,13 @@ defmodule LiveDjWeb.MountHelpers do
   end
 
   defp assign_current_user(socket, session) do
-    assign_new(socket, :current_user, fn ->
-      LiveDj.Accounts.get_user_by_session_token(session["user_token"])
-    end)
+    user = LiveDj.Accounts.get_user_by_session_token(session["user_token"])
+    %{user: user, visitor: visitor} = case user do
+      nil -> %{ user: %{username: "guest#{System.unique_integer()}"}, visitor: true}
+      user -> %{ user: user, visitor: false}
+    end
+    socket
+    |> assign_new(:current_user, fn -> user end)
+    |> assign_new(:visitor, fn -> visitor end)
   end
 end
