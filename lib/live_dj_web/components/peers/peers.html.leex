@@ -17,13 +17,16 @@
               <% end %>
             </div>
               <%= if user.uuid == @user.uuid do %>
-                <%= live_component @socket, LiveDjWeb.Components.ModalSimple,
+                <%= live_component @socket, LiveDjWeb.Components.Settings,
                   id: "change-username-modal",
+                  current_user: @current_user,
+                  room: @room,
                   user: @user,
-                  account_changeset: @account_changeset
+                  user_changeset: @user_changeset,
+                  visitor: @visitor
                 do %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                    <span class="clickeable" phx-click="open" phx-target="#modal-1">
+                    <span class="clickeable" phx-click="open" phx-target="#settings-menu">
                       <%= hd(user.metas).username %>
                     </span>
                   </p>
@@ -33,8 +36,13 @@
                   <span><%= hd(user.metas).username %></span>
                 </p>
               <% end %>
+              <%= if !hd(user.metas).visitor do %>
+                <span>
+                  <i class="mini fas fa-certificate primary"></i>
+                </span>
+              <% end %>
               <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
-                <p class="peer"><span class="typing-message">is typing</span></p>
+                <p class="peer"><span class="typing-message"></span></p>
               <% end %>
           </div>
         </li>

@@ -29,10 +29,12 @@
 
       <%= live_component @socket, LiveDjWeb.Components.Peers,
         id: "live-dj-peers-list",
-        account_changeset: @account_changeset,
         connected_users: @connected_users,
+        current_user: @current_user,
         room: @room,
-        user: @user
+        user: @user,
+        user_changeset: @user_changeset,
+        visitor: @visitor
       %>
     </div>
 

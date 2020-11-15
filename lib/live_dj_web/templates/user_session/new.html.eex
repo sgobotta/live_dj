@@ -1,0 +1,37 @@
+<div class="flex flex-wrap justify-center items-stretch mx-auto">
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: ""], fn f -> %>
+
+    <div class="flex items-start">
+      <span class="rounded text-white p-2 leading-none flex items-center title-pill">
+        Log In
+      </span>
+    </div>
+
+    <div class="flex flex-col items-center text-white px-4 py-6">
+      <%= if @error_message do %>
+        <p class="mb-4"><%= @error_message %>%></p>
+      <% end %>
+
+      <div class="mb-4">
+        <%= label f, :email, class: "" %>
+        <%= email_input f, :email, required: true, class: "text-input" %>
+        <%= error_tag f, :email %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :password, class: "" %>
+        <%= password_input f, :password, required: true, class: "text-input" %>
+        <%= error_tag f, :password %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :remember_me, "Remember me", class: "inline font-bold pr-4" %>
+        <%= checkbox f, :remember_me, class: "align-middle" %>
+      </div>
+    </div>
+
+    <div class="mt-auto flex items-center px-4" style="width: 100%">
+      <%= submit "Log in", class: "modal-button modal-submit-button full-width" %>
+    </div>
+  <% end %>
+</div>

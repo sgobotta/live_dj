@@ -6,19 +6,20 @@ defmodule LiveDjWeb.Room.ShowLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.Account
   alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
-  alias LiveDj.Repo
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
 
   @impl true
-  def mount(%{"slug" => slug}, _session, socket) do
-    user = create_connected_user()
+  def mount(%{"slug" => slug} = params, session, socket) do
+    socket = assign_defaults(socket, params, session)
+
+    %{current_user: current_user, visitor: visitor} = socket.assigns
+    user = create_connected_user(current_user.username)
 
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
@@ -26,7 +27,12 @@ defmodule LiveDjWeb.Room.ShowLive do
     volume_data = %{volume_level: 100}
     presence_meta = Map.merge(
       volume_data,
-      %{volume_icon: "fa-volume-up", typing: false, username: user.username}
+      %{
+        volume_icon: "fa-volume-up",
+        typing: false,
+        username: user.username,
+        visitor: visitor
+      }
     )
     {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
@@ -56,7 +62,6 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
           |> assign(:username_input, user.username)
-          |> put_account_changeset(%{"uuid" => user.uuid, "username" => user.username})
           |> assign_tracker(room)
         }
     end
@@ -605,44 +610,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  @impl true
-  def handle_event(
-    "change_username",
-    %{"account" => %{"username" => username} = account_params},
-    %{assigns: %{user: %{uuid: uuid}}} = socket
-  ) do
-    {:noreply,
-      socket
-      |> put_account_changeset(Map.merge(%{"uuid" => uuid}, account_params))
-      |> assign(:username_input, username)}
-  end
-
-  @impl true
-  def handle_event(
-    "submit_username",
-    %{"account" => %{"username" => username}},
-    socket = %{assigns: %{account_changeset: account_changeset, slug: slug, user: %{uuid: uuid} = user }}
-  ) do
-    case Repo.insert(
-      account_changeset,
-      on_conflict: {:replace, [:username, :updated_at]}, conflict_target: :uuid
-    ) do
-      {:ok, _} ->
-        :ok = Phoenix.PubSub.broadcast(
-          LiveDj.PubSub,
-          "room:" <> slug,
-          {:username_changed, %{uuid: uuid, username: username}}
-        )
-        {:noreply,
-          socket
-          |> assign(:user, Map.merge(user, %{username: username}))}
-      {:error, changeset} ->
-        {:noreply,
-          socket
-          |> assign(:account_changeset, changeset)}
-    end
-  end
-
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
     room = Organizer.get_room(slug)
     video_tracker = room.video_tracker
@@ -661,9 +628,9 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  defp create_connected_user do
+  defp create_connected_user(username) do
     uuid = UUID.uuid4()
-    %ConnectedUser{uuid: uuid, username: uuid}
+    %ConnectedUser{uuid: uuid, username: username}
   end
 
   defp assign_tracker(socket, room) do
@@ -677,11 +644,6 @@ defmodule LiveDjWeb.Room.ShowLive do
         socket
         |> assign(:room, room)
     end
-  end
-
-  defp put_account_changeset(socket, params) do
-    socket
-    |> assign(:account_changeset, Account.changeset(%Account{}, params))
   end
 
   defp fake_search_data(video_queue) do

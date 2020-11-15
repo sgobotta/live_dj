@@ -1,0 +1,29 @@
+<div style="all:unset;" id="<%= @id %>" >
+
+  <%= @inner_content.([]) %>
+
+  <%= live_component @socket, LiveDjWeb.Components.Modal,
+    id: "settings-menu",
+    title: "Settings",
+    extra_classes: "large",
+    state: "CLOSED"
+    do %>
+
+    <%= if !@visitor do %>
+      <%= live_component @socket, LiveDjWeb.Components.Settings.UsernameEdit,
+        id: "settings-username-edit",
+        current_user: @current_user,
+        room: @room,
+        user: @user,
+        user_changeset: @user_changeset
+      %>
+    <% else %>
+      <%= live_component @socket, LiveDjWeb.Components.Settings.UserRegistration,
+        id: "settings-user-registration",
+        room: @room,
+        user_changeset: @user_changeset
+      %>
+    <% end %>
+
+  <% end %>
+</div>

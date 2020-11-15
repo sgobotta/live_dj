@@ -11,6 +11,8 @@ $secondary-highlight-1: #fa84bf;
 $secondary-highlight-2: #fda4d1;
 $danger: #e65252;
 $text: #eaeaea;
+$success: #438b73;
+$success-highlight-1: #5dc09f;
 
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
@@ -40,6 +42,26 @@ i.fas{color:$text;font-size: 2.8rem;}
 select {
   width: auto;
 }
+
+/**
+ * Helpers
+ */
+
+.full-width {
+  width: 100%
+}
+
+.title-pill {
+  background-color: $primary;
+}
+
+.primary {
+  color: $primary !important;
+}
+
+/**
+ * End of Helpers
+ */
 
 .header {
   align-items: center;
@@ -128,7 +150,12 @@ header nav li {
   text-align: right;
   white-space: nowrap;
 }
+header nav li {
+  padding: 0px 12px;
+  float: right;
+}
 header nav ul {
+  overflow: hidden;
   margin: 1rem;
   margin-top: 0;
 }
@@ -366,7 +393,7 @@ a.disabled i {
 }
 
 i.success-feedback {
-  color: #438b73 !important;
+  color: $success !important;
   -webkit-animation: success-fade-in-out 2s forwards;
   -webkit-animation-delay: 0s;
   animation: success-fade-in-out 2s forwards;
@@ -440,7 +467,6 @@ a.btn i.trash {
   border: 0.1rem;
   border-style: dashed !important;
   border-color: #31708f !important;
-  font-size: 1.4rem;
 }
 
 input.text-input:focus {
@@ -586,6 +612,10 @@ input.text-input:focus {
   padding-right: 1rem;
 }
 
+.large {
+  max-width: 100%;
+}
+
 .modal-window {
   background-color: #000;
   opacity: 0.85;
@@ -651,20 +681,18 @@ input.text-input:focus {
   outline-offset: 2px;
 }
 
-.modal-close-button {
+.modal-button {
   align-items: center;
   color: #fff;
-  border-color: $secondary;
   display: inline-flex;
   justify-content: center;
-  background-color: $secondary;
   border-radius: 0.375rem;
   border-width: 1px;
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  opacity: 0.8;
+  opacity: 1;
   font-size: 1.250rem;
   line-height: 1.25rem;
   font-weight: 500;
@@ -673,12 +701,30 @@ input.text-input:focus {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
 }
 
+.modal-submit-button {
+  border-color: $success;
+  background-color: $success;
+}
+
+.modal-close-button {
+  border-color: $secondary;
+  background-color: $secondary;
+}
+
 .modal-close-button:hover {
   color: #fff;
   background-color: $secondary-highlight-2;
   outline: 2px solid transparent;
   outline-offset: 2px;
   border-color: $secondary-highlight-2;
+}
+
+.modal-submit-button:hover {
+  color: #fff;
+  background-color: $success-highlight-1;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: $success-highlight-1;
 }
 
 .modal-close-button:active {
@@ -809,7 +855,7 @@ div p.pill-text {
 }
 
 .search-control:hover {
-  color: #438b73;
+  color: $success;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
