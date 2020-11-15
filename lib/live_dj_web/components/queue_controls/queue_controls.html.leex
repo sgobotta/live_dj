@@ -1,8 +1,15 @@
-<div class="row queue-controls" id="player-syncing-data" phx-hook="PlayerSyncing">
-  <div class="column">
-    <h1>Queue</h1>
+<div
+  class="row queue-controls"
+  style="justify-content: space-between"
+  id="player-syncing-data"
+  phx-hook="PlayerSyncing"
+>
+  <div class="flex items-start">
+    <span class="rounded text-white p-2 leading-none flex title-pill mt-4 mb-4">
+      Queue (<%= length(@video_queue) %>)
+    </span>
   </div>
-  <div class="column">
+  <div class="flex items-center">
     <%= if @video_queue_controls.is_save_enabled do %>
       <a class="btn" phx-click="save_queue" phx-target="<%= @myself %>">
         <i class="fas fa-save queue-control"></i>
