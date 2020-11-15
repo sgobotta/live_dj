@@ -57,6 +57,101 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
     end
   end
 
+  describe "PUT /users/settings/update_username" do
+    @tag :capture_log
+    test "updates the user username", %{conn: conn, user: user} do
+      username = unique_user_username()
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => valid_user_password(),
+          "user" => %{"username" => username}
+        })
+
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert get_flash(conn, :info) =~ "Username updated successfully."
+      assert Accounts.get_user_by_email(user.email).username == username
+    end
+
+    test "does not update username on short data", %{conn: conn} do
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => "invalid",
+          "user" => %{"username" => "me"}
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ "Change Password"
+      assert response =~ "should be at least 3 character(s)"
+      assert response =~ "is not valid"
+    end
+
+    test "does not update username on empty data", %{conn: conn} do
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => "invalid",
+          "user" => %{"username" => ""}
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ "Change Password"
+      assert response =~ "can&#39;t be blank"
+      assert response =~ "is not valid"
+    end
+
+    test "does not update username on invalid data", %{conn: conn} do
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => "invalid",
+          "user" => %{"username" => " "}
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ "Change Password"
+      assert response =~ "can&#39;t be blank"
+      assert response =~ "did not change"
+      assert response =~ "is not valid"
+    end
+
+    test "does not update username on trailing spaces", %{conn: conn} do
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => "invalid",
+          "user" => %{"username" => " sa"}
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ "Change Password"
+      assert response =~ "should be at least 3 character(s)"
+      assert response =~ "is not valid"
+    end
+
+    test "does not update username on consecutive spaces", %{conn: conn} do
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => "invalid",
+          "user" => %{"username" => "a "}
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ "Change Password"
+      assert response =~ "should be at least 3 character(s)"
+      assert response =~ "is not valid"
+    end
+
+    test "does not update username on trialing and consecutive spaces", %{conn: conn} do
+      conn =
+        put(conn, Routes.user_settings_path(conn, :update_username), %{
+          "current_password" => "invalid",
+          "user" => %{"username" => "  a  "}
+        })
+
+      response = html_response(conn, 200)
+      assert response =~ "Change Password"
+      assert response =~ "should be at least 3 character(s)"
+      assert response =~ "is not valid"
+    end
+  end
+
   describe "PUT /users/settings/update_email" do
     @tag :capture_log
     test "updates the user email", %{conn: conn, user: user} do

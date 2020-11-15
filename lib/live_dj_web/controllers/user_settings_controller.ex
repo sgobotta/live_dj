@@ -4,10 +4,30 @@ defmodule LiveDjWeb.UserSettingsController do
   alias LiveDj.Accounts
   alias LiveDjWeb.UserAuth
 
-  plug :assign_email_and_password_changesets
+  plug :assign_initial_changesets
 
   def edit(conn, _params) do
     render(conn, "edit.html")
+  end
+
+  def update_username(conn, %{"current_password" => password, "user" => user_params}) do
+    user = conn.assigns.current_user
+
+    case Accounts.apply_user_username(user, password, user_params) do
+      {:ok, _user} ->
+        case Accounts.update_user_username(user, password, user_params) do
+          {:ok, _user} ->
+            conn
+            |> put_flash(:info, "Username updated successfully.")
+            |> put_session(:user_return_to, Routes.user_settings_path(conn, :edit))
+            |> redirect(to: Routes.user_settings_path(conn, :edit))
+
+          {:error, changeset} ->
+            render(conn, "edit.html", username_changeset: changeset)
+        end
+      {:error, changeset} ->
+        render(conn, "edit.html", username_changeset: changeset)
+    end
   end
 
   def update_email(conn, %{"current_password" => password, "user" => user_params}) do
@@ -62,10 +82,11 @@ defmodule LiveDjWeb.UserSettingsController do
     end
   end
 
-  defp assign_email_and_password_changesets(conn, _opts) do
+  defp assign_initial_changesets(conn, _opts) do
     user = conn.assigns.current_user
 
     conn
+    |> assign(:username_changeset, Accounts.change_user_email(user))
     |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
   end

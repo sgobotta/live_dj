@@ -13,6 +13,12 @@
       <% end %>
 
       <div class="mb-4">
+        <%= label f, :username, class: "" %>
+        <%= text_input f, :username, required: true, class: "text-input" %>
+        <%= error_tag f, :username %>
+      </div>
+
+      <div class="mb-4">
         <%= label f, :email, class: "" %>
         <%= email_input f, :email, required: true, class: "text-input" %>
         <%= error_tag f, :email %>

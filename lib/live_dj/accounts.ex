@@ -95,6 +95,66 @@ defmodule LiveDj.Accounts do
   ## Settings
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user username.
+
+  ## Examples
+
+      iex> change_user_username(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_username(user, attrs \\ %{}) do
+    User.username_changeset(user, attrs)
+  end
+
+  @doc """
+  Emulates that the username will change without actually changing
+  it in the database.
+
+  ## Examples
+
+      iex> apply_user_username(user, "valid password", %{username: ...})
+      {:ok, %User{}}
+
+      iex> apply_user_username(user, "invalid password", %{username: ...})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def apply_user_username(user, password, attrs) do
+    user
+    |> User.username_changeset(attrs)
+    |> User.validate_current_password(password)
+    |> Ecto.Changeset.apply_action(:update)
+  end
+
+  @doc """
+  Updates the user username.
+
+  ## Examples
+
+      iex> update_user_username(user, "valid password", %{username: ...})
+      {:ok, %User{}}
+
+      iex> update_user_username(user, "invalid password", %{username: ...})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_username(user, password, attrs) do
+    changeset =
+      user
+      |> User.username_changeset(attrs)
+      |> User.validate_current_password(password)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.update(:user, changeset)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for changing the user email.
 
   ## Examples

@@ -4,6 +4,7 @@ defmodule LiveDj.Accounts.User do
 
   @derive {Inspect, except: [:password]}
   schema "users" do
+    field :username, :string
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
@@ -22,9 +23,18 @@ defmodule LiveDj.Accounts.User do
   """
   def registration_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:username, :email, :password])
+    |> validate_username()
     |> validate_email()
     |> validate_password()
+  end
+
+  defp validate_username(changeset) do
+    changeset
+    |> validate_required([:username])
+    |> validate_length(:username, min: 3, max: 24)
+    |> unsafe_validate_unique(:username, LiveDj.Repo)
+    |> unique_constraint(:username)
   end
 
   defp validate_email(changeset) do
@@ -49,6 +59,22 @@ defmodule LiveDj.Accounts.User do
     changeset
     |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
     |> delete_change(:password)
+  end
+
+  @doc """
+  A user changeset for changing the username.
+
+  It requires the username to change otherwise an error is added.
+  """
+  def username_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username])
+    |> update_change(:username, &remove_spaces/1)
+    |> validate_username()
+    |> case do
+      %{changes: %{username: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :username, "did not change")
+    end
   end
 
   @doc """
@@ -108,6 +134,13 @@ defmodule LiveDj.Accounts.User do
       changeset
     else
       add_error(changeset, :current_password, "is not valid")
+    end
+  end
+
+  defp remove_spaces(username) do
+    case username do
+      nil -> username
+      _ -> String.replace(String.trim(username), ~r/\s+/, " ")
     end
   end
 end

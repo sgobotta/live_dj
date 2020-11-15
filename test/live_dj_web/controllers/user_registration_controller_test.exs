@@ -19,11 +19,12 @@ defmodule LiveDjWeb.UserRegistrationControllerTest do
   describe "POST /users/register" do
     @tag :capture_log
     test "creates account and logs the user in", %{conn: conn} do
+      username = unique_user_username()
       email = unique_user_email()
 
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => %{"email" => email, "password" => valid_user_password()}
+          "user" => %{"username" => username, "email" => email, "password" => valid_user_password()}
         })
 
       assert get_session(conn, :user_token)

@@ -4,6 +4,8 @@ defmodule LiveDj.AccountsFixtures do
   entities via the `LiveDj.Accounts` context.
   """
 
+  def unique_user_username, do: "user#{System.unique_integer()}"
+
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
 
@@ -11,6 +13,7 @@ defmodule LiveDj.AccountsFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
+        username: unique_user_username(),
         email: unique_user_email(),
         password: valid_user_password()
       })
