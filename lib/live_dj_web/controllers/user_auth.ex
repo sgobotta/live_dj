@@ -91,7 +91,15 @@ defmodule LiveDjWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    assign(conn, :current_user, user)
+
+    %{user: user, visitor: visitor} = case user do
+      nil -> %{user: %{username: ""}, visitor: true}
+      user -> %{user: user, visitor: false}
+    end
+
+    conn
+      |> assign(:current_user, user)
+      |> assign(:visitor, visitor)
   end
 
   defp ensure_user_token(conn) do
@@ -112,7 +120,7 @@ defmodule LiveDjWeb.UserAuth do
   Used for routes that require the user to not be authenticated.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_user] do
+    if conn.assigns[:current_user] && !conn.assigns[:visitor] do
       conn
       |> redirect(to: signed_in_path(conn))
       |> halt()
@@ -128,7 +136,7 @@ defmodule LiveDjWeb.UserAuth do
   they use the application at all, here would be a good place.
   """
   def require_authenticated_user(conn, _opts) do
-    if conn.assigns[:current_user] do
+    if conn.assigns[:current_user] && !conn.assigns[:visitor] do
       conn
     else
       conn
