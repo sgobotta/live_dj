@@ -33,8 +33,13 @@
                   <span><%= hd(user.metas).username %></span>
                 </p>
               <% end %>
+              <%= if !hd(user.metas).visitor do %>
+                <span>
+                  <i class="mini fas fa-certificate primary"></i>
+                </span>
+              <% end %>
               <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
-                <p class="peer"><span class="typing-message">is typing</span></p>
+                <p class="peer"><span class="typing-message"></span></p>
               <% end %>
           </div>
         </li>
