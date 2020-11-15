@@ -19,6 +19,14 @@ config :live_dj, LiveDjWeb.Endpoint,
 config :tubex, Tubex,
   api_key: System.get_env("YOUTUBE_API_KEY")
 
+config :live_dj, LiveDj.Mailer,
+  adapter: Bamboo.SendGridAdapter,
+  api_key: System.get_env("SENDGRID_API_KEY"),
+  hackney_opts: [
+    recv_timeout: :timer.minutes(1)
+  ]
+
+
 # Do not print debug messages in production
 config :logger, level: :info
 

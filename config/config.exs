@@ -18,13 +18,6 @@ config :live_dj, LiveDjWeb.Endpoint,
   pubsub_server: LiveDj.PubSub,
   live_view: [signing_salt: "giHzpJwl"]
 
-config :live_dj, LiveDj.Mailer,
-  adapter: Bamboo.SendGridAdapter,
-  api_key: {:system, "SENDGRID_API_KEY"},
-  hackney_opts: [
-    recv_timeout: :timer.minutes(1)
-  ]
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
