@@ -30,8 +30,9 @@ defmodule LiveDj.Organizer.Video do
   end
 
   def from_jsonb(jsonb_video) do
+    added_by = jsonb_video["added_by"]
     %Video{
-      added_by: jsonb_video["added_by"],
+      added_by: %{username: added_by["username"], uuid: added_by["uuid"]},
       channel_title: jsonb_video["channel_title"],
       description: jsonb_video["description"],
       img_height: jsonb_video["img_height"],
