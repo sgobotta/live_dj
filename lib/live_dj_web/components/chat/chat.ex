@@ -97,7 +97,8 @@ defmodule LiveDjWeb.Components.Chat do
 
     text = ~E"""
       Playing
-      <%= video_title %>.
+      <%= video_title %>,
+      added by <span class="font-bold highlight-username"><%= added_by %></span>
     """
 
     ~E"""
