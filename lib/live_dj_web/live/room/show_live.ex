@@ -381,7 +381,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_event("player_signal_video_ended", _params, socket) do
-    %{player: player, video_queue: video_queue, user: user} = socket.assigns
+    %{player: player, video_queue: video_queue} = socket.assigns
     %{video_id: current_video_id} = player
 
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
@@ -402,7 +402,6 @@ defmodule LiveDjWeb.Room.ShowLive do
         player_props = %{video_id: video_id, time: 0, state: "playing"}
         player = Player.update(player, player_props)
         message = Chat.create_message(:track_notification, %{
-          user: user,
           video: next_video
         })
         messages = messages ++ [message]
