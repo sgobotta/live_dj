@@ -66,6 +66,9 @@ const PlayerSyncing = initPlayer => ({
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
+      const selector = `[phx-value-video_id="${videoId}"`
+      const videoElement = document.querySelector(selector)
+      videoElement && videoElement.scrollIntoView({behavior: "smooth"})
       player.loadVideoById({
         videoId,
         startSeconds: time
