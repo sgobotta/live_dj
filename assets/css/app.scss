@@ -791,6 +791,64 @@ input.text-input:focus {
   }
 }
 
+.shinning-pill {
+  width:100%;
+
+  animation-name: ShineAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(.12,.89,.98,.47);
+
+  -webkit-animation-name: ShineAnimation;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: cubic-bezier(.12,.89,.98,.47);
+}
+
+@keyframes ShineAnimation {
+  from {
+    background-repeat:no-repeat;
+    background-image:-webkit-linear-gradient(
+      top left,
+      #fa84bf00 0%,
+      #fa84bf00 45%,
+      #fa84bf80 48%,
+      #fa84bfb3 50%,
+      #fa84bf80 52%,
+      #fa84bf00 57%,
+      #fa84bf00 100%
+    );
+    background-position:-250px -250px;
+    background-size: 600px 600px
+  }
+  to {
+    background-repeat:no-repeat;
+    background-position:250px 250px;
+  }
+}
+
+@-webkit-keyframes ShineAnimation {
+  from {
+    background-repeat:no-repeat;
+    background-image:-webkit-linear-gradient(
+      top left,
+      #fa84bf00 0%,
+      #fa84bf00 45%,
+      #fa84bf80 48%,
+      #fa84bfb3 50%,
+      #fa84bf80 52%,
+      #fa84bf00 57%,
+      #fa84bf00 100%
+    );
+    background-position:-250px -250px;
+    background-size: 600px 600px
+  }
+  to {
+    background-repeat:no-repeat;
+    background-position:250px 250px;
+  }
+}
+
 .extra-margin-top {
   margin-top: 40px;
 }
