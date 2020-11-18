@@ -49,7 +49,6 @@ const onStateChange = (hookContext, videoTimeTrackerElement) => event => {
         player.getCurrentTime(),
         player.getDuration()
       )
-      playerTotalTimeplayerTotalTime
       break
     }
     case 3: {
