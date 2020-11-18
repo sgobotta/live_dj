@@ -904,6 +904,42 @@ div p.pill-text {
   cursor: pointer;
 }
 
+.video-time-tracker {
+  color: $primary;
+  font-family: monospace;
+  font-size: 3.0rem;
+}
+
+@media (max-width: 768px) {
+  .video-time-tracker {
+    font-size: 2.0rem;
+  }
+}
+@media (max-width: 480px) {
+  .video-time-tracker {
+    font-size: 2.0rem;
+  }
+}
+@media (max-width: 360px) {
+  .video-time-tracker {
+    font-size: 2.0rem;
+  }
+}
+
+.player-controls-container {
+  display: flex;
+  margin: 12px 0 !important;
+
+  @media (max-width: 768px) {
+    display: grid;
+    padding: 25px 0;
+    
+    .volume-control-container {
+      width: 100%;
+    }
+  }
+}
+
 .player-control:hover {
   color: $secondary-highlight-1;
   -webkit-animation: slight-zoom-in 0.5s forwards;
@@ -1020,6 +1056,10 @@ html {
 /**
  * Volume Control
  */
+
+.volume-control-container {
+  width: 20%;
+}
 
 input[type=range] {
   width: 70%;
