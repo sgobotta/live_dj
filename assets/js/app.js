@@ -26,8 +26,10 @@ import LoadYTIframeAPI from './deps/yt-iframe-api'
 
 import createPlayer from './lib/player'
 
+console.log('Hello there :)')
+
 function onIframeReady() {
-  console.log("[LiveDj] YT Iframe API loaded ✔️ ")
+  // console.log("[LiveDj] YT Iframe API loaded ✔️ ")
   initLiveview()
 }
 
@@ -78,5 +80,5 @@ window.addEventListener("phx:page-loading-stop", info => NProgress.done())
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 
-console.log("[LiveDj] Loading YT Iframe API...")
+// console.log("[LiveDj] Loading YT Iframe API...")
 LoadYTIframeAPI(onIframeReady)
