@@ -1,5 +1,7 @@
 <div id="show-live" phx-hook="UiFeedback">
 
+  <div id="notificatiosn-handler" phx-hook="NotificationsHandling"/>
+
   <%= if !connected?(@socket) do %>
 
     <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,

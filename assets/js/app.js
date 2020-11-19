@@ -17,6 +17,7 @@ import {LiveSocket} from "phoenix_live_view"
 import ChatSyncing from "./hooks/chat-syncing"
 import DragAndDropping from "./hooks/drag-and-dropping"
 import ModalInteracting from "./hooks/modal-interacting"
+import NotificationsHandling from "./hooks/notifications-handling"
 import PlayerSyncing from "./hooks/player-syncing"
 import PresenceSyncing from "./hooks/presence-syncing"
 import SearchSyncing from "./hooks/search-syncing"
@@ -43,10 +44,13 @@ function initLiveview() {
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")
 
+  Notification.requestPermission()
+
   const Hooks = {
     ChatSyncing: ChatSyncing(),
     DragAndDropping: DragAndDropping(),
     ModalInteracting: ModalInteracting(),
+    NotificationsHandling: NotificationsHandling(),
     PlayerSyncing: PlayerSyncing(initPlayer),
     PresenceSyncing: PresenceSyncing(),
     SearchSyncing: SearchSyncing(),

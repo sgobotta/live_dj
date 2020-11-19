@@ -5,6 +5,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   use LiveDjWeb, :live_view
 
+  alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
@@ -411,7 +412,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:messages, messages)
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
-          |> push_event("receive_player_state", Player.create_response(player))}
+          |> push_event("receive_player_state", Player.create_response(player))
+          |> push_event("receive_notification", Notifications.create(:play_video, next_video))}
     end
   end
 
