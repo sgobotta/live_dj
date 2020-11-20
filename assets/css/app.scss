@@ -13,6 +13,7 @@ $danger: #e65252;
 $text: #eaeaea;
 $success: #438b73;
 $success-highlight-1: #5dc09f;
+$neutral-dark: #222;
 
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
@@ -969,6 +970,7 @@ div p.pill-text {
 .player-controls-container {
   display: flex;
   margin: 12px 0 !important;
+  background-color: $neutral-dark;
 
   @media (max-width: 768px) {
     display: grid;
