@@ -450,11 +450,37 @@ a.btn i.trash {
   border-color: #31708f;
 }
 
+@media (max-width: 480px) {
+  .section-title {
+    justify-content: center;
+    width: 100%;
+  
+    span {
+      width: 100%;
+    }
+  }
+
+  .queue-controls {
+    align-self: flex-end;
+
+    a {
+      padding: 10px
+    }
+  }
+}
+
 .section-container {
   padding: 25px;
   margin: 12px auto;
   clear:left;
   border: dotted rgba(0, 255, 0, 0.1) 1px;
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 2px;
+    border: dotted rgba(0, 255, 0, 0.1) 1px;
+  } 
 }
 
 .align-center {
