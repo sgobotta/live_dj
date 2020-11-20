@@ -441,9 +441,9 @@ a.btn i.trash {
 }
 
 .row img {
-  border: 0.05rem;
+  border: 0.1rem;
   border-style: outset;
-  border-color: #31708f;
+  border-color: #000;
 }
 
 @media (max-width: 480px) {
@@ -880,8 +880,13 @@ input.text-input:focus {
  * Queue tracks
  */
 
-@media (min-width: 481px) {
+.video-info-container {
+  flex: 1 0 40%;
+  width: 230px;
 
+  @media (max-width: 480px) {
+    width: 120px;
+  }
 }
 
 .remove-track-container {
@@ -926,7 +931,7 @@ div.pill:hover p.pill-text {
 }
 
 .pill-text {
-  white-space: pre-wrap;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
