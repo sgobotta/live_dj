@@ -7,19 +7,12 @@
       Peers (<%= length(@connected_users) %>)
     </span>
   </div>
-  <div class="scrollable-panel higher" style="padding: 20px;">
+  <div class="scrollable-panel higher p-4">
     <ul>
       <%= for user <- @connected_users do %>
         <li style="list-style: none;">
-          <div class="row" style="align-items: center;">
-            <div class="column-offset-1">
-              <span>
-                <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
-              </span>
-              <%= if user.uuid == @room.video_tracker do %>
-                <span>🕑</span>
-              <% end %>
-            </div>
+          <div class="flex space-x-4" style="align-items: center;">
+            <div class="flex-1">
               <%= if user.uuid == @user.uuid do %>
                 <%= live_component @socket, LiveDjWeb.Components.Settings,
                   id: "change-username-modal",
@@ -30,6 +23,9 @@
                   visitor: @visitor
                 do %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                    <%= if !hd(user.metas).visitor do %>
+                      <i class="mini fas fa-certificate primary"></i>
+                    <% end %>
                     <span class="clickeable" phx-click="open" phx-target="#settings-menu">
                       <%= hd(user.metas).username %>
                     </span>
@@ -37,19 +33,27 @@
                 <% end %>
               <% else %>
                 <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                  <span><%= hd(user.metas).username %></span>
+                  <%= if !hd(user.metas).visitor do %>
+                    <i class="mini fas fa-certificate primary"></i>
+                  <% end %>
+                  <span class="<%= if user.uuid !== @user.uuid && !hd(user.metas).typing do %> typing-message <% end %>">
+                    <%= hd(user.metas).username %>
+                  </span>
                 </p>
               <% end %>
-              <%= if !hd(user.metas).visitor do %>
-                <span>
-                  <i class="mini fas fa-certificate primary"></i>
-                </span>
+            </div>
+
+            <div class="flex-1">
+              <span>
+                <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
+              </span>
+              <%= if user.uuid == @room.video_tracker do %>
+                <span>🕑</span>
               <% end %>
-              <%= if user.uuid !== @user.uuid && hd(user.metas).typing do %>
-                <p class="peer"><span class="typing-message"></span></p>
-              <% end %>
+            </div>
           </div>
         </li>
+
       <% end %>
     </ul>
   </div>
