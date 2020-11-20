@@ -420,10 +420,6 @@ a.btn i.trash {
   font-size: 1.5rem;
 }
 
-.remove-track-btn-container {
-  padding: 12px
-}
-
 .row {
 
   margin-left: 0rem;
@@ -816,7 +812,7 @@ input.text-input:focus {
   &.current-video {
     background-color: $secondary;
   }
-}
+} 
 
 .shinning-pill {
   width:100%;
@@ -880,6 +876,21 @@ input.text-input:focus {
   margin-top: 40px;
 }
 
+/**
+ * Queue tracks
+ */
+
+@media (min-width: 481px) {
+
+}
+
+.remove-track-container {
+  align-self: center;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px;
+}
+
 .queue-thumb {
   border-radius: 50px;
   width: 50px;
@@ -887,22 +898,19 @@ input.text-input:focus {
 }
 
 .queue-thumb-icon {
-  /**
-   * It's not a default <i> element
-   */
   font-size: 50px !important;
 }
 
-div.row.pill:hover img.queue-thumb {
+div.pill:hover img.queue-thumb {
   display: none;
 }
 
-div.row.pill i.queue-thumb-icon {
+div.pill i.queue-thumb-icon {
   font-size: 100px;
   display: none;
 }
 
-div.row.pill:hover i.queue-thumb-icon {
+div.pill:hover i.queue-thumb-icon {
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
@@ -910,7 +918,7 @@ div.row.pill:hover i.queue-thumb-icon {
   display: block;
 }
 
-div.row.pill:hover p.pill-text {
+div.pill:hover p.pill-text {
   -webkit-animation: slide 0.3s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slide 0.3s forwards;
@@ -1003,7 +1011,7 @@ div p.pill-text {
   animation-delay: 0.1s;
 }
 
-.row.pill.draggable:hover {
+.pill.draggable:hover {
   background-color: $secondary-highlight-1;
 
   p {
@@ -1295,14 +1303,14 @@ how to remove the virtical space around the range input in IE*/
 
 @-webkit-keyframes slight-zoom-in {
   0% { transform: scale(1) }
-  25% { transform: scale(1.1) }
-  100% { transform: scale(1.2) }
+  25% { transform: scale(1.05) }
+  100% { transform: scale(1.1) }
 }
 
 @keyframes slight-zoom-in {
   0% { transform: scale(1); }
-  25% { transform: scale(1.1); }
-  100% { transform: scale(1.2); }
+  25% { transform: scale(1.05); }
+  100% { transform: scale(1.1); }
 }
 
 /**
@@ -1547,10 +1555,13 @@ ul.playlist {
   display: block;
   padding: 0 2.0rem;
 
+  @media (max-width: 480px) {
+    padding: 0 0.3rem;
+  }
+
   li {
     display: block;
     position: relative;
-    padding-right: 20px;
 
     &.hide {
       display: none !important;
