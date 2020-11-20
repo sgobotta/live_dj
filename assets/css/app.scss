@@ -461,7 +461,8 @@ a.btn i.trash {
   }
 
   .queue-controls {
-    align-self: flex-end;
+    width: 100%;
+    justify-content: center;
 
     a {
       padding: 10px
