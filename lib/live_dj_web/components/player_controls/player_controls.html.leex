@@ -1,78 +1,89 @@
-<div class="section-container flex justify-center player-controls-container">
-  <div class="inline-flex items-center justify-center p-4">
+<div class="section-container player-controls-main-container">
+  <div class="flex justify-center player-controls-container">
+    <div class="inline-flex items-center justify-center p-4">
 
-    <div class="p-2">
-      <%= if @player_controls.previous_button_state == "disabled" do %>
-        <a class="disabled">
-          <i class="fas fa-step-backward"></i>
-        </a>
-      <% else %>
-        <a phx-click="player_signal_play_previous" phx-target="<%= @myself %>">
-          <i class="fas fa-step-backward player-control clickeable"></i>
-        </a>
-      <% end %>
-    </div>
-
-    <div class="p-2">
-      <%= if @player_controls.play_button_state == "disabled" &&
-            @player_controls.pause_button_state == "disabled" do %>
-        <a>
-          <i class="fas fa-spinner rotating"></i>
-        </a>
-      <% else %>
-        <%= if @player.state == "paused" || @player.state == "stopped" do %>
-          <a
-            <%= @player_controls.play_button_state %>
-            phx-click="player_signal_playing"
-            phx-target="<%= @myself %>"
-          >
-            <i class="fas fa-play-circle player-control clickeable"></i>
+      <div class="p-2">
+        <%= if @player_controls.previous_button_state == "disabled" do %>
+          <a class="disabled">
+            <i class="fas fa-step-backward"></i>
+          </a>
+        <% else %>
+          <a phx-click="player_signal_play_previous" phx-target="<%= @myself %>">
+            <i class="fas fa-step-backward player-control clickeable"></i>
           </a>
         <% end %>
-        <%= if @player.state == "playing" do %>
-          <a
-            <%= @player_controls.pause_button_state %>
-            phx-click="player_signal_paused"
-            phx-target="<%= @myself %>"
-          >
-            <i class="fas fa-pause-circle player-control clickeable"></i>
+      </div>
+
+      <div class="p-2">
+        <%= if @player_controls.play_button_state == "disabled" &&
+              @player_controls.pause_button_state == "disabled" do %>
+          <a>
+            <i class="fas fa-spinner rotating"></i>
+          </a>
+        <% else %>
+          <%= if @player.state == "paused" || @player.state == "stopped" do %>
+            <a
+              <%= @player_controls.play_button_state %>
+              phx-click="player_signal_playing"
+              phx-target="<%= @myself %>"
+            >
+              <i class="fas fa-play-circle player-control clickeable"></i>
+            </a>
+          <% end %>
+          <%= if @player.state == "playing" do %>
+            <a
+              <%= @player_controls.pause_button_state %>
+              phx-click="player_signal_paused"
+              phx-target="<%= @myself %>"
+            >
+              <i class="fas fa-pause-circle player-control clickeable"></i>
+            </a>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="p-2">
+        <%= if @player_controls.next_button_state == "disabled" do %>
+          <a class="disabled">
+            <i class="fas fa-step-forward"></i>
+          </a>
+        <% else %>
+          <a phx-click="player_signal_play_next" phx-target="<%= @myself %>">
+            <i class="fas fa-step-forward player-control clickeable"></i>
           </a>
         <% end %>
-      <% end %>
+      </div>
+
     </div>
 
-    <div class="p-2">
-      <%= if @player_controls.next_button_state == "disabled" do %>
-        <a class="disabled">
-          <i class="fas fa-step-forward"></i>
+    <div class="inline-flex items-center justify-center p-4">
+      <span id="yt-video-time" class="video-time-tracker">
+        00:00:00/00:00:00
+      </span>
+    </div>
+
+    <div class="inline-flex items-center justify-center p-4 volume-control-container">
+      <div class="p-4">
+        <a phx-click="player_signal_toggle_volume">
+          <i class="fas <%= @volume_controls.volume_icon %> player-control clickeable"></i>
         </a>
-      <% else %>
-        <a phx-click="player_signal_play_next" phx-target="<%= @myself %>">
-          <i class="fas fa-step-forward player-control clickeable"></i>
-        </a>
-      <% end %>
+      </div>
+        <input
+          class="slider p-4"
+          id="volume-control"
+          value="<%= if @volume_controls.is_muted do %>0<% else %><%= @volume_controls.volume_level %><% end %>"
+          type="range"
+          min="0" max="100" step="1"
+        />
     </div>
-
   </div>
-
-  <div class="inline-flex items-center justify-center p-4">
-    <span id="yt-video-time" class="video-time-tracker">
-      00:00:00/00:00:00
-    </span>
-  </div>
-
-  <div class="inline-flex items-center justify-center p-4 volume-control-container">
-    <div class="p-4">
-      <a phx-click="player_signal_toggle_volume">
-        <i class="fas <%= @volume_controls.volume_icon %> player-control clickeable"></i>
-      </a>
-    </div>
-      <input
-        class="slider p-4"
-        id="volume-control"
-        value="<%= if @volume_controls.is_muted do %>0<% else %><%= @volume_controls.volume_level %><% end %>"
-        type="range"
-        min="0" max="100" step="1"
-      />
+  <div class="inline-flex items-center justify-center p-4 player-controls-video-tracking">
+    <input
+      class="progressive-slider p-4"
+      id="video-time-control"
+      value="0"
+      type="range"
+      min="0" max="100" step="1"
+    />
   </div>
 </div>
