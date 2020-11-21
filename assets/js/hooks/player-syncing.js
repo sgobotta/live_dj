@@ -135,7 +135,7 @@ const PlayerSyncing = initPlayer => ({
     setInterval(() => {
       const currentTime = player.getCurrentTime()
       this.pushEvent('player_signal_current_time', currentTime)
-    }, 750)
+    }, 500)
   }
 })
 
