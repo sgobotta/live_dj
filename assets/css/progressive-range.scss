@@ -8,13 +8,15 @@ $thumb-hover-height: 22px;
 $track-height: 6px;
 
 // Colors
+$track-color: $text;
 $upper-color: #cfcfcf;
-$lower-color: #999;
-$track-progress-color: #444;
+$lower-color: #bbb;
+$track-progress-color: $neutral-dark;
+$track-progress-hover-color: $primary-light;
 
 $upper-background: linear-gradient(to bottom, $upper-color, $track-progress-color) 100% 50% / 100% $track-height no-repeat transparent;
-$lower-background: linear-gradient(to bottom, $lower-color, $track-progress-color) 100% 50% / 100% $track-height no-repeat transparent;
-$hover-lower-moz-background: linear-gradient(to bottom, $primary, $track-progress-color) 100% 50% / 100% $track-height no-repeat transparent;
+$lower-background: linear-gradient(to bottom, $lower-color, $upper-color) 100% 50% / 100% $track-height no-repeat transparent;
+$hover-lower-moz-background: linear-gradient(to bottom, $track-progress-hover-color, $primary) 100% 50% / 100% $track-height no-repeat transparent;
 
 // Webkit cannot style progress so we fake it with a long shadow
 // on the thumb element
@@ -140,12 +142,12 @@ $hover-lower-moz-background: linear-gradient(to bottom, $primary, $track-progres
   }  
 
   &::-webkit-slider-thumb {
-    background-color: $upper-color;
+    background-color: $track-color;
   }
   &::-moz-range-thumb {
-    background-color: $upper-color;
+    background-color: $track-color;
   }
   &::-ms-thumb {
-    background-color: $upper-color;
+    background-color: $track-color;
   }
 }

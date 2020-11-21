@@ -5,6 +5,7 @@
 @import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
 
+$primary-light: #4297e0;
 $primary: #3271a9;
 $secondary: #8558af;
 $secondary-highlight-1: #fa84bf;
@@ -13,7 +14,9 @@ $danger: #e65252;
 $text: #eaeaea;
 $success: #438b73;
 $success-highlight-1: #5dc09f;
-$neutral-dark: #222;
+$neutral-semi-dark: #666;
+$neutral-dark: #444;
+$neutral-darker: #222;
 
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
@@ -433,7 +436,7 @@ a.btn i.trash {
   &.separator {
     border-top-style: dashed;
     border-top-width: 1px;
-    border-top-color: #31708f;
+    border-top-color: $primary;
     width: 100%;
   }
 
@@ -499,7 +502,7 @@ a.btn i.trash {
 .text-input {
   border: 0.1rem;
   border-style: dashed !important;
-  border-color: #31708f !important;
+  border-color: $primary !important;
 }
 
 input.text-input:focus {
@@ -806,7 +809,7 @@ input.text-input:focus {
 }
 
 .pill {
-  background-color: #31708f;
+  background-color: $primary;
   border: 10px black;
   border-radius: 25px;
   align-items: center;
@@ -970,7 +973,7 @@ div p.pill-text {
 
 .player-controls-main-container {
   margin: 12px 0 !important;
-  background-color: $neutral-dark;
+  background-color: $neutral-darker;
 }
 
 .player-controls-container {
