@@ -11,6 +11,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
+  alias LiveDj.Organizer.VolumeControls
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
@@ -25,11 +26,14 @@ defmodule LiveDjWeb.Room.ShowLive do
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
-    volume_data = %{volume_level: 100}
+    volume_data = %{
+      volume_level: 100,
+      is_muted: false,
+      volume_icon: "fa-volume-up"
+    }
     presence_meta = Map.merge(
       volume_data,
       %{
-        volume_icon: "fa-volume-up",
         typing: false,
         username: user.username,
         visitor: visitor
@@ -528,23 +532,76 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("volume_level_changed", volume_level, socket) do
-    %{slug: slug, user: %{uuid: uuid}} = socket.assigns
-    volume_icon = case volume_level do
-      l when l > 70 -> "fa-volume-up"
-      l when l > 30 -> "fa-volume-down"
-      l when l > 0 -> "fa-volume-off"
-      l when l == 0 -> "fa-volume-mute"
+  def handle_event("player_signal_toggle_volume", _params, socket) do
+    %{
+      volume_controls: volume_controls,
+      slug: slug,
+      user: %{uuid: uuid},
+    } = socket.assigns
+    %{is_muted: is_muted, volume_level: volume_level} = volume_controls
+
+    volume_level = case !is_muted do
+      true -> 0
+      false -> volume_level
     end
+
+    volume_icon = VolumeControls.get_volume_icon(volume_level)
+
+    params = %{
+      is_muted: !is_muted,
+      volume_icon: volume_icon}
+    volume_controls = VolumeControls.update(volume_controls, params)
+    socket = assign(socket, :volume_controls, volume_controls)
 
     :ok = Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> slug,
       {:volume_level_changed, %{uuid: uuid, volume_level: volume_level, volume_icon: volume_icon}}
     )
+
+    case is_muted do
+      true ->
+        {:noreply,
+          socket
+          |> push_event("receive_unmute_signal", %{})}
+      false ->
+        {:noreply,
+          socket
+          |> push_event("receive_mute_signal", %{})}
+    end
+  end
+
+  @impl true
+  def handle_event("volume_level_changed", volume_level, socket) do
+    %{slug: slug,
+      user: %{uuid: uuid},
+      volume_controls: volume_controls} = socket.assigns
+
+    volume_icon = VolumeControls.get_volume_icon(volume_level)
+
+    %{is_muted: is_muted} = volume_controls
+    socket = case is_muted do
+      true -> push_event(socket, "receive_unmute_signal", %{})
+      _ -> socket
+    end
+
+    is_volume_down = VolumeControls.get_state_by_level(volume_level)
+
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> slug,
+      {:volume_level_changed, %{uuid: uuid, volume_level: volume_level, volume_icon: volume_icon}}
+    )
+
+    params = %{
+      is_muted: is_volume_down,
+      volume_icon: volume_icon,
+      volume_level: volume_level}
+    volume_controls = VolumeControls.update(volume_controls, params)
+
     {:reply, %{level: volume_level},
       socket
-      |> assign(:volume_controls, %{volume_level: volume_level})}
+      |> assign(:volume_controls, volume_controls)}
   end
 
   @impl true

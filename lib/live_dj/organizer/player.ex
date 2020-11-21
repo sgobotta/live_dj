@@ -68,3 +68,26 @@ defmodule LiveDj.Organizer.Player do
     player.state == "playing" && player.video_id != ""
   end
 end
+
+defmodule LiveDj.Organizer.VolumeControls do
+
+  def get_volume_icon(volume_level) do
+    case volume_level do
+      l when l > 70 -> "fa-volume-up"
+      l when l > 30 -> "fa-volume-down"
+      l when l > 0 -> "fa-volume-off"
+      l when l == 0 -> "fa-volume-mute"
+    end
+  end
+
+  def get_state_by_level(volume_level) do
+    case volume_level do
+      0 -> true
+      _ -> false
+    end
+  end
+
+  def update(controls, props) do
+    Map.merge(controls, props)
+  end
+end

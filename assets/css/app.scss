@@ -882,8 +882,8 @@ input.text-input:focus {
  */
 
 .video-info-container {
-  flex: 1 0 40%;
-  width: 230px;
+  flex: 1 auto;
+  width: 130px;
 
   @media (max-width: 480px) {
     width: 120px;
