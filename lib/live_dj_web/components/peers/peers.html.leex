@@ -36,7 +36,7 @@
                   <%= if !hd(user.metas).visitor do %>
                     <i class="mini fas fa-certificate primary"></i>
                   <% end %>
-                  <span class="<%= if user.uuid !== @user.uuid && !hd(user.metas).typing do %> typing-message <% end %>">
+                  <span class="<%= if user.uuid !== @user.uuid && hd(user.metas).typing do %> typing-message <% end %>">
                     <%= hd(user.metas).username %>
                   </span>
                 </p>
