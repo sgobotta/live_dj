@@ -16,6 +16,24 @@ defmodule LiveDjWeb.Components.PlayerControls do
     }
   end
 
+  def handle_event("player_signal_playing", _params, socket) do
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:player_signal_playing, %{state: "playing"}}
+    )
+    {:noreply, socket}
+  end
+
+  def handle_event("player_signal_paused", _params, socket) do
+    :ok = Phoenix.PubSub.broadcast(
+      LiveDj.PubSub,
+      "room:" <> socket.assigns.slug,
+      {:player_signal_paused, %{state: "paused"}}
+    )
+    {:noreply, socket}
+  end
+
 # ===========================================================================
 #
 # Very similar functions, refactor if not used for a specific task

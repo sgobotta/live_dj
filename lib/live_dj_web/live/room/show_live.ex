@@ -367,24 +367,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  def handle_event("player_signal_playing", _params, socket) do
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:player_signal_playing, %{state: "playing"}}
-    )
-    {:noreply, socket}
-  end
-
-  def handle_event("player_signal_paused", _params, socket) do
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:player_signal_paused, %{state: "paused"}}
-    )
-    {:noreply, socket}
-  end
-
   def handle_event("player_signal_video_ended", _params, socket) do
     %{player: player, video_queue: video_queue} = socket.assigns
     %{video_id: current_video_id} = player

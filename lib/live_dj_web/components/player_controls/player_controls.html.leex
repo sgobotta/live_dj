@@ -24,6 +24,7 @@
           <a
             <%= @player_controls.play_button_state %>
             phx-click="player_signal_playing"
+            phx-target="<%= @myself %>"
           >
             <i class="fas fa-play-circle player-control clickeable"></i>
           </a>
@@ -32,6 +33,7 @@
           <a
             <%= @player_controls.pause_button_state %>
             phx-click="player_signal_paused"
+            phx-target="<%= @myself %>"
           >
             <i class="fas fa-pause-circle player-control clickeable"></i>
           </a>
