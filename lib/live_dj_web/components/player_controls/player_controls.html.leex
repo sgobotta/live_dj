@@ -45,7 +45,7 @@
           <i class="fas fa-step-forward"></i>
         </a>
       <% else %>
-        <a phx-click="player_signal_play_next">
+        <a phx-click="player_signal_play_next" phx-target="<%= @myself %>">
           <i class="fas fa-step-forward player-control clickeable"></i>
         </a>
       <% end %>
