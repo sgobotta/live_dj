@@ -1,24 +1,24 @@
 // excess height to improve interactive area / accessibility
 $height: 30px;
-$thumb-height: 3px;
-$thumb-hover-height: 16px;
+$thumb-height: 13px;
+$thumb-hover-height: 13px;
 $track-height: 3px;
 
 // colours
 $upper-color: #cfcfcf;
-$lower-color: #0199ff;
-$thumb-color: #0199ff;
-$thumb-hover-color: $primary;
+$lower-color: #999;
+$track-left-color: #444;
 
-$upper-background: linear-gradient(to bottom, $upper-color, $upper-color) 100% 50% / 100% $track-height no-repeat transparent;
+$upper-background: linear-gradient(to bottom, $upper-color, $track-left-color) 100% 50% / 100% $track-height no-repeat transparent;
 $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 50% / 100% $track-height no-repeat transparent;
+$lower-moz-background: linear-gradient(to bottom, $lower-color, $track-left-color) 100% 50% / 100% $track-height no-repeat transparent;
 
 // Webkit cannot style progress so we fake it with a long shadow
 // on the thumb element
 @function webkit-slider-thumb-shadow($i: 1) {
-  $val: #{$i}px 0 0 -#{($thumb-height - $track-height) / 2} #{$upper-color};
+  $val: #{$i}px 0 0 -#{($thumb-height - $track-height) / 2} #{$track-left-color};
   @if $i == 1 {
-    @for $k from 2 through 1000 {
+    @for $k from 2 through 3000 {
       $val: #{$val}, webkit-slider-thumb-shadow($k);
     }
   }
@@ -29,7 +29,7 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
   background-color: transparent;
   display: block;
   appearance: none;
-  width: 70%;
+  width: 100%;
   margin: 0;
   height: $height;
   overflow: hidden;
@@ -50,9 +50,9 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
 .progressive-slider::-webkit-slider-thumb {
   position: relative;
   appearance: none;
-  height: $thumb-height;
+  height: $thumb-height - 1;
   width: $thumb-height;
-  background: $thumb-color;
+  background: transparent;
   border-radius: 100%;
   border: 0;
   top: 50%;
@@ -65,12 +65,12 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
 .progressive-slider::-moz-range-track,
 .progressive-slider::-moz-range-progress {
   width: 100%;
-  height: $height;
-  background: $upper-background;
+  height: $track-height;
+  background: $track-left-color;
 }
 
 .progressive-slider::-moz-range-progress {
-  background: $lower-background;
+  background: $lower-moz-background;
 }
 
 .progressive-slider::-moz-range-thumb {
@@ -78,7 +78,7 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
   margin: 0;
   height: $thumb-height;
   width: $thumb-height;
-  background: $thumb-color;
+  background: transparent;
   border-radius: 100%;
   border: 0;
   transition: background-color 150ms;
@@ -95,7 +95,7 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
 }
 
 .progressive-slider::-ms-fill-lower {
-  background: $lower-background;
+  background: $lower-moz-background;
 }
 
 .progressive-slider::-ms-fill-upper {
@@ -106,7 +106,7 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
   appearance: none;
   height: $thumb-height;
   width: $thumb-height;
-  background: $thumb-color;
+  background: transparent;
   border-radius: 100%;
   border: 0;
   transition: background-color 150ms;
@@ -119,13 +119,22 @@ $lower-background: linear-gradient(to bottom, $lower-color, $lower-color) 100% 5
 .progressive-slider:hover,
 .progressive-slider:focus {
 
+  &::-webkit-slider-runnable-track {
+    background: $primary;
+    height: $track-height;
+  }
+
+  &::-moz-range-progress {
+    background: $primary;
+  }  
+
   &::-webkit-slider-thumb {
-    background-color: $thumb-hover-color;
+    background-color: $upper-color;
   }
   &::-moz-range-thumb {
-    background-color: $thumb-hover-color;
+    background-color: $upper-color;
   }
   &::-ms-thumb {
-    background-color: $thumb-hover-color;
+    background-color: $upper-color;
   }
 }
