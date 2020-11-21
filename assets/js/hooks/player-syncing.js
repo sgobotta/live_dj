@@ -1,13 +1,8 @@
 import debounce from 'lodash.debounce'
+import { secondsToTime } from '../lib/date-utils'
 
-const updateVideoTimeDisplay = (
-  timeTrackerElem,
-  playerCurrentTime,
-  playerTotalTime,
-) => {
-  const currentTime = new Date(playerCurrentTime * 1000).toISOString().substr(11, 8)
-  const totalTime = new Date(playerTotalTime * 1000).toISOString().substr(11, 8)
-  const videoTime = `${currentTime}/${totalTime}`
+const updateTimeDisplay = (timeTrackerElem, time) => {
+  const videoTime = secondsToTime(parseInt(time))
   timeTrackerElem.innerText = videoTime
 }
 
@@ -22,16 +17,18 @@ const updateVideoSlider = (
 }
 
 
-const udpateTimeDisplays = (timeTrackerElem, timeSliderElem, player) => {
+const udpateTimeDisplays = (startTimeTrackerElem, endTimeTrackerElem, timeSliderElem, player) => {
   const currentTime = player.getCurrentTime()
   const totalTime = player.getDuration()
-  updateVideoTimeDisplay(timeTrackerElem, currentTime, totalTime)
+  updateTimeDisplay(startTimeTrackerElem, currentTime)
+  updateTimeDisplay(endTimeTrackerElem, totalTime)
   updateVideoSlider(timeSliderElem, currentTime, totalTime)
 }
 
 const onStateChange = (
   hookContext,
-  timeTrackerElem,
+  startTimeTrackerElem,
+  endTimeTrackerElem,
   timeSliderElem
 ) => event => {
   switch (event.data) {
@@ -51,7 +48,12 @@ const onStateChange = (
       const { target: player } = event
       // console.log('playing')
       const trackTimeInterval = setInterval(() => {
-        udpateTimeDisplays(timeTrackerElem, timeSliderElem, player)
+        udpateTimeDisplays(
+          startTimeTrackerElem,
+          endTimeTrackerElem,
+          timeSliderElem,
+          player,
+        )
       }, 1000)
       hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
       break
@@ -61,7 +63,12 @@ const onStateChange = (
       const { trackTimeInterval } = hookContext.el.dataset
       clearInterval(trackTimeInterval)
       const { target: player } = event
-      udpateTimeDisplays(timeTrackerElem, timeSliderElem, player)
+      udpateTimeDisplays(
+        startTimeTrackerElem,
+        endTimeTrackerElem,
+        timeSliderElem,
+        player,
+      )
       break
     }
     case 3: {
@@ -121,10 +128,14 @@ const initTimeSlider = hookContext => player => {
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const timeTrackerElem = document.getElementById('yt-video-time')
+    const startTimeTrackerElem = document.getElementById('yt-video-start-time')
+    const endTimeTrackerElem = document.getElementById('yt-video-end-time')
     const timeSliderElem = document.getElementById('video-time-control')
     const player = await initPlayer(
-      onStateChange(this, timeTrackerElem, timeSliderElem),
+      onStateChange(
+        this,
+        startTimeTrackerElem, endTimeTrackerElem, timeSliderElem
+      ),
       onVolumeChange(this),
     )
     this.pushEvent('player_signal_ready')
@@ -139,12 +150,22 @@ const PlayerSyncing = initPlayer => ({
 
     this.handleEvent('receive_playing_signal', () => {
       player.playVideo()
-      udpateTimeDisplays(timeTrackerElem, timeSliderElem, player)
+      udpateTimeDisplays(
+        startTimeTrackerElem,
+        endTimeTrackerElem,
+        timeSliderElem,
+        player,
+      )
     })
 
     this.handleEvent('receive_paused_signal', () => {
       player.pauseVideo()
-      udpateTimeDisplays(timeTrackerElem, timeSliderElem, player)
+      udpateTimeDisplays(
+        startTimeTrackerElem,
+        endTimeTrackerElem,
+        timeSliderElem,
+        player,
+      )
     })
 
     this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
@@ -152,7 +173,12 @@ const PlayerSyncing = initPlayer => ({
       setTimeout(() => {
         document.scrollingElement.scrollIntoView({behavior: 'smooth'})
 
-        udpateTimeDisplays(timeTrackerElem, timeSliderElem, player)
+        udpateTimeDisplays(
+          startTimeTrackerElem,
+          endTimeTrackerElem,
+          timeSliderElem,
+          player,
+        )
 
         !shouldPlay && player.pauseVideo()
       }, 300)

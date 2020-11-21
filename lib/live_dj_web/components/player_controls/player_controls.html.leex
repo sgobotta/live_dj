@@ -56,12 +56,6 @@
 
     </div>
 
-    <div class="inline-flex items-center justify-center p-4">
-      <span id="yt-video-time" class="video-time-tracker">
-        00:00:00/00:00:00
-      </span>
-    </div>
-
     <div class="inline-flex items-center justify-center p-4 volume-control-container">
       <div class="p-4">
         <a phx-click="player_signal_toggle_volume">
@@ -78,6 +72,11 @@
     </div>
   </div>
   <div class="inline-flex items-center justify-center p-4 player-controls-video-tracking">
+    <div class="inline-flex items-center justify-center p-4">
+      <span id="yt-video-start-time" class="video-time-tracker">
+        -
+      </span>
+    </div>
     <input
       class="progressive-slider p-4"
       id="video-time-control"
@@ -85,5 +84,10 @@
       type="range"
       min="0" max="100" step="1"
     />
+    <div class="inline-flex items-center justify-center p-4">
+      <span id="yt-video-end-time" class="video-time-tracker">
+        -
+      </span>
+    </div>
   </div>
 </div>
