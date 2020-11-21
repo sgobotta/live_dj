@@ -92,6 +92,14 @@ const PlayerSyncing = initPlayer => ({
     )
     this.pushEvent('player_signal_ready')
 
+    this.handleEvent('receive_mute_signal', () => {
+      player.mute()
+    })
+    
+    this.handleEvent('receive_unmute_signal', () => {
+      player.unMute()
+    })
+
     this.handleEvent('receive_playing_signal', () => {
       player.playVideo()
       updateVideoTimeDisplay(
