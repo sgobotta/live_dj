@@ -2,7 +2,7 @@ import debounce from 'lodash.debounce'
 import { secondsToTime } from '../lib/date-utils'
 
 const updateTimeDisplay = (timeTrackerElem, time) => {
-  const videoTime = secondsToTime(parseInt(time))
+  const videoTime = time === 0 ? '-' : secondsToTime(parseInt(time))
   timeTrackerElem.innerText = videoTime
 }
 
@@ -98,10 +98,7 @@ const onVolumeChange = hookContext => player => {
   }, 500)
 
   volumeControl.oninput = _sendVolumeChangedNotification
-
-  volumeControl.onmouseenter = () => {
-    volumeControl.focus()
-  }
+  volumeControl.onchange = _sendVolumeChangedNotification
 }
 
 const initTimeSlider = hookContext => player => {
