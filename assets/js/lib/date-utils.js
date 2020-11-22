@@ -10,6 +10,8 @@ export function secondsToTime(seconds) {
   if (minutes != 0 || time !== "") {
     minutes = (minutes < 10 && time !== "") ? "0"+minutes : String(minutes);
     time += minutes+":";
+  } else {
+    time += "0:"
   }
   if (time === "") {
     time = seconds;
