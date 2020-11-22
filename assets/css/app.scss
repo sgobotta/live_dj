@@ -5,6 +5,7 @@
 @import "./phoenix.css";
 @import "../node_modules/nprogress/nprogress.css";
 
+$primary-light: #4297e0;
 $primary: #3271a9;
 $secondary: #8558af;
 $secondary-highlight-1: #fa84bf;
@@ -13,17 +14,22 @@ $danger: #e65252;
 $text: #eaeaea;
 $success: #438b73;
 $success-highlight-1: #5dc09f;
-$neutral-dark: #222;
+$neutral-semi-dark: #666;
+$neutral-dark: #444;
+$neutral-darker: #222;
+
+$primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50% / 100% 45px no-repeat transparent;
 
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
+@import "./progressive-range.scss";
 
 body {
   background-color: #000000;
 }
 
 h1{font-size: 3.6rem; line-height: 1.25; color: $text}
-h2{font-size: 2.8rem; line-height: 1.3; color: $text}
+h2{font-size: 2.8rem; line-height: 1.3; color: $text; font-weight: bolder;}
 h3{font-size: 2.2rem; letter-spacing: -.08rem; line-height: 1.35; color: $text}
 h4{font-size: 1.8rem; letter-spacing: -.05rem; line-height: 1.5; color: $text}
 h5{font-size: 1.6rem; letter-spacing: 0; line-height: 1.4; color: $text}
@@ -57,7 +63,7 @@ select {
 }
 
 .title-pill {
-  background-color: $primary;
+  background: $primary-gradient;
 }
 
 .primary {
@@ -323,13 +329,17 @@ b {
 
   border-left-width: 0.1rem;
   border-left-color: $primary;
-  border-style: dashed;
+  border-style: ridge;
+
+  &.extra-margin {
+    margin-top: 40px;
+  }
 
   &.higher {
     min-height: 446px;
     border-bottom-color: $primary;
     border-bottom-width: 0.1rem;
-    border-bottom-left-radius: 23px;
+    border-bottom-left-radius: 6px;
   }
 }
 
@@ -432,7 +442,7 @@ a.btn i.trash {
   &.separator {
     border-top-style: dashed;
     border-top-width: 1px;
-    border-top-color: #31708f;
+    border-top-color: $primary;
     width: 100%;
   }
 
@@ -468,10 +478,7 @@ a.btn i.trash {
 }
 
 .section-container {
-  padding: 25px;
-  margin: 12px auto;
-  clear:left;
-  border: dotted rgba(0, 255, 0, 0.1) 1px;
+  
 }
 
 @media (max-width: 480px) {
@@ -498,7 +505,7 @@ a.btn i.trash {
 .text-input {
   border: 0.1rem;
   border-style: dashed !important;
-  border-color: #31708f !important;
+  border-color: $primary !important;
 }
 
 input.text-input:focus {
@@ -543,6 +550,7 @@ input.text-input:focus {
 
 .chat-text {
   font-style: italic;
+  font-weight: bolder;
 }
 
 .highlight-username {
@@ -805,7 +813,7 @@ input.text-input:focus {
 }
 
 .pill {
-  background-color: #31708f;
+  background-color: $primary;
   border: 10px black;
   border-radius: 25px;
   align-items: center;
@@ -946,31 +954,33 @@ div p.pill-text {
 }
 
 .video-time-tracker {
-  color: $primary;
-  font-family: monospace;
-  font-size: 3.0rem;
+  color: $text;
+  font-weight: bolder;
+  font-size: 1.6rem;
 }
 
 @media (max-width: 768px) {
   .video-time-tracker {
-    font-size: 2.0rem;
+    font-size: 1.6rem;
   }
 }
 @media (max-width: 480px) {
   .video-time-tracker {
-    font-size: 2.0rem;
+    font-size: 1.6rem;
   }
 }
 @media (max-width: 360px) {
   .video-time-tracker {
-    font-size: 2.0rem;
+    font-size: 1.6rem;
   }
 }
 
-.player-controls-container {
-  display: flex;
+.player-controls-main-container {
   margin: 12px 0 !important;
-  background-color: $neutral-dark;
+  background-color: $neutral-darker;
+}
+
+.player-controls-container {
 
   @media (max-width: 768px) {
     display: grid;
@@ -980,6 +990,10 @@ div p.pill-text {
       width: 100%;
     }
   }
+}
+
+.player-controls-video-tracking {
+  display: flex;
 }
 
 .player-control:hover {
@@ -1052,6 +1066,8 @@ html {
   scrollbar-width: thin;
 }
 
+$scrollbar-style: ridge;
+
 ::-webkit-scrollbar {
   width: 2px;
   height: 4px;
@@ -1074,19 +1090,19 @@ html {
   background: $secondary-highlight-1;
 }
 ::-webkit-scrollbar-track {
-  border-style: dashed;
+  border-style: $scrollbar-style;
   border-width: 1px;
   border-color: $primary;
   background: transparent;
 }
 ::-webkit-scrollbar-track:hover {
-  border-style: dashed;
+  border-style: $scrollbar-style;
   border-width: 1px;
   border-color: $primary;
   background: transparent;
 }
 ::-webkit-scrollbar-track:active {
-  border-style: dashed;
+  border-style: $scrollbar-style;
   border-width: 1px;
   border-color: $primary;
   background: transparent;;
@@ -1100,120 +1116,7 @@ html {
  */
 
 .volume-control-container {
-  width: 20%;
-}
-
-input[type=range] {
-  width: 70%;
-  background-color: transparent;
-  -webkit-appearance: none;
-}
-input[type=range]:focus {
-  outline: none;
-}
-input[type=range]::-webkit-slider-runnable-track {
-  background: $secondary-highlight-1;
-  border: 1.6px solid $secondary-highlight-1;
-  border-radius: 25px;
-  width: 100%;
-  height: 4px;
-  cursor: pointer;
-}
-input[type=range]::-webkit-slider-runnable-track:hover {
-  height: 4px;
-  border-color: $secondary-highlight-1;
-  background-color: $secondary-highlight-1;
-}
-input[type=range]::-webkit-slider-thumb {
-  margin-top: -12.1px;
-  width: 25px;
-  height: 25px;
-  background: $primary;
-  border: 3.2px solid $primary;
-  border-radius: 25px;
-  cursor: pointer;
-  -webkit-appearance: none;
-}
-input[type=range]::-webkit-slider-thumb:hover {
-  width: 27px;
-  height: 27px;
-  border-color: $secondary-highlight-1;
-  background-color: $secondary-highlight-1;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background-color: $secondary-highlight-1;
-}
-input[type=range]::-moz-range-track {
-  background: $secondary-highlight-1;
-  border: 1.6px solid $secondary-highlight-1;
-  border-radius: 25px;
-  width: 100%;
-  height: 4px;
-  cursor: pointer;
-}
-input[type=range]:hover::-moz-range-track {
-  height: 6px;
-  border-color: $secondary-highlight-1;
-}
-input[type=range]::-moz-range-thumb {
-  margin-top: -12.1px;
-  width: 25px;
-  height: 25px;
-  background: $primary;
-  border: 3.2px solid $primary;
-  border-radius: 25px;
-  cursor: pointer;
-  -webkit-appearance: none;
-}
-input[type=range]::-moz-range-thumb:hover {
-  width: 27px;
-  height: 27px;
-  border-color: $secondary-highlight-1;
-  background-color: $secondary-highlight-1;
-}
-input[type=range]::-ms-track {
-  background: transparent;
-  border-color: transparent;
-  border-width: 10.5px 0;
-  color: transparent;
-  width: 100%;
-  height: 4px;
-  cursor: pointer;
-}
-input[type=range]::-ms-fill-lower {
-  background: $primary;
-  border: 1.6px solid $primary;
-  border-radius: 50px;
-}
-input[type=range]::-ms-fill-upper {
-  background: $primary;
-  border: 1.6px solid $primary;
-  border-radius: 50px;
-}
-input[type=range]::-ms-thumb {
-  width: 25px;
-  height: 25px;
-  background: $primary;
-  border: 3.2px solid $primary;
-  border-radius: 25px;
-  cursor: pointer;
-  margin-top: 0px;
-  /*Needed to keep the Edge thumb centred*/
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: $primary;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: $primary;
-}
-/*TODO: Use one of the selectors from https://stackoverflow.com/a/20541859/7077589 and figure out
-how to remove the virtical space around the range input in IE*/
-@supports (-ms-ime-align:auto) {
-  /* Pre-Chromium Edge only styles, selector taken from hhttps://stackoverflow.com/a/32202953/7077589 */
-  input[type=range] {
-    margin: 0;
-    /*Edge starts the margin from the thumb, not the track as other browsers do*/
-  }
+  width: 30%;
 }
 
 /**
