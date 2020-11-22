@@ -78,7 +78,6 @@ select {
   align-items: center;
   border: 0.1rem;
   border-color: #31708f;
-  border-style: dashed;
   bottom: 0;
   color: white;
   display: flex;
@@ -437,6 +436,7 @@ a.btn i.trash {
 
   &.search-result {
     padding: 1rem;
+    font-weight: bolder;
   }
 
   &.separator {
@@ -785,6 +785,7 @@ input.text-input:focus {
 
 .peer {
   font-size: 1.6rem;
+  font-weight: bolder;
 }
 
 .username {
@@ -946,6 +947,7 @@ div.pill:hover p.pill-text {
 }
 
 div p.pill-text {
+  font-weight: bolder;
   align-items: center;
 }
 
