@@ -549,6 +549,7 @@ input.text-input:focus {
 
 .chat-text {
   font-style: italic;
+  font-weight: bolder;
 }
 
 .highlight-username {
@@ -953,23 +954,23 @@ div p.pill-text {
 
 .video-time-tracker {
   color: $text;
-  font-family: monospace;
-  font-size: 2.2rem;
+  font-weight: bolder;
+  font-size: 1.6rem;
 }
 
 @media (max-width: 768px) {
   .video-time-tracker {
-    font-size: 2.0rem;
+    font-size: 1.6rem;
   }
 }
 @media (max-width: 480px) {
   .video-time-tracker {
-    font-size: 2.0rem;
+    font-size: 1.6rem;
   }
 }
 @media (max-width: 360px) {
   .video-time-tracker {
-    font-size: 2.0rem;
+    font-size: 1.6rem;
   }
 }
 
