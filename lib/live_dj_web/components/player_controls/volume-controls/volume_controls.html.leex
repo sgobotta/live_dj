@@ -14,8 +14,9 @@
       class="progressive-slider p-4"
       id="volume-control"
       phx-debounce="500"
-      value="<%= if @volume_controls.is_muted do %>0<% else %><%= @volume_controls.volume_level %><% end %>"
+      value="<%= if @volume_controls.is_muted, do: 0, else: @volume_controls.volume_level %>"
       type="range"
+      value="<%= if @volume_controls.is_muted, do: 0, else: @volume_controls.volume_level %>"
       min="0" max="100" step="1"
     />
   </form>
