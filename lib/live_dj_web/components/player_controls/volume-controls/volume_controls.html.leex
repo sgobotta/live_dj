@@ -1,0 +1,14 @@
+<div class="inline-flex items-center justify-center p-4 volume-control-container">
+  <div class="p-4">
+    <a phx-click="player_signal_toggle_volume" phx-target="<%= @myself %>">
+      <i class="fas <%= @volume_controls.volume_icon %> player-control clickeable"></i>
+    </a>
+  </div>
+    <input
+      class="progressive-slider p-4"
+      id="volume-control"
+      value="<%= if @volume_controls.is_muted do %>0<% else %><%= @volume_controls.volume_level %><% end %>"
+      type="range"
+      min="0" max="100" step="1"
+    />
+</div>
