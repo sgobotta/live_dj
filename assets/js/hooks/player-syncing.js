@@ -82,26 +82,7 @@ const onStateChange = (
   }
 }
 
-const onVolumeChange = hookContext => player => {
-  const volumeControl = document.getElementById('volume-control')
-
-  function sendVolumeChangedNotification(value) {
-    hookContext.pushEvent('volume_level_changed', parseInt(value), ({level}) => {
-      player.setVolume(level)
-    })
-  }
-
-  sendVolumeChangedNotification(player.getVolume())
-
-  const _sendVolumeChangedNotification = debounce(({target: {value}}) => {
-    sendVolumeChangedNotification(value)
-  }, 500)
-
-  volumeControl.oninput = _sendVolumeChangedNotification
-  volumeControl.onchange = _sendVolumeChangedNotification
-}
-
-const initTimeSlider = hookContext => player => {
+// const initTimeSlider = hookContext => player => {
   // const timeSlider = document.getElementById('video-time-control')
 
   // const playerCurrentTime = player.getCurrentTime()
@@ -121,7 +102,7 @@ const initTimeSlider = hookContext => player => {
   // }, 200)
 
   // timeSlider.oninput = onTimeChange
-}
+// }
 
 const PlayerSyncing = initPlayer => ({
   async mounted() {
@@ -133,7 +114,6 @@ const PlayerSyncing = initPlayer => ({
         this,
         startTimeTrackerElem, endTimeTrackerElem, timeSliderElem
       ),
-      onVolumeChange(this),
     )
     this.pushEvent('player_signal_ready')
 
@@ -179,6 +159,10 @@ const PlayerSyncing = initPlayer => ({
 
         !shouldPlay && player.pauseVideo()
       }, 300)
+    })
+
+    this.handleEvent('receive_player_volume', ({level: volumeLevel}) => {
+      player.setVolume(volumeLevel)
     })
 
     setInterval(() => {

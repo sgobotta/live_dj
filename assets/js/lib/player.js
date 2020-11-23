@@ -1,4 +1,4 @@
-export default (container, {onStateChange, onVolumeChange}) => {
+export default (container, {onStateChange}) => {
   return new Promise((resolve) => {
     new YT.Player(container, {
       height: "420",
@@ -8,7 +8,6 @@ export default (container, {onStateChange, onVolumeChange}) => {
       events: {
         onReady: event => {
           const player = event.target
-          onVolumeChange(player)
           resolve(player)
         },
         onStateChange,
