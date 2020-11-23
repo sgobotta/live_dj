@@ -11,7 +11,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
-  alias LiveDj.Organizer.VolumeControls
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
