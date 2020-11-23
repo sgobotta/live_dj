@@ -458,39 +458,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("volume_level_changed", volume_level, socket) do
-    %{slug: slug,
-      user: %{uuid: uuid},
-      volume_controls: volume_controls} = socket.assigns
-
-    volume_icon = VolumeControls.get_volume_icon(volume_level)
-
-    %{is_muted: is_muted} = volume_controls
-    socket = case is_muted do
-      true -> push_event(socket, "receive_unmute_signal", %{})
-      _ -> socket
-    end
-
-    is_volume_down = VolumeControls.get_state_by_level(volume_level)
-
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> slug,
-      {:volume_level_changed, %{uuid: uuid, volume_level: volume_level, volume_icon: volume_icon}}
-    )
-
-    params = %{
-      is_muted: is_volume_down,
-      volume_icon: volume_icon,
-      volume_level: volume_level}
-    volume_controls = VolumeControls.update(volume_controls, params)
-
-    {:reply, %{level: volume_level},
-      socket
-      |> assign(:volume_controls, volume_controls)}
-  end
-
-  @impl true
   def handle_event(
     "search",
     %{"search_field" => %{"query" => query}},
