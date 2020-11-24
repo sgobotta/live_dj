@@ -30,14 +30,9 @@ $hover-lower-moz-background: linear-gradient(to bottom, $track-progress-hover-co
   @return $val;
 }
 
-.progressive-slider {
-  background-color: transparent;
-  display: block;
-  appearance: none;
+.slider-form {
   margin: 0;
-  height: $height;
-  overflow: hidden;
-  cursor: pointer;
+
   width: 50%;
   
   @media (max-width: 480px) {
@@ -46,6 +41,16 @@ $hover-lower-moz-background: linear-gradient(to bottom, $track-progress-hover-co
   @media (max-width: 768px) {
     width: 80%;
   }
+}
+
+.progressive-slider {
+  background-color: transparent;
+  display: block;
+  appearance: none;
+  margin: 0;
+  height: $height;
+  overflow: hidden;
+  cursor: pointer;
 
   &:focus {
     outline: none;
