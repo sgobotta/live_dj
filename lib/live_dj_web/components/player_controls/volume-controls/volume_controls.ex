@@ -58,7 +58,7 @@ defmodule LiveDjWeb.Components.VolumeControls do
   @impl true
   def handle_event(
     "volume_level_changed",
-    %{"volume_change" => volume_level},
+    %{"volume" => %{"change" => volume_level}},
     socket
   ) do
     {volume_level, _} = Integer.parse(volume_level)
@@ -92,5 +92,12 @@ defmodule LiveDjWeb.Components.VolumeControls do
       socket
       |> push_event("receive_player_volume", %{level: volume_level})
       |> assign(:volume_controls, volume_controls)}
+  end
+
+  defp compute_volume(volume_controls) do
+    case volume_controls.is_muted do
+      true -> 0
+      false -> volume_controls.volume_level
+    end
   end
 end
