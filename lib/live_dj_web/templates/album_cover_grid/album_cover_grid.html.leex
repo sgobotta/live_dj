@@ -1,0 +1,30 @@
+<div class="flex align-center">
+
+  <%= if @queue == [] do %>
+    <div>
+      <img class="track-cover-thumb" src="https://millennialdiyer.com/wp1/wp-content/uploads/2018/11/Tips-Tricks-for-Assigning-Album-Cover-Art-to-your-Music-Library-Default-Image.jpg" />
+    </div>
+  <% else %>
+
+    <%= if length(@queue) < 4 do %>
+      <div>
+        <img class="track-cover-thumb" src="<%= hd(@queue)["img_url"] %>" />
+      </div>
+    <% else %>
+
+      <%= if length(@queue) >= 4 do %>
+        <%= for chunk <- Enum.chunk_every(Enum.take(@queue, 4), 2) do %>
+          <div>
+            <%= for track <- chunk do %>
+              <div>
+                <img class="track-cover-thumb-mini" src="<%= track["img_url"] %>" />
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+    <% end %>
+  <% end %>
+
+</div>
