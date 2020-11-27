@@ -399,9 +399,13 @@ b {
     margin-bottom: 0px;
   
     &.separator {
-      border-top-style: groove;
-      border-top-width: 1px;
-      border-top-color: $primary;
+      border-bottom-style: groove;
+      border-bottom-width: 1px;
+      border-bottom-color: $primary;
+    }
+
+    &.separator:last-child {
+      border-bottom-width: 0px;
     }
   }
   
