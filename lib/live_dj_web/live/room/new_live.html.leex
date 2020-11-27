@@ -1,8 +1,8 @@
 <div class="new-live-view">
   <div class="col-container">
-    <div class="flex flex-wrap justify-center items-stretch mx-auto">
-      <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save"], fn f -> %>
-      <div class="flex items-start">
+    <div class="flex flex-wrap justify-start items-stretch mx-auto">
+      <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save", class: "full-width"], fn f -> %>
+      <div class="flex items-start section-title">
         <span class="rounded text-white p-2 leading-none flex items-center title-pill">
           Create room
         </span>
@@ -28,29 +28,37 @@
 
     </div>
 
-    <div class="section-container col rooms-container p-4">
+    <div class="flex items-start mt-8 section-title">
+      <span class="rounded text-white p-2 leading-none flex title-pill">
+        Rooms
+      </span>
+    </div>
+
+    <div class="section-container col rooms-container">
       <%= if @public_rooms != [] do %>
 
       <div class="list">
-        <div class="flex items-start">
-          <span class="rounded text-white p-2 leading-none flex title-pill">
-            Rooms
-          </span>
-        </div>
         <div class="mt-4 mb-4">
           <ul class="like-list">
           <%= for room <- @public_rooms do %>
-            <li>
-              <span class="room-item">
-                <a
-                  class="clickeable"
-                  phx-click="redirect_room"
-                  phx-value-slug="<%= room.slug %>"
-                >
-                  <%= room.title %>
-                </a>
-              </span>
-              <span class="room-peers">(<%= @viewers_quantity[String.to_atom(room.title)] %>)</span>
+            <li class="room-item separator">
+              <div class="flex">
+                <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView, "album_cover_grid.html", queue: room.queue %>
+                <div class="flex-1 p-4">
+                  <p class="room-item-text">
+                    <a
+                      class="clickeable"
+                      phx-click="redirect_room"
+                      phx-value-slug="<%= room.slug %>"
+                    >
+                      <%= room.title %>
+                    </a>
+                  </p>
+                  <div class="p-4">
+                    <p class="room-peers">Users: <%= @viewers_quantity[String.to_atom(room.title)] %></p>
+                  </div>
+                </div>
+              </div>
             </li>
           <% end %>
           </ul>
