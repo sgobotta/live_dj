@@ -316,6 +316,16 @@ li.navbar-link:hover a {
   }
 }
 
+.track-cover-thumb {
+  width: 80px;
+  height: 80px;
+}
+
+.track-cover-thumb-mini {
+  width: 40px;
+  height: 40px;
+}
+
 b {
   color: white;
 }
@@ -384,21 +394,38 @@ b {
 }
 
 .rooms-container {
-  border: 0.1rem;
-  border-style: dashed !important;
-  border-color: #31708f !important;
-  border-radius: 0.5rem;
+
+  .room-item {
+    margin-bottom: 0px;
+  
+    &.separator {
+      border-top-style: groove;
+      border-top-width: 1px;
+      border-top-color: $primary;
+    }
+  }
+  
+  .room-item-text {
+    font-size: 2rem;
+    color: $primary;
+  }
+  .room-item-text a:hover {
+    color: $primary;
+    -webkit-animation: text-bolder 0.5s forwards;
+    -webkit-animation-delay: 0.1s;
+    animation: text-bolder 0.5s forwards;
+    animation-delay: 0.1s;
+  }
 }
 
-.room-item {
-  color: $secondary;
+@-webkit-keyframes text-bolder {
+  0% { font-weight: bolder; }
+  100% { font-weight: bold; }
 }
-.room-item a:hover {
-  color: $secondary-highlight-2;
-  -webkit-animation: text-highlight 0.5s forwards;
-  -webkit-animation-delay: 0.1s;
-  animation: text-highlight 0.5s forwards;
-  animation-delay: 0.1s;
+
+@keyframes text-bolder {
+  0% { font-weight: bolder; }
+  100% { font-weight: bold; }
 }
 
 .room-peers {
@@ -503,7 +530,7 @@ a.btn i.trash {
  */
 .text-input {
   border: 0.1rem;
-  border-style: dashed !important;
+  border-style: groove !important;
   border-color: $primary !important;
 }
 
@@ -801,6 +828,8 @@ input.text-input:focus {
   animation: text-highlight 0.5s forwards;
   animation-delay: 0.1s;
 }
+
+
 
 @-webkit-keyframes text-highlight {
   0% { font-size: 1.6rem; }
