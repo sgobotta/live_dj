@@ -4,7 +4,14 @@ export default (container, {onStateChange}) => {
       height: "420",
       width: "100%",
       videoId: '',
-      playerVars: { 'controls': 0 },
+      playerVars: {
+        controls: 0,
+        disablekb: 1,
+        enablejsapi: 1,
+        iv_load_policy: 3,
+        rel: 0,
+        showinfo: 0,
+      },
       events: {
         onReady: event => {
           const player = event.target
