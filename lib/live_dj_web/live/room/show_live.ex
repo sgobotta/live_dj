@@ -18,7 +18,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
     socket = assign_defaults(socket, params, session)
-
+    IO.inspect((slug))
     %{current_user: current_user, visitor: visitor} = socket.assigns
     user = create_connected_user(current_user.username)
 
@@ -103,6 +103,17 @@ defmodule LiveDjWeb.Room.ShowLive do
       true ->
         {:noreply, socket}
     end
+  end
+
+  def handle_info({:request_current_player, params}, socket) do
+    %{assigns: %{player: player, slug: slug}} = socket
+    :ok = Phoenix.PubSub.broadcast_from(
+      LiveDj.PubSub,
+      self(),
+      "room:" <> slug <> ":request_current_player",
+      {:receive_current_player, %{slug: slug, player: player}}
+    )
+    {:noreply, socket}
   end
 
   def handle_info(

@@ -5,6 +5,8 @@ defmodule LiveDjWeb.Room.NewLive do
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Room
 
+  @tick_rate :timer.seconds(10)
+
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket) do
@@ -21,6 +23,7 @@ defmodule LiveDjWeb.Room.NewLive do
       |> assign(:viewers_quantity, viewers_quantity)
       |> put_changeset()
 
+    send(self(), :tick)
 
     {:ok, socket}
   end
@@ -33,6 +36,36 @@ defmodule LiveDjWeb.Room.NewLive do
         :viewers_quantity,
         fn _viewers_quantity -> for room <- socket.assigns.public_rooms, do: {String.to_atom(room.title), Organizer.viewers_quantity(room)} end
       )
+    {:noreply, socket}
+  end
+
+  def handle_info(:tick, socket) do
+    schedule_next_tick()
+
+    IO.inspect("tick")
+
+    slug = "vulfpeck"
+
+    Organizer.subscribe(:request_current_player, slug)
+
+    :ok = Phoenix.PubSub.broadcast_from(
+      LiveDj.PubSub,
+      self(),
+      "room:" <> slug,
+      {:request_current_player, %{}}
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:receive_current_player, %{slug: slug} = params}, socket) do
+    Organizer.unsubscribe(:request_current_player, slug)
+    %{player: player} = params
+    IO.inspect("slug")
+    IO.inspect(slug)
+    IO.inspect("Receives player")
+    IO.inspect(player)
+
     {:noreply, socket}
   end
 
@@ -69,5 +102,9 @@ defmodule LiveDjWeb.Room.NewLive do
   defp put_changeset(socket, params \\ %{}) do
     socket
     |> assign(:changeset, Room.changeset(%Room{}, params))
+  end
+
+  defp schedule_next_tick() do
+    Process.send_after(self(), :tick, @tick_rate)
   end
 end
