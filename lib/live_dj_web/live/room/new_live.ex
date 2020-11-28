@@ -20,7 +20,9 @@ defmodule LiveDjWeb.Room.NewLive do
     rooms_players = for room <- public_rooms do
       {String.to_atom(room.slug), nil}
     end
-    rooms_queues = for room <- public_rooms, do: {String.to_atom(room.slug), []}
+    rooms_queues = for room <- public_rooms do
+      {String.to_atom(room.slug), room.queue}
+    end
     viewers_quantity = for room <- public_rooms do
       {String.to_atom(room.slug), Organizer.viewers_quantity(room)}
     end
