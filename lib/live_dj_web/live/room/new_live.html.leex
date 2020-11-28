@@ -54,8 +54,26 @@
                       <%= room.title %>
                     </a>
                   </p>
-                  <div class="p-4">
-                    <p class="room-peers">Users: <%= @viewers_quantity[String.to_atom(room.title)] %></p>
+                  <div class="p-2">
+                    <p class="room-peers">
+                      <%= if @rooms_players[String.to_atom(room.slug)] != nil do %>
+                        Currently playing: <%= @rooms_players[String.to_atom(room.slug)].title %>
+                      <% else %>
+                        Things are quiet here
+                      <% end %>
+                    </p>
+                  </div>
+                  <div class="p-2">
+                    <p class="room-peers">
+                      <i class="mini fas fa-users primary"></i>
+                      <span>
+                        <%= @viewers_quantity[String.to_atom(room.slug)] %>
+                      </span>
+                      <i class="mini fas fa-compact-disc primary ml-4"></i>
+                      <span>
+                        <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
