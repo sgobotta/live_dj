@@ -1,6 +1,6 @@
 <div class="flex flex-wrap justify-center items-stretch mx-auto">
-  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "search_form"], fn f -> %>
-    <div class="flex items-start">
+  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: ""], fn f -> %>
+    <div class="flex items-start section-title">
       <span class="rounded text-white p-2 leading-none flex items-center title-pill">
         Register
       </span>
