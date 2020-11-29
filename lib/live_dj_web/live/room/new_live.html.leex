@@ -1,8 +1,8 @@
-<div class="new-live-view">
+<div class="new-live-view container">
   <div class="col-container">
     <div class="flex flex-wrap justify-start items-stretch mx-auto">
       <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save", class: "full-width"], fn f -> %>
-      <div class="flex items-start section-title">
+      <div class="flex items-start section-title mb-6">
         <span class="rounded text-white p-2 leading-none flex items-center title-pill">
           Create room
         </span>
@@ -38,7 +38,7 @@
       <%= if @public_rooms != [] do %>
 
       <div class="list">
-        <div class="mt-4 mb-4">
+        <div class="mb-4">
           <ul class="like-list">
           <%= for room <- @public_rooms do %>
             <li class="room-item separator">
