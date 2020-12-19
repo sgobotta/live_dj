@@ -1,0 +1,22 @@
+
+div.policies {
+  color: $neutral-dark;
+
+  h1, h2 {
+    border-bottom: 1px solid $neutral-dark;
+  }
+
+  h2 {
+    margin-top: 16px;
+  }
+
+  p {
+    font-size: 1.6rem;
+    line-height: 2.2;
+  }
+
+  ul li {
+    color: #fff;
+    list-style: inside;
+  }
+}
