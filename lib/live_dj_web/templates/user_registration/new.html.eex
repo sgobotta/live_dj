@@ -29,6 +29,15 @@
         <%= password_input f, :password, required: true, class: "text-input" %>
         <%= error_tag f, :password %>
       </div>
+
+      <div class="mb-4">
+        <p>
+          <%= checkbox f, :terms, required: true, class: "text-input" %>
+          I have read and accept LiveDJ’s
+          <p><%= link "Terms and Privacy Policy.", to: Routes.policies_path(@conn, :index, "terms"), target: "_blank" %></p>
+        </p>
+        <%= error_tag f, :terms %>
+      </div>
     </div>
 
     <div class="mt-auto flex items-center px-4">
