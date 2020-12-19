@@ -6,4 +6,7 @@
   <li class="navbar-link"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
   <li class="navbar-link"><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
 <% end %>
+  <li class="navbar-link">
+    <%= link "Donate", to: Routes.donations_path(@conn, :index), target: "_blank" %>
+  </li>
 </ul>
