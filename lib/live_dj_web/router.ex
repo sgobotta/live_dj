@@ -77,6 +77,7 @@ defmodule LiveDjWeb.Router do
   scope "/", LiveDjWeb do
     pipe_through [:browser]
 
+    get "/donations", DonationsController, :index
     get "/policies/:policy", PoliciesController, :index
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
