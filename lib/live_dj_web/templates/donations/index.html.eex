@@ -4,7 +4,7 @@
       Argentina
     </h2>
     <p class="py-4 text-center mb-10" style="font-size: 1.6rem">
-      Donaciones mediante MercadoPago
+      Donaciones a través de MercadoPago
     </p>
     <div class="flex flex-wrap items-center justify-center py-4 pt-0">
       <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
