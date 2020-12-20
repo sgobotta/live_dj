@@ -77,4 +77,23 @@ defmodule LiveDj.Accounts.UserNotifier do
     ==============================
     """, "LiveDj: Email update verification")
   end
+  @doc """
+  Deliver instructions to update a user email.
+  """
+  def deliver_payment_confirmation(user) do
+    deliver(user.email, """
+
+    ==============================
+
+    Hi #{user.email},
+
+    We'd like to thank you for your contribution to LiveDj. This surely helps
+    us keep doing what we love and improve this software for everyone. If you
+    have any feature request please let us know! :)
+
+    Sincelery, the LiveDj team.
+
+    ==============================
+    """, "LiveDj: Payment received")
+  end
 end
