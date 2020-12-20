@@ -78,6 +78,8 @@ defmodule LiveDjWeb.Router do
     pipe_through [:browser]
 
     get "/donations", DonationsController, :index
+    get "/donations/thanks", DonationsController, :thanks
+    get "/donations/:donation_id", DonationsController, :new
     get "/policies/:policy", PoliciesController, :index
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
