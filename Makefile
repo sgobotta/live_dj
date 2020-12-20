@@ -33,6 +33,11 @@ ecto.setup: SHELL:=/bin/bash
 ecto.setup:
 	source .env && docker-compose up -d && mix ecto.setup
 
+#ecto.seed: @ Script for populating the database
+ecto.seed: SHELL:=/bin/bash
+ecto.seed:
+	source .env && docker-compose up -d && mix run priv/repo/seeds.exs
+
 #help: @ Shows help topics
 help:
 	@grep -E '[a-zA-Z\.\-]+:.*?@ .*$$' $(MAKEFILE_LIST)| tr -d '#'  | awk 'BEGIN {FS = ":.*?@ "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
