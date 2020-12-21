@@ -4,7 +4,7 @@ defmodule LiveDjWeb.DonationsControllerTest do
   alias LiveDj.Accounts
   alias LiveDjWeb.UserAuth
   import LiveDj.AccountsFixtures
-  import LiveDj.PaymentFixtures
+  import LiveDj.PaymentsFixtures
 
   setup %{conn: conn} do
     conn =

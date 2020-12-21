@@ -1,4 +1,4 @@
-defmodule LiveDj.PaymentFixtures do
+defmodule LiveDj.PaymentsFixtures do
   @moduledoc """
   This module defines test helpers for creating
   entities via the `LiveDj.Payments` context.
