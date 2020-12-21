@@ -14,7 +14,7 @@ alias LiveDj.Repo
 alias LiveDj.Payments.Plan
 
 try do
-  mercadopago_plans = System.get_env("MERCADOPAGO_PLANS")
+  System.get_env("MERCADOPAGO_PLANS")
     |> Poison.decode!()
     |> Enum.with_index()
     |> Enum.map(fn {plan, index} -> Repo.insert! %Plan{
