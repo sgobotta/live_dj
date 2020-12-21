@@ -20,6 +20,20 @@ $neutral-darker: #222;
 
 $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50% / 100% 45px no-repeat transparent;
 
+
+.bg-neutral-semi-dark {
+  background-color: $neutral-semi-dark
+}
+.bg-neutral-dark {
+  background-color: $neutral-dark
+}
+.bg-neutral-darker {
+  background-color: $neutral-darker
+}
+.bg-primary {
+  background-color: $primary
+}
+
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
 @import "./progressive-range.scss";
@@ -1557,4 +1571,47 @@ ul.playlist {
       animation: opacity .4s ease forwards
     }
   }
+}
+
+/**
+ * Donations
+ */
+
+.mercadopago-button {
+  background: $success !important;
+  width: 83.333333%;
+  text-transform: uppercase;
+  content: "Donar" !important;
+}
+
+.mercadopago-button::after {
+  content: '/Donar' !important;
+}
+
+/**
+ * Thank you page
+ */
+
+.thank-you-page {
+  background-color: #f0f0f0;
+}
+
+.musical-note-1 {
+  -webkit-animation: float 3s linear infinite;
+  animation: float 3s linear infinite;
+}
+
+.musical-note-2 {
+  -webkit-animation: float 6s linear infinite;
+  animation: float 6s linear infinite;
+}
+
+@-webkit-keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px) }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px) }
 }

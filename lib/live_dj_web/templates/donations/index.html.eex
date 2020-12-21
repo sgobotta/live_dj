@@ -1,0 +1,78 @@
+<div class="container flex flex-wrap pt-4 pb-10 m-auto mt-6 md:mt-15 lg:px-12 xl:px-16">
+  <div class="w-full px-0 lg:px-4">
+    <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
+      We're working on extra features and visuals. You can donate as a guest user but we recommend donating as a registered user to receive exclusive content.
+    </p>
+    <h2 class="px-12 font-bold text-center primary">
+      Argentina
+    </h2>
+    <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
+      Donaciones a través de MercadoPago
+    </p>
+    <div class="flex flex-wrap items-center justify-center py-2 pt-0">
+      <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
+        <label class="flex flex-col rounded-lg shadow-lg group relative cursor-pointer hover:shadow-2xl">
+          <div class="w-full px-4 py-6 rounded-t-lg card-section-1 bg-primary">
+            <h3 class="mx-auto font-semibold text-center underline group-hover:text-white text-white">
+              Elite
+            </h3>
+            <p class="text-5xl font-bold text-center group-hover:text-white text-white">
+              AR $500.<span class="text-3xl">00</span>
+            </p>
+            <p class="text-xs text-center uppercase group-hover:text-white text-white">
+              one time donation
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
+          >
+            <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"data-preference-id="57187762-7d7b5622-c2f1-4963-b48e-c873cd4148f4"></script>
+          </div>
+        </label>
+      </div>
+
+      <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
+        <label class="flex flex-col rounded-lg shadow-lg relative cursor-pointer hover:shadow-2xl">
+          <div class="w-full px-4 py-6 rounded-t-lg bg-primary">
+            <h3 class="mx-auto font-semibold text-center underline text-white group-hover:text-white">
+              Premium
+            </h3>
+            <p class="text-5xl font-bold text-center text-white">
+              AR $100.<span class="text-3xl">00</span>
+            </p>
+            <p class="text-xs text-center uppercase text-white">
+              one time donation
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
+          >
+            <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"data-preference-id="57187762-d6f2da6d-9617-4a89-a69e-bd2b0e0c232a"></script>
+          </div>
+        </label>
+      </div>
+
+      <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
+        <label class="flex flex-col rounded-lg shadow-lg group card-group relative hover:bg-jblue-secondary cursor-pointer hover:shadow-2xl">
+          <div class="w-full px-4 py-6 rounded-t-lg card-section-1 bg-primary">
+            <h3 class="mx-auto font-semibold text-center underline text-white group-hover:text-white">
+              Standard
+            </h3>
+            <p class="text-5xl font-bold text-center group-hover:text-white text-white">
+              AR $25.<span class="text-3xl">00</span>
+            </p>
+            <p class="text-xs text-center uppercase group-hover:text-white text-white">
+              one time donation
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
+          >
+            <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"data-preference-id="57187762-13dd45fa-00ca-4211-ae0d-3efe03a301c0"></script>
+          </div>
+        </label>
+      </div>
+
+    </div>
+  </div>
+</div>

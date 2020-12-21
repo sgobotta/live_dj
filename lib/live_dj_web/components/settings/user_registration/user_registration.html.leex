@@ -27,9 +27,12 @@
       </div>
 
       <div class="mb-4">
-        <%= label f, :email, class: "" %>
-        <%= email_input f, :email, required: true, class: "text-input" %>
-        <%= error_tag f, :email %>
+        <p>
+          <%= checkbox f, :terms, required: true, class: "text-input" %>
+          I have read and accept LiveDJ’s
+          <p><%= link "Terms and Privacy Policy.", to: Routes.policies_path(@socket, :index, "terms"), target: "_blank" %></p>
+        </p>
+        <%= error_tag f, :terms %>
       </div>
     </div>
 
