@@ -1,8 +1,7 @@
 defmodule LiveDjWeb.DonationsController do
   use LiveDjWeb, :controller
 
-  alias LiveDj.Accounts
-  alias LiveDj.Payments
+    alias LiveDj.Payments
 
   def index(conn, _params)   do
     render(conn, "index.html")
@@ -17,30 +16,27 @@ defmodule LiveDjWeb.DonationsController do
         conn
           |> redirect(to: "/")
       plan ->
-        IO.inspect("plan")
-        IO.inspect(plan)
+        user_id = case visitor do
+          true -> nil
+          false -> current_user.id
+        end
 
-        # case Payments.create_order(user_params) do
-        #   {:ok, order} ->
-        #     IO.inspect("ORDER")
-        #     IO.inspect(order)
-        #     {:ok, _} =
-        #       Payments.deliver_payment_confirmation(
-        #         user,
-        #         &Routes.user_confirmation_url(conn, :confirm, &1)
-        #       )
-        #   {:error, %Ecto.Changeset{} = changeset} ->
-        #     render(conn, "new.html", changeset: changeset)
-        # end
-
-
-        conn
-          |> redirect(to: "/donations/thanks")
+        case Payments.create_order(%{plan_id: plan.id, user_id: user_id}) do
+          {:ok, _order} ->
+            case visitor do
+              false ->
+                {:ok, _} = Payments.deliver_payment_confirmation(current_user)
+              true -> nil
+            end
+            conn
+            |> redirect(to: "/donations/thanks")
+          {:error, %Ecto.Changeset{} = changeset} ->
+            render(conn, "new.html", changeset: changeset)
+        end
     end
-
   end
 
-  def thanks(conn, params) do
+  def thanks(conn, _params) do
     %{assigns: %{current_user: current_user, visitor: visitor}} = conn
     case visitor do
       true ->
