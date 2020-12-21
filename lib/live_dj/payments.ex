@@ -6,6 +6,7 @@ defmodule LiveDj.Payments do
   import Ecto.Query, warn: false
   alias LiveDj.Repo
 
+  alias LiveDj.Accounts.{User, UserNotifier}
   alias LiveDj.Payments.Plan
 
   @doc """
@@ -212,5 +213,17 @@ defmodule LiveDj.Payments do
   """
   def change_order(%Order{} = order, attrs \\ %{}) do
     Order.changeset(order, attrs)
+  end
+
+  @doc """
+  Delivers the payment confirmation email to the given user.
+
+  ## Examples
+
+      iex> deliver_payment_confirmation(user)
+      {:ok, %{to: ..., body: ...}}
+  """
+  def deliver_payment_confirmation(%User{} = user) do
+    UserNotifier.deliver_payment_confirmation(user)
   end
 end
