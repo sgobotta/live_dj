@@ -12,7 +12,7 @@ defmodule LiveDj.Payments.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:plan_id, :user_id])
+    |> validate_required([:plan_id])
   end
 end
