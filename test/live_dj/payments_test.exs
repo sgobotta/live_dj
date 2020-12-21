@@ -3,6 +3,9 @@ defmodule LiveDj.PaymentsTest do
 
   alias LiveDj.Payments
 
+  import LiveDj.AccountsFixtures
+  import LiveDj.PaymentsFixtures
+
   describe "plans" do
     alias LiveDj.Payments.Plan
 
@@ -10,7 +13,7 @@ defmodule LiveDj.PaymentsTest do
     @update_attrs %{amount: 456.7, gateway: "some updated gateway", name: "some updated name", plan_id: "some updated plan_id", type: "some updated type"}
     @invalid_attrs %{amount: nil, gateway: nil, name: nil, plan_id: nil, type: nil}
 
-    def plan_fixture(attrs \\ %{}) do
+    def _plan_fixture(attrs \\ %{}) do
       {:ok, plan} =
         attrs
         |> Enum.into(@valid_attrs)
@@ -20,12 +23,12 @@ defmodule LiveDj.PaymentsTest do
     end
 
     test "list_plans/0 returns all plans" do
-      plan = plan_fixture()
+      plan = _plan_fixture()
       assert Payments.list_plans() == [plan]
     end
 
     test "get_plan!/1 returns the plan with given id" do
-      plan = plan_fixture()
+      plan = _plan_fixture()
       assert Payments.get_plan!(plan.id) == plan
     end
 
@@ -43,7 +46,7 @@ defmodule LiveDj.PaymentsTest do
     end
 
     test "update_plan/2 with valid data updates the plan" do
-      plan = plan_fixture()
+      plan = _plan_fixture()
       assert {:ok, %Plan{} = plan} = Payments.update_plan(plan, @update_attrs)
       assert plan.amount == 456.7
       assert plan.gateway == "some updated gateway"
@@ -53,19 +56,19 @@ defmodule LiveDj.PaymentsTest do
     end
 
     test "update_plan/2 with invalid data returns error changeset" do
-      plan = plan_fixture()
+      plan = _plan_fixture()
       assert {:error, %Ecto.Changeset{}} = Payments.update_plan(plan, @invalid_attrs)
       assert plan == Payments.get_plan!(plan.id)
     end
 
     test "delete_plan/1 deletes the plan" do
-      plan = plan_fixture()
+      plan = _plan_fixture()
       assert {:ok, %Plan{}} = Payments.delete_plan(plan)
       assert_raise Ecto.NoResultsError, fn -> Payments.get_plan!(plan.id) end
     end
 
     test "change_plan/1 returns a plan changeset" do
-      plan = plan_fixture()
+      plan = _plan_fixture()
       assert %Ecto.Changeset{} = Payments.change_plan(plan)
     end
   end
@@ -75,7 +78,14 @@ defmodule LiveDj.PaymentsTest do
 
     @valid_attrs %{}
     @update_attrs %{}
-    @invalid_attrs %{}
+    @invalid_attrs %{plan_id: nil}
+
+    setup do
+      user = user_fixture()
+      plan = plan_fixture()
+
+      %{user: user, plan: plan}
+    end
 
     def order_fixture(attrs \\ %{}) do
       {:ok, order} =
@@ -96,8 +106,8 @@ defmodule LiveDj.PaymentsTest do
       assert Payments.get_order!(order.id) == order
     end
 
-    test "create_order/1 with valid data creates a order" do
-      assert {:ok, %Order{} = order} = Payments.create_order(@valid_attrs)
+    test "create_order/1 with valid data creates an order", %{plan: plan} do
+      assert {:ok, %Order{} = order} = Payments.create_order(%{plan_id: plan.id})
     end
 
     test "create_order/1 with invalid data returns error changeset" do
