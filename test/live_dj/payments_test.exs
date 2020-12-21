@@ -96,13 +96,13 @@ defmodule LiveDj.PaymentsTest do
       order
     end
 
-    test "list_orders/0 returns all orders" do
-      order = order_fixture()
+    test "list_orders/0 returns all orders", %{plan: plan} do
+      order = order_fixture(%{plan_id: plan.id})
       assert Payments.list_orders() == [order]
     end
 
-    test "get_order!/1 returns the order with given id" do
-      order = order_fixture()
+    test "get_order!/1 returns the order with given id", %{plan: plan} do
+      order = order_fixture(%{plan_id: plan.id})
       assert Payments.get_order!(order.id) == order
     end
 
@@ -114,25 +114,25 @@ defmodule LiveDj.PaymentsTest do
       assert {:error, %Ecto.Changeset{}} = Payments.create_order(@invalid_attrs)
     end
 
-    test "update_order/2 with valid data updates the order" do
-      order = order_fixture()
+    test "update_order/2 with valid data updates the order", %{plan: plan} do
+      order = order_fixture(%{plan_id: plan.id})
       assert {:ok, %Order{} = order} = Payments.update_order(order, @update_attrs)
     end
 
-    test "update_order/2 with invalid data returns error changeset" do
-      order = order_fixture()
+    test "update_order/2 with invalid data returns error changeset", %{plan: plan} do
+      order = order_fixture(%{plan_id: plan.id})
       assert {:error, %Ecto.Changeset{}} = Payments.update_order(order, @invalid_attrs)
       assert order == Payments.get_order!(order.id)
     end
 
-    test "delete_order/1 deletes the order" do
-      order = order_fixture()
+    test "delete_order/1 deletes the order", %{plan: plan} do
+      order = order_fixture(%{plan_id: plan.id})
       assert {:ok, %Order{}} = Payments.delete_order(order)
       assert_raise Ecto.NoResultsError, fn -> Payments.get_order!(order.id) end
     end
 
-    test "change_order/1 returns a order changeset" do
-      order = order_fixture()
+    test "change_order/1 returns a order changeset", %{plan: plan} do
+      order = order_fixture(%{plan_id: plan.id})
       assert %Ecto.Changeset{} = Payments.change_order(order)
     end
   end
