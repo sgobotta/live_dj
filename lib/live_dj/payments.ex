@@ -51,7 +51,7 @@ defmodule LiveDj.Payments do
       ** (Ecto.NoResultsError)
 
   """
-  def get_plan_by_plan_id(plan_id), do: Repo.get_by!(Plan, plan_id: plan_id)
+  def get_plan_by_plan_id(plan_id), do: Repo.get_by(Plan, plan_id: plan_id)
 
   @doc """
   Creates a plan.
