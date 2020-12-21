@@ -1,12 +1,15 @@
 <div class="container flex flex-wrap pt-4 pb-10 m-auto mt-6 md:mt-15 lg:px-12 xl:px-16">
   <div class="w-full px-0 lg:px-4">
+    <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
+      We're working on extra features and visuals. You can donate as a guest user but we recommend donating as a registered user to receive exclusive content.
+    </p>
     <h2 class="px-12 font-bold text-center primary">
       Argentina
     </h2>
-    <p class="py-4 text-center mb-10" style="font-size: 1.6rem">
+    <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
       Donaciones a través de MercadoPago
     </p>
-    <div class="flex flex-wrap items-center justify-center py-4 pt-0">
+    <div class="flex flex-wrap items-center justify-center py-2 pt-0">
       <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
         <label class="flex flex-col rounded-lg shadow-lg group relative cursor-pointer hover:shadow-2xl">
           <div class="w-full px-4 py-6 rounded-t-lg card-section-1 bg-primary">
