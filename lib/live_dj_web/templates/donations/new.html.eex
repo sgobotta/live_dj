@@ -1,4 +1,4 @@
-<div class="thank-you-page rounded-md hero-wrapper grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<div class="bg-white rounded-md hero-wrapper grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
 
   <div class="hero-text col-span-6">
     <h1
@@ -24,19 +24,19 @@
           .g {
             fill-rule: evenodd;
           }
-    
+
           .b {
             fill: #ff7979;
           }
-    
+
           .c {
             fill: #020202;
           }
-    
+
           .d {
             fill: #2a2a2a;
           }
-    
+
           .e {
             fill: #fefefe;
           }

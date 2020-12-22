@@ -34,6 +34,10 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
   background-color: $primary
 }
 
+.bg-white {
+  background-color: $white;
+}
+
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
 @import "./progressive-range.scss";
@@ -1591,10 +1595,6 @@ ul.playlist {
 /**
  * Thank you page
  */
-
-.thank-you-page {
-  background-color: #f0f0f0;
-}
 
 .musical-note-1 {
   -webkit-animation: float 3s linear infinite;
