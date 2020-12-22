@@ -23,7 +23,8 @@ try do
       gateway: plan["gateway"],
       name: plan["name"],
       plan_id: plan["plan_id"],
-      type: plan["type"]
+      type: plan["type"],
+      extra: [%{preference_id: plan["preference_id"]}]
     } end)
 rescue
   Ecto.ConstraintError -> IO.inspect("Plan seeds already exist in the database.")
