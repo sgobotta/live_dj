@@ -1,10 +1,11 @@
 defmodule LiveDjWeb.DonationsController do
   use LiveDjWeb, :controller
 
-    alias LiveDj.Payments
+  alias LiveDj.Payments
 
   def index(conn, _params)   do
-    render(conn, "index.html")
+    mercadopago_plans = Payments.get_mercadopago_plans()
+    render(conn, "index.html", mercadopago_plans: mercadopago_plans)
   end
 
   def new(conn, params) do
