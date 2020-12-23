@@ -3,9 +3,10 @@ defmodule LiveDjWeb.ErrorView do
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
-  # def render("500.html", _assigns) do
-  #   "Internal Server Error"
-  # end
+  def render("500.html", assigns) do
+    render("internal_server_error.html", assigns)
+  end
+
   def render("404.html", assigns) do
     render("not_found.html", assigns)
   end
