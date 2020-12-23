@@ -1615,3 +1615,54 @@ ul.playlist {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px) }
 }
+
+.not-found-eye-animation-1 {
+  -webkit-animation: eye-peeking-1 3s linear infinite;
+  animation: eye-peeking-1 3s linear infinite; 
+}
+
+@-webkit-keyframes eye-peeking-1 {
+  0%, 100% { transform: scaleY(1.007); }
+  50% { transform: scaleY(1) }
+}
+
+@keyframes eye-peeking-1 {
+  0%, 100% { transform: scaleY(1.007); }
+  50% { transform: scaleY(1) }
+}
+
+.not-found-eye-animation-2 {
+  -webkit-animation: eye-peeking-2 6s linear infinite;
+  animation: eye-peeking-2 6s linear infinite; 
+}
+
+@-webkit-keyframes eye-peeking-2 {
+  0%, 100% { transform: scaleY(1.02); }
+  30%, 70% { transform: scale(1.01, 1.01); }
+  50% { transform: scale(0.99, 1.01); }
+  40%, 80% { transform: scaleY(1); }
+}
+
+@keyframes eye-peeking-2 {
+  0%, 100% { transform: scaleY(1.02); }
+  30%, 70% { transform: scale(1.01, 1.01); }
+  50% { transform: scale(0.99, 1.01); }
+  40%, 80% { transform: scaleY(1); }
+}
+
+.not-found-eye-animation-3 {
+  -webkit-animation: eye-searching-1 3s linear infinite;
+  animation: eye-searching-1 3s linear infinite; 
+}
+
+@-webkit-keyframes eye-searching-1 {
+  0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
+  80% { transform: scaleX(0.99); }
+  20% { transform: scaleX(1.01); }
+}
+
+@keyframes eye-searching-1 {
+  0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
+  80% { transform: scaleX(0.99); }
+  20% { transform: scaleX(1.01); }
+}
