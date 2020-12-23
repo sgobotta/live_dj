@@ -1652,7 +1652,7 @@ ul.playlist {
 
 .not-found-eye-animation-3 {
   -webkit-animation: eye-searching-1 3s linear infinite;
-  animation: eye-searching-1 3s linear infinite; 
+  animation: eye-searching-1 3s linear infinite;
 }
 
 @-webkit-keyframes eye-searching-1 {
@@ -1665,4 +1665,55 @@ ul.playlist {
   0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
   80% { transform: scaleX(0.99); }
   20% { transform: scaleX(1.01); }
+}
+
+.moving-screen-1 {
+  -webkit-animation: moving-screen-1 6s linear infinite;
+  animation: moving-screen-1 6s linear infinite;
+}
+
+@-webkit-keyframes moving-screen-1 {
+  0%, 30%, 50%, 70%, 100% { transform: scale(1, 1); }
+  80% { transform: scale(0.99, 0.98) }
+  20% { transform: scale(1.01, 1.02); }
+}
+
+@keyframes moving-screen-1 {
+  0%, 30%, 50%, 70%, 100% { transform: scale(1, 1); }
+  80% { transform: scale(0.99, 0.98) }
+  20% { transform: scale(1.01, 1.02); }
+}
+
+.moving-screen-2 {
+  -webkit-animation: moving-screen-2 4s linear infinite;
+  animation: moving-screen-2 4s linear infinite;
+}
+
+@-webkit-keyframes moving-screen-2 {
+  0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
+  80% { transform: scaleX(0.99); }
+  20% { transform: scaleX(1.01); }
+}
+
+@keyframes moving-screen-2 {
+  0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
+  80% { transform: scaleX(0.99); }
+  20% { transform: scaleX(1.01); }
+}
+
+.moving-screen-3 {
+  -webkit-animation: moving-screen-3 2s linear infinite;
+  animation: moving-screen-3 2s linear infinite;
+}
+
+@-webkit-keyframes moving-screen-3 {
+  0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
+  80% { transform: scaleX(1.01); }
+  20% { transform: scaleX(0.99); }
+}
+
+@keyframes moving-screen-3 {
+  0%, 30%, 50%, 70%, 100% { transform: scaleX(1); }
+  80% { transform: scaleX(1.01); }
+  20% { transform: scaleX(0.99); }
 }
