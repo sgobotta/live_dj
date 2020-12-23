@@ -17,7 +17,7 @@ config :live_dj, LiveDj.Repo,
 # with webpack to recompile .js and .css sources.
 config :live_dj, LiveDjWeb.Endpoint,
   http: [port: 4000],
-  debug_errors: true,
+  debug_errors: false,
   code_reloader: true,
   check_origin: false,
   watchers: [
