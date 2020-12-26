@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "title": "Short Videos",
     "slug": "short-videos",
     "inserted_at": "2020-11-14 23:59:09",
@@ -154,7 +153,6 @@
     ]
   },
   {
-    "id": 2,
     "title": "Three Elements Room",
     "slug": "three-elements-room",
     "inserted_at": "2020-11-15 22:30:51",
@@ -212,7 +210,6 @@
     ]
   },
   {
-    "id": 3,
     "title": "Vulfpeck",
     "slug": "vulfpeck",
     "inserted_at": "2020-11-16 22:45:12",
@@ -494,7 +491,6 @@
     ]
   },
   {
-    "id": 4,
     "title": "Empty Room",
     "slug": "empty-room",
     "inserted_at": "2020-11-27 01:11:13",
@@ -503,7 +499,6 @@
     "queue": []
   },
   {
-    "id": 5,
     "title": "One Element Room",
     "slug": "one-element-room",
     "inserted_at": "2020-11-27 01:20:42",
@@ -529,7 +524,6 @@
     ]
   },
   {
-    "id": 6,
     "title": "Falopa Lee",
     "slug": "falop2",
     "inserted_at": "2020-11-06 17:32:51",
@@ -1035,7 +1029,6 @@
     ]
   },
   {
-    "id": 7,
     "title": "Últimos Cartuchos",
     "slug": "ultimos-cartuchos",
     "inserted_at": "2020-11-10 15:05:17",
@@ -1189,7 +1182,6 @@
     ]
   },
   {
-    "id": 8,
     "title": "Acid afternoon",
     "slug": "acid-afternoon",
     "inserted_at": "2020-11-10 19:06:12",
@@ -1487,7 +1479,6 @@
     ]
   },
   {
-    "id": 9,
     "title": "Historia con perspectiva de género",
     "slug": "historia-con-perspectiva-de-género",
     "inserted_at": "2020-11-12 18:26:00",
@@ -1577,7 +1568,6 @@
     ]
   },
   {
-    "id": 10,
     "title": "Colocón de Verano",
     "slug": "colocon-de-verano",
     "inserted_at": "2020-11-12 23:02:50",
@@ -1939,7 +1929,6 @@
     ]
   },
   {
-    "id": 11,
     "title": "Es viernes!",
     "slug": "es-viernes",
     "inserted_at": "2020-11-27 13:53:15",
@@ -2125,7 +2114,6 @@
     ]
   },
   {
-    "id": 12,
     "title": "chill",
     "slug": "chill",
     "inserted_at": "2020-11-29 18:38:13",
@@ -2151,7 +2139,6 @@
     ]
   },
   {
-    "id": 13,
     "title": "me veras volver",
     "slug": "chau-chau-adios",
     "inserted_at": "2020-11-30 20:51:42",
@@ -2353,7 +2340,6 @@
     ]
   },
   {
-    "id": 14,
     "title": "buena vibra",
     "slug": "buena-vibra",
     "inserted_at": "2020-12-14 20:22:03",
@@ -2379,7 +2365,6 @@
     ]
   },
   {
-    "id": 15,
     "title": "Broom Room",
     "slug": "scooby-groovy-tracks-for-blooming-to.-",
     "inserted_at": "2020-12-21 13:58:55",
