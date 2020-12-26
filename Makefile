@@ -26,7 +26,7 @@ ecto.create:
 #ecto.reset: @ Drops your current database, recreates and migrates it again
 ecto.reset: SHELL:=/bin/bash
 ecto.reset:
-	source .env && docker-compose up -d && mix ecto.reset
+	source .env && docker-compose up -d && POOL_SIZE=2 mix ecto.reset
 
 #ecto.setup: @ Creates and migrates the database
 ecto.setup: SHELL:=/bin/bash
