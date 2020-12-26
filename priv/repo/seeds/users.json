@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "username": "wasabi",
     "email": "sgobotta@gmail.com",
     "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
@@ -9,7 +8,6 @@
     "updated_at": "2020-11-17 14:15:00"
   },
   {
-    "id": 2,
     "username": "natuli",
     "email": "natu@nat.coop",
     "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
@@ -18,7 +16,6 @@
     "updated_at": "2020-11-17 14:15:57"
   },
   {
-    "id": 3,
     "username": "marcemarce",
     "email": "marcelo@marce.coop",
     "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
@@ -27,7 +24,6 @@
     "updated_at": "2020-11-18 21:08:20"
   },
   {
-    "id": 4,
     "username": "Leo",
     "email": "leonardo@vaquel.coop",
     "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
@@ -36,7 +32,6 @@
     "updated_at": "2020-11-18 21:10:28"
   },
   {
-    "id": 5,
     "username": "gaby_bueno",
     "email": "gm@gmail.coop",
     "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
@@ -45,7 +40,6 @@
     "updated_at": "2020-11-27 13:52:01"
   },
   {
-    "id": 6,
     "username": "El Manatí",
     "email": "fmmainere@manati.com",
     "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
