@@ -1,0 +1,52 @@
+name: LiveDj CI
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres
+        ports: ['5432:5432']
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Elixir
+      uses: actions/setup-elixir@v1
+      with:
+        elixir-version: '1.10.3'
+        otp-version: '22.3'
+    - name: Restore dependencies cache
+      uses: actions/cache@v2
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-mix-
+    - name: Output Elixir version
+      run: elixir --version
+    - name: Output PostgreSQL version
+      run: psql --version
+    - name: Output Node.js version
+      run: node --version
+    - name: Install dependencies
+      run: mix deps.get
+    - name: Run tests
+      run: DB_USERNAME_TEST=user DB_PASSWORD_TEST=pass mix test
