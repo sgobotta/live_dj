@@ -1,0 +1,2599 @@
+[
+  {
+    "id": 1,
+    "title": "Short Videos",
+    "slug": "short-videos",
+    "inserted_at": "2020-11-14 23:59:09",
+    "updated_at": "2020-11-27 13:08:25",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "wUF9DeWJ0Dk",
+        "title": "3 seconds Countdown.",
+        "img_url": "https://i.ytimg.com/vi/RdFRovBQYto/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "",
+        "video_id": "RdFRovBQYto",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Twitch Channel : http://adf.ly/1k9KxK Facebook : http://adf.ly/1k1HBv Donation using Paypal : http://adf.ly/1k9KtJ Dota items : http://adf.ly/1k9Kvb.",
+        "channel_title": "Gerard Aldridge Guzman"
+      },
+      {
+        "next": "dyp2mLYhRkw",
+        "title": "Video Countdown 3 seconds",
+        "img_url": "https://i.ytimg.com/vi/wUF9DeWJ0Dk/default.jpg",
+        "added_by": {
+          "uuid": "071db349-de96-49dd-b084-00134aeca2d1",
+          "username": "guest-576460752303413630"
+        },
+        "previous": "RdFRovBQYto",
+        "video_id": "wUF9DeWJ0Dk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "my cat is epic.",
+        "channel_title": "bvbb"
+      },
+      {
+        "next": "FJ5pRIZXVks",
+        "title": "Video Countdown 20 Old  3 seconds",
+        "img_url": "https://i.ytimg.com/vi/dyp2mLYhRkw/default.jpg",
+        "added_by": {
+          "uuid": "9dc9c9be-5c71-4b9d-88b8-0ca362d0f28c",
+          "username": "sann"
+        },
+        "previous": "wUF9DeWJ0Dk",
+        "video_id": "dyp2mLYhRkw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "Bảo Anh"
+      },
+      {
+        "next": "qu_uJQQo_Us",
+        "title": "#1 Countdown | 3 seconds with sound effect",
+        "img_url": "https://i.ytimg.com/vi/FJ5pRIZXVks/default.jpg",
+        "added_by": {
+          "uuid": "9dc9c9be-5c71-4b9d-88b8-0ca362d0f28c",
+          "username": "sann"
+        },
+        "previous": "dyp2mLYhRkw",
+        "video_id": "FJ5pRIZXVks",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "If you read this far down the description I love you. Please Hit that ▷ SUBSCRIBE button and LIKE my video and also turn ON notifications BELL! FOLLOW ...",
+        "channel_title": "DiaryBela"
+      },
+      {
+        "next": "UO_QuXr521I",
+        "title": "3 second video",
+        "img_url": "https://i.ytimg.com/vi/qu_uJQQo_Us/default.jpg",
+        "added_by": {
+          "uuid": "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+          "username": "wasabi"
+        },
+        "previous": "FJ5pRIZXVks",
+        "video_id": "qu_uJQQo_Us",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "I created this video with the YouTube Slideshow Creator (http://www.youtube.com/upload)",
+        "channel_title": "Adam Bub"
+      },
+      {
+        "next": "TK4N5W22Gts",
+        "title": "2 Second Video",
+        "img_url": "https://i.ytimg.com/vi/UO_QuXr521I/default.jpg",
+        "added_by": {
+          "uuid": "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+          "username": "sann"
+        },
+        "previous": "qu_uJQQo_Us",
+        "video_id": "UO_QuXr521I",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "EVERY 100 ViEWS i GET i POST ANOTHER 2 SECOND ViDEO Remember To Watch Every 2 Second Video So We Can Hit Our Goal 700 Views On Each ...",
+        "channel_title": "2 Second Videos"
+      },
+      {
+        "next": "Wch3gJG2GJ4",
+        "title": "2 Second Video",
+        "img_url": "https://i.ytimg.com/vi/TK4N5W22Gts/default.jpg",
+        "added_by": {
+          "uuid": "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+          "username": "sann"
+        },
+        "previous": "UO_QuXr521I",
+        "video_id": "TK4N5W22Gts",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "2 Second Video Sequal To 1 Second Video.",
+        "channel_title": "Zetzu500"
+      },
+      {
+        "next": "tbnLqRW9Ef0",
+        "title": "1 Second Video",
+        "img_url": "https://i.ytimg.com/vi/Wch3gJG2GJ4/default.jpg",
+        "added_by": {
+          "uuid": "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+          "username": "sann"
+        },
+        "previous": "TK4N5W22Gts",
+        "video_id": "Wch3gJG2GJ4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "1 Second Video IT SUCKS!",
+        "channel_title": "Zetzu500"
+      },
+      {
+        "next": "",
+        "title": "1 sec VIDEO",
+        "img_url": "https://i.ytimg.com/vi/tbnLqRW9Ef0/default.jpg",
+        "added_by": {
+          "uuid": "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+          "username": "sann"
+        },
+        "previous": "Wch3gJG2GJ4",
+        "video_id": "tbnLqRW9Ef0",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "Chaladz"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Three Elements Room",
+    "slug": "three-elements-room",
+    "inserted_at": "2020-11-15 22:30:51",
+    "updated_at": "2020-11-27 01:41:45",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "1O0yazhqaxs",
+        "title": "3 Second Countdown (10 second video)",
+        "img_url": "https://i.ytimg.com/vi/8riMFCXAu1A/default.jpg",
+        "added_by": {
+          "uuid": "9d11c53a-a5f5-4afb-b9e7-425774220903",
+          "username": "guest-576460752303419295"
+        },
+        "previous": "",
+        "video_id": "8riMFCXAu1A",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "3 Second Countdown (10 second video) Thanks for stopping by. Like, comment, and subscribe. Send us love PO BOX 10415 Norfolk, VA 23513 ...",
+        "channel_title": "All Things Us"
+      },
+      {
+        "next": "wUF9DeWJ0Dk",
+        "title": "3 Second Video",
+        "img_url": "https://i.ytimg.com/vi/1O0yazhqaxs/default.jpg",
+        "added_by": {
+          "uuid": "9d11c53a-a5f5-4afb-b9e7-425774220903",
+          "username": "guest-576460752303419295"
+        },
+        "previous": "8riMFCXAu1A",
+        "video_id": "1O0yazhqaxs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "3 second video for testing purposes. Three Second Test Video Grey: https://youtu.be/1O0yazhqaxs Three Second Test Video Blue ...",
+        "channel_title": "Matthew McDonald"
+      },
+      {
+        "next": "",
+        "title": "Video Countdown 3 seconds",
+        "img_url": "https://i.ytimg.com/vi/wUF9DeWJ0Dk/default.jpg",
+        "added_by": {
+          "uuid": "9d11c53a-a5f5-4afb-b9e7-425774220903",
+          "username": "guest-576460752303419295"
+        },
+        "previous": "1O0yazhqaxs",
+        "video_id": "wUF9DeWJ0Dk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "my cat is epic.",
+        "channel_title": "bvbb"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Vulfpeck",
+    "slug": "vulfpeck",
+    "inserted_at": "2020-11-16 22:45:12",
+    "updated_at": "2020-11-28 05:04:56",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "rv4wf7bzfFE",
+        "title": "VULFPECK /// Cory Wong",
+        "img_url": "https://i.ytimg.com/vi/AWBUnr0F3Zo/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "",
+        "video_id": "AWBUnr0F3Zo",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Cory Wong buy on bandcamp → https://vulfpeck.bandcamp.com Cory Wong — guitar Jack Stratton — composer, guitar, mixing Theo Katzman ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "le0BLAEO93g",
+        "title": "VULFPECK /// Live at Madison Square Garden",
+        "img_url": "https://i.ytimg.com/vi/rv4wf7bzfFE/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "AWBUnr0F3Zo",
+        "video_id": "rv4wf7bzfFE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Live at Madison Square Garden buy on bandcamp → https://vulfpeck.bandcamp.com/ 0:00 The Sweet Science 2:18 Tee Time 4:19 Animal Spirits ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "jRHQPG1xd9o",
+        "title": "VULFPECK /// Dean Town",
+        "img_url": "https://i.ytimg.com/vi/le0BLAEO93g/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "rv4wf7bzfFE",
+        "video_id": "le0BLAEO93g",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Dean Town buy on bandcamp → https://vulfpeck.bandcamp.com Jack Stratton — kick & snare, mixing, video Theo Katzman — sock cymbal ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "yG96RttfZtM",
+        "title": "VULFPECK /// 1612",
+        "img_url": "https://i.ytimg.com/vi/jRHQPG1xd9o/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "le0BLAEO93g",
+        "video_id": "jRHQPG1xd9o",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// 1612 (feat. Antwaun Stanley) buy on bandcamp → https://vulfpeck.bandcamp.com Antwaun Stanley — vocals Jack Stratton — composer, guitar, ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "NzxW8nxgENA",
+        "title": "VULFPECK /// Back Pocket (Music Video)",
+        "img_url": "https://i.ytimg.com/vi/yG96RttfZtM/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "jRHQPG1xd9o",
+        "video_id": "yG96RttfZtM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Back Pocket buy on bandcamp → https://vulfpeck.bandcamp.com Chasity Roman — star Nick Bencivengo — star Tim Hendrix — director, editor, ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "rhxQoDlt2AU",
+        "title": "VULFPECK /// LAX (feat. Joey Dosik)",
+        "img_url": "https://i.ytimg.com/vi/NzxW8nxgENA/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "yG96RttfZtM",
+        "video_id": "NzxW8nxgENA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Joey Dosik — vocals, alto sax, composer Jack Stratton — piano, perc overdubs, mixing, composer Woody Goss — piano Theo Katzman — drums Cory Wong ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "KQRV0c1KXYc",
+        "title": "VULFPECK /// Dean Town (Live at Madison Square Garden)",
+        "img_url": "https://i.ytimg.com/vi/rhxQoDlt2AU/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "NzxW8nxgENA",
+        "video_id": "rhxQoDlt2AU",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Dean Town (Live at Madison Square Garden) buy vinyl first pressing at https://vulfpeck.bandcamp.com/",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "zVyEPAMpwDc",
+        "title": "VULFPECK /// Beastly",
+        "img_url": "https://i.ytimg.com/vi/KQRV0c1KXYc/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "rhxQoDlt2AU",
+        "video_id": "KQRV0c1KXYc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Beastly buy on bandcamp → https://vulfpeck.bandcamp.com Jack Stratton — composer, rhodes, mastering, video Theo Katzman — drums Woody ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "XnE-zRYxGFM",
+        "title": "Dean Town - Vulfpeck &amp; Chris Thile | Live from Here",
+        "img_url": "https://i.ytimg.com/vi/zVyEPAMpwDc/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "KQRV0c1KXYc",
+        "video_id": "zVyEPAMpwDc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Subscribe to the Live from Here channel and click the bell for notifications: https://bit.ly/2JCVkzd Chris Thile joins Vulfpeck for \"Dean Town\" on our December 8, ...",
+        "channel_title": "Live from Here"
+      },
+      {
+        "next": "F7nCDrf90V8",
+        "title": "VULFPECK /// Radio Shack",
+        "img_url": "https://i.ytimg.com/vi/XnE-zRYxGFM/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "zVyEPAMpwDc",
+        "video_id": "XnE-zRYxGFM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Radio Shack buy vinyl this month only → https://vuuulf.com/woody-vinyl Woody Goss — wurli, composer Theo Katzman — lead guitar Jack ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "dDL5k9LpZ9w",
+        "title": "VULFPECK /// Disco Ulysses (Instrumental)",
+        "img_url": "https://i.ytimg.com/vi/F7nCDrf90V8/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "XnE-zRYxGFM",
+        "video_id": "F7nCDrf90V8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Disco Ulysses (Instrumental) buy on bandcamp → http://vulfpeck.bandcamp.com Jack Stratton — drums, composer, mixing Joey Dosik — masking ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "wvpLjcXU3hY",
+        "title": "Vulfpeck Live at AB - Ancienne Belgique",
+        "img_url": "https://i.ytimg.com/vi/dDL5k9LpZ9w/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "F7nCDrf90V8",
+        "video_id": "dDL5k9LpZ9w",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Vulfpeck Live at AB - Ancienne Belgique Video: Peter Deckers Audio: Stef Van Alsenoy 00:10 - Intro 02:01 - Fugue State 04:32 - Cory Wong 10:01 - Animal ...",
+        "channel_title": "AB - Ancienne Belgique"
+      },
+      {
+        "next": "TiiWR6436Eg",
+        "title": "VULFPECK /// Running Away (feat. Joey Dosik, David T. Walker &amp; James Gadson)",
+        "img_url": "https://i.ytimg.com/vi/wvpLjcXU3hY/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "dDL5k9LpZ9w",
+        "video_id": "wvpLjcXU3hY",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Running Away buy on bandcamp → https://vulfpeck.bandcamp.com Joey Dosik — composer, vocals, wurlitzer, sax Jack Stratton — a&r, mixing ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "r4G0nbpLySI",
+        "title": "VULFPECK /// 1612",
+        "img_url": "https://i.ytimg.com/vi/TiiWR6436Eg/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "wvpLjcXU3hY",
+        "video_id": "TiiWR6436Eg",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Vulfpeck — 1612 (feat. Antwaun Stanley) Antwaun Stanley — vocals Jack Stratton — rhodes Woody Goss — rhodes Theo Katzman — drums Joe Dart — fender ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "b2_CJ_nx-l4",
+        "title": "VULFPECK /// Wait for the Moment",
+        "img_url": "https://i.ytimg.com/vi/r4G0nbpLySI/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "TiiWR6436Eg",
+        "video_id": "r4G0nbpLySI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Wait for the Moment (feat. Antwaun Stanley) buy on bandcamp → https://vulfpeck.bandcamp.com Antwaun Stanley — vocals Jack Stratton ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "qTUnDV3MgVQ",
+        "title": "VULFPECK /// 3 on E (feat. Antwaun Stanley)",
+        "img_url": "https://i.ytimg.com/vi/b2_CJ_nx-l4/default.jpg",
+        "added_by": {
+          "uuid": "fc1c3af3-ba75-4afa-bc8b-10e98c62e826",
+          "username": "sann"
+        },
+        "previous": "r4G0nbpLySI",
+        "video_id": "b2_CJ_nx-l4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Antwaun Stanley — vocals Jack Stratton — drums, mixing, overdubs, composer Joe Dart — bass Cory Wong — guitar Theo Katzman — guitar Woody Goss ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "",
+        "title": "VULFPECK /// Animal Spirits",
+        "img_url": "https://i.ytimg.com/vi/qTUnDV3MgVQ/default.jpg",
+        "added_by": {
+          "uuid": "04d23a10-60bf-4c99-8dce-6a57ef269e42",
+          "username": "guest-576460752303419389"
+        },
+        "previous": "b2_CJ_nx-l4",
+        "video_id": "qTUnDV3MgVQ",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Animal Spirits (feat. Theo Katzman & Christine Hucal) buy on bandcamp → https://vulfpeck.bandcamp.com Jack Stratton — composer, piano, ...",
+        "channel_title": "Vulf"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Empty Room",
+    "slug": "empty-room",
+    "inserted_at": "2020-11-27 01:11:13",
+    "updated_at": "2020-11-27 01:11:14",
+    "video_tracker": "",
+    "queue": []
+  },
+  {
+    "id": 5,
+    "title": "One Element Room",
+    "slug": "one-element-room",
+    "inserted_at": "2020-11-27 01:20:42",
+    "updated_at": "2020-11-27 04:06:48",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "",
+        "title": "VULFPECK /// Live at Madison Square Garden",
+        "img_url": "https://i.ytimg.com/vi/rv4wf7bzfFE/default.jpg",
+        "added_by": {
+          "uuid": "608e5bde-ef4a-4ddf-8e70-a8df05ec8aa5",
+          "username": "guest-576460752303411677"
+        },
+        "previous": "",
+        "video_id": "rv4wf7bzfFE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Live at Madison Square Garden buy on bandcamp → https://vulfpeck.bandcamp.com/ 0:00 The Sweet Science 2:18 Tee Time 4:19 Animal Spirits ...",
+        "channel_title": "Vulf"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Falopa Lee",
+    "slug": "falop2",
+    "inserted_at": "2020-11-06 17:32:51",
+    "updated_at": "2020-11-28 18:52:38",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "Ffkl2rOQEMg",
+        "title": "Mustafunk - Cementerio Club (vivo en XLR)",
+        "img_url": "https://i.ytimg.com/vi/NHFc8dtTRM0/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "",
+        "video_id": "NHFc8dtTRM0",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Mustafunk - 25/8/2017 Versión en vivo de \"Cementerio Club\" de Luis Alberto Spinetta. Grabado y mezclado por Del Faro Records y Babex Records Filmado y ...",
+        "channel_title": "Mustafunk"
+      },
+      {
+        "next": "BZNtxpO9DoA",
+        "title": "El Kuelgue - Parque Acuático",
+        "img_url": "https://i.ytimg.com/vi/Ffkl2rOQEMg/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "NHFc8dtTRM0",
+        "video_id": "Ffkl2rOQEMg",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "Produce Crack"
+      },
+      {
+        "next": "_5EiaIqB7io",
+        "title": "WOS - MELON VINO (Video Oficial)",
+        "img_url": "https://i.ytimg.com/vi/BZNtxpO9DoA/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "Ffkl2rOQEMg",
+        "video_id": "BZNtxpO9DoA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "WOS - MELON VINO Escucha el album CARAVANA en spotify: https://orcd.co/spotifycaravana #WOS #MELONVINO Produccion General: Peter Ehrlich (Agencia ...",
+        "channel_title": "WOS DS3"
+      },
+      {
+        "next": "Me_dIiZP3zc",
+        "title": "Chita - No Fue ft. CA7RIEL (Video Oficial)",
+        "img_url": "https://i.ytimg.com/vi/_5EiaIqB7io/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "BZNtxpO9DoA",
+        "video_id": "_5EiaIqB7io",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "No Fue feat. CA7RIEL (Video Oficial) Follow Chita: Instagram: https://www.instagram.com/therealchita/ Twitter: https://twitter.com/therealchitah Spotify: ...",
+        "channel_title": "Chita"
+      },
+      {
+        "next": "TNqWHc1hebM",
+        "title": "WOS - MUGRE (Video Oficial)",
+        "img_url": "https://i.ytimg.com/vi/Me_dIiZP3zc/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "_5EiaIqB7io",
+        "video_id": "Me_dIiZP3zc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "WOS - MUGRE Escucha MUGRE en todas las plataformas: Spotify: https://open.spotify.com/album/76U5G9L3YaFDkKGYXfl1Zb Apple Music: ...",
+        "channel_title": "WOS DS3"
+      },
+      {
+        "next": "Gnd6sBByLw4",
+        "title": "PARANOIA POP- BANDALOS CHINOS FT LOUTA- REMIX- SANTA PODEROSA",
+        "img_url": "https://i.ytimg.com/vi/TNqWHc1hebM/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "Me_dIiZP3zc",
+        "video_id": "TNqWHc1hebM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "SANTA PODEROSA https://www.instagram.com/santa.poderosa/?hl=es-la ARTE Y ANIMACION X FAUSTO VERCELLINO ...",
+        "channel_title": "Santa Poderosa"
+      },
+      {
+        "next": "0LVdYyPH6ag",
+        "title": "Bandalos Chinos  - Sin Señal (video oficial)",
+        "img_url": "https://i.ytimg.com/vi/Gnd6sBByLw4/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "TNqWHc1hebM",
+        "video_id": "Gnd6sBByLw4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Presentación Oficial Paranoia Pop: El Musical Show por streaming de Argentina para el mundo Entradas aquí ...",
+        "channel_title": "BANDALOS CHINOS"
+      },
+      {
+        "next": "bbiXVU81vJM",
+        "title": "Bandalos Chinos - Paranoia Pop (Audio Oficial) Ft. LOUTA",
+        "img_url": "https://i.ytimg.com/vi/0LVdYyPH6ag/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "Gnd6sBByLw4",
+        "video_id": "0LVdYyPH6ag",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bandalos Chinos - Paranoia Pop (Audio Oficial) ft. LOUTA Escuchalo acá: https://ffm.to/paranoiapop Presentación Oficial de Paranoia Pop: El Musical x ...",
+        "channel_title": "BANDALOS CHINOS"
+      },
+      {
+        "next": "Hwp4lIzEgIw",
+        "title": "Bandalos Chinos - A La Cabeza (Audio Oficial)",
+        "img_url": "https://i.ytimg.com/vi/bbiXVU81vJM/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "0LVdYyPH6ag",
+        "video_id": "bbiXVU81vJM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bandalos Chinos - A La Cabeza (Audio Oficial) Escuchalo acá: https://ffm.to/paranoiapop Presentación Oficial de Paranoia Pop: El Musical x STREAMING ...",
+        "channel_title": "BANDALOS CHINOS"
+      },
+      {
+        "next": "051MAVQH9dk",
+        "title": "Bandalos Chinos - Chu-Chu (Audio Oficial)",
+        "img_url": "https://i.ytimg.com/vi/Hwp4lIzEgIw/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "bbiXVU81vJM",
+        "video_id": "Hwp4lIzEgIw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bandalos Chinos - Chu-Chu (Audio Oficial) Escuchalo acá: https://ffm.to/paranoiapop Presentación Oficial de Paranoia Pop: El Musical x STREAMING Entradas ...",
+        "channel_title": "BANDALOS CHINOS"
+      },
+      {
+        "next": "fya67AFS_uI",
+        "title": "ANTIBIOTICO - CLARA CAVA",
+        "img_url": "https://i.ytimg.com/vi/051MAVQH9dk/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "Hwp4lIzEgIw",
+        "video_id": "051MAVQH9dk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "00:00:00 - Amor amor 00:04:15 - Después de ciertas cosas 00:07:48 - La luna 00:11:29 - Lleva la cuenta 00:14:30 - Desierto Canciones compuestas y escritas ...",
+        "channel_title": "Clara Cava"
+      },
+      {
+        "next": "tkSOychkPFs",
+        "title": "SESIÓN VIVO AMOR AMOR - CLARA CAVA",
+        "img_url": "https://i.ytimg.com/vi/fya67AFS_uI/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "051MAVQH9dk",
+        "video_id": "fya67AFS_uI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Video edit: Mila Fiuza Mezcla y master audio: Kevin Borensztein Voz: Clara Cava Batería: Lean Quinteros Guitarra: Andrés Pittavino Coros: Juana Rozas Sinte y ...",
+        "channel_title": "Clara Cava"
+      },
+      {
+        "next": "xV1v1ten8kE",
+        "title": "JUSTO AHÍ - CLARA CAVA",
+        "img_url": "https://i.ytimg.com/vi/tkSOychkPFs/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "fya67AFS_uI",
+        "video_id": "tkSOychkPFs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "JUSTO AHÍ Producción: Tade Fonk Composición Musical: Tade Fonk (Tadeo Kopistinski) Letra: Clara Cava Voz: Clara Cava Dirección de video: Mateo Caride ...",
+        "channel_title": "Clara Cava"
+      },
+      {
+        "next": "kuOE7s5S2Q4",
+        "title": "NAFTA // VIVO EN EL SILLÓN (sesión acústica)",
+        "img_url": "https://i.ytimg.com/vi/xV1v1ten8kE/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "tkSOychkPFs",
+        "video_id": "xV1v1ten8kE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Escucha nuestro disco: https://www.youtube.com/watch?v=vWJGbJhVTTQ&t=1010s Video por FARDO / fardo.com.ar Sonido: Jonathan Vainberg.",
+        "channel_title": "NAFTA"
+      },
+      {
+        "next": "QrR_gm6RqCo",
+        "title": "Zoe Gotusso en vivo en el Recoleta",
+        "img_url": "https://i.ytimg.com/vi/kuOE7s5S2Q4/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "xV1v1ten8kE",
+        "video_id": "kuOE7s5S2Q4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Zoe Gotusso grabó este concierto en vivo en la Capilla del Centro Cultural Recoleta acompañada por Diego Memma en guitarra, y Clara Susevich en teclados ...",
+        "channel_title": "Centro Cultural Recoleta"
+      },
+      {
+        "next": "ferZnZ0_rSM",
+        "title": "Mac Miller: NPR Music Tiny Desk Concert",
+        "img_url": "https://i.ytimg.com/vi/QrR_gm6RqCo/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "kuOE7s5S2Q4",
+        "video_id": "QrR_gm6RqCo",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Watch Mac Miller play \"Small Worlds\", \"What's the Use? (Feat. Thundercat)\" and \"2009\" at the Tiny Desk. Did you know you can watch new Tiny Desk Concerts ...",
+        "channel_title": "NPR Music"
+      },
+      {
+        "next": "0KqqwdUSrrA",
+        "title": "Anderson .Paak &amp; The Free Nationals: NPR Music Tiny Desk Concert",
+        "img_url": "https://i.ytimg.com/vi/ferZnZ0_rSM/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "QrR_gm6RqCo",
+        "video_id": "ferZnZ0_rSM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Watch Anderson .Paak & The Free Nationals play \"Come Down\", \"Heart Don't Stand A Chance\", \"Put Me Thru\" and \"Suede\" at the Tiny Desk. Did you know you ...",
+        "channel_title": "NPR Music"
+      },
+      {
+        "next": "S6Y1gohk5-A",
+        "title": "I Wanna Be Your Lover",
+        "img_url": "https://i.ytimg.com/vi/0KqqwdUSrrA/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "ferZnZ0_rSM",
+        "video_id": "0KqqwdUSrrA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Warner Records I Wanna Be Your Lover · Prince Prince ℗ 1979 NPG Records, Inc. under exclusive license to Warner Records Inc.",
+        "channel_title": "Prince - Topic"
+      },
+      {
+        "next": "jHWE4rFvaI4",
+        "title": "Purple Rain",
+        "img_url": "https://i.ytimg.com/vi/S6Y1gohk5-A/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "0KqqwdUSrrA",
+        "video_id": "S6Y1gohk5-A",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Rhino/Warner Records Purple Rain · Prince & The Revolution Purple Rain ℗ 1984 NPG Records, Inc. under exclusive license to ...",
+        "channel_title": "Prince - Topic"
+      },
+      {
+        "next": "IUhaTEpTC9g",
+        "title": "VULFPECK - Animal Spirits LIVE!",
+        "img_url": "https://i.ytimg.com/vi/jHWE4rFvaI4/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "S6Y1gohk5-A",
+        "video_id": "jHWE4rFvaI4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Vulfpeck live at Madison Square Garden https://youtu.be/rv4wf7bzfFE ⬆️⬆️⬆️ Watch full concert here!",
+        "channel_title": "Mateusz Krok"
+      },
+      {
+        "next": "b6zS069US_I",
+        "title": "SOUND OF TWO /// Bernard Purdie &amp; Herbie Hancock",
+        "img_url": "https://i.ytimg.com/vi/IUhaTEpTC9g/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "jHWE4rFvaI4",
+        "video_id": "IUhaTEpTC9g",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bernard Purdie [Important Educational Function] — (2000) ❏ Herbie Hancock [I Love Quincy] — (1984) ❏ Mixed by Jack Stratton.",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "ptKn85L0D2Y",
+        "title": "SOUND OF TWO /// Bernard Purdie &amp; Ethel Caffie-Austin",
+        "img_url": "https://i.ytimg.com/vi/b6zS069US_I/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "IUhaTEpTC9g",
+        "video_id": "b6zS069US_I",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bernard Purdie [Groove Master] — (1993) ❏ Ethel Caffie-Austin [Learn To Play Gospel Piano] — (2003) ❏ Mixed by Jack Stratton.",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "rQZLUEwI-VI",
+        "title": "SOUND OF TWO /// Bernard Purdie &amp; Cory Henry",
+        "img_url": "https://i.ytimg.com/vi/ptKn85L0D2Y/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "b6zS069US_I",
+        "video_id": "ptKn85L0D2Y",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bernard Purdie [KOSA 2006] — 2006 ❏ Cory Henry [The Revival] — 2015 (http://smarturl.it/TheRevival_iTu) ❏ Mixed by Jack Stratton.",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "KHt4NnxDqhM",
+        "title": "SOUND OF TWO /// Michael Brecker &amp; Milton Friedman",
+        "img_url": "https://i.ytimg.com/vi/rQZLUEwI-VI/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "ptKn85L0D2Y",
+        "video_id": "rQZLUEwI-VI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Michael Brecker [Gotanda U-Port﻿ Hall] — (1995) ❏ Milton Friedman [Freedom to Choose] — (1980) ❏ Mixed by Jack Stratton.",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "ZHjBanF0ru4",
+        "title": "LOUTA - USH (LETRA)",
+        "img_url": "https://i.ytimg.com/vi/KHt4NnxDqhM/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "rQZLUEwI-VI",
+        "video_id": "KHt4NnxDqhM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "1B JOSHUA ALEXIS BRAVO"
+      },
+      {
+        "next": "vlneT-a-KkQ",
+        "title": "LOUTA - AYER TE VI (Official Audio) ft. Zoe Gotusso",
+        "img_url": "https://i.ytimg.com/vi/ZHjBanF0ru4/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "KHt4NnxDqhM",
+        "video_id": "ZHjBanF0ru4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Louta - \"Ayer te ví\" feat. Zoe Gotusso (Official Audio) Descargar // Stream Enchastre ▷ https://SonyMusicArgentina.lnk.to/LOUTAe Mirá el video \"Todos con el ...",
+        "channel_title": "LoutaVEVO"
+      },
+      {
+        "next": "VbY4XTOvtgE",
+        "title": "El mató a un policía motorizado - El Tesoro",
+        "img_url": "https://i.ytimg.com/vi/vlneT-a-KkQ/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "ZHjBanF0ru4",
+        "video_id": "vlneT-a-KkQ",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "El Tesoro es la primera canción del simple \"El Tesoro\" Producido por Eduardo Bergallo y El mató a un policía motorizado. Arte, música y arreglos por El mató a ...",
+        "channel_title": "El mató a un policía motorizado"
+      },
+      {
+        "next": "CrFCns7g7jI",
+        "title": "Justo antes de la guerra con los esquimales - Ahora dices que no",
+        "img_url": "https://i.ytimg.com/vi/VbY4XTOvtgE/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "vlneT-a-KkQ",
+        "video_id": "VbY4XTOvtgE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "video edited by: https://www.facebook.com/santiagomarfilg https://www.instagram.com/elpirigram/ Unofficial video for \"Ahora dices que no \" by Justo antes de la ...",
+        "channel_title": "Santiago Agustín Gil"
+      },
+      {
+        "next": "bt2nh8X2K7A",
+        "title": "Justo Antes de la Guerra con los Esquimales - Fantasmas",
+        "img_url": "https://i.ytimg.com/vi/CrFCns7g7jI/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "VbY4XTOvtgE",
+        "video_id": "CrFCns7g7jI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Fantasmas de 'Justo Antes de la Guerra con los Esquimales [EP]' Camino por la alfombra roja de espaldas al mar. Los libros que llevo en mi bolsa, comienzan ...",
+        "channel_title": "Justo Antes de la Guerra con los Esquimales"
+      },
+      {
+        "next": "cxLUMcGobnA",
+        "title": "Justo Antes de la Guerra con los Esquimales - Hoy me Ves",
+        "img_url": "https://i.ytimg.com/vi/bt2nh8X2K7A/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "CrFCns7g7jI",
+        "video_id": "bt2nh8X2K7A",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Hoy me ves de 'Justo Antes de la Guerra con los Esquimales [EP]' Hoy me ves con ganas de volver acá. Un reloj en mi habitación detrás. Una voz que he de ...",
+        "channel_title": "Justo Antes de la Guerra con los Esquimales"
+      },
+      {
+        "next": "",
+        "title": "Rayos Láser -  Rayos Láser [[Full Album]]",
+        "img_url": "https://i.ytimg.com/vi/cxLUMcGobnA/default.jpg",
+        "added_by": {
+          "uuid": null,
+          "username": null
+        },
+        "previous": "bt2nh8X2K7A",
+        "video_id": "cxLUMcGobnA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Nuestro primer disco, esperamos que les guste! Suscribite acá ▷▷▷ http://bit.ly/RayosYT Seguinos: http://www.instagram.com/rayoslaser ...",
+        "channel_title": "Rayos Laser"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Últimos Cartuchos",
+    "slug": "ultimos-cartuchos",
+    "inserted_at": "2020-11-10 15:05:17",
+    "updated_at": "2020-12-14 20:21:38",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "kOuG60XsReM",
+        "title": "🔴 VORTERIX EN VIVO! - #VolveteACasaYQuedateAhi",
+        "img_url": "https://i.ytimg.com/vi/Bi4w23aW99s/default_live.jpg",
+        "added_by": {
+          "uuid": "91172d92-bf20-455e-a350-b161b23fcc79",
+          "username": "wasabi"
+        },
+        "previous": "",
+        "video_id": "Bi4w23aW99s",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VORTERIX EN VIVO! #EnVivo #Vorterix #QuedateEnCasa Disfrutá de toda la programación de VORTERIX.COM en vivo! LUNES A VIERNES: 07 a 10 ...",
+        "channel_title": "Vorterix"
+      },
+      {
+        "next": "BsSxLYsX1is",
+        "title": "APERTURA A PURAS INTERRUPCIONES Y TEMACOS",
+        "img_url": "https://i.ytimg.com/vi/kOuG60XsReM/default.jpg",
+        "added_by": {
+          "uuid": "5ecdded3-92a2-4d22-bba5-6bb56f65e074",
+          "username": "marcemarce"
+        },
+        "previous": "Bi4w23aW99s",
+        "video_id": "kOuG60XsReM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "alaYUqmwouM",
+        "title": "SEBASTIAN DAVIDOVSKY: IMPUESTO A LAS GRANDES FORTUNAS Y  PROYECTO DE LEY PARA LA IVE",
+        "img_url": "https://i.ytimg.com/vi/BsSxLYsX1is/default.jpg",
+        "added_by": {
+          "uuid": "01ee426d-ed84-4127-8442-eed5b7ca70e8",
+          "username": "wasabi"
+        },
+        "previous": "kOuG60XsReM",
+        "video_id": "BsSxLYsX1is",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "eid0HtRaPoc",
+        "title": "JORGE BERNARDEZ Y EL ESPECIAL DE JAMES BOND",
+        "img_url": "https://i.ytimg.com/vi/alaYUqmwouM/default.jpg",
+        "added_by": {
+          "uuid": "01ee426d-ed84-4127-8442-eed5b7ca70e8",
+          "username": "wasabi"
+        },
+        "previous": "BsSxLYsX1is",
+        "video_id": "alaYUqmwouM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "6IS6d3PQs8U",
+        "title": "UNA CHARLA INTIMA CON VALERIA BERTUCELLI Y UN PING PONG A FONDO",
+        "img_url": "https://i.ytimg.com/vi/eid0HtRaPoc/default.jpg",
+        "added_by": {
+          "uuid": "01ee426d-ed84-4127-8442-eed5b7ca70e8",
+          "username": "wasabi"
+        },
+        "previous": "alaYUqmwouM",
+        "video_id": "eid0HtRaPoc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "iSSKDIcpdSE",
+        "title": "BLOQUE FINAL Y GRACIAS POR LA OPORTUNIDAD",
+        "img_url": "https://i.ytimg.com/vi/6IS6d3PQs8U/default.jpg",
+        "added_by": {
+          "uuid": "01ee426d-ed84-4127-8442-eed5b7ca70e8",
+          "username": "wasabi"
+        },
+        "previous": "eid0HtRaPoc",
+        "video_id": "6IS6d3PQs8U",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "WO4vO95hyVw",
+        "title": "Little Simz - Selfish feat. Cleo Sol (Official Video)",
+        "img_url": "https://i.ytimg.com/vi/iSSKDIcpdSE/default.jpg",
+        "added_by": {
+          "uuid": "79ed0855-988a-45ce-b520-e66f48d38432",
+          "username": "guest-576460752303423230"
+        },
+        "previous": "6IS6d3PQs8U",
+        "video_id": "iSSKDIcpdSE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Album 3. GREY AREA. Out Now: https://little-simz.lnk.to/GREYAreaYD Connect With Little Simz: Spotify - https://littlesimz.lnk.to/SpotifyYD Facebook ...",
+        "channel_title": "Little Simz"
+      },
+      {
+        "next": "kmbFrcKTmZk",
+        "title": "ÉPICA NOTA CON EL GRAN RUBEN RADA &quot;EL GRACIOSO A MI ME  GANA&quot;",
+        "img_url": "https://i.ytimg.com/vi/WO4vO95hyVw/default.jpg",
+        "added_by": {
+          "uuid": "2bff6c64-d1d6-4e96-b8d4-ab89fa2ba6ea",
+          "username": "guest-576460752303422558"
+        },
+        "previous": "iSSKDIcpdSE",
+        "video_id": "WO4vO95hyVw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "",
+        "title": "UNA GUITARRA Y SINFIN DE CANCIONES",
+        "img_url": "https://i.ytimg.com/vi/kmbFrcKTmZk/default.jpg",
+        "added_by": {
+          "uuid": "6fe421b9-0530-4e91-aacb-fec924ed23a1",
+          "username": "wasabi"
+        },
+        "previous": "WO4vO95hyVw",
+        "video_id": "kmbFrcKTmZk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES A LAS 13HS. POR VORTERIX Grabado en los estudios de ...",
+        "channel_title": "Ultimos Cartuchos"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Acid afternoon",
+    "slug": "acid-afternoon",
+    "inserted_at": "2020-11-10 19:06:12",
+    "updated_at": "2020-11-24 18:49:06",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "lRAp6QBA1AE",
+        "title": "MGMT - Electric Feel live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/BjiEQ9gZmxs/default.jpg",
+        "previous": "",
+        "video_id": "BjiEQ9gZmxs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Electric Feel live on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "qlnrgiHBqZg",
+        "title": "MGMT - Time to Pretend live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/lRAp6QBA1AE/default.jpg",
+        "previous": "BjiEQ9gZmxs",
+        "video_id": "lRAp6QBA1AE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Time to Pretend on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "9QnCT6-C7AM",
+        "title": "MGMT - It&#39;s Working live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/qlnrgiHBqZg/default.jpg",
+        "previous": "lRAp6QBA1AE",
+        "video_id": "qlnrgiHBqZg",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing It's working on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "bwluuCYoYeE",
+        "title": "MGMT - Kids live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/9QnCT6-C7AM/default.jpg",
+        "previous": "qlnrgiHBqZg",
+        "video_id": "9QnCT6-C7AM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Kids on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "TL9BTmeAuW8",
+        "title": "MGMT - Flash Delirium live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/bwluuCYoYeE/default.jpg",
+        "previous": "9QnCT6-C7AM",
+        "video_id": "bwluuCYoYeE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Flash Delirium on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "Sx5TmM_InLs",
+        "title": "MGMT - Congratulations live @ Glastonbury 2010 HD",
+        "img_url": "https://i.ytimg.com/vi/TL9BTmeAuW8/default.jpg",
+        "previous": "bwluuCYoYeE",
+        "video_id": "TL9BTmeAuW8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Congratulations on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "5Wks1tXIlgY",
+        "title": "MGMT  - The Handshake Glastonbury 2010",
+        "img_url": "https://i.ytimg.com/vi/Sx5TmM_InLs/default.jpg",
+        "previous": "TL9BTmeAuW8",
+        "video_id": "Sx5TmM_InLs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT - The Handshake.",
+        "channel_title": "caritobreaks"
+      },
+      {
+        "next": "PHlcdrgENSM",
+        "title": "MGMT    Congratulations Glastonbury 2010",
+        "img_url": "https://i.ytimg.com/vi/5Wks1tXIlgY/default.jpg",
+        "previous": "Sx5TmM_InLs",
+        "video_id": "5Wks1tXIlgY",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "Lukashenkho"
+      },
+      {
+        "next": "BN1WwnEDWAM",
+        "title": "Jungle Love (Instrumental)",
+        "img_url": "https://i.ytimg.com/vi/PHlcdrgENSM/default.jpg",
+        "previous": "5Wks1tXIlgY",
+        "video_id": "PHlcdrgENSM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Sony Music Entertainment Jungle Love (Instrumental) · ALI Wild Side ℗ 2019 Alien Liberty International Released on: 2019-11-27 ...",
+        "channel_title": "ALI - Topic"
+      },
+      {
+        "next": "TC0vu9V8YXw",
+        "title": "The Clash - Should I Stay or Should I Go (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/BN1WwnEDWAM/default.jpg",
+        "previous": "PHlcdrgENSM",
+        "video_id": "BN1WwnEDWAM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Clash - Should I Stay Or Should I Go (Official Audio) Follow On Spotify - http://smarturl.it/TheClashTT Listen On Apple Music ...",
+        "channel_title": "theclashVEVO"
+      },
+      {
+        "next": "T9WUO87ZAdY",
+        "title": "Jungle Love",
+        "img_url": "https://i.ytimg.com/vi/TC0vu9V8YXw/default.jpg",
+        "previous": "BN1WwnEDWAM",
+        "video_id": "TC0vu9V8YXw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Warner Records Jungle Love · The Time Ice Cream Castle ℗ 1985 Warner Records Inc. Engineer: Bernie Grundman Engineer: David ...",
+        "channel_title": "The Time - Topic"
+      },
+      {
+        "next": "B7PnQBn5k_E",
+        "title": "Alt-J (∆) - Fitzpleasure (Lyrics)",
+        "img_url": "https://i.ytimg.com/vi/T9WUO87ZAdY/default.jpg",
+        "previous": "TC0vu9V8YXw",
+        "video_id": "T9WUO87ZAdY",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Fitzpleasure was inspired by a chapter from Hubert Selby, Jr.'s novel about the brutality of urban life, Last Exit to Brooklyn. \"Tralala\" is a prostitute in the book and ...",
+        "channel_title": "L Y R I X"
+      },
+      {
+        "next": "Y5iuYioOPWk",
+        "title": "Black Pumas - Colors (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/B7PnQBn5k_E/default.jpg",
+        "previous": "T9WUO87ZAdY",
+        "video_id": "B7PnQBn5k_E",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Deluxe Edition of the self titled Black Pumas debut album includes 11 bonus tracks (3 brand new songs, 4 covers, and 4 live recordings) and is available ...",
+        "channel_title": "BlackPumasVEVO"
+      },
+      {
+        "next": "Le-3MIBxQTw",
+        "title": "Moonshine - Caravan Palace",
+        "img_url": "https://i.ytimg.com/vi/Y5iuYioOPWk/default.jpg",
+        "previous": "B7PnQBn5k_E",
+        "video_id": "Y5iuYioOPWk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Follow me \\ Sigueme \\\\ Twitter: https://twitter.com/CumbiosoOFC Facebook: https://www.facebook.com/CumbiosoOFC \\\\ Contact me \\ Contactame ...",
+        "channel_title": "Cumbioso"
+      },
+      {
+        "next": "69kTbYNZvtY",
+        "title": "Alabama Shakes - Hold On (Official Video)",
+        "img_url": "https://i.ytimg.com/vi/Le-3MIBxQTw/default.jpg",
+        "previous": "Y5iuYioOPWk",
+        "video_id": "Le-3MIBxQTw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Official music video for \"Hold On\" - the first single off Alabama Shakes' debut record Boys & Girls. Out now on ATO Records and Rough Trade. Download on ...",
+        "channel_title": "Alabama Shakes"
+      },
+      {
+        "next": "UzXuQbcp8Yc",
+        "title": "Cat Stevens - Wild World (Lyrics)",
+        "img_url": "https://i.ytimg.com/vi/69kTbYNZvtY/default.jpg",
+        "previous": "Le-3MIBxQTw",
+        "video_id": "69kTbYNZvtY",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "From the album \"Tea For the Tillerman\" (1970). **Credits and Copyright** : I don't own this song and these pictures. I do not benefit from any profits that may ...",
+        "channel_title": "Florence M-P"
+      },
+      {
+        "next": "lfpzVjVnu1I",
+        "title": "Way Down We Go.  Kaleo  with Lyrics .",
+        "img_url": "https://i.ytimg.com/vi/UzXuQbcp8Yc/default.jpg",
+        "previous": "69kTbYNZvtY",
+        "video_id": "UzXuQbcp8Yc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "John Rankin"
+      },
+      {
+        "next": "E3DwWhV6Ps8",
+        "title": "Whitney - No Woman (Lyrics)",
+        "img_url": "https://i.ytimg.com/vi/lfpzVjVnu1I/default.jpg",
+        "previous": "UzXuQbcp8Yc",
+        "video_id": "lfpzVjVnu1I",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "http://www.whitneytheband.com --LYRICS-- I left drinking on the city train To spend some time on the road Then one morning I woke up in LA Caught my breath ...",
+        "channel_title": "Josh Manuel"
+      },
+      {
+        "next": "DWfY9GRe7SI",
+        "title": "Stone Sour - Wicked Game Lyrics",
+        "img_url": "https://i.ytimg.com/vi/E3DwWhV6Ps8/default.jpg",
+        "previous": "lfpzVjVnu1I",
+        "video_id": "E3DwWhV6Ps8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Lyrics Video for the Song Wicked Game performed by Stone Sour on their second album 'Come What(ever) May', originally by Chris Isaak. The lyrics are a little ...",
+        "channel_title": "Apurv Shaurya"
+      },
+      {
+        "next": "yjJL9DGU7Gg",
+        "title": "Toto Africa Lyrics",
+        "img_url": "https://i.ytimg.com/vi/DWfY9GRe7SI/default.jpg",
+        "previous": "E3DwWhV6Ps8",
+        "video_id": "DWfY9GRe7SI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "",
+        "channel_title": "Yunus Emre Selik"
+      },
+      {
+        "next": "vpS8DE1fMSs",
+        "title": "Stone Temple Pilots - Interstate Love Song (Official HD Music Video)",
+        "img_url": "https://i.ytimg.com/vi/yjJL9DGU7Gg/default.jpg",
+        "previous": "DWfY9GRe7SI",
+        "video_id": "yjJL9DGU7Gg",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "You're watching the official music video for \"Interstate Love Song\" from Stone Temple Pilots' album 'Purple' released on Atlantic Records in 1994. Order your ...",
+        "channel_title": "Stone Temple Pilots"
+      },
+      {
+        "next": "lYoWuaw5nSk",
+        "title": "Klingande - Jubel",
+        "img_url": "https://i.ytimg.com/vi/vpS8DE1fMSs/default.jpg",
+        "previous": "yjJL9DGU7Gg",
+        "video_id": "vpS8DE1fMSs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Chill Masters ⊡ Spotify : http://bit.ly/chillmasters-spotify ⊡ Deezer : http://bit.ly/chillmasters-dzr ⊡ Soundcloud : http://bit.ly/chillmasters-sc​ ⊡ Instagram ...",
+        "channel_title": "Chill Masters"
+      },
+      {
+        "next": "bc0KhhjJP98",
+        "title": "Vance Joy - Riptide (Lyrics)",
+        "img_url": "https://i.ytimg.com/vi/lYoWuaw5nSk/default.jpg",
+        "previous": "vpS8DE1fMSs",
+        "video_id": "lYoWuaw5nSk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Follow our Spotify playlists: http://bit.ly/7cloudsSpotify Vance Joy - Riptide (Lyrics) ⏬ Download / Stream: http://bit.ly/1uKMhe4 Turn on notifications to stay ...",
+        "channel_title": "7clouds"
+      },
+      {
+        "next": "",
+        "title": "Redbone - Come and Get Your Love (Single Edit - Audio)",
+        "img_url": "https://i.ytimg.com/vi/bc0KhhjJP98/default.jpg",
+        "previous": "lYoWuaw5nSk",
+        "video_id": "bc0KhhjJP98",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "'Come And Get Your Love' off of \"Wovoka\" by Redbone Listen to Wovoka: https://redbone-music.lnk.to/WovokaYD Listen to Redbone: ...",
+        "channel_title": "RedboneVEVO"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Historia con perspectiva de género",
+    "slug": "historia-con-perspectiva-de-género",
+    "inserted_at": "2020-11-12 18:26:00",
+    "updated_at": "2020-11-25 20:40:02",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "4RDdWZvPS8I",
+        "title": "PUPINA PLOMER Y LA GRAN HISTORIA DE LA RESISTENCIA CALCHAQUÍ",
+        "img_url": "https://i.ytimg.com/vi/XGqhKgl46CE/default.jpg",
+        "added_by": {
+          "uuid": "4d5c324a-2845-41df-9190-96f059224aa9",
+          "username": "4d5c324a-2845-41df-9190-96f059224aa9"
+        },
+        "previous": "",
+        "video_id": "XGqhKgl46CE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "IhZAglDPJcE",
+        "title": "PUPINA PLOMER: MUJERES OCULTAS DE LA HISTORIA ARGENTINA",
+        "img_url": "https://i.ytimg.com/vi/4RDdWZvPS8I/default.jpg",
+        "added_by": {
+          "uuid": "4d5c324a-2845-41df-9190-96f059224aa9",
+          "username": "4d5c324a-2845-41df-9190-96f059224aa9"
+        },
+        "previous": "XGqhKgl46CE",
+        "video_id": "4RDdWZvPS8I",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "-LZ7ym5dKVw",
+        "title": "PUPINA PLOMER Y LA DEMONIZACIÓN DE LAS BRUJAS ABC",
+        "img_url": "https://i.ytimg.com/vi/IhZAglDPJcE/default.jpg",
+        "added_by": {
+          "uuid": "4d5c324a-2845-41df-9190-96f059224aa9",
+          "username": "4d5c324a-2845-41df-9190-96f059224aa9"
+        },
+        "previous": "4RDdWZvPS8I",
+        "video_id": "IhZAglDPJcE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ULTIMOS CARTUCHOS, CON MIGUE GRANADOS Y MARTIN GARABAL. LUNES A VIERNES DE 10HS A 13HS EN VIVO POR VORTERIX Grabado en los ...",
+        "channel_title": "Ultimos Cartuchos"
+      },
+      {
+        "next": "jigtfDWMsyg",
+        "title": "América no se descubrió un 12 de octubre | Efememérides",
+        "img_url": "https://i.ytimg.com/vi/-LZ7ym5dKVw/default.jpg",
+        "added_by": {
+          "uuid": "4d5c324a-2845-41df-9190-96f059224aa9",
+          "username": "4d5c324a-2845-41df-9190-96f059224aa9"
+        },
+        "previous": "IhZAglDPJcE",
+        "video_id": "-LZ7ym5dKVw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Suscribite a Filo.News: https://www.youtube.com/c/FiloNewsOk?sub_confirmation=1 El 12 de octubre suele recordarse como \"El descubrimiento de América\" ...",
+        "channel_title": "Filo News"
+      },
+      {
+        "next": "",
+        "title": "La historia real del #8M: ¿De dónde salió el Día de la Mujer? | Efememérides",
+        "img_url": "https://i.ytimg.com/vi/jigtfDWMsyg/default.jpg",
+        "added_by": {
+          "uuid": "4d5c324a-2845-41df-9190-96f059224aa9",
+          "username": "4d5c324a-2845-41df-9190-96f059224aa9"
+        },
+        "previous": "-LZ7ym5dKVw",
+        "video_id": "jigtfDWMsyg",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Suscribite a Filo.News: https://www.youtube.com/c/FiloNewsOk?sub_confirmation=1 No hubo tal incendio: ¿De dónde salió realmente el Día de la Mujer?",
+        "channel_title": "Filo News"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Colocón de Verano",
+    "slug": "colocon-de-verano",
+    "inserted_at": "2020-11-12 23:02:50",
+    "updated_at": "2020-11-27 16:21:39",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "tUJwRNbiyBM",
+        "title": "Gativideo - Efecto Mandela (Video Oficial)",
+        "img_url": "https://i.ytimg.com/vi/1wz5Gi2R5UM/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "",
+        "video_id": "1wz5Gi2R5UM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Video dirigido por Gativideo y Balú Realizado por Balú: Francisco Bárcena Federico Grebnicoff Santiago Cáceres Santiago Boada Nicolás Pampin Vestuarios: ...",
+        "channel_title": "GATIVIDEO"
+      },
+      {
+        "next": "QLE8khLg2CE",
+        "title": "Juan Ingaramo feat. Dak1llah &amp; CA7RIEL -  Fobia (letra - lyric)",
+        "img_url": "https://i.ytimg.com/vi/tUJwRNbiyBM/default.jpg",
+        "added_by": {
+          "uuid": "b3f64298-9656-4afd-b97e-28d7b1de1daf",
+          "username": "natuli"
+        },
+        "previous": "1wz5Gi2R5UM",
+        "video_id": "tUJwRNbiyBM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Del disco: Best Seller / Geiser Discos ℗2018.",
+        "channel_title": "Erika"
+      },
+      {
+        "next": "0BB91p4cNOU",
+        "title": "Lo que nos mata - Illya Kuryaki and the Valderramas",
+        "img_url": "https://i.ytimg.com/vi/QLE8khLg2CE/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "tUJwRNbiyBM",
+        "video_id": "QLE8khLg2CE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Lo que nos mata - Illya Kuryaki and teh Valderramas - Leche (1999)",
+        "channel_title": "jazze1983"
+      },
+      {
+        "next": "8Y5nUhNzuNc",
+        "title": "Miami Horror - Leila (Poolside Remix)",
+        "img_url": "https://i.ytimg.com/vi/0BB91p4cNOU/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "QLE8khLg2CE",
+        "video_id": "0BB91p4cNOU",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Join us a we head Poolside, with their remix of \"Leila\" Listen on your favorite app here: smarturl.it/LeilaPoolside -- Miami Horror Presents: The Shapes Spotify, ...",
+        "channel_title": "Miami Horror"
+      },
+      {
+        "next": "IJrKlSkxRHA",
+        "title": "VULFPECK /// Margery, My First Car",
+        "img_url": "https://i.ytimg.com/vi/8Y5nUhNzuNc/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "0BB91p4cNOU",
+        "video_id": "8Y5nUhNzuNc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "VULFPECK /// Margery, My First Car (feat. Christine Hucal) buy on bandcamp → http://vuuulf.com/bandcamp play on spotify → http://vuuulf.com/spotify Jack ...",
+        "channel_title": "Vulf"
+      },
+      {
+        "next": "3haLtS0vZ6I",
+        "title": "Unknown Mortal Orchestra - Hunnybee (Official Video)",
+        "img_url": "https://i.ytimg.com/vi/IJrKlSkxRHA/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "8Y5nUhNzuNc",
+        "video_id": "IJrKlSkxRHA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Unknown Mortal Orchestra – “Hunnybee” from 'Sex & Food', out now on Jagjaguwar Stream/Buy – https://unknownmortalorchestra.lnk.to/sexandfood CREDITS: ...",
+        "channel_title": "UMOVEVO"
+      },
+      {
+        "next": "Jq57zqfqF6s",
+        "title": "DUKI, Ronny J, Capo Plaza, Pablo Chill-E, C.R.O - Goteo Remix (Video Oficial)",
+        "img_url": "https://i.ytimg.com/vi/3haLtS0vZ6I/default.jpg",
+        "added_by": {
+          "uuid": "3dad5066-8849-4b78-b190-805804739ddf",
+          "username": "RICARDO VACUNATTI"
+        },
+        "previous": "IJrKlSkxRHA",
+        "video_id": "3haLtS0vZ6I",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Spotify: https://spoti.fi/2NQZX9G Apple Music: https://apple.co/2va8eyK Deezer: http://bit.ly/38xtjBz Tidal: http://bit.ly/2tz95J7 https://instagram.com/dukissj ...",
+        "channel_title": "Duki"
+      },
+      {
+        "next": "pJq7ZT0RZwc",
+        "title": "El mató a un policía motorizado - El Tesoro (Video oficial)",
+        "img_url": "https://i.ytimg.com/vi/Jq57zqfqF6s/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": ""
+        },
+        "previous": "3haLtS0vZ6I",
+        "video_id": "Jq57zqfqF6s",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "El mató a un policía motorizado - El Tesoro (Video oficial) Dirigido por Facundo Españon y Federico Rotstein Actúan: Max Suen, Azul Fernandez, Camilo ...",
+        "channel_title": "El mató a un policía motorizado"
+      },
+      {
+        "next": "krUfKR3UjFY",
+        "title": "Mucha Data - Cazzu ( Video Oficial )",
+        "img_url": "https://i.ytimg.com/vi/pJq7ZT0RZwc/default.jpg",
+        "added_by": {
+          "uuid": "884fddc4-1dc7-468e-98a8-1a3261a6a705",
+          "username": "nat"
+        },
+        "previous": "Jq57zqfqF6s",
+        "video_id": "pJq7ZT0RZwc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Mucha Data - Cazzu.",
+        "channel_title": "CAZZU Canal Oficial"
+      },
+      {
+        "next": "DMgZNxlgZt4",
+        "title": "Miss Bolivia ft Cazzu - Soltera (Video Oficial)",
+        "img_url": "https://i.ytimg.com/vi/krUfKR3UjFY/default.jpg",
+        "added_by": {
+          "uuid": "884fddc4-1dc7-468e-98a8-1a3261a6a705",
+          "username": "nat"
+        },
+        "previous": "pJq7ZT0RZwc",
+        "video_id": "krUfKR3UjFY",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Escuchalo ACÁ https://lnk.to/MBSoltera Grandes Éxitos ▷ https://lnk.to/MBGrandesExitos Suscribite al Canal: http://smarturl.it/missboliviayt PLATAFORMAS ...",
+        "channel_title": "MissBoliviaVEVO"
+      },
+      {
+        "next": "rGRIR4VZBkI",
+        "title": "Miss Bolivia - En el Mar (Pseudo Video) ft. Ale Sergi, Lito Vitale",
+        "img_url": "https://i.ytimg.com/vi/DMgZNxlgZt4/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "krUfKR3UjFY",
+        "video_id": "DMgZNxlgZt4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Music video by Miss Bolivia performing En el Mar. (C) 2017 Sony Music Entertainment Argentina S.A. http://vevo.ly/C4rdvO.",
+        "channel_title": "MissBoliviaVEVO"
+      },
+      {
+        "next": "Bp0-TarxMH0",
+        "title": "CA7RIEL xVIBRA ALTAx (AUDIO OFICIAL)",
+        "img_url": "https://i.ytimg.com/vi/rGRIR4VZBkI/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "DMgZNxlgZt4",
+        "video_id": "rGRIR4VZBkI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Suscríbete aquí: http://bit.ly/CA7RIELYT Escucha a CA7RIEL en: Spotify: https://spoti.fi/2l9URKs Deezer: http://bit.ly/Ca7rielDeezer Apple Music: ...",
+        "channel_title": "CA7RIEL y Paco Amoroso"
+      },
+      {
+        "next": "GJxyBZvAGRc",
+        "title": "CA7RIEL - McFly (Orco Videos)",
+        "img_url": "https://i.ytimg.com/vi/Bp0-TarxMH0/default.jpg",
+        "added_by": {
+          "uuid": "",
+          "username": "wasabi"
+        },
+        "previous": "rGRIR4VZBkI",
+        "video_id": "Bp0-TarxMH0",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Prod by: Evlay Beats / CA7RIEL Producción general: Facundo Cruz (Clix) Direccion: Orco Videos Produccion: Rocio Mercado Asistente Creativa: Ana Belen ...",
+        "channel_title": "CA7RIEL y Paco Amoroso"
+      },
+      {
+        "next": "ar4eYHIAeTc",
+        "title": "CA7RIEL ¤ PACO AMOROSO - CONO HIELO (Orco Videos)",
+        "img_url": "https://i.ytimg.com/vi/GJxyBZvAGRc/default.jpg",
+        "added_by": {
+          "uuid": "3dad5066-8849-4b78-b190-805804739ddf",
+          "username": "wasabi"
+        },
+        "previous": "Bp0-TarxMH0",
+        "video_id": "GJxyBZvAGRc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Prod by: Evlay Beats, Laucha the Kid Producción general: Facundo Cruz / Clix Direccion Orco Videos Produccion Rocio Mercado Asistente Creativa Ana Belen ...",
+        "channel_title": "CA7RIEL y Paco Amoroso"
+      },
+      {
+        "next": "rF7vrseYJGc",
+        "title": "Isla de Caras - Despacio",
+        "img_url": "https://i.ytimg.com/vi/ar4eYHIAeTc/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "GJxyBZvAGRc",
+        "video_id": "ar4eYHIAeTc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Chango” es el primer LP de Isla de Caras, grabado en los estudios \"Los Pájaros\" y \"El Mar\", masterizado en New York por Alan Douches (Animal Collective, ...",
+        "channel_title": "Estamos Felices"
+      },
+      {
+        "next": "yrskHYRfC0c",
+        "title": "Mi Amigo invencible_Suavemente Entusiasmado",
+        "img_url": "https://i.ytimg.com/vi/rF7vrseYJGc/default.jpg",
+        "added_by": {
+          "uuid": "884fddc4-1dc7-468e-98a8-1a3261a6a705",
+          "username": "wasabi"
+        },
+        "previous": "ar4eYHIAeTc",
+        "video_id": "rF7vrseYJGc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Producido por Charlie Desidney & Luke Temple Grabado y mezclado por Diego Acosta Masterizado por Maxi Forestieri Arte de tapa Federico Calandria Video ...",
+        "channel_title": "mi amigo invencible"
+      },
+      {
+        "next": "knU9gRUWCno",
+        "title": "MGMT - Kids at Glastonbury 2014",
+        "img_url": "https://i.ytimg.com/vi/yrskHYRfC0c/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "rF7vrseYJGc",
+        "video_id": "yrskHYRfC0c",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Subscribe and to OFFICIAL BBC YouTube https://bit.ly/2IXqEIn Stream original BBC programmes FIRST on BBC iPlayer https://bbc.in/2J18jYJ Guidance: ...",
+        "channel_title": "BBC"
+      },
+      {
+        "next": "lRAp6QBA1AE",
+        "title": "The Strokes - Someday (Official Music Video)",
+        "img_url": "https://i.ytimg.com/vi/knU9gRUWCno/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "yrskHYRfC0c",
+        "video_id": "knU9gRUWCno",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Strokes 'The New Abnormal' Available Now: https://smarturl.it/TheNewAbnormal?iqID=yt The Strokes' official music video for 'Someday'. Click to listen to ...",
+        "channel_title": "thestrokesVEVO"
+      },
+      {
+        "next": "BjiEQ9gZmxs",
+        "title": "MGMT - Time to Pretend live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/lRAp6QBA1AE/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "knU9gRUWCno",
+        "video_id": "lRAp6QBA1AE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Time to Pretend on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "HD9Q1lctyo8",
+        "title": "MGMT - Electric Feel live @ Glastonbury 2010 HD High Quality",
+        "img_url": "https://i.ytimg.com/vi/BjiEQ9gZmxs/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "lRAp6QBA1AE",
+        "video_id": "BjiEQ9gZmxs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "MGMT performing Electric Feel live on Glastonbury Festival 2010.",
+        "channel_title": "Nonplusultraism"
+      },
+      {
+        "next": "OYYZFx7_DS8",
+        "title": "The Cure - Friday I&#39;m In Love (Glastonbury 2019)",
+        "img_url": "https://i.ytimg.com/vi/HD9Q1lctyo8/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "BjiEQ9gZmxs",
+        "video_id": "HD9Q1lctyo8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Cure perform Friday I'm In Love at Glastonbury 2019. Watch The Cure live on BBC iPlayer at 7.30pm on Friday 26 June: ...",
+        "channel_title": "BBC Music"
+      },
+      {
+        "next": "",
+        "title": "This Charming Man (2011 Remaster)",
+        "img_url": "https://i.ytimg.com/vi/OYYZFx7_DS8/default.jpg",
+        "added_by": {
+          "uuid": "5b591577-86d0-4df2-8db5-73016997e940",
+          "username": "sann"
+        },
+        "previous": "HD9Q1lctyo8",
+        "video_id": "OYYZFx7_DS8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by WM UK This Charming Man (2011 Remaster) · The Smiths The Smiths ℗ 1986 Warner Music UK Ltd. Bass Guitar: Andy Rourke ...",
+        "channel_title": "The Smiths - Topic"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Es viernes!",
+    "slug": "es-viernes",
+    "inserted_at": "2020-11-27 13:53:15",
+    "updated_at": "2020-11-28 03:37:58",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "T9WUO87ZAdY",
+        "title": "Rock the Casbah (Remastered)",
+        "img_url": "https://i.ytimg.com/vi/0pCFVX6lzHU/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "",
+        "video_id": "0pCFVX6lzHU",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Sony Music UK Rock the Casbah (Remastered) · The Clash Combat Rock (Remastered) ℗ 2013 Sony Music Entertainment UK Limited ...",
+        "channel_title": "The Clash - Topic"
+      },
+      {
+        "next": "AKgjOCuW_MU",
+        "title": "Alt-J (∆) - Fitzpleasure (Lyrics)",
+        "img_url": "https://i.ytimg.com/vi/T9WUO87ZAdY/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "0pCFVX6lzHU",
+        "video_id": "T9WUO87ZAdY",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Fitzpleasure was inspired by a chapter from Hubert Selby, Jr.'s novel about the brutality of urban life, Last Exit to Brooklyn. \"Tralala\" is a prostitute in the book and ...",
+        "channel_title": "L Y R I X"
+      },
+      {
+        "next": "BN1WwnEDWAM",
+        "title": "Casiopea - Galactic Funk",
+        "img_url": "https://i.ytimg.com/vi/AKgjOCuW_MU/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "T9WUO87ZAdY",
+        "video_id": "AKgjOCuW_MU",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "27 April 1985.",
+        "channel_title": "M luminox"
+      },
+      {
+        "next": "PHlcdrgENSM",
+        "title": "The Clash - Should I Stay or Should I Go (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/BN1WwnEDWAM/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "AKgjOCuW_MU",
+        "video_id": "BN1WwnEDWAM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Clash - Should I Stay Or Should I Go (Official Audio) Follow On Spotify - http://smarturl.it/TheClashTT Listen On Apple Music ...",
+        "channel_title": "theclashVEVO"
+      },
+      {
+        "next": "CBGW9vm0-iM",
+        "title": "Jungle Love (Instrumental)",
+        "img_url": "https://i.ytimg.com/vi/PHlcdrgENSM/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "BN1WwnEDWAM",
+        "video_id": "PHlcdrgENSM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Sony Music Entertainment Jungle Love (Instrumental) · ALI Wild Side ℗ 2019 Alien Liberty International Released on: 2019-11-27 ...",
+        "channel_title": "ALI - Topic"
+      },
+      {
+        "next": "DwPWGUhEtP0",
+        "title": "Epitaph (Live)",
+        "img_url": "https://i.ytimg.com/vi/CBGW9vm0-iM/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "PHlcdrgENSM",
+        "video_id": "CBGW9vm0-iM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Entertainment One U.S., LP Epitaph (Live) · King Crimson Radical Action To Unseat the Hold of Monkey Mind (Live) ℗ Discipline Global ...",
+        "channel_title": "King Crimson - Topic"
+      },
+      {
+        "next": "X_pDwv3tpug",
+        "title": "Roundabout (2003 Remaster)",
+        "img_url": "https://i.ytimg.com/vi/DwPWGUhEtP0/default.jpg",
+        "added_by": {
+          "uuid": "c14c514e-9d98-403b-816b-8c92e1299686",
+          "username": "gaby_bueno"
+        },
+        "previous": "CBGW9vm0-iM",
+        "video_id": "DwPWGUhEtP0",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Rhino/Elektra Roundabout (2003 Remaster) · Yes Fragile ℗ 1972 Elektra Entertainment Group for the United States and WEA ...",
+        "channel_title": "Yes - Topic"
+      },
+      {
+        "next": "4F4f_EDbRoU",
+        "title": "King Crimson - Red (OFFICIAL)",
+        "img_url": "https://i.ytimg.com/vi/X_pDwv3tpug/default.jpg",
+        "added_by": {
+          "uuid": "b01b170b-4a18-4726-b3cf-31313a5b8e50",
+          "username": "wasabi"
+        },
+        "previous": "DwPWGUhEtP0",
+        "video_id": "X_pDwv3tpug",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Robert Fripp guitar & Mellotron, John Wetton bass & vocals, Bill Bruford, drums and percussion. Appears on Red (1974)",
+        "channel_title": "King Crimson"
+      },
+      {
+        "next": "B7PnQBn5k_E",
+        "title": "Caravan Palace - Moonshine ( lyrics ) | Vibe Chaser",
+        "img_url": "https://i.ytimg.com/vi/4F4f_EDbRoU/default.jpg",
+        "added_by": {
+          "uuid": "f8aeca11-4d24-4076-a566-765d94cfdea5",
+          "username": "gaby_bueno"
+        },
+        "previous": "X_pDwv3tpug",
+        "video_id": "4F4f_EDbRoU",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Caravan Palace - Moonshine ( lyrics ) Moonshine ( lyrics ) - Caravan Palace Subscribe \"Vibe Chaser\" : http://bit.ly/vibechaser Thanks for listening to the music!",
+        "channel_title": "Vibe Chaser"
+      },
+      {
+        "next": "e2Z0sON2UPc",
+        "title": "Black Pumas - Colors (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/B7PnQBn5k_E/default.jpg",
+        "added_by": {
+          "uuid": "f8aeca11-4d24-4076-a566-765d94cfdea5",
+          "username": "gaby_bueno"
+        },
+        "previous": "4F4f_EDbRoU",
+        "video_id": "B7PnQBn5k_E",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Deluxe Edition of the self titled Black Pumas debut album includes 11 bonus tracks (3 brand new songs, 4 covers, and 4 live recordings) and is available ...",
+        "channel_title": "BlackPumasVEVO"
+      },
+      {
+        "next": "",
+        "title": "Ain&#39;t No Rest for the Wicked",
+        "img_url": "https://i.ytimg.com/vi/e2Z0sON2UPc/default.jpg",
+        "added_by": {
+          "uuid": "f8aeca11-4d24-4076-a566-765d94cfdea5",
+          "username": "gaby_bueno"
+        },
+        "previous": "B7PnQBn5k_E",
+        "video_id": "e2Z0sON2UPc",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Sony Music Entertainment Ain't No Rest for the Wicked · Cage The Elephant Cage The Elephant (Expanded Edition) ℗ 2009 Zomba ...",
+        "channel_title": "Cage The Elephant - Topic"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "chill",
+    "slug": "chill",
+    "inserted_at": "2020-11-29 18:38:13",
+    "updated_at": "2020-12-11 02:29:53",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "",
+        "title": "take me there",
+        "img_url": "https://i.ytimg.com/vi/v3p4-lzvRAA/default.jpg",
+        "added_by": {
+          "uuid": "46ffdd6f-a432-4876-8463-3589e3cd6c4f",
+          "username": "guest-576460752303421759"
+        },
+        "previous": "",
+        "video_id": "v3p4-lzvRAA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Repost Network take me there · potsu · Chance Thrash just friends ℗ Repost Network Released on: 2018-07-17 Auto-generated by ...",
+        "channel_title": "potsu - Topic"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "me veras volver",
+    "slug": "chau-chau-adios",
+    "inserted_at": "2020-11-30 20:51:42",
+    "updated_at": "2020-11-30 22:07:34",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "odL7WQ1j128",
+        "title": "Africa",
+        "img_url": "https://i.ytimg.com/vi/QAo_Ycocl1E/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "",
+        "video_id": "QAo_Ycocl1E",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Columbia Africa · Toto Toto IV ℗ 1982 Columbia Records, a division of Sony Music Entertainment Released on: 1982-04-08 ...",
+        "channel_title": "Toto - Topic"
+      },
+      {
+        "next": "gH8YP4E5gjo",
+        "title": "Bersuit Vergarabat - Me Voy (Letra)",
+        "img_url": "https://i.ytimg.com/vi/odL7WQ1j128/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "QAo_Ycocl1E",
+        "video_id": "odL7WQ1j128",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Bersuit Vergarabat - Me voy (Letra)",
+        "channel_title": "Lyrics Videos"
+      },
+      {
+        "next": "kvC4_HBOnI0",
+        "title": "Cerati - Adios (Letra)",
+        "img_url": "https://i.ytimg.com/vi/gH8YP4E5gjo/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "odL7WQ1j128",
+        "video_id": "gH8YP4E5gjo",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Cerati - Adios álbum Ahí vamos, en 2006, como 5º canción. Publicación 2006 Formato CD Single Grabación 2006 Género(s) Pop rock Duración 3:49 ...",
+        "channel_title": "DOCTOR DETODO"
+      },
+      {
+        "next": "huc7IL7b8S8",
+        "title": "bajo del mar (la sirenita audio latino)",
+        "img_url": "https://i.ytimg.com/vi/kvC4_HBOnI0/default.jpg",
+        "added_by": {
+          "uuid": "96e68395-fcbb-4769-94fd-8c67f3513e9b",
+          "username": "guest-576460752303422143"
+        },
+        "previous": "gH8YP4E5gjo",
+        "video_id": "kvC4_HBOnI0",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "musica bajo del mar.",
+        "channel_title": "Angeles Gonzalez"
+      },
+      {
+        "next": "YzPUY_uiYkI",
+        "title": "The Show Must Go On (Remastered 2011)",
+        "img_url": "https://i.ytimg.com/vi/huc7IL7b8S8/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "kvC4_HBOnI0",
+        "video_id": "huc7IL7b8S8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Universal Music Group The Show Must Go On (Remastered 2011) · Queen Greatest Hits II ℗ 2011 Hollywood Records, Inc. Released ...",
+        "channel_title": "Queen - Topic"
+      },
+      {
+        "next": "BN1WwnEDWAM",
+        "title": "Throwing It All Away (2007 Remaster)",
+        "img_url": "https://i.ytimg.com/vi/YzPUY_uiYkI/default.jpg",
+        "added_by": {
+          "uuid": "b04d4ccd-93b3-465f-87e2-86d240012b77",
+          "username": "wasabi"
+        },
+        "previous": "huc7IL7b8S8",
+        "video_id": "YzPUY_uiYkI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Rhino Atlantic Throwing It All Away (2007 Remaster) · Genesis Invisible Touch ℗ 1986 Philip Collins Limited, Anthony Banks Limited, ...",
+        "channel_title": "Genesis - Topic"
+      },
+      {
+        "next": "dQ4R30OhEAE",
+        "title": "The Clash - Should I Stay or Should I Go (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/BN1WwnEDWAM/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "YzPUY_uiYkI",
+        "video_id": "BN1WwnEDWAM",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "The Clash - Should I Stay Or Should I Go (Official Audio) Follow On Spotify - http://smarturl.it/TheClashTT Listen On Apple Music ...",
+        "channel_title": "theclashVEVO"
+      },
+      {
+        "next": "GKBaQohqL7E",
+        "title": "Africa [8 Bit Tribute to Toto] - 8 Bit Universe",
+        "img_url": "https://i.ytimg.com/vi/dQ4R30OhEAE/default.jpg",
+        "added_by": {
+          "uuid": "29b81c7f-01a6-4d00-bb72-7e0be9ba9106",
+          "username": "guest-576460752303421791"
+        },
+        "previous": "BN1WwnEDWAM",
+        "video_id": "dQ4R30OhEAE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "8 Bit version of Africa, a tribute to Toto *DO NOT USE 8BU CONTENT WITHOUT PERMISSION* Email us at 8bituniversemusic@gmail.com and someone can ...",
+        "channel_title": "8 Bit Universe"
+      },
+      {
+        "next": "bhRQ_UA5b9Y",
+        "title": "El Oso - (Clásico de Moris, por Antonio Birabent)",
+        "img_url": "https://i.ytimg.com/vi/GKBaQohqL7E/default.jpg",
+        "added_by": {
+          "uuid": "f1fa5b1b-7a09-47b2-b204-dc23b263a1e2",
+          "username": "guest-576460752303421375"
+        },
+        "previous": "dQ4R30OhEAE",
+        "video_id": "GKBaQohqL7E",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Es una canción verdaderamente sencilla... pero según cómo se la escuche, puede ser interpretada como una bonita metáfora de la vida ^^",
+        "channel_title": "Oso Curioso"
+      },
+      {
+        "next": "sLujZP9cdz8",
+        "title": "Freddie Mercury Friends Will Be Friends",
+        "img_url": "https://i.ytimg.com/vi/bhRQ_UA5b9Y/default.jpg",
+        "added_by": {
+          "uuid": "f1fa5b1b-7a09-47b2-b204-dc23b263a1e2",
+          "username": "guest-576460752303421375"
+        },
+        "previous": "GKBaQohqL7E",
+        "video_id": "bhRQ_UA5b9Y",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "by Ermanno video.",
+        "channel_title": "Ermanno Gandolfi"
+      },
+      {
+        "next": "5vRlJrkxsqo",
+        "title": "Bersuit Vergarabat - Toco y me voy",
+        "img_url": "https://i.ytimg.com/vi/sLujZP9cdz8/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "bhRQ_UA5b9Y",
+        "video_id": "sLujZP9cdz8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Te la toco de primera Vos si querés la agarrás Cada jugada que sueño se hace realidad O pareciera... algo casual. Aunque pongas la barrera Yo te la mando a ...",
+        "channel_title": "Alvaro Gonzalez"
+      },
+      {
+        "next": "",
+        "title": "THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST",
+        "img_url": "https://i.ytimg.com/vi/5vRlJrkxsqo/default.jpg",
+        "added_by": {
+          "uuid": "353ad027-b1bf-422e-bcf1-b92b138031b8",
+          "username": "gaby_bueno"
+        },
+        "previous": "sLujZP9cdz8",
+        "video_id": "5vRlJrkxsqo",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST THE BEST ...",
+        "channel_title": "THEBESTTHEBESTTHEBE"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "buena vibra",
+    "slug": "buena-vibra",
+    "inserted_at": "2020-12-14 20:22:03",
+    "updated_at": "2020-12-14 23:27:44",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "",
+        "title": "Sesiones Buena Vibra Vol.5 + Festival Aurora",
+        "img_url": "https://i.ytimg.com/vi/Xsizx1629zk/default_live.jpg",
+        "added_by": {
+          "uuid": "928def2c-ab60-4131-a0b2-3c304ef678a4",
+          "username": "wasabi"
+        },
+        "previous": "",
+        "video_id": "Xsizx1629zk",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "En el marco del eclipse total solar realizamos las sesiones Buena Vibra Vol. 5 en conjunto con @aurorafestival.art PECES RAROS LAS LIGAS MENORES EL ...",
+        "channel_title": "Festival Buena Vibra"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Broom Room",
+    "slug": "scooby-groovy-tracks-for-blooming-to.-",
+    "inserted_at": "2020-12-21 13:58:55",
+    "updated_at": "2020-12-21 20:02:31",
+    "video_tracker": "",
+    "queue": [
+      {
+        "next": "cjVm3sCxIyI",
+        "title": "Skinshape - Arrogance is the Death of Men (Full Album)",
+        "img_url": "https://i.ytimg.com/vi/cQ_cHzU2sM8/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "",
+        "video_id": "cQ_cHzU2sM8",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Follow our playlists ➪ https://fanlink.to/NiceGuysPlaylist Tracklist 01. Tomorrow 00:00 02. Sound Of Your Voice 04:13 03. Arrogance Is The Death Of Men 08:16 ...",
+        "channel_title": "Nice Guys"
+      },
+      {
+        "next": "9WIuy3CVqbw",
+        "title": "PIPELINEFUNK - Armin Küpper spielt Saxophon mit dem verrückten Echo von der Pipeline",
+        "img_url": "https://i.ytimg.com/vi/cjVm3sCxIyI/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "cQ_cHzU2sM8",
+        "video_id": "cjVm3sCxIyI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "PIPELINEFUNK - Armin Küpper (English below) Dieser Sound an der Röhre, in dieser Einsamkeit gibt mir das Gefühl: Hey, du bist da nicht allein ! Manchmal ...",
+        "channel_title": "Armin Küpper"
+      },
+      {
+        "next": "BXgpgvK4osQ",
+        "title": "The End Of Comedy",
+        "img_url": "https://i.ytimg.com/vi/9WIuy3CVqbw/default.jpg",
+        "added_by": {
+          "uuid": "017f0177-76a2-42ce-b588-8d6e6b093c83",
+          "username": "wasabi"
+        },
+        "previous": "cjVm3sCxIyI",
+        "video_id": "9WIuy3CVqbw",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Provided to YouTube by Domino The End Of Comedy · Drugdealer and Weyes Blood The End Of Comedy ℗ Domino Recording Co Ltd Released on: ...",
+        "channel_title": "Drugdealer - Topic"
+      },
+      {
+        "next": "toiRFaxSxtI",
+        "title": "Space Lounge - Inspectre Funk",
+        "img_url": "https://i.ytimg.com/vi/BXgpgvK4osQ/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "9WIuy3CVqbw",
+        "video_id": "BXgpgvK4osQ",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "https://inspectrefunk.bandcamp.com/album/sequence-ep.",
+        "channel_title": "Inspectre Funk"
+      },
+      {
+        "next": "f0eXwwJn8IU",
+        "title": "Something About Us - Daft Punk (Inspectre Funk Cover)",
+        "img_url": "https://i.ytimg.com/vi/toiRFaxSxtI/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "BXgpgvK4osQ",
+        "video_id": "toiRFaxSxtI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Inspectre Funk covering Something About Us by Daft Punk. If you'd like to download the audio, you can purchase it here: ...",
+        "channel_title": "Inspectre Funk"
+      },
+      {
+        "next": "dwDns8x3Jb4",
+        "title": "L&#39;Impératrice - Sonate Pacifique (Radio Edit)",
+        "img_url": "https://i.ytimg.com/vi/f0eXwwJn8IU/default.jpg",
+        "added_by": {
+          "uuid": "017f0177-76a2-42ce-b588-8d6e6b093c83",
+          "username": "wasabi"
+        },
+        "previous": "toiRFaxSxtI",
+        "video_id": "f0eXwwJn8IU",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Follow L'impératrice - http://bit.ly/2n5v0iL Taken from L'Impératrice « Sonate pacifique - EP » Ecouter sur Deezer - http://bit.ly/2n5IBGZ Ecouter sur Spotify ...",
+        "channel_title": "Cracki Records"
+      },
+      {
+        "next": "q27KtfR1ESA",
+        "title": "Daft Punk - Around the world (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/dwDns8x3Jb4/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "f0eXwwJn8IU",
+        "video_id": "dwDns8x3Jb4",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Daft Punk - Homework : ℗ 1997 Daft Life under exclusive license to Parlophone Records Ltd./Parlophone Music, a division of Parlophone Music France Youtube ...",
+        "channel_title": "Daft Punk"
+      },
+      {
+        "next": "lDo4zPctvko",
+        "title": "Daft Punk - Rollin&#39; and Scratchin&#39; (Official Audio)",
+        "img_url": "https://i.ytimg.com/vi/q27KtfR1ESA/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "dwDns8x3Jb4",
+        "video_id": "q27KtfR1ESA",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Daft Punk - Homework : ℗ 1997 Daft Life under exclusive license to Parlophone Records Ltd./Parlophone Music, a division of Parlophone Music France Youtube ...",
+        "channel_title": "Daft Punk"
+      },
+      {
+        "next": "xn6Fnxgd0AE",
+        "title": "Gustavo Cerati - Y Si El Humo Está En Foco (HQ)",
+        "img_url": "https://i.ytimg.com/vi/lDo4zPctvko/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "q27KtfR1ESA",
+        "video_id": "lDo4zPctvko",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ALBUM: Bocanada TRACK LISTING: 10 AÑO DE PUBLICACION DE ALBUM: 1999 LETRA: (Instrumental)",
+        "channel_title": "Generación Rock en español"
+      },
+      {
+        "next": "uegKaO1C7ew",
+        "title": "GUSTAVO CERATI /  PASEO INMORAL",
+        "img_url": "https://i.ytimg.com/vi/xn6Fnxgd0AE/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "lDo4zPctvko",
+        "video_id": "xn6Fnxgd0AE",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Tema del album Bocanada.",
+        "channel_title": "juan pablo caro garcia"
+      },
+      {
+        "next": "XdPkDGmfTTs",
+        "title": "Gustavo Cerati - Aquí &amp; Ahora (Los Primeros Tres Minutos) (HQ)",
+        "img_url": "https://i.ytimg.com/vi/uegKaO1C7ew/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "xn6Fnxgd0AE",
+        "video_id": "uegKaO1C7ew",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ALBUM: Bocanada TRACK LISTING: 12 AÑO DE PUBLICACION DE ALBUM: 1999 LETRA: Soy pequeño soy una gota en el jardín sigue el curso de agua que ...",
+        "channel_title": "Generación Rock en español"
+      },
+      {
+        "next": "OscDj0ZXKlI",
+        "title": "Gustavo Cerati - Aquí &amp; Ahora (Y Después) (HQ)",
+        "img_url": "https://i.ytimg.com/vi/XdPkDGmfTTs/default.jpg",
+        "added_by": {
+          "uuid": "7dc6b8cc-ea1b-4804-866b-dbc5ef411047",
+          "username": "guest-576460752303422239"
+        },
+        "previous": "uegKaO1C7ew",
+        "video_id": "XdPkDGmfTTs",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "ALBUM: Bocanada TRACK LISTING: 13 AÑO DE PUBLICACION DE ALBUM: 1999 LETRA: (Instrumental)",
+        "channel_title": "Generación Rock en español"
+      },
+      {
+        "next": "",
+        "title": "Cerati  &amp; Melero - Colores Santos (1992) (CD Completo)",
+        "img_url": "https://i.ytimg.com/vi/OscDj0ZXKlI/default.jpg",
+        "added_by": {
+          "uuid": "21697bbb-5df4-4f4e-a611-33c37d5334cf",
+          "username": "guest-576460752303423484"
+        },
+        "previous": "XdPkDGmfTTs",
+        "video_id": "OscDj0ZXKlI",
+        "img_width": 120,
+        "is_queued": false,
+        "img_height": 90,
+        "description": "Colores santos es un álbum lanzado en el año 1992 y fue realizado por los músicos argentinos Gustavo Cerati y Daniel Melero. Contó con la colaboración de ...",
+        "channel_title": "Marcel Hetz"
+      }
+    ]
+  }
+]
