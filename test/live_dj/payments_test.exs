@@ -107,7 +107,7 @@ defmodule LiveDj.PaymentsTest do
     end
 
     test "create_order/1 with valid data creates an order", %{plan: plan} do
-      assert {:ok, %Order{} = order} = Payments.create_order(%{plan_id: plan.id})
+      assert {:ok, %Order{} = _order} = Payments.create_order(%{plan_id: plan.id})
     end
 
     test "create_order/1 with invalid data returns error changeset" do
@@ -116,7 +116,7 @@ defmodule LiveDj.PaymentsTest do
 
     test "update_order/2 with valid data updates the order", %{plan: plan} do
       order = order_fixture(%{plan_id: plan.id})
-      assert {:ok, %Order{} = order} = Payments.update_order(order, @update_attrs)
+      assert {:ok, %Order{} = _order} = Payments.update_order(order, @update_attrs)
     end
 
     test "update_order/2 with invalid data returns error changeset", %{plan: plan} do

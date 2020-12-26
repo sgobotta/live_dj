@@ -32,7 +32,7 @@ defmodule LiveDjWeb.UserSessionControllerTest do
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
-      response = html_response(conn, 200)
+      _response = html_response(conn, 200)
       # Username was removed from header
       # assert response =~ user.username
     end
