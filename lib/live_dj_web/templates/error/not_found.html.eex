@@ -48,7 +48,7 @@
             Oops!
           </h1>
           <hr class="w-24 h-1 bg-primary rounded-full mt-4">
-          <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold">
+          <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold text-2xl">
             The page you were looking for doesn't exist or the link you clicked may be broken.
           </p>
         </div>
