@@ -33,9 +33,21 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
 .bg-primary {
   background-color: $primary
 }
-
+.bg-secondary {
+  background-color: $secondary
+}
 .bg-white {
   background-color: $white;
+}
+
+.br-primary {
+  border-color: $primary;
+}
+.br-primary-light {
+  border-color: $primary-light;
+}
+.br-secondary {
+  border-color: $secondary;
 }
 
 @import "./search-loader.scss";

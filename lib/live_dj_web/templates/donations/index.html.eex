@@ -1,10 +1,8 @@
 <div class="container flex flex-wrap pt-4 pb-10 m-auto mt-6 md:mt-15 lg:px-12 xl:px-16">
   <div class="w-full px-0 lg:px-4">
-    <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
-      We're working on extra features and visuals. You can donate as a guest user but we recommend donating as a registered user to receive exclusive content.
-    </p>
+
     <h2 class="px-12 font-bold text-center primary">
-      Argentina
+      Latinamerica
     </h2>
     <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
       Donaciones a través de MercadoPago
@@ -20,8 +18,8 @@
               <p class="text-5xl font-bold text-center group-hover:text-white text-white">
                 AR $<%= plan.amount %>.<span class="text-3xl">00</span>
               </p>
-              <p class="text-xs text-center uppercase group-hover:text-white text-white">
-                one time donation
+              <p class="text-2xs text-center uppercase group-hover:text-white text-white">
+                donación única
               </p>
             </div>
             <div
@@ -32,6 +30,62 @@
                 data-preference-id="<%= plan.preference_id %>"
               >
               </script>
+            </div>
+          </label>
+        </div>
+        <% end %>
+    </div>
+
+    <hr class="h-1 bg-secondary rounded-full m-8 br-secondary">
+
+    <h2 class="px-12 font-bold text-center primary">
+      Other countries and regions
+    </h2>
+    <p class="py-2 text-center mb-10" style="font-size: 1.6rem">
+      Donations through PayPal
+    </p>
+    <div class="flex flex-wrap items-center justify-center py-2 pt-0">
+      <%= for plan <- @paypal_plans do %>
+        <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
+          <label class="flex flex-col rounded-lg shadow-lg group relative cursor-pointer hover:shadow-2xl">
+            <div class="w-full px-4 py-6 rounded-t-lg card-section-1 bg-primary">
+              <h3 class="mx-auto font-semibold text-center underline group-hover:text-white text-white">
+                <%= String.capitalize(plan.name) %>
+              </h3>
+              <p class="text-3xl font-bold text-center group-hover:text-white text-white">
+                Check out available plans or choose any amount
+              </p>
+              <p class="text-2xs text-center uppercase group-hover:text-white text-white">
+                one time donation
+              </p>
+            </div>
+            <div
+              class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
+            >
+              <form
+                action="https://www.sandbox.paypal.com/donate"
+                method="post" target="_top"
+                style="margin-bottom:0px;"
+              >
+                <input
+                  type="hidden"
+                  name="hosted_button_id"
+                  value="<%= plan.input_value %>"
+                />
+                <input
+                  type="image"
+                  src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+                  border="0" name="submit"
+                  title="PayPal - The safer, easier way to pay online!"
+                  alt="Donate with PayPal button"
+                />
+                <img
+                  alt=""
+                  border="0"
+                  src="https://www.sandbox.paypal.com/en_AR/i/scr/pixel.gif"
+                  width="1" height="1"
+                />
+              </form>
             </div>
           </label>
         </div>

@@ -13,6 +13,21 @@ defmodule LiveDjWeb.DonationsControllerTest do
     %{user: user_fixture(), conn: conn, plan: plan_fixture()}
   end
 
+  describe "GET /donations" do
+    test "visits the donations page as a visitor user", %{conn: conn, user: user, plan: plan} do
+      conn = get(conn, Routes.donations_path(conn, :index))
+      response = html_response(conn, 200)
+      assert assert get_flash(conn, :info) =~ "We're working on extra features and visuals. You can donate as a guest user but we recommend donating as a registered user to receive exclusive content."
+    end
+
+    test "visits the donations page as a registered user", %{conn: conn, user: user, plan: plan} do
+      conn = log_in_user(conn, user)
+        |> get(Routes.donations_path(conn, :index))
+      response = html_response(conn, 200)
+      assert assert get_flash(conn, :info) =~ "Receive a donor badge by contributing to this project."
+    end
+  end
+
   describe "GET /donations/:donation_id" do
     test "receives a valid donation as a visitor user", %{conn: conn, plan: plan} do
       conn = get(conn, Routes.donations_path(conn, :new, plan.plan_id))
