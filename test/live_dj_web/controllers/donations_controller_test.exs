@@ -5,10 +5,6 @@ defmodule LiveDjWeb.DonationsControllerTest do
   import LiveDj.PaymentsFixtures
 
   setup %{conn: conn} do
-    mercadopago_attr = System.get_env("MERCADOPAGO_ATTR")
-    paypal_attrs = System.get_env("PAYPAL_ATTRS")
-    IO.inspect("MERCADOPAGO ATTR: #{mercadopago_attr}")
-    IO.inspect("PAYPAL ATTRS: #{paypal_attrs}")
     conn =
       conn
       |> Map.replace!(:secret_key_base, LiveDjWeb.Endpoint.config(:secret_key_base))
