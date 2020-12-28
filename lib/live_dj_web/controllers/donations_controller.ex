@@ -27,16 +27,14 @@ defmodule LiveDjWeb.DonationsController do
         [fst, snd] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
         Poison.decode!(params[fst])[snd]
       "mercadopago_completed" ->
-        attr = System.get_env("MERCADOPAGO_ATTR")
-        params[attr]
+        params[System.get_env("MERCADOPAGO_ATTR")]
+      _ -> ""
     end
 
     %{assigns: %{current_user: current_user, visitor: visitor}} = conn
 
     case Payments.get_plan_by_plan_id(donation_id) do
-      nil ->
-        conn
-          |> redirect(to: "/")
+      nil -> redirect(conn, to: "/#{params["donation_id"]}")
       plan ->
         user_id = case visitor do
           true -> nil
