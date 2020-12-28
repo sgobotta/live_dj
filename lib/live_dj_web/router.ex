@@ -67,7 +67,7 @@ defmodule LiveDjWeb.Router do
   scope "/", LiveDjWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/users/settings", UserSettingsController, :edit
+    get "/users/settings", UserSettingsController, :index
     put "/users/settings/update_username", UserSettingsController, :update_username
     put "/users/settings/update_password", UserSettingsController, :update_password
     put "/users/settings/update_email", UserSettingsController, :update_email
