@@ -7,7 +7,7 @@ defmodule LiveDjWeb.UserSettingsController do
   plug :assign_initial_changesets
 
   def index(conn, _params) do
-    render(conn, "edit.html")
+    render(conn, "index.html")
   end
 
   def update_username(conn, %{"current_password" => password, "user" => user_params}) do
@@ -23,10 +23,10 @@ defmodule LiveDjWeb.UserSettingsController do
             |> redirect(to: Routes.user_settings_path(conn, :index))
 
           {:error, changeset} ->
-            render(conn, "edit.html", username_changeset: changeset)
+            render(conn, "index.html", username_changeset: changeset)
         end
       {:error, changeset} ->
-        render(conn, "edit.html", username_changeset: changeset)
+        render(conn, "index.html", username_changeset: changeset)
     end
   end
 
@@ -49,7 +49,7 @@ defmodule LiveDjWeb.UserSettingsController do
         |> redirect(to: Routes.user_settings_path(conn, :index))
 
       {:error, changeset} ->
-        render(conn, "edit.html", email_changeset: changeset)
+        render(conn, "index.html", email_changeset: changeset)
     end
   end
 
@@ -78,7 +78,7 @@ defmodule LiveDjWeb.UserSettingsController do
         |> UserAuth.log_in_user(user)
 
       {:error, changeset} ->
-        render(conn, "edit.html", password_changeset: changeset)
+        render(conn, "index.html", password_changeset: changeset)
     end
   end
 
