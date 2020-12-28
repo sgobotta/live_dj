@@ -6,7 +6,7 @@
       Thank you, <%= @username %>!
     </h1>
     <hr class="w-24 h-1 bg-primary rounded-full mt-4">
-    <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold">
+    <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold text-2xl">
       Your donation has been successfully processed. Contributions let us improve our efforts to make this site a better experience for you!
     </p>
   </div>

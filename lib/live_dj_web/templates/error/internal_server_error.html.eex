@@ -48,7 +48,7 @@
             Oh no!
           </h1>
           <hr class="w-24 h-1 bg-primary rounded-full mt-4">
-          <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold">
+          <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold text-2xl">
             Our spaghetti code is not working properly. Time to paw through your logs and get down and dirty in your stack trace. We'll redirect you to the homepage in a few seconds.
           </p>
         </div>
