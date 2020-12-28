@@ -19,8 +19,8 @@ jobs:
         image: postgres
         ports: ['5432:5432']
         env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: pass
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -49,4 +49,9 @@ jobs:
     - name: Install dependencies
       run: mix deps.get
     - name: Run tests
-      run: DB_USERNAME_TEST=user DB_PASSWORD_TEST=pass mix test
+      env:
+        MERCADOPAGO_ATTR: ${{ secrets.MERCADOPAGO_ATTR }}
+        PAYPAL_ATTRS: ${{ secrets.PAYPAL_ATTRS }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      run: DB_USERNAME_TEST=${POSTGRES_USER} DB_PASSWORD_TEST=${POSTGRES_PASSWORD} MERCADOPAGO_ATTR=${MERCADOPAGO_ATTR} PAYPAL_ATTRS=${PAYPAL_ATTRS} mix test

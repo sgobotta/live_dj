@@ -3,19 +3,38 @@ defmodule LiveDjWeb.DonationsController do
 
   alias LiveDj.Payments
 
-  def index(conn, _params)   do
+  def index(conn, _params) do
+    %{assigns: %{visitor: visitor}} = conn
     mercadopago_plans = Payments.get_mercadopago_plans()
-    render(conn, "index.html", mercadopago_plans: mercadopago_plans)
+    paypal_plans = Payments.get_paypal_plans()
+    conn = case visitor do
+      true -> put_flash(conn, :info, "We're working on extra features and visuals. You can donate as a guest user but we recommend donating as a registered user to receive exclusive content.")
+      false -> put_flash(conn, :info, "Receive a donor badge by contributing to this project.")
+    end
+
+    render(
+      conn,
+      "index.html",
+      mercadopago_plans: mercadopago_plans, paypal_plans: paypal_plans
+    )
   end
 
   def new(conn, params) do
     %{"donation_id" => donation_id} = params
+
+    donation_id = case donation_id do
+      "paypal_completed" ->
+        [fst, snd] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+        Poison.decode!(params[fst])[snd]
+      "mercadopago_completed" ->
+        params[System.get_env("MERCADOPAGO_ATTR")]
+      _ -> ""
+    end
+
     %{assigns: %{current_user: current_user, visitor: visitor}} = conn
 
     case Payments.get_plan_by_plan_id(donation_id) do
-      nil ->
-        conn
-          |> redirect(to: "/")
+      nil -> redirect(conn, to: "/#{params["donation_id"]}")
       plan ->
         user_id = case visitor do
           true -> nil

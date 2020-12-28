@@ -17,7 +17,8 @@ defmodule LiveDj.PaymentsFixtures do
         gateway: "mercadopago",
         name: "elite",
         plan_id: "123",
-        type: "donation"
+        type: "donation",
+        extra: [%{"preference_id" => "asd123"}]
       })
       |> LiveDj.Payments.create_plan()
     plan

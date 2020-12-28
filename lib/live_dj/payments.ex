@@ -129,6 +129,16 @@ defmodule LiveDj.Payments do
       end)
   end
 
+  def get_paypal_plans() do
+    list_plans()
+    |> Enum.filter(fn p -> p.gateway == "paypal" end)
+    |> Enum.map(
+      fn p ->
+        Map.merge(p, %{input_value: hd(p.extra)["input_value"], amount: floor(p.amount)})
+        |> Map.drop([:extra, :plan_id])
+      end)
+  end
+
   alias LiveDj.Payments.Order
 
   @doc """
