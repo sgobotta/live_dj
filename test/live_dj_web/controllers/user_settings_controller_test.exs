@@ -8,14 +8,14 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
   describe "GET /users/settings" do
     test "renders settings page", %{conn: conn} do
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
+      conn = get(conn, Routes.user_settings_path(conn, :index))
       response = html_response(conn, 200)
       assert response =~ "Change Password"
     end
 
     test "redirects if user is not logged in" do
       conn = build_conn()
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
+      conn = get(conn, Routes.user_settings_path(conn, :index))
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
     end
   end
@@ -31,7 +31,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
           }
         })
 
-      assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :index)
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
       assert get_flash(new_password_conn, :info) =~ "Password updated successfully"
       assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
@@ -67,7 +67,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
           "user" => %{"username" => username}
         })
 
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :info) =~ "Username updated successfully."
       assert Accounts.get_user_by_email(user.email).username == username
     end
@@ -161,7 +161,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
           "user" => %{"email" => unique_user_email()}
         })
 
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :info) =~ "A link to confirm your email"
       assert Accounts.get_user_by_email(user.email)
     end
@@ -194,19 +194,19 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :info) =~ "Email changed successfully"
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, "oops"))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
       assert Accounts.get_user_by_email(user.email)
     end
