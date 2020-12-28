@@ -63,7 +63,7 @@
               class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
             >
               <form
-                action="https://www.sandbox.paypal.com/donate"
+                action="<%= plan.host %>/donate"
                 method="post" target="_top"
                 style="margin-bottom:0px;"
               >

@@ -28,7 +28,7 @@ try do
       name: plan["name"],
       plan_id: plan["plan_id"],
       type: plan["type"],
-      extra: [%{input_value: plan["input_value"]}],
+      extra: [%{input_value: plan["input_value"], host: plan["host"]}],
       inserted_at: datetime,
       updated_at: datetime
     } end)
