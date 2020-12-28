@@ -134,7 +134,7 @@ defmodule LiveDj.Payments do
     |> Enum.filter(fn p -> p.gateway == "paypal" end)
     |> Enum.map(
       fn p ->
-        Map.merge(p, %{input_value: hd(p.extra)["input_value"], amount: floor(p.amount)})
+        Map.merge(p, %{input_value: hd(p.extra)["input_value"], host: hd(p.extra)["host"], amount: floor(p.amount)})
         |> Map.drop([:extra, :plan_id])
       end)
   end
