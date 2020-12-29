@@ -24,8 +24,8 @@ defmodule LiveDjWeb.DonationsController do
 
     donation_id = case donation_id do
       "paypal_completed" ->
-        [fst, snd] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
-        Poison.decode!(params[fst])[snd]
+        [attr, id, _] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+        Poison.decode!(params[attr])[id]
       "mercadopago_completed" ->
         params[System.get_env("MERCADOPAGO_ATTR")]
       _ -> ""
