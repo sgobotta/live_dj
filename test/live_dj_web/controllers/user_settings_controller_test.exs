@@ -6,9 +6,9 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
   setup :register_and_log_in_user
 
-  describe "GET /users/settings" do
+  describe "GET /users/settings/account" do
     test "renders settings page", %{conn: conn} do
-      conn = get(conn, Routes.user_settings_path(conn, :index))
+      conn = get(conn, Routes.user_settings_path(conn, :edit))
       response = html_response(conn, 200)
       assert response =~ "Change Password"
     end
@@ -138,7 +138,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
       assert response =~ "is not valid"
     end
 
-    test "does not update username on trialing and consecutive spaces", %{conn: conn} do
+    test "does not update username on trailing and consecutive spaces", %{conn: conn} do
       conn =
         put(conn, Routes.user_settings_path(conn, :update_username), %{
           "current_password" => "invalid",
