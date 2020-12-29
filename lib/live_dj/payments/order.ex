@@ -5,6 +5,7 @@ defmodule LiveDj.Payments.Order do
   schema "orders" do
     belongs_to :user, LiveDj.Accounts.User
     belongs_to :plan, LiveDj.Payments.Plan
+    field :amount, :float
 
     timestamps()
   end
