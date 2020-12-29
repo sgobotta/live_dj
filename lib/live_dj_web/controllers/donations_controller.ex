@@ -1,4 +1,6 @@
 defmodule LiveDjWeb.DonationsController do
+  require Logger
+
   use LiveDjWeb, :controller
 
   alias LiveDj.Payments
@@ -62,9 +64,10 @@ defmodule LiveDjWeb.DonationsController do
             end
             conn
             |> redirect(to: "/donations/thanks")
-          {:error, %Ecto.Changeset{} = _changeset} ->
+          {:error, %Ecto.Changeset{} = changeset} ->
             # Log this error to manually fix up potential errors.
             # Payment has been made but it was not registered.
+            Logger.error("An error occurred while creating an Order. Details: #{inspect(changeset)}.")
             conn
             |> redirect(to: "/donations/thanks")
         end
