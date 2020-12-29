@@ -41,7 +41,19 @@ defmodule LiveDjWeb.DonationsController do
           false -> current_user.id
         end
 
-        case Payments.create_order(%{plan_id: plan.id, user_id: user_id}) do
+        amount = case plan.gateway do
+          "mercadopago" -> plan.amount
+          "paypal" ->
+            [_, _, amount] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+            {amount, _} = Float.parse(params[amount])
+            amount
+        end
+
+        case Payments.create_order(%{
+          amount: amount,
+          plan_id: plan.id,
+          user_id: user_id
+        }) do
           {:ok, _order} ->
             case visitor do
               false ->
@@ -50,8 +62,11 @@ defmodule LiveDjWeb.DonationsController do
             end
             conn
             |> redirect(to: "/donations/thanks")
-          {:error, %Ecto.Changeset{} = changeset} ->
-            render(conn, "new.html", changeset: changeset)
+          {:error, %Ecto.Changeset{} = _changeset} ->
+            # Log this error to manually fix up potential errors.
+            # Payment has been made but it was not registered.
+            conn
+            |> redirect(to: "/donations/thanks")
         end
     end
   end
