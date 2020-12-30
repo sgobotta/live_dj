@@ -1,22 +1,56 @@
-<div class="flex flex-wrap mt-12 justify-center">
-  <%= for order <- @orders do %>
-    <div class="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6 gap-4 mb-4 mt-4">
-      <div class="col-span-2 sm:col-span-1 xl:col-span-1">
-        <img
-          alt="..."
-          src="https://source.unsplash.com/gUBJ9vSlky0"
-          class="h-24 w-24 rounded  mx-auto"
-        />
+<%= if @orders != [] do %>
+
+  <div class="flex flex-wrap mt-10 justify-center">
+    <%= for order <- @orders do %>
+      <div class="row grid grid-cols-6 mb-2 mt-2">
+
+        <div class="col-span-1 flex align-center">
+          <img
+            alt="<%= String.capitalize(order.plan.gateway) %>"
+            src="<%= Routes.static_path(@conn, "/images/#{order.plan.gateway}.png") %>"
+            class="h-24 w-24 rounded mx-auto"
+          />
+        </div>
+        <div class="col-span-3 p-4">
+          <h3 class="font-semibold"><%= String.capitalize(order.plan.type) %></h3>
+          <p class="font-semibold">
+            <%= String.capitalize(order.plan.name) %>
+          </p>
+        </div>
+        <div class="flex flex-col col-span-2 p-2 justify-end">
+          <div class="row font-bold primary">
+            <p class="primary-light">
+              <%= "$ #{order.amount |> Decimal.new() |> Decimal.round(2)}" %>
+            </p>
+          </div>
+          <div class="row italic primary">
+            <p><%= order.inserted_at %></p>
+          </div>
+        </div>
+
       </div>
-      <div class="col-span-2 sm:col-span-4 xl:col-span-4">
-        <h3 class="font-semibold"><%= String.capitalize(order.plan.type) %></h3>
-        <p>
-        <%= String.capitalize(order.plan.name) %> | <%= String.capitalize(order.plan.gateway) %>
+    <% end %>
+  </div>
+
+<% else %>
+  <div class="p-4">
+    <div class="bg-white rounded-md hero-wrapper grid grid-cols-1 md:grid-cols-12 gap-8 items-center center">
+
+      <div class="hero-text col-span-6">
+        <h1
+          class="p-8 font-bold text-4xl md:text-5xl max-w-xl text-gray-900 leading-tight">
+          Nothing to see here.
+        </h1>
+        <hr class="w-24 h-1 bg-primary rounded-full mt-4">
+        <p class="p-8 text-gray-800 leading-relaxed mt-8 font-semibold text-2xl">
+          There're no payments yet.
         </p>
       </div>
-      <div class="col-span-2 sm:col-span-1 xl:col-span-1 italic primary">
-        $ <%= order.amount %>
+
+      <div class="hero-image col-span-6 w-2/3">
+        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "searching") %>
       </div>
+
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
