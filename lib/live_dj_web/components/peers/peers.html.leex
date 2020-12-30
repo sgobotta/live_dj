@@ -23,6 +23,9 @@
                   visitor: @visitor
                 do %>
                   <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                    <%= if hd(user.metas).is_donor do %>
+                      <i class="mini fas fa-hand-holding-heart secondary-highlight-1"></i>
+                    <% end %>
                     <%= if !hd(user.metas).visitor do %>
                       <i class="mini fas fa-certificate primary"></i>
                     <% end %>
@@ -33,6 +36,9 @@
                 <% end %>
               <% else %>
                 <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                  <%= if hd(user.metas).is_donor do %>
+                    <i class="mini fas fa-hand-holding-heart secondary-highlight-1"></i>
+                  <% end %>
                   <%= if !hd(user.metas).visitor do %>
                     <i class="mini fas fa-certificate primary"></i>
                   <% end %>

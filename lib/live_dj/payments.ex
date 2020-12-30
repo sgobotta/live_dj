@@ -185,6 +185,10 @@ defmodule LiveDj.Payments do
   """
   def get_order!(id), do: Repo.get!(Order, id)
 
+  def has_order_by_user_id(id) do
+    Repo.exists?(Order, user_id: id)
+  end
+
   @doc """
   Creates a order.
 
