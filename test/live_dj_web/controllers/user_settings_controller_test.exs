@@ -20,6 +20,20 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
     end
   end
 
+
+  describe "GET /users/settings/payments" do
+    test "renders payments page", %{conn: conn} do
+      conn = get(conn, Routes.user_settings_path(conn, :show_payments))
+      _response = html_response(conn, 200)
+    end
+
+    test "redirects if user is not logged in" do
+      conn = build_conn()
+      conn = get(conn, Routes.user_settings_path(conn, :show_payments))
+      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+    end
+  end
+
   describe "PUT /users/settings/update_password" do
     test "updates the user password and resets tokens", %{conn: conn, user: user} do
       new_password_conn =
