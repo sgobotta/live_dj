@@ -1,4 +1,6 @@
 defmodule LiveDjWeb.DonationsController do
+  require Logger
+
   use LiveDjWeb, :controller
 
   alias LiveDj.Payments
@@ -24,8 +26,8 @@ defmodule LiveDjWeb.DonationsController do
 
     donation_id = case donation_id do
       "paypal_completed" ->
-        [fst, snd] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
-        Poison.decode!(params[fst])[snd]
+        [attr, id, _] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+        Poison.decode!(params[attr])[id]
       "mercadopago_completed" ->
         params[System.get_env("MERCADOPAGO_ATTR")]
       _ -> ""
@@ -41,7 +43,19 @@ defmodule LiveDjWeb.DonationsController do
           false -> current_user.id
         end
 
-        case Payments.create_order(%{plan_id: plan.id, user_id: user_id}) do
+        amount = case plan.gateway do
+          "mercadopago" -> plan.amount
+          "paypal" ->
+            [_, _, amount] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+            {amount, _} = Float.parse(params[amount])
+            amount
+        end
+
+        case Payments.create_order(%{
+          amount: amount,
+          plan_id: plan.id,
+          user_id: user_id
+        }) do
           {:ok, _order} ->
             case visitor do
               false ->
@@ -51,7 +65,11 @@ defmodule LiveDjWeb.DonationsController do
             conn
             |> redirect(to: "/donations/thanks")
           {:error, %Ecto.Changeset{} = changeset} ->
-            render(conn, "new.html", changeset: changeset)
+            # Log this error to manually fix up potential errors.
+            # Payment has been made but it was not registered.
+            Logger.error("An error occurred while creating an Order. Details: #{inspect(changeset)}.")
+            conn
+            |> redirect(to: "/donations/thanks")
         end
     end
   end

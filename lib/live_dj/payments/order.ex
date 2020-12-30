@@ -5,6 +5,7 @@ defmodule LiveDj.Payments.Order do
   schema "orders" do
     belongs_to :user, LiveDj.Accounts.User
     belongs_to :plan, LiveDj.Payments.Plan
+    field :amount, :float
 
     timestamps()
   end
@@ -12,7 +13,7 @@ defmodule LiveDj.Payments.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:plan_id, :user_id])
-    |> validate_required([:plan_id])
+    |> cast(attrs, [:amount, :plan_id, :user_id])
+    |> validate_required([:amount, :plan_id])
   end
 end

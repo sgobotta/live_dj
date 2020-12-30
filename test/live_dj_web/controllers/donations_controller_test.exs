@@ -42,8 +42,15 @@ defmodule LiveDjWeb.DonationsControllerTest do
 
     test "receives a valid paypal donation as a visitor user", %{conn: conn} do
       plan = plan_fixture(%{plan_id: "234", gateway: "paypal", amount: 0.0, name: "standard", extra: [%{"input_value" => "asd123"}]})
-      [fst, snd] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
-      conn = get(conn, Routes.donations_path(conn, :new, "paypal_completed", %{[fst] => "{\"#{snd}\": \"#{plan.plan_id}\"}"}))
+      [attr, id, amount] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+      conn = get(conn,
+        Routes.donations_path(
+          conn,
+          :new,
+          "paypal_completed",
+          %{[attr] => "{\"#{id}\": \"#{plan.plan_id}\"}", [amount] => "420.01"}
+        )
+      )
       _response = html_response(conn, 302)
       assert "/donations/thanks" = redir_path = redirected_to(conn)
       conn = get(recycle(conn), redir_path)
@@ -72,9 +79,16 @@ defmodule LiveDjWeb.DonationsControllerTest do
 
     test "receives a valid paypal donation as a registered user", %{conn: conn, user: user} do
       plan = plan_fixture(%{plan_id: "234", gateway: "paypal", amount: 0.0, name: "standard", extra: [%{"input_value" => "asd123"}]})
-      [fst, snd] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
+      [attr, id, amount] = Poison.decode!(System.get_env("PAYPAL_ATTRS"))
       conn = log_in_user(conn, user)
-        |> get(Routes.donations_path(conn, :new, "paypal_completed", %{[fst] => "{\"#{snd}\": \"#{plan.plan_id}\"}"}))
+        |> get(
+          Routes.donations_path(
+            conn,
+            :new,
+            "paypal_completed",
+            %{[attr] => "{\"#{id}\": \"#{plan.plan_id}\"}", [amount] => "420.01"}
+          )
+        )
       _response = html_response(conn, 302)
       assert "/donations/thanks" = redir_path = redirected_to(conn)
       conn = get(recycle(conn), redir_path)

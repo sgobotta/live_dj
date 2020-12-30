@@ -30,6 +30,15 @@ config :live_dj, LiveDj.Mailer,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :logger, :error,
+  path: "log/error.log",
+  level: :error
+
+config :logger,
+  backends: [:console, {LoggerFileBackend, :error}],
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

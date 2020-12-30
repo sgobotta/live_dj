@@ -2,12 +2,29 @@ defmodule LiveDjWeb.UserSettingsController do
   use LiveDjWeb, :controller
 
   alias LiveDj.Accounts
+  alias LiveDj.Payments
   alias LiveDjWeb.UserAuth
 
   plug :assign_initial_changesets
 
+  def index(conn, _params) do
+    render(conn, "index.html")
+  end
+
   def edit(conn, _params) do
     render(conn, "edit.html")
+  end
+
+  def show_payments(conn, _params) do
+    %{assigns: %{current_user: current_user}} = conn
+    orders = Payments.list_user_orders(current_user.id)
+    |> Enum.map(fn order -> Map.merge(order, %{
+      amount: ceil(order.amount)
+      |> Decimal.new()
+      |> Decimal.round(2)
+      |> Decimal.to_string()
+    }) end)
+    render(conn, "show_payments.html", orders: orders)
   end
 
   def update_username(conn, %{"current_password" => password, "user" => user_params}) do
@@ -19,8 +36,8 @@ defmodule LiveDjWeb.UserSettingsController do
           {:ok, _user} ->
             conn
             |> put_flash(:info, "Username updated successfully.")
-            |> put_session(:user_return_to, Routes.user_settings_path(conn, :edit))
-            |> redirect(to: Routes.user_settings_path(conn, :edit))
+            |> put_session(:user_return_to, Routes.user_settings_path(conn, :index))
+            |> redirect(to: Routes.user_settings_path(conn, :index))
 
           {:error, changeset} ->
             render(conn, "edit.html", username_changeset: changeset)
@@ -46,7 +63,7 @@ defmodule LiveDjWeb.UserSettingsController do
           :info,
           "A link to confirm your email change has been sent to the new address."
         )
-        |> redirect(to: Routes.user_settings_path(conn, :edit))
+        |> redirect(to: Routes.user_settings_path(conn, :index))
 
       {:error, changeset} ->
         render(conn, "edit.html", email_changeset: changeset)
@@ -58,12 +75,12 @@ defmodule LiveDjWeb.UserSettingsController do
       :ok ->
         conn
         |> put_flash(:info, "Email changed successfully.")
-        |> redirect(to: Routes.user_settings_path(conn, :edit))
+        |> redirect(to: Routes.user_settings_path(conn, :index))
 
       :error ->
         conn
         |> put_flash(:error, "Email change link is invalid or it has expired.")
-        |> redirect(to: Routes.user_settings_path(conn, :edit))
+        |> redirect(to: Routes.user_settings_path(conn, :index))
     end
   end
 
@@ -74,7 +91,7 @@ defmodule LiveDjWeb.UserSettingsController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "Password updated successfully.")
-        |> put_session(:user_return_to, Routes.user_settings_path(conn, :edit))
+        |> put_session(:user_return_to, Routes.user_settings_path(conn, :index))
         |> UserAuth.log_in_user(user)
 
       {:error, changeset} ->

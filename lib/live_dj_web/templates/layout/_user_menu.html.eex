@@ -1,6 +1,6 @@
 <ul>
 <%= if !@visitor do %>
-  <li class="navbar-link"><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
+  <li class="navbar-link"><%= link "Settings", to: Routes.user_settings_path(@conn, :index) %></li>
   <li class="navbar-link"><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
 <% else %>
   <li class="navbar-link"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>

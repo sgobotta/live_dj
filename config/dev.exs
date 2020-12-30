@@ -72,7 +72,17 @@ config :live_dj, LiveDj.Mailer,
   adapter: Bamboo.LocalAdapter
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger,
+  backends: [:console, {LoggerFileBackend, :info}, {LoggerFileBackend, :error}],
+  format: "[$level] $message\n"
+
+config :logger, :info,
+  path: "log/info.log",
+  level: :info
+
+config :logger, :error,
+  path: "log/error.log",
+  level: :error
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

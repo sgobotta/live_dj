@@ -6,7 +6,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
   setup :register_and_log_in_user
 
-  describe "GET /users/settings" do
+  describe "GET /users/settings/account" do
     test "renders settings page", %{conn: conn} do
       conn = get(conn, Routes.user_settings_path(conn, :edit))
       response = html_response(conn, 200)
@@ -15,7 +15,21 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
     test "redirects if user is not logged in" do
       conn = build_conn()
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
+      conn = get(conn, Routes.user_settings_path(conn, :index))
+      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+    end
+  end
+
+
+  describe "GET /users/settings/payments" do
+    test "renders payments page", %{conn: conn} do
+      conn = get(conn, Routes.user_settings_path(conn, :show_payments))
+      _response = html_response(conn, 200)
+    end
+
+    test "redirects if user is not logged in" do
+      conn = build_conn()
+      conn = get(conn, Routes.user_settings_path(conn, :show_payments))
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
     end
   end
@@ -31,7 +45,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
           }
         })
 
-      assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :index)
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
       assert get_flash(new_password_conn, :info) =~ "Password updated successfully"
       assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
@@ -67,7 +81,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
           "user" => %{"username" => username}
         })
 
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :info) =~ "Username updated successfully."
       assert Accounts.get_user_by_email(user.email).username == username
     end
@@ -138,7 +152,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
       assert response =~ "is not valid"
     end
 
-    test "does not update username on trialing and consecutive spaces", %{conn: conn} do
+    test "does not update username on trailing and consecutive spaces", %{conn: conn} do
       conn =
         put(conn, Routes.user_settings_path(conn, :update_username), %{
           "current_password" => "invalid",
@@ -161,7 +175,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
           "user" => %{"email" => unique_user_email()}
         })
 
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :info) =~ "A link to confirm your email"
       assert Accounts.get_user_by_email(user.email)
     end
@@ -194,19 +208,19 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :info) =~ "Email changed successfully"
       refute Accounts.get_user_by_email(user.email)
       assert Accounts.get_user_by_email(email)
 
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, "oops"))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.user_settings_path(conn, :index)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
       assert Accounts.get_user_by_email(user.email)
     end

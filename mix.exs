@@ -20,7 +20,9 @@ defmodule LiveDj.MixProject do
   def application do
     [
       mod: {LiveDj.Application, []},
-      extra_applications: [:tubex, :logger, :runtime_tools, :bamboo]
+      extra_applications: [
+        :tubex, :logger, :runtime_tools, :bamboo, :logger_file_backend
+      ],
     ]
   end
 
@@ -40,8 +42,10 @@ defmodule LiveDj.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.14.6"},
-      {:floki, ">= 0.27.0", only: :test},
+      {:floki, ">= 0.27.0"},
+      {:logger_file_backend, "~> 0.0.11"},
       {:phoenix_html, "~> 2.11"},
+      {:phoenix_inline_svg, "~> 1.4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.2"},
       {:telemetry_metrics, "~> 0.4"},

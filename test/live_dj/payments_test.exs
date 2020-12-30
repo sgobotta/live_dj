@@ -76,9 +76,9 @@ defmodule LiveDj.PaymentsTest do
   describe "orders" do
     alias LiveDj.Payments.Order
 
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{plan_id: nil}
+    @valid_attrs %{amount: 420.01}
+    @update_attrs %{amount: 240.01}
+    @invalid_attrs %{plan_id: nil, amount: nil}
 
     setup do
       user = user_fixture()
@@ -107,7 +107,7 @@ defmodule LiveDj.PaymentsTest do
     end
 
     test "create_order/1 with valid data creates an order", %{plan: plan} do
-      assert {:ok, %Order{} = _order} = Payments.create_order(%{plan_id: plan.id})
+      assert {:ok, %Order{} = _order} = Payments.create_order(Map.merge(@valid_attrs, %{plan_id: plan.id}))
     end
 
     test "create_order/1 with invalid data returns error changeset" do

@@ -1,8 +1,17 @@
 defmodule LiveDjWeb.ErrorViewTest do
   use LiveDjWeb.ConnCase, async: true
+  use Plug.Test
 
   # Bring render/3 and render_to_string/3 for testing custom views
   import Phoenix.View
+
+  setup do
+    conn =
+      conn(:get, "/")
+      |> Plug.Conn.put_private(:phoenix_endpoint, LiveDjWeb.Endpoint)
+
+    {:ok, conn: conn}
+  end
 
   test "renders 404.html", %{conn: conn} do
     assert render_to_string(LiveDjWeb.ErrorView, "404.html", conn: conn) =~ "Oops!"
