@@ -18,6 +18,12 @@ defmodule LiveDjWeb.UserSettingsController do
   def show_payments(conn, _params) do
     %{assigns: %{current_user: current_user}} = conn
     orders = Payments.list_user_orders(current_user.id)
+    |> Enum.map(fn order -> Map.merge(order, %{
+      amount: ceil(order.amount)
+      |> Decimal.new()
+      |> Decimal.round(2)
+      |> Decimal.to_string()
+    }) end)
     render(conn, "show_payments.html", orders: orders)
   end
 
