@@ -154,6 +154,21 @@ defmodule LiveDj.Payments do
     Repo.all(Order)
   end
 
+  def list_user_orders(id) do
+    from(
+      order in Order,
+      where: order.user_id == ^id,
+      order_by: [desc: order.inserted_at],
+      join: plan in Plan, on: order.plan_id == plan.id,
+      select: %{
+        amount: order.amount,
+        inserted_at: order.inserted_at,
+        plan: %{gateway: plan.gateway, name: plan.name, type: plan.type}
+      }
+    )
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single order.
 
