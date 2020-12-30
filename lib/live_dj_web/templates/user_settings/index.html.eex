@@ -1,14 +1,10 @@
 <div class="flex flex-wrap justify-center items-stretch mx-auto">
   <%= link to: Routes.user_settings_path(@conn, :edit),
-    class: "flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
-    <div
-      class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded"
-    >
-      <img
-        src="<%= Routes.static_path(@conn, "/images/account.svg") %>"
-        class="rounded-full h-32 w-32"
-        alt="Account Settings"
-      />
+    class: "setting-card account-asset flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
+    <div class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded">
+      <div class="h-32 w-32">
+        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "account") %>
+      </div>
       <h1 class="primary text-4xl my-4">Account</h1>
       <p class="text-justify px-8 mb-8 black">
         Manage your username, email or password.
@@ -16,16 +12,12 @@
     </div>
   <% end %>
 
-  <%= link to: Routes.user_settings_path(@conn, :edit),
-    class: "flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
-    <div
-      class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded"
-    >
-      <img
-        src="https://images.unsplash.com/photo-1581247227572-360cf3d83e00?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80"
-        class="rounded-full h-32 w-32"
-        alt="Payment Settings"
-      />
+  <%= link to: Routes.user_settings_path(@conn, :index),
+    class: "setting-card payment-asset flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
+    <div class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded">
+      <div class="h-32 w-32">
+        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "payments") %>
+      </div>
       <h1 class="primary text-4xl my-4">Payments</h1>
       <p class="text-justify px-8 mb-8 black">
         Find and access details about your payments.
