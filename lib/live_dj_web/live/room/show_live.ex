@@ -5,12 +5,14 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   use LiveDjWeb, :live_view
 
+  alias LiveDj.Accounts
   alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Chat
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
   alias LiveDj.Organizer.Video
+  alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
@@ -77,6 +79,14 @@ defmodule LiveDjWeb.Room.ShowLive do
   ) do
 
     connected_users = Organizer.list_present_with_metas(slug)
+    |> Enum.map(fn u ->
+      %{username: username} = hd(u.metas)
+      has_orders = case Accounts.get_user_by_username(username) do
+        nil -> false
+        user -> Payments.has_order_by_user_id(user.id)
+      end
+      Map.merge(u, %{metas: [Map.merge(hd(u.metas), %{is_donor: has_orders})]})
+    end)
 
     room = handle_video_tracker_activity(slug, connected_users, payload)
 
