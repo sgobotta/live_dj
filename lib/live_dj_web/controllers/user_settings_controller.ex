@@ -2,6 +2,7 @@ defmodule LiveDjWeb.UserSettingsController do
   use LiveDjWeb, :controller
 
   alias LiveDj.Accounts
+  alias LiveDj.Payments
   alias LiveDjWeb.UserAuth
 
   plug :assign_initial_changesets
@@ -12,6 +13,12 @@ defmodule LiveDjWeb.UserSettingsController do
 
   def edit(conn, _params) do
     render(conn, "edit.html")
+  end
+
+  def show_payments(conn, _params) do
+    %{assigns: %{current_user: current_user}} = conn
+    orders = Payments.list_user_orders(current_user.id)
+    render(conn, "show_payments.html", orders: orders)
   end
 
   def update_username(conn, %{"current_password" => password, "user" => user_params}) do
