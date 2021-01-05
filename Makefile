@@ -23,6 +23,11 @@ ecto.create: SHELL:=/bin/bash
 ecto.create: 
 	source .env && docker-compose up -d && mix ecto.create
 
+#ecto.migrate: @ Migrates the database
+ecto.migrate: SHELL:=/bin/bash
+ecto.migrate:
+	source .env && docker-compose up -d && POOL_SIZE=2 mix ecto.migrate
+
 #ecto.reset: @ Drops your current database, recreates and migrates it again
 ecto.reset: SHELL:=/bin/bash
 ecto.reset:
