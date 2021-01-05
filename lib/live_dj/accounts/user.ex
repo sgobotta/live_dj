@@ -10,6 +10,8 @@ defmodule LiveDj.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
+    many_to_many :badges, LiveDj.Stats.Badge, join_through: "users_badges"
+
     timestamps()
   end
 

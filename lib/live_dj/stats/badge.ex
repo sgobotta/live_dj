@@ -7,6 +7,8 @@ defmodule LiveDj.Stats.Badge do
     field :icon, :string
     field :name, :string
 
+    many_to_many :users, LiveDj.Accounts.User, join_through: "users_badges"
+
     timestamps()
   end
 
