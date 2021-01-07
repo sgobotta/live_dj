@@ -63,6 +63,31 @@ defmodule LiveDj.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Gets a user by id with the given associations preloaded in the user struct.
+
+  ## Examples
+
+      iex> get_user_preloaded_by(1, [:badges])
+      {:ok, #LiveDj.Accounts.User<...>}
+
+      iex> inexistent_user_id = 9876543210
+      iex> get_user_preloaded_by(inexistent_user_id, [:badges])
+      {:error, nil}
+
+  """
+  def get_user_preloaded_by(user_id, associations \\ []) do
+    user = Repo.one(
+      from u in User,
+        where: u.id == ^user_id,
+        preload: ^associations
+    )
+    case user do
+      nil -> {:error, nil}
+      _ -> {:ok, user}
+    end
+  end
+
   ## User registration
 
   @doc """
