@@ -2,6 +2,8 @@ defmodule LiveDj.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias LiveDj.Accounts.UserBadge
+
   @derive {Inspect, except: [:password]}
   schema "users" do
     field :username, :string
@@ -10,7 +12,7 @@ defmodule LiveDj.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
-    many_to_many :badges, LiveDj.Stats.Badge, join_through: "users_badges"
+    many_to_many :badges, LiveDj.Stats.Badge, join_through: UserBadge
 
     timestamps()
   end
