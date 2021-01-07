@@ -47,6 +47,33 @@ defmodule LiveDj.AccountsTest do
     end
   end
 
+  describe "get_user_preloaded_by/2" do
+    test "returns error if id is invalid" do
+      assert {:error, nil} = Accounts.get_user_preloaded_by(1, [:badges])
+    end
+
+    test "returns error if id is invalid, using the default associations list" do
+      assert {:error, nil} = Accounts.get_user_preloaded_by(1)
+    end
+
+    test "returns ok with the given user id" do
+      %{id: id} = user_fixture()
+      assert {:ok, preloaded_user} = Accounts.get_user_preloaded_by(id, [:badges])
+      assert [] = preloaded_user.badges
+    end
+
+    test "returns ok with the given user id, using the default associations list" do
+      %{id: id} = user_fixture()
+      assert {:ok, preloaded_user} = Accounts.get_user_preloaded_by(id)
+      assert %Ecto.Association.NotLoaded{
+        __cardinality__: :many,
+        __field__: :badges,
+        __owner__: LiveDj.Accounts.User
+        } == preloaded_user.badges
+      assert inspect(preloaded_user.badges) == "#Ecto.Association.NotLoaded<association :badges is not loaded>"
+    end
+  end
+
   describe "register_user/1" do
     test "requires email and password to be set" do
       {:error, changeset} = Accounts.register_user(%{})
