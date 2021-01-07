@@ -1,6 +1,9 @@
 defmodule LiveDj.StatsTest do
   use LiveDj.DataCase
 
+  import LiveDj.AccountsFixtures
+
+  alias LiveDj.Accounts
   alias LiveDj.Stats
 
   describe "badges" do
@@ -63,6 +66,18 @@ defmodule LiveDj.StatsTest do
     test "change_badge/1 returns a badge changeset" do
       badge = badge_fixture()
       assert %Ecto.Changeset{} = Stats.change_badge(badge)
+    end
+
+    test "assoc_user_badge/2 with valid data creates a user/badge relationship" do
+      badge = badge_fixture()
+      assert Stats.get_badge!(badge.id) == badge
+      user = user_fixture()
+      {:ok, preloaded_user} = Accounts.get_user_preloaded_by(user.id, [:badges])
+      assert :ok = Stats.assoc_user_badge(preloaded_user, badge)
+      {:ok, preloaded_user} = Accounts.get_user_preloaded_by(user.id, [:badges])
+      assert badge in preloaded_user.badges
+      preloaded_badge = Stats.get_badge!(badge.id) |> Repo.preload(:users)
+      assert user in preloaded_badge.users
     end
   end
 end
