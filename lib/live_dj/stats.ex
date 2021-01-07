@@ -101,4 +101,27 @@ defmodule LiveDj.Stats do
   def change_badge(%Badge{} = badge, attrs \\ %{}) do
     Badge.changeset(badge, attrs)
   end
+
+  @doc """
+  Associates an existing `%User{}`to an existing %Badge{}
+
+  ## Examples
+
+      iex> assoc_user_badge(user, badge)
+      :ok
+
+      iex> assoc_user_badge(user, badge)
+      {:error, #Ecto.Changeset<action: nil, changes: %{...}, errors: [...], data: #LiveDj.Accounts.User<>, valid?: false>}
+
+  """
+  def assoc_user_badge(user, badge) do
+    association_result = user
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:badges, [badge | user.badges])
+    |> Repo.update()
+    case association_result do
+      {:ok, _user} -> :ok
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
 end
