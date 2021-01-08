@@ -7,6 +7,7 @@ defmodule LiveDj.Stats do
   alias LiveDj.Repo
 
   alias LiveDj.Stats.Badge
+  alias LiveDj.Accounts.UserBadge
 
   @doc """
   Returns the list of badges.
@@ -103,22 +104,31 @@ defmodule LiveDj.Stats do
   end
 
   @doc """
-  Associates an existing `%User{}`to an existing %Badge{}
+  Associates an existing `%User{}`to an existing %Badge{} by inserting a
+  %UserBadge{} entity.
 
   ## Examples
 
-      iex> assoc_user_badge(user, badge)
+      iex> assoc_user_badge(user_id, badge_id)
       :ok
 
-      iex> assoc_user_badge(user, badge)
-      {:error, #Ecto.Changeset<action: nil, changes: %{...}, errors: [...], data: #LiveDj.Accounts.User<>, valid?: false>}
+      iex> assoc_user_badge(user_id)
+      {:error,
+       #Ecto.Changeset<
+         action: :insert,
+         changes: %{user_id: 1},
+         errors: [badge_id: {"can't be blank", [validation: :required]}],
+         data: #LiveDj.Accounts.UserBadge<>,
+         valid?: false
+       >}
 
   """
-  def assoc_user_badge(user, badge) do
-    association_result = user
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:badges, [badge | user.badges])
-    |> Repo.update()
+  def assoc_user_badge(user_id, badge_id) do
+    association_result = UserBadge.changeset(
+      %UserBadge{},
+      %{user_id: user_id, badge_id: badge_id}
+    )
+    |> Repo.insert()
     case association_result do
       {:ok, _user} -> :ok
       {:error, changeset} -> {:error, changeset}
