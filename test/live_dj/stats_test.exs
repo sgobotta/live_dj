@@ -70,11 +70,9 @@ defmodule LiveDj.StatsTest do
 
     test "assoc_user_badge/2 with valid data creates a user/badge relationship" do
       badge = badge_fixture()
-      assert Stats.get_badge!(badge.id) == badge
       user = user_fixture()
-      {:ok, preloaded_user} = Accounts.get_user_preloaded_by(user.id, [:badges])
-      assert :ok = Stats.assoc_user_badge(preloaded_user, badge)
-      {:ok, preloaded_user} = Accounts.get_user_preloaded_by(user.id, [:badges])
+      assert :ok = Stats.assoc_user_badge(user.id, badge.id)
+      preloaded_user = Accounts.get_user!(user.id) |> Repo.preload(:badges)
       assert badge in preloaded_user.badges
       preloaded_badge = Stats.get_badge!(badge.id) |> Repo.preload(:users)
       assert user in preloaded_badge.users
