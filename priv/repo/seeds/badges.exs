@@ -6,17 +6,18 @@ try do
   badges = System.get_env("LIVEDJ_BADGES")
     |> Poison.decode!()
     |> Enum.with_index()
-    |> Enum.map(fn {badge, index} -> %{
-      id: index + 1,
-      name: badge["name"],
-      description: badge["description"],
-      icon: badge["icon"],
-      inserted_at: Utils.date_to_naive_datetime(badge["inserted_at"]),
-      updated_at: Utils.date_to_naive_datetime(badge["inserted_at"])
-    } end)
+    |> Enum.map(fn {badge, index} ->
+      %Badge{
+        name: badge["name"],
+        description: badge["description"],
+        icon: badge["icon"],
+        inserted_at: Utils.date_to_naive_datetime(badge["inserted_at"]),
+        updated_at: Utils.date_to_naive_datetime(badge["inserted_at"])
+      }
+      |> Repo.insert()
+    end)
 
-  {count, _} = Repo.insert_all(Badge, badges)
-  IO.inspect("Inserted #{count} badges.")
+  IO.inspect("Inserted #{length(badges)} badges.")
 
 rescue
   Postgrex.Error ->

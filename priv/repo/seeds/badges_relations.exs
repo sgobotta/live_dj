@@ -1,7 +1,7 @@
 alias LiveDj.Stats
 
 try do
-  badges_users = [{1, 1}, {1, 2}]
+  badges_users = [{1, 1}, {1, 2}, {2,2}]
   |> Enum.map(fn {user_id, badge_id} ->
     :ok = Stats.assoc_user_badge(user_id, badge_id)
   end)
