@@ -95,7 +95,11 @@ select {
 
 .setting-card:hover {
   border-right-color: $secondary-highlight-1;
-} 
+}
+
+.setting-card {
+  min-width: 340px;
+}
 
 /**
  * Helpers
@@ -1800,7 +1804,7 @@ ul.playlist {
   }
 }
 
-.account-asset:hover .account-body-asset-1 {
+.account-asset:hover .account-body--asset-1 {
   -webkit-animation: holding-weight 2s linear infinite;
   -moz-animation: holding-weight 2s linear infinite;
   -ms-animation: holding-weight 2s linear infinite;
@@ -1839,6 +1843,103 @@ ul.playlist {
     -webkit-transform: scale(0.97) translateY(3px);
     -o-transform: scale(0.97) translateY(3px);
     transform: scale(0.97) translateY(3px);
+  }
+}
+
+.account-asset:hover .account-table-asset-1 {
+  -webkit-animation: display-table-1 1s infinite;
+  -moz-animation: display-table-1 1s infinite;
+  -ms-animation: display-table-1 1s infinite;
+  -o-animation: display-table-1 1s infinite;
+  animation: display-table-1 1s infinite;
+}
+
+@-webkit-keyframes display-table-1 {
+  0% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+  48% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+  49% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+  100% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes display-table-1 {
+  0% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+  48% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+  49% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+  100% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+}
+
+.account-table-asset-2 {
+  opacity: 0;
+  stroke-opacity: 0;
+}
+
+.account-asset:hover .account-table-asset-2 {
+  -webkit-animation: display-table-2 1s infinite;
+  -moz-animation: display-table-2 1s infinite;
+  -ms-animation: display-table-2 1s infinite;
+  -o-animation: display-table-2 1s infinite;
+  animation: display-table-2 1s infinite;
+}
+
+@-webkit-keyframes display-table-2 {
+  0% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+  49% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+  50% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+  100% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+}
+
+@keyframes display-table-2 {
+  0% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+  49% {
+    stroke-opacity: 0;
+    opacity: 0;
+  }
+  50% {
+    stroke-opacity: 1;
+    opacity: 1;
+  }
+  100% {
+    stroke-opacity: 1;
+    opacity: 1;
   }
 }
 
@@ -2102,3 +2203,60 @@ ul.playlist {
     transform: translateX(3px);
   }
 }
+
+/**
+ * Badge Animations
+ */
+
+.badge-asset:hover .badges-asset-star-3 {
+  -webkit-animation: fill-star 1.3s linear infinite;
+  -moz-animation: fill-star 1.3s linear infinite;
+  -ms-animation: fill-star 1.3s linear infinite;
+  -o-animation: fill-star 1.3s linear infinite;
+  animation: fill-star 1.3s linear infinite;
+}
+
+@-webkit-keyframes fill-star {
+  from {
+    fill: none;
+  }
+  to {
+    fill: #ffe680;
+  }
+}
+
+@keyframes fill-star {
+  from {
+    fill: none;
+  }
+  to {
+    fill: #ffe680;
+  }
+}
+
+.badge-asset:hover .badge-asset-spark {
+  -webkit-animation: fill-spark 1.3s linear infinite;
+  -moz-animation: fill-spark 1.3s linear infinite;
+  -ms-animation: fill-spark 1.3s linear infinite;
+  -o-animation: fill-spark 1.3s linear infinite;
+  animation: fill-spark 1.3s linear infinite;
+}
+
+@-webkit-keyframes fill-spark {
+  from {
+    fill: none;
+  }
+  to {
+    fill: #000;
+  }
+}
+
+@keyframes fill-spark {
+  from {
+    fill: none;
+  }
+  to {
+    fill: #000;
+  }
+}
+
