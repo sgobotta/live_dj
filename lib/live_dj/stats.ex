@@ -109,24 +109,16 @@ defmodule LiveDj.Stats do
 
   ## Examples
 
-      iex> assoc_user_badge(user_id, badge_id)
+      iex> assoc_user_badge(user_id, badge_reference_name)
       :ok
 
-      iex> assoc_user_badge(user_id)
-      {:error,
-       #Ecto.Changeset<
-         action: :insert,
-         changes: %{user_id: 1},
-         errors: [badge_id: {"can't be blank", [validation: :required]}],
-         data: #LiveDj.Accounts.UserBadge<>,
-         valid?: false
-       >}
-
   """
-  def assoc_user_badge(user_id, badge_id) do
+  def assoc_user_badge(user_id, badge_reference_name) do
     association_result = UserBadge.changeset(
       %UserBadge{},
-      %{user_id: user_id, badge_id: badge_id}
+      %{
+        user_id: user_id,
+        badge_id: Repo.get_by(Badge, reference_name: badge_reference_name).id}
     )
     |> Repo.insert()
     case association_result do
