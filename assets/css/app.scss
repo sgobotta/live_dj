@@ -50,10 +50,12 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
   border-color: $secondary;
 }
 
+@import "./badge.scss";
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
 @import "./progressive-range.scss";
 @import "./policies.scss";
+@import "./tooltip.scss";
 
 body {
   background-color: #000000;
@@ -1804,7 +1806,8 @@ ul.playlist {
   }
 }
 
-.account-asset:hover .account-body--asset-1 {
+/**
+.account-asset:hover .account-body-asset-1 {
   -webkit-animation: holding-weight 2s linear infinite;
   -moz-animation: holding-weight 2s linear infinite;
   -ms-animation: holding-weight 2s linear infinite;
@@ -1845,6 +1848,7 @@ ul.playlist {
     transform: scale(0.97) translateY(3px);
   }
 }
+*/
 
 .account-asset:hover .account-table-asset-1 {
   -webkit-animation: display-table-1 1s infinite;
