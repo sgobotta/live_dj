@@ -284,11 +284,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       Map.merge(m, %{volume_level: volume_level, volume_icon: volume_icon})
     end)
 
-    connected_users = Organizer.list_present_with_metas(slug)
-
-    {:noreply,
-      socket
-      |> assign(:connected_users, connected_users)}
+    {:noreply, socket}
   end
 
   def handle_info({:remove_track, %{video_id: video_id}}, socket) do
@@ -346,11 +342,8 @@ defmodule LiveDjWeb.Room.ShowLive do
     Presence.update(self(), "room:" <> slug, uuid, fn m ->
       Map.merge(m, %{username: username})
     end)
-    connected_users = Organizer.list_present_with_metas(slug)
 
-    {:noreply,
-      socket
-      |> assign(:connected_users, connected_users)}
+    {:noreply, socket}
   end
 
   @impl true
