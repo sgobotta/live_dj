@@ -3,10 +3,12 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
 
   alias LiveDj.Accounts
   alias LiveDj.Repo
+
   import LiveDj.AccountsFixtures
+  import LiveDj.StatsFixtures
 
   setup do
-    %{user: user_fixture()}
+    %{user: user_fixture(), badge: badge_fixture(reference_name: "users-confirmed_via_link")}
   end
 
   describe "GET /users/confirm" do
@@ -56,7 +58,7 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
   end
 
   describe "GET /users/confirm/:token" do
-    test "confirms the given token once", %{conn: conn, user: user} do
+    test "confirms the given token once", %{conn: conn, user: user, badge: badge} do
       token =
         extract_user_token(fn url ->
           Accounts.deliver_user_confirmation_instructions(user, url)
@@ -65,20 +67,33 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
       conn = get(conn, Routes.user_confirmation_path(conn, :confirm, token))
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "Account confirmed successfully"
-      assert Accounts.get_user!(user.id).confirmed_at
+
+      %{
+        confirmed_at: confirmed_at,
+        badges: badges
+      } = Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+      assert confirmed_at
       refute get_session(conn, :user_token)
       assert Repo.all(Accounts.UserToken) == []
+
+      assert badge in badges
 
       conn = get(conn, Routes.user_confirmation_path(conn, :confirm, token))
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :error) =~ "Confirmation link is invalid or it has expired"
     end
 
-    test "does not confirm email with invalid token", %{conn: conn, user: user} do
+    test "does not confirm email with invalid token", %{conn: conn, user: user, badge: badge} do
       conn = get(conn, Routes.user_confirmation_path(conn, :confirm, "oops"))
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :error) =~ "Confirmation link is invalid or it has expired"
-      refute Accounts.get_user!(user.id).confirmed_at
+
+      %{
+        confirmed_at: confirmed_at,
+        badges: badges
+      } = Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+      refute confirmed_at
+      refute badge in badges
     end
   end
 end
