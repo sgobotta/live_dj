@@ -63,6 +63,40 @@ defmodule LiveDj.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Preloads a `%User{}` with the given associations.
+
+  ## Examples
+
+      iex> preload_user(user, associations)
+      #LiveDj.Accounts.User<
+        __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+        badges: [
+          %LiveDj.Stats.Badge{
+            __meta__: #Ecto.Schema.Metadata<:loaded, "badges">,
+            description: "..",
+            icon: "...",
+            id: 1,
+            inserted_at: ~N[2020-01-07 16:20:00],
+            name: "...",
+            ...
+          },
+          ...
+        ],
+        confirmed_at: ~N[2020-11-15 22:14:57],
+        email: "...",
+        id: 1,
+        inserted_at: ~N[2020-11-15 22:13:29],
+        updated_at: ~N[2020-11-17 14:15:00],
+        username: "...",
+        ...
+      >
+
+  """
+  def preload_user(%User{} = user, associations \\ []) do
+    Repo.preload(user, associations)
+  end
+
   ## User registration
 
   @doc """
