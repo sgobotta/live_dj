@@ -3,6 +3,7 @@ defmodule LiveDjWeb.UserSettingsController do
 
   alias LiveDj.Accounts
   alias LiveDj.Payments
+  alias LiveDj.Stats
   alias LiveDjWeb.UserAuth
 
   plug :assign_initial_changesets
@@ -25,6 +26,17 @@ defmodule LiveDjWeb.UserSettingsController do
       |> Decimal.to_string()
     }) end)
     render(conn, "show_payments.html", orders: orders)
+  end
+
+  def show_badges(conn, _params) do
+    %{assigns: %{current_user: current_user}} = conn
+    current_user_badges = Accounts.preload_user(current_user, [:badges]).badges
+    |> Enum.map(fn b -> b.id end)
+    badges = Stats.list_badges()
+    |> Enum.map(fn badge ->
+      Map.merge(badge, %{acquired: badge.id in current_user_badges})
+    end)
+    render(conn, "show_badges.html", badges: badges)
   end
 
   def update_username(conn, %{"current_password" => password, "user" => user_params}) do
