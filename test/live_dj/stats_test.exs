@@ -9,9 +9,9 @@ defmodule LiveDj.StatsTest do
   describe "badges" do
     alias LiveDj.Stats.Badge
 
-    @valid_attrs %{description: "some description", icon: "some icon", name: "some name"}
-    @update_attrs %{description: "some updated description", icon: "some updated icon", name: "some updated name"}
-    @invalid_attrs %{description: nil, icon: nil, name: nil}
+    @valid_attrs %{description: "some description", icon: "some icon", name: "some name", reference_name: "some reference name"}
+    @update_attrs %{description: "some updated description", icon: "some updated icon", name: "some updated name", reference_name: "some updated reference name"}
+    @invalid_attrs %{description: nil, icon: nil, name: nil, reference_name: nil}
 
     def badge_fixture(attrs \\ %{}) do
       {:ok, badge} =
