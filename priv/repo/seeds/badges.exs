@@ -8,9 +8,10 @@ try do
     |> Enum.with_index()
     |> Enum.map(fn {badge, index} ->
       %Badge{
-        name: badge["name"],
         description: badge["description"],
         icon: badge["icon"],
+        name: badge["name"],
+        reference_name: badge["reference_name"],
         inserted_at: Utils.date_to_naive_datetime(badge["inserted_at"]),
         updated_at: Utils.date_to_naive_datetime(badge["inserted_at"])
       }
