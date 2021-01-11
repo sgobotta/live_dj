@@ -13,6 +13,7 @@ defmodule LiveDj.Accounts.User do
     field :confirmed_at, :naive_datetime
 
     many_to_many :badges, LiveDj.Stats.Badge, join_through: UserBadge
+    many_to_many :rooms, LiveDj.Organizer.Room, join_through: UserRoom
 
     timestamps()
   end
