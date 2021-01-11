@@ -5,8 +5,7 @@ alias LiveDj.Stats.Badge
 try do
   badges = System.get_env("LIVEDJ_BADGES")
     |> Poison.decode!()
-    |> Enum.with_index()
-    |> Enum.map(fn {badge, index} ->
+    |> Enum.map(fn badge ->
       %Badge{
         description: badge["description"],
         icon: badge["icon"],
