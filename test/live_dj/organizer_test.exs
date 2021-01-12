@@ -63,4 +63,73 @@ defmodule LiveDj.OrganizerTest do
       assert %Ecto.Changeset{} = Organizer.change_room(room)
     end
   end
+
+  describe "users_rooms" do
+    alias LiveDj.Organizer.UserRoom
+    alias LiveDj.AccountsFixtures
+    alias LiveDj.OrganizerFixtures
+
+    @valid_attrs %{is_owner: true}
+    @update_attrs %{is_owner: false}
+    @invalid_attrs %{is_owner: nil}
+
+    setup do
+      user = AccountsFixtures.user_fixture()
+      room = OrganizerFixtures.room_fixture()
+
+      %{room: room, user: user}
+    end
+
+    def user_room_fixture(attrs \\ %{}) do
+      {:ok, user_room} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Organizer.create_user_room()
+
+      user_room
+    end
+
+    test "list_users_rooms/0 returns all users_rooms", %{user: user, room: room} do
+      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id})
+      assert Organizer.list_users_rooms() == [user_room]
+    end
+
+    test "get_user_room!/1 returns the user_room with given id", %{user: user, room: room} do
+      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id})
+      assert Organizer.get_user_room!(user_room.id) == user_room
+    end
+
+    test "create_user_room/1 with valid data creates a user_room", %{user: user, room: room} do
+      valid_attrs = Enum.into(@valid_attrs, %{user_id: user.id, room_id: room.id})
+      assert {:ok, %UserRoom{} = user_room} = Organizer.create_user_room(valid_attrs)
+      assert user_room.is_owner == true
+    end
+
+    test "create_user_room/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Organizer.create_user_room(@invalid_attrs)
+    end
+
+    test "update_user_room/2 with valid data updates the user_room", %{user: user, room: room} do
+      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id})
+      assert {:ok, %UserRoom{} = user_room} = Organizer.update_user_room(user_room, @update_attrs)
+      assert user_room.is_owner == false
+    end
+
+    test "update_user_room/2 with invalid data returns error changeset", %{user: user, room: room} do
+      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id})
+      assert {:error, %Ecto.Changeset{}} = Organizer.update_user_room(user_room, @invalid_attrs)
+      assert user_room == Organizer.get_user_room!(user_room.id)
+    end
+
+    test "delete_user_room/1 deletes the user_room", %{user: user, room: room} do
+      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id})
+      assert {:ok, %UserRoom{}} = Organizer.delete_user_room(user_room)
+      assert_raise Ecto.NoResultsError, fn -> Organizer.get_user_room!(user_room.id) end
+    end
+
+    test "change_user_room/1 returns a user_room changeset", %{user: user, room: room} do
+      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id})
+      assert %Ecto.Changeset{} = Organizer.change_user_room(user_room)
+    end
+  end
 end
