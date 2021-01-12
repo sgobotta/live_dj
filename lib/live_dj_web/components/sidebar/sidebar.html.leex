@@ -1,23 +1,23 @@
 <div class="sidebar flex h-screen antialiased text-gray-900 bg-neutral-darker">
-  <aside class="flex-shrink-0 w-72 h-full">
-    <div class="flex flex-col h-full pb-4 rounded-lg neumorphism-shadow">
+  <aside class="flex-shrink-0 w-82 h-full">
+    <div class="flex flex-col h-full pb-4 rounded-lg sidebar-shadow">
       <!-- Sidebar links -->
       <nav class="flex-1 max-h-full p-4 overflow-y-hidden">
         <ul class="max-h-full p-2 space-y-1 overflow-y-auto divide-y divide-list-element">
         <!-- Hamburger button -->
           <li style="margin: 0px;">
-            <a
+            <button
               class="flex items-center px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
             >
-              <span>
-                <i class="fas fa-bars clickeable" style="color: black"></i>
+              <span class="p-1">
+                <i class="fas fa-bars clickeable sidebar-primary text-3xl"></i>
               </span>
               <span class="ml-2 font-medium">Menu</span>
-            </a>
+            </button>
           </li>
           <!-- Dashboard link -->
           <li>
-            <a
+            <button
               class="flex items-center w-full px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
               data-bs-target="#dashboardCollapse"
               data-bs-toggle="collapse"
@@ -26,7 +26,7 @@
             >
               <span>
                 <svg
-                  class="w-5 h-5"
+                  class="w-8 h-8"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -52,7 +52,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
-            </a>
+            </button>
             <ul class="collapse" id="dashboardCollapse">
               <li>
                 <a
@@ -79,7 +79,7 @@
           </li>
           <!-- Settings link -->
           <li>
-            <a
+            <button
               class="flex items-center w-full px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
               data-bs-target="#settingsCollapse"
               data-bs-toggle="collapse"
@@ -88,7 +88,7 @@
             >
               <span>
                 <svg
-                  class="w-5 h-5"
+                  class="w-8 h-8"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -120,7 +120,7 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </span>
-            </a>
+            </button>
             <ul class="collapse" id="settingsCollapse">
               <li>
                 <a
@@ -154,13 +154,13 @@
           </li>
           <!-- Profile link -->
           <li>
-            <a
+            <button
               href="#"
               class="flex items-center px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
             >
               <span>
                 <svg
-                  class="w-5 h-5"
+                  class="w-8 h-8"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -175,13 +175,13 @@
                 </svg>
               </span>
               <span class="ml-2 font-medium">Profile</span>
-            </a>
+            </button>
           </li>
         </ul>
       </nav>
       <div class="flex-shrink-0 px-4 py-2">
         <button
-          class="w-full px-4 py-2 text-lg font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md neumorphism-shadow focus:outline-none focus:ring button-effect"
+          class="w-full px-4 py-2 text-lg font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md sidebar-shadow focus:outline-none focus:ring button-effect"
         >
           Logout
         </button>
@@ -194,9 +194,3 @@
     </main>
   </div>
 </div>
-
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-  crossorigin="anonymous"
-></script>
