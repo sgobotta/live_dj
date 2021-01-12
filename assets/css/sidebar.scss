@@ -6,6 +6,16 @@ $sidebar-primary: #dedcdc;
 }
 
 .sidebar {
+  li {
+    margin: 0px !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  li button {
+    margin-right: 0px;
+  }
+
   li:hover {
     button {
       color: $primary-light;
@@ -22,12 +32,26 @@ $sidebar-primary: #dedcdc;
     background-color: #222;
   }
 
-  nav {
-    width: 20rem;
-  }
-
   i.fas {
     font-size: 1.875rem
+  }
+
+  span.dashboard-button-text {
+    @media (max-width: 640px) {
+      
+    }
+    @media (min-width: 768px) {
+      
+    }
+    @media (min-width: 1024px) {
+      
+    }
+    @media (min-width: 1280px) {
+      
+    }
+    @media (min-width: 1536px) {
+      
+    }
   }
 }
 
@@ -63,11 +87,10 @@ $sidebar-primary: #dedcdc;
     transition: none;
   }
 }
-/* fixed github link. this stuff also should be applied throw config file  */
 .button-effect {
   box-shadow: -4px -4px 10px #35393a, 4px 4px 10px #070808;
 }
-.button-effect:hover {
+.button-effect:hover, .nav-button-effect:hover {
   box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a;
 }
 .button-effect:hover > svg,
