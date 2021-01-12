@@ -2,27 +2,22 @@
   <aside class="flex-shrink-0 w-82 h-full">
     <div class="flex flex-col h-full pb-4 rounded-lg sidebar-shadow">
       <!-- Sidebar links -->
-      <nav class="flex-1 max-h-full p-4 overflow-y-hidden">
+      <nav class="flex-1 w-32 max-h-full p-4 overflow-y-hidden">
         <ul class="max-h-full p-2 space-y-1 overflow-y-auto divide-y divide-list-element">
         <!-- Hamburger button -->
-          <li style="margin: 0px;">
-            <button
-              class="flex items-center px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
-            >
-              <span class="p-1">
-                <i class="fas fa-bars clickeable sidebar-primary text-3xl"></i>
-              </span>
-              <span class="ml-2 font-medium">Menu</span>
-            </button>
-          </li>
-          <!-- Dashboard link -->
           <li>
             <button
-              class="flex items-center w-full px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
-              data-bs-target="#dashboardCollapse"
-              data-bs-toggle="collapse"
-              aria-expanded="false"
-              aria-controls="dashboardCollapse"
+              class="flex nav-button-effect items-center justify-center w-full px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+            >
+              <span>
+                <i class="fas fa-music clickeable sidebar-primary text-3xl"></i>
+              </span>
+            </button>
+          </li>
+          <!-- Back link -->
+          <li>
+            <button
+              class="flex nav-button-effect items-center justify-center w-full px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
             >
               <span>
                 <svg
@@ -40,51 +35,12 @@
                   />
                 </svg>
               </span>
-              <span class="ml-2 font-medium">Dashboard</span>
-              <span class="ml-auto">
-                <svg
-                  class="w-4 h-4 transition-transform"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
             </button>
-            <ul class="collapse" id="dashboardCollapse">
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link one</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link two</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link three</a
-                >
-              </li>
-            </ul>
           </li>
           <!-- Settings link -->
           <li>
             <button
-              class="flex items-center w-full px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
-              data-bs-target="#settingsCollapse"
-              data-bs-toggle="collapse"
-              aria-expanded="false"
-              aria-controls="settingsCollapse"
+              class="flex nav-button-effect items-center justify-center w-full px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
             >
               <span>
                 <svg
@@ -108,55 +64,12 @@
                   />
                 </svg>
               </span>
-              <span class="ml-2 font-medium">Settings</span>
-              <span class="ml-auto">
-                <svg
-                  class="w-4 h-4 transition-transform"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </span>
             </button>
-            <ul class="collapse" id="settingsCollapse">
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link one</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link two</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link three</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
-                  >Link four</a
-                >
-              </li>
-            </ul>
           </li>
           <!-- Profile link -->
           <li>
             <button
-              href="#"
-              class="flex items-center px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+              class="flex nav-button-effect items-center justify-center w-full px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
             >
               <span>
                 <svg
@@ -174,7 +87,6 @@
                   />
                 </svg>
               </span>
-              <span class="ml-2 font-medium">Profile</span>
             </button>
           </li>
         </ul>
@@ -183,7 +95,7 @@
         <button
           class="w-full px-4 py-2 text-lg font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md sidebar-shadow focus:outline-none focus:ring button-effect"
         >
-          Logout
+          <i class="fas fa-sign-out-alt clickeable sidebar-primary text-3xl"></i>
         </button>
       </div>
     </div>
