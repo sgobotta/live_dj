@@ -1,4 +1,4 @@
-defmodule LiveDj.Accounts.UserRoom do
+defmodule LiveDj.Organizer.UserRoom do
   use Ecto.Schema
   import Ecto.Changeset
 
