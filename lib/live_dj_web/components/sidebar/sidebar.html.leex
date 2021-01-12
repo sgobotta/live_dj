@@ -1,0 +1,202 @@
+<div class="sidebar flex h-screen antialiased text-gray-900 bg-neutral-darker">
+  <aside class="flex-shrink-0 w-72 h-full">
+    <div class="flex flex-col h-full pb-4 rounded-lg neumorphism-shadow">
+      <!-- Sidebar links -->
+      <nav class="flex-1 max-h-full p-4 overflow-y-hidden">
+        <ul class="max-h-full p-2 space-y-1 overflow-y-auto divide-y divide-list-element">
+        <!-- Hamburger button -->
+          <li style="margin: 0px;">
+            <a
+              class="flex items-center px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+            >
+              <span>
+                <i class="fas fa-bars clickeable" style="color: black"></i>
+              </span>
+              <span class="ml-2 font-medium">Menu</span>
+            </a>
+          </li>
+          <!-- Dashboard link -->
+          <li>
+            <a
+              class="flex items-center w-full px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
+              data-bs-target="#dashboardCollapse"
+              data-bs-toggle="collapse"
+              aria-expanded="false"
+              aria-controls="dashboardCollapse"
+            >
+              <span>
+                <svg
+                  class="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+              </span>
+              <span class="ml-2 font-medium">Dashboard</span>
+              <span class="ml-auto">
+                <svg
+                  class="w-4 h-4 transition-transform"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </a>
+            <ul class="collapse" id="dashboardCollapse">
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link one</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link two</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link three</a
+                >
+              </li>
+            </ul>
+          </li>
+          <!-- Settings link -->
+          <li>
+            <a
+              class="flex items-center w-full px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
+              data-bs-target="#settingsCollapse"
+              data-bs-toggle="collapse"
+              aria-expanded="false"
+              aria-controls="settingsCollapse"
+            >
+              <span>
+                <svg
+                  class="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </span>
+              <span class="ml-2 font-medium">Settings</span>
+              <span class="ml-auto">
+                <svg
+                  class="w-4 h-4 transition-transform"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </a>
+            <ul class="collapse" id="settingsCollapse">
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link one</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link two</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link three</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex px-6 py-2 font-medium sidebar-primary transition-transform transform hover:translate-x-1"
+                  >Link four</a
+                >
+              </li>
+            </ul>
+          </li>
+          <!-- Profile link -->
+          <li>
+            <a
+              href="#"
+              class="flex items-center px-4 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+            >
+              <span>
+                <svg
+                  class="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </span>
+              <span class="ml-2 font-medium">Profile</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="flex-shrink-0 px-4 py-2">
+        <button
+          class="w-full px-4 py-2 text-lg font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md neumorphism-shadow focus:outline-none focus:ring button-effect"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </aside>
+  <div class="flex-1">
+    <main>
+      <%= @inner_content.([]) %>
+    </main>
+  </div>
+</div>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+  crossorigin="anonymous"
+></script>
