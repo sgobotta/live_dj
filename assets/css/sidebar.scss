@@ -46,7 +46,7 @@ div.sidebar {
     }
   }
 
-  button, button:hover {
+  button.sidebar-button {
     background-color: #222;
   }
 }
@@ -94,15 +94,15 @@ div.sections-group-navigation {
 
   header.sections-group-header nav li {
     float: left;
-    width: 49%;
+    width: 50%;
     
     button {
       width: 100%;
     }
   }
 
-  header.sections-group-header nav li.header-item {
-    padding: 0px;
+  header.sections-group-header nav li.sections-group-header-item {
+    padding: 0;
   }
 
   header.sections-group-header ul {
@@ -153,13 +153,34 @@ div.sections-group-navigation {
     transition: none;
   }
 }
-.button-effect {
-  box-shadow: -4px -4px 10px #35393a, 4px 4px 10px #070808;
+.sections-group-button {
+  color: #dedcdc;
+  background-color: #000 !important;
 }
-.button-effect:hover, .nav-button-effect:hover {
+.sections-group-button:hover {
+  color: #dedcdc;
+  transform: none;
+  background-color: #000 !important;
+}
+.sections-group-button:focus  {
+  color: #dedcdc;
+  background-color: #141414;
+}
+.nav-button-effect-active:hover {
+  color: #dedcdc;
+  background-color: #141414 !important;
+}
+.nav-button-effect-active:focus {
+  color: #dedcdc;
+  background-color: #141414 !important;
+}
+.nav-button-effect-active {
+  background-color: #141414 !important;
+}
+.button-effect:hover {
   box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a;
 }
 .button-effect:hover > svg,
 .button-effect:focus > svg {
-  transform: scale(.95)
+  transform: scale(.99)
 }
