@@ -454,24 +454,28 @@ b {
 
 .scrollable-panel {
   overflow-y: scroll;
-  border-left-width: 0.1rem;
+  border-left-width: 0rem;
   border-left-color: $primary;
   border-style: ridge;
 
   &.fixed-height-sm {
-    height: 20vh;
+    height: 27vh;
   }
 
   &.fixed-height-md {
     height: 30vh;
   }
 
-  &.extra-margin {
-    margin-top: 40px;
+  &.fixed-height-lg {
+    height: 36vh;
   }
 
-  &.extra-height {
-    height: 36vh;
+  &.fixed-height-xl {
+    height: 40vh;
+  }
+
+  &.extra-margin {
+    margin-top: 40px;
   }
 
   &.higher {
@@ -650,10 +654,6 @@ a.btn i.trash {
   align-self: center;
 }
 
-.search-form {
-  margin-top: 8px;
-}
-
 .chat-form {
   margin-top: 8px;
 }
@@ -683,6 +683,33 @@ input.text-input:focus {
 @keyframes input-highlight {
   0% { border: 0.1rem; }
   100% { border: 0.15rem }
+}
+
+.chat-text-input, .search-text-input {
+  border: 0px !important;
+  box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a !important;
+}
+
+input.chat-text-input:focus {
+  content: none;
+  -webkit-animation: input-highlight 0.1s forwards;
+  animation: input-highlight 0.1s forwards;
+  -webkit-transition: border-color 1500ms ease-in;
+  transition: border-color 1500ms ease-in;
+}
+
+@-webkit-keyframes input-highlight {
+  0% { border: 0.1rem; }
+  100% { border: 0.15rem; }
+}
+
+@keyframes input-highlight {
+  0% { border: 0.1rem; }
+  100% { border: 0.15rem }
+}
+
+.chat-panel, .peers-panel {
+  background-color: #222;
 }
 
 .chat-message {
