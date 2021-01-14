@@ -5,12 +5,21 @@ $sidebar-primary: #dedcdc;
   color: $sidebar-primary;
 }
 
-.sidebar {
-  header nav ul {
+/**
+ * Main Sidebar/Header
+ */
+
+div.sidebar {
+
+  .h-afull {
+    height: 98%;
+  }
+
+  header.navigation nav ul {
     margin: 0rem;
   }
 
-  header nav li {
+  header.navigation nav li {
     padding: 0px;
     float: left;
   }
@@ -40,42 +49,79 @@ $sidebar-primary: #dedcdc;
   button, button:hover {
     background-color: #222;
   }
-
-  i.fas {
-    font-size: 1.875rem
-  }
 }
 
-@media (max-width: 768px) {
-  .sidebar {
+@media (max-width: 1024px) {
+  div.sidebar {
     width: 100vw;
     flex-direction: column;
 
-    header {
+    header.navigation {
       display: flex;
     }
 
-    aside {
+    aside.navigation {
       display: none;
     }
   }
 }
-@media (min-width: 768px) {
-  .sidebar {
-    height: 100vh;
+@media (min-width: 1024px) {
+  div.sidebar {
+    height: 97vh;
     flex-direction: row;
 
-    header {
+    header.navigation {
       display: none;
     }
 
-    aside {
+    aside.navigation {
       display: flex;
+    }
+
+    li.sections-group-header-item {
+      margin: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
   }
 }
 
-/* Add this shadow in tailwind.config.js */
+/**
+ * Sections Group Header
+ */
+
+div.sections-group-navigation {
+
+  header.sections-group-header nav li {
+    float: left;
+    width: 49%;
+    
+    button {
+      width: 100%;
+    }
+  }
+
+  header.sections-group-header nav li.header-item {
+    padding: 0px;
+  }
+
+  header.sections-group-header ul {
+    margin: 0;
+  }
+
+  header.sections-group-header ul.divide-list-element {
+    li {
+      border-color: #121212;
+    }
+  }
+
+  header.sections-group-header div.sidebar-shadow {
+    box-shadow: -4px -4px 10px #222, 4px 4px 10px rgba(0, 0, 0, 0.6);
+  }
+}
+
+
+
 .sidebar-shadow {
   box-shadow: -4px -4px 10px #121212, 4px 4px 10px rgba(0, 0, 0, 0.6);
 }
