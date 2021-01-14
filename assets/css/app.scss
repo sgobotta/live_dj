@@ -62,6 +62,7 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
 
 body {
   background-color: #000000;
+  height: 1vh;
 }
 
 h1{font-size: 3.6rem; line-height: 1.25; color: $white}
@@ -137,6 +138,10 @@ select {
 /**
  * End of Helpers
  */
+
+.main-header {
+  height: 3vh;
+}
 
 .header {
   align-items: center;
@@ -251,6 +256,59 @@ header nav a {
 
 li.navbar-link:hover a {
   color: $secondary-highlight-1;
+}
+
+
+/**
+ * Sections
+ */
+
+.sections-grid {
+  display: grid;
+  grid-auto-flow: row;
+  max-height: 100vh;
+  overflow-y: hidden;
+}
+
+@media (max-width: 1024px) {
+
+  .sections-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  /**
+  * Sections hide/show on small sreens
+  */
+  .show-section {
+
+  }
+  .hide-section {
+    display: none !important;
+  }
+}
+@media (min-width: 1024px) {
+
+  .sections-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /**
+   * Sections never hide on big screens
+   */
+  .show-section {
+
+  }
+  .hide-section {
+
+  }
+}
+
+.sections-group-show-section {
+
+}
+
+.sections-group-hide-section {
+  display: none !important;
 }
 
 /* LiveView specific classes for your customizations */
@@ -395,20 +453,28 @@ b {
 }
 
 .scrollable-panel {
-  min-height: 400px;
-  max-height: 400px;
   overflow-y: scroll;
-
   border-left-width: 0.1rem;
   border-left-color: $primary;
   border-style: ridge;
+
+  &.fixed-height-sm {
+    height: 20vh;
+  }
+
+  &.fixed-height-md {
+    height: 30vh;
+  }
 
   &.extra-margin {
     margin-top: 40px;
   }
 
+  &.extra-height {
+    height: 36vh;
+  }
+
   &.higher {
-    min-height: 446px;
     border-bottom-color: $primary;
     border-bottom-width: 0.1rem;
     border-bottom-left-radius: 6px;
@@ -551,10 +617,9 @@ a.btn i.trash {
   border-color: #000;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1024px) {
   .section-title {
     justify-content: center;
-    width: 100%;
   
     span {
       width: 100%;
@@ -799,6 +864,7 @@ input.text-input:focus {
 }
 
 .modal-close-icon {
+  background-color: transparent !important;
   border: 0px;
   color: #a0aec0;
   transition-duration: 150ms;
@@ -1079,9 +1145,12 @@ div p.pill-text {
 
 .player-controls-container {
 
+  height: 12vh;
+
   @media (max-width: 768px) {
     display: grid;
     padding: 25px 0;
+    height: 22vh;
     
     .volume-control-container {
       width: 100%;
