@@ -1,5 +1,12 @@
 <div
-  class="column"
+  class="
+    column
+    <%= if @current_section == "peers" do %>
+      sections-group-show-section
+    <% else %>
+      sections-group-hide-section
+    <% end %>
+  "sections-group-show-section
   id="peers-list-data" phx-hook="PresenceSyncing"
 >
   <div class="flex items-start section-title">
@@ -7,7 +14,7 @@
       Peers (<%= length(@connected_users) %>)
     </span>
   </div>
-  <div class="scrollable-panel higher p-4">
+  <div class="scrollable-panel fixed-height-md higher extra-height p-4">
     <ul>
       <%= for user <- @connected_users do %>
         <li style="list-style: none;">

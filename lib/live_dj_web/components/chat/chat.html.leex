@@ -1,11 +1,20 @@
-<div class="column">
-  <div id="chat-data" phx-hook="ChatSyncing">
+<div
+  class="
+    column
+    <%= if @current_section == "chat" do %>
+      sections-group-show-section
+    <% else %>
+      sections-group-hide-section
+    <% end %>
+  "
+>
+  <div id="chat-data" phx-hook="ChatSyncing" class=>
     <div class="flex items-start section-title">
       <span class="rounded text-white p-2 leading-none flex title-pill mt-4 mb-4">
         <%= @room.title %> chat
       </span>
     </div>
-    <div id="chat" class="scrollable-panel">
+    <div id="chat" class="scrollable-panel fixed-height-md">
       <%= for message <- @messages do %>
         <div>
           <p class="chat-message">
@@ -14,21 +23,23 @@
         </div>
       <% end %>
     </div>
-    <form
-      phx-change="typing"
-      phx-submit="new_message"
-      phx-target="<%= @myself %>"
-      class="chat-form"
-    >
-      <%=
-        text_input :submit,
-        :message,
-        value: @new_message,
-        phx_blur: "stop_typing",
-        phx_target: @myself,
-        placeholder: "Write something...",
-        class: "text-input"
-      %>
-    </form>
+    <div>
+      <form
+        phx-change="typing"
+        phx-submit="new_message"
+        phx-target="<%= @myself %>"
+        class="chat-form"
+      >
+        <%=
+          text_input :submit,
+          :message,
+          value: @new_message,
+          phx_blur: "stop_typing",
+          phx_target: @myself,
+          placeholder: "Write something...",
+          class: "text-input"
+        %>
+      </form>
+    </div>
   </div>
 </div>

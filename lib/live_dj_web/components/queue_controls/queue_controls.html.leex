@@ -1,5 +1,8 @@
 <div
-  class="row queue-controls justify-between"
+  class="
+    row queue-controls justify-between
+    <%= if @current_tab == "video_queue" do %>show-section<% else %>hide-section<% end %>
+  "
 >
   <div class="flex items-start section-title">
     <span class="rounded text-white p-2 leading-none flex title-pill mt-4 mb-4">

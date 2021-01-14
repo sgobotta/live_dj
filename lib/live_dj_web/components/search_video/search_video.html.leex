@@ -1,4 +1,13 @@
-<div>
+<div
+  class="
+    m-4
+    <%= if @current_tab == "video_search" do %>
+      show-section
+    <% else %>
+      hide-section
+    <% end %>
+  "
+>
   <div>
     <form id="search-video-form" phx-submit="search" class="search-form">
       <%=
@@ -15,7 +24,7 @@
   <div
     phx-hook="SearchSyncing"
     id="search-data"
-    class="scrollable-panel higher extra-margin"
+    class="scrollable-panel fixed-height-md higher extra-margin"
   >
 
     <div class="loader-container">
