@@ -1,0 +1,43 @@
+<div
+  class="
+    sections-group-navigation mt-4
+    <%= if @current_tab == "chat" do %>
+      show-section
+    <% else %>
+      hide-section
+    <% end %>
+  "
+>
+  <header class="sections-group-header">
+    <div class="flex rounded-lg sidebar-shadow w-full">
+      <!-- Sidebar links -->
+      <nav class="flex-1">
+        <ul class="p-2 space-x-1 overflow-x-auto divide-x divide-list-element">
+          <!-- Chat button -->
+          <li class="sections-group-header-item px-1">
+            <button
+              class="flex nav-button-effect items-center justify-center sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+              phx-click="sections_group_show_chat"
+            >
+              <span>Chat</span>
+            </button>
+          </li>
+          <!-- Peers link -->
+          <li class="sections-group-header-item px-1">
+            <button
+              class="flex nav-button-effect items-center justify-center sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
+              phx-click="sections_group_show_peers"
+            >
+              <span>Peers</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div class="flex-1 m-4">
+    <main>
+      <%= @inner_content.([]) %>
+    </main>
+  </div>
+</div>
