@@ -539,27 +539,22 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_event("show_chat", _, socket) do
-    IO.inspect("show_chat")
     {:noreply, socket |> assign(:current_tab, "chat")}
   end
 
   def handle_event("show_queue", _, socket) do
-    IO.inspect("show_queue")
     {:noreply, socket |> assign(:current_tab, "video_queue")}
   end
 
   def handle_event("show_search", _, socket) do
-    IO.inspect("show_search")
     {:noreply, socket |> assign(:current_tab, "video_search")}
   end
 
   def handle_event("sections_group_show_chat", _, socket) do
-    IO.inspect("sections_group_show_peers")
     {:noreply, socket |> assign(:sections_group_tab, "chat")}
   end
 
   def handle_event("sections_group_show_peers", _, socket) do
-    IO.inspect("sections_group_show_peers")
     {:noreply, socket |> assign(:sections_group_tab, "peers")}
   end
 
