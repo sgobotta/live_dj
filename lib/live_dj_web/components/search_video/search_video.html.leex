@@ -1,6 +1,9 @@
 <div
+  style="background: #141414; border-color: #141414"
   class="
+    rounded-lg
     m-4
+    mt-0
     <%= if @current_tab == "video_search" do %>
       show-section
     <% else %>
@@ -8,13 +11,13 @@
     <% end %>
   "
 >
-  <div>
-    <form id="search-video-form" phx-submit="search" class="search-form">
+  <div class="mx-6">
+    <form id="search-video-form" phx-submit="search" class="mb-2">
       <%=
         text_input :search_field,
         :query,
         placeholder: "Search videos...",
-        class: "text-input",
+        class: "search-text-input button-effect mt-4",
         autofocus: false,
         "phx-debounce": "300"
       %>
@@ -24,7 +27,7 @@
   <div
     phx-hook="SearchSyncing"
     id="search-data"
-    class="scrollable-panel fixed-height-md higher extra-margin"
+    class="scrollable-panel fixed-height-md extra-margin rounded-lg"
   >
 
     <div class="loader-container">
