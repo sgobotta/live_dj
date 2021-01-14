@@ -67,6 +67,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
           |> assign(:username_input, user.username)
+          |> assign(:current_tab, "video_queue")
+          |> assign(:sections_group_tab, "chat")
           |> assign_tracker(room)
         }
     end
@@ -534,6 +536,31 @@ defmodule LiveDjWeb.Room.ShowLive do
       false ->
         {:noreply, socket}
     end
+  end
+
+  def handle_event("show_chat", _, socket) do
+    IO.inspect("show_chat")
+    {:noreply, socket |> assign(:current_tab, "chat")}
+  end
+
+  def handle_event("show_queue", _, socket) do
+    IO.inspect("show_queue")
+    {:noreply, socket |> assign(:current_tab, "video_queue")}
+  end
+
+  def handle_event("show_search", _, socket) do
+    IO.inspect("show_search")
+    {:noreply, socket |> assign(:current_tab, "video_search")}
+  end
+
+  def handle_event("sections_group_show_chat", _, socket) do
+    IO.inspect("sections_group_show_peers")
+    {:noreply, socket |> assign(:sections_group_tab, "chat")}
+  end
+
+  def handle_event("sections_group_show_peers", _, socket) do
+    IO.inspect("sections_group_show_peers")
+    {:noreply, socket |> assign(:sections_group_tab, "peers")}
   end
 
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
