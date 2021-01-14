@@ -9,12 +9,7 @@
   "sections-group-show-section
   id="peers-list-data" phx-hook="PresenceSyncing"
 >
-  <div class="flex items-start section-title">
-    <span class="rounded text-white p-2 leading-none flex title-pill mt-4 mb-4">
-      Peers (<%= length(@connected_users) %>)
-    </span>
-  </div>
-  <div class="scrollable-panel fixed-height-md higher extra-height p-4">
+  <div class="peers-panel scrollable-panel fixed-height-xl p-4 m-6 rounded-lg">
     <ul>
       <%= for user <- @connected_users do %>
         <li style="list-style: none;">
