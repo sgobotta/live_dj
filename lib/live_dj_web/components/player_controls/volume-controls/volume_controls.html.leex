@@ -3,7 +3,11 @@
 >
   <div class="p-4">
     <a phx-click="player_signal_toggle_volume" phx-target="<%= @myself %>">
-      <i class="fas <%= @volume_controls.volume_icon %> player-control clickeable"></i>
+      <%= PhoenixInlineSvg.Helpers.svg_image(
+        LiveDjWeb.Endpoint,
+        "icons/volume/#{@volume_controls.volume_icon}",
+        class: "h-12 w-12 player-control clickeable")
+      %>
     </a>
   </div>
   <form class="slider-form"
