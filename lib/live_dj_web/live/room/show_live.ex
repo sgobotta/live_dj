@@ -8,10 +8,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.Accounts
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.Chat
-  alias LiveDj.Organizer.Player
-  alias LiveDj.Organizer.Queue
-  alias LiveDj.Organizer.Video
+  alias LiveDj.Organizer.{Chat, Player, VolumeControls, Queue, Video}
   alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
@@ -26,11 +23,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
-    volume_data = %{
-      volume_level: 100,
-      is_muted: false,
-      volume_icon: "fa-volume-up"
-    }
+    volume_data = VolumeControls.get_initial_state()
     presence_meta = Map.merge(
       volume_data,
       %{
