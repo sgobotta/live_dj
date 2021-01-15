@@ -55,6 +55,10 @@ $hover-lower-moz-background: linear-gradient(to bottom, $track-progress-hover-co
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 480px) {
+    width: 15vh;
+  }
 }
 
 // Webkit

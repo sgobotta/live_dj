@@ -1194,11 +1194,11 @@ div p.pill-text {
 
   @media (max-width: 768px) {
     justify-content: normal;
-    padding: 25px 0;
+    margin: 15px;
     height: 7vh;
     
     .volume-control-container {
-      width: 100%;
+      width: 70%;
     }
   }
 }
