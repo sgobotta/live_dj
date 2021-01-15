@@ -26,7 +26,7 @@
         2xl:row-span-2 2xl:pb-8
       ">
 
-        <div class="lg:order-1 lg:row-span-1 lg:col-span-3 m-0">
+        <div class="live-section-box p-4 lg:order-1 lg:row-span-1 lg:col-span-3 m-0 mt-4 mb-4">
           <div>
             <%= live_component @socket, LiveDjWeb.Components.VideoPlayer,
               id: "live-dj-player-controls",
@@ -34,7 +34,7 @@
             %>
           </div>
 
-          <div class="mx-6">
+          <div>
             <%= live_component @socket, LiveDjWeb.Components.PlayerControls,
               id: "live-dj-player-controls",
               current_tab: @current_tab,
@@ -89,8 +89,7 @@
         </div>
 
         <div
-          style="background: #141414; border-color: #141414"
-          class="lg:order-3 lg:row-span-1 lg:col-span-2 m-0 rounded-lg"
+          class="live-section-box lg:order-3 lg:row-span-1 lg:col-span-2 m-0"
         >
           <div class="column">
 

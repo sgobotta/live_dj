@@ -1,7 +1,7 @@
 <div
-  style="background: #141414; border-color: #141414"
   class="
-    border-0 rounded-xl
+    live-section-box
+    border-0
     sections-group-navigation mt-4 pb-2
     <%= if @current_tab == "chat" do %>
       show-section
@@ -21,7 +21,7 @@
               class="
                 sections-group-button
                 flex items-center justify-center sidebar-primary
-                rounded-tr-lg rounded-b-none rounded-tl-lg
+                rounded-tr-3xl rounded-b-none rounded-tl-3xl
                 <%= if @current_section == "chat" do %>
                   nav-button-effect-active
                 <% end %>
@@ -40,7 +40,7 @@
                 sections-group-button
                 flex items-center justify-center
                 sidebar-primary
-                rounded-tl-lg rounded-b-none rounded-tr-lg
+                rounded-tl-3xl rounded-b-none rounded-tr-3xl
                 <%= if @current_section == "peers" do %>
                   nav-button-effect-active
                 <% end %>
