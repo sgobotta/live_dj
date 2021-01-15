@@ -38,6 +38,11 @@ div.sidebar {
     button {
       color: $primary-light;
     }
+
+    .svg-icon {
+      stroke: $primary-light;
+      fill: $primary-light;
+    }
   }
 
   .divide-list-element {
@@ -155,12 +160,12 @@ div.sections-group-navigation {
 }
 .sections-group-button {
   color: #dedcdc;
-  background-color: #000 !important;
+  background-color: $background-darker !important;
 }
 .sections-group-button:hover {
   color: #dedcdc;
   transform: none;
-  background-color: #000 !important;
+  background-color: $background-darker !important;
 }
 .sections-group-button:focus  {
   color: #dedcdc;
@@ -183,4 +188,9 @@ div.sections-group-navigation {
 .button-effect:hover > svg,
 .button-effect:focus > svg {
   transform: scale(.99)
+}
+
+.svg-icon {
+  fill: #dedcdc;
+  stroke: #dedcdc;
 }

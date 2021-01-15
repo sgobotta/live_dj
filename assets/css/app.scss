@@ -17,6 +17,8 @@ $success-highlight-1: #5dc09f;
 $neutral-semi-dark: #666;
 $neutral-dark: #444;
 $neutral-darker: #222;
+$background-dark: #141414;
+$background-darker: #0a0a0a;
 
 $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50% / 100% 45px no-repeat transparent;
 
@@ -29,6 +31,12 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
 }
 .bg-neutral-darker {
   background-color: $neutral-darker
+}
+.bg-background-dark {
+  background-color: $background-dark
+}
+.bg-background-darker {
+  background-color: $background-darker
 }
 .bg-primary {
   background-color: $primary
@@ -309,6 +317,21 @@ li.navbar-link:hover a {
 
 .sections-group-hide-section {
   display: none !important;
+}
+
+.live-section-box {
+  background: #141414;
+  border-color: #141414;
+  border-radius: 1.5rem;
+  height: fit-content;
+}
+
+.video-player-container {
+  height: 34vh;
+}
+
+iframe#video-player {
+  border-radius: 0.75rem;;
 }
 
 /* LiveView specific classes for your customizations */
@@ -638,10 +661,6 @@ a.btn i.trash {
       padding: 10px
     }
   }
-}
-
-.section-container {
-  
 }
 
 @media (max-width: 480px) {
@@ -1166,18 +1185,17 @@ div p.pill-text {
 }
 
 .player-controls-main-container {
-  margin: 12px 0 !important;
   background-color: $neutral-darker;
 }
 
 .player-controls-container {
 
-  height: 12vh;
+  height: 7vh;
 
   @media (max-width: 768px) {
-    display: grid;
+    justify-content: normal;
     padding: 25px 0;
-    height: 22vh;
+    height: 7vh;
     
     .volume-control-container {
       width: 100%;
@@ -1187,6 +1205,13 @@ div p.pill-text {
 
 .player-controls-video-tracking {
   display: flex;
+  height: 4vh;
+}
+
+@media (max-width: 768px) {
+  .player-controls-video-tracking {
+    height: 6vh;
+  }
 }
 
 .player-control:hover {
