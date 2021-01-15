@@ -12,6 +12,7 @@ $secondary-highlight-1: #fa84bf;
 $secondary-highlight-2: #fda4d1;
 $danger: #e65252;
 $white: #eaeaea;
+$text: #dedcdc;
 $success: #438b73;
 $success-highlight-1: #5dc09f;
 $neutral-semi-dark: #666;
@@ -1214,7 +1215,14 @@ div p.pill-text {
   }
 }
 
+.player-control {
+  fill: $text;
+  stroke: $text;
+}
+
 .player-control:hover {
+  fill: $secondary-highlight-1;
+  stroke: $secondary-highlight-1;
   color: $secondary-highlight-1;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
