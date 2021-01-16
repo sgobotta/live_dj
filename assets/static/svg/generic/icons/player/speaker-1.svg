@@ -13,16 +13,16 @@
    id="Capa_1"
    x="0px"
    y="0px"
-   viewBox="0 0 63.999998 63.999998"
+   viewBox="0 0 64 64"
    xml:space="preserve"
    sodipodi:docname="speaker-1.svg"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    width="64"
-   height="64"><metadata
-   id="metadata39"><rdf:RDF><cc:Work
+   height="64"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><metadata
+   id="metadata47"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-   id="defs37" /><sodipodi:namedview
+   id="defs45" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -31,81 +31,92 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1293"
-   inkscape:window-height="1017"
-   id="namedview35"
+   inkscape:window-width="1920"
+   inkscape:window-height="1019"
+   id="namedview43"
    showgrid="false"
-   inkscape:zoom="5.1299885"
-   inkscape:cx="11.598467"
-   inkscape:cy="23.002001"
+   showguides="true"
+   inkscape:guide-bbox="true"
+   inkscape:zoom="8"
+   inkscape:cx="37.147725"
+   inkscape:cy="23.536384"
    inkscape:window-x="0"
    inkscape:window-y="29"
-   inkscape:window-maximized="0"
-   inkscape:current-layer="Capa_1"
-   showguides="false" />
-<path
-   d="m 33.859125,5.0602181 c -1.163445,-0.6580142 -2.540268,-0.6365572 -3.683449,0.05245 -0.05484,0.032186 -0.107285,0.070331 -0.154968,0.1108612 L 13.868366,18.888054 H 1.192055 C 0.532849,18.888054 0,19.420902 0,20.080109 V 42.72915 c 0,0.317087 0.125166,0.619868 0.349272,0.842783 0.224106,0.222914 0.525696,0.349272 0.842783,0.349272 l 12.647701,-0.006 16.143999,14.829162 c 0.0596,0.05484 0.123974,0.102516 0.191921,0.143047 0.586491,0.354039 1.23616,0.531656 1.88583,0.531656 0.616293,-0.0012 1.231393,-0.159735 1.797619,-0.479206 1.190863,-0.672319 1.902519,-1.901327 1.902519,-3.285303 V 8.3455211 c 0,-1.383976 -0.711656,-2.611792 -1.902519,-3.285303 z m -0.48159,50.5943829 c 0,0.513775 -0.258676,0.965564 -0.6902,1.209936 -0.184768,0.103708 -0.653246,0.303974 -1.192055,0.03099 L 15.496713,42.198686 v -5.431002 c 0,-0.659207 -0.532849,-1.192055 -1.192056,-1.192055 -0.659206,0 -1.192054,0.532848 -1.192054,1.192055 v 4.763451 L 2.38411,41.535935 V 21.270972 h 10.728493 v 4.768219 c 0,0.659206 0.532848,1.192054 1.192054,1.192054 0.659207,0 1.192056,-0.532848 1.192056,-1.192054 V 20.63203 L 31.476208,7.1141281 c 0.549537,-0.288477 1.025166,-0.08344 1.211127,0.02146 0.431524,0.244371 0.6902,0.69616 0.6902,1.209935 z"
-   id="path2"
-   inkscape:connector-curvature="0"
-   style="stroke-width:1.19205475" />
-<g
-   id="g4"
-   transform="translate(0,17.995998)">
-</g>
-<g
-   id="g6"
-   transform="translate(0,17.995998)">
-</g>
-<g
-   id="g8"
-   transform="translate(0,17.995998)">
-</g>
+   inkscape:window-maximized="1"
+   inkscape:current-layer="g10"><sodipodi:guide
+     position="32.033898,114.15254"
+     orientation="1,0"
+     id="guide854"
+     inkscape:locked="false" /></sodipodi:namedview>
 <g
    id="g10"
-   transform="translate(0,17.995998)">
+   transform="matrix(1.0666667,0,0,1.0666667,0,0.41966766)">
+	<path
+   d="m 28.404,7.758 c -0.975,-0.552 -2.131,-0.534 -3.09,0.044 -0.046,0.027 -0.09,0.059 -0.13,0.093 L 11.634,19.358 H 1 c -0.553,0 -1,0.447 -1,1 v 19 c 0,0.266 0.105,0.52 0.293,0.707 0.188,0.187 0.441,0.293 0.707,0.293 l 10.61,-0.005 13.543,12.44 c 0.05,0.046 0.104,0.086 0.161,0.12 0.492,0.297 1.037,0.446 1.582,0.446 0.517,-0.001 1.033,-0.134 1.508,-0.402 C 29.403,52.393 30,51.363 30,50.201 V 10.514 C 30,9.353 29.403,8.323 28.404,7.758 Z M 28,50.201 c 0,0.431 -0.217,0.81 -0.579,1.015 -0.155,0.087 -0.548,0.255 -1,0.026 L 13,38.913 v -4.556 c 0,-0.553 -0.447,-1 -1,-1 -0.553,0 -1,0.447 -1,1 v 3.996 l -9,0.004 v -17 h 9 v 4 c 0,0.553 0.447,1 1,1 0.553,0 1,-0.447 1,-1 V 20.821 L 26.405,9.481 C 26.866,9.239 27.266,9.411 27.421,9.499 27.783,9.704 28,10.083 28,10.514 Z"
+   id="path2"
+   inkscape:connector-curvature="0" />
+	
+	
+	
 </g>
 <g
    id="g12"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g14"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g16"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g18"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g20"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g22"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g24"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g26"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g28"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g30"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
 </g>
 <g
    id="g32"
-   transform="translate(0,17.995998)">
+   transform="translate(0,4)">
+</g>
+<g
+   id="g34"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g36"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g38"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g40"
+   transform="translate(0,4)">
 </g>
 </svg>
