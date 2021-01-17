@@ -146,7 +146,12 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   opacity: 0;
 }
 
+.queue-control-save-asset-checked-layer {
+  opacity: 0;
+}
+
 svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset-checked-layer {
+  opacity: 1;
   stroke: $success;
   fill: $success;
   -webkit-animation: animate-success-button 1.5s normal;
