@@ -34,17 +34,6 @@ div.sidebar {
     margin-right: 0px;
   }
 
-  li.aside-item:hover, li.header-item:hover, button.header-item:hover {
-    button {
-      color: $primary-light;
-    }
-
-    .svg-icon {
-      stroke: $primary-light;
-      fill: $primary-light;
-    }
-  }
-
   .divide-list-element {
     li {
       border-top-color: #121212;

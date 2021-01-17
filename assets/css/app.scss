@@ -72,7 +72,17 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
   }
 }
 
-.hover-color-secondary:hover {
+.hover-color-primary-highlight:hover {
+  button {
+    color: $secondary-highlight-1;
+  }
+
+  .svg-icon {
+    stroke: $secondary-highlight-1;
+    fill: $secondary-highlight-1;
+  }
+}
+.hover-color-secondary-highlight-1:hover {
   button {
     color: $secondary-highlight-1;
   }
