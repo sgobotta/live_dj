@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Live DJ! 🎶</title>
+    <title>Live DJ</title>
     <link rel="stylesheet" href="/css/app.css">
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </head>
@@ -35,7 +35,7 @@
             <%= link "Donate", to: Routes.donations_path(@conn, :index) %>
           </li>
         </ul>
-        <h2>Live DJ</h2>
+        <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "logo/live-dj-logo-white", class: "pt-1 h-20") %>
       </section>
     </header>
 
