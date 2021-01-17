@@ -1,4 +1,140 @@
 /**
+ * Icon Animations
+ */
+
+.player-control-spin .play-control-loader-asset-first-circle {
+  -webkit-animation: three-points-loader-first-circle 2s infinite;
+  -moz-animation: three-points-loader-first-circle 2s infinite;
+  -ms-animation: three-points-loader-first-circle 2s infinite;
+  -o-animation: three-points-loader-first-circle 2s infinite;
+  animation: three-points-loader-first-circle 2s infinite;
+}
+
+.player-control-spin .play-control-loader-asset-second-circle {
+  -webkit-animation: three-points-loader-second-circle 2s infinite;
+  -moz-animation: three-points-loader-second-circle 2s infinite;
+  -ms-animation: three-points-loader-second-circle 2s infinite;
+  -o-animation: three-points-loader-second-circle 2s infinite;
+  animation: three-points-loader-second-circle 2s infinite;
+}
+
+.player-control-spin .play-control-loader-asset-third-circle {
+  -webkit-animation: three-points-loader-third-circle 2s infinite;
+  -moz-animation: three-points-loader-third-circle 2s infinite;
+  -ms-animation: three-points-loader-third-circle 2s infinite;
+  -o-animation: three-points-loader-third-circle 2s infinite;
+  animation: three-points-loader-third-circle 2s infinite;
+}
+
+@keyframes three-points-loader-first-circle {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  33% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes three-points-loader-second-circle {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  33% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  66% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes three-points-loader-third-circle {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  66% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+@-webkit-keyframes three-points-loader-first-circle {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  33% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes three-points-loader-second-circle {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  33% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  66% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes three-points-loader-third-circle {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  66% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/**
  * Accounts Settings Animation
  */
 
