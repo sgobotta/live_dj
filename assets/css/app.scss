@@ -104,7 +104,7 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
 @import "./animations.scss";
 
 body {
-  background-color: #000000;
+  background-color: $neutral-darker;
   height: 1vh;
 }
 
@@ -176,6 +176,10 @@ select {
 
 .black {
   color: #000;
+}
+
+.no-border {
+  border-width: 0 !important;
 }
 
 /**
@@ -464,6 +468,7 @@ iframe#video-player {
  */
 
 .new-live-view {
+  background-color: $neutral-darker;
   display: flex;
   justify-content: center;
 
@@ -744,7 +749,7 @@ input.text-input:focus {
   100% { border: 0.15rem }
 }
 
-.chat-text-input, .search-text-input {
+.chat-text-input, .search-text-input, .text-input-effect {
   border: 0px !important;
   box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a !important;
 }
