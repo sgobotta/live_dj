@@ -13,7 +13,7 @@
    id="Capa_1"
    x="0px"
    y="0px"
-   viewBox="0 0 64.000001 64.000001"
+   viewBox="0 0 64 64"
    xml:space="preserve"
    sodipodi:docname="search.svg"
    width="64"
@@ -21,7 +21,7 @@
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><metadata
    id="metadata39"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
    id="defs37" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
@@ -31,81 +31,80 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="956"
-   inkscape:window-height="1017"
+   inkscape:window-width="1920"
+   inkscape:window-height="1019"
    id="namedview35"
    showgrid="false"
-   inkscape:zoom="4.4007684"
-   inkscape:cx="34.993889"
-   inkscape:cy="26.813499"
+   inkscape:zoom="4.4556886"
+   inkscape:cx="-33.552614"
+   inkscape:cy="26.483"
    inkscape:window-x="0"
    inkscape:window-y="29"
-   inkscape:window-maximized="0"
+   inkscape:window-maximized="1"
    inkscape:current-layer="Capa_1" />
 <path
-   d="M 64,58.937476 45.105637,40.043113 C 48.241968,35.857758 50.124005,30.681858 50.124005,25.062002 50.124005,11.242098 38.881907,0 25.062002,0 11.242098,0 0,11.242098 0,25.062002 c 0,13.819905 11.242098,25.062003 25.062002,25.062003 5.619856,0 10.795756,-1.882037 14.981111,-5.018368 L 58.937476,64 Z M 2.3868574,25.062002 c 0,-12.503552 10.1715926,-22.6751446 22.6751446,-22.6751446 12.503553,0 22.675145,10.1715926 22.675145,22.6751446 0,12.503553 -10.171592,22.675145 -22.675145,22.675145 -12.503552,0 -22.6751446,-10.171592 -22.6751446,-22.675145 z M 42.446678,43.074421 c 0.21243,-0.205269 0.42128,-0.414119 0.62655,-0.62655 0.174241,-0.180207 0.362802,-0.346094 0.531076,-0.531075 l 17.02068,17.02068 -1.688702,1.688701 -17.019486,-17.021873 c 0.184981,-0.168274 0.349674,-0.356835 0.529882,-0.529883 z"
+   d="m 57.221154,56.79 -14.859,-15.453 c 3.79,-3.801 6.138,-9.041 6.138,-14.82 0,-11.58 -9.42,-21 -21,-21 -11.58,0 -21.0000001,9.42 -21.0000001,21 0,11.58 9.4200001,21 21.0000001,21 5.083,0 9.748,-1.817 13.384,-4.832 l 14.895,15.491 c 0.196,0.205 0.458,0.307 0.721,0.307 0.25,0 0.499,-0.093 0.693,-0.279 0.398,-0.383 0.41,-1.016 0.028,-1.414 z m -29.721,-11.273 c -10.477,0 -19.0000001,-8.523 -19.0000001,-19 0,-10.477 8.5230001,-19 19.0000001,-19 10.477,0 19,8.523 19,19 0,10.477 -8.524,19 -19,19 z"
    id="path2"
-   inkscape:connector-curvature="0"
-   style="stroke-width:1.19342864" />
+   inkscape:connector-curvature="0" />
 <g
    id="g4"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g6"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g8"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g10"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g12"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g14"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g16"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g18"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g20"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g22"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g24"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g26"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g28"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g30"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <g
    id="g32"
-   transform="translate(0,10.373001)">
+   transform="translate(0,11.034)">
 </g>
 <title
-   id="title827">Search</title></svg>
+   id="title846">Search</title></svg>
