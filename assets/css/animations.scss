@@ -2,6 +2,10 @@
  * Icon Animations
  */
 
+  /**
+   * Play/Pause/Loader buttons animations
+   */
+
 .player-control-spin .play-control-loader-asset-first-circle {
   -webkit-animation: three-points-loader-first-circle 2s infinite;
   -moz-animation: three-points-loader-first-circle 2s infinite;
@@ -131,6 +135,41 @@
   100% {
     opacity: 0;
     transform: scale(0.4);
+  }
+}
+
+  /**
+   * Save queue buttons animations
+   */
+
+svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset-save-layer {
+  opacity: 0;
+}
+
+svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset-checked-layer {
+  stroke: $success;
+  fill: $success;
+  -webkit-animation: animate-success-button 1.5s normal;
+  -moz-animation: animate-success-button 1.5s normal;
+  -ms-animation: animate-success-button 1.5s normal;
+  -o-animation: animate-success-button 1.5s normal;
+  animation: animate-success-button 1.5s normal;
+}
+
+@-webkit-keyframes animate-success-button {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes animate-success-button {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
   }
 }
 
