@@ -11,16 +11,4 @@ defmodule LiveDjWeb.Components.Sidebar do
       |> assign(assigns)
     }
   end
-
-  def handle_event("redirect_settings", _, socket) do
-    {:noreply,
-      socket
-      |> redirect(to: Routes.user_settings_path(socket, :index))}
-  end
-
-  def handle_event("redirect_home", _, socket) do
-    {:noreply,
-      socket
-      |> redirect(to: Routes.new_path(socket, :new))}
-  end
 end

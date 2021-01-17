@@ -42,25 +42,27 @@
       <div class="flex-shrink-0 px-2 py-2 align-center">
         <!-- Home link -->
         <button
-          phx-click="redirect_home"
-          phx-target="<%= @myself %>"
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
-          <span>
+          <a
+            href=" <%=Routes.new_path(@socket, :new) %>"
+            target="_blank"
+          >
             <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/home", class: "h-8 w-8 svg-icon") %>
-          </span>
+          </a>
         </button>
       </div>
       <!-- Settings link -->
       <div class="flex-shrink-0 px-2 py-2 align-center">
         <button
-          phx-click="redirect_settings"
-          phx-target="<%= @myself %>"
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
-          <span>
+          <a
+            href=" <%=Routes.user_settings_path(@socket, :index) %>"
+            target="_blank"
+          >
             <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/home", class: "h-8 w-8 svg-icon") %>
-          </span>
+          </a>
         </button>
       </div>
       <div class="flex-shrink-0 px-4 py-2 align-center">
@@ -94,9 +96,12 @@
             <button
               class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring button-effect"
             >
-              <span>
+              <a
+                href=" <%=Routes.new_path(@socket, :new) %>"
+                target="_blank"
+              >
                 <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/home", class: "h-10 w-10 svg-icon") %>
-              </span>
+              </a>
             </button>
           </li>
           <!-- Settings link -->
@@ -104,9 +109,12 @@
             <button
               class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring button-effect"
             >
-              <span>
+              <a
+                href=" <%=Routes.user_settings_path(@socket, :index) %>"
+                target="_blank"
+              >
                 <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/home", class: "h-10 w-10 svg-icon") %>
-              </span>
+              </a>
             </button>
           </li>
         </ul>
