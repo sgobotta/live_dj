@@ -11,7 +11,7 @@
   </div>
   <div class="flex items-center queue-controls">
     <a
-      class="<%= if @video_queue_controls.is_save_enabled do %>btn<% else %>disabled<% end %>"
+      class="<%= if @video_queue_controls.is_save_enabled do %>clickeable<% else %>disabled<% end %>"
       <%= if @video_queue_controls.is_save_enabled do %>
         phx-click="save_queue"
         phx-target="<%= @myself %>"
