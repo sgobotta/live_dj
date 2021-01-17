@@ -39,15 +39,46 @@
           </li>
         </ul>
       </nav>
-      <div class="flex-shrink-0 px-4 py-2 align-center">
+      <div class="flex-shrink-0 px-2 py-2 align-center">
         <button
           phx-click="redirect_home"
           phx-target="<%= @myself %>"
-          class="w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md sidebar-shadow focus:outline-none focus:ring button-effect"
+          class="hover-color-secondary w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
           <span>
             <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/home", class: "h-8 w-8 svg-icon") %>
           </span>
+        </button>
+      </div>
+      <div class="flex-shrink-0 px-2 py-2 align-center">
+        <button
+          phx-click="redirect_settings"
+          phx-target="<%= @myself %>"
+          class="hover-color-secondary w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
+        >
+          <span>
+            <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/home", class: "h-8 w-8 svg-icon") %>
+          </span>
+        </button>
+      </div>
+      <div class="flex-shrink-0 px-4 py-2 align-center">
+        <button
+          phx-click="redirect_donations"
+          phx-target="<%= @myself %>"
+          class="hover-color-warning w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md sidebar-shadow focus:outline-none focus:ring button-effect"
+        >
+          <a
+            href=" <%=Routes.donations_path(@socket, :index) %>"
+            target="_blank"
+          >
+            <%=
+              PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/home",
+                class: "h-8 w-8 svg-icon"
+              )
+            %>
+          </a>
         </button>
       </div>
     </div>
