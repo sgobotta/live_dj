@@ -5,51 +5,52 @@
       <div class="p-2">
         <%= if @player_controls.previous_button_state == "disabled" do %>
           <a class="disabled">
-            <i class="fas fa-step-backward"></i>
+            <%= PhoenixInlineSvg.Helpers.svg_image(
+              LiveDjWeb.Endpoint,
+              "icons/player/back",
+              class: "h-12 w-12")
+            %>
           </a>
         <% else %>
           <a phx-click="player_signal_play_previous" phx-target="<%= @myself %>">
-            <i class="fas fa-step-backward player-control clickeable"></i>
+            <%= PhoenixInlineSvg.Helpers.svg_image(
+              LiveDjWeb.Endpoint,
+              "icons/player/back",
+              class: "h-12 w-12 player-control clickeable")
+            %>
           </a>
         <% end %>
       </div>
 
       <div class="p-2">
-        <%= if @player_controls.play_button_state == "disabled" &&
-              @player_controls.pause_button_state == "disabled" do %>
-          <a>
-            <i class="fas fa-spinner rotating"></i>
-          </a>
-        <% else %>
-          <%= if @player.state == "paused" || @player.state == "stopped" do %>
-            <a
-              <%= @player_controls.play_button_state %>
-              phx-click="player_signal_playing"
-              phx-target="<%= @myself %>"
-            >
-              <i class="fas fa-play-circle player-control clickeable"></i>
-            </a>
-          <% end %>
-          <%= if @player.state == "playing" do %>
-            <a
-              <%= @player_controls.pause_button_state %>
-              phx-click="player_signal_paused"
-              phx-target="<%= @myself %>"
-            >
-              <i class="fas fa-pause-circle player-control clickeable"></i>
-            </a>
-          <% end %>
-        <% end %>
+        <a
+          phx-click="<%= if @player.state == "paused" || @player.state == "stopped" do %>player_signal_playing<% else %>player_signal_paused<% end %>"
+          phx-target="<%= @myself %>"
+        >
+          <%= PhoenixInlineSvg.Helpers.svg_image(
+            LiveDjWeb.Endpoint,
+            "icons/player/play-controls",
+            class: "h-12 w-12 player-control clickeable #{@play_button_class}"
+          ) %>
+        </a>
       </div>
 
       <div class="p-2">
         <%= if @player_controls.next_button_state == "disabled" do %>
           <a class="disabled">
-            <i class="fas fa-step-forward"></i>
+            <%= PhoenixInlineSvg.Helpers.svg_image(
+              LiveDjWeb.Endpoint,
+              "icons/player/next",
+              class: "h-12 w-12 ")
+            %>
           </a>
         <% else %>
           <a phx-click="player_signal_play_next" phx-target="<%= @myself %>">
-            <i class="fas fa-step-forward player-control clickeable"></i>
+            <%= PhoenixInlineSvg.Helpers.svg_image(
+              LiveDjWeb.Endpoint,
+              "icons/player/next",
+              class: "h-12 w-12 player-control clickeable")
+            %>
           </a>
         <% end %>
       </div>

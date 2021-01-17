@@ -8,11 +8,29 @@ defmodule LiveDjWeb.Components.PlayerControls do
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
 
-
   def update(assigns, socket) do
+    %{
+      player_controls: %{
+        pause_button_state: pause_button_state,
+        play_button_state: play_button_state
+      },
+      player: player
+    } = assigns
+    player_is_loading = pause_button_state == "disabled" && play_button_state == "disabled"
+
+    play_button_class = case player_is_loading do
+      true -> "show_loader_control_button player-control-spin"
+      false -> case player.state do
+        "playing" -> "show_pause_control_button"
+        "stopped" -> "show_play_control_button"
+        "paused" ->  "show_play_control_button"
+      end
+    end
+
     {:ok,
       socket
       |> assign(assigns)
+      |> assign(:play_button_class, play_button_class)
     }
   end
 
