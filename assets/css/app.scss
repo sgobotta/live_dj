@@ -10,6 +10,7 @@ $primary: #3271a9;
 $secondary: #8558af;
 $secondary-highlight-1: #fa84bf;
 $secondary-highlight-2: #fda4d1;
+$warning: #8a6d3b;
 $danger: #e65252;
 $white: #eaeaea;
 $text: #dedcdc;
@@ -58,6 +59,28 @@ $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50%
 }
 .br-secondary {
   border-color: $secondary;
+}
+
+.hover-color-warning:hover {
+  button {
+    color: $warning;
+  }
+
+  .svg-icon {
+    stroke: $warning;
+    fill: $warning;
+  }
+}
+
+.hover-color-secondary:hover {
+  button {
+    color: $secondary-highlight-1;
+  }
+
+  .svg-icon {
+    stroke: $secondary-highlight-1;
+    fill: $secondary-highlight-1;
+  }
 }
 
 @import "./badge.scss";

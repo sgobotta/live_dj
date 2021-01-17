@@ -34,7 +34,7 @@ div.sidebar {
     margin-right: 0px;
   }
 
-  li.aside-item:hover, li.header-item:hover {
+  li.aside-item:hover, li.header-item:hover, button.header-item:hover {
     button {
       color: $primary-light;
     }
