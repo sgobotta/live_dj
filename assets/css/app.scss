@@ -13,6 +13,7 @@ $secondary-highlight-2: #fda4d1;
 $danger: #e65252;
 $white: #eaeaea;
 $text: #dedcdc;
+$disabled: #808080;
 $success: #438b73;
 $success-highlight-1: #5dc09f;
 $neutral-semi-dark: #666;
@@ -491,7 +492,7 @@ b {
   }
 
   &.fixed-height-lg {
-    height: 36vh;
+    height: 35vh;
   }
 
   &.fixed-height-xl {
@@ -595,7 +596,12 @@ b {
 }
 
 a.disabled i {
-  color: grey
+  color: $disabled;
+}
+
+a.disabled svg {
+  fill: $disabled;
+  stroke: $disabled;
 }
 
 i.success-feedback {
@@ -1192,7 +1198,7 @@ div p.pill-text {
 .player-controls-container {
 
   height: 7vh;
-
+  
   @media (max-width: 768px) {
     justify-content: normal;
     margin: 15px;
@@ -1201,6 +1207,10 @@ div p.pill-text {
     .volume-control-container {
       width: 70%;
     }
+  }
+
+  @media (max-width: 1024px) {
+    height: 12vh;
   }
 }
 
@@ -1229,6 +1239,41 @@ div p.pill-text {
   animation: slight-zoom-in 0.5s forwards;
   animation-delay: 0.1s;
 }
+
+/**
+ * Player Control play/pause/loader buttons
+ */
+
+svg.show_play_control_button g#play-layer {
+  opacity: 1;
+}
+svg.show_play_control_button g#pause-layer {
+  opacity: 0;
+}
+svg.show_play_control_button g#loader-layer {
+  opacity: 0;
+}
+
+svg.show_pause_control_button g#play-layer {
+  opacity: 0;
+}
+svg.show_pause_control_button g#pause-layer {
+  opacity: 1;
+}
+svg.show_pause_control_button g#loader-layer {
+  opacity: 0;
+}
+
+svg.show_loader_control_button g#play-layer {
+  opacity: 0;
+}
+svg.show_loader_control_button g#pause-layer {
+  opacity: 0;
+}
+svg.show_loader_control_button g#loader-layer {
+  opacity: 1;
+}
+
 
 .queue-control:hover {
   color: $secondary;
