@@ -1233,7 +1233,6 @@ div p.pill-text {
 .player-control:hover {
   fill: $secondary-highlight-1;
   stroke: $secondary-highlight-1;
-  color: $secondary-highlight-1;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
@@ -1282,21 +1281,45 @@ svg.queue-control-enabled {
 .queue-control-enabled:hover {
   fill: $secondary;
   stroke: $secondary;
-  color: $secondary;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
   animation-delay: 0.1s;
 }
 
-.search-control:hover {
-  stroke: $success;
-  color: $success;
-  color: $success;
+.search-control-add-asset-add-layer {
+  fill: $text;
+  stroke: $text; 
+}
+
+.search-control-enabled:hover .search-control-add-asset-add-layer {
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
   animation: slight-zoom-in 0.5s forwards;
   animation-delay: 0.1s;
+}
+
+.search-control-enabled:hover .search-control-add-asset-add-layer {
+  stroke: $success;
+  fill: $success;
+}
+
+.search-control-add-asset-check-layer {
+  stroke: $success;
+  fill: $success;
+}
+
+svg.search-control-add-asset.show-add-button .search-control-add-asset-add-layer {
+  opacity: 1;
+}
+svg.search-control-add-asset.show-add-button .search-control-add-asset-check-layer {
+  opacity: 0;
+}
+svg.search-control-add-asset.show-check-button .search-control-add-asset-add-layer {
+  opacity: 0;
+}
+svg.search-control-add-asset.show-check-button .search-control-add-asset-check-layer {
+  opacity: 1;
 }
 
 .draggable {
