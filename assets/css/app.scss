@@ -1274,8 +1274,14 @@ svg.show_loader_control_button g#loader-layer {
   opacity: 1;
 }
 
+svg.queue-control-enabled {
+  fill: $text;
+  stroke: $text;
+}
 
-.queue-control:hover {
+.queue-control-enabled:hover {
+  fill: $secondary;
+  stroke: $secondary;
   color: $secondary;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
@@ -1284,6 +1290,8 @@ svg.show_loader_control_button g#loader-layer {
 }
 
 .search-control:hover {
+  stroke: $success;
+  color: $success;
   color: $success;
   -webkit-animation: slight-zoom-in 0.5s forwards;
   -webkit-animation-delay: 0.1s;
