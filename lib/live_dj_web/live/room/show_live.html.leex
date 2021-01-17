@@ -105,8 +105,9 @@
             <%= live_component @socket, LiveDjWeb.Components.Queue,
               id: "live-dj-queue",
               current_tab: @current_tab,
-              video_queue: @video_queue,
-              player: @player
+              player: @player,
+              room: @room,
+              video_queue: @video_queue
             %>
 
           </div>
