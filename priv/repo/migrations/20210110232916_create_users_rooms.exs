@@ -10,7 +10,6 @@ defmodule LiveDj.Repo.Migrations.CreateUsersRooms do
       timestamps()
     end
 
-    create index(:users_rooms, [:user_id])
-    create index(:users_rooms, [:room_id])
+    create unique_index(:users_rooms, [:room_id, :user_id])
   end
 end
