@@ -13,5 +13,6 @@
 Code.require_file("seeds/plans.exs", __DIR__)
 Code.require_file("seeds/rooms.exs", __DIR__)
 Code.require_file("seeds/users.exs", __DIR__)
+Code.require_file("seeds/users_rooms.exs", __DIR__)
 Code.require_file("seeds/badges.exs", __DIR__)
 Code.require_file("seeds/badges_relations.exs", __DIR__)
