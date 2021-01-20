@@ -193,6 +193,27 @@ defmodule LiveDj.Organizer do
   def get_user_room!(id), do: Repo.get!(UserRoom, id)
 
   @doc """
+  Given a set of values, returns true if a UserRoom exists.
+
+  ## Examples
+
+      iex> has_user_room_by(1, 1, true)
+      true
+
+      iex> has_user_room_by(100, 13, true)
+      false
+
+  """
+  def has_user_room_by(user_id, room_id, is_owner) do
+    from(ur in UserRoom,
+      where:
+        ur.user_id == ^user_id and
+        ur.room_id == ^room_id and
+        ur.is_owner == ^is_owner
+    ) |> Repo.exists?()
+  end
+
+  @doc """
   Creates a user_room.
 
   ## Examples
