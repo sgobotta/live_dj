@@ -8,7 +8,7 @@ defmodule LiveDj.Organizer.Room do
     field :title, :string
     field :video_tracker, :string, default: ""
 
-    many_to_many :users, LiveDj.Accounts.User, join_through: LiveDj.Accounts.UserRoom
+    many_to_many :users, LiveDj.Accounts.User, join_through: LiveDj.Organizer.UserRoom
 
     timestamps()
   end
