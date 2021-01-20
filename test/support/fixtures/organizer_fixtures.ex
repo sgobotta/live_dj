@@ -5,14 +5,14 @@ defmodule LiveDj.OrganizerFixtures do
   """
 
   def room_fixture(attrs \\ %{}) do
+    random_words = Enum.join(Faker.Lorem.words(5), " ")
     {:ok, room} =
       attrs
       |> Enum.into(%{
-        title: "A title",
-        slug: "A slug"
+        title: random_words,
+        slug: random_words
       })
       |> LiveDj.Organizer.create_room()
       room
   end
-
 end
