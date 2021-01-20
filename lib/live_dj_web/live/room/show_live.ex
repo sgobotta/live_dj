@@ -6,6 +6,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Accounts
+  alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.{Chat, Player, VolumeControls, Queue, Video}
@@ -18,7 +19,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   def mount(%{"slug" => slug} = params, session, socket) do
     socket = assign_defaults(socket, params, session)
     %{current_user: current_user, visitor: visitor} = socket.assigns
-    user = create_connected_user(current_user.username)
+    user = ConnectedUser.create_connected_user(current_user.username)
 
     room = Organizer.get_room(slug)
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
@@ -567,11 +568,6 @@ defmodule LiveDjWeb.Room.ShowLive do
             updated_room
         end
     end
-  end
-
-  defp create_connected_user(username) do
-    uuid = UUID.uuid4()
-    %ConnectedUser{uuid: uuid, username: username}
   end
 
   defp assign_tracker(socket, room) do
