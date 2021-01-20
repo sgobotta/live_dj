@@ -1,19 +1,23 @@
 defmodule LiveDjWeb.Room.NewLive do
   use LiveDjWeb, :live_view
 
-  alias LiveDj.Repo
+  alias LiveDj.ConnectedUser
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Room
   alias LiveDj.Organizer.Queue
+  alias LiveDj.Repo
 
   @tick_rate :timer.seconds(15)
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, session, socket) do
     if connected?(socket) do
       Organizer.subscribe()
       :timer.send_interval(1000, self(), :reload_room_list)
     end
+    socket = assign_defaults(socket, params, session)
+    %{current_user: current_user} = socket.assigns
+    user = ConnectedUser.create_connected_user(current_user.username)
 
     public_rooms = Organizer.list_rooms()
 
@@ -29,6 +33,7 @@ defmodule LiveDjWeb.Room.NewLive do
 
     socket =
       socket
+      |> assign(:user, user)
       |> assign(:public_rooms, public_rooms)
       |> assign(:rooms_players, rooms_players)
       |> assign(:rooms_queues, rooms_queues)
@@ -110,9 +115,24 @@ defmodule LiveDjWeb.Room.NewLive do
     }
   end
 
-  def handle_event("save", _, %{assigns: %{changeset: changeset}} = socket) do
+  def handle_event("save", _, %{assigns: assigns} = socket) do
+    %{
+      changeset: changeset,
+      current_user: current_user,
+      visitor: visitor
+    } = assigns
     case Repo.insert(changeset) do
       {:ok, room} ->
+        room = case visitor do
+          true -> room
+          false ->
+            {:ok, _user_room} = Organizer.create_user_room(%{
+              room_id: room.id,
+              user_id: current_user.id,
+              is_owner: true
+            })
+            room
+        end
         {:noreply,
           socket
           |> redirect(to: Routes.show_path(socket, :show, room.slug))

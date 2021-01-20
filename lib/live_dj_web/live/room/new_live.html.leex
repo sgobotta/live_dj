@@ -1,7 +1,7 @@
 <div class="new-live-view mt-8 pb-6">
   <div class="col-container">
     <div class="flex flex-wrap justify-start items-stretch mx-auto live-section-box p-4">
-      <%= form_for @changeset, "#", [phx_change: "validate", phx_submit: "save", class: "full-width mb-1"], fn f -> %>
+      <%= form_for @changeset, "#", [id: "create_room", phx_change: "validate", phx_submit: "save", class: "full-width mb-1"], fn f -> %>
       <div class="flex items-start section-title mt-1 mb-4">
         <span class="rounded text-white p-2 leading-none flex items-center title-pill">
           Create room
