@@ -11,6 +11,8 @@ try do
         icon: badge["icon"],
         name: badge["name"],
         reference_name: badge["reference_name"],
+        type: badge["type"],
+        checkpoint: badge["checkpoint"],
         inserted_at: date_time,
         updated_at: date_time
       }
