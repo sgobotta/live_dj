@@ -2,7 +2,7 @@ defmodule LiveDj.Stats.Badge do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LiveDj.Accounts.UserBadge
+  alias LiveDj.Stats.UserBadge
 
   schema "badges" do
     field :description, :string

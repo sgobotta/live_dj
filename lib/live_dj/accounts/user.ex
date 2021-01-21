@@ -2,9 +2,8 @@ defmodule LiveDj.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LiveDj.Accounts.UserBadge
   alias LiveDj.Organizer.{Room, UserRoom}
-  alias LiveDj.Stats.Badge
+  alias LiveDj.Stats.{Badge, UserBadge}
 
   @derive {Inspect, except: [:password]}
   schema "users" do
