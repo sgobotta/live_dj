@@ -6,8 +6,7 @@ defmodule LiveDj.Stats do
   import Ecto.Query, warn: false
   alias LiveDj.Repo
 
-  alias LiveDj.Stats.Badge
-  alias LiveDj.Accounts.UserBadge
+  alias LiveDj.Stats.{Badge, UserBadge}
 
   @doc """
   Returns the list of badges.
@@ -138,7 +137,8 @@ defmodule LiveDj.Stats do
       %UserBadge{},
       %{
         user_id: user_id,
-        badge_id: Repo.get_by(Badge, reference_name: badge_reference_name).id}
+        badge_id: Repo.get_by(Badge, reference_name: badge_reference_name).id
+      }
     )
     |> Repo.insert()
     case association_result do
@@ -163,11 +163,105 @@ defmodule LiveDj.Stats do
         b.type == "rooms-creation" and
         b.checkpoint == ^rooms_length
     ) |> Repo.one()
-    badge
 
-    # case badge do
-    #   nil -> {:unchanged}
-    #   badge -> create_badge()
-    # end
+    case badge do
+      nil -> {:unchanged}
+      badge ->
+        {:ok, create_user_badge(%{user_id: user_id, badge_id: badge.id})}
+    end
+  end
+
+  @doc """
+  Returns the list of users_badges.
+
+  ## Examples
+
+      iex> list_users_badges()
+      [%UserBadge{}, ...]
+
+  """
+  def list_users_badges do
+    Repo.all(UserBadge)
+  end
+
+  @doc """
+  Gets a single user_badge.
+
+  Raises `Ecto.NoResultsError` if the User badge does not exist.
+
+  ## Examples
+
+      iex> get_user_badge!(123)
+      %UserBadge{}
+
+      iex> get_user_badge!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user_badge!(id), do: Repo.get!(UserBadge, id)
+
+  @doc """
+  Creates a user_badge.
+
+  ## Examples
+
+      iex> create_user_badge(%{user_id: 1, badge_id: 1})
+      {:ok, %UserBadge{}}
+
+      iex> create_user_badge(%{user_id: bad_value, badge_id: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user_badge(attrs \\ %{}) do
+    %UserBadge{}
+    |> UserBadge.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a user_badge.
+
+  ## Examples
+
+      iex> update_user_badge(user_badge, %{user_id: 1, badge_id: 1})
+      {:ok, %UserBadge{}}
+
+      iex> update_user_badge(user_badge, %{user_id: bad_value, badge_id: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_badge(%UserBadge{} = user_badge, attrs) do
+    user_badge
+    |> UserBadge.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a user_badge.
+
+  ## Examples
+
+      iex> delete_user_badge(user_badge)
+      {:ok, %UserBadge{}}
+
+      iex> delete_user_badge(user_badge)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user_badge(%UserBadge{} = user_badge) do
+    Repo.delete(user_badge)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user_badge changes.
+
+  ## Examples
+
+      iex> change_user_badge(user_badge)
+      %Ecto.Changeset{data: %UserBadge{}}
+
+  """
+  def change_user_badge(%UserBadge{} = user_badge, attrs \\ %{}) do
+    UserBadge.changeset(user_badge, attrs)
   end
 end
