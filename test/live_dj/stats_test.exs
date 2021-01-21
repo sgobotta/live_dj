@@ -84,4 +84,70 @@ defmodule LiveDj.StatsTest do
       assert user in preloaded_badge.users
     end
   end
+
+  describe "users_badges" do
+    alias LiveDj.Stats.UserBadge
+    alias LiveDj.StatsFixtures
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{badge_id: nil, user_id: nil}
+
+    setup do
+      user = user_fixture()
+      badge = StatsFixtures.badge_fixture()
+
+      %{badge: badge, user: user}
+    end
+
+    def user_badge_fixture(attrs \\ %{}) do
+      {:ok, user_badge} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Stats.create_user_badge()
+
+      user_badge
+    end
+
+    test "list_users_badges/0 returns all users_badges", %{badge: badge, user: user} do
+      user_badge = user_badge_fixture(%{badge_id: badge.id, user_id: user.id})
+      assert Stats.list_users_badges() == [user_badge]
+    end
+
+    test "get_user_badge!/1 returns the user_badge with given id", %{badge: badge, user: user} do
+      user_badge = user_badge_fixture(%{badge_id: badge.id, user_id: user.id})
+      assert Stats.get_user_badge!(user_badge.id) == user_badge
+    end
+
+    test "create_user_badge/1 with valid data creates a user_badge", %{badge: badge, user: user} do
+      valid_attrs = Enum.into(@valid_attrs, %{badge_id: badge.id, user_id: user.id})
+      assert {:ok, %UserBadge{} = _user_badge} = Stats.create_user_badge(valid_attrs)
+    end
+
+    test "create_user_badge/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Stats.create_user_badge(@invalid_attrs)
+    end
+
+    test "update_user_badge/2 with valid data updates the user_badge", %{badge: badge, user: user} do
+      user_badge = user_badge_fixture(%{user_id: user.id, badge_id: badge.id})
+      assert {:ok, %UserBadge{} = _user_badge} = Stats.update_user_badge(user_badge, @update_attrs)
+    end
+
+    test "update_user_badge/2 with invalid data returns error changeset", %{badge: badge, user: user} do
+      user_badge = user_badge_fixture(%{user_id: user.id, badge_id: badge.id})
+      assert {:error, %Ecto.Changeset{}} = Stats.update_user_badge(user_badge, @invalid_attrs)
+      assert user_badge == Stats.get_user_badge!(user_badge.id)
+    end
+
+    test "delete_user_badge/1 deletes the user_badge", %{badge: badge, user: user} do
+      user_badge = user_badge_fixture(%{user_id: user.id, badge_id: badge.id})
+      assert {:ok, %UserBadge{}} = Stats.delete_user_badge(user_badge)
+      assert_raise Ecto.NoResultsError, fn -> Stats.get_user_badge!(user_badge.id) end
+    end
+
+    test "change_user_badge/1 returns a user_badge changeset", %{badge: badge, user: user} do
+      user_badge = user_badge_fixture(%{user_id: user.id, badge_id: badge.id})
+      assert %Ecto.Changeset{} = Stats.change_user_badge(user_badge)
+    end
+  end
 end
