@@ -4,7 +4,7 @@ defmodule LiveDj.StatsFixtures do
   entities via the `LiveDj.Stats` context.
   """
 
-  def badges_fixture() do
+  def badges_fixture do
     Code.require_file("../../../priv/repo/seeds/badges.exs", __DIR__)
     LiveDj.Stats.list_badges()
   end
@@ -16,11 +16,13 @@ defmodule LiveDj.StatsFixtures do
         description: "A description",
         icon: "an-icon",
         inserted_at: "2020-01-07 16:20:00",
+        type: "some type",
+        checkpoint: 0,
         name: "Name",
         reference_name: "123"
       })
       |> LiveDj.Stats.create_badge()
-      badge
+    badge
   end
 
 end
