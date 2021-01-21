@@ -7,6 +7,8 @@ defmodule LiveDj.Repo.Migrations.CreateBadges do
       add :description, :string, null: false
       add :icon, :string, null: false
       add :reference_name, :string, null: false
+      add :type, :string, null: false
+      add :checkpoint, :integer, null: false
 
       timestamps()
     end

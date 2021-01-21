@@ -9,6 +9,8 @@ defmodule LiveDj.Stats.Badge do
     field :icon, :string
     field :name, :string
     field :reference_name, :string
+    field :type, :string
+    field :checkpoint, :integer
 
     many_to_many :users, LiveDj.Accounts.User, join_through: UserBadge
 
@@ -18,7 +20,7 @@ defmodule LiveDj.Stats.Badge do
   @doc false
   def changeset(badge, attrs) do
     badge
-    |> cast(attrs, [:description, :icon, :name, :reference_name])
-    |> validate_required([:description, :icon, :name, :reference_name])
+    |> cast(attrs, [:description, :icon, :name, :reference_name, :type, :checkpoint])
+    |> validate_required([:description, :icon, :name, :reference_name, :type, :checkpoint])
   end
 end
