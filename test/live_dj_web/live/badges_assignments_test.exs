@@ -1,7 +1,6 @@
 defmodule LiveDjWeb.BadgesAssignmentsTest do
   use LiveDjWeb.ConnCase, async: true
 
-  alias LiveDj.Organizer
   alias LiveDj.Stats
 
   import LiveDj.StatsFixtures
@@ -17,7 +16,7 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
       Map.merge(register_and_log_in_user(%{conn: conn}), %{badges: badges})
     end
 
-    test "As a User When I create my first room A 'first room badge' is received", %{conn: conn, user: user, badges: badges} do
+    test "As a User When I create my first room A 'First Room' badge is received", %{conn: conn, user: user, badges: badges} do
       {:ok, view, _html} = live(conn, "/")
 
       view
@@ -31,9 +30,7 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
         fn badge -> badge.reference_name == "rooms-create_once" end
       )
 
-      refute Stats.has_badge_by(user.id, badge.id)
-
+      assert Stats.has_badge_by(user.id, badge.id)
     end
   end
-
 end
