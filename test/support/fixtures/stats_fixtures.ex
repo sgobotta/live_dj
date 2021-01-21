@@ -4,6 +4,11 @@ defmodule LiveDj.StatsFixtures do
   entities via the `LiveDj.Stats` context.
   """
 
+  def badges_fixture() do
+    Code.require_file("../../../priv/repo/seeds/badges.exs", __DIR__)
+    LiveDj.Stats.list_badges()
+  end
+
   def badge_fixture(attrs \\ %{}) do
     {:ok, badge} =
       attrs
