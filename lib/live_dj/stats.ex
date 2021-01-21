@@ -39,14 +39,34 @@ defmodule LiveDj.Stats do
   def get_badge!(id), do: Repo.get!(Badge, id)
 
   @doc """
+  Given a set of values, returns true if a UserBadge exists.
+
+  ## Examples
+
+      iex> has_badge_by(1, 1)
+      true
+
+      iex> has_badge_by(100, 13)
+      false
+
+  """
+  def has_badge_by(user_id, badge_id) do
+    from(ub in UserBadge,
+      where:
+        ub.user_id == ^user_id and
+        ub.badge_id == ^badge_id
+    ) |> Repo.exists?()
+  end
+
+  @doc """
   Creates a badge.
 
   ## Examples
 
-      iex> create_badge(%{field: value})
+      iex> create_badge(%{user_id: user_id, badge_id: badge_id})
       {:ok, %Badge{}}
 
-      iex> create_badge(%{field: bad_value})
+      iex> create_badge(%{user_id: user_id})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -61,10 +81,10 @@ defmodule LiveDj.Stats do
 
   ## Examples
 
-      iex> update_badge(badge, %{field: new_value})
+      iex> update_badge(badge, %{user_id: user_id, badge_id: badge_id})
       {:ok, %Badge{}}
 
-      iex> update_badge(badge, %{field: bad_value})
+      iex> update_badge(badge, %{user_id: user_id})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -125,5 +145,29 @@ defmodule LiveDj.Stats do
       {:ok, _user} -> :ok
       {:error, changeset} -> {:error, changeset}
     end
+  end
+
+  @doc """
+  Given a user_id and a rooms_length Associates an existing `%User{}`to an existing %Badge{} by inserting a
+  %UserBadge{} entity.
+
+  ## Examples
+
+      iex> assoc_user_badge("rooms-creation", 1, 2)
+      :ok
+
+  """
+  def assoc_user_badge("rooms-creation", user_id, rooms_length) do
+    badge = from(b in Badge,
+      where:
+        b.type == "rooms-creation" and
+        b.checkpoint == ^rooms_length
+    ) |> Repo.one()
+    badge
+
+    # case badge do
+    #   nil -> {:unchanged}
+    #   badge -> create_badge()
+    # end
   end
 end
