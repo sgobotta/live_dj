@@ -1,13 +1,10 @@
-defmodule LiveDj.Accounts.UserBadge do
+defmodule LiveDj.Stats.UserBadge do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LiveDj.Accounts.User
-  alias LiveDj.Stats.Badge
-
   schema "users_badges" do
-    belongs_to :user, User
-    belongs_to :badge, Badge
+    belongs_to :user, LiveDj.Accounts.User
+    belongs_to :badge, LiveDj.Stats.Badge
 
     timestamps([{:updated_at, false}])
   end
