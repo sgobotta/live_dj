@@ -9,9 +9,9 @@ defmodule LiveDj.StatsTest do
   describe "badges" do
     alias LiveDj.Stats.Badge
 
-    @valid_attrs %{description: "some description", icon: "some icon", name: "some name", reference_name: "some reference name"}
-    @update_attrs %{description: "some updated description", icon: "some updated icon", name: "some updated name", reference_name: "some updated reference name"}
-    @invalid_attrs %{description: nil, icon: nil, name: nil, reference_name: nil}
+    @valid_attrs %{description: "some description", icon: "some icon", name: "some name", reference_name: "some reference name", type: "some type", checkpoint: 420 }
+    @update_attrs %{description: "some updated description", icon: "some updated icon", name: "some updated name", reference_name: "some updated reference name", type: "some updated type", checkpoint: 4200}
+    @invalid_attrs %{description: nil, icon: nil, name: nil, reference_name: nil, type: nil, checkpoint: nil}
 
     def badge_fixture(attrs \\ %{}) do
       {:ok, badge} =
@@ -37,6 +37,9 @@ defmodule LiveDj.StatsTest do
       assert badge.description == "some description"
       assert badge.icon == "some icon"
       assert badge.name == "some name"
+      assert badge.reference_name == "some reference name"
+      assert badge.type == "some type"
+      assert badge.checkpoint == 420
     end
 
     test "create_badge/1 with invalid data returns error changeset" do
@@ -49,6 +52,9 @@ defmodule LiveDj.StatsTest do
       assert badge.description == "some updated description"
       assert badge.icon == "some updated icon"
       assert badge.name == "some updated name"
+      assert badge.reference_name == "some updated reference name"
+      assert badge.type == "some updated type"
+      assert badge.checkpoint == 4200
     end
 
     test "update_badge/2 with invalid data returns error changeset" do
