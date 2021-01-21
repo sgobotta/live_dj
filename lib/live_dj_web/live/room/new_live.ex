@@ -1,11 +1,15 @@
 defmodule LiveDjWeb.Room.NewLive do
   use LiveDjWeb, :live_view
 
+  alias LiveDj.Accounts
   alias LiveDj.ConnectedUser
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Room
   alias LiveDj.Organizer.Queue
   alias LiveDj.Repo
+  alias LiveDj.Stats
+
+  require Logger
 
   @tick_rate :timer.seconds(15)
 
@@ -131,6 +135,11 @@ defmodule LiveDjWeb.Room.NewLive do
               user_id: current_user.id,
               is_owner: true
             })
+            rooms_length = length(Accounts.preload_user(current_user, [:rooms]).rooms)
+            case Stats.assoc_user_badge("rooms-creation", current_user.id, rooms_length) do
+              {:ok, user_badge} -> Logger.info("[TODO] Send a room type Badge Notification on relation id (#{user_badge.id})...")
+              {:unchanged} -> nil
+            end
             room
         end
         {:noreply,
