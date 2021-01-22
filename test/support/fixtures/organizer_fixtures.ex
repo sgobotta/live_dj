@@ -28,7 +28,7 @@ defmodule LiveDj.OrganizerFixtures do
         room_id: room.id,
         user_id: user.id,
       })
-      |> LiveDj.Organizer.create_room()
+      |> LiveDj.Organizer.create_user_room()
     %{room: room, user: user, user_room: user_room}
   end
 end
