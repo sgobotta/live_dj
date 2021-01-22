@@ -12,11 +12,11 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
   describe "Room badges assignment" do
 
     setup(%{conn: conn}) do
-      badges = badges_fixture()
-      Map.merge(register_and_log_in_user(%{conn: conn}), %{badges: badges})
+      badge = badge_fixture(%{checkpoint: 1, type: "rooms-creation"})
+      Map.merge(register_and_log_in_user(%{conn: conn}), %{badge: badge})
     end
 
-    test "As a User When I create my first room A 'First Room' badge is received", %{conn: conn, user: user, badges: badges} do
+    test "As a User When I create my first room A 'First Room' badge is received", %{conn: conn, user: user, badge: badge} do
       {:ok, view, _html} = live(conn, "/")
 
       view
@@ -25,12 +25,42 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
 
       render_click(view, :save)
 
-      badge = Enum.find(
-        badges,
-        fn badge -> badge.reference_name == "rooms-create_once" end
-      )
-
       assert Stats.has_badge_by(user.id, badge.id)
+    end
+  end
+
+  describe "Queue track badges assignment" do
+
+    alias LiveDj.OrganizerFixtures
+
+    @search_video_form_id "#search-video-form"
+
+    setup(%{conn: conn}) do
+      badges = badge_fixture(%{checkpoint: 1, type: "queue-track-contribution"})
+      %{
+        user_room: another_user_room_relationship,
+        user: another_user,
+        room: another_user_room
+      } = OrganizerFixtures.user_room_fixture()
+
+      Map.merge(
+        register_and_log_in_user(%{conn: conn}),
+        %{another_user: another_user, another_user_room: another_user_room, another_user_room_relationship: another_user_room_relationship, badges: badges}
+      )
+    end
+
+    test "As a User When I add a track to another user's room queue A 'Cooperative Dj' badge is received",
+      %{another_user: another_user, another_user_room: another_user_room, another_user_room_relationship: another_user_room_relationship, conn: conn, badges: badges, user: user}
+    do
+      {:ok, view, _html} = live(conn, "/room/#{another_user_room.slug}")
+
+      view
+        |> element(@search_video_form_id)
+        |> render_change(%{search_field: @valid_search_video_attrs})
+
+        rendered_view = render_click(view, :save)
+
+
     end
   end
 end
