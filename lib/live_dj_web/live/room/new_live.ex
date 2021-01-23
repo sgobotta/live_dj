@@ -125,14 +125,18 @@ defmodule LiveDjWeb.Room.NewLive do
       current_user: current_user,
       visitor: visitor
     } = assigns
+
+    # Move to a controller
     case Repo.insert(changeset) do
       {:ok, room} ->
         room = case visitor do
           true -> room
           false ->
+            group = Accounts.get_group_by_codename("room-admin")
             {:ok, _user_room} = Organizer.create_user_room(%{
               room_id: room.id,
               user_id: current_user.id,
+              group_id: group.id,
               is_owner: true
             })
             rooms_length = length(Accounts.preload_user(current_user, [:rooms]).rooms)
