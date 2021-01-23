@@ -28,4 +28,7 @@ try do
 rescue
   _error ->
     IO.inspect("Stopped seeds population due to errors.")
+else
+  _ ->
+    IO.inspect("✅ Seeds population finished succesfully")
 end
