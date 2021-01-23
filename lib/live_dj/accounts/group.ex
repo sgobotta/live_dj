@@ -6,6 +6,8 @@ defmodule LiveDj.Accounts.Group do
     field :codename, :string
     field :name, :string
 
+    has_many :users_rooms, LiveDj.Organizer.UserRoom
+
     timestamps()
   end
 

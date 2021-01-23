@@ -4,6 +4,7 @@ defmodule LiveDj.Repo.Migrations.CreateUsersRooms do
   def change do
     create table(:users_rooms) do
       add :is_owner, :boolean, default: false, null: false
+
       add :user_id, references(:users, on_delete: :nothing)
       add :room_id, references(:rooms, on_delete: :nothing)
 
