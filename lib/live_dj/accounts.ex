@@ -585,10 +585,10 @@ defmodule LiveDj.Accounts do
 
   ## Examples
 
-      iex> create_group(%{name: value})
+      iex> create_group(%{codename: value, name: value})
       {:ok, %Group{}}
 
-      iex> create_group(%{name: bad_value})
+      iex> create_group(%{codename: bad_value, name: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -603,10 +603,10 @@ defmodule LiveDj.Accounts do
 
   ## Examples
 
-      iex> update_group(group, %{name: new_value})
+      iex> update_group(group, %{codename: new_value, name: new_value})
       {:ok, %Group{}}
 
-      iex> update_group(group, %{name: bad_value})
+      iex> update_group(group, %{codename: bad_value, name: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """

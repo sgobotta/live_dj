@@ -31,9 +31,10 @@ defmodule LiveDj.AccountsFixtures do
   end
 
   def permission_fixture(attrs \\ %{}) do
+    words = Faker.Lorem.words(2)
     valid_attrs = %{
-      codename: Enum.join(Faker.Lorem.words(2), " "),
-      name: Enum.join(Faker.Lorem.words(2), " ")
+      codename: Enum.join(words, "-"),
+      name: Enum.join(words, " ")
     }
     {:ok, permission} =
       attrs
@@ -44,7 +45,11 @@ defmodule LiveDj.AccountsFixtures do
   end
 
   def group_fixture(attrs \\ %{}) do
-    valid_attrs = %{name: Enum.join(Faker.Lorem.words(2), " ")}
+    words = Faker.Lorem.words(2)
+    valid_attrs = %{
+      codename: Enum.join(words, "-"),
+      name: Enum.join(words, " ")
+    }
     {:ok, group} =
       attrs
       |> Enum.into(valid_attrs)

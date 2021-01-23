@@ -3,6 +3,7 @@ defmodule LiveDj.Accounts.Group do
   import Ecto.Changeset
 
   schema "groups" do
+    field :codename, :string
     field :name, :string
 
     timestamps()
@@ -11,7 +12,7 @@ defmodule LiveDj.Accounts.Group do
   @doc false
   def changeset(group, attrs) do
     group
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:codename, :name])
+    |> validate_required([:codename, :name])
   end
 end
