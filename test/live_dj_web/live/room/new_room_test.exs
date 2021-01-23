@@ -3,6 +3,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
 
   alias LiveDj.Organizer
 
+  import LiveDj.AccountsFixtures
   import Phoenix.LiveViewTest
 
   @valid_room_attrs %{slug: "some slug", title: "some title"}
@@ -147,6 +148,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     end
 
     test "A redirection is performed and a user/room relationship is created", %{conn: conn, user: user} do
+      group_fixture(%{codename: "room-admin", name: "Room admin"})
       conn = conn |> log_in_user(user)
       {:ok, view, _html} = live(conn, "/")
 

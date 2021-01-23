@@ -3,6 +3,7 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
 
   alias LiveDj.Stats
 
+  import LiveDj.AccountsFixtures
   import LiveDj.StatsFixtures
   import Phoenix.LiveViewTest
 
@@ -13,6 +14,7 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
 
     setup(%{conn: conn}) do
       badge = badge_fixture(%{checkpoint: 1, type: "rooms-creation"})
+      _group = group_fixture(%{codename: "room-admin", name: "Room admin"})
       Map.merge(register_and_log_in_user(%{conn: conn}), %{badge: badge})
     end
 
@@ -37,11 +39,12 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
 
     setup(%{conn: conn}) do
       badge = badge_fixture(%{checkpoint: 1, type: "queue-track-contribution"})
+      group = group_fixture(%{codename: "room-admin", name: "Room admin"})
       %{
         user_room: another_user_room_relationship,
         user: another_user,
         room: another_user_room
-      } = OrganizerFixtures.user_room_fixture()
+      } = OrganizerFixtures.user_room_fixture(%{group_id: group.id})
 
       Map.merge(
         register_and_log_in_user(%{conn: conn}),
