@@ -3,11 +3,12 @@ defmodule LiveDj.Repo.Migrations.CreatePermissions do
 
   def change do
     create table(:permissions) do
-      add :name, :string
-      add :codename, :string
+      add :name, :string, null: false
+      add :codename, :string, null: false
 
       timestamps()
     end
 
+    create unique_index(:permissions, [:name, :codename])
   end
 end
