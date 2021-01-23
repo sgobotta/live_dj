@@ -644,4 +644,100 @@ defmodule LiveDj.Accounts do
   def change_group(%Group{} = group, attrs \\ %{}) do
     Group.changeset(group, attrs)
   end
+
+  alias LiveDj.Accounts.PermissionGroup
+
+  @doc """
+  Returns the list of permissions_groups.
+
+  ## Examples
+
+      iex> list_permissions_groups()
+      [%PermissionGroup{}, ...]
+
+  """
+  def list_permissions_groups do
+    Repo.all(PermissionGroup)
+  end
+
+  @doc """
+  Gets a single permission_group.
+
+  Raises `Ecto.NoResultsError` if the Permission group does not exist.
+
+  ## Examples
+
+      iex> get_permission_group!(123)
+      %PermissionGroup{}
+
+      iex> get_permission_group!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_permission_group!(id), do: Repo.get!(PermissionGroup, id)
+
+  @doc """
+  Creates a permission_group.
+
+  ## Examples
+
+      iex> create_permission_group(%{field: value})
+      {:ok, %PermissionGroup{}}
+
+      iex> create_permission_group(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_permission_group(attrs \\ %{}) do
+    %PermissionGroup{}
+    |> PermissionGroup.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a permission_group.
+
+  ## Examples
+
+      iex> update_permission_group(permission_group, %{field: new_value})
+      {:ok, %PermissionGroup{}}
+
+      iex> update_permission_group(permission_group, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_permission_group(%PermissionGroup{} = permission_group, attrs) do
+    permission_group
+    |> PermissionGroup.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a permission_group.
+
+  ## Examples
+
+      iex> delete_permission_group(permission_group)
+      {:ok, %PermissionGroup{}}
+
+      iex> delete_permission_group(permission_group)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_permission_group(%PermissionGroup{} = permission_group) do
+    Repo.delete(permission_group)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking permission_group changes.
+
+  ## Examples
+
+      iex> change_permission_group(permission_group)
+      %Ecto.Changeset{data: %PermissionGroup{}}
+
+  """
+  def change_permission_group(%PermissionGroup{} = permission_group, attrs \\ %{}) do
+    PermissionGroup.changeset(permission_group, attrs)
+  end
 end
