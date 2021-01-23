@@ -1047,22 +1047,16 @@ input.chat-text-input:focus {
 }
 .highlight:hover span {
   color: $secondary-highlight-1;
-  -webkit-animation: text-highlight 0.5s forwards;
-  -webkit-animation-delay: 0.1s;
-  animation: text-highlight 0.5s forwards;
-  animation-delay: 0.1s;
 }
-
-
 
 @-webkit-keyframes text-highlight {
   0% { font-size: 1.6rem; }
-  100% { font-size: 1.7rem; font-weight: bold; }
+  100% { font-size: 1.62rem; }
 }
 
 @keyframes text-highlight {
   0% { font-size: 1.6rem; }
-  100% { font-size: 1.7rem; font-weight: bold }
+  100% { font-size: 1.62rem; }
 }
 
 .pill {
