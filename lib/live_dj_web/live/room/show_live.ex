@@ -17,26 +17,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
-    socket = assign_defaults(socket, params, session)
-    %{current_user: current_user, visitor: visitor} = socket.assigns
-    user = ConnectedUser.create_connected_user(current_user.username)
-
     room = Organizer.get_room(slug)
-    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
-
-    volume_data = VolumeControls.get_initial_state()
-    presence_meta = Map.merge(
-      volume_data,
-      %{
-        typing: false,
-        username: user.username,
-        visitor: visitor
-      }
-    )
-    {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
-
-    parsed_queue = room.queue
-    |> Enum.map(fn track -> Video.from_jsonb(track) end)
 
     case room do
       nil ->
@@ -46,6 +27,27 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> push_redirect(to: Routes.new_path(socket, :new))
         }
       room ->
+        socket = assign_defaults(socket, params, session)
+        %{current_user: current_user, visitor: visitor} = socket.assigns
+        user = ConnectedUser.create_connected_user(current_user.username)
+
+        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
+
+        volume_data = VolumeControls.get_initial_state()
+        presence_meta = Map.merge(
+          volume_data,
+          %{
+            typing: false,
+            username: user.username,
+            visitor: visitor,
+            group: %{codename: ""}
+          }
+        )
+        {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
+
+        parsed_queue = room.queue
+        |> Enum.map(fn track -> Video.from_jsonb(track) end)
+
         player = Player.get_initial_state()
         {:ok,
           socket
