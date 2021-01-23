@@ -4,6 +4,8 @@ defmodule LiveDj.AccountsFixtures do
   entities via the `LiveDj.Accounts` context.
   """
 
+  alias LiveDj.Accounts
+
   def unique_user_username, do: "user#{System.unique_integer()}"
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -17,7 +19,7 @@ defmodule LiveDj.AccountsFixtures do
         email: unique_user_email(),
         password: valid_user_password()
       })
-      |> LiveDj.Accounts.register_user()
+      |> Accounts.register_user()
 
     user
   end
@@ -26,5 +28,28 @@ defmodule LiveDj.AccountsFixtures do
     {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token, _] = String.split(captured.body, "[TOKEN]")
     token
+  end
+
+  def permission_fixture(attrs \\ %{}) do
+    valid_attrs = %{
+      codename: Enum.join(Faker.Lorem.words(2), " "),
+      name: Enum.join(Faker.Lorem.words(2), " ")
+    }
+    {:ok, permission} =
+      attrs
+      |> Enum.into(valid_attrs)
+      |> Accounts.create_permission()
+
+    permission
+  end
+
+  def group_fixture(attrs \\ %{}) do
+    valid_attrs = %{name: Enum.join(Faker.Lorem.words(2), " ")}
+    {:ok, group} =
+      attrs
+      |> Enum.into(valid_attrs)
+      |> Accounts.create_group()
+
+    group
   end
 end
