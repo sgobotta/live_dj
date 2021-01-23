@@ -486,22 +486,13 @@ defmodule LiveDj.AccountsTest do
     @update_attrs %{codename: "some updated codename", name: "some updated name"}
     @invalid_attrs %{codename: nil, name: nil}
 
-    def permission_fixture(attrs \\ %{}) do
-      {:ok, permission} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Accounts.create_permission()
-
-      permission
-    end
-
     test "list_permissions/0 returns all permissions" do
-      permission = permission_fixture()
+      permission = permission_fixture(@valid_attrs)
       assert Accounts.list_permissions() == [permission]
     end
 
     test "get_permission!/1 returns the permission with given id" do
-      permission = permission_fixture()
+      permission = permission_fixture(@valid_attrs)
       assert Accounts.get_permission!(permission.id) == permission
     end
 
@@ -516,26 +507,26 @@ defmodule LiveDj.AccountsTest do
     end
 
     test "update_permission/2 with valid data updates the permission" do
-      permission = permission_fixture()
+      permission = permission_fixture(@valid_attrs)
       assert {:ok, %Permission{} = permission} = Accounts.update_permission(permission, @update_attrs)
       assert permission.codename == "some updated codename"
       assert permission.name == "some updated name"
     end
 
     test "update_permission/2 with invalid data returns error changeset" do
-      permission = permission_fixture()
+      permission = permission_fixture(@valid_attrs)
       assert {:error, %Ecto.Changeset{}} = Accounts.update_permission(permission, @invalid_attrs)
       assert permission == Accounts.get_permission!(permission.id)
     end
 
     test "delete_permission/1 deletes the permission" do
-      permission = permission_fixture()
+      permission = permission_fixture(@valid_attrs)
       assert {:ok, %Permission{}} = Accounts.delete_permission(permission)
       assert_raise Ecto.NoResultsError, fn -> Accounts.get_permission!(permission.id) end
     end
 
     test "change_permission/1 returns a permission changeset" do
-      permission = permission_fixture()
+      permission = permission_fixture(@valid_attrs)
       assert %Ecto.Changeset{} = Accounts.change_permission(permission)
     end
   end
@@ -547,22 +538,13 @@ defmodule LiveDj.AccountsTest do
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
-    def group_fixture(attrs \\ %{}) do
-      {:ok, group} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Accounts.create_group()
-
-      group
-    end
-
     test "list_groups/0 returns all groups" do
-      group = group_fixture()
+      group = group_fixture(@valid_attrs)
       assert Accounts.list_groups() == [group]
     end
 
     test "get_group!/1 returns the group with given id" do
-      group = group_fixture()
+      group = group_fixture(@valid_attrs)
       assert Accounts.get_group!(group.id) == group
     end
 
@@ -576,26 +558,90 @@ defmodule LiveDj.AccountsTest do
     end
 
     test "update_group/2 with valid data updates the group" do
-      group = group_fixture()
+      group = group_fixture(@valid_attrs)
       assert {:ok, %Group{} = group} = Accounts.update_group(group, @update_attrs)
       assert group.name == "some updated name"
     end
 
     test "update_group/2 with invalid data returns error changeset" do
-      group = group_fixture()
+      group = group_fixture(@valid_attrs)
       assert {:error, %Ecto.Changeset{}} = Accounts.update_group(group, @invalid_attrs)
       assert group == Accounts.get_group!(group.id)
     end
 
     test "delete_group/1 deletes the group" do
-      group = group_fixture()
+      group = group_fixture(@valid_attrs)
       assert {:ok, %Group{}} = Accounts.delete_group(group)
       assert_raise Ecto.NoResultsError, fn -> Accounts.get_group!(group.id) end
     end
 
     test "change_group/1 returns a group changeset" do
-      group = group_fixture()
+      group = group_fixture(@valid_attrs)
       assert %Ecto.Changeset{} = Accounts.change_group(group)
+    end
+  end
+
+  describe "permissions_groups" do
+    alias LiveDj.Accounts.PermissionGroup
+
+    @invalid_attrs %{group_id: nil, permission_id: nil}
+
+    def permission_group_fixture(attrs \\ %{}) do
+      permission = permission_fixture()
+      group = group_fixture()
+      valid_attrs = %{permission_id: permission.id, group_id: group.id}
+      {:ok, valid_permission_group} =
+        attrs
+        |> Enum.into(valid_attrs)
+        |> Accounts.create_permission_group()
+
+      valid_permission_group
+    end
+
+    test "list_permissions_groups/0 returns all permissions_groups" do
+      permission_group = permission_group_fixture()
+      assert Accounts.list_permissions_groups() == [permission_group]
+    end
+
+    test "get_permission_group!/1 returns the permission_group with given id" do
+      permission_group = permission_group_fixture()
+      assert Accounts.get_permission_group!(permission_group.id) == permission_group
+    end
+
+    test "create_permission_group/1 with valid data creates a permission_group" do
+      permission = permission_fixture()
+      group = group_fixture()
+      valid_attrs = %{permission_id: permission.id, group_id: group.id}
+      assert {:ok, %PermissionGroup{} = _permission_group} = Accounts.create_permission_group(valid_attrs)
+    end
+
+    test "create_permission_group/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_permission_group(@invalid_attrs)
+    end
+
+    test "update_permission_group/2 with valid data updates the permission_group" do
+      permission_group = permission_group_fixture()
+      permission = permission_fixture()
+      group = group_fixture()
+      update_attrs = %{permission_id: permission.id, group_id: group.id}
+      assert {:ok, %PermissionGroup{} = _permission_group} = Accounts.update_permission_group(permission_group, update_attrs)
+    end
+
+    test "update_permission_group/2 with invalid data returns error changeset" do
+      permission_group = permission_group_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_permission_group(permission_group, @invalid_attrs)
+      assert permission_group == Accounts.get_permission_group!(permission_group.id)
+    end
+
+    test "delete_permission_group/1 deletes the permission_group" do
+      permission_group = permission_group_fixture()
+      assert {:ok, %PermissionGroup{}} = Accounts.delete_permission_group(permission_group)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_permission_group!(permission_group.id) end
+    end
+
+    test "change_permission_group/1 returns a permission_group changeset" do
+      permission_group = permission_group_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_permission_group(permission_group)
     end
   end
 end
