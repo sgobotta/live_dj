@@ -534,9 +534,9 @@ defmodule LiveDj.AccountsTest do
   describe "groups" do
     alias LiveDj.Accounts.Group
 
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
-    @invalid_attrs %{name: nil}
+    @valid_attrs %{codename: "some codename", name: "some name"}
+    @update_attrs %{codename: "some updated codename", name: "some updated name"}
+    @invalid_attrs %{codename: nil, name: nil}
 
     test "list_groups/0 returns all groups" do
       group = group_fixture(@valid_attrs)
