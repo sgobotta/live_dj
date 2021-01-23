@@ -80,3 +80,15 @@ test: MIX_ENV=test
 test: SHELL:=/bin/bash
 test:
 	source .env && mix test
+
+#test.only: @ Runs mix tests that matches the wip tag only
+test.only: MIX_ENV=test
+test.only: SHELL:=/bin/bash
+test.only:
+	source .env && mix test --only wip
+
+#test.drop: @ Drops the test database. Usually used after schemas change.
+test.drop: MIX_ENV=test
+test.drop: SHELL:=/bin/bash
+test.drop:
+	source .env && DB_DATABASE=live_dj_test && mix ecto.drop
