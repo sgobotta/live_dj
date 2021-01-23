@@ -581,6 +581,24 @@ defmodule LiveDj.Accounts do
   def get_group!(id), do: Repo.get!(Group, id)
 
   @doc """
+  Gets a single group by codename.
+
+  Raises `Ecto.NoResultsError` if the Group does not exist.
+
+  ## Examples
+
+      iex> get_group_by_codename("a-valid-codename")
+      %Group{}
+
+      iex> get_group("a-bad-codename")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_group_by_codename(codename) do
+    Repo.get_by(Group, %{codename: codename})
+  end
+
+  @doc """
   Creates a group.
 
   ## Examples
