@@ -1,5 +1,7 @@
 Code.require_file("utils.exs", __DIR__)
 
+require Logger
+
 alias LiveDj.Repo
 alias LiveDj.Organizer.Room
 alias LiveDj.Seeds.Utils
@@ -18,14 +20,16 @@ try do
       )
     end)
     {count, _} = Repo.insert_all(Room, rooms)
-    IO.inspect("Inserted #{count} rooms.")
+    count
   end
-
 rescue
   Postgrex.Error ->
-    IO.inspect("Room seeds were already loaded in the database. Skipping execution.")
+    Logger.info("Room seeds were already loaded in the database. Skipping execution.")
   error ->
-    IO.inspect("Unexpected error while loading Room seeds.")
-    IO.inspect(error)
+    Logger.error("❌ Unexpected error while loading Room seeds.")
+    Logger.error(error)
     raise error
+else
+  count ->
+    Logger.info("✅ Inserted #{count} rooms.")
 end

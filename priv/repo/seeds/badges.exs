@@ -1,8 +1,10 @@
 alias LiveDj.Repo
 alias LiveDj.Stats.Badge
 
+require Logger
+
 try do
-  badges = System.get_env("LIVEDJ_BADGES")
+  System.get_env("LIVEDJ_BADGES")
     |> Poison.decode!()
     |> Enum.map(fn badge ->
       {:ok, date_time} = Ecto.Type.cast(:naive_datetime, badge["inserted_at"])
@@ -18,14 +20,14 @@ try do
       }
       |> Repo.insert()
     end)
-
-  IO.inspect("Inserted #{length(badges)} badges.")
-
 rescue
   Postgrex.Error ->
-    IO.inspect("Badge seeds were already loaded in the database. Skipping execution.")
+    Logger.info("Badge seeds were already loaded in the database. Skipping execution.")
   error ->
-    IO.inspect("Unexpected error while loading Badge seeds.")
-    IO.inspect(error)
+    Logger.error("❌ Unexpected error while loading Badge seeds.")
+    Logger.error(error)
     raise error
+else
+  elements ->
+    Logger.info("✅ Inserted #{length(elements)} badges.")
 end

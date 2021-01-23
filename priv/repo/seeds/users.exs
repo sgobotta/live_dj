@@ -4,6 +4,8 @@ alias LiveDj.Repo
 alias LiveDj.Accounts.User
 alias LiveDj.Seeds.Utils
 
+require Logger
+
 json_file = "#{__DIR__}/users.json"
 
 try do
@@ -18,14 +20,16 @@ try do
       )
     end)
     {count, _} = Repo.insert_all(User, users)
-    IO.inspect("Inserted #{count} users.")
+    count
   end
-
 rescue
   Postgrex.Error ->
-    IO.inspect("User seeds were already loaded in the database. Skipping execution.")
+    Logger.info("User seeds were already loaded in the database. Skipping execution.")
   error ->
-    IO.inspect("Unexpected error while loading User seeds.")
-    IO.inspect(error)
+    Logger.error("❌ Unexpected error while loading User seeds.")
+    Logger.error(error)
     raise error
+else
+  count ->
+    Logger.info("✅ Inserted #{count} users.")
 end

@@ -1,6 +1,8 @@
 alias LiveDj.Repo
 alias LiveDj.Payments.Plan
 
+require Logger
+
 try do
   datetime = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
   mercadopago_plans = System.get_env("MERCADOPAGO_PLANS")
@@ -34,13 +36,15 @@ try do
     } end)
 
   {count, _} = Repo.insert_all(Plan, mercadopago_plans ++ paypal_plans)
-  IO.inspect("Inserted #{count} plans.")
-
+  count
 rescue
   Postgrex.Error ->
-    IO.inspect("Plan seeds were already loaded in the database. Skipping execution.")
+    Logger.info("Plan seeds were already loaded in the database. Skipping execution.")
   error ->
-    IO.inspect("Unexpected error while loading Plan seeds.")
-    IO.inspect(error)
+    Logger.error("❌ Unexpected error while loading Plan seeds.")
+    Logger.error(error)
     raise error
+else
+  count ->
+    Logger.info("✅ Inserted #{count} plans.")
 end

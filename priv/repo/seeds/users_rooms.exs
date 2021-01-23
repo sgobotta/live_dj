@@ -1,9 +1,11 @@
 alias LiveDj.Organizer
 
+require Logger
+
 try do
-  users_rooms = [
   # Assumes Rooms, Users and Groups were created
-  # {room_id, user_id, is_owner}
+  # {room_id, user_id, is_owner, group_id}
+  [
     {1,  1, true,  1},
     {1,  2, false, 2},
     {1,  3, false, 2},
@@ -48,14 +50,14 @@ try do
         })
       end
     )
-
-  IO.inspect("Inserted #{length(users_rooms)} user/room relationships.")
-
 rescue
   Postgrex.Error ->
-    IO.inspect("UserRoom seeds were already loaded in the database. Skipping execution.")
+    Logger.info("UserRoom seeds were already loaded in the database. Skipping execution.")
   error ->
-    IO.inspect("Unexpected error while loading UserRoom seeds.")
-    IO.inspect(error)
+    Logger.error("❌ Unexpected error while loading UserRoom seeds.")
+    Logger.error(error)
     raise error
+else
+  elements ->
+    Logger.info("✅ Inserted #{length(elements)} user/room relationships.")
 end
