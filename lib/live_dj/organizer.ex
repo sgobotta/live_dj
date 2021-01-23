@@ -193,6 +193,24 @@ defmodule LiveDj.Organizer do
   def get_user_room!(id), do: Repo.get!(UserRoom, id)
 
   @doc """
+  Gets a single user_room.
+
+  Raises `Ecto.NoResultsError` if the User room does not exist.
+
+  ## Examples
+
+      iex> get_user_room_by_user_id(%{user_id: valid_value, room_id: valid_value})
+      %UserRoom{}
+
+      iex> get_user_room_by_user_id(%{user_id: bad_value, room_id: bad_value})
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user_room_by(attrs) do
+    Repo.get_by(UserRoom, attrs)
+  end
+
+  @doc """
   Given a set of values, returns true if a UserRoom exists.
 
   ## Examples
