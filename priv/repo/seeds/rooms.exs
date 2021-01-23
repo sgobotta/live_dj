@@ -27,4 +27,5 @@ rescue
   error ->
     IO.inspect("Unexpected error while loading Room seeds.")
     IO.inspect(error)
+    raise error
 end

@@ -42,4 +42,5 @@ rescue
   error ->
     IO.inspect("Unexpected error while loading Plan seeds.")
     IO.inspect(error)
+    raise error
 end

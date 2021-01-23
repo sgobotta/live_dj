@@ -27,4 +27,5 @@ rescue
   error ->
     IO.inspect("Unexpected error while loading Badge seeds.")
     IO.inspect(error)
+    raise error
 end

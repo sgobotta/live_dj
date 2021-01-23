@@ -55,4 +55,5 @@ rescue
   error ->
     IO.inspect("Unexpected error while loading UserRoom seeds.")
     IO.inspect(error)
+    raise error
 end

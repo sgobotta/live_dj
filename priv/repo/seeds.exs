@@ -10,9 +10,22 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-Code.require_file("seeds/plans.exs", __DIR__)
-Code.require_file("seeds/rooms.exs", __DIR__)
-Code.require_file("seeds/users.exs", __DIR__)
-Code.require_file("seeds/users_rooms.exs", __DIR__)
-Code.require_file("seeds/badges.exs", __DIR__)
-Code.require_file("seeds/badges_relations.exs", __DIR__)
+try do
+  seeds = [
+    "permissions",
+    "groups",
+    "permissions_groups",
+    "plans",
+    "rooms",
+    "users",
+    "users_rooms",
+    "badges",
+    "badges_relations"
+  ]
+  for seed <- seeds do
+    Code.require_file("seeds/#{seed}.exs", __DIR__)
+  end
+rescue
+  _error ->
+    IO.inspect("Stopped seeds population due to errors.")
+end
