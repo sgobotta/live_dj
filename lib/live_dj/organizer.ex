@@ -236,10 +236,10 @@ defmodule LiveDj.Organizer do
 
   ## Examples
 
-      iex> create_user_room(%{field: value})
+      iex> create_user_room(%{is_owner: value, user_id: value, room_id: value, group_id: value})
       {:ok, %UserRoom{}}
 
-      iex> create_user_room(%{field: bad_value})
+      iex> create_user_room(%{is_owner: bad_value, user_id: bad_value, room_id: bad_value, group_id: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -254,10 +254,10 @@ defmodule LiveDj.Organizer do
 
   ## Examples
 
-      iex> update_user_room(user_room, %{field: new_value})
+      iex> update_user_room(user_room, %{is_owner: value, user_id: value, room_id: value, group_id: value})
       {:ok, %UserRoom{}}
 
-      iex> update_user_room(user_room, %{field: bad_value})
+      iex> update_user_room(user_room, %{is_owner: bad_value, user_id: bad_value, room_id: bad_value, group_id: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
