@@ -1354,6 +1354,59 @@ svg.search-control-add-asset.show-check-button .search-control-add-asset-check-l
   opacity: 1;
 }
 
+
+.peers-control-admin-asset-add-layer {
+  fill: $text;
+  stroke: $text;
+}
+.svg-button-container:hover .peers-control-admin-asset-add-layer {
+  fill: $success-highlight-1;
+  stroke: $success-highlight-1;
+}
+.peers-control-admin-asset-check-layer {
+  fill: $success-highlight-1;
+  stroke: $success-highlight-1;
+}
+.peers-control-admin-asset-remove-layer {
+  fill: $text;
+  stroke: $text;
+}
+.svg-button-container:hover .peers-control-admin-asset-remove-layer {
+  fill: $danger;
+  stroke: $danger;
+}
+.svg-button-container:focus {
+  outline: none;
+}
+
+svg.peers-control-admin-asset.show-add-button .peers-control-admin-asset-add-layer {
+  opacity: 1;
+}
+svg.peers-control-admin-asset.show-add-button .peers-control-admin-asset-check-layer {
+  opacity: 0;
+}
+svg.peers-control-admin-asset.show-add-button .peers-control-admin-asset-remove-layer {
+  opacity: 0;
+}
+svg.peers-control-admin-asset.show-check-button .peers-control-admin-asset-add-layer {
+  opacity: 0;
+}
+svg.peers-control-admin-asset.show-check-button .peers-control-admin-asset-check-layer {
+  opacity: 1;
+}
+svg.peers-control-admin-asset.show-check-button .peers-control-admin-asset-remove-layer {
+  opacity: 0;
+}
+svg.peers-control-admin-asset.show-remove-button .peers-control-admin-asset-add-layer {
+  opacity: 0;
+}
+svg.peers-control-admin-asset.show-remove-button .peers-control-admin-asset-check-layer {
+  opacity: 0;
+}
+svg.peers-control-admin-asset.show-remove-button .peers-control-admin-asset-remove-layer {
+  opacity: 1;
+}
+
 .draggable {
   cursor: pointer
 }
