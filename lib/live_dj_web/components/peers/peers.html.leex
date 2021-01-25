@@ -53,11 +53,25 @@
 
             <div class="flex-1">
               <span>
-                <i class="mini fas <%= hd(user.metas).volume_icon %>"></i>
+                <i class="mini fas <%= get_volume_icon_class(hd(user.metas).volume_icon) %>"></i>
               </span>
+
+              <%= if hd(user.metas).group.codename == "room-admin" do %>
+                <a>
+                  <span>🛠️</span>
+                </a>
+              <% end %>
+              <%= if hd(user.metas).group.codename == "room-collaborator" do %>
+                <a>
+                  <span>🔧</span>
+                </a>
+              <% end %>
               <%= if user.uuid == @room.video_tracker do %>
                 <span>🕑</span>
               <% end %>
+            </div>
+            <div class="flex" style="width: 20px">
+              <%= render_assign_privileges_button(@room_group, user, @myself) %>
             </div>
           </div>
         </li>
