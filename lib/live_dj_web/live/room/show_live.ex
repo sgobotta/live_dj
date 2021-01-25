@@ -15,6 +15,9 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
 
+  # FIXME: Use this from a Controller
+  alias LiveDj.Repo
+
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
     room = Organizer.get_room(slug)
@@ -31,16 +34,31 @@ defmodule LiveDjWeb.Room.ShowLive do
         %{current_user: current_user, visitor: visitor} = socket.assigns
         user = ConnectedUser.create_connected_user(current_user.username)
 
+        # FIXME: refactor to a group management module
+        group = case visitor do
+          true -> %{codename: "anonymous-user", name: "Anonymous user"}
+          false ->
+            case Organizer.get_user_room_by(%{user_id: current_user.id, room_id: room.id}) do
+              nil -> %{codename: "registered-user", name: "Registered  user"}
+              user_room -> Repo.preload(user_room, [:group]).group
+            end
+        end
+
         Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
         volume_data = VolumeControls.get_initial_state()
+        presence_meta_user_id = case visitor do
+          true -> 0
+          false -> current_user.id
+        end
         presence_meta = Map.merge(
           volume_data,
           %{
             typing: false,
             username: user.username,
             visitor: visitor,
-            group: %{codename: ""}
+            group: group,
+            user_id: presence_meta_user_id
           }
         )
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
@@ -63,8 +81,9 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
           |> assign(:username_input, user.username)
-          |> assign(:current_tab, "video_queue")
-          |> assign(:sections_group_tab, "chat")
+          |> assign(:current_tab, "chat")
+          |> assign(:sections_group_tab, "peers")
+          |> assign(:room_group, group)
           |> assign_tracker(room)
         }
     end
@@ -280,6 +299,16 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     Presence.update(self(), "room:" <> slug, uuid, fn m ->
       Map.merge(m, %{volume_level: volume_level, volume_icon: volume_icon})
+    end)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:presence_group_changed, params}, socket) do
+    %{group: group, topic: topic, uuid: uuid} = params
+
+    Presence.update(self(), topic, uuid, fn m ->
+      Map.merge(m, %{group: group})
     end)
 
     {:noreply, socket}

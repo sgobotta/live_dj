@@ -73,6 +73,7 @@
               slug: @slug
             %>
 
+
             <%= live_component @socket, LiveDjWeb.Components.Peers,
               id: "live-dj-peers-list",
               connected_users: @connected_users,
@@ -80,6 +81,7 @@
               current_tab: @current_tab,
               current_user: @current_user,
               room: @room,
+              room_group: @room_group,
               user: @user,
               user_changeset: @user_changeset,
               visitor: @visitor
