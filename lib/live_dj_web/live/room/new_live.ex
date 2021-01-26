@@ -119,6 +119,23 @@ defmodule LiveDjWeb.Room.NewLive do
     }
   end
 
+  def handle_event("save", _,
+    %{
+      assigns: %{
+      visitor: true,
+      changeset: %{changes: %{management_type: "managed"}} = changeset
+      }
+    } = socket
+  ) do
+    {:noreply,
+      socket
+      |> assign(:changeset, changeset)
+      |> put_flash(:error,
+        "Please sign in with a username to create managed rooms."
+      )
+    }
+  end
+
   def handle_event("save", _, %{assigns: assigns} = socket) do
     %{
       changeset: changeset,
