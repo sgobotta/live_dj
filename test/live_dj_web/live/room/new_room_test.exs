@@ -83,7 +83,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     end
   end
 
-  describe "As a visitor user When a room is created" do
+  describe "As a visitor user When I want to create a room" do
 
     test "An error alert is returned if the title input is empty", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/")
@@ -105,7 +105,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert render_click(view, :save) =~ "can&apos;t be blank"
     end
 
-    test "A redirection is performed", %{conn: conn} do
+    test "A redirection is performed if the room is created", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/")
 
       expected_redirection_path_value = "/room/some-slug"
@@ -117,9 +117,20 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert {:error, {:redirect, %{to: ^expected_redirection_path_value}}} = render_click(view, :save)
       assert_redirected view, expected_redirection_path_value
     end
+
+    test "An error alert is returned if I choose managed as the management_type option", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/")
+
+      management = %{management_type: "managed"}
+      view
+        |> element(@create_room_form_id)
+        |> render_change(%{room: Enum.into(management, @valid_room_attrs)})
+
+        assert render_click(view, :save) =~ "Please sign in with a username to create managed rooms."
+    end
   end
 
-  describe "As a registered user When a room is created" do
+  describe "As a registered user When I want to create a room" do
 
     setup(%{conn: conn}) do
       register_and_log_in_user(%{conn: conn})
@@ -147,6 +158,33 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert render_click(view, :save) =~ "can&apos;t be blank"
     end
 
+    test "with a managed management_type value, A redirection is performed and a user/room relationship is created",
+      %{conn: conn, user: user}
+    do
+      group_fixture(%{codename: "room-admin", name: "Room admin"})
+      conn = conn |> log_in_user(user)
+      {:ok, view, _html} = live(conn, "/")
+
+      expected_redirection_path_value = "/room/some-slug"
+
+      management = %{management_type: "managed"}
+      view
+        |> element(@create_room_form_id)
+        |> render_change(%{room: Enum.into(management, @valid_room_attrs)})
+
+      rendered_view = render_click(view, :save)
+      assert {:error, {:redirect, %{to: ^expected_redirection_path_value}}} = rendered_view
+
+      {:ok, conn} = rendered_view |> follow_redirect(conn)
+      %{assigns: %{room: room}} = conn
+
+      assert_redirected(view, expected_redirection_path_value)
+      # When a room is created, the user that triggers the action is the owner
+      # by default.
+      assert Organizer.has_user_room_by(user.id, room.id, true)
+      assert room.management_type == "managed"
+    end
+
     test "A redirection is performed and a user/room relationship is created", %{conn: conn, user: user} do
       group_fixture(%{codename: "room-admin", name: "Room admin"})
       conn = conn |> log_in_user(user)
@@ -168,6 +206,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       # When a room is created, the user that triggers the action is the owner
       # by default.
       assert Organizer.has_user_room_by(user.id, room.id, true)
+      assert room.management_type == "free"
     end
   end
 end

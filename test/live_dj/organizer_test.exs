@@ -6,8 +6,8 @@ defmodule LiveDj.OrganizerTest do
   describe "rooms" do
     alias LiveDj.Organizer.Room
 
-    @valid_attrs %{slug: "some slug", title: "some title"}
-    @update_attrs %{slug: "some updated slug", title: "some updated title"}
+    @valid_attrs %{slug: "some slug", title: "some title", management_type: "some management type"}
+    @update_attrs %{slug: "some updated slug", title: "some updated title", management_type: "some updated management type"}
     @invalid_attrs %{slug: nil, title: nil}
 
     def room_fixture(attrs \\ %{}) do
