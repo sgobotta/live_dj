@@ -1,0 +1,49 @@
+<div
+  class="
+    flex flex-wrap justify-center items-stretch live-inside-box
+    p-4 m-6 rounded-lg
+  "
+>
+  <%= form_for @changeset, "#",
+    [
+      phx_submit: "submit_changeset",
+      phx_change: "validate",
+      phx_target: @myself,
+      class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4"
+    ],
+    fn form -> %>
+
+    <div class="flex items-start">
+      <span class="rounded text-white p-2 leading-none flex title-pill full-width">
+        Change Room Settings
+      </span>
+    </div>
+
+    <div class="flex flex-col items-center text-white text-left px-4 py-6">
+      <%= if @changeset.action do %>
+        <p class="mb-4">Oops, something went wrong!</p>
+        <p class="mb-4">Please check the errors below.</p>
+      <% end %>
+
+      <div class="mb-4 full-width">
+        <%= label form, :title, class: "text-left" %>
+        <%= text_input form, :title, required: true, class: "text-input-effect" %>
+        <%= error_tag form, :title %>
+      </div>
+
+      <div class="mb-4 full-width">
+        <%= label form, :management_type, class: "pr-4 text-left" %>
+        <%= select(
+          form,
+          :management_type,
+          ["Free room management for everyone": "free", "Anyone can join, but it's managed by admin and collaborators": "managed"],
+          class: "select-input full-width text-color px-4")
+        %>
+      </div>
+    </div>
+
+    <div class="mt-auto flex items-center justify-end">
+      <%= submit "Update room", class: "modal-button modal-submit-button full-width" %>
+    </div>
+  <% end %>
+</div>
