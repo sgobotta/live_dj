@@ -6,7 +6,7 @@
     <% else %>
       sections-group-hide-section
     <% end %>
-  "sections-group-show-section
+  "
   id="peers-list-data" phx-hook="PresenceSyncing"
 >
   <div class="peers-panel scrollable-panel fixed-height-xl p-4 m-6 rounded-lg">
@@ -16,26 +16,17 @@
           <div class="flex space-x-4" style="align-items: center;">
             <div class="flex-1">
               <%= if user.uuid == @user.uuid do %>
-                <%= live_component @socket, LiveDjWeb.Components.Settings,
-                  id: "change-username-modal",
-                  current_user: @current_user,
-                  room: @room,
-                  user: @user,
-                  user_changeset: @user_changeset,
-                  visitor: @visitor
-                do %>
-                  <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
-                    <%= if hd(user.metas).is_donor do %>
-                      <i class="mini fas fa-hand-holding-heart secondary-highlight-1"></i>
-                    <% end %>
-                    <%= if !hd(user.metas).visitor do %>
-                      <i class="mini fas fa-certificate primary"></i>
-                    <% end %>
-                    <span class="clickeable" phx-click="open" phx-target="#settings-menu">
-                      <%= hd(user.metas).username %>
-                    </span>
-                  </p>
-                <% end %>
+                <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                  <%= if hd(user.metas).is_donor do %>
+                    <i class="mini fas fa-hand-holding-heart secondary-highlight-1"></i>
+                  <% end %>
+                  <%= if !hd(user.metas).visitor do %>
+                    <i class="mini fas fa-certificate primary"></i>
+                  <% end %>
+                  <span>
+                    <%= hd(user.metas).username %>
+                  </span>
+                </p>
               <% else %>
                 <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
                   <%= if hd(user.metas).is_donor do %>
