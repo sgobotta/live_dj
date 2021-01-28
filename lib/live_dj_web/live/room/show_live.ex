@@ -9,7 +9,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.{Chat, Player, VolumeControls, Queue, Video}
+  alias LiveDj.Organizer.{Chat, Player, Queue, Room, Video, VolumeControls}
   alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
@@ -17,6 +17,8 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   # FIXME: Use this from a Controller
   alias LiveDj.Repo
+
+  import Ecto
 
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
@@ -43,6 +45,8 @@ defmodule LiveDjWeb.Room.ShowLive do
               user_room -> Repo.preload(user_room, [:group]).group
             end
         end
+
+        room_changeset = Ecto.Changeset.change(room)
 
         Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
@@ -76,6 +80,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:messages, [])
           |> assign(:video_queue, Enum.with_index(parsed_queue))
           |> assign(:video_queue_controls, Queue.get_initial_controls())
+          |> assign(:room_changeset, room_changeset)
           |> assign(:search_result, [])
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
@@ -371,6 +376,12 @@ defmodule LiveDjWeb.Room.ShowLive do
     end)
 
     {:noreply, socket}
+  end
+
+  def handle_info({:update_socket, %{room: room}}, socket) do
+    {:noreply, socket
+      |> assign(:room, room)
+      |> assign(:room_changeset, Ecto.Changeset.change(room))}
   end
 
   @impl true
