@@ -7,7 +7,7 @@
           <!-- Queue link -->
           <li class="header-item">
             <button
-              class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring"
+              class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:outline-none focus:ring"
               phx-click="show_queue"
             >
               <span>
@@ -18,7 +18,7 @@
           <!-- Search link -->
           <li class="header-item">
             <button
-              class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+              class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:ring focus:outline-none"
               phx-click="show_search"
             >
               <span>
@@ -29,13 +29,34 @@
           <!-- Chat link -->
           <li class="header-item">
             <button
-              class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:ring focus:outline-none"
+              class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:ring focus:outline-none"
               phx-click="show_chat"
             >
               <span>
                 <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/messages", class: "h-8 w-8 svg-icon") %>
               </span>
             </button>
+          </li>
+          <!-- Settings link -->
+          <li class="header-item">
+            <%= live_component @socket, LiveDjWeb.Components.Settings,
+              id: "header-change-username-modal",
+              current_user: @current_user,
+              room: @room,
+              room_changeset: @room_changeset,
+              user: @user,
+              user_changeset: @user_changeset,
+              visitor: @visitor
+            do %>
+              <button
+                class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:ring focus:outline-none"
+                phx-click="open" phx-target="#header-change-username-modal-settings-menu"
+              >
+                <span>
+                  <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/messages", class: "h-8 w-8 svg-icon") %>
+                </span>
+              </button>
+            <% end %>
           </li>
         </ul>
       </nav>
@@ -107,7 +128,7 @@
           <!-- Home link -->
           <li class="aside-item">
             <button
-              class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring button-effect"
+              class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:outline-none focus:ring button-effect"
             >
               <a
                 href=" <%=Routes.new_path(@socket, :new) %>"
@@ -120,7 +141,7 @@
           <!-- Settings link -->
           <li class="aside-item">
             <button
-              class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:translate-x-1 focus:outline-none focus:ring button-effect"
+              class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:outline-none focus:ring button-effect"
             >
               <a
                 href=" <%=Routes.user_settings_path(@socket, :index) %>"
@@ -129,6 +150,27 @@
                 <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/account", class: "h-10 w-10 svg-icon") %>
               </a>
             </button>
+          </li>
+          <!-- Room Settings modal -->
+          <li class="header-item">
+            <%= live_component @socket, LiveDjWeb.Components.Settings,
+              id: "aside-change-username-modal",
+              current_user: @current_user,
+              room: @room,
+              room_changeset: @room_changeset,
+              user: @user,
+              user_changeset: @user_changeset,
+              visitor: @visitor
+            do %>
+              <button
+                class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:ring focus:outline-none"
+                phx-click="open" phx-target="#aside-change-username-modal-settings-menu"
+              >
+                <span>
+                  <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/messages", class: "h-8 w-8 svg-icon") %>
+                </span>
+              </button>
+            <% end %>
           </li>
         </ul>
       </nav>
