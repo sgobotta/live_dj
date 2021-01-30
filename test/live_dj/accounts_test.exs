@@ -586,18 +586,6 @@ defmodule LiveDj.AccountsTest do
 
     @invalid_attrs %{group_id: nil, permission_id: nil}
 
-    def permission_group_fixture(attrs \\ %{}) do
-      permission = permission_fixture()
-      group = group_fixture()
-      valid_attrs = %{permission_id: permission.id, group_id: group.id}
-      {:ok, valid_permission_group} =
-        attrs
-        |> Enum.into(valid_attrs)
-        |> Accounts.create_permission_group()
-
-      valid_permission_group
-    end
-
     test "list_permissions_groups/0 returns all permissions_groups" do
       permission_group = permission_group_fixture()
       assert Accounts.list_permissions_groups() == [permission_group]
