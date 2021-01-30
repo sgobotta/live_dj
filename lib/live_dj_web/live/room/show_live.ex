@@ -37,12 +37,25 @@ defmodule LiveDjWeb.Room.ShowLive do
         user = ConnectedUser.create_connected_user(current_user.username)
 
         # FIXME: refactor to a group management module
-        group = case visitor do
-          true -> %{codename: "anonymous-user", name: "Anonymous user"}
+        user_room_group = case visitor do
+          true -> %{
+            codename: "anonymous-user",
+            name: "Anonymous user",
+            permissions: []
+          }
           false ->
-            case Organizer.get_user_room_by(%{user_id: current_user.id, room_id: room.id}) do
-              nil -> %{codename: "registered-user", name: "Registered  user"}
-              user_room -> Repo.preload(user_room, [:group]).group
+            case Organizer.get_user_room_by(%{
+              user_id: current_user.id,
+              room_id: room.id
+            }) do
+              nil -> %{
+                codename: "registered-user",
+                name: "Registered  user",
+                permissions: []
+              }
+              user_room ->
+                user_room = Repo.preload(user_room, [:group])
+                user_room.group |> Repo.preload(:permissions)
             end
         end
 
@@ -61,7 +74,7 @@ defmodule LiveDjWeb.Room.ShowLive do
             typing: false,
             username: user.username,
             visitor: visitor,
-            group: group,
+            user_room_group: user_room_group,
             user_id: presence_meta_user_id
           }
         )
@@ -88,7 +101,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:username_input, user.username)
           |> assign(:current_tab, "chat")
           |> assign(:sections_group_tab, "peers")
-          |> assign(:room_group, group)
+          |> assign(:user_room_group, user_room_group)
           |> assign_tracker(room)
         }
     end

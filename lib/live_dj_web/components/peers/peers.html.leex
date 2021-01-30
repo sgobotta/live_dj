@@ -47,12 +47,12 @@
                 <i class="mini fas <%= get_volume_icon_class(hd(user.metas).volume_icon) %>"></i>
               </span>
 
-              <%= if hd(user.metas).group.codename == "room-admin" do %>
+              <%= if hd(user.metas).user_room_group.codename == "room-admin" do %>
                 <a>
                   <span>🛠️</span>
                 </a>
               <% end %>
-              <%= if hd(user.metas).group.codename == "room-collaborator" do %>
+              <%= if hd(user.metas).user_room_group.codename == "room-collaborator" do %>
                 <a>
                   <span>🔧</span>
                 </a>
@@ -62,7 +62,7 @@
               <% end %>
             </div>
             <div class="flex" style="width: 20px">
-              <%= render_assign_privileges_button(@room_group, user, @myself) %>
+              <%= render_assign_privileges_button(@user_room_group, user, @myself) %>
             </div>
           </div>
         </li>

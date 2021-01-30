@@ -81,14 +81,14 @@ defmodule LiveDjWeb.Components.Peers do
     end
   end
 
-  def render_assign_privileges_button(room_group, peer_metas, target) do
+  def render_assign_privileges_button(user_room_group, peer_metas, target) do
     %{uuid: uuid, metas: metas} = peer_metas
     peer_metas = hd(metas)
 
-    case peer_metas.group.codename do
+    case peer_metas.user_room_group.codename do
       "anonymous-user" -> ""
       peer_group ->
-        case room_group.codename do
+        case user_room_group.codename do
           "room-admin" ->
             case peer_group do
               "room-collaborator" ->
