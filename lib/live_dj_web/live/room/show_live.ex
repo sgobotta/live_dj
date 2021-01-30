@@ -326,7 +326,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{group: group, topic: topic, uuid: uuid} = params
 
     Presence.update(self(), topic, uuid, fn m ->
-      Map.merge(m, %{group: group})
+      Map.merge(m, %{user_room_group: group})
     end)
 
     {:noreply, socket}
