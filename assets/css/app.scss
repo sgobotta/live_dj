@@ -776,7 +776,7 @@ input.chat-text-input:focus {
   100% { border: 0.15rem }
 }
 
-.chat-panel, .peers-panel {
+.chat-panel, .peers-panel, .room-settings, .live-inside-box {
   background-color: #222;
 }
 
@@ -857,7 +857,8 @@ input.chat-text-input:focus {
 
 .modal {
   z-index: 50;
-  position: fixed;
+  position: absolute;
+  top: 0vh;
   bottom: 0;
   right: 0;
   left: 0;
@@ -897,10 +898,8 @@ input.chat-text-input:focus {
   width: 100%;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   max-width: 32rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-bottom: 2rem;
-  margin-left: auto;
-  margin-right: auto;
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -910,11 +909,10 @@ input.chat-text-input:focus {
 }
 
 .modal-window {
-  background-color: #000;
-  opacity: 0.85;
+  background-color: $background-dark;
+  opacity: 1;
   border-color: $primary;
-  border-width: 1px;
-  border-style: dashed;
+  border-width: 0px;
   position: relative;
   display: flex;
   flex-direction: column;
