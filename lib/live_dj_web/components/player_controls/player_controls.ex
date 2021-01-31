@@ -46,7 +46,6 @@ defmodule LiveDjWeb.Components.PlayerControls do
     )
     {:noreply, socket}
   end
-
   def handle_event("player_signal_playing", _params,
     %{assigns: %{player_permissions: %{can_play_track: false}}} = socket
   ) do
@@ -63,31 +62,42 @@ defmodule LiveDjWeb.Components.PlayerControls do
     )
     {:noreply, socket}
   end
-
   def handle_event("player_signal_paused", _params,
     %{assigns: %{player_permissions: %{can_pause_track: false}}} = socket
   ) do
     {:noreply, socket}
   end
 
-  def handle_event("player_signal_play_previous", _params, socket) do
+  def handle_event("player_signal_play_previous", _params,
+  %{assigns: %{player_permissions: %{can_play_previous_track: true}}} = socket
+  ) do
     {:noreply,
       socket
       |> handle_player_signal_play_video(%{
         broadcast_event_name: :player_signal_play_previous,
         get_target_video: &Queue.get_previous_video/2
-      })
-    }
+        })}
+  end
+  def handle_event("player_signal_play_previous", _params,
+    %{assigns: %{player_permissions: %{can_play_previous_track: false}}} = socket
+  ) do
+    {:noreply, socket}
   end
 
-  def handle_event("player_signal_play_next", _params, socket) do
+  def handle_event("player_signal_play_next", _params,
+    %{assigns: %{player_permissions: %{can_play_next_track: true}}} = socket
+  ) do
     {:noreply,
       socket
       |> handle_player_signal_play_video(%{
         broadcast_event_name: :player_signal_play_next,
         get_target_video: &Queue.get_next_video/2
-      })
-    }
+        })}
+  end
+  def handle_event("player_signal_play_next", _params,
+  %{assigns: %{player_permissions: %{can_play_next_track: false}}} = socket
+  ) do
+    {:noreply, socket}
   end
 
   defp handle_player_signal_play_video(socket, params) do
