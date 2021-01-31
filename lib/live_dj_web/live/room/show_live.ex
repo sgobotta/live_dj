@@ -63,6 +63,7 @@ defmodule LiveDjWeb.Room.ShowLive do
 
         Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
 
+        # Refactor to a module that manages Presence (initial data, updates, etc.)
         volume_data = VolumeControls.get_initial_state()
         presence_meta_user_id = case visitor do
           true -> 0
@@ -74,7 +75,10 @@ defmodule LiveDjWeb.Room.ShowLive do
             typing: false,
             username: user.username,
             visitor: visitor,
-            user_room_group: user_room_group,
+            group: %{
+              codename: user_room_group.codename,
+              name: user_room_group.name
+            },
             user_id: presence_meta_user_id
           }
         )
@@ -322,12 +326,23 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply, socket}
   end
 
-  def handle_info({:presence_group_changed, params}, socket) do
-    %{group: group, topic: topic, uuid: uuid} = params
+  def handle_info({:user_room_group_changed, params}, socket) do
+    %{group: group, topic: topic, user_id: user_id, uuid: uuid} = params
 
     Presence.update(self(), topic, uuid, fn m ->
-      Map.merge(m, %{user_room_group: group})
+      Map.merge(m, %{group: group})
     end)
+
+    socket = case socket.assigns.visitor do
+      true -> socket
+      false ->
+        IO.inspect("current_user")
+        IO.inspect(socket.assigns.current_user)
+        case user_id == socket.assigns.current_user.id do
+          false -> socket
+          true -> assign(socket, :user_room_group, group)
+        end
+    end
 
     {:noreply, socket}
   end

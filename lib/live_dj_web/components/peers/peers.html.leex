@@ -47,16 +47,8 @@
                 <i class="mini fas <%= get_volume_icon_class(hd(user.metas).volume_icon) %>"></i>
               </span>
 
-              <%= if hd(user.metas).user_room_group.codename == "room-admin" do %>
-                <a>
-                  <span>🛠️</span>
-                </a>
-              <% end %>
-              <%= if hd(user.metas).user_room_group.codename == "room-collaborator" do %>
-                <a>
-                  <span>🔧</span>
-                </a>
-              <% end %>
+              <%= render_group_avatar(hd(user.metas).group.codename) %>
+
               <%= if user.uuid == @room.video_tracker do %>
                 <span>🕑</span>
               <% end %>

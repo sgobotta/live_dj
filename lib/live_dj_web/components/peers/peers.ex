@@ -49,7 +49,7 @@ defmodule LiveDjWeb.Components.Peers do
         :ok = Phoenix.PubSub.broadcast(
           LiveDj.PubSub,
           topic,
-          {:presence_group_changed, %{topic: topic, uuid: uuid, group: group}}
+          {:user_room_group_changed, %{topic: topic, user_id: user_id, uuid: uuid, group: group}}
         )
 
         {:noreply, socket}
@@ -74,7 +74,7 @@ defmodule LiveDjWeb.Components.Peers do
         :ok = Phoenix.PubSub.broadcast(
           LiveDj.PubSub,
           topic,
-          {:presence_group_changed, %{topic: topic, uuid: uuid, group: group}}
+          {:user_room_group_changed, %{topic: topic, user_id: user_id, uuid: uuid, group: group}}
         )
 
         {:noreply, socket}
@@ -85,7 +85,7 @@ defmodule LiveDjWeb.Components.Peers do
     %{uuid: uuid, metas: metas} = peer_metas
     peer_metas = hd(metas)
 
-    case peer_metas.user_room_group.codename do
+    case peer_metas.group.codename do
       "anonymous-user" -> ""
       peer_group ->
         case user_room_group.codename do
@@ -128,6 +128,18 @@ defmodule LiveDjWeb.Components.Peers do
           class: "h-8 w-8 clickeable #{classes}"
         ) %>
       </button>
+    """
+  end
+
+  def render_group_avatar(user_room_group, assigns \\ %{}) do
+    icon = case user_room_group do
+      "room-admin"        -> "🛠️"
+      "room-collaborator" -> "🔧"
+      _ -> ""
+    end
+
+    ~L"""
+      <a><%= icon %></a>
     """
   end
 end
