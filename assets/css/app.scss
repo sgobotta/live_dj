@@ -434,7 +434,7 @@ iframe#video-player {
 /* Alerts and form errors */
 .alert {
   padding: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   border: 1px solid transparent;
   border-radius: 4px;
 }
@@ -453,8 +453,6 @@ iframe#video-player {
   background-color: transparent;
   border-color: $danger;
   border-style: dashed;
-  animation: opacity 2s alternate infinite;
-  -webkit-animation: opacity 2s alternate infinite;
 }
 .alert p {
   margin-bottom: 0;
