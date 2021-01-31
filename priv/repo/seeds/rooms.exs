@@ -13,10 +13,10 @@ try do
     {:ok, rooms} <- Jason.decode(body, keys: :atoms) do
 
     date_keys = [:inserted_at, :updated_at]
-    rooms = Enum.map(rooms, fn user ->
+    rooms = Enum.map(rooms, fn room ->
       Map.merge(
-        user,
-        Utils.dates_to_naive_datetime(user, date_keys)
+        room,
+        Utils.dates_to_naive_datetime(room, date_keys)
       )
     end)
     {count, _} = Repo.insert_all(Room, rooms)
