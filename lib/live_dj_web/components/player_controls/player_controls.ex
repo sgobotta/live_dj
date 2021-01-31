@@ -26,7 +26,6 @@ defmodule LiveDjWeb.Components.PlayerControls do
 
     {:ok,
       socket
-      |> assign(:is_managed, is_managed)
       |> assign(:player_permissions, player_permissions)
       |> assign(assigns)
     }
