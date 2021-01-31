@@ -102,8 +102,8 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player_controls, Player.get_controls_state(player))
           |> assign(:volume_controls, volume_data)
           |> assign(:username_input, user.username)
-          |> assign(:current_tab, "chat")
-          |> assign(:sections_group_tab, "peers")
+          |> assign(:current_tab, "video_queue")
+          |> assign(:sections_group_tab, "chat")
           |> assign(:user_room_group, user_room_group)
           |> assign_tracker(room)
         }

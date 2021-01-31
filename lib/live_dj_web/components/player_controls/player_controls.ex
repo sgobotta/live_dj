@@ -107,4 +107,64 @@ defmodule LiveDjWeb.Components.PlayerControls do
 
 #
 # ===========================================================================
+
+  def render_player_control_button("play-controls", player_state, player_controls, assigns) do
+    %{
+      pause_button_state: pause_button_state,
+      play_button_state: play_button_state
+    } = player_controls
+    is_player_loading = pause_button_state == "disabled" && play_button_state == "disabled"
+    play_button_class = case is_player_loading do
+      true -> "show_loader_control_button player-control-spin"
+      false -> case player_state do
+        "playing" -> "show_pause_control_button"
+        "stopped" -> "show_play_control_button"
+        "paused" ->  "show_play_control_button"
+      end
+    end
+    player_event = case player_state do
+      "paused"  -> "player_signal_playing"
+      "stopped" -> "player_signal_playing"
+      "playing" -> "player_signal_paused"
+      _         -> ""
+    end
+
+    ~L"""
+      <a phx-click="<%= player_event %>" phx-target="<%= assigns %>">
+        <%= render_svg(
+          "icons/player/play-controls",
+          "h-12 w-12 player-control clickeable #{play_button_class}"
+        ) %>
+      </a>
+    """
+  end
+
+  def render_player_control_button(button, event_name, button_state, assigns) do
+    %{link_props: link_props, svg_classes: svg_classes} = case button_state do
+      "disabled" ->
+        %{
+          link_props: %{class: "disabled", phx_click: "", phx_target: nil},
+          svg_classes: ""
+        }
+      _ ->
+        %{
+          link_props: %{class: "", phx_click: event_name, phx_target: assigns},
+          svg_classes: "player-control clickeable"
+        }
+    end
+
+    ~L"""
+      <a
+        class="<%= link_props.class %>"
+        phx-click="<%= link_props.phx_click %>"
+        phx-target="<%= link_props.phx_target %>"
+      >
+        <%= render_svg("icons/player/#{button}", "h-12 w-12 #{svg_classes}") %>
+      </a>
+    """
+  end
+
+  defp render_svg(icon, classes) do
+    PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, icon, class: classes)
+  end
 end
