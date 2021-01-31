@@ -44,6 +44,7 @@ defmodule LiveDjWeb.Components.Peers do
           group_id: group_id
         })
         %UserRoom{group: group} = Repo.preload(user_room, [:group])
+        group = Repo.preload(group, [:permissions])
 
         topic = "room:" <> slug
         :ok = Phoenix.PubSub.broadcast(
@@ -68,7 +69,11 @@ defmodule LiveDjWeb.Components.Peers do
           room_id: room_id
         })
         {:ok, _user_room} = Organizer.delete_user_room(user_room)
-        group = %{codename: "registered-user", name: "Registered  user"}
+        group = %{
+          codename: "registered-user",
+          name: "Registered user",
+          permissions: [],
+        }
 
         topic = "room:" <> slug
         :ok = Phoenix.PubSub.broadcast(
@@ -86,12 +91,15 @@ defmodule LiveDjWeb.Components.Peers do
     peer_metas = hd(metas)
 
     case peer_metas.group.codename do
-      "anonymous-user" -> ""
+      "anonymous-user" ->
+        # Send an invite notification to register
+        ""
       peer_group ->
-        case user_room_group.codename do
-          "room-admin" ->
-            case peer_group do
-              "room-collaborator" ->
+        %{permissions: permissions} = user_room_group
+        case peer_group do
+          "room-collaborator" ->
+            case Enum.any?(permissions, fn p -> p.codename == "can_remove_room_collaborators" end) do
+              true ->
                 button_params = %{
                   event: "remove_room_collaborator",
                   classes: "show-remove-button",
@@ -99,7 +107,11 @@ defmodule LiveDjWeb.Components.Peers do
                   target: target
                 }
                 render_privileges_button(button_params)
-              "registered-user" ->
+              false -> ""
+            end
+          "registered-user" ->
+            case Enum.any?(permissions, fn p -> p.codename == "can_remove_room_collaborators" end) do
+              true ->
                 button_params = %{
                   event: "add_room_collaborator",
                   classes: "show-add-button",
@@ -107,10 +119,10 @@ defmodule LiveDjWeb.Components.Peers do
                   target: target
                 }
                 render_privileges_button(button_params)
-              _ -> ""
+              false -> ""
             end
           _ -> ""
-      end
+        end
     end
   end
 

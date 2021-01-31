@@ -9,7 +9,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.{Chat, Player, Queue, Room, Video, VolumeControls}
+  alias LiveDj.Organizer.{Chat, Player, Queue, Video, VolumeControls}
   alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
@@ -17,8 +17,6 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   # FIXME: Use this from a Controller
   alias LiveDj.Repo
-
-  import Ecto
 
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
@@ -77,7 +75,8 @@ defmodule LiveDjWeb.Room.ShowLive do
             visitor: visitor,
             group: %{
               codename: user_room_group.codename,
-              name: user_room_group.name
+              name: user_room_group.name,
+              permissions: user_room_group.permissions,
             },
             user_id: presence_meta_user_id
           }
@@ -336,8 +335,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     socket = case socket.assigns.visitor do
       true -> socket
       false ->
-        IO.inspect("current_user")
-        IO.inspect(socket.assigns.current_user)
         case user_id == socket.assigns.current_user.id do
           false -> socket
           true -> assign(socket, :user_room_group, group)
