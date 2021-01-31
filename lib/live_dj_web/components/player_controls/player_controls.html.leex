@@ -7,6 +7,7 @@
           "back",
           "player_signal_play_previous",
           @player_controls.previous_button_state,
+          @player_permissions.can_play_previous_track,
           @myself)
         %>
       </div>
@@ -16,6 +17,7 @@
           "play-controls",
           @player.state,
           @player_controls,
+          {@player_permissions.can_play_track, @player_permissions.can_pause_track},
           @myself)
         %>
       </div>
@@ -25,6 +27,7 @@
           "next",
           "player_signal_play_next",
           @player_controls.next_button_state,
+          @player_permissions.can_play_next_track,
           @myself)
         %>
       </div>
