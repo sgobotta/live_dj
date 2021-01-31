@@ -10,17 +10,23 @@ defmodule LiveDjWeb.Components.PlayerControls do
 
   def update(assigns, socket) do
 
-    %{user_room_group: %{permissions: permissions}} = assigns
+    %{
+      user_room_group: %{permissions: permissions},
+      room_management: room_management
+    } = assigns
+
+    is_managed = room_management != "free"
 
     player_permissions = %{
-      can_play_track:  has_permission(permissions, "can_play_track"),
-      can_pause_track: has_permission(permissions, "can_pause_track"),
-      can_play_next_track: has_permission(permissions, "can_play_next_track"),
-      can_play_previous_track: has_permission(permissions, "can_play_previous_track"),
+      can_play_track: !is_managed or has_permission(permissions, "can_play_track"),
+      can_pause_track: !is_managed or has_permission(permissions, "can_pause_track"),
+      can_play_next_track: !is_managed or has_permission(permissions, "can_play_next_track"),
+      can_play_previous_track: !is_managed or has_permission(permissions, "can_play_previous_track"),
     }
 
     {:ok,
       socket
+      |> assign(:is_managed, is_managed)
       |> assign(:player_permissions, player_permissions)
       |> assign(assigns)
     }
@@ -47,12 +53,20 @@ defmodule LiveDjWeb.Components.PlayerControls do
     {:noreply, socket}
   end
 
-  def handle_event("player_signal_paused", _params, socket) do
+  def handle_event("player_signal_paused", _params,
+    %{assigns: %{player_permissions: %{can_pause_track: true}}} = socket
+  ) do
     :ok = Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> socket.assigns.slug,
       {:player_signal_paused, %{state: "paused"}}
     )
+    {:noreply, socket}
+  end
+
+  def handle_event("player_signal_paused", _params,
+    %{assigns: %{player_permissions: %{can_pause_track: false}}} = socket
+  ) do
     {:noreply, socket}
   end
 
