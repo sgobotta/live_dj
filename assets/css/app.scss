@@ -1267,10 +1267,6 @@ div p.pill-text {
 .player-control:hover {
   fill: $secondary-highlight-1;
   stroke: $secondary-highlight-1;
-  -webkit-animation: slight-zoom-in 0.5s forwards;
-  -webkit-animation-delay: 0.1s;
-  animation: slight-zoom-in 0.5s forwards;
-  animation-delay: 0.1s;
 }
 
 /**
