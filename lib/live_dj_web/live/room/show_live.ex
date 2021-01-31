@@ -89,22 +89,23 @@ defmodule LiveDjWeb.Room.ShowLive do
         player = Player.get_initial_state()
         {:ok,
           socket
-          |> assign(:user, user)
-          |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:new_message, "")
+          |> assign(:current_tab, "video_queue")
           |> assign(:messages, [])
-          |> assign(:video_queue, Enum.with_index(parsed_queue))
-          |> assign(:video_queue_controls, Queue.get_initial_controls())
-          |> assign(:room_changeset, room_changeset)
-          |> assign(:search_result, [])
+          |> assign(:new_message, "")
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
-          |> assign(:volume_controls, volume_data)
-          |> assign(:username_input, user.username)
-          |> assign(:current_tab, "video_queue")
+          |> assign(:room_changeset, room_changeset)
+          |> assign(:room_management, room.management_type)
+          |> assign(:search_result, [])
           |> assign(:sections_group_tab, "chat")
+          |> assign(:slug, slug)
+          |> assign(:user, user)
           |> assign(:user_room_group, user_room_group)
+          |> assign(:username_input, user.username)
+          |> assign(:video_queue, Enum.with_index(parsed_queue))
+          |> assign(:video_queue_controls, Queue.get_initial_controls())
+          |> assign(:volume_controls, volume_data)
           |> assign_tracker(room)
         }
     end
@@ -403,10 +404,12 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply, socket}
   end
 
-  def handle_info({:update_socket, %{room: room}}, socket) do
-    {:noreply, socket
+  def handle_info({:update_room_assign, %{room: room}}, socket) do
+    {:noreply,
+      socket
       |> assign(:room, room)
-      |> assign(:room_changeset, Ecto.Changeset.change(room))}
+      |> assign(:room_changeset, Ecto.Changeset.change(room))
+      |> assign(:room_management, room.management_type)}
   end
 
   @impl true

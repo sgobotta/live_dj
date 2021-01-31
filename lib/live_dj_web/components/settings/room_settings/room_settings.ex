@@ -29,7 +29,7 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
         :ok = Phoenix.PubSub.broadcast(
           LiveDj.PubSub,
           "room:" <> room.slug,
-          {:update_socket, %{room: room}}
+          {:update_room_assign, %{room: room}}
         )
         {:noreply,
           socket
