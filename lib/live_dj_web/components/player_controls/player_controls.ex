@@ -70,43 +70,38 @@ defmodule LiveDjWeb.Components.PlayerControls do
     {:noreply, socket}
   end
 
-# ===========================================================================
-#
-# Very similar functions, refactor if not used for a specific task
-#
-
   def handle_event("player_signal_play_previous", _params, socket) do
-    %{video_queue: video_queue, player: player} = socket.assigns
-    %{video_id: current_video_id} = player
-    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    previous_video = Queue.get_previous_video(video_queue, current_video_id)
-
-    case previous_video do
-      nil -> {:noreply, socket}
-      video ->
-        %{slug: slug} = socket.assigns
-        %{video_id: video_id} = video
-        player = Player.update(player, %{video_id: video_id, time: 0, state: "playing", previous_id: video.previous, next_id: video.next})
-        player_controls = Player.get_controls_state(player)
-
-        :ok = Phoenix.PubSub.broadcast(
-          LiveDj.PubSub,
-          "room:" <> slug,
-          {:player_signal_play_previous, %{player: player, player_controls: player_controls}}
-        )
-
-        {:noreply, socket}
-    end
+    {:noreply,
+      socket
+      |> handle_player_signal_play_video(%{
+        broadcast_event_name: :player_signal_play_previous,
+        get_target_video: &Queue.get_previous_video/2
+      })
+    }
   end
 
   def handle_event("player_signal_play_next", _params, socket) do
+    {:noreply,
+      socket
+      |> handle_player_signal_play_video(%{
+        broadcast_event_name: :player_signal_play_next,
+        get_target_video: &Queue.get_next_video/2
+      })
+    }
+  end
+
+  defp handle_player_signal_play_video(socket, params) do
+    %{
+      broadcast_event_name: broadcast_event_name,
+      get_target_video: get_target_video,
+    } = params
     %{video_queue: video_queue, player: player} = socket.assigns
     %{video_id: current_video_id} = player
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    next_video = Queue.get_next_video(video_queue, current_video_id)
+    target_video = get_target_video.(video_queue, current_video_id)
 
-    case next_video do
-      nil -> {:noreply, socket}
+    case target_video do
+      nil -> socket
       video ->
         %{slug: slug} = socket.assigns
         %{video_id: video_id} = video
@@ -116,15 +111,11 @@ defmodule LiveDjWeb.Components.PlayerControls do
         :ok = Phoenix.PubSub.broadcast(
           LiveDj.PubSub,
           "room:" <> slug,
-          {:player_signal_play_next, %{player: player, player_controls: player_controls}}
+          {broadcast_event_name, %{player: player, player_controls: player_controls}}
         )
-
-        {:noreply, socket}
+        socket
     end
   end
-
-#
-# ===========================================================================
 
   def render_player_control_button(
     "play-controls", player_state, player_controls,
