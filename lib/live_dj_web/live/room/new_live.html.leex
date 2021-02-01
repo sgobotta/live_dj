@@ -32,7 +32,7 @@
             <%= select(
               form,
               :management_type,
-              ["Free room management for everyone": "free", "Anyone can join, but it's managed by admin and collaborators": "managed"],
+              @management_type_options,
               class: "select-input full-width text-color px-4")
             %>
           </div>

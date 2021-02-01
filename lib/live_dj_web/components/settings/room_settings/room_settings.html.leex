@@ -39,15 +39,17 @@
         <%= error_tag form, :title %>
       </div>
 
-      <div class="mb-4 full-width">
-        <%= label form, :management_type, class: "pr-4 text-left" %>
-        <%= select(
-          form,
-          :management_type,
-          ["Free room management for everyone": "free", "Anyone can join, but it's managed by admin and collaborators": "managed"],
-          class: "select-input full-width text-color px-4")
-        %>
-      </div>
+      <%= if @is_managed do %>
+        <div class="mb-4 full-width">
+          <%= label form, :management_type, class: "pr-4 text-left" %>
+          <%= select(
+            form,
+            :management_type,
+            ["Free room management for everyone": "free", "Anyone can join, but it's managed by admin and collaborators": "managed"],
+            class: "select-input full-width text-color px-4")
+          %>
+        </div>
+      <% end %>
     </div>
 
     <div class="mt-auto flex items-center justify-end">

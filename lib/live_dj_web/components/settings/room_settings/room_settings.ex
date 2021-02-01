@@ -27,6 +27,7 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
       socket
       |> assign(:changeset, assigns.room_changeset)
       |> assign(:has_all_room_permissions, has_all_room_permissions)
+      |> assign(:is_managed, is_managed)
       |> assign(:slug, assigns.room_changeset.data.slug)
     }
   end
@@ -49,14 +50,16 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
   end
 
   def handle_event("submit_changeset", _,
-  %{assigns: %{has_all_room_permissions: false}} = socket
+    %{assigns: %{has_all_room_permissions: false}} = socket
   ) do
     {:noreply,
       socket
       |> put_flash(:error, "You don't have enough permissions to edit the room.")}
   end
 
-  def handle_event("submit_changeset", _, socket) do
+  def handle_event("submit_changeset", _,
+    %{assigns: %{has_all_room_permissions: true}} = socket
+  ) do
     %{assigns: %{changeset: changeset}} = socket
     case Repo.update(changeset) do
       {:ok, room} ->

@@ -21,7 +21,7 @@ defmodule LiveDjWeb.Room.NewLive do
       :timer.send_interval(1000, self(), :reload_room_list)
     end
     socket = assign_defaults(socket, params, session)
-    %{current_user: current_user} = socket.assigns
+    %{current_user: current_user, visitor: visitor} = socket.assigns
     user = ConnectedUser.create_connected_user(current_user.username)
 
     public_rooms = Organizer.list_rooms()
@@ -36,8 +36,18 @@ defmodule LiveDjWeb.Room.NewLive do
       {String.to_atom(room.slug), Organizer.viewers_quantity(room)}
     end
 
+    options = ["Free room management for everyone": "free"]
+
+    management_type_options = case visitor do
+      true -> options
+      false -> options ++ [
+        "Anyone can join, but it's managed by admin and collaborators": "managed"
+      ]
+    end
+
     socket =
       socket
+      |> assign(:management_type_options, management_type_options)
       |> assign(:user, user)
       |> assign(:public_rooms, public_rooms)
       |> assign(:rooms_players, rooms_players)
@@ -108,6 +118,7 @@ defmodule LiveDjWeb.Room.NewLive do
 
     {:noreply,
       socket
+      |> assign(:public_rooms, Organizer.list_rooms())
       |> assign(:rooms_players, rooms_players)
       |> assign(:rooms_queues, rooms_queues)}
   end
