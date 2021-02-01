@@ -25,6 +25,10 @@ $background-darker: #0a0a0a;
 
 $primary-gradient: linear-gradient(to bottom, $primary, $primary-light) 100% 50% / 100% 45px no-repeat transparent;
 
+body {
+  cursor: default;
+}
+
 .primary
 
 .bg-neutral-semi-dark {
