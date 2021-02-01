@@ -55,15 +55,15 @@
                 phx-click="open" phx-target="#header-change-username-modal-settings-menu"
               >
                 <span>
-                  <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/messages", class: "h-8 w-8 svg-icon") %>
+                  <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/settings", class: "h-8 w-8 svg-icon") %>
                 </span>
               </button>
             <% end %>
           </li>
         </ul>
       </nav>
-      <div class="flex-shrink-0 px-2 py-2 align-center">
-        <!-- Home link -->
+      <!-- Home link -->
+      <div class="flex-shrink-0 px-1 py-2 align-center">
         <button
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
@@ -76,7 +76,7 @@
         </button>
       </div>
       <!-- Settings link -->
-      <div class="flex-shrink-0 px-2 py-2 align-center">
+      <div class="flex-shrink-0 px-1 py-2 align-center">
         <button
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
@@ -88,7 +88,78 @@
           </a>
         </button>
       </div>
-      <div class="flex-shrink-0 px-4 py-2 align-center">
+      <%= if !@visitor do %>
+        <!-- Log out button -->
+        <div class="flex-shrink-0 px-1 py-2 align-center">
+          <button
+            class="
+              hover-color-secondary-highlight-1
+              w-full px-4 py-2 w-16
+              font-medium text-center
+              sidebar-primary
+              transition-transform transform
+              hover:scale-105 rounded-md focus:outline-none focus:ring
+              button-effect
+            "
+          >
+            <%= link to: Routes.user_session_path(@socket, :delete),
+              method: :delete
+            do %>
+              <%= PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/live-section/log-out",
+                class: "h-8 w-8 svg-icon")
+              %>
+            <% end %>
+          </button>
+        </div>
+      <% else %>
+        <!-- Log in button -->
+        <div class="flex-shrink-0 px-1 py-2 align-center">
+          <button
+            class="
+              hover-color-secondary-highlight-1
+              w-full px-4 py-2 w-16
+              font-medium text-center
+              sidebar-primary
+              transition-transform transform
+              hover:scale-105 rounded-md focus:outline-none focus:ring
+              button-effect
+            "
+          >
+            <%= link to: Routes.user_session_path(@socket, :new) do %>
+              <%= PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/live-section/log-in",
+                class: "h-8 w-8 svg-icon")
+              %>
+            <% end %>
+          </button>
+        </div>
+        <!-- Register button -->
+        <div class="flex-shrink-0 px-1 py-2 align-center">
+          <button
+            class="
+              hover-color-secondary-highlight-1
+              w-full px-4 py-2 w-16
+              font-medium text-center
+              sidebar-primary
+              transition-transform transform
+              hover:scale-105 rounded-md focus:outline-none focus:ring
+              button-effect
+            "
+          >
+            <%= link to: Routes.user_registration_path(@socket, :new) do %>
+              <%= PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/live-section/register",
+                class: "h-8 w-8 svg-icon")
+              %>
+            <% end %>
+          </button>
+        </div>
+      <% end %>
+      <div class="flex-shrink-0 px-2 py-2 align-center">
         <button
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md sidebar-shadow focus:outline-none focus:ring button-effect"
         >
@@ -167,17 +238,92 @@
               visitor: @visitor
             do %>
               <button
-                class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:ring focus:outline-none"
+                class="hover-color-primary-highlight flex nav-button-effect items-center justify-center w-16 pr-2 pl-6 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:ring focus:outline-none"
                 phx-click="open" phx-target="#aside-change-username-modal-settings-menu"
               >
                 <span>
-                  <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/messages", class: "h-8 w-8 svg-icon") %>
+                  <%= PhoenixInlineSvg.Helpers.svg_image(
+                    LiveDjWeb.Endpoint,
+                    "icons/live-section/settings",
+                    class: "h-10 w-10 svg-icon")
+                  %>
                 </span>
               </button>
             <% end %>
           </li>
         </ul>
       </nav>
+      <%= if !@visitor do %>
+        <!-- Log out button -->
+        <div class="flex-shrink-0 px-4 py-2 align-center">
+          <button
+            class="
+              hover-color-secondary-highlight-1
+              w-full px-4 py-2 w-16
+              font-medium text-center
+              sidebar-primary
+              transition-transform transform
+              hover:scale-105 rounded-md focus:outline-none focus:ring
+              button-effect
+            "
+          >
+            <%= link to: Routes.user_session_path(@socket, :delete),
+              method: :delete
+            do %>
+              <%= PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/live-section/log-out",
+                class: "h-10 w-10 svg-icon")
+              %>
+            <% end %>
+          </button>
+        </div>
+      <% else %>
+        <!-- Log in button -->
+        <div class="flex-shrink-0 px-4 py-2 align-center">
+          <button
+            class="
+              hover-color-secondary-highlight-1
+              w-full px-4 py-2 w-16
+              font-medium text-center
+              sidebar-primary
+              transition-transform transform
+              hover:scale-105 rounded-md focus:outline-none focus:ring
+              button-effect
+            "
+          >
+            <%= link to: Routes.user_session_path(@socket, :new) do %>
+              <%= PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/live-section/log-in",
+                class: "h-10 w-10 svg-icon")
+              %>
+            <% end %>
+          </button>
+        </div>
+        <!-- Register button -->
+        <div class="flex-shrink-0 px-4 py-2 align-center">
+          <button
+            class="
+              hover-color-secondary-highlight-1
+              w-full px-4 py-2 w-16
+              font-medium text-center
+              sidebar-primary
+              transition-transform transform
+              hover:scale-105 rounded-md focus:outline-none focus:ring
+              button-effect
+            "
+          >
+            <%= link to: Routes.user_registration_path(@socket, :new) do %>
+              <%= PhoenixInlineSvg.Helpers.svg_image(
+                LiveDjWeb.Endpoint,
+                "icons/live-section/register",
+                class: "h-10 w-10 svg-icon")
+              %>
+            <% end %>
+          </button>
+        </div>
+      <% end %>
     </div>
   </aside>
 
