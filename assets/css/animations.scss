@@ -182,7 +182,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
  * Accounts Settings Animation
  */
 
- .account-asset:hover .account-table-asset-1 {
+ .account-asset .account-table-asset-1 {
   -webkit-animation: display-table-1 1s infinite;
   -moz-animation: display-table-1 1s infinite;
   -ms-animation: display-table-1 1s infinite;
@@ -233,7 +233,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   stroke-opacity: 0;
 }
 
-.account-asset:hover .account-table-asset-2 {
+.account-asset .account-table-asset-2 {
   -webkit-animation: display-table-2 1s infinite;
   -moz-animation: display-table-2 1s infinite;
   -ms-animation: display-table-2 1s infinite;
@@ -283,7 +283,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
  * Payments Settings Animation
  */
 
-.payment-asset:hover .payments-asset-coins-1 {
+.payment-asset .payments-asset-coins-1 {
   -webkit-animation: display-coins-1 2s infinite;
   -moz-animation: display-coins-1 2s infinite;
   -ms-animation: display-coins-1 2s infinite;
@@ -325,7 +325,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   opacity: 0;
 }
 
-.payment-asset:hover .payments-asset-coins-2 {
+.payment-asset .payments-asset-coins-2 {
   -webkit-animation: display-coins-2 2s infinite;
   -moz-animation: display-coins-2 2s infinite;
   -ms-animation: display-coins-2 2s infinite;
@@ -379,7 +379,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   opacity: 0;
 }
 
-.payment-asset:hover .payments-asset-coins-3 {
+.payment-asset .payments-asset-coins-3 {
   -webkit-animation: display-coins-3 2s infinite;
   -moz-animation: display-coins-3 2s infinite;
   -ms-animation: display-coins-3 2s infinite;
@@ -417,7 +417,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   }
 }
 
-.payment-asset:hover .payments-asset-tree {
+.payment-asset .payments-asset-tree {
   -webkit-animation: moving-screen-1 1s linear infinite;
   -moz-animation: moving-screen-1 1s linear infinite;
   -ms-animation: moving-screen-1 1s linear infinite;
@@ -425,14 +425,14 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   animation: moving-screen-1 1s linear infinite;
 }
 
-.payment-asset:hover .payments-asset-branch-1 {
+.payment-asset .payments-asset-branch-1 {
   -webkit-animation: bounce-up-n-down 4s linear infinite reverse;
   -moz-animation: bounce-up-n-down 4s linear infinite reverse;
   -ms-animation: bounce-up-n-down 4s linear infinite reverse;
   -o-animation: bounce-up-n-down 4s linear infinite reverse;
   animation: bounce-up-n-down 4s linear infinite reverse;
 }
-.payment-asset:hover .payments-asset-branch-2 {
+.payment-asset .payments-asset-branch-2 {
   -webkit-animation: bounce-up-n-down 6s linear infinite reverse;
   -moz-animation: bounce-up-n-down 6s linear infinite reverse;
   -ms-animation: bounce-up-n-down 6s linear infinite reverse;
@@ -530,7 +530,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   }
 }
 
-.payment-asset:hover .payments-asset-plant-1 {
+.payment-asset .payments-asset-plant-1 {
   -webkit-animation: slight-stroke 4s linear infinite reverse;
   -moz-animation: slight-stroke 4s linear infinite reverse;
   -ms-animation: slight-stroke 4s linear infinite reverse;
@@ -538,7 +538,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   animation: slight-stroke 4s linear infinite reverse;
 }
 
-.payment-asset:hover .payments-asset-plant-2 {
+.payment-asset .payments-asset-plant-2 {
   -webkit-animation: slight-stroke 3s linear infinite alternate-reverse;
   -moz-animation: slight-stroke 3s linear infinite alternate-reverse;
   -ms-animation: slight-stroke 3s linear infinite alternate-reverse;
@@ -608,7 +608,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   }
 }
 
-.payment-asset:hover .payments-asset-money-sign {
+.payment-asset .payments-asset-money-sign {
   -webkit-animation: bounce-left-n-right 1s linear infinite reverse;
   -moz-animation: bounce-left-n-right 1s linear infinite reverse;
   -ms-animation: bounce-left-n-right 1s linear infinite reverse;
@@ -682,7 +682,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
  * Badge Settings Animations
  */
 
-.badge-asset:hover .badges-asset-star-3 {
+.badge-asset .badges-asset-star-3 {
   -webkit-animation: fill-star 1.3s linear infinite;
   -moz-animation: fill-star 1.3s linear infinite;
   -ms-animation: fill-star 1.3s linear infinite;
@@ -708,7 +708,7 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
   }
 }
 
-.badge-asset:hover .badge-asset-spark {
+.badge-asset .badge-asset-spark {
   -webkit-animation: fill-spark 1.3s linear infinite;
   -moz-animation: fill-spark 1.3s linear infinite;
   -ms-animation: fill-spark 1.3s linear infinite;
