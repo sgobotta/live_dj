@@ -39,7 +39,7 @@
         <%= error_tag form, :title %>
       </div>
 
-      <%= if @is_managed do %>
+      <%= if @legacy_room_details_permissions.can_edit_room_management_type do %>
         <div class="mb-4 full-width">
           <%= label form, :management_type, class: "pr-4 text-left" %>
           <%= select(
