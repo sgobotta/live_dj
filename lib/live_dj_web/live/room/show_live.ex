@@ -36,21 +36,15 @@ defmodule LiveDjWeb.Room.ShowLive do
 
         # FIXME: refactor to a group management module
         user_room_group = case visitor do
-          true -> %{
-            codename: "anonymous-user",
-            name: "Anonymous user",
-            permissions: []
-          }
+          true -> Accounts.get_group_by_codename("anonymous-room-visitor")
+            |> Repo.preload([:permissions])
           false ->
             case Organizer.get_user_room_by(%{
               user_id: current_user.id,
               room_id: room.id
             }) do
-              nil -> %{
-                codename: "registered-user",
-                name: "Registered  user",
-                permissions: []
-              }
+              nil -> Accounts.get_group_by_codename("registered-room-visitor")
+                |> Repo.preload([:permissions])
               user_room ->
                 user_room = Repo.preload(user_room, [:group])
                 user_room.group |> Repo.preload(:permissions)
@@ -90,7 +84,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:ok,
           socket
           |> assign(:connected_users, [])
-          |> assign(:current_tab, "video_queue")
+          |> assign(:current_tab, "chat")
           |> assign(:messages, [])
           |> assign(:new_message, "")
           |> assign(:player, player)
@@ -98,7 +92,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:room_changeset, room_changeset)
           |> assign(:room_management, room.management_type)
           |> assign(:search_result, [])
-          |> assign(:sections_group_tab, "chat")
+          |> assign(:sections_group_tab, "peers")
           |> assign(:slug, slug)
           |> assign(:user, user)
           |> assign(:user_room_group, user_room_group)

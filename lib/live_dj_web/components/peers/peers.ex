@@ -68,12 +68,10 @@ defmodule LiveDjWeb.Components.Peers do
           user_id: user_id,
           room_id: room_id
         })
-        {:ok, _user_room} = Organizer.delete_user_room(user_room)
-        group = %{
-          codename: "registered-user",
-          name: "Registered user",
-          permissions: [],
-        }
+        group = Accounts.get_group_by_codename("registered-room-visitor")
+          |> Repo.preload([:permissions])
+        {:ok, _user_room} = Organizer.update_user_room(user_room, %{
+          group_id: group.id})
 
         topic = "room:" <> slug
         :ok = Phoenix.PubSub.broadcast(
@@ -91,7 +89,7 @@ defmodule LiveDjWeb.Components.Peers do
     peer_metas = hd(metas)
 
     case peer_metas.group.codename do
-      "anonymous-user" ->
+      "anonymous-room-visitor" ->
         # Send an invite notification to register
         ""
       peer_group ->
@@ -109,7 +107,7 @@ defmodule LiveDjWeb.Components.Peers do
                 render_privileges_button(button_params)
               false -> ""
             end
-          "registered-user" ->
+          "registered-room-visitor" ->
             case Enum.any?(permissions, fn p -> p.codename == "can_remove_room_collaborators" end) do
               true ->
                 button_params = %{
