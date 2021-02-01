@@ -153,21 +153,30 @@ defmodule LiveDj.Stats do
 
   ## Examples
 
-      iex> assoc_user_badge("rooms-creation", 1, 2)
-      :ok
+      iex> assoc_user_badge("a-valid-badge-type", 1, 2)
+      {:ok, %UserBadge{}}
+
+      iex> assoc_user_badge("a-valid-badge-type", existent_user, existent_checkpoint)
+      {:unchanged}
+
+      iex> assoc_user_badge("an-invalid-badge-type", 1, 2)
+      {:error}
 
   """
-  def assoc_user_badge("rooms-creation", user_id, rooms_length) do
+  def assoc_user_badge(badge_type, user_id, entity_length) do
     badge = from(b in Badge,
       where:
-        b.type == "rooms-creation" and
-        b.checkpoint == ^rooms_length
+        b.type       == ^badge_type and
+        b.checkpoint == ^entity_length
     ) |> Repo.one()
 
     case badge do
       nil -> {:unchanged}
       badge ->
-        {:ok, create_user_badge(%{user_id: user_id, badge_id: badge.id})}
+        case create_user_badge(%{user_id: user_id, badge_id: badge.id}) do
+          {:ok, user_badge} -> {:ok, user_badge |> Repo.preload([:badge])}
+          {:error, _} -> {:error}
+        end
     end
   end
 
