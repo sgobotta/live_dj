@@ -474,7 +474,9 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))
-          |> push_event("receive_notification", Notifications.create(:play_video, next_video))}
+          |> push_event("receive_notification", Notifications.create(
+            :play_video, next_video, "playing-track"
+          ))}
     end
   end
 
