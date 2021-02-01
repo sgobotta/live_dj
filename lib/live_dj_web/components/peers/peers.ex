@@ -7,8 +7,10 @@ defmodule LiveDjWeb.Components.Peers do
 
   alias LiveDj.Repo
   alias LiveDj.Accounts
+  alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.UserRoom
+  alias LiveDj.Stats
 
   def update(assigns, socket) do
     {:ok,
@@ -38,11 +40,25 @@ defmodule LiveDjWeb.Components.Peers do
         %{assigns: %{room: %{id: room_id, slug: slug}}} = socket
         user_id = hd(user.metas).user_id
         group_id = Accounts.get_group_by_codename("room-collaborator").id
+        users_rooms = Organizer.list_users_rooms_by(user_id, false)
         {:ok, user_room} = Organizer.create_user_room(%{
           user_id: user_id,
           room_id: room_id,
           group_id: group_id
         })
+        socket = case Stats.assoc_user_badge(
+          "rooms-collaboration",
+          user_id,
+          length(users_rooms) + 1
+        ) do
+          {:unchanged} -> socket
+          {:ok, user_badge} ->
+            %{badge: badge} = user_badge
+            push_event(socket, "receive_notification", Notifications.create(
+              :receive_badge, %{badge_icon: badge.icon, badge_name: badge.name}
+            ))
+          {:error} -> socket
+        end
         %UserRoom{group: group} = Repo.preload(user_room, [:group])
         group = Repo.preload(group, [:permissions])
 
