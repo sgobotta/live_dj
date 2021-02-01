@@ -1,5 +1,9 @@
-<div class="new-live-view mt-8 pb-6">
-  <div class="col-container">
+<div class="new-live-view mt-10 pb-6">
+  <div
+    id="notifications-handler-new-live"
+    phx-hook="NotificationsHandling"
+    class="col-container"
+  >
     <div class="flex flex-wrap justify-start items-stretch mx-auto live-section-box p-4">
       <%= form_for @changeset, "#", [
         id: "create_room",

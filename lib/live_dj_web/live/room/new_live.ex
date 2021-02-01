@@ -3,6 +3,7 @@ defmodule LiveDjWeb.Room.NewLive do
 
   alias LiveDj.Accounts
   alias LiveDj.ConnectedUser
+  alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Room
   alias LiveDj.Organizer.Queue
@@ -146,8 +147,8 @@ defmodule LiveDjWeb.Room.NewLive do
     # Move to a controller
     case Repo.insert(changeset) do
       {:ok, room} ->
-        room = case visitor do
-          true -> room
+        {socket, room} = case visitor do
+          true -> {socket, room}
           false ->
             group = Accounts.get_group_by_codename("room-admin")
             {:ok, _user_room} = Organizer.create_user_room(%{
@@ -157,11 +158,20 @@ defmodule LiveDjWeb.Room.NewLive do
               is_owner: true
             })
             rooms_length = length(Accounts.preload_user(current_user, [:rooms]).rooms)
-            case Stats.assoc_user_badge("rooms-creation", current_user.id, rooms_length) do
-              {:ok, user_badge} -> Logger.info("[TODO] Send a room type Badge Notification on relation id (#{user_badge.id})...")
-              {:unchanged} -> nil
+            socket = case Stats.assoc_user_badge("rooms-creation", current_user.id, rooms_length) do
+              {:ok, user_badge} ->
+                %{badge: badge} = user_badge
+                # FIXME: Not received. Maybe cause a redirection is performed.
+                push_event(socket, "receive_notification", Notifications.create(
+                  :receive_badge, %{
+                    badge_icon: badge.icon,
+                    badge_name: badge.name
+                  }
+                ))
+              {:unchanged} -> socket
+              {:error} -> socket
             end
-            room
+            {socket, room}
         end
         {:noreply,
           socket
