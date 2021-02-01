@@ -47,14 +47,18 @@
                 <i class="mini fas <%= get_volume_icon_class(hd(user.metas).volume_icon) %>"></i>
               </span>
 
-              <%= render_group_avatar(hd(user.metas).group.codename) %>
+              <%= render_group_avatar(
+                @is_managed,
+                hd(user.metas).group.codename,
+                @myself
+              ) %>
 
               <%= if user.uuid == @room.video_tracker do %>
                 <span>🕑</span>
               <% end %>
             </div>
             <div class="flex" style="width: 20px">
-              <%= render_assign_privileges_button(@user_room_group, user, @myself) %>
+              <%= render_assign_privileges_button(@is_managed, @user_room_group, user, @myself) %>
             </div>
           </div>
         </li>

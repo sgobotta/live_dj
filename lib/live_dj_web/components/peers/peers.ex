@@ -13,9 +13,13 @@ defmodule LiveDjWeb.Components.Peers do
   alias LiveDj.Stats
 
   def update(assigns, socket) do
+    %{room_management: room_management} = assigns
+    is_managed = room_management != "free"
+
     {:ok,
       socket
       |> assign(:connected_users, assigns.connected_users)
+      |> assign(:is_managed, is_managed)
       |> assign(assigns)
     }
   end
@@ -100,7 +104,10 @@ defmodule LiveDjWeb.Components.Peers do
     end
   end
 
-  def render_assign_privileges_button(user_room_group, peer_metas, target) do
+  def render_assign_privileges_button(false, _user_room_group, _peer_metas, _target) do
+    {:safe, ""}
+  end
+  def render_assign_privileges_button(true, user_room_group, peer_metas, target) do
     %{uuid: uuid, metas: metas} = peer_metas
     peer_metas = hd(metas)
 
@@ -112,7 +119,8 @@ defmodule LiveDjWeb.Components.Peers do
         %{permissions: permissions} = user_room_group
         case peer_group do
           "room-collaborator" ->
-            case Enum.any?(permissions, fn p -> p.codename == "can_remove_room_collaborators" end) do
+            case Enum.any?(permissions,
+              fn p -> p.codename == "can_remove_room_collaborators" end) do
               true ->
                 button_params = %{
                   event: "remove_room_collaborator",
@@ -124,7 +132,8 @@ defmodule LiveDjWeb.Components.Peers do
               false -> ""
             end
           "registered-room-visitor" ->
-            case Enum.any?(permissions, fn p -> p.codename == "can_remove_room_collaborators" end) do
+            case Enum.any?(permissions,
+              fn p -> p.codename == "can_remove_room_collaborators" end) do
               true ->
                 button_params = %{
                   event: "add_room_collaborator",
@@ -157,7 +166,10 @@ defmodule LiveDjWeb.Components.Peers do
     """
   end
 
-  def render_group_avatar(user_room_group, assigns \\ %{}) do
+  def render_group_avatar(false, _user_room_group, _assigns) do
+    {:safe, ""}
+  end
+  def render_group_avatar(true, user_room_group, assigns) do
     icon = case user_room_group do
       "room-admin"        -> "🛠️"
       "room-collaborator" -> "🔧"
