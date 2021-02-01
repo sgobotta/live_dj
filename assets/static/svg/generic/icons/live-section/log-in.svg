@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 64 64"
+   xml:space="preserve"
+   sodipodi:docname="log-in.svg"
+   width="64"
+   height="64"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><metadata
+   id="metadata43"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs41" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1019"
+   id="namedview39"
+   showgrid="false"
+   inkscape:zoom="4.2142857"
+   inkscape:cx="19.576271"
+   inkscape:cy="28"
+   inkscape:window-x="0"
+   inkscape:window-y="29"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Capa_1" />
+<g
+   id="g6"
+   transform="translate(4,4)">
+	<path
+   d="m 25.293,39.293 c -0.391,0.391 -0.391,1.023 0,1.414 C 25.488,40.902 25.744,41 26,41 c 0.256,0 0.512,-0.098 0.707,-0.293 L 38.706,28.708 c 0.093,-0.092 0.166,-0.203 0.217,-0.326 0.101,-0.244 0.101,-0.519 0,-0.764 -0.051,-0.123 -0.125,-0.234 -0.217,-0.327 L 26.707,15.293 c -0.391,-0.391 -1.023,-0.391 -1.414,0 -0.391,0.391 -0.391,1.023 0,1.414 L 35.586,27 H 5 c -0.553,0 -1,0.447 -1,1 0,0.553 0.447,1 1,1 h 30.586 z"
+   id="path2"
+   inkscape:connector-curvature="0" />
+	<path
+   d="M 51,0 H 14 c -0.553,0 -1,0.447 -1,1 v 21 c 0,0.553 0.447,1 1,1 0.553,0 1,-0.447 1,-1 V 2 H 50 V 54 H 15 V 34 c 0,-0.553 -0.447,-1 -1,-1 -0.553,0 -1,0.447 -1,1 v 21 c 0,0.553 0.447,1 1,1 h 37 c 0.553,0 1,-0.447 1,-1 V 1 C 52,0.447 51.553,0 51,0 Z"
+   id="path4"
+   inkscape:connector-curvature="0" />
+</g><title
+   id="title4782">Log in</title></svg>
