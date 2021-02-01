@@ -246,7 +246,10 @@ defmodule LiveDj.Organizer do
   def create_user_room(attrs \\ %{}) do
     %UserRoom{}
     |> UserRoom.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(
+      on_conflict: {:replace, [:group_id]},
+      conflict_target: [:user_id, :room_id]
+    )
   end
 
   @doc """
