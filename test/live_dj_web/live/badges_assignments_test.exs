@@ -35,11 +35,11 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
 
     alias LiveDj.OrganizerFixtures
 
-    # @search_video_form_id "#search-video-form"
-
     setup(%{conn: conn}) do
       badge = badge_fixture(%{checkpoint: 1, type: "queue-track-contribution"})
       group = group_fixture(%{codename: "room-admin", name: "Room admin"})
+      group_fixture(%{codename: "anonymous-room-visitor", name: "Anonymous room visitor"})
+      group_fixture(%{codename: "registered-room-visitor", name: "Registered room visitor"})
       %{
         user_room: another_user_room_relationship,
         user: another_user,

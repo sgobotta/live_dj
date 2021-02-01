@@ -9,6 +9,9 @@ defmodule LiveDjWeb.ShowRoomTest do
   describe "ShowLive user room groups assignation" do
 
     setup(%{conn: conn}) do
+      # Creates some mandatory groups
+      group_fixture(%{codename: "anonymous-room-visitor", name: "Anonymous room visitor"})
+      group_fixture(%{codename: "registered-room-visitor", name: "Registered room visitor"})
       # Creates an initial group
       group = group_fixture()
       # Just creates 3 permissions and associates them to a group
