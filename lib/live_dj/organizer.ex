@@ -177,6 +177,23 @@ defmodule LiveDj.Organizer do
   end
 
   @doc """
+  Returns the list of users_rooms matching the given params.
+
+  ## Examples
+
+      iex> list_users_rooms()
+      [%UserRoom{}, ...]
+
+  """
+  def list_users_rooms_by(user_id, is_owner) do
+    from(ur in UserRoom,
+      where:
+        ur.user_id  == ^user_id  and
+        ur.is_owner == ^is_owner
+    ) |> Repo.all()
+  end
+
+  @doc """
   Gets a single user_room.
 
   Raises `Ecto.NoResultsError` if the User room does not exist.
