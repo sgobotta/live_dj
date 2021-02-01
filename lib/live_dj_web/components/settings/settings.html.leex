@@ -42,7 +42,9 @@
       <div class="live-section-box lg:order-1 lg:row-span-1 lg:col-span-1 md:col-span-1 m-0">
         <%= live_component @socket, LiveDjWeb.Components.Settings.RoomSettings,
           id: "#{@id}-settings-room-settings",
-          room_changeset: @room_changeset
+          room_changeset: @room_changeset,
+          room_management: @room_management,
+          user_room_group: @user_room_group
         %>
       </div>
 

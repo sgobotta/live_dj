@@ -4,6 +4,14 @@
     p-4 m-6 rounded-lg
   "
 >
+  <p class="alert alert-info" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
+
+  <p class="alert alert-danger" role="alert"
+    phx-click="lv:clear-flash"
+    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+
   <%= form_for @changeset, "#",
     [
       phx_submit: "submit_changeset",
@@ -43,7 +51,9 @@
     </div>
 
     <div class="mt-auto flex items-center justify-end">
-      <%= submit "Update room", class: "modal-button modal-submit-button full-width" %>
+      <%= submit "Update room",
+        class: "modal-button modal-submit-button full-width disabled"
+      %>
     </div>
   <% end %>
 </div>
