@@ -1,34 +1,36 @@
-<h1 style="text-align: center">Badges & Achievements</h1>
+<div class="my-10">
+  <h2 style="text-align: center">Badges & Achievements</h2>
 
-<div class="px-8 py-8">
-  <div
-    class="grid grid-flow-row
-      grid-cols-1
-      sm:grid-cols-3
-      md:grid-cols-4
-      lg:grid-cols-6
-      xl:grid-cols-8
-    "
-  >
-    <%= for badge <- @badges do %>
-      <div class="flip-card">
-        <div class="flex flex-col justify-center my-8 mx-8 bg-white border border-gray-300 rounded cursor-default flip-card-inner">
-          <div class="flip-card-front <%= if badge.acquired, do: "acquired" %>">
-            <div>
-              <div class="flex justify-center mt-4">
-                <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "badges/#{badge.icon}", class: "badge-asset h-32 w-32") %>
+  <div class="px-8 py-8">
+    <div
+      class="grid grid-flow-row
+        grid-cols-1
+        sm:grid-cols-3
+        md:grid-cols-4
+        lg:grid-cols-6
+        xl:grid-cols-8
+      "
+    >
+      <%= for badge <- @badges do %>
+        <div class="flip-card">
+          <div class="flex flex-col justify-center my-8 mx-8 bg-white border border-gray-300 rounded cursor-default flip-card-inner">
+            <div class="flip-card-front <%= if badge.acquired, do: "acquired" %>">
+              <div>
+                <div class="flex justify-center mt-4">
+                  <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "badges/#{badge.icon}", class: "badge-asset h-32 w-32") %>
+                </div>
+                <p class="text-2xl font-semibold text-center text-black">
+                  <%= badge.name %>
+                </p>
               </div>
-              <p class="text-2xl font-semibold text-center text-black">
-                <%= badge.name %>
-              </p>
+            </div>
+            <div class="flip-card-back flex flex-col justify-center align-center">
+              <p class="text-black text-center font-normal px-5"><%= badge.description %></p>
+              <p class="text-black text-center font-normal"><%= badge.name %></p>
             </div>
           </div>
-          <div class="flip-card-back flex flex-col justify-center align-center">
-            <p class="text-black text-center font-normal px-5"><%= badge.description %></p>
-            <p class="text-black text-center font-normal"><%= badge.name %></p>
-          </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
