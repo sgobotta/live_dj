@@ -474,8 +474,6 @@ iframe#video-player {
  */
 
 .new-live-view {
-  background-color: $neutral-darker;
-  display: flex;
   justify-content: center;
 
   div.col-container {
@@ -507,6 +505,35 @@ iframe#video-player {
   }
 }
 
+
+.new-live-rooms-list {
+  height: 55vh;
+}
+
+@media (max-width: 480px) {
+  .new-live-rooms-list {
+    height: 55vh;
+  }
+}
+
+@media (min-width: 768px) {
+  .new-live-rooms-list {
+    height: 80vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .new-live-rooms-list {
+    height: 80vh;
+  }
+}
+
+@media (min-width: 1025px) {
+  .new-live-rooms-list {
+    height: 80vh;
+  }
+}
+
 .track-cover-thumb {
   width: 80px;
   height: 80px;
@@ -519,6 +546,10 @@ iframe#video-player {
 
 b {
   color: white;
+}
+
+.scrollable {
+  overflow-y: scroll
 }
 
 .scrollable-panel {
