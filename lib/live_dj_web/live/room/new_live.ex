@@ -53,6 +53,7 @@ defmodule LiveDjWeb.Room.NewLive do
       |> assign(:rooms_players, rooms_players)
       |> assign(:rooms_queues, rooms_queues)
       |> assign(:viewers_quantity, viewers_quantity)
+      |> assign(:visitor, visitor)
       |> put_changeset()
 
     send(self(), :tick)
