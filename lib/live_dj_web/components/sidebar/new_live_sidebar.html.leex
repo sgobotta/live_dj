@@ -7,13 +7,10 @@
           <!-- Home link -->
           <li class="header-item">
             <button
-              class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
+              class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect-active"
             >
-              <a
-                href=" <%=Routes.new_path(@socket, :new) %>"
-                target="_blank"
-              >
-                <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/home", class: "h-8 w-8 svg-icon") %>
+              <a>
+                <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/home", class: "h-8 w-8 svg-secondary-highlight-1") %>
               </a>
             </button>
           </li>
@@ -24,7 +21,7 @@
             >
               <a
                 href=" <%=Routes.user_settings_path(@socket, :index) %>"
-                target="_blank"
+                target=""
               >
                 <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/account", class: "h-8 w-8 svg-icon") %>
               </a>
@@ -135,7 +132,7 @@
             href=" <%=Routes.donations_path(@socket, :index) %>"
             target="_blank"
           >
-            <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/love", class: "h-10 w-10 svg-icon") %>
+            <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/love", class: "h-10 w-10 svg-secondary-highlight-1") %>
           </a>
         </button>
       </div>
@@ -145,13 +142,10 @@
           <!-- Home link -->
           <li class="aside-item">
             <button
-              class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:outline-none focus:ring button-effect"
+              class="hover-color-secondary-highlight-1 flex nav-button-effect items-center justify-center w-20 px-2 py-2 sidebar-primary transition-transform transform rounded-md hover:scale-110 focus:outline-none focus:ring button-effect-active"
             >
-              <a
-                href=" <%=Routes.new_path(@socket, :new) %>"
-                target="_blank"
-              >
-                <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/home", class: "h-10 w-10 svg-icon") %>
+              <a>
+                <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/home", class: "h-10 w-10 svg-secondary-highlight-1") %>
               </a>
             </button>
           </li>
@@ -162,7 +156,7 @@
             >
               <a
                 href=" <%=Routes.user_settings_path(@socket, :index) %>"
-                target="_blank"
+                target=""
               >
                 <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "icons/live-section/account", class: "h-10 w-10 svg-icon") %>
               </a>
