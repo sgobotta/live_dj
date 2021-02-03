@@ -733,3 +733,27 @@ svg.queue-control-save-asset.animate-save-button-saved .queue-control-save-asset
     fill: #000;
   }
 }
+
+.github-button-container:hover .github-button {
+  display: inline-block;
+  -webkit-animation: slide-left 1000ms forwards;
+  animation: slide-left 1000ms forwards;
+}
+
+.github-button {
+  display: none;
+  background-color: transparent;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-right: 2px;
+}
+
+@keyframes slide-left {
+  from {
+    right: -100px;
+  }
+  to {
+    right: 0;
+  }
+}
