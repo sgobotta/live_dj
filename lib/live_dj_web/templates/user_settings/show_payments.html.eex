@@ -1,4 +1,4 @@
-<div class="my-10">
+<div class="my-24">
   <%= if @orders != [] do %>
 
     <div class="flex flex-wrap mt-10 justify-center">

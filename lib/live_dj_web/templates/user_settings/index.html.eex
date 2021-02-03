@@ -1,4 +1,4 @@
-<div class="flex flex-wrap justify-center items-stretch mx-auto my-12">
+<div class="flex flex-wrap justify-center items-stretch mx-auto my-24">
   <%= link to: Routes.user_settings_path(@conn, :edit),
     class: "setting-card account-asset flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
     <div class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded">
