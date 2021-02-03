@@ -1,8 +1,8 @@
 <div class="sidebar flex antialiased bg-neutral-darker h-afull">
   <header class="navigation">
-    <div class="flex rounded-lg sidebar-shadow w-full">
+    <div class="flex rounded-lg sidebar-shadow w-full show-live-header-container">
       <!-- Sidebar links -->
-      <nav class="flex-1 p-2">
+      <nav class="flex-1">
         <ul class="p-2 space-y-1 divide-list-element">
           <!-- Queue link -->
           <li class="header-item">
@@ -63,7 +63,7 @@
         </ul>
       </nav>
       <!-- Home link -->
-      <div class="flex-shrink-0 px-1 py-2 align-center">
+      <div class="flex-shrink-0 px-1 py-2 self-end sm:self-center">
         <button
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
@@ -76,7 +76,7 @@
         </button>
       </div>
       <!-- Settings link -->
-      <div class="flex-shrink-0 px-1 py-2 align-center">
+      <div class="flex-shrink-0 px-1 py-2 self-end md:self-center">
         <button
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md focus:outline-none focus:ring button-effect"
         >
@@ -90,7 +90,7 @@
       </div>
       <%= if !@visitor do %>
         <!-- Log out button -->
-        <div class="flex-shrink-0 px-1 py-2 align-center">
+        <div class="flex-shrink-0 px-1 py-2 self-end md:self-center">
           <button
             class="
               hover-color-secondary-highlight-1
@@ -115,7 +115,7 @@
         </div>
       <% else %>
         <!-- Log in button -->
-        <div class="flex-shrink-0 px-1 py-2 align-center">
+        <div class="flex-shrink-0 px-1 py-2 self-end md:self-center">
           <button
             class="
               hover-color-secondary-highlight-1
@@ -137,7 +137,7 @@
           </button>
         </div>
         <!-- Register button -->
-        <div class="flex-shrink-0 px-1 py-2 align-center">
+        <div class="flex-shrink-0 px-1 py-2 self-end md:self-center">
           <button
             class="
               hover-color-secondary-highlight-1
@@ -159,7 +159,7 @@
           </button>
         </div>
       <% end %>
-      <div class="flex-shrink-0 px-2 py-2 align-center">
+      <div class="flex-shrink-0 px-2 py-2 pr-4 self-end md:self-center">
         <button
           class="hover-color-secondary-highlight-1 w-full px-4 py-2 w-16 font-medium text-center sidebar-primary transition-transform transform hover:scale-105 rounded-md sidebar-shadow focus:outline-none focus:ring button-effect"
         >

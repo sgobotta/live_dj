@@ -14,6 +14,7 @@
 
   <% else %>
 
+    <!-- Start of Sidebar -->
     <%= live_component @socket, LiveDjWeb.Components.Sidebar,
       id: "live-dj-sidebar",
       current_user: @current_user,
@@ -28,7 +29,7 @@
 
       <div class="
         flex flex-col
-        mx-2 pt-4 px-0 sm:px-6 mt-12
+        mx-2 px-0 sm:px-6 mt-0 lg:mt-16 xl:mt-16 2xl:mt-16 mb-12
         overflow-y-hidden
         lg:grid lg:gap-4 2xl:gap-6 lg:grid-cols-4
         2xl:row-span-2 2xl:pb-8
@@ -138,6 +139,7 @@
       </div>
 
     <% end %>
+    <!-- End of Sidebar -->
 
   <% end %>
 
