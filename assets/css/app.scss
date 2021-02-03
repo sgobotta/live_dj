@@ -101,6 +101,11 @@ body {
   }
 }
 
+.svg-secondary-highlight-1 {
+  stroke: $secondary-highlight-1;
+  fill: $secondary-highlight-1;
+}
+
 @import "./badge.scss";
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
