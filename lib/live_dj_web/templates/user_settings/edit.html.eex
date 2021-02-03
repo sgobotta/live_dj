@@ -1,5 +1,5 @@
 <div class="flex flex-wrap justify-center items-stretch mx-auto my-24 live-inside-box">
-  <%= form_for @username_changeset, Routes.user_settings_path(@conn, :update_username), [class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 p-4 live-section-box"], fn f -> %>
+  <%= form_for @username_changeset, Routes.user_settings_path(@conn, :update_username), [class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 p-4 m-6 live-section-box"], fn f -> %>
     <div class="flex items-start">
       <span class="rounded text-white p-2 leading-none flex items-center title-pill full-width">
         Change Username
@@ -14,13 +14,13 @@
 
       <div class="mb-4">
         <%= label f, :username, class: "" %>
-        <%= text_input f, :username, required: true, class: "text-input" %>
+        <%= text_input f, :username, required: true, class: "text-input-effect" %>
         <%= error_tag f, :username %>
       </div>
 
       <div class="mb-4">
         <%= label f, :current_password, for: "current_password_for_username", class: "block pr-4" %>
-        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_username", class: "text-input" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_username", class: "text-input-effect" %>
         <%= error_tag f, :current_password %>
       </div>
     </div>
@@ -45,13 +45,13 @@
 
       <div class="mb-4">
         <%= label f, :email, class: "" %>
-        <%= email_input f, :email, required: true, class: "text-input" %>
+        <%= email_input f, :email, required: true, class: "text-input-effect" %>
         <%= error_tag f, :email %>
       </div>
 
       <div class="mb-4">
         <%= label f, :current_password, for: "current_password_for_email", class: "block pr-4" %>
-        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", class: "text-input" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", class: "text-input-effect" %>
         <%= error_tag f, :current_password %>
       </div>
     </div>
@@ -76,19 +76,19 @@
 
       <div class="mb-4">
         <%= label f, :password, "New password", class: "block pr-4" %>
-        <%= password_input f, :password, required: true, class: "text-input" %>
+        <%= password_input f, :password, required: true, class: "text-input-effect" %>
         <%= error_tag f, :password %>
       </div>
 
       <div class="mb-4">
         <%= label f, :password_confirmation, "Confirm new password", class: "block pr-4" %>
-        <%= password_input f, :password_confirmation, required: true, class: "text-input" %>
+        <%= password_input f, :password_confirmation, required: true, class: "text-input-effect" %>
         <%= error_tag f, :password_confirmation %>
       </div>
 
       <div class="mb-4">
         <%= label f, :current_password, for: "current_password_for_password", class: "block pr-4" %>
-        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", class: "text-input" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", class: "text-input-effect" %>
         <%= error_tag f, :current_password %>
       </div>
     </div>
