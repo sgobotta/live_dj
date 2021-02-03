@@ -29,8 +29,6 @@ body {
   cursor: default;
 }
 
-.primary
-
 .bg-neutral-semi-dark {
   background-color: $neutral-semi-dark
 }
@@ -317,6 +315,24 @@ li.navbar-link:hover a {
 select option {
   color: $text;
   background-color: $background-dark;
+}
+
+@media screen and (min-width: 300px) and (max-width: 420px) {
+  .show-live-header-container {
+    padding-top: 0px;
+  }
+}
+
+@media screen and (min-width: 421px) and (max-width: 600px) {
+  .show-live-header-container {
+    padding-top: 5rem;
+  }
+}
+
+@media (min-width: 601px) {
+  .show-live-header-container {
+    padding-top: 0rem;
+  }
 }
 
 /**
