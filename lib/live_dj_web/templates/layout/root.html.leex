@@ -20,23 +20,6 @@
 
     <header class="main-header">
       <section class="container justify-center">
-        <!--
-        <nav role="navigation">
-          <ul>
-            <li>
-              <a
-                class="github-button"
-                href="https://github.com/sgobotta/live_dj"
-                data-color-scheme="no-preference: light; light: light; dark: light;"
-                data-size="large"
-                data-show-count="true"
-                aria-label="Star sgobotta/live_dj on GitHub"
-              >Star</a>
-            </li>
-          </ul>
-        </nav>
-        <%= render "_user_menu.html", assigns %>
-        -->
         <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "logo/live-dj-logo-white", class: "pt-3 h-20") %>
       </section>
     </header>
@@ -45,5 +28,28 @@
       <%= @inner_content %>
     </div>
     <div style="margin-bottom: 10px;" />
+
+    <div class="bg-background-dark full-width rounded-t-sm fixed bottom-0 flex">
+      <div class="justify-start text-center full-width">
+        <p class="flex p-0 justify-center items-center h-full">
+          LiveDj | 2020 - <%= DateTime.utc_now |> Map.fetch!(:year) %>
+        </p>
+      </div>
+      <div class="text-right github-button-container">
+        <i class="fab fa-github text-color p-2">
+          <div class="github-button">
+            <a
+              class="github-button"
+              href="https://github.com/sgobotta/live_dj"
+              data-color-scheme="no-preference: light; light: light; dark: light;"
+              data-show-count="true"
+              aria-label="Star sgobotta/live_dj on GitHub"
+            >
+              Stars
+            </a>
+          </div>
+        </i>
+      </div>
+    </div>
   </body>
 </html>
