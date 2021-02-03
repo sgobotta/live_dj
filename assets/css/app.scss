@@ -1323,6 +1323,11 @@ div p.pill-text {
   stroke: $secondary-highlight-1;
 }
 
+.asset-player-control:hover {
+  fill: #ff7979;
+  stroke: #ff7979;
+}
+
 /**
  * Player Control play/pause/loader buttons
  */
