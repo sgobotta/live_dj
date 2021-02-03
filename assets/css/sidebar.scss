@@ -178,6 +178,9 @@ div.sections-group-navigation {
 .button-effect:hover {
   box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a;
 }
+.button-effect-active {
+  box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a;
+}
 .button-effect:hover > svg,
 .button-effect:focus > svg {
   transform: scale(.99)
