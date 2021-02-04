@@ -84,7 +84,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:ok,
           socket
           |> assign(:connected_users, [])
-          |> assign(:current_tab, "chat")
+          |> assign(:current_tab, "video_queue")
           |> assign(:messages, [])
           |> assign(:new_message, "")
           |> assign(:player, player)
@@ -92,7 +92,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:room_changeset, room_changeset)
           |> assign(:room_management, room.management_type)
           |> assign(:search_result, [])
-          |> assign(:sections_group_tab, "peers")
+          |> assign(:sections_group_tab, "chat")
           |> assign(:slug, slug)
           |> assign(:user, user)
           |> assign(:user_room_group, user_room_group)
