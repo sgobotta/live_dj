@@ -6,15 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "Live DJ" %>
+    <link rel="manifest" href="manifest.json" />
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://kit.fontawesome.com/6c4d808205.js" crossorigin="anonymous"></script>
+    <link rel="apple-touch-icon" href="images/icons/live-dj-icon-white_128x128.png" />
+    <meta name="apple-mobile-web-app-status-bar" content="#141414" />
+    <meta name="theme-color" content="#222" />
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
       crossorigin="anonymous"
     ></script>
+    <script>
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+        .then(function() { console.log("Service Worker Registered"); });
+      }
+    </script>
   </head>
   <body>
 
