@@ -2105,3 +2105,9 @@ ul.playlist {
   80% { transform: scaleX(1.01); }
   20% { transform: scaleX(0.99); }
 }
+
+.add-button {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+}

@@ -10,7 +10,14 @@
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://kit.fontawesome.com/6c4d808205.js" crossorigin="anonymous"></script>
-    <link rel="apple-touch-icon" href="images/icons/live-dj-icon-white_128x128.png" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_72x72.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_96x96.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_128x128.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_144x144.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_152x152.png") %>" />
+  <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_192x192.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_384x384.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_512x512.png") %>" />
     <meta name="apple-mobile-web-app-status-bar" content="#141414" />
     <meta name="theme-color" content="#222" />
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -62,4 +69,5 @@
       </div>
     </div>
   </body>
+  <button class="add-button">Add to home screen</button>
 </html>
