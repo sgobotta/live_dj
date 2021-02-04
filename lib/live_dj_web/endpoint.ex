@@ -24,7 +24,7 @@ defmodule LiveDjWeb.Endpoint do
     at: "/",
     from: :live_dj,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js sw.js favicon.ico robots.txt manifest.json)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
