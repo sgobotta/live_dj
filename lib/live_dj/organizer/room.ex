@@ -7,11 +7,14 @@ defmodule LiveDj.Organizer.Room do
     field :slug, :string
     field :title, :string
     field :video_tracker, :string, default: ""
+    field :management_type, :string, default: "free"
+
+    many_to_many :users, LiveDj.Accounts.User, join_through: LiveDj.Organizer.UserRoom
 
     timestamps()
   end
 
-  @fields [:queue, :slug, :title, :video_tracker]
+  @fields [:management_type, :queue, :slug, :title, :video_tracker]
 
   @doc false
   def changeset(room, attrs) do

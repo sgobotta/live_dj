@@ -1,7 +1,7 @@
-<div class="flex flex-wrap justify-center items-stretch mx-auto">
-  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: ""], fn f -> %>
+<div class="flex flex-wrap justify-center items-stretch mx-auto my-24 live-inside-box">
+  <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "p-4 live-section-box"], fn f -> %>
     <div class="flex items-start section-title">
-      <span class="rounded text-white p-2 leading-none flex items-center title-pill">
+      <span class="rounded text-white p-2 leading-none flex items-center title-pill full-width">
         Register
       </span>
     </div>
@@ -14,19 +14,19 @@
 
       <div class="mb-4">
         <%= label f, :username, class: "" %>
-        <%= text_input f, :username, required: true, class: "text-input" %>
+        <%= text_input f, :username, required: true, class: "text-input-effect" %>
         <%= error_tag f, :username %>
       </div>
 
       <div class="mb-4">
         <%= label f, :email, class: "" %>
-        <%= email_input f, :email, required: true, class: "text-input" %>
+        <%= email_input f, :email, required: true, class: "text-input-effect" %>
         <%= error_tag f, :email %>
       </div>
 
       <div class="mb-4">
         <%= label f, :password, class: "" %>
-        <%= password_input f, :password, required: true, class: "text-input" %>
+        <%= password_input f, :password, required: true, class: "text-input-effect" %>
         <%= error_tag f, :password %>
       </div>
 

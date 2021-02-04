@@ -25,11 +25,31 @@ defmodule LiveDjWeb.MountHelpers do
   defp assign_current_user(socket, session) do
     user = LiveDj.Accounts.get_user_by_session_token(session["user_token"])
     %{user: user, visitor: visitor} = case user do
-      nil -> %{ user: %{username: "guest#{System.unique_integer()}"}, visitor: true}
-      user -> %{ user: user, visitor: false}
+      nil  -> %{user: %{username: create_random_name()}, visitor: true}
+      user -> %{user: user, visitor: false}
     end
     socket
     |> assign_new(:current_user, fn -> user end)
     |> assign_new(:visitor, fn -> visitor end)
+  end
+
+  defp create_random_name() do
+    adjectives = [
+      fn -> Faker.Superhero.descriptor end,
+      fn -> Faker.Pizza.cheese end,
+      fn -> Faker.Pizza.style end,
+      fn -> Faker.Commerce.product_name_material end,
+      fn -> Faker.Cannabis.strain end,
+      fn -> Faker.Commerce.product_name_adjective end,
+    ]
+    nouns = [
+      fn -> Faker.StarWars.character end,
+      fn -> Faker.Pokemon.name end,
+      fn -> Faker.Food.ingredient end,
+      fn -> Faker.Superhero.name end,
+    ]
+    descriptor  = Enum.at(adjectives, Enum.random(0..length(adjectives)-1))
+    name = Enum.at(nouns, Enum.random(0..length(nouns)-1))
+    "#{descriptor.()} #{name.()}"
   end
 end

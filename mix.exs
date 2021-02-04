@@ -42,6 +42,7 @@ defmodule LiveDj.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.14.6"},
+      {:faker, "~> 0.16"},
       {:floki, ">= 0.27.0"},
       {:logger_file_backend, "~> 0.0.11"},
       {:phoenix_html, "~> 2.11"},

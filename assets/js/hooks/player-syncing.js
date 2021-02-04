@@ -2,7 +2,9 @@ import debounce from 'lodash.debounce'
 import { secondsToTime } from '../lib/date-utils'
 
 const updateTimeDisplay = (timeTrackerElem, time) => {
-  const videoTime = time === 0 ? '-' : secondsToTime(parseInt(time))
+  const videoTime = (time === 0 || time === undefined)
+    ? '-'
+    : secondsToTime(parseInt(time))
   timeTrackerElem.innerText = videoTime
 }
 

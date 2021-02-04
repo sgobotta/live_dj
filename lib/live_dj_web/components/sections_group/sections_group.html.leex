@@ -1,0 +1,64 @@
+<div
+  class="
+    live-section-box
+    border-0
+    sections-group-navigation mt-4 pb-2
+    <%= if @current_tab == "chat" do %>
+      show-section
+    <% else %>
+      hide-section
+    <% end %>
+  "
+>
+  <header class="sections-group-header">
+    <div class="flex rounded-lg w-full">
+      <!-- Sidebar links -->
+      <nav class="flex-1">
+        <ul class="overflow-x-hidden">
+          <!-- Chat button -->
+          <li class="sections-group-header-item">
+            <button
+              class="
+                sections-group-button font-normal
+                flex items-center justify-center sidebar-primary
+                rounded-tr-3xl rounded-b-none rounded-tl-3xl
+                <%= if @current_section == "chat" do %>
+                  nav-button-effect-active
+                <% end %>
+                transition-transform transform
+                hover:translate-x-1 focus:ring focus:outline-none
+              "
+              phx-click="sections_group_show_chat"
+            >
+              <span>Chat</span>
+            </button>
+          </li>
+          <!-- Peers link -->
+          <li class="sections-group-header-item">
+            <button
+              class="
+                sections-group-button font-normal
+                flex items-center justify-center
+                sidebar-primary
+                rounded-tl-3xl rounded-b-none rounded-tr-3xl
+                <%= if @current_section == "peers" do %>
+                  nav-button-effect-active
+                <% end %>
+                transition-transform transform
+                hover:translate-x-1 focus:outline-none focus:ring
+              "
+              phx-click="sections_group_show_peers"
+            >
+              <span>Peers (<%= length(@connected_users) %>)</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div class="flex-1 m-1 mb-2">
+    <main>
+      <%= @inner_content.([]) %>
+    </main>
+  </div>
+</div>

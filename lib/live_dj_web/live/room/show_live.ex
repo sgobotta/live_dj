@@ -6,43 +6,21 @@ defmodule LiveDjWeb.Room.ShowLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Accounts
+  alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.Chat
-  alias LiveDj.Organizer.Player
-  alias LiveDj.Organizer.Queue
-  alias LiveDj.Organizer.Video
+  alias LiveDj.Organizer.{Chat, Player, Queue, Video, VolumeControls}
   alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
   alias Phoenix.Socket.Broadcast
 
+  # FIXME: Use this from a Controller
+  alias LiveDj.Repo
+
   @impl true
   def mount(%{"slug" => slug} = params, session, socket) do
-    socket = assign_defaults(socket, params, session)
-    %{current_user: current_user, visitor: visitor} = socket.assigns
-    user = create_connected_user(current_user.username)
-
     room = Organizer.get_room(slug)
-    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
-
-    volume_data = %{
-      volume_level: 100,
-      is_muted: false,
-      volume_icon: "fa-volume-up"
-    }
-    presence_meta = Map.merge(
-      volume_data,
-      %{
-        typing: false,
-        username: user.username,
-        visitor: visitor
-      }
-    )
-    {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
-
-    parsed_queue = room.queue
-    |> Enum.map(fn track -> Video.from_jsonb(track) end)
 
     case room do
       nil ->
@@ -52,21 +30,76 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> push_redirect(to: Routes.new_path(socket, :new))
         }
       room ->
+        socket = assign_defaults(socket, params, session)
+        %{current_user: current_user, visitor: visitor} = socket.assigns
+        user = ConnectedUser.create_connected_user(current_user.username)
+
+        # FIXME: refactor to a group management module
+        user_room_group = case visitor do
+          true -> Accounts.get_group_by_codename("anonymous-room-visitor")
+            |> Repo.preload([:permissions])
+          false ->
+            case Organizer.get_user_room_by(%{
+              user_id: current_user.id,
+              room_id: room.id
+            }) do
+              nil -> Accounts.get_group_by_codename("registered-room-visitor")
+                |> Repo.preload([:permissions])
+              user_room ->
+                user_room = Repo.preload(user_room, [:group])
+                user_room.group |> Repo.preload(:permissions)
+            end
+        end
+
+        room_changeset = Ecto.Changeset.change(room)
+
+        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
+
+        # Refactor to a module that manages Presence (initial data, updates, etc.)
+        volume_data = VolumeControls.get_initial_state()
+        presence_meta_user_id = case visitor do
+          true -> 0
+          false -> current_user.id
+        end
+        presence_meta = Map.merge(
+          volume_data,
+          %{
+            typing: false,
+            username: user.username,
+            visitor: visitor,
+            group: %{
+              codename: user_room_group.codename,
+              name: user_room_group.name,
+              permissions: user_room_group.permissions,
+            },
+            user_id: presence_meta_user_id
+          }
+        )
+        {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
+
+        parsed_queue = room.queue
+        |> Enum.map(fn track -> Video.from_jsonb(track) end)
+
         player = Player.get_initial_state()
         {:ok,
           socket
-          |> assign(:user, user)
-          |> assign(:slug, slug)
           |> assign(:connected_users, [])
-          |> assign(:new_message, "")
+          |> assign(:current_tab, "chat")
           |> assign(:messages, [])
-          |> assign(:video_queue, Enum.with_index(parsed_queue))
-          |> assign(:video_queue_controls, Queue.get_initial_controls())
-          |> assign(:search_result, [])
+          |> assign(:new_message, "")
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
-          |> assign(:volume_controls, volume_data)
+          |> assign(:room_changeset, room_changeset)
+          |> assign(:room_management, room.management_type)
+          |> assign(:search_result, [])
+          |> assign(:sections_group_tab, "peers")
+          |> assign(:slug, slug)
+          |> assign(:user, user)
+          |> assign(:user_room_group, user_room_group)
           |> assign(:username_input, user.username)
+          |> assign(:video_queue, Enum.with_index(parsed_queue))
+          |> assign(:video_queue_controls, Queue.get_initial_controls())
+          |> assign(:volume_controls, volume_data)
           |> assign_tracker(room)
         }
     end
@@ -284,11 +317,26 @@ defmodule LiveDjWeb.Room.ShowLive do
       Map.merge(m, %{volume_level: volume_level, volume_icon: volume_icon})
     end)
 
-    connected_users = Organizer.list_present_with_metas(slug)
+    {:noreply, socket}
+  end
 
-    {:noreply,
-      socket
-      |> assign(:connected_users, connected_users)}
+  def handle_info({:user_room_group_changed, params}, socket) do
+    %{group: group, topic: topic, user_id: user_id, uuid: uuid} = params
+
+    Presence.update(self(), topic, uuid, fn m ->
+      Map.merge(m, %{group: group})
+    end)
+
+    socket = case socket.assigns.visitor do
+      true -> socket
+      false ->
+        case user_id == socket.assigns.current_user.id do
+          false -> socket
+          true -> assign(socket, :user_room_group, group)
+        end
+    end
+
+    {:noreply, socket}
   end
 
   def handle_info({:remove_track, %{video_id: video_id}}, socket) do
@@ -346,11 +394,16 @@ defmodule LiveDjWeb.Room.ShowLive do
     Presence.update(self(), "room:" <> slug, uuid, fn m ->
       Map.merge(m, %{username: username})
     end)
-    connected_users = Organizer.list_present_with_metas(slug)
 
+    {:noreply, socket}
+  end
+
+  def handle_info({:update_room_assign, %{room: room}}, socket) do
     {:noreply,
       socket
-      |> assign(:connected_users, connected_users)}
+      |> assign(:room, room)
+      |> assign(:room_changeset, Ecto.Changeset.change(room))
+      |> assign(:room_management, room.management_type)}
   end
 
   @impl true
@@ -421,7 +474,9 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:player, player)
           |> assign(:player_controls, Player.get_controls_state(player))
           |> push_event("receive_player_state", Player.create_response(player))
-          |> push_event("receive_notification", Notifications.create(:play_video, next_video))}
+          |> push_event("receive_notification", Notifications.create(
+            :play_video, next_video, "playing-track"
+          ))}
     end
   end
 
@@ -543,6 +598,26 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
+  def handle_event("show_chat", _, socket) do
+    {:noreply, socket |> assign(:current_tab, "chat")}
+  end
+
+  def handle_event("show_queue", _, socket) do
+    {:noreply, socket |> assign(:current_tab, "video_queue")}
+  end
+
+  def handle_event("show_search", _, socket) do
+    {:noreply, socket |> assign(:current_tab, "video_search")}
+  end
+
+  def handle_event("sections_group_show_chat", _, socket) do
+    {:noreply, socket |> assign(:sections_group_tab, "chat")}
+  end
+
+  def handle_event("sections_group_show_peers", _, socket) do
+    {:noreply, socket |> assign(:sections_group_tab, "peers")}
+  end
+
   defp handle_video_tracker_activity(slug, presence, %{leaves: leaves}) do
     room = Organizer.get_room(slug)
     video_tracker = room.video_tracker
@@ -561,11 +636,6 @@ defmodule LiveDjWeb.Room.ShowLive do
     end
   end
 
-  defp create_connected_user(username) do
-    uuid = UUID.uuid4()
-    %ConnectedUser{uuid: uuid, username: username}
-  end
-
   defp assign_tracker(socket, room) do
     current_user = socket.assigns.user.uuid
     case Organizer.list_filtered_present(room.slug, current_user) do
@@ -577,121 +647,5 @@ defmodule LiveDjWeb.Room.ShowLive do
         socket
         |> assign(:room, room)
     end
-  end
-
-  defp fake_search_data(video_queue) do
-    search_data = [
-      %Tubex.Video{
-        channel_id: "UCK5zTxgu4T8xLs0z5VBoIhg",
-        channel_title: "Bảo Anh",
-        description: "",
-        etag: nil,
-        playlist_id: nil,
-        published_at: "2012-12-23T09:47:11Z",
-        thumbnails: %{
-          "default" => %{
-            "height" => 90,
-            "url" => "https://i.ytimg.com/vi/dyp2mLYhRkw/default.jpg",
-            "width" => 120
-          },
-          "high" => %{
-            "height" => 360,
-            "url" => "https://i.ytimg.com/vi/dyp2mLYhRkw/hqdefault.jpg",
-            "width" => 480
-          },
-          "medium" => %{
-            "height" => 180,
-            "url" => "https://i.ytimg.com/vi/dyp2mLYhRkw/mqdefault.jpg",
-            "width" => 320
-          }
-        },
-        title: "Video Countdown 20 Old  3 seconds",
-        video_id: "dyp2mLYhRkw"
-      },
-      %Tubex.Video{
-        channel_id: "UCLoZ-xYlaY7udYHFjgm55Hw",
-        channel_title: "DiaryBela",
-        description: "If you read this far down the description I love you. Please Hit that ▷ SUBSCRIBE button and LIKE my video and also turn ON notifications BELL! FOLLOW ...",
-        etag: nil,
-        playlist_id: nil,
-        published_at: "2019-06-21T15:09:53Z",
-        thumbnails: %{
-          "default" => %{
-            "height" => 90,
-            "url" => "https://i.ytimg.com/vi/FJ5pRIZXVks/default.jpg",
-            "width" => 120
-          },
-          "high" => %{
-            "height" => 360,
-            "url" => "https://i.ytimg.com/vi/FJ5pRIZXVks/hqdefault.jpg",
-            "width" => 480
-          },
-          "medium" => %{
-            "height" => 180,
-            "url" => "https://i.ytimg.com/vi/FJ5pRIZXVks/mqdefault.jpg",
-            "width" => 320
-          }
-        },
-        title: "#1 Countdown | 3 seconds with sound effect",
-        video_id: "FJ5pRIZXVks"
-      },
-      %Tubex.Video{
-        channel_id: "UC-5mG3KEnJ4WUFXrGVUTHXw",
-        channel_title: "bvbb",
-        description: "my cat is epic.",
-        etag: nil,
-        playlist_id: nil,
-        published_at: "2017-04-09T18:42:40Z",
-        thumbnails: %{
-          "default" => %{
-            "height" => 90,
-            "url" => "https://i.ytimg.com/vi/wUF9DeWJ0Dk/default.jpg",
-            "width" => 120
-          },
-          "high" => %{
-            "height" => 360,
-            "url" => "https://i.ytimg.com/vi/wUF9DeWJ0Dk/hqdefault.jpg",
-            "width" => 480
-          },
-          "medium" => %{
-            "height" => 180,
-            "url" => "https://i.ytimg.com/vi/wUF9DeWJ0Dk/mqdefault.jpg",
-            "width" => 320
-          }
-        },
-        title: "Video Countdown 3 seconds",
-        video_id: "wUF9DeWJ0Dk"
-      },
-      %Tubex.Video{
-        channel_id: "UCtWuB1D_E3mcyYThA9iKggQ",
-        channel_title: "Vulf",
-        description: "VULFPECK /// Dean Town buy on bandcamp → https://vulfpeck.bandcamp.com Jack Stratton — kick & snare, mixing, video Theo Katzman — sock cymbal ...",
-        etag: nil,
-        playlist_id: nil,
-        published_at: "2016-10-11T17:01:52Z",
-        thumbnails: %{
-          "default" => %{
-            "height" => 90,
-            "url" => "https://i.ytimg.com/vi/le0BLAEO93g/default.jpg",
-            "width" => 120
-          },
-          "high" => %{
-            "height" => 360,
-            "url" => "https://i.ytimg.com/vi/le0BLAEO93g/hqdefault.jpg",
-            "width" => 480
-          },
-          "medium" => %{
-            "height" => 180,
-            "url" => "https://i.ytimg.com/vi/le0BLAEO93g/mqdefault.jpg",
-            "width" => 320
-          }
-        },
-        title: "VULFPECK /// Dean Town",
-        video_id: "le0BLAEO93g"
-      }
-    ]
-    Enum.map(search_data, fn search ->
-      video = Video.from_tubex_video(search)
-      Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end)
   end
 end

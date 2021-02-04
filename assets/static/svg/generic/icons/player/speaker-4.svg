@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 64 64"
+   xml:space="preserve"
+   sodipodi:docname="speaker-4.svg"
+   width="64"
+   height="64"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><metadata
+   id="metadata47"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs45" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="956"
+   inkscape:window-height="1017"
+   id="namedview43"
+   showgrid="false"
+   showguides="true"
+   inkscape:guide-bbox="true"
+   inkscape:zoom="3.9333333"
+   inkscape:cx="54.025424"
+   inkscape:cy="30"
+   inkscape:window-x="0"
+   inkscape:window-y="29"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Capa_1"><sodipodi:guide
+     position="32.033898,114.15254"
+     orientation="1,0"
+     id="guide854"
+     inkscape:locked="false" /></sodipodi:namedview>
+<g
+   id="g10"
+   transform="matrix(1.0666667,0,0,1.0666667,0,0.41966766)">
+	<path
+   d="m 28.404,7.758 c -0.975,-0.552 -2.131,-0.534 -3.09,0.044 -0.046,0.027 -0.09,0.059 -0.13,0.093 L 11.634,19.358 H 1 c -0.553,0 -1,0.447 -1,1 v 19 c 0,0.266 0.105,0.52 0.293,0.707 0.188,0.187 0.441,0.293 0.707,0.293 l 10.61,-0.005 13.543,12.44 c 0.05,0.046 0.104,0.086 0.161,0.12 0.492,0.297 1.037,0.446 1.582,0.446 0.517,-0.001 1.033,-0.134 1.508,-0.402 C 29.403,52.393 30,51.363 30,50.201 V 10.514 C 30,9.353 29.403,8.323 28.404,7.758 Z M 28,50.201 c 0,0.431 -0.217,0.81 -0.579,1.015 -0.155,0.087 -0.548,0.255 -1,0.026 L 13,38.913 v -4.556 c 0,-0.553 -0.447,-1 -1,-1 -0.553,0 -1,0.447 -1,1 v 3.996 l -9,0.004 v -17 h 9 v 4 c 0,0.553 0.447,1 1,1 0.553,0 1,-0.447 1,-1 V 20.821 L 26.405,9.481 C 26.866,9.239 27.266,9.411 27.421,9.499 27.783,9.704 28,10.083 28,10.514 Z"
+   id="path2"
+   inkscape:connector-curvature="0" />
+	<path
+   d="m 52.026,29.858 c 0,-8.347 -5.316,-15.76 -13.229,-18.447 -0.522,-0.177 -1.091,0.103 -1.269,0.626 -0.177,0.522 0.103,1.091 0.626,1.269 7.101,2.411 11.872,9.063 11.872,16.553 0,7.483 -4.762,14.136 -11.849,16.554 -0.522,0.178 -0.802,0.746 -0.623,1.27 0.142,0.415 0.53,0.677 0.946,0.677 0.107,0 0.216,-0.017 0.323,-0.054 7.898,-2.695 13.203,-10.108 13.203,-18.448 z"
+   id="path4"
+   inkscape:connector-curvature="0" />
+	<path
+   d="M 44.453,6.374 C 43.945,6.161 43.358,6.395 43.141,6.904 42.926,7.413 43.163,8 43.672,8.216 52.376,11.909 58,20.405 58,29.858 c 0,9.777 -5.894,18.38 -15.015,21.914 -0.515,0.2 -0.771,0.779 -0.571,1.294 0.153,0.396 0.532,0.639 0.933,0.639 0.12,0 0.242,-0.021 0.361,-0.067 C 53.605,49.801 60,40.467 60,29.858 60,19.6 53.897,10.382 44.453,6.374 Z"
+   id="path6"
+   inkscape:connector-curvature="0" />
+	<path
+   d="m 43.026,29.858 c 0,-5.972 -4.009,-11.302 -9.749,-12.962 -0.53,-0.151 -1.084,0.152 -1.238,0.684 -0.153,0.53 0.152,1.085 0.684,1.238 4.889,1.413 8.304,5.953 8.304,11.04 0,5.087 -3.415,9.627 -8.304,11.04 -0.531,0.153 -0.837,0.708 -0.684,1.238 0.127,0.438 0.526,0.723 0.961,0.723 0.092,0 0.185,-0.013 0.277,-0.039 5.741,-1.661 9.749,-6.991 9.749,-12.962 z"
+   id="path8"
+   inkscape:connector-curvature="0" />
+</g>
+<g
+   id="g12"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g14"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g16"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g18"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g20"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g22"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g24"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g26"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g28"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g30"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g32"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g34"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g36"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g38"
+   transform="translate(0,4)">
+</g>
+<g
+   id="g40"
+   transform="translate(0,4)">
+</g>
+</svg>

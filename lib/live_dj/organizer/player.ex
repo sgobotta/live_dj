@@ -71,12 +71,21 @@ end
 
 defmodule LiveDj.Organizer.VolumeControls do
 
+  def get_initial_state do
+    %{
+      volume_level: 100,
+      is_muted: false,
+      volume_icon: "speaker-4"
+    }
+  end
+
   def get_volume_icon(volume_level) do
     case volume_level do
-      l when l > 70 -> "fa-volume-up"
-      l when l > 30 -> "fa-volume-down"
-      l when l > 0 -> "fa-volume-off"
-      l when l == 0 -> "fa-volume-mute"
+      l when l > 70 -> "speaker-4"
+      l when l > 40 -> "speaker-3"
+      l when l > 10 -> "speaker-2"
+      l when l > 0 ->  "speaker-1"
+      l when l == 0 -> "speaker-0"
     end
   end
 

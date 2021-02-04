@@ -32,6 +32,11 @@ npm-debug.log
 # we ignore priv/static. You may want to comment
 # this depending on your deployment strategy.
 /priv/static/
+
+# iex preload
+.iex.exs
+
+# Environment
 .env
 
 # Logger configuration points to this directory

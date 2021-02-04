@@ -1,8 +1,8 @@
-<div class="flex flex-wrap justify-center items-stretch mx-auto">
-  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: ""], fn f -> %>
+<div class="flex flex-wrap justify-center items-stretch mx-auto my-24  live-inside-box">
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "p-4 live-section-box"], fn f -> %>
 
     <div class="flex items-start section-title">
-      <span class="rounded text-white p-2 leading-none flex items-center title-pill">
+      <span class="rounded text-white p-2 leading-none flex items-center title-pill full-width">
         Log In
       </span>
     </div>
@@ -14,18 +14,18 @@
 
       <div class="mb-4">
         <%= label f, :email, class: "" %>
-        <%= email_input f, :email, required: true, class: "text-input" %>
+        <%= email_input f, :email, required: true, class: "text-input-effect" %>
         <%= error_tag f, :email %>
       </div>
 
       <div class="mb-4">
         <%= label f, :password, class: "" %>
-        <%= password_input f, :password, required: true, class: "text-input" %>
+        <%= password_input f, :password, required: true, class: "text-input-effect" %>
         <%= error_tag f, :password %>
       </div>
 
       <div class="mb-4">
-        <%= label f, :remember_me, "Remember me", class: "inline font-bold pr-4" %>
+        <%= label f, :remember_me, "Remember me", class: "inline pr-4" %>
         <%= checkbox f, :remember_me, class: "align-middle" %>
       </div>
     </div>

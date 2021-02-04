@@ -5,41 +5,51 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Live DJ", suffix: " 🎶" %>
+    <%= live_title_tag assigns[:page_title] || "Live DJ" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://kit.fontawesome.com/6c4d808205.js" crossorigin="anonymous"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
 
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
-            <li>
-              <a
-                class="github-button"
-                href="https://github.com/sgobotta/live_dj"
-                data-color-scheme="no-preference: light; light: light; dark: light;"
-                data-size="large"
-                data-show-count="true"
-                aria-label="Star sgobotta/live_dj on GitHub"
-              >Star</a>
-            </li>
-          </ul>
-        </nav>
-        <%= render "_user_menu.html", assigns %>
-        <h2>Live DJ</h2>
+    <header class="main-header">
+      <section class="container justify-center">
+        <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "logo/live-dj-logo-white", class: "pt-3 h-20") %>
       </section>
     </header>
 
-    <div class="mg-0" style="background-color: #222">
-      <div id="video-player"></div>
-    </div>
     <div>
       <%= @inner_content %>
     </div>
     <div style="margin-bottom: 10px;" />
+
+    <div class="bg-background-dark full-width rounded-t-sm fixed bottom-0 flex">
+      <div class="justify-start text-center full-width">
+        <p class="flex p-0 justify-center items-center h-full">
+          LiveDj | 2020 - <%= DateTime.utc_now |> Map.fetch!(:year) %>
+        </p>
+      </div>
+      <div class="text-right github-button-container">
+        <i class="fab fa-github text-color p-2">
+          <div class="github-button">
+            <a
+              class="github-button"
+              href="https://github.com/sgobotta/live_dj"
+              data-color-scheme="no-preference: light; light: light; dark: light;"
+              data-show-count="true"
+              aria-label="Star sgobotta/live_dj on GitHub"
+            >
+              Stars
+            </a>
+          </div>
+        </i>
+      </div>
+    </div>
   </body>
 </html>

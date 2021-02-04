@@ -1,9 +1,9 @@
-<div class="flex flex-wrap justify-center items-stretch mx-auto">
+<div class="flex flex-wrap justify-center items-stretch mx-auto my-24">
   <%= link to: Routes.user_settings_path(@conn, :edit),
     class: "setting-card account-asset flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
     <div class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded">
       <div class="h-48 w-48">
-        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "account") %>
+        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "settings/account") %>
       </div>
       <h1 class="primary text-4xl my-4">Account</h1>
       <p class="text-justify px-8 mb-8 black">
@@ -16,11 +16,24 @@
     class: "setting-card payment-asset flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
     <div class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded">
       <div class="h-48 w-48">
-        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "payments") %>
+        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "settings/payments") %>
       </div>
       <h1 class="primary text-4xl my-4">Payments</h1>
       <p class="text-justify px-8 mb-8 black">
         Find and access details about your payments.
+      </p>
+    </div>
+  <% end %>
+
+  <%= link to: Routes.user_settings_path(@conn, :show_badges),
+    class: "setting-card badge-asset flex flex-col items-center bg-white border-r-8 br-primary-light mx-8 mb-8 flex-1 mb-8 md:mb-8 sm:flex-initial border-r-8 br-primary-light shadow-lg rounded" do %>
+    <div class="flex flex-col items-center p-8 bg-white flex-1 mb-0 rounded">
+      <div class="h-48 w-48">
+        <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "settings/badges") %>
+      </div>
+      <h1 class="primary text-4xl my-4">Badges & Achievements</h1>
+      <p class="text-justify px-8 mb-8 black">
+        Take a look at the badges and achievements.
       </p>
     </div>
   <% end %>

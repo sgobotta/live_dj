@@ -1,0 +1,192 @@
+
+$sidebar-primary: #dedcdc;
+
+.sidebar-primary {
+  color: $sidebar-primary;
+}
+
+/**
+ * Main Sidebar/Header
+ */
+
+div.sidebar {
+
+  .h-afull {
+    height: 98%;
+  }
+
+  .v-afull {
+    height: 97vh;
+  }
+
+  header.navigation nav ul {
+    margin: 0rem;
+  }
+
+  header.navigation nav li {
+    padding: 0px;
+    float: left;
+  }
+
+  li.aside-item, li.header-item {
+    margin: 0px !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  li.aside-item, li.header-item button {
+    margin-right: 0px;
+  }
+
+  .divide-list-element {
+    li {
+      border-top-color: #121212;
+    }
+  }
+
+  button.sidebar-button {
+    background-color: #222;
+  }
+}
+
+@media (max-width: 1024px) {
+  div.sidebar {
+    width: 100vw;
+    flex-direction: column;
+
+    header.navigation {
+      display: flex;
+    }
+
+    aside.navigation {
+      display: none;
+    }
+  }
+}
+@media (min-width: 1024px) {
+  div.sidebar {
+    height: 97vh;
+    flex-direction: row;
+
+    header.navigation {
+      display: none;
+    }
+
+    aside.navigation {
+      display: flex;
+    }
+
+    li.sections-group-header-item {
+      margin: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+}
+
+/**
+ * Sections Group Header
+ */
+
+div.sections-group-navigation {
+
+  header.sections-group-header nav li {
+    float: left;
+    width: 50%;
+    
+    button {
+      width: 100%;
+    }
+  }
+
+  header.sections-group-header nav li.sections-group-header-item {
+    padding: 0;
+  }
+
+  header.sections-group-header ul {
+    margin: 0;
+  }
+
+  header.sections-group-header ul.divide-list-element {
+    li {
+      border-color: #121212;
+    }
+  }
+
+  header.sections-group-header div.sidebar-shadow {
+    box-shadow: -4px -4px 10px #222, 4px 4px 10px rgba(0, 0, 0, 0.6);
+  }
+}
+
+
+
+.sidebar-shadow {
+  box-shadow: -4px -4px 10px #121212, 4px 4px 10px rgba(0, 0, 0, 0.6);
+}
+/* Rotate chevron in collapsing */
+[data-bs-toggle='collapse'][aria-expanded='true'] span:nth-child(3) svg {
+  transform: rotate(-90deg);
+}
+
+/* For bootstrap collapse plugin */
+.fade {
+  transition: opacity 0.15s linear;
+}
+.fade:not(.show) {
+  opacity: 0;
+}
+.collapse:not(.show) {
+  display: none;
+}
+.collapsing {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .collapsing {
+    transition: none;
+  }
+  .fade {
+    transition: none;
+  }
+}
+.sections-group-button {
+  color: #dedcdc;
+  background-color: $background-darker !important;
+}
+.sections-group-button:hover {
+  color: #dedcdc;
+  transform: none;
+  background-color: $background-darker !important;
+}
+.sections-group-button:focus  {
+  color: #dedcdc;
+  background-color: #141414;
+}
+.nav-button-effect-active:hover {
+  color: #dedcdc;
+  background-color: #141414 !important;
+}
+.nav-button-effect-active:focus {
+  color: #dedcdc;
+  background-color: #141414 !important;
+}
+.nav-button-effect-active {
+  background-color: #141414 !important;
+}
+.button-effect:hover {
+  box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a;
+}
+.button-effect-active {
+  box-shadow: inset -4px -4px 10px #323637, inset 4px 4px 10px #080a0a;
+}
+.button-effect:hover > svg,
+.button-effect:focus > svg {
+  transform: scale(.99)
+}
+
+.svg-icon {
+  fill: #dedcdc;
+  stroke: #dedcdc;
+}

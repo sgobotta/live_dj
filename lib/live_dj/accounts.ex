@@ -63,6 +63,40 @@ defmodule LiveDj.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Preloads a `%User{}` with the given associations.
+
+  ## Examples
+
+      iex> preload_user(user, associations)
+      #LiveDj.Accounts.User<
+        __meta__: #Ecto.Schema.Metadata<:loaded, "users">,
+        badges: [
+          %LiveDj.Stats.Badge{
+            __meta__: #Ecto.Schema.Metadata<:loaded, "badges">,
+            description: "..",
+            icon: "...",
+            id: 1,
+            inserted_at: ~N[2020-01-07 16:20:00],
+            name: "...",
+            ...
+          },
+          ...
+        ],
+        confirmed_at: ~N[2020-11-15 22:14:57],
+        email: "...",
+        id: 1,
+        inserted_at: ~N[2020-11-15 22:13:29],
+        updated_at: ~N[2020-11-17 14:15:00],
+        username: "...",
+        ...
+      >
+
+  """
+  def preload_user(%User{} = user, associations \\ []) do
+    Repo.preload(user, associations)
+  end
+
   ## User registration
 
   @doc """
@@ -411,5 +445,317 @@ defmodule LiveDj.Accounts do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
+  end
+
+  alias LiveDj.Accounts.Permission
+
+  @doc """
+  Returns the list of permissions.
+
+  ## Examples
+
+      iex> list_permissions()
+      [%Permission{}, ...]
+
+  """
+  def list_permissions do
+    Repo.all(Permission)
+  end
+
+  @doc """
+  Gets a single permission.
+
+  Raises `Ecto.NoResultsError` if the Permission does not exist.
+
+  ## Examples
+
+      iex> get_permission!(123)
+      %Permission{}
+
+      iex> get_permission!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_permission!(id), do: Repo.get!(Permission, id)
+
+  @doc """
+  Creates a permission.
+
+  ## Examples
+
+      iex> create_permission(%{name: value, codename: value})
+      {:ok, %Permission{}}
+
+      iex> create_permission(%{name: bad_value, codename: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_permission(attrs \\ %{}) do
+    %Permission{}
+    |> Permission.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a permission.
+
+  ## Examples
+
+      iex> update_permission(permission, %{name: new_value})
+      {:ok, %Permission{}}
+
+      iex> update_permission(permission, %{codename: new_value})
+      {:ok, %Permission{}}
+
+      iex> update_permission(permission, %{name: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+      iex> update_permission(permission, %{codename: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_permission(%Permission{} = permission, attrs) do
+    permission
+    |> Permission.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a permission.
+
+  ## Examples
+
+      iex> delete_permission(permission)
+      {:ok, %Permission{}}
+
+      iex> delete_permission(permission)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_permission(%Permission{} = permission) do
+    Repo.delete(permission)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking permission changes.
+
+  ## Examples
+
+      iex> change_permission(permission)
+      %Ecto.Changeset{data: %Permission{}}
+
+  """
+  def change_permission(%Permission{} = permission, attrs \\ %{}) do
+    Permission.changeset(permission, attrs)
+  end
+
+  alias LiveDj.Accounts.Group
+
+  @doc """
+  Returns the list of groups.
+
+  ## Examples
+
+      iex> list_groups()
+      [%Group{}, ...]
+
+  """
+  def list_groups do
+    Repo.all(Group)
+  end
+
+  @doc """
+  Gets a single group.
+
+  Raises `Ecto.NoResultsError` if the Group does not exist.
+
+  ## Examples
+
+      iex> get_group!(123)
+      %Group{}
+
+      iex> get_group!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_group!(id), do: Repo.get!(Group, id)
+
+  @doc """
+  Gets a single group by codename.
+
+  Raises `Ecto.NoResultsError` if the Group does not exist.
+
+  ## Examples
+
+      iex> get_group_by_codename("a-valid-codename")
+      %Group{}
+
+      iex> get_group("a-bad-codename")
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_group_by_codename(codename) do
+    Repo.get_by(Group, %{codename: codename})
+  end
+
+  @doc """
+  Creates a group.
+
+  ## Examples
+
+      iex> create_group(%{codename: value, name: value})
+      {:ok, %Group{}}
+
+      iex> create_group(%{codename: bad_value, name: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_group(attrs \\ %{}) do
+    %Group{}
+    |> Group.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a group.
+
+  ## Examples
+
+      iex> update_group(group, %{codename: new_value, name: new_value})
+      {:ok, %Group{}}
+
+      iex> update_group(group, %{codename: bad_value, name: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_group(%Group{} = group, attrs) do
+    group
+    |> Group.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a group.
+
+  ## Examples
+
+      iex> delete_group(group)
+      {:ok, %Group{}}
+
+      iex> delete_group(group)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_group(%Group{} = group) do
+    Repo.delete(group)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking group changes.
+
+  ## Examples
+
+      iex> change_group(group)
+      %Ecto.Changeset{data: %Group{}}
+
+  """
+  def change_group(%Group{} = group, attrs \\ %{}) do
+    Group.changeset(group, attrs)
+  end
+
+  alias LiveDj.Accounts.PermissionGroup
+
+  @doc """
+  Returns the list of permissions_groups.
+
+  ## Examples
+
+      iex> list_permissions_groups()
+      [%PermissionGroup{}, ...]
+
+  """
+  def list_permissions_groups do
+    Repo.all(PermissionGroup)
+  end
+
+  @doc """
+  Gets a single permission_group.
+
+  Raises `Ecto.NoResultsError` if the Permission group does not exist.
+
+  ## Examples
+
+      iex> get_permission_group!(123)
+      %PermissionGroup{}
+
+      iex> get_permission_group!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_permission_group!(id), do: Repo.get!(PermissionGroup, id)
+
+  @doc """
+  Creates a permission_group.
+
+  ## Examples
+
+      iex> create_permission_group(%{field: value})
+      {:ok, %PermissionGroup{}}
+
+      iex> create_permission_group(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_permission_group(attrs \\ %{}) do
+    %PermissionGroup{}
+    |> PermissionGroup.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a permission_group.
+
+  ## Examples
+
+      iex> update_permission_group(permission_group, %{field: new_value})
+      {:ok, %PermissionGroup{}}
+
+      iex> update_permission_group(permission_group, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_permission_group(%PermissionGroup{} = permission_group, attrs) do
+    permission_group
+    |> PermissionGroup.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a permission_group.
+
+  ## Examples
+
+      iex> delete_permission_group(permission_group)
+      {:ok, %PermissionGroup{}}
+
+      iex> delete_permission_group(permission_group)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_permission_group(%PermissionGroup{} = permission_group) do
+    Repo.delete(permission_group)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking permission_group changes.
+
+  ## Examples
+
+      iex> change_permission_group(permission_group)
+      %Ecto.Changeset{data: %PermissionGroup{}}
+
+  """
+  def change_permission_group(%PermissionGroup{} = permission_group, attrs \\ %{}) do
+    PermissionGroup.changeset(permission_group, attrs)
   end
 end

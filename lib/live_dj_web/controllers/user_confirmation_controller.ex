@@ -1,7 +1,10 @@
 defmodule LiveDjWeb.UserConfirmationController do
   use LiveDjWeb, :controller
 
+  require Logger
+
   alias LiveDj.Accounts
+  alias LiveDj.Stats
 
   def new(conn, _params) do
     render(conn, "new.html")
@@ -29,7 +32,12 @@ defmodule LiveDjWeb.UserConfirmationController do
   # leaked token giving the user access to the account.
   def confirm(conn, %{"token" => token}) do
     case Accounts.confirm_user(token) do
-      {:ok, _} ->
+      {:ok, user} ->
+        badge_reference_name = "users-confirmed_via_link"
+        case Stats.assoc_user_badge(user.id, badge_reference_name) do
+          :ok -> Logger.info("Assigned badge #{badge_reference_name} to user #{user.id}")
+          {:error, changeset} -> Logger.error("An error occurred while assignnig the #{badge_reference_name} badge. Details: #{inspect(changeset)}.")
+        end
         conn
         |> put_flash(:info, "Account confirmed successfully.")
         |> redirect(to: "/")

@@ -2,6 +2,9 @@ defmodule LiveDj.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias LiveDj.Organizer.{Room, UserRoom}
+  alias LiveDj.Stats.{Badge, UserBadge}
+
   @derive {Inspect, except: [:password]}
   schema "users" do
     field :username, :string
@@ -9,6 +12,9 @@ defmodule LiveDj.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+
+    many_to_many :badges, Badge, join_through: UserBadge
+    many_to_many :rooms, Room, join_through: UserRoom
 
     timestamps()
   end

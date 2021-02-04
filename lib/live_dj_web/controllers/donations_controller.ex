@@ -4,6 +4,7 @@ defmodule LiveDjWeb.DonationsController do
   use LiveDjWeb, :controller
 
   alias LiveDj.Payments
+  alias LiveDj.Stats
 
   def index(conn, _params) do
     %{assigns: %{visitor: visitor}} = conn
@@ -59,6 +60,7 @@ defmodule LiveDjWeb.DonationsController do
           {:ok, _order} ->
             case visitor do
               false ->
+                :ok = Stats.assoc_user_badge(user_id, "payments-donate_once")
                 {:ok, _} = Payments.deliver_payment_confirmation(current_user)
               true -> nil
             end

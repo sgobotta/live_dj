@@ -1,57 +1,35 @@
-<div class="section-container player-controls-main-container mg-0">
+<div class="section-container bg-background-dark mg-0 rounded-lg rounded-tl-none rounded-tr-none">
   <div class="flex justify-center player-controls-container">
     <div class="inline-flex items-center justify-center p-4">
 
       <div class="p-2">
-        <%= if @player_controls.previous_button_state == "disabled" do %>
-          <a class="disabled">
-            <i class="fas fa-step-backward"></i>
-          </a>
-        <% else %>
-          <a phx-click="player_signal_play_previous" phx-target="<%= @myself %>">
-            <i class="fas fa-step-backward player-control clickeable"></i>
-          </a>
-        <% end %>
+        <%= render_player_control_button(
+          "back",
+          "player_signal_play_previous",
+          @player_controls.previous_button_state,
+          @player_permissions.can_play_previous_track,
+          @myself)
+        %>
       </div>
 
       <div class="p-2">
-        <%= if @player_controls.play_button_state == "disabled" &&
-              @player_controls.pause_button_state == "disabled" do %>
-          <a>
-            <i class="fas fa-spinner rotating"></i>
-          </a>
-        <% else %>
-          <%= if @player.state == "paused" || @player.state == "stopped" do %>
-            <a
-              <%= @player_controls.play_button_state %>
-              phx-click="player_signal_playing"
-              phx-target="<%= @myself %>"
-            >
-              <i class="fas fa-play-circle player-control clickeable"></i>
-            </a>
-          <% end %>
-          <%= if @player.state == "playing" do %>
-            <a
-              <%= @player_controls.pause_button_state %>
-              phx-click="player_signal_paused"
-              phx-target="<%= @myself %>"
-            >
-              <i class="fas fa-pause-circle player-control clickeable"></i>
-            </a>
-          <% end %>
-        <% end %>
+        <%= render_player_control_button(
+          "play-controls",
+          @player.state,
+          @player_controls,
+          {@player_permissions.can_play_track, @player_permissions.can_pause_track},
+          @myself)
+        %>
       </div>
 
       <div class="p-2">
-        <%= if @player_controls.next_button_state == "disabled" do %>
-          <a class="disabled">
-            <i class="fas fa-step-forward"></i>
-          </a>
-        <% else %>
-          <a phx-click="player_signal_play_next" phx-target="<%= @myself %>">
-            <i class="fas fa-step-forward player-control clickeable"></i>
-          </a>
-        <% end %>
+        <%= render_player_control_button(
+          "next",
+          "player_signal_play_next",
+          @player_controls.next_button_state,
+          @player_permissions.can_play_next_track,
+          @myself)
+        %>
       </div>
 
     </div>

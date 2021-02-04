@@ -19,15 +19,11 @@ const UiFeedback = () => ({
     })
 
     this.handleEvent('queue_saved', ({pos}) => {
-      const element = document.querySelector('i.save-btn').parentElement
-      const okIcon = document.createElement('i')
-      okIcon.classList.add('fas')
-      okIcon.classList.add('fa-check-circle')
-      okIcon.classList.add('success-feedback')
-      element.appendChild(okIcon)
+      const saveButton = document.querySelector('svg.queue-control-disabled')
+      saveButton.classList.add('animate-save-button-saved')
 
       setTimeout(() => {
-        okIcon.remove()
+        saveButton.classList.remove('animate-save-button-saved')
       }, 3000)
     })
   }

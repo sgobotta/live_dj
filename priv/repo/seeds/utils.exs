@@ -1,6 +1,6 @@
 defmodule LiveDj.Seeds.Utils do
-  defp date_to_naive_datetime("NULL"), do: nil
-  defp date_to_naive_datetime(datetime) do
+  def date_to_naive_datetime("NULL"), do: nil
+  def date_to_naive_datetime(datetime) do
     {:ok, naive_datetime} = Ecto.Type.cast(:naive_datetime, datetime)
     naive_datetime
   end

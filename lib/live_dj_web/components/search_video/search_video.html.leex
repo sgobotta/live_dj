@@ -1,11 +1,22 @@
-<div>
-  <div>
-    <form id="search-video-form" phx-submit="search" class="search-form">
+<div
+  class="
+    live-section-box
+    mb-4
+    mt-0
+    <%= if @current_tab == "video_search" do %>
+      show-section
+    <% else %>
+      hide-section
+    <% end %>
+  "
+>
+  <div class="mx-6">
+    <form id="search-video-form" phx-submit="search" class="mb-2">
       <%=
         text_input :search_field,
         :query,
         placeholder: "Search videos...",
-        class: "text-input",
+        class: "search-text-input button-effect mt-4",
         autofocus: false,
         "phx-debounce": "300"
       %>
@@ -15,7 +26,7 @@
   <div
     phx-hook="SearchSyncing"
     id="search-data"
-    class="scrollable-panel higher extra-margin"
+    class="scrollable-panel fixed-height-md extra-margin rounded-lg"
   >
 
     <div class="loader-container">
@@ -40,15 +51,19 @@
           </p>
         </div>
         <div class="column-offset-25 align-center">
-          <%= if video.is_queued == true do %>
-            <a class="disabled">
-              <i class="fas fa-check-circle"></i>
-            </a>
-          <% else %>
-            <a class="btn" phx-click="add_to_queue" phx-value-video_id="<%= video.video_id %>">
-              <i class="fas fa-plus-circle search-control"></i>
-            </a>
-          <% end %>
+          <a
+            class="<%= if video.is_queued do %>disabled<% else %>search-control-enabled clickeable<% end %>"
+            <%= if !video.is_queued do %>
+              phx-click="add_to_queue"
+              phx-value-video_id="<%= video.video_id %>"
+            <% end %>
+          >
+            <%= PhoenixInlineSvg.Helpers.svg_image(
+              LiveDjWeb.Endpoint,
+              "icons/search/add",
+              class: "h-12 w-12 #{if video.is_queued do "show-check-button" else "show-add-button" end}")
+            %>
+          </a>
         </div>
       </div>
     <% end %>

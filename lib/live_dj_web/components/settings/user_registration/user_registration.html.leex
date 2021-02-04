@@ -1,32 +1,37 @@
-<div class="flex flex-wrap justify-center items-stretch mx-auto">
+<div
+  class="
+    flex flex-wrap justify-center items-stretch live-inside-box
+    p-4 m-6 rounded-lg
+  "
+>
   <%= form_for @user_changeset, Routes.user_registration_path(@socket, :create),
     [
       phx_submit: "submit_changeset",
       phx_target: @myself,
       phx_trigger_action: @trigger_submit,
-      class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4"
+      class: "flex flex-col bg-gray-1000 rounded-lg max-w-1/4 m-4 full-width"
     ],
     fn f -> %>
 
     <div class="flex items-start">
-      <span class="rounded text-white p-2 leading-none flex items-center title-pill">
+      <span class="rounded text-white p-2 leading-none flex items-center title-pill full-width">
         Register
       </span>
     </div>
 
-    <div class="flex flex-col items-center text-white px-4 py-6">
+    <div class="flex flex-col items-center text-white text-left px-4 py-6">
       <%= if @user_changeset.action do %>
-        <p class="mb-4">Oops, something went wrong!</p>
-        <p class="mb-4">Please check the errors below.</p>
+        <p class="mb-4 full-width">Oops, something went wrong!</p>
+        <p class="mb-4 full-width">Please check the errors below.</p>
       <% end %>
 
-      <div class="mb-4">
+      <div class="mb-4 full-width">
         <%= label f, :username, class: "" %>
-        <%= text_input f, :username, required: true, class: "text-input" %>
+        <%= text_input f, :username, required: true, class: "text-input-effect" %>
         <%= error_tag f, :username %>
       </div>
 
-      <div class="mb-4">
+      <div class="mb-4 full-width">
         <p>
           <%= checkbox f, :terms, required: true, class: "text-input" %>
           I have read and accept LiveDJ’s

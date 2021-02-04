@@ -1,4 +1,10 @@
-<div class="scrollable-panel higher extra-margin-top">
+<div
+  class="
+    m-4
+    scrollable-panel fixed-height-sm extra-margin-top
+    <%= if @current_tab == "video_queue" do %>show-section<% else %>hide-section<% end %>
+  "
+>
   <ul class="playlist">
     <li
       id="drag-data-xxxxxxxxxxx"
