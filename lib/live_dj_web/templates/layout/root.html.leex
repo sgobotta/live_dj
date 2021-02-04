@@ -8,6 +8,12 @@
     <%= live_title_tag assigns[:page_title] || "Live DJ" %>
     <link rel="manifest" href="manifest.json" />
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script>
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+        .then(function() { console.log("Service Worker Registered"); });
+      }
+    </script>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script src="https://kit.fontawesome.com/6c4d808205.js" crossorigin="anonymous"></script>
     <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_72x72.png") %>" />
@@ -15,7 +21,7 @@
     <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_128x128.png") %>" />
     <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_144x144.png") %>" />
     <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_152x152.png") %>" />
-  <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_192x192.png") %>" />
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_192x192.png") %>" />
     <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_384x384.png") %>" />
     <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/icons/live-dj-icon-white_512x512.png") %>" />
     <meta name="apple-mobile-web-app-status-bar" content="#141414" />
@@ -26,12 +32,6 @@
       integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
       crossorigin="anonymous"
     ></script>
-    <script>
-      if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-        .then(function() { console.log("Service Worker Registered"); });
-      }
-    </script>
   </head>
   <body>
 
