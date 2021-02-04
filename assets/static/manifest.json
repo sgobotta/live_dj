@@ -1,0 +1,15 @@
+{
+  "name": "LiveDj",
+  "short_name": "LiveDj",
+  "start_url": "http://localhost:4000",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#222",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/icons/live-dj-icon-white_128x128.png",
+      "type": "image/png", "sizes": "128x128"
+    }
+  ]
+}
