@@ -88,7 +88,7 @@ window.addEventListener("phx:page-loading-stop", info => NProgress.done())
 LoadYTIframeAPI(onIframeReady)
 
 let deferredPrompt;
-const addBtn = document.querySelector('.add-button');
+const addBtn = document.querySelector('.add-pwa-button');
 addBtn.style.display = 'none';
 
 window.addEventListener('beforeinstallprompt', (e) => {
