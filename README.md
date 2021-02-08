@@ -1,6 +1,12 @@
 <p align="center">
-  <a href="live-dj.herokuapp.com" target="_blank" rel="noopener noreferrer">
-    <img width="240" src="assets/static/svg/generic/logo/live-dj-logo-black.svg" alt="LiveDj logo" />
+  <a
+    href="https://live-dj.herokuapp.com"
+    target="_blank" rel="noopener noreferrer"
+  >
+    <img
+      width="384" src="assets/static/svg/generic/logo/live-dj-logo-black.svg"
+      alt="LiveDj logo"
+    />
   </a>
 </p>
 
