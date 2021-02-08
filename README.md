@@ -1,6 +1,6 @@
 <p align="center">
   <a href="live-dj.herokuapp.com" target="_blank" rel="noopener noreferrer">
-    <img width="240" src="assets/static/svg/generic/logo/live-dj-logo-white.svg" alt="LiveDj logo" />
+    <img width="240" src="assets/static/svg/generic/logo/live-dj-logo-black.svg" alt="LiveDj logo" />
   </a>
 </p>
 
@@ -117,5 +117,5 @@ Please make sure to read the [Contributing Guide](https://github.com/sgobotta/li
 ---
 
 <p align="center">
-  <code>&lt;/&gt;</code> with ❤️ from Buenos Aires, Argentina 🌎 as an <code>Open Source</code> project.
+  <code>&lt;/&gt;</code> with ❤️ from <code>Buenos Aires, Argentina</code> 🌎 as an <code>Open Source</code> project.
 </p>
