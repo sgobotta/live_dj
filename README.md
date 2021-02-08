@@ -15,7 +15,22 @@
     src="https://github.com/sgobotta/live_dj/workflows/LiveDj%20CI/badge.svg"
     alt="Build Status"
   >
-  <a href="https://github.com/sgobotta/live_dj/blob/main/CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg" alt="Contributor Covenant"></a>
+  <a
+    href="https://github.com/sgobotta/live_dj/blob/main/LICENSE"
+  >
+    <img
+      src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"
+      alt="License"
+    >
+  </a>
+  <a
+    href="https://github.com/sgobotta/live_dj/blob/main/CODE_OF_CONDUCT.md"
+  >
+    <img
+      src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg"
+      alt="Contributor Covenant"
+    >
+  </a>
 </p>
 
 ## About
@@ -97,7 +112,7 @@ Please make sure to read the [Contributing Guide](https://github.com/sgobotta/li
 
 ## License
 
-[GPL 3.0](https://opensource.org/licenses/GPL-3.0)
+[GPL v3.0](https://github.com/sgobotta/live_dj/blob/main/LICENSE)
 
 ---
 
