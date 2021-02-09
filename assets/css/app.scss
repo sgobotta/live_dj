@@ -475,7 +475,7 @@ iframe#video-player {
 }
 .alert-danger {
   color: $text;
-  background-color: transparent;
+  background-color: $neutral-darker;
   border-color: $danger;
   border-style: dashed;
 }
