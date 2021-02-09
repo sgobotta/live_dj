@@ -1,4 +1,10 @@
-<main role="main" class="">
+<main
+  role="main-header"
+  class="
+    absolute mx-5
+    -inset-x-0.5 top-20 lg:left-auto lg:right-0 lg:top-2
+  "
+>
   <p class="alert alert-info" role="alert"
     phx-click="lv:clear-flash"
     phx-value-key="info"><%= live_flash(@flash, :info) %></p>
@@ -7,5 +13,5 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
-  <%= @inner_content %>
 </main>
+<%= @inner_content %>

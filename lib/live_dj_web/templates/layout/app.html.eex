@@ -1,5 +1,11 @@
-<main role="main" class="my-24">
+<main
+  role="main-header"
+  class="
+    absolute mx-5
+    -inset-x-0.5 top-16 lg:left-auto lg:right-0 lg:top-2
+  "
+>
   <p class="alert alert-info mt-10" role="alert"><%= get_flash(@conn, :info) %></p>
   <p class="alert alert-danger mt-10" role="alert"><%= get_flash(@conn, :error) %></p>
-  <%= @inner_content %>
 </main>
+<%= render "_sidebar.html", assigns %>
