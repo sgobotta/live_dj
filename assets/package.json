@@ -21,7 +21,7 @@
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
     "superagent": "^6.1.0",
-    "tailwindcss": "^1.9.6"
+    "tailwindcss": "^2.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
