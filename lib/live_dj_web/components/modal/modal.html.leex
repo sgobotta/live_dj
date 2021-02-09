@@ -32,11 +32,11 @@
     <div
       x-show="open"
       x-transition:enter="ease-out duration-300"
-      x-transition:enter-start="opacity-0 mb-2 sm:mb-8 sm:mt-2 sm:scale-95"
-      x-transition:enter-end="opacity-100 mb-8 sm:mt-8 sm:scale-100"
+      x-transition:enter-start="opacity-0 mb-2 sm:mb-8 sm:mt-0 sm:scale-95"
+      x-transition:enter-end="opacity-100 mb-8 sm:mt-0 sm:scale-100"
       x-transition:leave="ease-in duration-200"
-      x-transition:leave-start="opacity-100 mb-8 sm:mt-8 sm:scale-100"
-      x-transition:leave-end="opacity-0 mb-2 sm:mb-8 sm:mt-2 sm:scale-95"
+      x-transition:leave-start="opacity-100 mb-8 sm:mt-0 sm:scale-100"
+      x-transition:leave-end="opacity-0 mb-2 sm:mb-8 sm:mt-0 sm:scale-95"
       class="modal-dialog <%= @extra_classes %>">
 
       <div @click.away="open = false" class="modal-window">
