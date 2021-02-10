@@ -10,7 +10,14 @@ defmodule LiveDj.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -40,6 +47,7 @@ defmodule LiveDj.MixProject do
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
+      {:excoveralls, "~> 0.10", only: :test},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.14.6"},
       {:faker, "~> 0.16"},
