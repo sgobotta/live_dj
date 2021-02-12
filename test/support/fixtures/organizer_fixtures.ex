@@ -6,6 +6,45 @@ defmodule LiveDj.OrganizerFixtures do
 
   alias LiveDj.AccountsFixtures
 
+  @room_queue [%{
+    next: "Wch3gJG2GJ4",
+    title: "2 Second Video",
+    img_url: "https://i.ytimg.com/vi/TK4N5W22Gts/default.jpg",
+    added_by: %{
+      uuid: "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+      username: "sann"
+    },
+    previous: "UO_QuXr521I",
+    video_id: "TK4N5W22Gts",
+    img_width: 120,
+    is_queued: false,
+    img_height: 90,
+    description: "2 Second Video Sequal To 1 Second Video.",
+    channel_title: "Zetzu500"
+  },
+  %{
+    next: "tbnLqRW9Ef0",
+    title: "1 Second Video",
+    img_url: "https://i.ytimg.com/vi/Wch3gJG2GJ4/default.jpg",
+    added_by: %{
+      uuid: "05ffb9af-ea4b-485f-9860-3264c3cdf404",
+      username: "sann"
+    },
+    previous: "TK4N5W22Gts",
+    video_id: "Wch3gJG2GJ4",
+    img_width: 120,
+    is_queued: false,
+    img_height: 90,
+    description: "1 Second Video IT SUCKS!",
+    channel_title: "Zetzu500"
+  }]
+
+  def rooms_fixture do
+    for n <- 0..3 do
+      room_fixture(%{queue: @room_queue})
+    end
+  end
+
   def room_fixture(attrs \\ %{}) do
     random_words = Enum.join(Faker.Lorem.words(5), " ")
     {:ok, room} =
