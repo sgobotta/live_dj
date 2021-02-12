@@ -58,11 +58,6 @@ install.deps:
 install.npm:
 	cd assets; npm i
 
-#mix.test: @ Runs tests
-mix.test: SHELL:=/bin/bash
-mix.test:
-	source .env && mix test
-
 #reset: @ Runs the ecto.reset command
 reset: ecto.reset
 
@@ -80,6 +75,12 @@ test: MIX_ENV=test
 test: SHELL:=/bin/bash
 test:
 	source .env && mix test
+
+#test.cover: @ Runs mix tests and generates coverage
+test.cover: MIX_ENV=test
+test.cover: SHELL:=/bin/bash
+test.cover:
+	source .env && mix coveralls.html
 
 #test.only: @ Runs mix tests that matches the wip tag only
 test.only: MIX_ENV=test
