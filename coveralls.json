@@ -10,9 +10,10 @@
   ],
 
   "coverage_options": {
-    "treat_no_relevant_lines_as_covered": true,
+    "minimum_coverage": 90,
     "output_dir": "cover/",
-    "minimum_coverage": 90
+    "template_path": "test/coverage/templates/html/htmlcov/",
+    "treat_no_relevant_lines_as_covered": true
   },
 
   "skip_files": [
