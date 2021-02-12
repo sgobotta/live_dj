@@ -45,6 +45,10 @@ defmodule LiveDj.PaymentsTest do
       assert {:error, %Ecto.Changeset{}} = Payments.create_plan(@invalid_attrs)
     end
 
+    test "create_plan/1 with no parameters returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Payments.create_plan()
+    end
+
     test "update_plan/2 with valid data updates the plan" do
       plan = _plan_fixture()
       assert {:ok, %Plan{} = plan} = Payments.update_plan(plan, @update_attrs)
