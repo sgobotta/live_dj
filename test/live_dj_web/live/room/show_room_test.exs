@@ -4,6 +4,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   alias LiveDj.Repo
   import LiveDj.OrganizerFixtures
   import LiveDj.DataCase
+  import Phoenix.LiveViewTest
 
   describe "ShowLive user room groups assignation" do
 
@@ -45,6 +46,47 @@ defmodule LiveDjWeb.ShowRoomTest do
 
       assert assigns.visitor
       assert assigns.user_room_group.permissions == []
+    end
+  end
+
+  @tag wip: true
+  describe "ShowLive chat behaviour" do
+
+    @new_message_form_id "#new-message"
+    @new_message_form_input_id "#new-message-input"
+
+    setup(%{conn: conn}) do
+      %{group: group} = show_live_setup()
+
+      %{conn: conn, group: group |> Repo.preload([:permissions])}
+    end
+
+    test "As a Registered user I can communicate with other peers by typing a messag in the chat box",
+      %{conn: conn, group: group}
+    do
+      # Associates a group id to a new user for a new room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: false, group_id: group.id
+      })
+      # Creates a new authenticated connection
+      owner_conn = log_in_user(conn, user)
+      {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
+      # Simulates a chat interaction
+      view
+        |> element(@new_message_form_id)
+        |> render_change(%{})
+      view
+        |> element(@new_message_form_input_id)
+        |> render_blur(%{value: "Hi?"})
+      view
+        |> element(@new_message_form_id)
+        |> render_submit(%{submit: %{message: "Hello!"}})
+      # Establishes a connection
+      %{assigns: %{user: user}} = get(owner_conn, "/room/#{room.slug}")
+
+      refute render(view) =~ "Hi?"
+      assert render(view) =~ "Hello!"
+      assert render(view) =~ user.username
     end
   end
 end
