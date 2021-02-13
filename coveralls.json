@@ -1,8 +1,10 @@
 {
   "default_stop_words": [
+    "apply",
+    "defimpl",
     "defmodule",
     "defrecord",
-    "defimpl",
+    "defstruct",
     "def.+(.+\/\/.+).+do"
   ],
 
