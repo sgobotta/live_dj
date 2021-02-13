@@ -20,6 +20,7 @@
     </div>
     <div class="m-6">
       <form
+        id="new-message"
         phx-change="typing"
         phx-submit="new_message"
         phx-target="<%= @myself %>"
@@ -28,6 +29,7 @@
         <%=
           text_input :submit,
           :message,
+          id: "new-message-input",
           value: @new_message,
           phx_blur: "stop_typing",
           phx_target: @myself,
