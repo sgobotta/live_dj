@@ -11,7 +11,12 @@
   "
 >
   <div class="mx-6">
-    <form id="search-video-form" phx-submit="search" class="mb-2">
+    <form
+      id="search-video-form"
+      phx-submit="search"
+      phx-target="<%= @myself %>"
+      class="mb-2"
+    >
       <%=
         text_input :search_field,
         :query,
@@ -55,6 +60,7 @@
             class="<%= if video.is_queued do %>disabled<% else %>search-control-enabled clickeable<% end %>"
             <%= if !video.is_queued do %>
               phx-click="add_to_queue"
+              phx-target="<%= @myself %>"
               phx-value-video_id="<%= video.video_id %>"
             <% end %>
           >

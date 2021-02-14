@@ -131,7 +131,10 @@
           <%= live_component @socket, LiveDjWeb.Components.SearchVideo,
             id: "live-dj-video-search",
             current_tab: @current_tab,
-            search_result: @search_result
+            search_result: @search_result,
+            slug: @slug,
+            user: @user,
+            video_queue: @video_queue
           %>
 
         </div>
