@@ -134,7 +134,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     alias LiveDj.OrganizerFixtures
 
     setup do
-      rooms = for _n <- 0..2, do: OrganizerFixtures.room_fixture()
+      rooms = for _n <- 0..2, do: OrganizerFixtures.room_fixture(%{queue: []})
 
       %{rooms: rooms}
     end
@@ -152,7 +152,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     alias LiveDj.OrganizerFixtures
 
     setup(%{conn: conn}) do
-      rooms = for _n <- 1..3, do: OrganizerFixtures.room_fixture()
+      rooms = for _n <- 1..3, do: OrganizerFixtures.room_fixture(%{queue: []})
       Map.merge(register_and_log_in_user(%{conn: conn}), %{rooms: rooms})
     end
 
