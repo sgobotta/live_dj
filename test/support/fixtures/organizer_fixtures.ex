@@ -51,16 +51,19 @@ defmodule LiveDj.OrganizerFixtures do
       attrs
       |> Enum.into(%{
         title: random_words,
-        slug: random_words
+        slug: random_words,
+        queue: @room_queue
       })
       |> LiveDj.Organizer.create_room()
       room
   end
 
-  def user_room_fixture(attrs \\ %{}) do
-    user = AccountsFixtures.user_fixture()
-    room = room_fixture()
-    group = AccountsFixtures.group_fixture()
+  def user_room_fixture(
+    attrs \\ %{}, user_attrs \\ %{}, room_attrs \\ %{}, group_attrs \\ %{}
+  ) do
+    user = AccountsFixtures.user_fixture(user_attrs)
+    room = room_fixture(room_attrs)
+    group = AccountsFixtures.group_fixture(group_attrs)
     {:ok, user_room} =
       attrs
       |> Enum.into(%{is_owner: true, room_id: room.id, user_id: user.id, group_id: group.id})
