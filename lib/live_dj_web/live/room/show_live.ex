@@ -176,8 +176,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> push_event("video_added_to_queue", %{pos: added_video_position})
 
     case updated_video_queue do
-      [{v, _}] ->
-        selected_video = v
+      [video] ->
+        selected_video = video
         props = %{time: 0, video_id: selected_video.video_id, state: "playing", previous_id: "", next_id: ""}
         player = Player.update(player, props)
         {:noreply,
@@ -190,9 +190,11 @@ defmodule LiveDjWeb.Room.ShowLive do
         case player.state do
           "stopped" ->
             %{video_id: video_id} = player
-            next_video = Queue.get_next_video(updated_video_queue, video_id)
-            %{video_id: video_id} = next_video
-            player = Player.update(player, %{state: "playing", time: 0, video_id: video_id})
+            next_video_id = case video_id do
+              "" -> ""
+              _  -> Queue.get_next_video(updated_video_queue, video_id)
+            end
+            player = Player.update(player, %{state: "playing", time: 0, video_id: next_video_id})
             {:noreply,
               socket
               |> assign(:player, player)
