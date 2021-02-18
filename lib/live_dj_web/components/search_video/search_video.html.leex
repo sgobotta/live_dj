@@ -13,7 +13,8 @@
   <div class="mx-6">
     <form
       id="search-video-form"
-      phx-submit="search"
+      phx-change="search"
+      phx-submit="submit"
       phx-target="<%= @myself %>"
       class="mb-2"
     >
@@ -41,7 +42,7 @@
     </div>
 
     </div>
-    <%= for video <- @search_result do %>
+    <%= for {video, index} <- @search_result do %>
       <div class="row search-result separator">
         <div class="column-offset-25 align-center">
           <%= img_tag(video.img_url, width: video.img_width) %>
@@ -58,10 +59,11 @@
         <div class="column-offset-25 align-center">
           <a
             class="<%= if video.is_queued do %>disabled<% else %>search-control-enabled clickeable<% end %>"
+            id="<%= "search-element-button-#{index+1}" %>"
             <%= if !video.is_queued do %>
               phx-click="add_to_queue"
               phx-target="<%= @myself %>"
-              phx-value-video_id="<%= video.video_id %>"
+              phx-value-video_id="<%= index %>"
             <% end %>
           >
             <%= PhoenixInlineSvg.Helpers.svg_image(
