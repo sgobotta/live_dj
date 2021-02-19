@@ -40,7 +40,7 @@ defmodule LiveDj.OrganizerFixtures do
   }]
 
   def rooms_fixture do
-    for n <- 0..3 do
+    for _n <- 0..3 do
       room_fixture(%{queue: @room_queue})
     end
   end

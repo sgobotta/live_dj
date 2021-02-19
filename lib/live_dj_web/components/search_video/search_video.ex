@@ -34,12 +34,8 @@ defmodule LiveDjWeb.Components.SearchVideo do
   end
 
   @impl true
-  def handle_event(
-    "search",
-    %{"search_field" => %{"query" => query}},
-    %{assigns: %{search_query: search_query}} = socket
-  ) do
-    {:noreply, assign(socket, :search_query, query)}
+  def handle_event("search", %{"search_field" => search_field}, socket) do
+    {:noreply, assign(socket, :search_query, search_field["query"])}
   end
 
   @impl true
@@ -48,7 +44,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
       user: user}} = socket
     {selected_video, _index} = Enum.find(
       search_result,
-      fn {search, index} ->
+      fn {_search, index} ->
         {selected_video, _} = Integer.parse(selected_video["video_id"])
         index == selected_video
       end
