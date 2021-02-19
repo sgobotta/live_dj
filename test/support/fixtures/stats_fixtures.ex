@@ -4,9 +4,30 @@ defmodule LiveDj.StatsFixtures do
   entities via the `LiveDj.Stats` context.
   """
 
+  alias LiveDj.AccountsFixtures
+
   def badges_fixture do
     Code.require_file("../../../priv/repo/seeds/badges.exs", __DIR__)
     LiveDj.Stats.list_badges()
+  end
+
+  def user_badge_fixture(
+    attrs \\ %{},
+    user_attrs \\ %{},
+    badge_attrs \\ %{}
+  ) do
+    badge = badge_fixture(
+      Enum.into(badge_attrs, %{reference_name: "Another reference name"})
+    )
+    user = AccountsFixtures.user_fixture(user_attrs)
+    {:ok, user_badge} =
+      attrs
+      |> Enum.into(%{
+        user_id: user.id,
+        badge_id: badge.id
+      })
+      |> LiveDj.Stats.create_user_badge()
+    user_badge
   end
 
   def badge_fixture(attrs \\ %{}) do
