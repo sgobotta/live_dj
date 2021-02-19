@@ -7,8 +7,24 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
   setup :register_and_log_in_user
 
+  describe "GET /users/settings" do
+    test "renders the main settings page", %{conn: conn} do
+      conn = get(conn, Routes.user_settings_path(conn, :index))
+      response = html_response(conn, 200)
+      assert response =~ "Account"
+      assert response =~ "Payments"
+      assert response =~ "Badges & Achievements"
+    end
+
+    test "redirects if user is not logged in" do
+      conn = build_conn()
+      conn = get(conn, Routes.user_settings_path(conn, :index))
+      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+    end
+  end
+
   describe "GET /users/settings/account" do
-    test "renders settings page", %{conn: conn} do
+    test "renders account settings page", %{conn: conn} do
       conn = get(conn, Routes.user_settings_path(conn, :edit))
       response = html_response(conn, 200)
       assert response =~ "Change Password"
@@ -16,7 +32,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
     test "redirects if user is not logged in" do
       conn = build_conn()
-      conn = get(conn, Routes.user_settings_path(conn, :index))
+      conn = get(conn, Routes.user_settings_path(conn, :edit))
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
     end
   end
