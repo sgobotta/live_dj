@@ -26,18 +26,20 @@ defmodule LiveDjWeb.Components.SearchVideo do
     search_result = case Tubex.Video.search_by_query(query, opts) do
       {:ok, search_result, _pag_opts} -> search_result
       {:error, %{"error" => %{"errors" => errors}}} ->
-        for error <- errors do
-          Logger.error(error["message"])
-        end
+        for error <- errors do Logger.error(error["message"]) end
         []
     end
     search_result = Enum.map(search_result, fn search ->
       video = Video.from_tubex_video(search)
       is_queued = Queue.is_queued(video, video_queue)
-      Video.update(video, %{is_queued: is_queued}) end)
+      Video.update(video, %{is_queued: is_queued})
+    end)
+      |> Enum.with_index()
+
+    send self(), {:receive_search_results, search_result}
+
     {:noreply,
       socket
-      |> assign(:search_result, Enum.with_index(search_result))
       |> push_event("receive_search_completed_signal", %{})}
   end
 

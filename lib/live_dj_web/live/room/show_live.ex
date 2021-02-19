@@ -161,13 +161,18 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply, socket}
   end
 
+  def handle_info({:receive_search_results, search_result}, socket) do
+    {:noreply, assign(socket, :search_result, search_result)}
+  end
+
   def handle_info({:add_to_queue, params}, %{assigns: assigns} = socket) do
     %{added_video_position: added_video_position,
       updated_video_queue: updated_video_queue} = params
     %{player: player, search_result: search_result,
       video_queue_controls: video_queue_controls} = assigns
-    search_result = Enum.map(search_result, fn video ->
-      Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}) end)
+    search_result = Enum.map(search_result, fn {video, index} ->
+      {Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
+    end)
     video_queue_controls = Queue.mark_as_unsaved(video_queue_controls)
     socket = socket
       |> assign(:search_result, search_result)
@@ -215,12 +220,14 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info({:request_initial_state, _params}, socket) do
-    %{messages: messages, video_queue: video_queue, player: player} = socket.assigns
+    %{messages: messages, video_queue: video_queue,
+      player: player} = socket.assigns
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{current_queue: video_queue, messages: messages, player: player}}
+      {:receive_initial_state, %{
+        current_queue: video_queue, messages: messages, player: player}}
     )
     {:noreply, socket}
   end
@@ -230,8 +237,11 @@ defmodule LiveDjWeb.Room.ShowLive do
     Organizer.unsubscribe(:request_initial_state, slug)
     %{current_queue: current_queue, messages: messages, player: player} = params
     current_queue = Enum.map(current_queue, fn {v, _} -> v end)
-    search_result = Enum.map(search_result, fn video ->
-      Video.update(video, %{is_queued: Queue.is_queued(video, current_queue)}) end)
+    search_result = Enum.map(search_result, fn {video, index} ->
+      video = Video.update(video, %{
+        is_queued: Queue.is_queued(video, current_queue)})
+      {video, index}
+    end)
     socket = socket
       |> assign(:messages, messages)
       |> assign(:video_queue, Enum.with_index(current_queue))
@@ -356,8 +366,11 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     {:noreply,
       socket
-      |> assign(:search_result, Enum.map(search_data, fn video ->
-        Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end))
+      |> assign(:search_result, Enum.map(search_data, fn {video, index} ->
+        video = Video.update(video, %{
+          is_queued: Queue.is_queued(video, video_queue)})
+        {video, index}
+      end))
       |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
       |> assign(:video_queue, Enum.with_index(video_queue))}
   end
