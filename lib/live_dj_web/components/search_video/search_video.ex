@@ -2,6 +2,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
   @moduledoc """
   Responsible for displaying and handling video search results
   """
+  require Logger
 
   use LiveDjWeb, :live_component
 
@@ -22,7 +23,14 @@ defmodule LiveDjWeb.Components.SearchVideo do
   ) do
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     opts = [maxResults: 20]
-    {:ok, search_result, _pag_opts} = Tubex.Video.search_by_query(query, opts)
+    search_result = case Tubex.Video.search_by_query(query, opts) do
+      {:ok, search_result, _pag_opts} -> search_result
+      {:error, %{"error" => %{"errors" => errors}}} ->
+        for error <- errors do
+          Logger.error(error["message"])
+        end
+        []
+    end
     search_result = Enum.map(search_result, fn search ->
       video = Video.from_tubex_video(search)
       is_queued = Queue.is_queued(video, video_queue)
