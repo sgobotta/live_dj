@@ -3,6 +3,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
   alias LiveDj.Accounts
   import LiveDj.AccountsFixtures
+  import LiveDj.PaymentsFixtures
 
   setup :register_and_log_in_user
 
@@ -22,9 +23,20 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
 
 
   describe "GET /users/settings/payments" do
-    test "renders payments page", %{conn: conn} do
+    test "renders payments page with empty content", %{conn: conn} do
       conn = get(conn, Routes.user_settings_path(conn, :show_payments))
       _response = html_response(conn, 200)
+    end
+
+    test "renders payments page with orders", %{conn: conn, user: user} do
+      order_amount = "420.00"
+      plan = plan_fixture()
+      _order = order_fixture(%{amount: order_amount, plan_id: plan.id,
+        user_id: user.id})
+      conn = get(conn, Routes.user_settings_path(conn, :show_payments))
+      _response = html_response(conn, 200)
+      assert length(conn.assigns.orders) == 1
+      assert Enum.at(conn.assigns.orders, 0).amount == order_amount
     end
 
     test "redirects if user is not logged in" do
