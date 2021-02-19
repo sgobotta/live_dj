@@ -21,7 +21,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
     %{assigns: %{video_queue: video_queue, search_query: query}} = socket
   ) do
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    opts = [maxResults: 5]
+    opts = [maxResults: 20]
     {:ok, search_result, _pag_opts} = Tubex.Video.search_by_query(query, opts)
     search_result = Enum.map(search_result, fn search ->
       video = Video.from_tubex_video(search)
