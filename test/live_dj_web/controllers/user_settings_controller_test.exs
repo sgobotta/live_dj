@@ -52,7 +52,9 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
       conn = get(conn, Routes.user_settings_path(conn, :show_payments))
       _response = html_response(conn, 200)
       assert length(conn.assigns.orders) == 1
-      assert Enum.at(conn.assigns.orders, 0).amount == order_amount
+      assert Enum.any?(conn.assigns.orders, fn o ->
+        o.amount == order_amount
+      end)
     end
 
     test "redirects if user is not logged in" do
@@ -256,6 +258,31 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
     test "redirects if user is not logged in", %{token: token} do
       conn = build_conn()
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
+      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+    end
+  end
+
+  describe "GET /users/settings/badges" do
+
+    import LiveDj.StatsFixtures
+
+    test "renders the badges and achievements page",
+      %{conn: conn, user: user}
+    do
+      badge = badge_fixture()
+      _user_badge = user_badge_fixture(%{badge_id: badge.id,
+        user_id: user.id})
+      conn = get(conn, Routes.user_settings_path(conn, :show_badges))
+      response = html_response(conn, 200)
+      assert response =~ "Badges & Achievements"
+      user = Accounts.preload_user(conn.assigns.current_user, [:badges])
+      assert length(user.badges) == 1
+      assert Enum.member?(user.badges, badge)
+    end
+
+    test "redirects if user is not logged in" do
+      conn = build_conn()
+      conn = get(conn, Routes.user_settings_path(conn, :show_badges))
       assert redirected_to(conn) == Routes.user_session_path(conn, :new)
     end
   end

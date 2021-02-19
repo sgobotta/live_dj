@@ -65,7 +65,7 @@ defmodule LiveDj.MixProject do
       {:poison, "~> 3.1"},
       {:uuid, "~> 1.1"},
       {:tubex, "~> 0.0.8", github: "sgobotta/tubex"},
-      {:tzdata, "~> 1.0.4"}
+      {:tzdata, "~> 1.1"}
     ]
   end
 
