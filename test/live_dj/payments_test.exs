@@ -2,9 +2,9 @@ defmodule LiveDj.PaymentsTest do
   use LiveDj.DataCase
 
   alias LiveDj.Payments
+  alias LiveDj.PaymentsFixtures
 
   import LiveDj.AccountsFixtures
-  import LiveDj.PaymentsFixtures
 
   describe "plans" do
     alias LiveDj.Payments.Plan
@@ -86,7 +86,7 @@ defmodule LiveDj.PaymentsTest do
 
     setup do
       user = user_fixture()
-      plan = plan_fixture()
+      plan = PaymentsFixtures.plan_fixture()
 
       %{user: user, plan: plan}
     end
