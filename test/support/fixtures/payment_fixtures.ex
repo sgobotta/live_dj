@@ -4,10 +4,7 @@ defmodule LiveDj.PaymentsFixtures do
   entities via the `LiveDj.Payments` context.
   """
 
-  # def unique_user_username, do: "user#{System.unique_integer()}"
-
-  # def unique_user_email, do: "user#{System.unique_integer()}@example.com"
-  # def valid_user_password, do: "hello world!"
+  alias LiveDj.AccountsFixtures
 
   def plan_fixture(attrs \\ %{}) do
     {:ok, plan} =
@@ -22,6 +19,20 @@ defmodule LiveDj.PaymentsFixtures do
       })
       |> LiveDj.Payments.create_plan()
     plan
+  end
+
+  def order_fixture(attrs \\ %{}, user_attrs \\ %{}, plan_attrs \\ %{}) do
+    plan = plan_fixture(plan_attrs)
+    user = AccountsFixtures.user_fixture(user_attrs)
+    {:ok, order} =
+      attrs
+      |> Enum.into(%{
+        amount: 500.00,
+        user_id: user.id,
+        plan_id: plan.id
+      })
+      |> LiveDj.Payments.create_order()
+    order
   end
 
 end
