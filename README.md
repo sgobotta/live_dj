@@ -17,13 +17,17 @@
 ---
 
 <p align="center" style="margin-top: 14px;">
-  <a
-    href="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml"
-  >
+  <a href="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml">
     <img
       src="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml/badge.svg"
       alt="Build Status"
     >
+  </a>
+  <a href='https://coveralls.io/github/sgobotta/live_dj?branch=develop'>
+    <img
+      src='https://coveralls.io/repos/github/sgobotta/live_dj/badge.svg?branch=develop'
+      alt='Coverage Status'
+    />
   </a>
   <a
     href="https://github.com/sgobotta/live_dj/blob/main/LICENSE"
