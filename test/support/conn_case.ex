@@ -17,6 +17,11 @@ defmodule LiveDjWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  import Phoenix.ConnTest
+  import Phoenix.LiveViewTest
+
+  @endpoint LiveDjWeb.Endpoint
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -65,5 +70,25 @@ defmodule LiveDjWeb.ConnCase do
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
     |> Plug.Conn.put_session(:user_token, token)
+  end
+
+  @doc """
+    Given a list of urls, builds and returns n live connections
+  """
+  def create_live_connections(urls) do
+    for url <- urls do
+      conn = build_conn()
+      {:ok, _, _} = live_conn = live(conn, url)
+      {conn, live_conn, url}
+    end
+  end
+
+  @doc """
+    Given a url, builds and returns n connections
+  """
+  def create_connections(url, n \\ 1) do
+    for _ <- 0..(n-1) do
+      get(build_conn(), url)
+    end
   end
 end

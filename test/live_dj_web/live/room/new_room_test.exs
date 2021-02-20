@@ -4,10 +4,91 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
   alias LiveDj.Organizer
 
   import LiveDj.AccountsFixtures
+  import LiveDj.OrganizerFixtures
+  import LiveDj.DataCase
   import Phoenix.LiveViewTest
 
   @valid_room_attrs %{slug: "some slug", title: "some title"}
   @create_room_form_id "#create_room"
+
+  describe "room handlers" do
+
+    setup(%{conn: conn}) do
+      show_live_setup()
+
+      # Creates some rooms
+      rooms = rooms_fixture()
+
+      %{conn: conn, rooms: rooms}
+    end
+
+    test "handle_info/2 :reload_room_list", %{conn: new_live_conn, rooms: rooms} do
+      # Gets a random room
+      room = Enum.at(rooms, Enum.random(0..length(rooms)-1))
+      %{assigns: assigns} = new_live_conn = get(new_live_conn, "/")
+
+      room_viewers = Enum.reduce(
+        assigns.viewers_quantity, 0,
+        fn {_, quantity}, acc -> quantity + acc end
+      )
+      assert room_viewers == 0
+
+      # Creates a connection to the new live view page
+      {:ok, new_live_view, _html} = live(new_live_conn, "/")
+      send(new_live_view.pid, :reload_room_list)
+
+      # Creates 3 connections
+      _conns = create_connections("/room/#{room.slug}", 3)
+      # for _ <- 0..2 do
+      #   get(build_conn(), "/room/#{room.slug}")
+      # end
+
+      %{assigns: assigns} = _new_live_conn = get(new_live_conn, "/")
+      room_viewers = Enum.reduce(
+        assigns.viewers_quantity, 0,
+        fn {_, quantity}, acc -> quantity + acc end
+      )
+      assert room_viewers == 3
+    end
+
+    test "handle_info/2 :receive_current_player", %{conn: new_live_conn, rooms: rooms} do
+      initial_player_state = LiveDj.Organizer.Player.get_initial_state()
+      {player_states, room_urls} = _rooms_data = Enum.reduce(rooms, {[], []},
+        fn %{slug: slug, queue: queue}, {player_states, room_urls} ->
+          %{video_id: video_id, previous: previous, next: next} = Enum.at(
+            queue, Enum.random(0..length(queue)-1)
+          )
+          player_state = LiveDj.Organizer.Player.update(
+            initial_player_state,
+            %{state: "playing", video_id: video_id, previous_id: previous, next_id: next}
+          )
+          {player_states ++ [player_state], room_urls ++ ["/room/#{slug}"]}
+        end
+      )
+
+      show_live_conns = create_live_connections(room_urls)
+
+      {:ok, new_live_view, _html} = live(new_live_conn, "/")
+
+      # FIXME: properly assign player states
+      for {_conn, {:ok, view, _html}, _url} <- show_live_conns do
+        send(view.pid, {:player_signal_playing, %{state: Enum.at(player_states, 0)}})
+      end
+      _show_live_conns = for {conn, {:ok, view, _html}, url} <- show_live_conns do
+        conn = get(conn, url)
+        send(view.pid, {:request_current_player, %{}})
+        conn
+      end
+
+      send(new_live_view.pid, :tick)
+      # Creates a connection to the new live view page
+      %{assigns: %{public_rooms: public_rooms}} = _new_live_conn = get(new_live_conn, "/")
+
+      assert length(public_rooms) == length(rooms)
+
+      # FIXME: assert players, not rooms. Clean code up.
+    end
+  end
 
   describe "As a visitor user When I visit /" do
     test "the NewLive module is rendered", %{conn: conn} do
@@ -53,7 +134,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     alias LiveDj.OrganizerFixtures
 
     setup do
-      rooms = for _n <- 1..3, do: OrganizerFixtures.room_fixture()
+      rooms = for _n <- 0..2, do: OrganizerFixtures.room_fixture(%{queue: []})
 
       %{rooms: rooms}
     end
@@ -71,7 +152,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     alias LiveDj.OrganizerFixtures
 
     setup(%{conn: conn}) do
-      rooms = for _n <- 1..3, do: OrganizerFixtures.room_fixture()
+      rooms = for _n <- 1..3, do: OrganizerFixtures.room_fixture(%{queue: []})
       Map.merge(register_and_log_in_user(%{conn: conn}), %{rooms: rooms})
     end
 

@@ -52,4 +52,31 @@ defmodule LiveDj.DataCase do
       end)
     end)
   end
+
+  import LiveDj.AccountsFixtures
+
+  @doc """
+  A helper that initialises the needed data for a show live view
+  """
+  def show_live_setup do
+    # Creates some mandatory groups
+    group_fixture(%{
+      codename: "anonymous-room-visitor",
+      name: "Anonymous room visitor"
+    })
+    group_fixture(%{
+      codename: "registered-room-visitor",
+      name: "Registered room visitor"
+    })
+    # Creates an initial group
+    group = group_fixture()
+    # Just creates 3 permissions and associates them to a group
+    permissions = for _n <- 1..3, do: permission_fixture()
+    {:ok, _permission_group} = permissions_group_fixture(%{
+      permissions: permissions,
+      group_id: group.id
+    })
+
+    %{group: group}
+  end
 end

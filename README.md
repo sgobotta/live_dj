@@ -17,10 +17,14 @@
 ---
 
 <p align="center" style="margin-top: 14px;">
-  <img
-    src="https://github.com/sgobotta/live_dj/workflows/LiveDj%20CI/badge.svg"
-    alt="Build Status"
+  <a
+    href="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml"
   >
+    <img
+      src="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml/badge.svg"
+      alt="Build Status"
+    >
+  </a>
   <a
     href="https://github.com/sgobotta/live_dj/blob/main/LICENSE"
   >

@@ -161,12 +161,19 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply, socket}
   end
 
-  def handle_info(
-    {:add_to_queue, %{added_video_position: added_video_position, updated_video_queue: updated_video_queue, video_queue_controls: video_queue_controls}},
-    %{assigns: %{player: player, search_result: search_result}} = socket
-  ) do
-    search_result = Enum.map(search_result, fn video ->
-      Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}) end)
+  def handle_info({:receive_search_results, search_result}, socket) do
+    {:noreply, assign(socket, :search_result, search_result)}
+  end
+
+  def handle_info({:add_to_queue, params}, %{assigns: assigns} = socket) do
+    %{added_video_position: added_video_position,
+      updated_video_queue: updated_video_queue} = params
+    %{player: player, search_result: search_result,
+      video_queue_controls: video_queue_controls} = assigns
+    search_result = Enum.map(search_result, fn {video, index} ->
+      {Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
+    end)
+    video_queue_controls = Queue.mark_as_unsaved(video_queue_controls)
     socket = socket
       |> assign(:search_result, search_result)
       |> assign(:video_queue, Enum.with_index(updated_video_queue))
@@ -174,8 +181,8 @@ defmodule LiveDjWeb.Room.ShowLive do
       |> push_event("video_added_to_queue", %{pos: added_video_position})
 
     case updated_video_queue do
-      [{v, _}] ->
-        selected_video = v
+      [video] ->
+        selected_video = video
         props = %{time: 0, video_id: selected_video.video_id, state: "playing", previous_id: "", next_id: ""}
         player = Player.update(player, props)
         {:noreply,
@@ -188,9 +195,11 @@ defmodule LiveDjWeb.Room.ShowLive do
         case player.state do
           "stopped" ->
             %{video_id: video_id} = player
-            next_video = Queue.get_next_video(updated_video_queue, video_id)
-            %{video_id: video_id} = next_video
-            player = Player.update(player, %{state: "playing", time: 0, video_id: video_id})
+            next_video_id = case video_id do
+              "" -> ""
+              _  -> Queue.get_next_video(updated_video_queue, video_id)
+            end
+            player = Player.update(player, %{state: "playing", time: 0, video_id: next_video_id})
             {:noreply,
               socket
               |> assign(:player, player)
@@ -211,12 +220,14 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info({:request_initial_state, _params}, socket) do
-    %{messages: messages, video_queue: video_queue, player: player} = socket.assigns
+    %{messages: messages, video_queue: video_queue,
+      player: player} = socket.assigns
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
       "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{current_queue: video_queue, messages: messages, player: player}}
+      {:receive_initial_state, %{
+        current_queue: video_queue, messages: messages, player: player}}
     )
     {:noreply, socket}
   end
@@ -226,8 +237,11 @@ defmodule LiveDjWeb.Room.ShowLive do
     Organizer.unsubscribe(:request_initial_state, slug)
     %{current_queue: current_queue, messages: messages, player: player} = params
     current_queue = Enum.map(current_queue, fn {v, _} -> v end)
-    search_result = Enum.map(search_result, fn video ->
-      Video.update(video, %{is_queued: Queue.is_queued(video, current_queue)}) end)
+    search_result = Enum.map(search_result, fn {video, index} ->
+      video = Video.update(video, %{
+        is_queued: Queue.is_queued(video, current_queue)})
+      {video, index}
+    end)
     socket = socket
       |> assign(:messages, messages)
       |> assign(:video_queue, Enum.with_index(current_queue))
@@ -352,8 +366,11 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     {:noreply,
       socket
-      |> assign(:search_result, Enum.map(search_data, fn video ->
-        Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end))
+      |> assign(:search_result, Enum.map(search_data, fn {video, index} ->
+        video = Video.update(video, %{
+          is_queued: Queue.is_queued(video, video_queue)})
+        {video, index}
+      end))
       |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
       |> assign(:video_queue, Enum.with_index(video_queue))}
   end
@@ -531,53 +548,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       "room:" <> socket.assigns.slug,
       {:player_signal_play_by_id, %{video_id: params["video_id"]}}
     )
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event(
-    "search",
-    %{"search_field" => %{"query" => query}},
-    %{assigns: %{video_queue: video_queue}} = socket
-  ) do
-    video_queue = Enum.map(video_queue, fn {v, _} -> v end)
-    opts = [maxResults: 25]
-    {:ok, search_result, _pagination_options} = Tubex.Video.search_by_query(query, opts)
-    search_result = Enum.map(search_result, fn search ->
-      video = Video.from_tubex_video(search)
-      Video.update(video, %{is_queued: Queue.is_queued(video, video_queue)}) end)
-    {:noreply,
-      socket
-      |> assign(:search_result, search_result)
-      |> push_event("receive_search_completed_signal", %{})}
-  end
-
-  @impl true
-  def handle_event("add_to_queue", selected_video, %{assigns: assigns} = socket) do
-    %{
-      search_result: search_result,
-      video_queue: video_queue,
-      video_queue_controls: video_queue_controls,
-      user: user
-    } = assigns
-
-    selected_video = Enum.find(
-      search_result,
-      fn search -> search.video_id == selected_video["video_id"] end
-    ) |> Video.assign_user(user)
-    video_queue = video_queue
-      |> Enum.map(fn {v, _} -> v end)
-      |> Queue.add_to_queue(selected_video)
-
-    Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:add_to_queue, %{
-        updated_video_queue: video_queue,
-        video_queue_controls: Queue.mark_as_unsaved(video_queue_controls),
-        added_video_position: length(video_queue)}}
-    )
-
     {:noreply, socket}
   end
 

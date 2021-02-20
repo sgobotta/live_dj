@@ -2,9 +2,9 @@ defmodule LiveDj.PaymentsTest do
   use LiveDj.DataCase
 
   alias LiveDj.Payments
+  alias LiveDj.PaymentsFixtures
 
   import LiveDj.AccountsFixtures
-  import LiveDj.PaymentsFixtures
 
   describe "plans" do
     alias LiveDj.Payments.Plan
@@ -45,6 +45,10 @@ defmodule LiveDj.PaymentsTest do
       assert {:error, %Ecto.Changeset{}} = Payments.create_plan(@invalid_attrs)
     end
 
+    test "create_plan/1 with no parameters returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Payments.create_plan()
+    end
+
     test "update_plan/2 with valid data updates the plan" do
       plan = _plan_fixture()
       assert {:ok, %Plan{} = plan} = Payments.update_plan(plan, @update_attrs)
@@ -82,7 +86,7 @@ defmodule LiveDj.PaymentsTest do
 
     setup do
       user = user_fixture()
-      plan = plan_fixture()
+      plan = PaymentsFixtures.plan_fixture()
 
       %{user: user, plan: plan}
     end
