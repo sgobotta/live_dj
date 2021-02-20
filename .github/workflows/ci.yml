@@ -50,18 +50,20 @@ jobs:
       run: mix deps.get
     - name: Run tests
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         MERCADOPAGO_ATTR: ${{ secrets.MERCADOPAGO_ATTR }}
         PAYPAL_ATTRS: ${{ secrets.PAYPAL_ATTRS }}
         POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        YOUTUBE_TEST_API_KEY: ${{ secrets.YOUTUBE_TEST_API_KEY }}
         TZ: ${{ secrets.TZ }}
+        YOUTUBE_TEST_API_KEY: ${{ secrets.YOUTUBE_TEST_API_KEY }}
       run: >
         DB_USERNAME_TEST=${POSTGRES_USER}
         DB_PASSWORD_TEST=${POSTGRES_PASSWORD}
+        GITHUB_TOKEN=${GITHUB_TOKEN}
         MERCADOPAGO_ATTR=${MERCADOPAGO_ATTR}
         MIX_ENV=test
         PAYPAL_ATTRS=${PAYPAL_ATTRS}
         TZ=${TZ}
         YOUTUBE_TEST_API_KEY=${YOUTUBE_TEST_API_KEY}
-        mix test
+        mix coveralls.github
