@@ -54,6 +54,7 @@
               <%= if @player.video_id != video.video_id do %>
                 <a
                   class="btn"
+                  id="<%= "remove-video-button-#{index}" %>"
                   phx-click="remove_track"
                   phx-value-video_id="<%= video.video_id %>"
                 >
