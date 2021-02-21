@@ -159,7 +159,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     test "The rooms assigns contain a public rooms list", %{conn: conn, rooms: rooms} do
       %{assigns: assigns} = _conn = get(conn, "/")
 
-      %{public_rooms: public_rooms} = assigns
+      %{public_rooms: public_rooms} = assigns # FIXME
       assert public_rooms == rooms
     end
   end

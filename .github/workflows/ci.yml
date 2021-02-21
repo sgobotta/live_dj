@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - '*'
-  pull_request:
-    branches:
-      - '*'
+  # pull_request:
+  #   branches:
+  #     - '*'
 
 jobs:
   build:
@@ -66,4 +66,4 @@ jobs:
         PAYPAL_ATTRS=${PAYPAL_ATTRS}
         TZ=${TZ}
         YOUTUBE_TEST_API_KEY=${YOUTUBE_TEST_API_KEY}
-        mix coveralls.github
+        mix coveralls.html

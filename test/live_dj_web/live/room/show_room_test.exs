@@ -2,6 +2,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   use LiveDjWeb.ConnCase, async: true
 
   alias LiveDj.Repo
+  import LiveDj.AccountsFixtures
   import LiveDj.OrganizerFixtures
   import LiveDj.DataCase
   import Phoenix.LiveViewTest
@@ -230,7 +231,7 @@ defmodule LiveDjWeb.ShowRoomTest do
     end
   end
 
-  describe "ShowLive volume controls" do
+  describe "ShowLive volume controls behaviour" do
     @volume_slider_id "#volume-controls-slider"
     @volume_toggle_id "#volume-controls-toggle"
 
@@ -246,9 +247,6 @@ defmodule LiveDjWeb.ShowRoomTest do
 
     test "As a User I can change the volume level", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
-      # Volume is at it's maximum level by default, so that we assert the
-      # speaker-4 class is used.
-      assert view |> render() =~ "speaker-4"
       # Changes the volume level to 70
       rendered_view = view
       |> element(@volume_slider_id)
@@ -288,9 +286,6 @@ defmodule LiveDjWeb.ShowRoomTest do
 
     test "As a user I can toggle the volume level", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
-      # Volume is at it's maximum level by default, so that we assert the
-      # speaker-4 class is used.
-      assert view |> render() =~ "speaker-4"
       # Asserts The volume toggle button exists
       view |> element(@volume_toggle_id) |> has_element?()
       # Changes the volume level to 70 just to avoid using the default volume
@@ -309,6 +304,39 @@ defmodule LiveDjWeb.ShowRoomTest do
       rendered_view = view |> element(@volume_toggle_id) |> render_click()
       refute rendered_view =~ "speaker-0"
       assert rendered_view =~ "speaker-3"
+    end
+  end
+
+  describe "ShowLive room settings behaviour" do
+    @room_settings_modal_button "#aside-room-settings-modal-button"
+    @username_edit_form_id "#username-edit-form"
+
+    setup(%{conn: conn}) do
+      %{group: group} = show_live_setup()
+      group = group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: false, group_id: group.id
+      })
+      %{conn: log_in_user(conn, user), room: room}
+    end
+
+    test "As a Registered User I can change my username",
+      %{conn: conn, room: room}
+    do
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      view |> element(@room_settings_modal_button) |> render_click()
+      # Asserts The volume toggle button exists
+      assert view |> element(@username_edit_form_id) |> has_element?()
+      # Changes the volume level to 70 just to avoid using the default volume
+      # value
+      new_name = "wasabibrownies"
+      params = %{
+        "user" => %{"username" => new_name},
+        "current_password" => valid_user_password()
+      }
+      view |> element(@username_edit_form_id) |> render_submit(params)
+      assert view |> render() =~ new_name
     end
   end
 end
