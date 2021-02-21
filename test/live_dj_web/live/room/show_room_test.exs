@@ -171,7 +171,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{conn: log_in_user(conn, user), room: room}
     end
 
-    test"As a Registered User I can play a video from a queue",
+    test "As a Registered User I can play a video from a queue",
       %{conn: conn, room: room}
     do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
@@ -189,11 +189,11 @@ defmodule LiveDjWeb.ShowRoomTest do
       |> render() =~ "current-video"
     end
 
-    test"As a Registered User I can remove a video from a queue",
+    test "As a Registered User I can remove a video from a queue",
       %{conn: conn, room: room}
     do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
-      video_index = Enum.random(0..length(room.queue)-1)
+      video_index = length(room.queue) - 1
       element_id = String.replace(@remove_video_button_id,
         "?", "#{video_index}"
       )
@@ -207,7 +207,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       refute view |> element(element_id) |> has_element?()
     end
 
-    test"As a Registered User I can't remove a video that's currently being played",
+    test "As a Registered User I can't remove a video that's currently being played",
       %{conn: conn, room: room}
     do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
@@ -227,6 +227,62 @@ defmodule LiveDjWeb.ShowRoomTest do
       remove_element_id = String.replace(@remove_video_button_id, "?",
         "#{video_index}")
       refute view |> element(remove_element_id) |> has_element?()
+    end
+  end
+
+  describe "ShowLive volume controls" do
+    @volume_slider_id "#volume-controls-slider"
+    @volume_toggle_id "#volume-controls-toggle"
+
+    setup(%{conn: conn}) do
+      %{group: group} = show_live_setup()
+      group = group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: false, group_id: group.id
+      })
+      %{conn: log_in_user(conn, user), room: room}
+    end
+
+    test "As a User I can change the volume level", %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      # Volume is at it's maximum level by default, so speaker-4 class is used.
+      assert view |> render() =~ "speaker-4"
+      # Changes the volume level to 70
+      rendered_view = view
+      |> element(@volume_slider_id)
+      |> render_change(%{"volume" => %{"change" => 70}})
+      # Volume lowered to 70 so that speaker-3 class is used
+      refute rendered_view =~ "speaker-4"
+      assert rendered_view =~ "speaker-3"
+      # Changes the volume level to 40
+      rendered_view = view
+      |> element(@volume_slider_id)
+      |> render_change(%{"volume" => %{"change" => 40}})
+      # Volume lowered to 69 so that speaker-2 class is used
+      refute rendered_view =~ "speaker-3"
+      assert rendered_view =~ "speaker-2"
+      # Changes the volume level to 10
+      rendered_view = view
+      |> element(@volume_slider_id)
+      |> render_change(%{"volume" => %{"change" => 10}})
+      # Volume lowered to 10 so that speaker-1 class is used
+      refute rendered_view =~ "speaker-2"
+      assert rendered_view =~ "speaker-1"
+      # Changes the volume level to 9
+      rendered_view = view
+      |> element(@volume_slider_id)
+      |> render_change(%{"volume" => %{"change" => 0}})
+      # Volume lowered to 0 so that speaker-0 class is used
+      refute rendered_view =~ "speaker-1"
+      assert rendered_view =~ "speaker-0"
+      # Changes the volume level back to 70
+      rendered_view = view
+      |> element(@volume_slider_id)
+      |> render_change(%{"volume" => %{"change" => 70}})
+      # Volume lowered to 70 so that speaker-3 class is used
+      refute rendered_view =~ "speaker-4"
+      assert rendered_view =~ "speaker-3"
     end
   end
 end
