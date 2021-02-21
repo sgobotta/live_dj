@@ -159,6 +159,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   describe "ShowLive video queue behaviour - Registered users" do
 
     @play_video_button_id "#play-button-?"
+    @remove_video_button_id "#remove-video-button-?"
 
     setup(%{conn: conn}) do
       %{group: group} = show_live_setup()
@@ -186,6 +187,24 @@ defmodule LiveDjWeb.ShowRoomTest do
       assert view
       |> element(element_id)
       |> render() =~ "current-video"
+    end
+
+    test"As a Registered User I can remove a video from a queue",
+      %{conn: conn, room: room}
+    do
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      video_index = Enum.random(0..length(room.queue)-1)
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}"
+      )
+      # Finds the element in the DOM
+      element = view |> element(element_id)
+      # Asserts the element exists so that it can be deleted
+      assert element |> has_element?()
+      # Clicks the remove button
+      render_click(element)
+      # Asserts the element has been removed from the DOM
+      refute view |> element(element_id) |> has_element?()
     end
   end
 end
