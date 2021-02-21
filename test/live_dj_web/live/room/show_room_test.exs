@@ -206,5 +206,27 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Asserts the element has been removed from the DOM
       refute view |> element(element_id) |> has_element?()
     end
+
+    test"As a Registered User I can't remove a video that's currently being played",
+      %{conn: conn, room: room}
+    do
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      video_index = Enum.random(0..length(room.queue)-1)
+      element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
+      # Finds the element in the DOM
+      element = view |> element(element_id)
+      # Refutes the element is the one that is being played
+      refute element |> render() =~ "current-video"
+      # Clicks the play button
+      element |> render_click()
+      # Asserts the element is the one that is being played
+      assert view
+      |> element(element_id)
+      |> render() =~ "current-video"
+      # Refutes the remove button exists for this element
+      remove_element_id = String.replace(@remove_video_button_id, "?",
+        "#{video_index}")
+      refute view |> element(remove_element_id) |> has_element?()
+    end
   end
 end
