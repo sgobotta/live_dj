@@ -32,7 +32,11 @@
             class="flex space-x-4 pill <%= if video.video_id == @player.video_id do %>current-video shinning-pill<% end %> draggable"
           >
             <div
-              class="queue-thumb flex-1"
+              id="<%= "play-button-#{index}" %>"
+              class="
+                queue-thumb flex-1
+                <%= if video.video_id == @player.video_id do %>current-video<% end %>
+              "
               phx-click="player_signal_play_by_id"
               phx-value-video_id="<%= video.video_id %>"
             >
