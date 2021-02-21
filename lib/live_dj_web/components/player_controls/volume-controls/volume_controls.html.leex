@@ -2,7 +2,9 @@
   class="inline-flex items-center justify-center p-4 volume-control-container"
 >
   <div class="p-4">
-    <a phx-click="player_signal_toggle_volume" phx-target="<%= @myself %>">
+    <a id="volume-controls-toggle"
+      phx-click="player_signal_toggle_volume" phx-target="<%= @myself %>"
+    >
       <%= PhoenixInlineSvg.Helpers.svg_image(
         LiveDjWeb.Endpoint,
         "icons/player/#{@volume_controls.volume_icon}",
@@ -10,7 +12,7 @@
       %>
     </a>
   </div>
-  <form class="slider-form"
+  <form id="volume-controls-slider" class="slider-form"
     phx-target="<%= @myself %>" phx-change="volume_level_changed"
   >
     <%=
