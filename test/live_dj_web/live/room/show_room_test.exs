@@ -155,4 +155,37 @@ defmodule LiveDjWeb.ShowRoomTest do
       assert_push_event view, "receive_player_state", %{}
     end
   end
+
+  describe "ShowLive video queue behaviour - Registered users" do
+
+    @play_video_button_id "#play-button-?"
+
+    setup(%{conn: conn}) do
+      %{group: group} = show_live_setup()
+      group = group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: false, group_id: group.id
+      })
+      %{conn: log_in_user(conn, user), room: room}
+    end
+
+    test"As a Registered User I can play a video from a queue",
+      %{conn: conn, room: room}
+    do
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      video_index = Enum.random(0..length(room.queue)-1)
+      element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
+      # Finds the element in the DOM
+      element = view |> element(element_id)
+      # Refutes the element is the one that is being played
+      refute element |> render() =~ "current-video"
+      # Clicks the play button
+      element |> render_click()
+      # Asserts the element is the one that is being played
+      assert view
+      |> element(element_id)
+      |> render() =~ "current-video"
+    end
+  end
 end
