@@ -8,7 +8,8 @@
       <%= PhoenixInlineSvg.Helpers.svg_image(
         LiveDjWeb.Endpoint,
         "icons/player/#{@volume_controls.volume_icon}",
-        class: "h-12 w-12 player-control clickeable")
+        class:
+          "h-12 w-12 player-control clickeable #{@volume_controls.volume_icon}")
       %>
     </a>
   </div>
