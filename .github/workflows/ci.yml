@@ -66,4 +66,4 @@ jobs:
         PAYPAL_ATTRS=${PAYPAL_ATTRS}
         TZ=${TZ}
         YOUTUBE_TEST_API_KEY=${YOUTUBE_TEST_API_KEY}
-        mix coveralls.html
+        mix coveralls.github

@@ -234,6 +234,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   describe "ShowLive volume controls behaviour" do
     @volume_slider_id "#volume-controls-slider"
     @volume_toggle_id "#volume-controls-toggle"
+    @rendered_target ".volume-control-container"
 
     setup(%{conn: conn}) do
       %{group: group} = show_live_setup()
@@ -247,6 +248,10 @@ defmodule LiveDjWeb.ShowRoomTest do
 
     test "As a User I can change the volume level", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      assert view |> element(@volume_slider_id) |> has_element?()
+      # Volume is at it's maximum level by default, so that we assert the
+      # speaker-4 class is used.
+      assert view |> element(@rendered_target) |> render() =~ "speaker-4"
       # Changes the volume level to 70
       rendered_view = view
       |> element(@volume_slider_id)
@@ -254,6 +259,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Volume lowered to 70 so that we assert the speaker-3 class is used
       refute rendered_view =~ "speaker-4"
       assert rendered_view =~ "speaker-3"
+      assert_push_event view, "receive_player_volume", %{level: 70}
       # Changes the volume level to 40
       rendered_view = view
       |> element(@volume_slider_id)
@@ -261,6 +267,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Volume lowered to 69 so that we assert the speaker-2 class is used
       refute rendered_view =~ "speaker-3"
       assert rendered_view =~ "speaker-2"
+      assert_push_event view, "receive_player_volume", %{level: 40}
       # Changes the volume level to 10
       rendered_view = view
       |> element(@volume_slider_id)
@@ -268,6 +275,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Volume lowered to 10 so that we assert the speaker-1 class is used
       refute rendered_view =~ "speaker-2"
       assert rendered_view =~ "speaker-1"
+      assert_push_event view, "receive_player_volume", %{level: 10}
       # Changes the volume level to 9
       rendered_view = view
       |> element(@volume_slider_id)
@@ -275,6 +283,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Volume lowered to 0 so that we assert the speaker-0 class is used
       refute rendered_view =~ "speaker-1"
       assert rendered_view =~ "speaker-0"
+      assert_push_event view, "receive_player_volume", %{level: 0}
       # Changes the volume level back to 70
       rendered_view = view
       |> element(@volume_slider_id)
@@ -282,12 +291,13 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Volume lowered to 70 so that we assert the speaker-3 class is used
       refute rendered_view =~ "speaker-4"
       assert rendered_view =~ "speaker-3"
+      assert_push_event view, "receive_player_volume", %{level: 70}
     end
 
     test "As a user I can toggle the volume level", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
       # Asserts The volume toggle button exists
-      view |> element(@volume_toggle_id) |> has_element?()
+      assert view |> element(@volume_toggle_id) |> has_element?()
       # Changes the volume level to 70 just to avoid using the default volume
       # value
       rendered_view = view
@@ -296,14 +306,17 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Volume lowered to 70 so that we assert the speaker-3 class is used
       refute rendered_view =~ "speaker-4"
       assert rendered_view =~ "speaker-3"
+      assert_push_event view, "receive_player_volume", %{level: 70}
       # Clicks the toggle button to get a muted state
       rendered_view = view |> element(@volume_toggle_id) |> render_click()
       refute rendered_view =~ "speaker-3"
       assert rendered_view =~ "speaker-0"
+      assert_push_event view, "receive_mute_signal", %{}
       # Clicks the toggle button again to get to our initial state of level 70
       rendered_view = view |> element(@volume_toggle_id) |> render_click()
       refute rendered_view =~ "speaker-0"
       assert rendered_view =~ "speaker-3"
+      assert_push_event view, "receive_unmute_signal", %{}
     end
   end
 
