@@ -2,6 +2,8 @@ defmodule LiveDjWeb.ShowRoomTest do
   use LiveDjWeb.ConnCase, async: true
 
   alias LiveDj.Repo
+  alias LiveDjWeb.Router.Helpers, as: Routes
+
   import LiveDj.AccountsFixtures
   import LiveDj.OrganizerFixtures
   import LiveDj.DataCase
@@ -321,8 +323,9 @@ defmodule LiveDjWeb.ShowRoomTest do
   end
 
   describe "ShowLive room settings behaviour" do
-    @room_settings_modal_button "#aside-room-settings-modal-button"
+    @room_settings_modal_button_id "#aside-room-settings-modal-button"
     @username_edit_form_id "#username-edit-form"
+    @user_registration_form_id "#user-registration-form"
 
     setup(%{conn: conn}) do
       %{group: group} = show_live_setup()
@@ -338,11 +341,11 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{conn: conn, room: room}
     do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
-      view |> element(@room_settings_modal_button) |> render_click()
-      # Asserts The volume toggle button exists
+      # Opens the room settings modal
+      view |> element(@room_settings_modal_button_id) |> render_click()
+      # Asserts The username edit form exists
       assert view |> element(@username_edit_form_id) |> has_element?()
-      # Changes the volume level to 70 just to avoid using the default volume
-      # value
+      # Fills in the form and clicks the submit button
       new_name = "wasabibrownies"
       params = %{
         "user" => %{"username" => new_name},
@@ -350,6 +353,29 @@ defmodule LiveDjWeb.ShowRoomTest do
       }
       view |> element(@username_edit_form_id) |> render_submit(params)
       assert view |> render() =~ new_name
+    end
+
+    test "As a Visitor User I can fill a registration form",
+      %{room: room}
+    do
+      conn = build_conn()
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      # Opens the room settings modal
+      view |> element(@room_settings_modal_button_id) |> render_click()
+      # Asserts The username edit form exists
+      assert view
+      |> element(@user_registration_form_id) |> has_element?()
+      # Fills in the form and clicks the submit button
+      new_name = "wasabibrownies"
+      params = %{
+        "user" => %{"username" => new_name, "terms" => true},
+      }
+
+      # FIXME: it's not testing anything.
+      # There's currently no way to test phx_trigger_action.
+      view
+      |> form(@user_registration_form_id, params)
+      |> render_submit()
     end
   end
 end
