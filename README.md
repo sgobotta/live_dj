@@ -25,9 +25,9 @@
       alt="Build Status"
     >
   </a>
-  <a href='https://coveralls.io/github/sgobotta/live_dj?branch=develop'>
+  <a href='https://coveralls.io/github/sgobotta/live_dj'>
     <img
-      src='https://coveralls.io/repos/github/sgobotta/live_dj/badge.svg?branch=develop'
+      src='https://coveralls.io/repos/github/sgobotta/live_dj/badge.svg'
       alt='Coverage Status'
     />
   </a>
