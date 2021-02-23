@@ -322,6 +322,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   end
 
   describe "ShowLive room settings behaviour" do
+
     @room_settings_modal_button_id "#aside-room-settings-modal-button"
     @username_edit_form_id "#username-edit-form"
     @user_registration_form_id "#user-registration-form"
@@ -437,6 +438,43 @@ defmodule LiveDjWeb.ShowRoomTest do
         "?", "#{user_uuid}")
       assert owner_view |> element(add_button_id) |> has_element?()
       refute owner_view |> element(remove_button_id) |> has_element?()
+    end
+  end
+
+  describe "ShowLive room settings section behaviour" do
+
+    @room_settings_modal_button_id "#aside-room-settings-modal-button"
+    @room_edit_form_id "#room-edit-form"
+
+    setup(%{conn: conn}) do
+      %{group: room_admin_group} = show_live_setup()
+      room_admin_group = room_admin_group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: true, group_id: room_admin_group.id
+      }, %{}, %{management_type: "managed"})
+      %{conn: log_in_user(conn, user), room: room}
+    end
+
+    test "As a room owner I can change room details",
+      %{conn: conn, room: room}
+    do
+      url = "/room/#{room.slug}"
+      # Gets an owner view
+      {:ok, view, _html} = live(conn, url)
+      # Opens the room settings modal
+      view |> element(@room_settings_modal_button_id) |> render_click()
+      # Asserts The room edit form exists
+      assert view |> element(@room_edit_form_id) |> has_element?()
+      # Updates room details
+      view
+      |> element(@room_edit_form_id)
+      |> render_change(%{title: "some title", room_management_type: "free"})
+      # Submits the form and asserts a flash message is rendered
+      assert view
+      |> element(@room_edit_form_id)
+      |> render_submit() =~ "Room updated succesfully!"
     end
   end
 end
