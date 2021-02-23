@@ -62,7 +62,7 @@ defmodule LiveDj.DataCase do
       codename: "anonymous-room-visitor",
       name: "Anonymous room visitor"
     })
-    registered_room_visitor = group_fixture(%{
+    registered_room_visitor_group = group_fixture(%{
       codename: "registered-room-visitor",
       name: "Registered room visitor"
     })
@@ -70,14 +70,14 @@ defmodule LiveDj.DataCase do
       codename: "room-admin",
       name: "Room admin"
     })
-    room_collaborator = group_fixture(%{
+    room_collaborator_group = group_fixture(%{
       codename: "room-collaborator",
       name: "Room collaborator"
     })
     %{anonymous_room_visitor_group: anonymous_room_visitor_group,
-      registered_room_visitor: registered_room_visitor,
+      registered_room_visitor: registered_room_visitor_group,
       room_admin_group: room_admin_group,
-      room_collaborator: room_collaborator}
+      room_collaborator_group: room_collaborator_group}
   end
 
   def permissions_setup do
@@ -90,8 +90,19 @@ defmodule LiveDj.DataCase do
       codename: "can_remove_room_collaborators",
       name: "Can remove room collaborators"
     })
+    can_edit_room_management_type = permission_fixture(%{
+      codename: "can_edit_room_management_type",
+      name: "Can edit room management type"
+    })
+    can_edit_room_name = permission_fixture(%{
+      codename: "can_edit_room_name",
+      name: "Can edit room name"
+    })
+
     %{can_add_room_collaborators_permission: can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission}
+      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
+      can_edit_room_management_type_permission: can_edit_room_management_type,
+      can_edit_room_name_permission: can_edit_room_name}
   end
 
   def badges_setup do
@@ -102,9 +113,12 @@ defmodule LiveDj.DataCase do
   A helper that initialises the needed data for a show live view
   """
   def show_live_setup do
-    %{room_admin_group: room_admin_group} = groups_setup()
+    %{room_admin_group: room_admin_group,
+      room_collaborator_group: room_collaborator_group} = groups_setup()
     %{can_add_room_collaborators_permission: can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission
+      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
+      can_edit_room_management_type_permission: can_edit_room_management_type_permission,
+      can_edit_room_name_permission: can_edit_room_name_permission
     } = permissions_setup()
     # Creates permission group relationships
     permission_group_fixture(%{
@@ -114,6 +128,22 @@ defmodule LiveDj.DataCase do
     permission_group_fixture(%{
       permission_id: can_remove_room_collaborators_permission.id,
       group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_edit_room_management_type_permission.id,
+      group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_edit_room_name_permission.id,
+      group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_edit_room_management_type_permission.id,
+      group_id: room_collaborator_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_edit_room_name_permission.id,
+      group_id: room_collaborator_group.id
     })
 
     badges_setup()
