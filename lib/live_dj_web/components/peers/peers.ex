@@ -133,7 +133,7 @@ defmodule LiveDjWeb.Components.Peers do
             end
           "registered-room-visitor" ->
             case Enum.any?(permissions,
-              fn p -> p.codename == "can_remove_room_collaborators" end) do
+              fn p -> p.codename == "can_add_room_collaborators" end) do
               true ->
                 button_params = %{
                   event: "add_room_collaborator",
@@ -152,6 +152,7 @@ defmodule LiveDjWeb.Components.Peers do
   def render_privileges_button(%{event: event, classes: classes, presence_id: presence_id, target: assigns}) do
     ~L"""
       <button
+        id="<%= event %>-<%= presence_id %>"
         class="svg-button-container"
         phx-click="<%= event %>"
         phx-target="<%= assigns %>"
