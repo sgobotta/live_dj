@@ -54,29 +54,72 @@ defmodule LiveDj.DataCase do
   end
 
   import LiveDj.AccountsFixtures
+  import LiveDj.StatsFixtures
+
+  def groups_setup do
+    # Creates some mandatory groups
+    anonymous_room_visitor_group = group_fixture(%{
+      codename: "anonymous-room-visitor",
+      name: "Anonymous room visitor"
+    })
+    registered_room_visitor = group_fixture(%{
+      codename: "registered-room-visitor",
+      name: "Registered room visitor"
+    })
+    room_admin_group = group_fixture(%{
+      codename: "room-admin",
+      name: "Room admin"
+    })
+    room_collaborator = group_fixture(%{
+      codename: "room-collaborator",
+      name: "Room collaborator"
+    })
+    %{anonymous_room_visitor_group: anonymous_room_visitor_group,
+      registered_room_visitor: registered_room_visitor,
+      room_admin_group: room_admin_group,
+      room_collaborator: room_collaborator}
+  end
+
+  def permissions_setup do
+    # Creates some mandatory permissions
+    can_add_room_collaborators_permission = permission_fixture(%{
+      codename: "can_add_room_collaborators",
+      name: "Can add room collaborators"
+    })
+    can_remove_room_collaborators_permission = permission_fixture(%{
+      codename: "can_remove_room_collaborators",
+      name: "Can remove room collaborators"
+    })
+    %{can_add_room_collaborators_permission: can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission}
+  end
+
+  def badges_setup do
+    badge_fixture(%{type: "rooms-collaboration", checkpoint: 1})
+  end
 
   @doc """
   A helper that initialises the needed data for a show live view
   """
   def show_live_setup do
-    # Creates some mandatory groups
-    group_fixture(%{
-      codename: "anonymous-room-visitor",
-      name: "Anonymous room visitor"
+    %{room_admin_group: room_admin_group} = groups_setup()
+    %{can_add_room_collaborators_permission: can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission
+    } = permissions_setup()
+    # Creates permission group relationships
+    permission_group_fixture(%{
+      permission_id: can_add_room_collaborators_permission.id,
+      group_id: room_admin_group.id
     })
-    group_fixture(%{
-      codename: "registered-room-visitor",
-      name: "Registered room visitor"
-    })
-    # Creates an initial group
-    group = group_fixture()
-    # Just creates 3 permissions and associates them to a group
-    permissions = for _n <- 1..3, do: permission_fixture()
-    {:ok, _permission_group} = permissions_group_fixture(%{
-      permissions: permissions,
-      group_id: group.id
+    permission_group_fixture(%{
+      permission_id: can_remove_room_collaborators_permission.id,
+      group_id: room_admin_group.id
     })
 
-    %{group: group}
+    badges_setup()
+
+    # Returns an Admin group that can be assigned to create room owners using
+    # user_room fixtures
+    %{group: room_admin_group}
   end
 end
