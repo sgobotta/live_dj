@@ -6,6 +6,7 @@
 >
   <%= form_for @user_changeset, Routes.user_registration_path(@socket, :create),
     [
+      id: "user-registration-form",
       phx_submit: "submit_changeset",
       phx_target: @myself,
       phx_trigger_action: @trigger_submit,

@@ -2,6 +2,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   use LiveDjWeb.ConnCase, async: true
 
   alias LiveDj.Repo
+
   import LiveDj.AccountsFixtures
   import LiveDj.OrganizerFixtures
   import LiveDj.DataCase
@@ -321,8 +322,9 @@ defmodule LiveDjWeb.ShowRoomTest do
   end
 
   describe "ShowLive room settings behaviour" do
-    @room_settings_modal_button "#aside-room-settings-modal-button"
+    @room_settings_modal_button_id "#aside-room-settings-modal-button"
     @username_edit_form_id "#username-edit-form"
+    @user_registration_form_id "#user-registration-form"
 
     setup(%{conn: conn}) do
       %{group: group} = show_live_setup()
@@ -338,11 +340,11 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{conn: conn, room: room}
     do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
-      view |> element(@room_settings_modal_button) |> render_click()
-      # Asserts The volume toggle button exists
+      # Opens the room settings modal
+      view |> element(@room_settings_modal_button_id) |> render_click()
+      # Asserts The username edit form exists
       assert view |> element(@username_edit_form_id) |> has_element?()
-      # Changes the volume level to 70 just to avoid using the default volume
-      # value
+      # Fills in the form and clicks the submit button
       new_name = "wasabibrownies"
       params = %{
         "user" => %{"username" => new_name},
@@ -350,6 +352,91 @@ defmodule LiveDjWeb.ShowRoomTest do
       }
       view |> element(@username_edit_form_id) |> render_submit(params)
       assert view |> render() =~ new_name
+    end
+
+    test "As a Visitor User I can fill a registration form",
+      %{room: room}
+    do
+      conn = build_conn()
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      # Opens the room settings modal
+      view |> element(@room_settings_modal_button_id) |> render_click()
+      # Asserts The username edit form exists
+      assert view
+      |> element(@user_registration_form_id) |> has_element?()
+      # Fills in the form and clicks the submit button
+      new_name = "wasabibrownies"
+      params = %{
+        "user" => %{"username" => new_name, "terms" => true},
+      }
+
+      # FIXME: it's not testing anything.
+      # There's currently no way to test phx_trigger_action.
+      view
+      |> form(@user_registration_form_id, params)
+      |> render_submit()
+    end
+  end
+
+  describe "ShowLive peers section behaviour" do
+
+    @add_collaborator_button_id "#add_room_collaborator-?"
+    @remove_collaborator_button_id "#remove_room_collaborator-?"
+
+    setup(%{conn: conn}) do
+      %{group: room_admin_group} = show_live_setup()
+      room_admin_group = room_admin_group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: true, group_id: room_admin_group.id
+      }, %{}, %{management_type: "managed"})
+      %{conn: log_in_user(conn, user), room: room}
+    end
+
+    test "As a room owner I can add and remove collaborators",
+      %{conn: owner_conn, room: room}
+    do
+      url = "/room/#{room.slug}"
+      # Registers and logs in a user
+      %{conn: user_conn, user: _user} = register_and_log_in_user(
+        %{conn: build_conn()})
+      # Obatains the user connection uuid to get buttons ids
+      %{assigns: %{user: %{uuid: user_uuid}}} = user_conn = get(
+        user_conn, url)
+      # Gets an owner view
+      {:ok, owner_view, _html} = live(owner_conn, url)
+      # Asserts the add button is available but the remove button isn't
+      add_button_id = String.replace(
+        @add_collaborator_button_id, "?", "#{user_uuid}")
+      remove_button_id = String.replace(
+        @remove_collaborator_button_id, "?", "#{user_uuid}")
+      refute owner_view |> element(remove_button_id) |> has_element?()
+      assert owner_view |> element(add_button_id) |> has_element?()
+      # Adds a user as a collaborator
+      owner_view |> element(add_button_id) |> render_click()
+      # Refreshes the user connection to asserts the remove is now available but
+      # the add button isn't
+      %{assigns: %{user: %{uuid: user_uuid}}} = _user_conn = get(
+        user_conn, url)
+      add_button_id = String.replace(@add_collaborator_button_id,
+        "?", "#{user_uuid}")
+      remove_button_id = String.replace(@remove_collaborator_button_id,
+        "?", "#{user_uuid}")
+      refute owner_view |> element(add_button_id) |> has_element?()
+      assert owner_view |> element(remove_button_id) |> has_element?()
+      # Removes a user as a collaborator
+      owner_view |> element(remove_button_id) |> render_click()
+      # Refreshes the user connection to asserts the add is now available but
+      # the remove button isn't
+      %{assigns: %{user: %{uuid: user_uuid}}} = _user_conn = get(
+        user_conn, url)
+      add_button_id = String.replace(@add_collaborator_button_id,
+        "?", "#{user_uuid}")
+      remove_button_id = String.replace(@remove_collaborator_button_id,
+        "?", "#{user_uuid}")
+      assert owner_view |> element(add_button_id) |> has_element?()
+      refute owner_view |> element(remove_button_id) |> has_element?()
     end
   end
 end
