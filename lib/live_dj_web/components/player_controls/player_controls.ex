@@ -152,7 +152,12 @@ defmodule LiveDjWeb.Components.PlayerControls do
     end
 
     ~L"""
-      <a class="<%= anchor_class %>" phx-click="<%= player_event %>" phx-target="<%= assigns %>">
+      <a
+        id="<%= player_event %>"
+        class="<%= anchor_class %>"
+        phx-click="<%= player_event %>"
+        phx-target="<%= assigns %>"
+      >
         <%= render_svg(
           "icons/player/play-controls",
           "h-12 w-12 player-control clickeable #{play_button_class}"
@@ -165,13 +170,21 @@ defmodule LiveDjWeb.Components.PlayerControls do
     %{link_props: link_props, svg_classes: svg_classes} = case button_state do
       "disabled" ->
         %{
-          link_props: %{class: "disabled", phx_click: "", phx_target: nil},
+          link_props: %{
+            class: "disabled",
+            id: "",
+            phx_click: "",
+            phx_target: nil,
+          },
           svg_classes: "",
         }
+      # FIXME: this case contains empty strings from the initial state that may
+      # cause unwanted behaviour
       _ ->
         %{
           link_props: %{
             class: if has_permission do "" else "disabled" end,
+            id: if has_permission do event_name else "" end,
             phx_click: if has_permission do event_name else "" end,
             phx_target: if has_permission do assigns else nil end,
           },
@@ -181,6 +194,7 @@ defmodule LiveDjWeb.Components.PlayerControls do
 
     ~L"""
       <a
+        id="<%= link_props.id %>"
         class="<%= link_props.class %>"
         phx-click="<%= link_props.phx_click %>"
         phx-target="<%= link_props.phx_target %>"
