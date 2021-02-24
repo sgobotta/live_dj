@@ -13,6 +13,7 @@
     <a
       class="<%= if @video_queue_controls.is_save_enabled do %>clickeable<% else %>disabled<% end %>"
       <%= if @video_queue_controls.is_save_enabled do %>
+        id="player-controls-save-queue"
         phx-click="save_queue"
         phx-target="<%= @myself %>"
       <% end %>
