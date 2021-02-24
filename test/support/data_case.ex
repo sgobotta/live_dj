@@ -98,11 +98,33 @@ defmodule LiveDj.DataCase do
       codename: "can_edit_room_name",
       name: "Can edit room name"
     })
+    can_play_track_permission = permission_fixture(%{
+      codename: "can_play_track",
+      name: "Can play tracks"
+    })
+    can_pause_track_permission = permission_fixture(%{
+      codename: "can_pause_track",
+      name: "Can pause tracks"
+    })
+    can_play_next_track_permission = permission_fixture(%{
+      codename: "can_play_next_track",
+      name: "Can play next track"
+    })
+    can_play_previous_track_permission = permission_fixture(%{
+      codename: "can_play_previous_track",
+      name: "Can play previous track"
+    })
 
-    %{can_add_room_collaborators_permission: can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
+    %{can_add_room_collaborators_permission:
+        can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission:
+        can_remove_room_collaborators_permission,
       can_edit_room_management_type_permission: can_edit_room_management_type,
-      can_edit_room_name_permission: can_edit_room_name}
+      can_edit_room_name_permission: can_edit_room_name,
+      can_play_track_permission: can_play_track_permission,
+      can_pause_track_permission: can_pause_track_permission,
+      can_play_next_track_permission: can_play_next_track_permission,
+      can_play_previous_track_permission: can_play_previous_track_permission}
   end
 
   def badges_setup do
@@ -115,10 +137,17 @@ defmodule LiveDj.DataCase do
   def show_live_setup do
     %{room_admin_group: room_admin_group,
       room_collaborator_group: room_collaborator_group} = groups_setup()
-    %{can_add_room_collaborators_permission: can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
-      can_edit_room_management_type_permission: can_edit_room_management_type_permission,
-      can_edit_room_name_permission: can_edit_room_name_permission
+    %{can_add_room_collaborators_permission:
+        can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission:
+        can_remove_room_collaborators_permission,
+      can_edit_room_management_type_permission:
+        can_edit_room_management_type_permission,
+      can_edit_room_name_permission: can_edit_room_name_permission,
+      can_play_track_permission: can_play_track_permission,
+      can_pause_track_permission: can_pause_track_permission,
+      can_play_next_track_permission: can_play_next_track_permission,
+      can_play_previous_track_permission: can_play_previous_track_permission,
     } = permissions_setup()
     # Creates permission group relationships
     permission_group_fixture(%{
@@ -135,6 +164,22 @@ defmodule LiveDj.DataCase do
     })
     permission_group_fixture(%{
       permission_id: can_edit_room_name_permission.id,
+      group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_play_track_permission.id,
+      group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_pause_track_permission.id,
+      group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_play_next_track_permission.id,
+      group_id: room_admin_group.id
+    })
+    permission_group_fixture(%{
+      permission_id: can_play_previous_track_permission.id,
       group_id: room_admin_group.id
     })
     permission_group_fixture(%{
