@@ -12,7 +12,7 @@
   ],
 
   "coverage_options": {
-    "minimum_coverage": 83,
+    "minimum_coverage": 87,
     "output_dir": "cover/",
     "template_path": "test/coverage/templates/html/htmlcov/",
     "treat_no_relevant_lines_as_covered": true
