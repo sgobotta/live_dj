@@ -8,6 +8,17 @@ defmodule LiveDjWeb.ShowRoomTest do
   import LiveDj.DataCase
   import Phoenix.LiveViewTest
 
+  def remove_video(view, element_id) do
+    # Finds the element in the DOM
+    element = view |> element(element_id)
+    # Asserts the element exists so that it can be deleted
+    assert element |> has_element?()
+    # Clicks the remove button
+    render_click(element)
+    # Asserts the element has been removed from the DOM
+    refute view |> element(element_id) |> has_element?()
+  end
+
   describe "ShowLive user room groups assignation" do
 
     setup(%{conn: conn}) do
@@ -191,6 +202,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       |> render() =~ "current-video"
     end
 
+    @tag wip: true
     test "As a Registered User I can remove a video from a queue",
       %{conn: conn, room: room}
     do
@@ -199,14 +211,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       element_id = String.replace(@remove_video_button_id,
         "?", "#{video_index}"
       )
-      # Finds the element in the DOM
-      element = view |> element(element_id)
-      # Asserts the element exists so that it can be deleted
-      assert element |> has_element?()
-      # Clicks the remove button
-      render_click(element)
-      # Asserts the element has been removed from the DOM
-      refute view |> element(element_id) |> has_element?()
+      remove_video(view, element_id)
     end
 
     test "As a Registered User I can't remove a video that's currently being played",
@@ -465,7 +470,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       {:ok, view, _html} = live(conn, url)
       # Opens the room settings modal
       view |> element(@room_settings_modal_button_id) |> render_click()
-      # Asserts The room edit form exists
+      # Asserts the room edit form exists
       assert view |> element(@room_edit_form_id) |> has_element?()
       # Updates room details
       view
@@ -475,6 +480,40 @@ defmodule LiveDjWeb.ShowRoomTest do
       assert view
       |> element(@room_edit_form_id)
       |> render_submit() =~ "Room updated succesfully!"
+    end
+  end
+
+  describe "ShowLive queue controls behaviour" do
+
+    @player_controls_save_button_id "#player-controls-save-queue"
+    @remove_video_button_id "#remove-video-button-?"
+
+    setup(%{conn: conn}) do
+      %{group: room_admin_group} = show_live_setup()
+      room_admin_group = room_admin_group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: true, group_id: room_admin_group.id
+      }, %{}, %{management_type: "managed"})
+      %{conn: log_in_user(conn, user), room: room}
+    end
+
+    test "As a User I can save the current queue", %{conn: conn, room: room} do
+      url = "/room/#{room.slug}"
+      # Gets an owner view
+      {:ok, view, _html} = live(conn, url)
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+      "?", "#{video_index}"
+      )
+      remove_video(view, element_id)
+      # Asserts the save queue button exists
+      assert view |> element(@player_controls_save_button_id) |> has_element?()
+      # Saves the queue
+      view |> element(@player_controls_save_button_id) |> render_click()
+      # Asserts the save button isn't enabled
+      refute view |> element(@player_controls_save_button_id) |> has_element?()
     end
   end
 end
