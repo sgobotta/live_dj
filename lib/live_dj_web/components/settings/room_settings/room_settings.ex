@@ -15,13 +15,16 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
     is_managed = room_management != "free"
 
     legacy_room_details_permissions = %{
-      can_edit_room_management_type: has_permission(permissions, "can_edit_room_management_type"),
+      can_edit_room_management_type:
+        has_permission(permissions, "can_edit_room_management_type"),
       can_edit_room_name: has_permission(permissions, "can_edit_room_name"),
     }
 
     room_details_permissions = %{
-      can_edit_room_management_type: !is_managed or has_permission(permissions, "can_edit_room_management_type"),
-      can_edit_room_name: !is_managed or has_permission(permissions, "can_edit_room_name"),
+      can_edit_room_management_type: !is_managed or has_permission(
+        permissions, "can_edit_room_management_type"),
+      can_edit_room_name: !is_managed or has_permission(
+        permissions, "can_edit_room_name"),
     }
     {_, has_all_room_permissions} = Enum.map_reduce(room_details_permissions,
       true, fn {_key, has_permission}, acc ->
@@ -33,7 +36,8 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
       |> assign(:changeset, assigns.room_changeset)
       |> assign(:has_all_room_permissions, has_all_room_permissions)
       |> assign(:is_managed, is_managed)
-      |> assign(:legacy_room_details_permissions, legacy_room_details_permissions)
+      |> assign(:legacy_room_details_permissions,
+        legacy_room_details_permissions)
       |> assign(:slug, assigns.room_changeset.data.slug)
     }
   end
@@ -47,7 +51,7 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
   ) do
     {:noreply,
       socket
-      |> put_flash(:error, "You don't have enough permissions to edit the room.")}
+      |> put_flash(:error, "You don't have enough permissions to edit the room.")} # FIXME: use gettext
   end
   def handle_event("validate", %{"room" => room_params}, socket) do
     {:noreply,
@@ -60,7 +64,7 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
   ) do
     {:noreply,
       socket
-      |> put_flash(:error, "You don't have enough permissions to edit the room.")}
+      |> put_flash(:error, "You don't have enough permissions to edit the room.")} # FIXME: use gettext
   end
 
   def handle_event("submit_changeset", _,
