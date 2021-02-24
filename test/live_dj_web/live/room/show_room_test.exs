@@ -33,6 +33,30 @@ defmodule LiveDjWeb.ShowRoomTest do
     |> render() =~ "current-video"
   end
 
+  describe "ShowLive client requests" do
+    setup(%{conn: conn}) do
+      %{group: room_admin_group} = show_live_setup()
+      room_admin_group = room_admin_group |> Repo.preload([:permissions])
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: _user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: true, group_id: room_admin_group.id
+      }, %{}, %{management_type: "managed"})
+      %{conn: conn, room: room}
+    end
+
+    test "As a client When I connect a 'player_signal_ready' event is triggered",
+      %{conn: conn, room: room}
+    do
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+      # FIXME: Assert a request_initial_state message has been sent
+      view
+      |> element("#player-syncing-data")
+      |> render_hook(:player_signal_ready, %{})
+    end
+  end
+
   describe "ShowLive user room groups assignation" do
 
     setup(%{conn: conn}) do
