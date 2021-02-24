@@ -34,6 +34,9 @@ defmodule LiveDjWeb.ShowRoomTest do
   end
 
   describe "ShowLive client requests" do
+
+    @play_video_button_id "#play-button-?"
+
     setup(%{conn: conn}) do
       %{group: room_admin_group} = show_live_setup()
       room_admin_group = room_admin_group |> Repo.preload([:permissions])
@@ -54,6 +57,33 @@ defmodule LiveDjWeb.ShowRoomTest do
       view
       |> element("#player-syncing-data")
       |> render_hook(:player_signal_ready, %{})
+    end
+
+    test "As a player When a song ends a 'player_signal_video_ended' event is triggered",
+      %{conn: conn, room: room}
+    do
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+      video_index = Enum.random(0..length(room.queue)-1)
+      element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
+      # We play a video so that the player is initialised with a current video
+      # and next video
+      play_video(view, element_id)
+      view
+      |> element("#player-syncing-data")
+      |> render_hook(:player_signal_video_ended, %{})
+      assert_push_event view, "receive_player_state", %{}
+      {:ok, view, _html} = live(conn, url)
+      # We wait a little to send another hook event
+      :timer.sleep(250)
+      view
+      |> element("#player-syncing-data")
+      |> render_hook(:player_signal_video_ended, %{})
+      # We wait a little to send another hook event
+      :timer.sleep(250)
+      view
+      |> element("#player-syncing-data")
+      |> render_hook(:player_signal_video_ended, %{})
     end
   end
 
