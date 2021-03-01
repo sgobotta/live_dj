@@ -31,7 +31,7 @@ defmodule LiveDj.AccountsFixtures do
   end
 
   def permission_fixture(attrs \\ %{}) do
-    words = Faker.Lorem.words(2)
+    words = Faker.Lorem.words(4)
     valid_attrs = %{
       codename: Enum.join(words, "-"),
       name: Enum.join(words, " ")
