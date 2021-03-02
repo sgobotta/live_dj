@@ -38,14 +38,15 @@ defmodule LiveDjWeb.ShowRoomTest do
     @play_video_button_id "#play-button-?"
 
     setup(%{conn: conn}) do
-      %{group: room_admin_group} = show_live_setup()
-      room_admin_group = room_admin_group |> Repo.preload([:permissions])
+      %{group: admin_group} = show_live_setup()
+      admin_group = admin_group |> Repo.preload([:permissions])
       # Associates a group id to a new user for a new room and makes this user
       # an owner of the room
-      %{room: room, user: _user, user_room: _user_room} = user_room_fixture(%{
-        is_owner: true, group_id: room_admin_group.id
-      }, %{}, %{management_type: "managed"})
-      %{conn: conn, room: room}
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      %{conn: log_in_user(conn, user), room: room}
     end
 
     test "As a client When I connect a 'player_signal_ready' event is triggered",
@@ -59,30 +60,28 @@ defmodule LiveDjWeb.ShowRoomTest do
       |> render_hook(:player_signal_ready, %{})
     end
 
+    @player_syncing_hook_id "#player-syncing-data"
+
     test "As a player When a song ends a 'player_signal_video_ended' event is triggered",
       %{conn: conn, room: room}
     do
       url = "/room/#{room.slug}"
       {:ok, view, _html} = live(conn, url)
-      video_index = Enum.random(0..length(room.queue)-1)
+      video_index = 0
       element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
       # We play a video so that the player is initialised with a current video
       # and next video
       play_video(view, element_id)
+      :timer.sleep(30)
       view
-      |> element("#player-syncing-data")
+      |> element(@player_syncing_hook_id)
       |> render_hook(:player_signal_video_ended, %{})
       assert_push_event view, "receive_player_state", %{}
       {:ok, view, _html} = live(conn, url)
       # We wait a little to send another hook event
-      :timer.sleep(250)
+      :timer.sleep(30)
       view
-      |> element("#player-syncing-data")
-      |> render_hook(:player_signal_video_ended, %{})
-      # We wait a little to send another hook event
-      :timer.sleep(250)
-      view
-      |> element("#player-syncing-data")
+      |> element(@player_syncing_hook_id)
       |> render_hook(:player_signal_video_ended, %{})
     end
   end
@@ -586,15 +585,15 @@ defmodule LiveDjWeb.ShowRoomTest do
     setup(%{conn: conn}) do
       %{group: room_admin_group} = show_live_setup()
       room_admin_group = room_admin_group |> Repo.preload([:permissions])
-      # Associates a group id to a new user for a new room and makes this user
-      # an owner of the room
-      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
-        is_owner: true, group_id: room_admin_group.id
-      }, %{}, %{management_type: "managed"})
-      %{conn: log_in_user(conn, user), room: room}
+      %{admin_group: room_admin_group, conn: conn}
     end
 
-    test "As a User I can play and pause videos", %{conn: conn, room: room} do
+    test "As a User I can play and pause videos", %{admin_group: admin_group, conn: conn} do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
@@ -618,12 +617,17 @@ defmodule LiveDjWeb.ShowRoomTest do
     end
 
     test "As a User I can play the next and the previous video",
-      %{conn: conn, room: room}
+      %{admin_group: admin_group, conn: conn}
     do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
-      video_index = Enum.random(0..length(room.queue)-1)
+      video_index = 0
       element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
       play_video(view, element_id)
       # Asserts the play next button exists
