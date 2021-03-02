@@ -170,6 +170,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       updated_video_queue: updated_video_queue} = params
     %{player: player, search_result: search_result,
       video_queue_controls: video_queue_controls} = assigns
+    # Attempts to mark the selected song on each peer search result
     search_result = Enum.map(search_result, fn {video, index} ->
       {Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
     end)
@@ -183,7 +184,13 @@ defmodule LiveDjWeb.Room.ShowLive do
     case updated_video_queue do
       [video] ->
         selected_video = video
-        props = %{time: 0, video_id: selected_video.video_id, state: "playing", previous_id: "", next_id: ""}
+        props = %{
+          time: 0,
+          video_id: selected_video.video_id,
+          state: "playing",
+          previous_id: "",
+          next_id: ""
+        }
         player = Player.update(player, props)
         {:noreply,
           socket
@@ -195,16 +202,24 @@ defmodule LiveDjWeb.Room.ShowLive do
         case player.state do
           "stopped" ->
             %{video_id: video_id} = player
-            next_video_id = case video_id do
-              "" -> ""
+            video = case video_id do
+              "" -> %{video_id: "", previous: "", next: ""}
               _  -> Queue.get_next_video(updated_video_queue, video_id)
             end
-            player = Player.update(player, %{state: "playing", time: 0, video_id: next_video_id})
+            player = Player.update(player, %{
+              state: "playing",
+              time: 0,
+              video_id: video.video_id,
+              previous_id: video.previous,
+              next_id: video.next
+            })
+            player_controls = Player.get_controls_state(player)
+            player_state_response = Player.create_response(player)
             {:noreply,
               socket
               |> assign(:player, player)
-              |> assign(:player_controls, Player.get_controls_state(player))
-              |> push_event("receive_player_state", Player.create_response(player))}
+              |> assign(:player_controls, player_controls)
+              |> push_event("receive_player_state", player_state_response)}
           _ ->
             {:noreply, socket}
         end
