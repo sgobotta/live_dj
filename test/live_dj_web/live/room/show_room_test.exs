@@ -524,7 +524,6 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{conn: log_in_user(conn, user), room: room}
     end
 
-    @tag wip: true
     test "As a room owner I can change room details",
       %{conn: conn, room: room}
     do
@@ -655,7 +654,44 @@ defmodule LiveDjWeb.ShowRoomTest do
       refute has_button(view, "play_next")
     end
 
-    # test "As a Player, when"
-    # Agregar casos con un solo video, dos videos, tres videos, etc.
+    test "When the queue is empty, some player controls are missing",
+      %{admin_group: admin_group, conn: conn}
+    do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: []}
+      )
+      conn = log_in_user(conn, user)
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+
+      refute has_button(view, "pause")
+      refute has_button(view, "play_next")
+      refute has_button(view, "play_previous")
+    end
+
+    test "When the has one element, some player controls are missing",
+      %{admin_group: admin_group, conn: conn}
+    do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: [hd(room_queue())]}
+      )
+      conn = log_in_user(conn, user)
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+      video_index = 0
+      element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
+      play_video(view, element_id)
+
+      click(view, "play")
+      assert has_button(view, "pause")
+      refute has_button(view, "play_previous")
+      refute has_button(view, "play")
+      click(view, "pause")
+      assert has_button(view, "play")
+      refute has_button(view, "play_previous")
+      refute has_button(view, "pause")
+    end
   end
 end
