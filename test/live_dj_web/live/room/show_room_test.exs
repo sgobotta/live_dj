@@ -591,7 +591,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
-      video_index = Enum.random(0..length(room.queue)-1)
+      video_index = 0
       element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
       play_video(view, element_id)
       # Asserts the play button exists
@@ -642,7 +642,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       click(view, "play_next")
       # Asserts the play previous button exists
       assert has_button(view, "play_previous")
-      # Refutes next video button existence
+      # Refutes next video button existence since it's the last vide in the
+      # queue
       refute has_button(view, "play_next")
     end
 
