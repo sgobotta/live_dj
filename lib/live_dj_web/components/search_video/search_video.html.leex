@@ -3,6 +3,7 @@
     live-section-box
     mb-4
     mt-0
+    pb-4
     <%= if @current_tab == "video_search" do %>
       show-section
     <% else %>
@@ -10,7 +11,7 @@
     <% end %>
   "
 >
-  <div class="mx-6">
+  <div class="mx-6 mb-16">
     <form
       id="search-video-form"
       phx-change="search"
@@ -32,7 +33,9 @@
   <div
     phx-hook="SearchSyncing"
     id="search-data"
-    class="scrollable-panel fixed-height-md extra-margin rounded-lg"
+    class="
+      scrollable-panel
+      fixed-height-md mt-6 mx-4 px-8 rounded-lg"
   >
 
     <div class="loader-container">
