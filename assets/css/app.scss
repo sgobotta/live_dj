@@ -580,7 +580,7 @@ b {
   border-style: ridge;
 
   &.fixed-height-sm {
-    height: 27vh;
+    height: 30vh;
   }
 
   &.fixed-height-md {
@@ -593,10 +593,6 @@ b {
 
   &.fixed-height-xl {
     height: 40vh;
-  }
-
-  &.extra-margin {
-    margin-top: 40px;
   }
 
   &.higher {
@@ -1184,10 +1180,6 @@ input.chat-text-input:focus {
   }
 }
 
-.extra-margin-top {
-  margin-top: 40px;
-}
-
 /**
  * Queue tracks
  */
@@ -1507,13 +1499,20 @@ svg.peers-control-admin-asset.show-remove-button .peers-control-admin-asset-remo
 /* General style */
 html {
   scrollbar-color: $secondary $primary;
-  scrollbar-width: thin;
+  scrollbar-width: thin !important;
 }
 
-$scrollbar-style: ridge;
+$scrollbar-border-style: ridge;
+$scrollbar-thumb: $neutral-darker;
+$scrollbar-thumb-active-color: $text;
+$scrollbar-thumb-hover-color: $text;
+$scrollbar-active-color: $neutral-darker;
+$scrollbar-track-color: transparent;
+$scrollbar-track-hover-color: transparent;
+$scrollbar-track-active-color: transparent;
 
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 6px;
   height: 4px;
 }
 ::-webkit-scrollbar-button {
@@ -1521,34 +1520,34 @@ $scrollbar-style: ridge;
   height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-  background: $secondary;
-  border: 1px solid $secondary;
+  background: $scrollbar-thumb;
+  border: 1px solid $scrollbar-thumb;
   border-radius: 50px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  border: 1px solid $secondary-highlight-1;
-  background: $secondary-highlight-1;
+  border: 1px solid $scrollbar-thumb-hover-color;
+  background: $scrollbar-thumb-hover-color;
 }
 ::-webkit-scrollbar-thumb:active {
-  border: 1px double $secondary-highlight-2;
-  background: $secondary-highlight-1;
+  border: 1px double $scrollbar-thumb-active-color;
+  background: $scrollbar-thumb-active-color;
 }
 ::-webkit-scrollbar-track {
-  border-style: $scrollbar-style;
+  border-style: $scrollbar-border-style;
   border-width: 1px;
-  border-color: $primary;
+  border-color: $scrollbar-track-color;
   background: transparent;
 }
 ::-webkit-scrollbar-track:hover {
-  border-style: $scrollbar-style;
+  border-style: $scrollbar-border-style;
   border-width: 1px;
-  border-color: $primary;
+  border-color: $scrollbar-track-hover-color;
   background: transparent;
 }
 ::-webkit-scrollbar-track:active {
-  border-style: $scrollbar-style;
+  border-style: $scrollbar-border-style;
   border-width: 1px;
-  border-color: $primary;
+  border-color: $scrollbar-track-active-color;
   background: transparent;;
 }
 ::-webkit-scrollbar-corner {
