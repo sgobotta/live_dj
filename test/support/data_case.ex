@@ -54,6 +54,7 @@ defmodule LiveDj.DataCase do
   end
 
   import LiveDj.AccountsFixtures
+  import LiveDj.OrganizerFixtures
   import LiveDj.StatsFixtures
 
   def groups_setup do
@@ -196,5 +197,14 @@ defmodule LiveDj.DataCase do
     # Returns an Admin group that can be assigned to create room owners using
     # user_room fixtures
     %{group: room_admin_group}
+  end
+
+  def create_room_ownership(admin_group, room_attrs) do
+    # Associates a group id to a new user for a new room and makes this user
+    # an owner of the room
+    %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+      is_owner: true, group_id: admin_group.id
+    }, %{}, room_attrs)
+    %{room: room, user: user}
   end
 end

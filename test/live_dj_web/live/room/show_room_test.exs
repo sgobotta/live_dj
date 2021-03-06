@@ -6,6 +6,7 @@ defmodule LiveDjWeb.ShowRoomTest do
   import LiveDj.AccountsFixtures
   import LiveDj.OrganizerFixtures
   import LiveDj.DataCase
+  import LiveDj.ViewCase
   import Phoenix.LiveViewTest
 
   def remove_video(view, element_id) do
@@ -22,14 +23,13 @@ defmodule LiveDjWeb.ShowRoomTest do
 
   def play_video(view, element_id) do
     # Finds the element in the DOM
-    element = view |> element(element_id)
+    element = button(view, element_id)
     # Refutes the element is the one that is being played
     refute element |> render() =~ "current-video"
     # Clicks the play button
-    element |> render_click()
+    click(view, element_id)
     # Asserts the element is the one that is being played
-    assert view
-    |> element(element_id)
+    assert element
     |> render() =~ "current-video"
   end
 
@@ -40,17 +40,19 @@ defmodule LiveDjWeb.ShowRoomTest do
     setup(%{conn: conn}) do
       %{group: room_admin_group} = show_live_setup()
       room_admin_group = room_admin_group |> Repo.preload([:permissions])
-      # Associates a group id to a new user for a new room and makes this user
-      # an owner of the room
-      %{room: room, user: _user, user_room: _user_room} = user_room_fixture(%{
-        is_owner: true, group_id: room_admin_group.id
-      }, %{}, %{management_type: "managed"})
-      %{conn: conn, room: room}
+      %{admin_group: room_admin_group, conn: conn}
     end
 
     test "As a client When I connect a 'player_signal_ready' event is triggered",
-      %{conn: conn, room: room}
+      %{admin_group: admin_group, conn: conn}
     do
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       {:ok, view, _html} = live(conn, url)
       # FIXME: Assert a request_initial_state message has been sent
@@ -59,30 +61,50 @@ defmodule LiveDjWeb.ShowRoomTest do
       |> render_hook(:player_signal_ready, %{})
     end
 
-    test "As a player When a song ends a 'player_signal_video_ended' event is triggered",
-      %{conn: conn, room: room}
+    test "As a non video-tracker client I constantly send the current video time",
+      %{admin_group: admin_group, conn: conn}
     do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       {:ok, view, _html} = live(conn, url)
-      video_index = Enum.random(0..length(room.queue)-1)
+      view
+      |> element("#player-syncing-data")
+      |> render_hook(:player_signal_current_time, %{})
+    end
+
+    @player_syncing_hook_id "#player-syncing-data"
+
+    test "As a player When a song ends a 'player_signal_video_ended' event is triggered",
+      %{admin_group: admin_group, conn: conn}
+    do
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: [hd(room_queue())]}
+      )
+      conn = log_in_user(conn, user)
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+      video_index = 0
       element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
       # We play a video so that the player is initialised with a current video
       # and next video
       play_video(view, element_id)
+      :timer.sleep(30)
       view
-      |> element("#player-syncing-data")
+      |> element(@player_syncing_hook_id)
       |> render_hook(:player_signal_video_ended, %{})
       assert_push_event view, "receive_player_state", %{}
       {:ok, view, _html} = live(conn, url)
       # We wait a little to send another hook event
-      :timer.sleep(250)
+      :timer.sleep(30)
       view
-      |> element("#player-syncing-data")
-      |> render_hook(:player_signal_video_ended, %{})
-      # We wait a little to send another hook event
-      :timer.sleep(250)
-      view
-      |> element("#player-syncing-data")
+      |> element(@player_syncing_hook_id)
       |> render_hook(:player_signal_video_ended, %{})
     end
   end
@@ -506,9 +528,6 @@ defmodule LiveDjWeb.ShowRoomTest do
 
   describe "ShowLive room settings section behaviour" do
 
-    @room_settings_modal_button_id "#aside-room-settings-modal-button"
-    @room_edit_form_id "#room-edit-form"
-
     setup(%{conn: conn}) do
       %{group: room_admin_group} = show_live_setup()
       room_admin_group = room_admin_group |> Repo.preload([:permissions])
@@ -527,23 +546,22 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Gets an owner view
       {:ok, view, _html} = live(conn, url)
       # Opens the room settings modal
-      view |> element(@room_settings_modal_button_id) |> render_click()
+      click(view, "room_settings")
       # Asserts the room edit form exists
-      assert view |> element(@room_edit_form_id) |> has_element?()
+      assert has_form(view, "room_edit")
       # Updates room details
       view
-      |> element(@room_edit_form_id)
+      |> get_form("room_edit")
       |> render_change(%{title: "some title", room_management_type: "free"})
       # Submits the form and asserts a flash message is rendered
       assert view
-      |> element(@room_edit_form_id)
+      |> get_form("room_edit")
       |> render_submit() =~ "Room updated succesfully!"
     end
   end
 
   describe "ShowLive queue controls behaviour" do
 
-    @player_controls_save_button_id "#player-controls-save-queue"
     @remove_video_button_id "#remove-video-button-?"
 
     setup(%{conn: conn}) do
@@ -563,77 +581,132 @@ defmodule LiveDjWeb.ShowRoomTest do
       {:ok, view, _html} = live(conn, url)
       video_index = length(room.queue) - 1
       element_id = String.replace(@remove_video_button_id,
-      "?", "#{video_index}"
-      )
+        "?", "#{video_index}")
       remove_video(view, element_id)
       # Asserts the save queue button exists
-      assert view |> element(@player_controls_save_button_id) |> has_element?()
+      assert has_button(view, "save_queue")
       # Saves the queue
-      view |> element(@player_controls_save_button_id) |> render_click()
+      click(view, "save_queue")
       # Asserts the save button isn't enabled
-      refute view |> element(@player_controls_save_button_id) |> has_element?()
+      refute has_button(view, "save_queue")
     end
   end
 
   describe "ShowLive player controls behaviour" do
 
     @play_video_button_id "#play-button-?"
-    @pause_button_id "#player_signal_paused"
-    @play_button_id "#player_signal_playing"
-    @play_next_button_id "#player_signal_play_next"
-    @play_previous_button_id "#player_signal_play_previous"
 
     setup(%{conn: conn}) do
       %{group: room_admin_group} = show_live_setup()
       room_admin_group = room_admin_group |> Repo.preload([:permissions])
-      # Associates a group id to a new user for a new room and makes this user
-      # an owner of the room
-      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
-        is_owner: true, group_id: room_admin_group.id
-      }, %{}, %{management_type: "managed"})
-      %{conn: log_in_user(conn, user), room: room}
+      %{admin_group: room_admin_group, conn: conn}
     end
 
-    test "As a User I can play and pause videos", %{conn: conn, room: room} do
+    test "As a User I can play and pause videos",
+      %{admin_group: admin_group, conn: conn}
+    do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
-      video_index = Enum.random(0..length(room.queue)-1)
+      video_index = 0
       element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
       play_video(view, element_id)
       # Asserts the play button exists
-      assert view |> element(@play_button_id) |> has_element?()
+      assert has_button(view, "play")
       # Clicks the play button
-      view |> element(@play_button_id) |> render_click()
+      click(view, "play")
       # Asserts the play button does not exist anymore
-      refute view |> element(@play_button_id) |> has_element?()
+      refute has_button(view, "play")
       # Asserts the pause button exists
-      assert view |> element(@pause_button_id) |> has_element?()
+      assert has_button(view, "pause")
       # Clicks the pause button
-      view |> element(@pause_button_id) |> render_click()
+      click(view, "pause")
       # Asserts the play video button exists
-      assert view |> element(@play_button_id) |> has_element?()
+      assert has_button(view, "play")
       # Asserts the pause button does not exist anymore
-      refute view |> element(@pause_button_id) |> has_element?()
+      refute has_button(view, "pause")
     end
 
     test "As a User I can play the next and the previous video",
-      %{conn: conn, room: room}
+      %{admin_group: admin_group, conn: conn}
     do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
-      video_index = Enum.random(0..length(room.queue)-1)
+      video_index = 0
       element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
       play_video(view, element_id)
       # Asserts the play next button exists
-      assert view |> element(@play_next_button_id) |> has_element?()
+      assert has_button(view, "play_next")
+      # Refutes previous video button existence
+      refute has_button(view, "play_previous")
       # Clicks the play next button
-      view |> element(@play_next_button_id) |> render_click()
-      # Asserts the play previous buttone xists
-      assert view |> element(@play_previous_button_id) |> has_element?()
-      # Clicks the play previous button
-      view |> element(@play_next_button_id) |> render_click()
+      click(view, "play_next")
+      # Asserts the play previous and next buttons exist
+      assert has_button(view, "play_previous")
+      assert has_button(view, "play_next")
+      # Clicks the play next button
+      click(view, "play_next")
+      # Asserts the play previous and next buttons exist
+      assert has_button(view, "play_previous")
+      assert has_button(view, "play_next")
+      # Clicks the play next button
+      click(view, "play_next")
+      # Asserts the play previous button exists
+      assert has_button(view, "play_previous")
+      # Refutes next video button existence since it's the last vide in the
+      # queue
+      refute has_button(view, "play_next")
+    end
+
+    test "When the queue is empty, some player controls are missing",
+      %{admin_group: admin_group, conn: conn}
+    do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: []}
+      )
+      conn = log_in_user(conn, user)
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+
+      refute has_button(view, "pause")
+      refute has_button(view, "play_next")
+      refute has_button(view, "play_previous")
+    end
+
+    test "When the has one element, some player controls are missing",
+      %{admin_group: admin_group, conn: conn}
+    do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: [hd(room_queue())]}
+      )
+      conn = log_in_user(conn, user)
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+      video_index = 0
+      element_id = String.replace(@play_video_button_id, "?", "#{video_index}")
+      play_video(view, element_id)
+
+      click(view, "play")
+      assert has_button(view, "pause")
+      refute has_button(view, "play_previous")
+      refute has_button(view, "play")
+      click(view, "pause")
+      assert has_button(view, "play")
+      refute has_button(view, "play_previous")
+      refute has_button(view, "pause")
     end
   end
 end
