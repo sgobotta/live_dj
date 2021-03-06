@@ -632,12 +632,27 @@ defmodule LiveDjWeb.ShowRoomTest do
       play_video(view, element_id)
       # Asserts the play next button exists
       assert view |> element(@play_next_button_id) |> has_element?()
+      # Refutes previous video button existence
+      refute view |> element(@play_previous_button_id) |> has_element?()
       # Clicks the play next button
       view |> element(@play_next_button_id) |> render_click()
-      # Asserts the play previous buttone xists
+      # Asserts the play previous and next buttons exist
       assert view |> element(@play_previous_button_id) |> has_element?()
-      # Clicks the play previous button
+      assert view |> element(@play_next_button_id) |> has_element?()
+      # Clicks the play next button
       view |> element(@play_next_button_id) |> render_click()
+      # Asserts the play previous and next buttons exist
+      assert view |> element(@play_previous_button_id) |> has_element?()
+      assert view |> element(@play_next_button_id) |> has_element?()
+      # Clicks the play next button
+      view |> element(@play_next_button_id) |> render_click()
+      # Asserts the play previous button exists
+      assert view |> element(@play_previous_button_id) |> has_element?()
+      # Refutes next video button existence
+      refute view |> element(@play_next_button_id) |> has_element?()
     end
+
+    # test "As a Player, when"
+    # Agregar casos con un solo video, dos videos, tres videos, etc.
   end
 end
