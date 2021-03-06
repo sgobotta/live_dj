@@ -38,20 +38,21 @@ defmodule LiveDjWeb.ShowRoomTest do
     @play_video_button_id "#play-button-?"
 
     setup(%{conn: conn}) do
-      %{group: admin_group} = show_live_setup()
-      admin_group = admin_group |> Repo.preload([:permissions])
+      %{group: room_admin_group} = show_live_setup()
+      room_admin_group = room_admin_group |> Repo.preload([:permissions])
+      %{admin_group: room_admin_group, conn: conn}
+    end
+
+    test "As a client When I connect a 'player_signal_ready' event is triggered",
+      %{admin_group: admin_group, conn: conn}
+    do
       # Associates a group id to a new user for a new room and makes this user
       # an owner of the room
       %{room: room, user: user} = create_room_ownership(
         admin_group,
         %{management_type: "managed", queue: room_queue()}
       )
-      %{conn: log_in_user(conn, user), room: room}
-    end
-
-    test "As a client When I connect a 'player_signal_ready' event is triggered",
-      %{conn: conn, room: room}
-    do
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       {:ok, view, _html} = live(conn, url)
       # FIXME: Assert a request_initial_state message has been sent
@@ -63,8 +64,15 @@ defmodule LiveDjWeb.ShowRoomTest do
     @player_syncing_hook_id "#player-syncing-data"
 
     test "As a player When a song ends a 'player_signal_video_ended' event is triggered",
-      %{conn: conn, room: room}
+      %{admin_group: admin_group, conn: conn}
     do
+      # Associates a group id to a new user for a new room and makes this user
+      # an owner of the room
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: [hd(room_queue())]}
+      )
+      conn = log_in_user(conn, user)
       url = "/room/#{room.slug}"
       {:ok, view, _html} = live(conn, url)
       video_index = 0
