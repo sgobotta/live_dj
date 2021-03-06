@@ -61,6 +61,21 @@ defmodule LiveDjWeb.ShowRoomTest do
       |> render_hook(:player_signal_ready, %{})
     end
 
+    test "As a non video-tracker client I constantly send the current video time",
+      %{admin_group: admin_group, conn: conn}
+    do
+      %{room: room, user: user} = create_room_ownership(
+        admin_group,
+        %{management_type: "managed", queue: room_queue()}
+      )
+      conn = log_in_user(conn, user)
+      url = "/room/#{room.slug}"
+      {:ok, view, _html} = live(conn, url)
+      view
+      |> element("#player-syncing-data")
+      |> render_hook(:player_signal_current_time, %{})
+    end
+
     @player_syncing_hook_id "#player-syncing-data"
 
     test "As a player When a song ends a 'player_signal_video_ended' event is triggered",
