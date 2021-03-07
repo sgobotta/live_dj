@@ -1,6 +1,8 @@
 /**
- * Badge Styles
+ * Card Styles
  */
+
+$flip-card-background: #dfdfdf;
 
  /* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
  .flip-card {
@@ -40,7 +42,7 @@
 /* Style the back side */
 .flip-card-back {
   justify-content: space-evenly;
-  background-color: #dfdfdf;
+  background-color: $flip-card-background;
   position: absolute;
   height: 100%;
   width: 100%;
