@@ -41,10 +41,10 @@
     <div class="loader-container">
       <div class="loading">
         <p>Searching...</p>
-      <span></span>
+        <span></span>
+      </div>
     </div>
 
-    </div>
     <%= for {video, index} <- @search_result do %>
       <div class="
         grid grid-cols-4 gap-2 search-result separator
@@ -57,8 +57,8 @@
           <div class="">
             <p><%= video.title %></p>
           </div>
-          <div class="col-span-3">
-            <div class="">
+          <div class="col-span-3 grid grid-cols-8 gap-2">
+            <div class="col-span-1 justify-self-center">
               <%= if video.is_queued do %>
                 <a
                   class="disabled"
@@ -70,7 +70,7 @@
                   ) %>
                 </a>
               <% else %>
-                <div class="align-center">
+                <div>
                   <a
                     style="position: relative"
                     class="<%= if video.is_queued do %>disabled<% else %>search-control-enabled clickeable<% end %>"
