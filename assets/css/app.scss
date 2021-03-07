@@ -716,67 +716,64 @@ a.btn i.trash {
   font-size: 1.5rem;
 }
 
-.row {
+.search-result {
+  padding: 1rem;
 
-  margin-left: 0rem;
-
-  &.search-result {
-    padding: 1rem;
-
-    &.unqueued a svg.show-add-button {
-      display: none;
-    }
-    &.unqueued a svg.show-check-button {
-      display: none;
-    }
-    &.queued a svg.show-add-button {
-      display: none;
-    }
-    &.queued a svg.show-check-button {
-      display: block;
-    }
+  &.unqueued a svg.show-add-button {
+    display: none;
   }
-
-  &.search-result:hover {
-    border-radius: 5px;
-    background-color: $neutral-darker;
-
-    &.unqueued a svg.show-add-button {
-      display: block;
-    }
-    &.unqueued a svg.show-check-button {
-      display: none;
-    }
-    &.queued a svg.show-add-button {
-      display: none;
-    }
-    &.queued a svg.show-check-button {
-      display: block;
-    }
+  &.unqueued a svg.show-check-button {
+    display: none;
   }
-
-  &.search-result:focus {
-    border-radius: 5px;
-    background-color: $neutral-darker;
-
-    &.unqueued a svg.show-add-button {
-      display: block;
-    }
-    &.unqueued a svg.show-check-button {
-      display: none;
-    }
-    &.queued a svg.show-add-button {
-      display: none;
-    }
-    &.queued a svg.show-check-button {
-      display: block;
-    }
+  &.queued a svg.show-add-button {
+    display: none;
   }
-
-  &.search-result:hover + .search-result {
-    border-top-color: transparent;
+  &.queued a svg.show-check-button {
+    display: block;
   }
+}
 
+.search-result:hover {
+  border-radius: 5px;
+  background-color: $neutral-darker;
+
+  &.unqueued a svg.show-add-button {
+    display: block;
+  }
+  &.unqueued a svg.show-check-button {
+    display: none;
+  }
+  &.queued a svg.show-add-button {
+    display: none;
+  }
+  &.queued a svg.show-check-button {
+    display: block;
+  }
+}
+
+.search-result:focus {
+  border-radius: 5px;
+  background-color: $neutral-darker;
+
+  &.unqueued a svg.show-add-button {
+    display: block;
+  }
+  &.unqueued a svg.show-check-button {
+    display: none;
+  }
+  &.queued a svg.show-add-button {
+    display: none;
+  }
+  &.queued a svg.show-check-button {
+    display: block;
+  }
+}
+
+.search-result:hover + .search-result {
+  border-top-color: transparent;
+}
+
+.search-result {
   &.separator {
     border-top-style: solid;
     border-top-width: 1px;
@@ -789,7 +786,7 @@ a.btn i.trash {
   }
 }
 
-.row img {
+.search-result img {
   border: 0.1rem;
   border-style: outset;
   border-color: #000;
