@@ -29,12 +29,11 @@ $font-01: "Montserrat", "Helvetica", "Arial", sans-serif;
 
   .loading {
      width: 80px;
-     height: 50px;
-     position: absolute;
+     position: relative;
 
      p {
         top: 0;
-        padding: 0;
+        padding: 1rem;
         margin: 0;
         color: $c-02;
         font-family: $font-01;
@@ -76,7 +75,7 @@ $font-01: "Montserrat", "Helvetica", "Arial", sans-serif;
         height: 16px;
         width: 16px;
         bottom: 0;
-        position: absolute;
+        position: relative;
         transform: translateX(64px);
         animation: loading 3.5s ease both infinite;
 

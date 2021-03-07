@@ -1656,21 +1656,21 @@ $scrollbar-track-active-color: transparent;
  */
 
 .anim-fade-in {
-  div.row.search-result {
+  div.search-result {
     -webkit-animation: opacity-in 1s forwards;
     animation: opacity-in 1s forwards;
   }
 }
 
 .anim-fade-out {
-  div.row.search-result {
+  div.search-result {
     -webkit-animation: opacity-out 150ms forwards;
     animation: opacity-out 150ms forwards;
   }
 }
 
 .hidden-elements {
-  div.row.search-result {
+  div.search-result {
     display: none;
   }
 }
