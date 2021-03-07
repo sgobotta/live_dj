@@ -725,10 +725,20 @@ a.btn i.trash {
     font-weight: bolder;
   }
 
+  &.search-result:hover {
+    font-weight: 900;
+    border-radius: 5px;
+    background-color: $neutral-darker;
+  }
+
+  &.search-result:hover + .search-result {
+    border-top-color: transparent;
+  }
+
   &.separator {
-    border-top-style: dashed;
+    border-top-style: solid;
     border-top-width: 1px;
-    border-top-color: $primary;
+    border-top-color: $neutral-darker;
     width: 100%;
   }
 
@@ -1512,7 +1522,7 @@ $scrollbar-track-hover-color: transparent;
 $scrollbar-track-active-color: transparent;
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
   height: 4px;
 }
 ::-webkit-scrollbar-button {
