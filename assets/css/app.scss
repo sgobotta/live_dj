@@ -391,7 +391,6 @@ select option {
   background: #141414;
   border-color: #141414;
   border-radius: 1.5rem;
-  height: fit-content;
 }
 
 .video-player-container {
@@ -588,7 +587,7 @@ b {
   }
 
   &.fixed-height-lg {
-    height: 35vh;
+    height: 34vh;
   }
 
   &.fixed-height-xl {
