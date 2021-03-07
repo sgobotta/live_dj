@@ -31,11 +31,11 @@
         flex flex-col
         mx-2 px-0 sm:px-6 mt-0 lg:mt-16 xl:mt-16 2xl:mt-16 mb-12
         overflow-y-hidden
-        lg:grid lg:gap-4 2xl:gap-6 lg:grid-cols-4
+        lg:grid lg:gap-4 2xl:gap-6 lg:grid-cols-12
         2xl:row-span-2 2xl:pb-8
       ">
 
-        <div class="live-section-box p-4 lg:order-1 lg:row-span-1 lg:col-span-3 m-0 mt-4 mb-4">
+        <div class="live-section-box p-4 lg:order-1 lg:col-span-8 m-0 mt-4">
           <div>
             <%= live_component @socket, LiveDjWeb.Components.VideoPlayer,
               id: "live-dj-player-controls",
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div class="lg:order-2 lg:row-span-1 lg:col-span-1 m-0">
+        <div class="lg:order-2 lg:row-span-1 lg:col-span-4 m-0">
 
           <%= live_component @socket, LiveDjWeb.Components.SectionsGroup,
             id: "live-dj-chat",
@@ -102,7 +102,7 @@
         </div>
 
         <div
-          class="live-section-box lg:order-3 lg:row-span-1 lg:col-span-2 m-0"
+          class="live-section-box lg:order-3 lg:row-span-1 lg:col-span-6 m-0"
         >
           <div class="column">
 
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <div class="lg:order-4 lg:row-span-2 2xl:row-span-2 lg:col-span-2 m-0">
+        <div class="lg:order-4 lg:row-span-2 2xl:row-span-2 lg:col-span-6 m-0">
 
           <%= live_component @socket, LiveDjWeb.Components.SearchVideo,
             id: "live-dj-video-search",

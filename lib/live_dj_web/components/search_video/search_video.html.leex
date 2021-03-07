@@ -3,6 +3,7 @@
     live-section-box
     mb-4
     mt-0
+    pb-4
     <%= if @current_tab == "video_search" do %>
       show-section
     <% else %>
@@ -10,7 +11,7 @@
     <% end %>
   "
 >
-  <div class="mx-6">
+  <div class="mx-6 mb-16">
     <form
       id="search-video-form"
       phx-change="search"
@@ -32,46 +33,63 @@
   <div
     phx-hook="SearchSyncing"
     id="search-data"
-    class="scrollable-panel fixed-height-md extra-margin rounded-lg"
+    class="
+      scrollable-panel
+      fixed-height-md mt-6 mx-4 px-8 rounded-lg"
   >
 
     <div class="loader-container">
       <div class="loading">
         <p>Searching...</p>
-      <span></span>
+        <span></span>
+      </div>
     </div>
 
-    </div>
     <%= for {video, index} <- @search_result do %>
-      <div class="row search-result separator">
-        <div class="column-offset-25 align-center">
-          <%= img_tag(video.img_url, width: video.img_width) %>
+      <div class="
+        grid grid-cols-4 gap-2 search-result separator
+        <%= if video.is_queued do %>queued<% else %>unqueued<% end %>
+      ">
+        <div class="align-center">
+          <%= img_tag(video.img_url, width: video.img_width * 1.2) %>
         </div>
-        <div class="column">
-          <p><%= video.title %></p>
-          <p><%= video.description %></p>
-          <p>
-            <strong>
-              <%= video.channel_title %>
-            </strong>
-          </p>
-        </div>
-        <div class="column-offset-25 align-center">
-          <a
-            class="<%= if video.is_queued do %>disabled<% else %>search-control-enabled clickeable<% end %>"
-            id="<%= "search-element-button-#{index+1}" %>"
-            <%= if !video.is_queued do %>
-              phx-click="add_to_queue"
-              phx-target="<%= @myself %>"
-              phx-value-video_id="<%= index %>"
-            <% end %>
-          >
-            <%= PhoenixInlineSvg.Helpers.svg_image(
-              LiveDjWeb.Endpoint,
-              "icons/search/add",
-              class: "h-12 w-12 #{if video.is_queued do "show-check-button" else "show-add-button" end}")
-            %>
-          </a>
+        <div class="col-span-3 grid grid-rows-2">
+          <div class="row-span-2">
+            <p class="font-bold"><%= video.title %></p>
+          </div>
+          <div class="row-span-1 grid grid-rows-1 grid-cols-8 gap-2">
+            <div class="col-span-1 self-end justify-self-center">
+              <%= if video.is_queued do %>
+                <a
+                  class="disabled"
+                  id="<%= "search-element-button-#{index+1}" %>"
+                >
+                  <%= render_svg(
+                    "icons/search/add",
+                    "h-12 w-12 show-check-button"
+                  ) %>
+                </a>
+              <% else %>
+                <div>
+                  <a
+                    style="position: relative"
+                    class="<%= if video.is_queued do %>disabled<% else %>search-control-enabled clickeable<% end %>"
+                    id="<%= "search-element-button-#{index+1}" %>"
+                    <%= if !video.is_queued do %>
+                      phx-click="add_to_queue"
+                      phx-target="<%= @myself %>"
+                      phx-value-video_id="<%= index %>"
+                    <% end %>
+                  >
+                    <%= render_svg(
+                      "icons/search/add",
+                      "h-12 w-12 show-add-button"
+                    ) %>
+                  </a>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     <% end %>

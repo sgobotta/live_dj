@@ -73,4 +73,8 @@ defmodule LiveDjWeb.Components.SearchVideo do
 
     {:noreply, socket}
   end
+
+  defp render_svg(icon, classes) do
+    PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, icon, class: classes)
+  end
 end
