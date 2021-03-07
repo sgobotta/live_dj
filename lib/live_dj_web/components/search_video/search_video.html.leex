@@ -53,12 +53,12 @@
         <div class="align-center">
           <%= img_tag(video.img_url, width: video.img_width * 1.2) %>
         </div>
-        <div class="col-span-3">
-          <div class="">
-            <p><%= video.title %></p>
+        <div class="col-span-3 grid grid-rows-2">
+          <div class="row-span-2">
+            <p class="font-bold"><%= video.title %></p>
           </div>
-          <div class="col-span-3 grid grid-cols-8 gap-2">
-            <div class="col-span-1 justify-self-center">
+          <div class="row-span-1 grid grid-rows-1 grid-cols-8 gap-2">
+            <div class="col-span-1 self-end justify-self-center">
               <%= if video.is_queued do %>
                 <a
                   class="disabled"
@@ -66,7 +66,7 @@
                 >
                   <%= render_svg(
                     "icons/search/add",
-                    "h-8 w-8 show-check-button"
+                    "h-12 w-12 show-check-button"
                   ) %>
                 </a>
               <% else %>
@@ -83,7 +83,7 @@
                   >
                     <%= render_svg(
                       "icons/search/add",
-                      "h-8 w-8 #{if video.is_queued do "show-check-button" else "show-add-button" end}"
+                      "h-12 w-12 show-add-button"
                     ) %>
                   </a>
                 </div>
