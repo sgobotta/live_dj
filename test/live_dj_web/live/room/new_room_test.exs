@@ -173,7 +173,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
         |> element(@create_room_form_id)
         |> render_change(%{room: %{slug: "A slug"}})
 
-      assert render_click(view, :save) =~ "can&apos;t be blank"
+      assert render_click(view, :save) =~ "can&#39;t be blank"
     end
 
     test "An error alert is returned if the slug input is empty", %{conn: conn} do
@@ -183,7 +183,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
         |> element(@create_room_form_id)
         |> render_change(%{room: %{title: "A title"}})
 
-      assert render_click(view, :save) =~ "can&apos;t be blank"
+      assert render_click(view, :save) =~ "can&#39;t be blank"
     end
 
     test "A redirection is performed if the room is created", %{conn: conn} do
@@ -225,7 +225,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
         |> element(@create_room_form_id)
         |> render_change(%{room: %{slug: "A slug"}})
 
-      assert render_click(view, :save) =~ "can&apos;t be blank"
+      assert render_click(view, :save) =~ "can&#39;t be blank"
     end
 
     test "An error alert is returned if the slug input is empty", %{conn: conn, user: user} do
@@ -236,7 +236,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
         |> element(@create_room_form_id)
         |> render_change(%{room: %{title: "A title"}})
 
-      assert render_click(view, :save) =~ "can&apos;t be blank"
+      assert render_click(view, :save) =~ "can&#39;t be blank"
     end
 
     test "with a managed management_type value, A redirection is performed and a user/room relationship is created",
