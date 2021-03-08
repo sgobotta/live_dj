@@ -48,13 +48,13 @@ defmodule LiveDj.Organizer.Video do
 
   def from_tubex_video(tubex_video) do
     %Video{
-      channel_title: tubex_video.channel_title,
+      channel_title: HtmlEntities.decode(tubex_video.channel_title),
       img_url: tubex_video.thumbnails["default"]["url"],
       img_height: tubex_video.thumbnails["default"]["height"],
       img_width: tubex_video.thumbnails["default"]["width"],
       is_queued: false,
-      description: tubex_video.description,
-      title: tubex_video.title,
+      description: HtmlEntities.decode(tubex_video.description),
+      title: HtmlEntities.decode(tubex_video.title),
       video_id: tubex_video.video_id,
       previous: "",
       next: "",
