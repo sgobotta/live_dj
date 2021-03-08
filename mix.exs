@@ -47,6 +47,7 @@ defmodule LiveDj.MixProject do
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
+      {:html_entities, "~> 0.5.2"},
       {:excoveralls, "~> 0.10", only: :test},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_view, "~> 0.14.6"},
