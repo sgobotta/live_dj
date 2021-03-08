@@ -74,6 +74,48 @@ defmodule LiveDjWeb.Components.SearchVideo do
     {:noreply, socket}
   end
 
+  defp render_button("add", video_index, true, assigns) do
+    id = "search-element-button-#{video_index+1}"
+    props = %{
+      classes: "disabled",
+      click_event: "",
+      icon: "icons/search/add",
+      icon_classes: "show-check-button",
+      id: id,
+      value: video_index
+    }
+    render_button(props, assigns)
+  end
+  defp render_button("add", video_index, false, assigns) do
+    id = "search-element-button-#{video_index+1}"
+    props = %{
+      classes: "search-control-enabled clickeable",
+      click_event: "add_to_queue",
+      icon: "icons/search/add",
+      icon_classes: "show-add-button",
+      id: id,
+      value: video_index
+    }
+    render_button(props, assigns)
+  end
+
+  defp render_button(
+    %{classes: classes, icon: icon, icon_classes: icon_classes, id: id,
+      value: value, click_event: click_event}, assigns
+  ) do
+    ~L"""
+      <a
+        class="<%= classes %>"
+        id="<%= id %>"
+        phx-click="<%= click_event %>"
+        phx-target="<%= assigns %>"
+        phx-value-video_id="<%= value %>"
+      >
+        <%= render_svg(icon, "h-12 w-12 #{icon_classes}") %>
+      </a>
+    """
+  end
+
   defp render_svg(icon, classes) do
     PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, icon, class: classes)
   end
