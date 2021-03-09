@@ -77,50 +77,53 @@
           >
             <%= if @public_rooms != [] do %>
 
-            <div class="list">
-              <div class="mb-4">
-                <ul class="like-list">
-                <%= for room <- @public_rooms do %>
-                  <li class="room-item separator">
-                    <div class="flex">
+            <div class="mb-4">
+              <ul class="like-list grid gap-2 grid-cols-1 lg:grid-cols-2 m-2">
+              <%= for room <- @public_rooms do %>
+                <li class="room-item col-span-1 hover-card px-2">
+                  <div class="flex grid grid-cols-8 xl:grid-cols-12">
+
+                    <div class="
+                      col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
                       <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView, "album_cover_grid.html", queue: room.queue %>
-                      <div class="flex-1 p-4">
-                        <p class="room-item-text">
-                          <a
-                            class="clickeable"
-                            phx-click="redirect_room"
-                            phx-value-slug="<%= room.slug %>"
-                          >
-                            <%= room.title %>
-                          </a>
+                    </div>
+
+                    <div class="col-span-6 row-span-1 sm:col-span-5 md:col-span-6 lg:col-span-6 xl:col-span-10 p-4">
+                      <p class="room-item-text">
+                        <a
+                          class="clickeable"
+                          phx-click="redirect_room"
+                          phx-value-slug="<%= room.slug %>"
+                        >
+                          <%= room.title %>
+                        </a>
+                      </p>
+                      <div class="p-2">
+                        <p class="room-peers">
+                          <%= if @rooms_players[String.to_atom(room.slug)] != nil do %>
+                            Currently playing: <%= @rooms_players[String.to_atom(room.slug)].title %>
+                          <% else %>
+                            Things are quiet here
+                          <% end %>
                         </p>
-                        <div class="p-2">
-                          <p class="room-peers">
-                            <%= if @rooms_players[String.to_atom(room.slug)] != nil do %>
-                              Currently playing: <%= @rooms_players[String.to_atom(room.slug)].title %>
-                            <% else %>
-                              Things are quiet here
-                            <% end %>
-                          </p>
-                        </div>
-                        <div class="p-2">
-                          <p class="room-peers">
-                            <i class="mini fas fa-users primary"></i>
-                            <span>
-                              <%= @viewers_quantity[String.to_atom(room.slug)] %>
-                            </span>
-                            <i class="mini fas fa-compact-disc primary ml-4"></i>
-                            <span>
-                              <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
-                            </span>
-                          </p>
-                        </div>
+                      </div>
+                      <div class="p-2">
+                        <p class="room-peers">
+                          <i class="mini fas fa-users primary"></i>
+                          <span>
+                            <%= @viewers_quantity[String.to_atom(room.slug)] %>
+                          </span>
+                          <i class="mini fas fa-compact-disc primary ml-4"></i>
+                          <span>
+                            <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
+                          </span>
+                        </p>
                       </div>
                     </div>
-                  </li>
-                <% end %>
-                </ul>
-              </div>
+                  </div>
+                </li>
+              <% end %>
+              </ul>
             </div>
 
             <% else %>
