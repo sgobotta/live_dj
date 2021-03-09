@@ -9,7 +9,6 @@
     class="overflow-x-hidden"
     id="notifications-handler-new-live"
     phx-hook="NotificationsHandling"
-    class="col-container"
   >
 
     <%= live_component @socket, LiveDjWeb.Components.NewLiveSidebar,
@@ -18,14 +17,88 @@
     do %>
       <div class="
         new-live-view
-        flex flex-col
-        mx-2 pt-10 px-0 sm:px-6 lg:mt-12
+        mx-2 mb-6 pt-10 px-0 sm:px-6 lg:mt-12 2xl:pb-8
         overflow-y-hidden
-        md:grid lg:grid md:gap-2 lg:gap-4 2xl:gap-6 lg:grid-cols-4 md:grid-cols-4
-        2xl:row-span-2 2xl:pb-8
+        grid grid-cols-1 sm:grid-cols-1 md:grid-cols-8 lg:grid-cols-8
+        md:grid-rows-2 lg:grid-rows-2
+        gap-2
       ">
+        <div class="
+          live-section-box
+          p-4 m-0 mt-4
+          col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-6 row-span-2
+        ">
 
-        <div class="live-section-box p-4 lg:order-1 lg:row-span-1 md:col-span-2 lg:col-span-1 m-0 mt-4">
+          <div class="flex items-start mt-1 section-title mb-5">
+            <span class="rounded text-white p-2 leading-none flex title-pill">
+              Public Rooms
+            </span>
+          </div>
+
+          <div
+            class="rooms-container overflow-y-scroll new-live-rooms-list"
+          >
+            <%= if @public_rooms != [] do %>
+
+            <div class="mb-4">
+              <ul class="like-list grid gap-2 grid-cols-1 lg:grid-cols-2 m-2">
+              <%= for room <- @public_rooms do %>
+                <li class="room-item col-span-1 hover-card px-2">
+                  <div class="flex grid grid-cols-8 xl:grid-cols-12">
+
+                    <div class="
+                      col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
+                      <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView, "album_cover_grid.html", queue: room.queue %>
+                    </div>
+
+                    <div
+                      class="
+                        p-4 clickeable
+                        col-span-6 row-span-1
+                        sm:col-span-5 md:col-span-6 lg:col-span-6 xl:col-span-10
+                      "
+                      phx-click="redirect_room"
+                      phx-value-slug="<%= room.slug %>"
+                    >
+                      <p class="text-3xl"><%= room.title %></p>
+                      <div class="p-2">
+                        <p class="room-peers">
+                          <%= if @rooms_players[String.to_atom(room.slug)] != nil do %>
+                            Currently playing: <%= @rooms_players[String.to_atom(room.slug)].title %>
+                          <% else %>
+                            Things are quiet here
+                          <% end %>
+                        </p>
+                      </div>
+                      <div class="p-2">
+                        <p class="room-peers">
+                          <i class="mini fas fa-users primary"></i>
+                          <span>
+                            <%= @viewers_quantity[String.to_atom(room.slug)] %>
+                          </span>
+                          <i class="mini fas fa-compact-disc primary ml-4"></i>
+                          <span>
+                            <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              <% end %>
+              </ul>
+            </div>
+
+            <% else %>
+              <p><span>Go ahead, create the first room!</span></p>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="
+          live-section-box p-4 m-0 mt-4
+          col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 row-span-1
+        ">
           <%= form_for @changeset, "#", [
             id: "create_room",
             phx_change: "validate",
@@ -62,74 +135,6 @@
               <%= submit "Save", class: "modal-button modal-submit-button full-width font-normal" %>
             </div>
           <% end %>
-        </div>
-
-        <div class="live-section-box p-4 lg:order-1 lg:row-span-1 md:col-span-2 lg:col-span-3 m-0 mt-4 mb-4">
-
-          <div class="flex items-start mt-1 section-title mb-5">
-            <span class="rounded text-white p-2 leading-none flex title-pill">
-              Public Rooms
-            </span>
-          </div>
-
-          <div
-            class="section-container col rooms-container overflow-y-scroll new-live-rooms-list"
-          >
-            <%= if @public_rooms != [] do %>
-
-            <div class="mb-4">
-              <ul class="like-list grid gap-2 grid-cols-1 lg:grid-cols-2 m-2">
-              <%= for room <- @public_rooms do %>
-                <li class="room-item col-span-1 hover-card px-2">
-                  <div class="flex grid grid-cols-8 xl:grid-cols-12">
-
-                    <div class="
-                      col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
-                      <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView, "album_cover_grid.html", queue: room.queue %>
-                    </div>
-
-                    <div class="col-span-6 row-span-1 sm:col-span-5 md:col-span-6 lg:col-span-6 xl:col-span-10 p-4">
-                      <p class="room-item-text">
-                        <a
-                          class="clickeable"
-                          phx-click="redirect_room"
-                          phx-value-slug="<%= room.slug %>"
-                        >
-                          <%= room.title %>
-                        </a>
-                      </p>
-                      <div class="p-2">
-                        <p class="room-peers">
-                          <%= if @rooms_players[String.to_atom(room.slug)] != nil do %>
-                            Currently playing: <%= @rooms_players[String.to_atom(room.slug)].title %>
-                          <% else %>
-                            Things are quiet here
-                          <% end %>
-                        </p>
-                      </div>
-                      <div class="p-2">
-                        <p class="room-peers">
-                          <i class="mini fas fa-users primary"></i>
-                          <span>
-                            <%= @viewers_quantity[String.to_atom(room.slug)] %>
-                          </span>
-                          <i class="mini fas fa-compact-disc primary ml-4"></i>
-                          <span>
-                            <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              <% end %>
-              </ul>
-            </div>
-
-            <% else %>
-              <p><span>Go ahead, create the first room!</span></p>
-            <% end %>
-          </div>
         </div>
       </div>
     <% end %>
