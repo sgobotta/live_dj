@@ -67,6 +67,11 @@ body {
   border-width: 0 !important;
 }
 
+.hover-card:hover {
+  border-radius: 5px;
+  background-color: $neutral-darker;
+}
+
 .hover-color-warning:hover {
   button {
     color: $warning;
@@ -665,10 +670,6 @@ b {
   }
   .room-item-text a:hover {
     color: $primary;
-    -webkit-animation: text-bolder 0.5s forwards;
-    -webkit-animation-delay: 0.1s;
-    animation: text-bolder 0.5s forwards;
-    animation-delay: 0.1s;
   }
 }
 
