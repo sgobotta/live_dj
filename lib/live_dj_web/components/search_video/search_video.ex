@@ -111,7 +111,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
         phx-target="<%= assigns %>"
         phx-value-video_id="<%= value %>"
       >
-        <%= render_svg(icon, "h-12 w-12 #{icon_classes}") %>
+        <%= render_svg(icon, "h-8 w-8 #{icon_classes}") %>
       </a>
     """
   end
