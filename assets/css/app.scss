@@ -1153,18 +1153,19 @@ input.chat-text-input:focus {
 }
 
 .pill {
-  background-color: $primary;
-  border: 10px black;
+  background-color: transparent;
+  border: solid 1px $neutral-semi-dark;
   border-radius: 25px;
   align-items: center;
 
   &.current-video {
+    border: solid 1px transparent;
     background-color: $secondary;
   }
 } 
 
 .shinning-pill {
-  width:100%;
+  width: 100%;
 
   animation-name: ShineAnimation;
   animation-duration: 2s;
@@ -1510,7 +1511,8 @@ svg.peers-control-admin-asset.show-remove-button .peers-control-admin-asset-remo
 }
 
 .pill.draggable:hover {
-  background-color: $secondary-highlight-1;
+  border: solid 1px transparent;
+  background-color: $primary-light;
 
   p {
     color: #000
