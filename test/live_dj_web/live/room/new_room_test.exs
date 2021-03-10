@@ -147,7 +147,6 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     end
   end
 
-  @tag wip: true
   describe "As a registered user When there are rooms" do
 
     alias LiveDj.OrganizerFixtures
