@@ -257,6 +257,35 @@ defmodule LiveDjWeb.ShowRoomTest do
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
     end
+
+    @tag wip: true
+    test "As a registered User I can search and add a video to a single video queue",
+      %{conn: conn, group: group}
+    do
+      # Associates a group id to a new user for a new room
+      %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: false, group_id: group.id
+      }, %{}, %{queue: [hd(room_queue())]})
+      # Creates a new authenticated connection
+      owner_conn = log_in_user(conn, user)
+      {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
+      # Simulates a search video interaction
+      search_query = "some video search"
+      view
+        |> element(@search_video_form_id)
+        |> render_change(%{search_field: %{query: search_query}})
+      view
+        |> element(@search_video_form_id)
+        |> render_submit(%{})
+      assert_push_event view, "receive_search_completed_signal", %{}
+      # Adds a video to the queue
+      view
+        |> element("#search-element-button-1")
+        |> render_click()
+      pos = length(room.queue) + 1
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+    end
   end
 
   describe "ShowLive video queue behaviour - Registered users" do
@@ -571,7 +600,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       # an owner of the room
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: true, group_id: room_admin_group.id
-      }, %{}, %{management_type: "managed"})
+      }, %{}, %{management_type: "free"})
       %{conn: log_in_user(conn, user), room: room}
     end
 
