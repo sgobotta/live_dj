@@ -147,6 +147,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     end
   end
 
+  @tag wip: true
   describe "As a registered user When there are rooms" do
 
     alias LiveDj.OrganizerFixtures
@@ -157,10 +158,11 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     end
 
     test "The rooms assigns contain a public rooms list", %{conn: conn, rooms: rooms} do
-      %{assigns: assigns} = _conn = get(conn, "/")
+      %{assigns: %{public_rooms: public_rooms}} = _conn = get(conn, "/")
 
-      %{public_rooms: public_rooms} = assigns # FIXME
-      assert public_rooms == rooms
+      for room <- rooms do
+        assert Enum.member?(public_rooms, room)
+      end
     end
   end
 
