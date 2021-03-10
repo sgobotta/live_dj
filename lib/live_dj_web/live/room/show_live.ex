@@ -513,16 +513,6 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   @impl true
-  def handle_event("remove_track", params, socket) do
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:remove_track, %{video_id: params["video_id"]}}
-    )
-    {:noreply, socket}
-  end
-
-  @impl true
   def handle_event("player_signal_sort_video", %{"from" => from, "to" => to}, socket) do
     %{
       player: player,
