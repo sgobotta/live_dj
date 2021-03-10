@@ -5,6 +5,7 @@ defmodule LiveDjWeb.Components.PlayerControls do
 
   use LiveDjWeb, :live_component
 
+  alias LiveDj.Accounts.Permission
   alias LiveDj.Organizer.Player
   alias LiveDj.Organizer.Queue
 
@@ -18,10 +19,10 @@ defmodule LiveDjWeb.Components.PlayerControls do
     is_managed = room_management != "free"
 
     player_permissions = %{
-      can_play_track: !is_managed or has_permission(permissions, "can_play_track"),
-      can_pause_track: !is_managed or has_permission(permissions, "can_pause_track"),
-      can_play_next_track: !is_managed or has_permission(permissions, "can_play_next_track"),
-      can_play_previous_track: !is_managed or has_permission(permissions, "can_play_previous_track"),
+      can_play_track: !is_managed or Permission.has_permission(permissions, "can_play_track"),
+      can_pause_track: !is_managed or Permission.has_permission(permissions, "can_pause_track"),
+      can_play_next_track: !is_managed or Permission.has_permission(permissions, "can_play_next_track"),
+      can_play_previous_track: !is_managed or Permission.has_permission(permissions, "can_play_previous_track"),
     }
 
     {:ok,
@@ -29,10 +30,6 @@ defmodule LiveDjWeb.Components.PlayerControls do
       |> assign(:player_permissions, player_permissions)
       |> assign(assigns)
     }
-  end
-
-  defp has_permission(permissions, permission) do
-    Enum.any?(permissions, fn p -> p.codename == permission end)
   end
 
   def handle_event("player_signal_playing", _params,
