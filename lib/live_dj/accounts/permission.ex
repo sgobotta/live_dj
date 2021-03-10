@@ -15,4 +15,8 @@ defmodule LiveDj.Accounts.Permission do
     |> cast(attrs, [:name, :codename])
     |> validate_required([:name, :codename])
   end
+
+  def has_permission(permissions, permission) do
+    Enum.any?(permissions, fn p -> p.codename == permission end)
+  end
 end
