@@ -1510,7 +1510,16 @@ svg.peers-control-admin-asset.show-remove-button .peers-control-admin-asset-remo
   animation-delay: 0.1s;
 }
 
-.pill.draggable:hover {
+.hovered-pill {
+  border: solid 1px transparent;
+  background-color: $primary-light;
+  
+  p {
+    color: #000
+  }
+}
+
+.pill.draggable.hoverable:hover {
   border: solid 1px transparent;
   background-color: $primary-light;
 
@@ -1971,14 +1980,14 @@ ul.playlist {
       display: inline-block;
       position: absolute;
       width: 70%;
-      left: 40px;
-      height: 40px;
-      bottom: 0px;
+      left: 54px;
+      height: 20px;
+      top: 0px;
       cursor: pointer;
 
       &.expand {
         bottom: -30px;
-        height: 80px;
+        height: 110px;
         background-color: transparent;
         z-index: 90;
       }
