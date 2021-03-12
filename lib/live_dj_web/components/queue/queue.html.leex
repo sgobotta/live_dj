@@ -27,43 +27,38 @@
         data-position="<%= index + 1 %>"
         phx-hook="DragAndDropping"
       >
-        <div>
+        <div
+          class="flex space-x-4 pill <%= if video.video_id == @player.video_id do %>current-video shinning-pill<% else %>hoverable<% end %>"
+        >
           <div
-            class="flex space-x-4 pill <%= if video.video_id == @player.video_id do %>current-video shinning-pill<% end %> draggable"
+            id="<%= "play-button-#{index}" %>"
+            class="
+              queue-thumb flex-1
+              <%= if video.video_id == @player.video_id do %>current-video<% end %>
+            "
+            phx-click="player_signal_play_by_id"
+            phx-value-video_id="<%= video.video_id %>"
           >
-            <div
-              id="<%= "play-button-#{index}" %>"
-              class="
-                queue-thumb flex-1
-                <%= if video.video_id == @player.video_id do %>current-video<% end %>
-              "
-              phx-click="player_signal_play_by_id"
-              phx-value-video_id="<%= video.video_id %>"
-            >
-              <img src="<%= video.img_url %>" class="queue-thumb" />
-              <i class="fas fa-play-circle queue-thumb-icon clickeable"></i>
-            </div>
-
-            <div class="flex-1 video-info-container">
-              <div class="align-center">
-                <p class="pill-text"><%= video.title %></p>
-              </div>
-            </div>
-
-            <div class="flex-1 remove-track-container">
-              <%= if @player.video_id != video.video_id do %>
-                <a
-                  class="btn"
-                  id="<%= "remove-video-button-#{index}" %>"
-                  phx-click="remove_track"
-                  phx-value-video_id="<%= video.video_id %>"
-                >
-                  <i class="fas fa-trash trash clickeable"></i>
-                </a>
-              <% end %>
-            </div>
-
+            <img src="<%= video.img_url %>" class="queue-thumb" />
+            <i class="fas fa-play-circle queue-thumb-icon clickeable"></i>
           </div>
+
+          <div class="flex-1 video-info-container">
+            <div class="align-center">
+              <p class="pill-text"><%= video.title %></p>
+            </div>
+          </div>
+
+          <div class="flex-1 remove-track-container">
+            <%= render_remove_button(
+              @player.video_id,
+              video.video_id,
+              index,
+              @queue_permissions.can_remove_track,
+              @myself
+            ) %>
+          </div>
+
         </div>
         <span data-over-slot="<%= index + 1 %>" class="over-zone" />
       </li>
