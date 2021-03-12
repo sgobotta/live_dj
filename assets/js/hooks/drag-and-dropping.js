@@ -1,5 +1,17 @@
 const DragAndDropping = () => ({
   async mounted() {
+    const childNodes = this.el.childNodes
+    const isAGhostNode = !childNodes.length === 4
+    if (!isAGhostNode) {
+      const trackItem = childNodes[1]
+      const overZone = childNodes[3]
+      overZone.addEventListener("mouseover", () => {
+        trackItem.classList.add("hovered-pill")
+      })
+      overZone.addEventListener("mouseleave", () => {
+        trackItem.classList.remove("hovered-pill")
+      })
+    }
 
     function updateGhostsStyles(position, className) {
       Array.from(Array(2).keys()).forEach(index => {
