@@ -1153,7 +1153,7 @@ input.chat-text-input:focus {
 }
 
 .pill {
-  background-color: transparent;
+  background-color: $neutral-darker;
   border: solid 1px $neutral-semi-dark;
   border-radius: 25px;
   align-items: center;
@@ -1981,13 +1981,13 @@ ul.playlist {
       position: absolute;
       width: 70%;
       left: 54px;
-      height: 20px;
-      top: 0px;
+      height: 40px;
+      bottom: 0px;
       cursor: pointer;
 
       &.expand {
         bottom: -30px;
-        height: 110px;
+        height: 80px;
         background-color: transparent;
         z-index: 90;
       }
@@ -2007,8 +2007,8 @@ ul.playlist {
       display: block;
       position: relative;
       height: 50px;
-      background-color: transparent;
-      border: 3px solid $secondary-highlight-1;
+      background-color: #222;
+      border: 2px solid $secondary-highlight-1;
       border-style: dashed;
       border-radius: 50px;
       animation: opacity .4s ease forwards
