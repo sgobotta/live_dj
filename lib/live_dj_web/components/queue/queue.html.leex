@@ -28,7 +28,7 @@
         phx-hook="DragAndDropping"
       >
         <div
-          class="flex space-x-4 pill <%= if video.video_id == @player.video_id do %>current-video shinning-pill<% else %>hoverable<% end %>"
+          class="flex space-x-4 pill <%= if video.video_id == @player.video_id do %>current-video shinning-pill<% else %>hoverable<% end %> draggable"
         >
           <div
             id="<%= "play-button-#{index}" %>"
