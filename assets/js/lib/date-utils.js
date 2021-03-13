@@ -1,7 +1,7 @@
 export function secondsToTime(seconds) {
-  var hours   = Math.floor(seconds / 3600);
-  var minutes = Math.floor((seconds - (hours * 3600)) / 60);
-  var seconds = seconds - (hours * 3600) - (minutes * 60);
+  const hours   = Math.floor(seconds / 3600);
+  let minutes = Math.floor((seconds - (hours * 3600)) / 60);
+  const _seconds = seconds - (hours * 3600) - (minutes * 60);
   var time = "";
 
   if (hours != 0) {
@@ -14,10 +14,10 @@ export function secondsToTime(seconds) {
     time += "0:"
   }
   if (time === "") {
-    time = seconds;
+    time = _seconds;
   }
   else {
-    time += (seconds < 10) ? "0"+seconds : String(seconds);
+    time += (_seconds < 10) ? "0"+_seconds : String(_seconds);
   }
   return time;
 }
