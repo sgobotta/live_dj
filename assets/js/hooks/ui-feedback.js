@@ -18,7 +18,7 @@ const UiFeedback = () => ({
       applyAnimationClass(`[data-position="${pos}"] > div.pill`, 'adds-track')
     })
 
-    this.handleEvent('queue_saved', ({pos}) => {
+    this.handleEvent('queue_saved', () => {
       const saveButton = document.querySelector('svg.queue-control-disabled')
       saveButton.classList.add('animate-save-button-saved')
 
