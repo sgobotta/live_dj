@@ -1,6 +1,8 @@
 import debounce from 'lodash.debounce'
 import { secondsToTime } from '../lib/date-utils'
 
+const HOOK_ID = '#player-syncing-controls'
+
 const updateTimeDisplay = (timeTrackerElem, time) => {
   const videoTime = (time === 0 || time === undefined)
     ? '-'
@@ -48,7 +50,7 @@ const onStateChange = (
     case 1: {
       // console.log('interval is on')
       const { target: player } = event
-      // console.log('playing')
+      hookContext.pushEventTo(HOOK_ID, 'player_signal_playing')
       const trackTimeInterval = setInterval(() => {
         udpateTimeDisplays(
           startTimeTrackerElem,
@@ -61,7 +63,7 @@ const onStateChange = (
       break
     }
     case 2: {
-      // console.log('paused: ', event)
+      hookContext.pushEventTo(HOOK_ID, 'player_signal_paused')
       const { trackTimeInterval } = hookContext.el.dataset
       clearInterval(trackTimeInterval)
       const { target: player } = event
