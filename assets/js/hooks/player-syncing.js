@@ -1,4 +1,3 @@
-import debounce from 'lodash.debounce'
 import { secondsToTime } from '../lib/date-utils'
 
 const HOOK_ID = '#player-syncing-controls'
@@ -21,7 +20,12 @@ const updateVideoSlider = (
 }
 
 
-const udpateTimeDisplays = (startTimeTrackerElem, endTimeTrackerElem, timeSliderElem, player) => {
+const udpateTimeDisplays = (
+  startTimeTrackerElem,
+  endTimeTrackerElem,
+  timeSliderElem,
+  player
+) => {
   const currentTime = player.getCurrentTime()
   const totalTime = player.getDuration()
   updateTimeDisplay(startTimeTrackerElem, currentTime)
@@ -86,28 +90,6 @@ const onStateChange = (
   }
 }
 
-// const initTimeSlider = hookContext => player => {
-  // const timeSlider = document.getElementById('video-time-control')
-
-  // const playerCurrentTime = player.getCurrentTime()
-  // const playerDuration = player.getDuration()
-  // console.log('[Player] Current time :: ', playerCurrentTime)
-  // console.log('[Player] Duration :: ', playerDuration)
-  // timeSlider.min = 0
-  // timeSlider.max = playerDuration
-  // timeSlider.value = playerCurrentTime
-
-  // const onTimeChange = debounce(({target}) => {
-    
-  //   console.log('target :: ', target)
-  //   console.log('value :: ',target.value)
-  //   // timeTracker.value = player.getCurrentTime()
-  
-  // }, 200)
-
-  // timeSlider.oninput = onTimeChange
-// }
-
 const PlayerSyncing = initPlayer => ({
   async mounted() {
     const startTimeTrackerElem = document.getElementById('yt-video-start-time')
@@ -124,7 +106,7 @@ const PlayerSyncing = initPlayer => ({
     this.handleEvent('receive_mute_signal', () => {
       player.mute()
     })
-    
+
     this.handleEvent('receive_unmute_signal', () => {
       player.unMute()
     })
@@ -149,10 +131,14 @@ const PlayerSyncing = initPlayer => ({
       )
     })
 
-    this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
+    this.handleEvent('receive_player_state', ({
+      shouldPlay,
+      time,
+      videoId
+    }) => {
       player.loadVideoById({ videoId, startSeconds: time })
       setTimeout(() => {
-        document.scrollingElement.scrollIntoView({behavior: 'smooth'})
+        document.scrollingElement.scrollIntoView({ behavior: 'smooth' })
 
         udpateTimeDisplays(
           startTimeTrackerElem,
@@ -165,7 +151,7 @@ const PlayerSyncing = initPlayer => ({
       }, 300)
     })
 
-    this.handleEvent('receive_player_volume', ({level: volumeLevel}) => {
+    this.handleEvent('receive_player_volume', ({ level: volumeLevel }) => {
       player.setVolume(volumeLevel)
     })
 
