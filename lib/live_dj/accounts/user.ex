@@ -2,6 +2,7 @@ defmodule LiveDj.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias LiveDj.Collections.{Video, UserVideo}
   alias LiveDj.Organizer.{Room, UserRoom}
   alias LiveDj.Stats.{Badge, UserBadge}
 
@@ -15,6 +16,7 @@ defmodule LiveDj.Accounts.User do
 
     many_to_many :badges, Badge, join_through: UserBadge
     many_to_many :rooms, Room, join_through: UserRoom
+    many_to_many :videos, Video, join_through: UserVideo
 
     timestamps()
   end
