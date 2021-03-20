@@ -148,7 +148,7 @@ defmodule LiveDj.Collections do
   def create_user_video(attrs \\ %{}) do
     %UserVideo{}
     |> UserVideo.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(on_conflict: :nothing)
   end
 
   @doc """
