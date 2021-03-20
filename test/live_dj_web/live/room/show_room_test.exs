@@ -194,6 +194,8 @@ defmodule LiveDjWeb.ShowRoomTest do
 
   describe "ShowLive search video behaviour" do
 
+    alias LiveDj.Collections
+
     @search_video_form_id "#search-video-form"
 
     setup(%{conn: conn}) do
@@ -209,6 +211,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: false, group_id: group.id
       })
+      # Fetches an initial video list
+      videos = Collections.list_videos()
       # Creates a new authenticated connection
       owner_conn = log_in_user(conn, user)
       {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
@@ -228,6 +232,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       pos = length(room.queue) + 1
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
 
     test "As a registered User I can search and add a video to an empty queue",
@@ -237,6 +242,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: false, group_id: group.id
       }, %{}, %{queue: []})
+      # Fetches an initial video list
+      videos = Collections.list_videos()
       # Creates a new authenticated connection
       owner_conn = log_in_user(conn, user)
       {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
@@ -256,9 +263,9 @@ defmodule LiveDjWeb.ShowRoomTest do
       pos = length(room.queue) + 1
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
 
-    @tag wip: true
     test "As a registered User I can search and add a video to a single video queue",
       %{conn: conn, group: group}
     do
@@ -266,6 +273,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: false, group_id: group.id
       }, %{}, %{queue: [hd(room_queue())]})
+      # Fetches an initial video list
+      videos = Collections.list_videos()
       # Creates a new authenticated connection
       owner_conn = log_in_user(conn, user)
       {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
@@ -285,6 +294,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       pos = length(room.queue) + 1
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
   end
 
