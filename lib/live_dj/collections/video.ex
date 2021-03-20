@@ -24,12 +24,12 @@ defmodule LiveDj.Collections.Video do
 
   def from_tubex(video) do
     %{
-      channel_title: video.channel_title,
-      description: video.description,
+      channel_title: HtmlEntities.decode(video.channel_title),
+      description: HtmlEntities.decode(video.description),
       img_height: Integer.to_string(video.img_height),
       img_url: video.img_url,
       img_width: Integer.to_string(video.img_width),
-      title: video.title,
+      title: HtmlEntities.decode(video.title),
       video_id: video.video_id,
     }
   end
