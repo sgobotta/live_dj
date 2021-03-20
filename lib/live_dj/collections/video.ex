@@ -2,6 +2,8 @@ defmodule LiveDj.Collections.Video do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias LiveDj.Collections.UserVideo
+
   schema "videos" do
     field :channel_title, :string
     field :description, :string
@@ -10,6 +12,8 @@ defmodule LiveDj.Collections.Video do
     field :img_width, :string
     field :title, :string
     field :video_id, :string
+
+    many_to_many :users, LiveDj.Accounts.User, join_through: UserVideo
 
     timestamps()
   end
