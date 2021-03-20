@@ -1,6 +1,6 @@
 defmodule LiveDj.Organizer.Queue do
 
-  alias LiveDj.Organizer.Video
+  alias LiveDj.Organizer.QueueItem
 
   def get_initial_controls do
     %{is_save_enabled: false}
@@ -21,11 +21,11 @@ defmodule LiveDj.Organizer.Queue do
   def add_to_queue(queue, video) do
     case queue do
       []  -> [video]
-      [v] -> [Video.update(v, %{next: video.video_id}) | [Video.update(video, %{previous: v.video_id})]]
+      [v] -> [QueueItem.update(v, %{next: video.video_id}) | [QueueItem.update(video, %{previous: v.video_id})]]
       [v|vs] ->
         videos = Enum.drop(vs, -1)
-        last_video = Video.update(List.last(vs), %{next: video.video_id})
-        new_video = Video.update(video, %{previous: last_video.video_id})
+        last_video = QueueItem.update(List.last(vs), %{next: video.video_id})
+        new_video = QueueItem.update(video, %{previous: last_video.video_id})
         [v | videos ++ [last_video, new_video]]
     end
   end
@@ -35,10 +35,10 @@ defmodule LiveDj.Organizer.Queue do
     queue = Enum.filter(queue, fn video -> video.video_id != video_id end)
     Enum.map(queue, fn v ->
       case v.next == video.video_id do
-        true -> Video.update(v, %{next: video.next})
+        true -> QueueItem.update(v, %{next: video.next})
         false ->
           case v.previous == video.video_id do
-            true -> Video.update(v, %{previous: video.previous})
+            true -> QueueItem.update(v, %{previous: video.previous})
             false -> v
           end
       end
@@ -57,12 +57,12 @@ defmodule LiveDj.Organizer.Queue do
   def link_by_prop(queue, prop, from, to) do
     {_, queue} = Enum.reduce(queue, {"", []}, fn ({v,i}, {link_id, vs_acc}) ->
       video = case i do
-        ^from                -> Video.update(v, %{prop => link_id})
-        ^to                  -> Video.update(v, %{prop => link_id})
-        i when (from-1) == i -> Video.update(v, %{prop => link_id})
-        i when (from+1) == i -> Video.update(v, %{prop => link_id})
-        i when (to-1)   == i -> Video.update(v, %{prop => link_id})
-        i when (to+1)   == i -> Video.update(v, %{prop => link_id})
+        ^from                -> QueueItem.update(v, %{prop => link_id})
+        ^to                  -> QueueItem.update(v, %{prop => link_id})
+        i when (from-1) == i -> QueueItem.update(v, %{prop => link_id})
+        i when (from+1) == i -> QueueItem.update(v, %{prop => link_id})
+        i when (to-1)   == i -> QueueItem.update(v, %{prop => link_id})
+        i when (to+1)   == i -> QueueItem.update(v, %{prop => link_id})
         _                    -> v
       end
       {video.video_id, vs_acc ++ [{video,i}]}

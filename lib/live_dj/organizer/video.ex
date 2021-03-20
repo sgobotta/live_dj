@@ -1,6 +1,6 @@
-defmodule LiveDj.Organizer.Video do
+defmodule LiveDj.Organizer.QueueItem do
 
-  alias LiveDj.Organizer.Video
+  alias LiveDj.Organizer.QueueItem
 
   @derive Jason.Encoder
 
@@ -31,7 +31,7 @@ defmodule LiveDj.Organizer.Video do
 
   def from_jsonb(jsonb_video) do
     added_by = jsonb_video["added_by"]
-    %Video{
+    %QueueItem{
       added_by: %{username: added_by["username"], uuid: added_by["uuid"]},
       channel_title: jsonb_video["channel_title"],
       description: jsonb_video["description"],
@@ -47,7 +47,7 @@ defmodule LiveDj.Organizer.Video do
   end
 
   def from_tubex_video(tubex_video) do
-    %Video{
+    %QueueItem{
       channel_title: HtmlEntities.decode(tubex_video.channel_title),
       img_url: tubex_video.thumbnails["default"]["url"],
       img_height: tubex_video.thumbnails["default"]["height"],

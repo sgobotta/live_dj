@@ -9,7 +9,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.{Chat, Player, Queue, Video, VolumeControls}
+  alias LiveDj.Organizer.{Chat, Player, Queue, QueueItem, VolumeControls}
   alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
@@ -78,7 +78,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
         parsed_queue = room.queue
-        |> Enum.map(fn track -> Video.from_jsonb(track) end)
+        |> Enum.map(fn track -> QueueItem.from_jsonb(track) end)
 
         player = Player.get_initial_state()
         {:ok,
@@ -172,7 +172,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       video_queue_controls: video_queue_controls} = assigns
     # Attempts to mark the selected song on each peer search result
     search_result = Enum.map(search_result, fn {video, index} ->
-      {Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
+      {QueueItem.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
     end)
     video_queue_controls = Queue.mark_as_unsaved(video_queue_controls)
     socket = socket
@@ -253,7 +253,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{current_queue: current_queue, messages: messages, player: player} = params
     current_queue = Enum.map(current_queue, fn {v, _} -> v end)
     search_result = Enum.map(search_result, fn {video, index} ->
-      video = Video.update(video, %{
+      video = QueueItem.update(video, %{
         is_queued: Queue.is_queued(video, current_queue)})
       {video, index}
     end)
@@ -382,7 +382,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
       socket
       |> assign(:search_result, Enum.map(search_data, fn {video, index} ->
-        video = Video.update(video, %{
+        video = QueueItem.update(video, %{
           is_queued: Queue.is_queued(video, video_queue)})
         {video, index}
       end))
