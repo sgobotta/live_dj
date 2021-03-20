@@ -19,5 +19,6 @@ defmodule LiveDj.Collections.Video do
     video
     |> cast(attrs, [:channel_title, :description, :img_height, :img_url, :img_width, :title, :video_id])
     |> validate_required([:channel_title, :description, :img_height, :img_url, :img_width, :title, :video_id])
+    |> unique_constraint(:video_id)
   end
 end
