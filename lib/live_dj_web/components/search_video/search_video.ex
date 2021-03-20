@@ -6,6 +6,8 @@ defmodule LiveDjWeb.Components.SearchVideo do
 
   use LiveDjWeb, :live_component
 
+  alias LiveDj.Collections
+  alias LiveDj.Collections.Video
   alias LiveDj.Organizer.{Queue, QueueItem}
 
   @impl true
@@ -59,6 +61,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
         index == selected_video
       end
     )
+    _video = Collections.create_video(Video.from_tubex(selected_video))
     selected_video = QueueItem.assign_user(selected_video, user)
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
       |> Queue.add_to_queue(selected_video)
