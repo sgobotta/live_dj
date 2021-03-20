@@ -9,7 +9,6 @@ defmodule LiveDj.Repo.Migrations.CreateUsersVideos do
       timestamps()
     end
 
-    create index(:users_videos, [:user_id])
-    create index(:users_videos, [:video_id])
+    create unique_index(:users_videos, [:user_id, :video_id])
   end
 end
