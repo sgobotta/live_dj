@@ -23,7 +23,8 @@ try do
     "users",
     "users_rooms",
     "badges",
-    "badges_relations"
+    "badges_relations",
+    "users_videos",
   ]
   for seed <- seeds do
     Code.require_file("seeds/#{seed}.exs", __DIR__)
