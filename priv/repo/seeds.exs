@@ -14,6 +14,7 @@ require Logger
 
 try do
   seeds = [
+    "videos",
     "permissions",
     "groups",
     "permissions_groups",
