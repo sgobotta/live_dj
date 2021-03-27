@@ -1,41 +1,38 @@
 require Logger
 
+alias LiveDj.Accounts.User
 alias LiveDj.Collections
+alias LiveDj.Repo
 
 schema_upper = "UserVideo"
 schema_plural = "user videos"
 
 try do
   # Assumes Users and Videos were created
-  # {user_id, video_id}
-  [
-    {1,  1},
-    {1,  2},
-    {1,  3},
-    {1,  4},
-    {1,  5},
-    {1,  6},
+  users = Repo.all(User) |> Enum.map(fn u -> u.id end)
+  videos = Collections.list_videos() |> Enum.map(fn v -> v.id end)
 
-    {2,  1},
-    {2,  2},
-    {2,  3},
-    {2,  4},
-    {2,  5},
-    {2,  6},
+  # [{user_id, video_id}]
+  for u <- users do
+    evens = Enum.filter(videos, fn e -> rem(e, 2) == 0 end)
+    odds = Enum.filter(videos, fn e -> rem(e, 2) == 0 end)
+    all = videos
 
-    {3,  1},
-    {3,  2},
-    {3,  3},
-    {3,  4},
-    {3,  5},
-    {3,  6},
+    videos_length = length(videos)
+    a_quarter_videos = trunc(videos_length / 4)
+    first_quarter = Enum.slice(videos, 0, a_quarter_videos * 2)
+    second_and_third_quarter = Enum.slice(videos, a_quarter_videos, a_quarter_videos * 2)
 
-    {4,  1},
-
-    {5,  1},
-
-    {6,  6},
-  ]
+    case u do
+      1 -> for v <- evens, do: {u, v}
+      2 -> for v <- odds, do: {u, v}
+      3 -> for v <- all, do: {u, v}
+      4 -> for v <- first_quarter, do: {u, v}
+      5 -> for v <- second_and_third_quarter, do: {u, v}
+      _ -> []
+    end
+  end
+  |> List.flatten()
   |> Enum.map(
       fn {user_id, video_id} ->
         {:ok, _} = Collections.create_user_video(%{
