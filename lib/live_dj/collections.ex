@@ -293,4 +293,100 @@ defmodule LiveDj.Collections do
   def change_playlist(%Playlist{} = playlist, attrs \\ %{}) do
     Playlist.changeset(playlist, attrs)
   end
+
+  alias LiveDj.Collections.PlaylistVideo
+
+  @doc """
+  Returns the list of playlists_videos.
+
+  ## Examples
+
+      iex> list_playlists_videos()
+      [%PlaylistVideo{}, ...]
+
+  """
+  def list_playlists_videos do
+    Repo.all(PlaylistVideo)
+  end
+
+  @doc """
+  Gets a single playlist_video.
+
+  Raises `Ecto.NoResultsError` if the Playlist video does not exist.
+
+  ## Examples
+
+      iex> get_playlist_video!(123)
+      %PlaylistVideo{}
+
+      iex> get_playlist_video!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_playlist_video!(id), do: Repo.get!(PlaylistVideo, id)
+
+  @doc """
+  Creates a playlist_video.
+
+  ## Examples
+
+      iex> create_playlist_video(%{field: value})
+      {:ok, %PlaylistVideo{}}
+
+      iex> create_playlist_video(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_playlist_video(attrs \\ %{}) do
+    %PlaylistVideo{}
+    |> PlaylistVideo.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a playlist_video.
+
+  ## Examples
+
+      iex> update_playlist_video(playlist_video, %{field: new_value})
+      {:ok, %PlaylistVideo{}}
+
+      iex> update_playlist_video(playlist_video, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_playlist_video(%PlaylistVideo{} = playlist_video, attrs) do
+    playlist_video
+    |> PlaylistVideo.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a playlist_video.
+
+  ## Examples
+
+      iex> delete_playlist_video(playlist_video)
+      {:ok, %PlaylistVideo{}}
+
+      iex> delete_playlist_video(playlist_video)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_playlist_video(%PlaylistVideo{} = playlist_video) do
+    Repo.delete(playlist_video)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking playlist_video changes.
+
+  ## Examples
+
+      iex> change_playlist_video(playlist_video)
+      %Ecto.Changeset{data: %PlaylistVideo{}}
+
+  """
+  def change_playlist_video(%PlaylistVideo{} = playlist_video, attrs \\ %{}) do
+    PlaylistVideo.changeset(playlist_video, attrs)
+  end
 end
