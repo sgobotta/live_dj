@@ -140,4 +140,61 @@ defmodule LiveDj.CollectionsTest do
       assert %Ecto.Changeset{} = Collections.change_user_video(user_video)
     end
   end
+
+  describe "playlists" do
+    alias LiveDj.Collections.Playlist
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    # @invalid_attrs %{}
+
+    def playlist_fixture(attrs \\ %{}) do
+      {:ok, playlist} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Collections.create_playlist()
+
+      playlist
+    end
+
+    test "list_playlists/0 returns all playlists" do
+      playlist = playlist_fixture()
+      assert Collections.list_playlists() == [playlist]
+    end
+
+    test "get_playlist!/1 returns the playlist with given id" do
+      playlist = playlist_fixture()
+      assert Collections.get_playlist!(playlist.id) == playlist
+    end
+
+    test "create_playlist/1 with valid data creates a playlist" do
+      assert {:ok, %Playlist{} = playlist} = Collections.create_playlist(@valid_attrs)
+    end
+
+    # test "create_playlist/1 with invalid data returns error changeset" do
+    #   assert {:error, %Ecto.Changeset{}} = Collections.create_playlist(@invalid_attrs)
+    # end
+
+    test "update_playlist/2 with valid data updates the playlist" do
+      playlist = playlist_fixture()
+      assert {:ok, %Playlist{} = playlist} = Collections.update_playlist(playlist, @update_attrs)
+    end
+
+    # test "update_playlist/2 with invalid data returns error changeset" do
+    #   playlist = playlist_fixture()
+    #   assert {:error, %Ecto.Changeset{}} = Collections.update_playlist(playlist, @invalid_attrs)
+    #   assert playlist == Collections.get_playlist!(playlist.id)
+    # end
+
+    test "delete_playlist/1 deletes the playlist" do
+      playlist = playlist_fixture()
+      assert {:ok, %Playlist{}} = Collections.delete_playlist(playlist)
+      assert_raise Ecto.NoResultsError, fn -> Collections.get_playlist!(playlist.id) end
+    end
+
+    test "change_playlist/1 returns a playlist changeset" do
+      playlist = playlist_fixture()
+      assert %Ecto.Changeset{} = Collections.change_playlist(playlist)
+    end
+  end
 end
