@@ -197,4 +197,62 @@ defmodule LiveDj.CollectionsTest do
       assert %Ecto.Changeset{} = Collections.change_playlist(playlist)
     end
   end
+
+  describe "playlists_videos" do
+    alias LiveDj.Collections.PlaylistVideo
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    # @invalid_attrs %{}
+
+    @tag wip: true
+    def playlist_video_fixture(attrs \\ %{}) do
+      {:ok, playlist_video} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Collections.create_playlist_video()
+
+      playlist_video
+    end
+
+    test "list_playlists_videos/0 returns all playlists_videos" do
+      playlist_video = playlist_video_fixture()
+      assert Collections.list_playlists_videos() == [playlist_video]
+    end
+
+    test "get_playlist_video!/1 returns the playlist_video with given id" do
+      playlist_video = playlist_video_fixture()
+      assert Collections.get_playlist_video!(playlist_video.id) == playlist_video
+    end
+
+    test "create_playlist_video/1 with valid data creates a playlist_video" do
+      assert {:ok, %PlaylistVideo{} = playlist_video} = Collections.create_playlist_video(@valid_attrs)
+    end
+
+    # test "create_playlist_video/1 with invalid data returns error changeset" do
+    #   assert {:error, %Ecto.Changeset{}} = Collections.create_playlist_video(@invalid_attrs)
+    # end
+
+    test "update_playlist_video/2 with valid data updates the playlist_video" do
+      playlist_video = playlist_video_fixture()
+      assert {:ok, %PlaylistVideo{} = playlist_video} = Collections.update_playlist_video(playlist_video, @update_attrs)
+    end
+
+    # test "update_playlist_video/2 with invalid data returns error changeset" do
+    #   playlist_video = playlist_video_fixture()
+    #   assert {:error, %Ecto.Changeset{}} = Collections.update_playlist_video(playlist_video, @invalid_attrs)
+    #   assert playlist_video == Collections.get_playlist_video!(playlist_video.id)
+    # end
+
+    test "delete_playlist_video/1 deletes the playlist_video" do
+      playlist_video = playlist_video_fixture()
+      assert {:ok, %PlaylistVideo{}} = Collections.delete_playlist_video(playlist_video)
+      assert_raise Ecto.NoResultsError, fn -> Collections.get_playlist_video!(playlist_video.id) end
+    end
+
+    test "change_playlist_video/1 returns a playlist_video changeset" do
+      playlist_video = playlist_video_fixture()
+      assert %Ecto.Changeset{} = Collections.change_playlist_video(playlist_video)
+    end
+  end
 end
