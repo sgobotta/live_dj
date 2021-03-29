@@ -2,7 +2,11 @@ defmodule LiveDj.Collections.Playlist do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias LiveDj.Collections.{PlaylistVideo, Video}
+
   schema "playlists" do
+
+    many_to_many :videos, Video, join_through: PlaylistVideo
 
     timestamps()
   end
