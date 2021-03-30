@@ -4,6 +4,7 @@ defmodule LiveDj.OrganizerTest do
   alias LiveDj.Organizer
 
   describe "rooms" do
+    alias LiveDj.Collections
     alias LiveDj.Organizer.Room
 
     @valid_attrs %{slug: "some slug", title: "some title", management_type: "some management type"}
@@ -65,6 +66,15 @@ defmodule LiveDj.OrganizerTest do
     test "change_room/1 returns a room changeset" do
       room = room_fixture()
       assert %Ecto.Changeset{} = Organizer.change_room(room)
+    end
+
+    test "assoc_room/2 returns a room with an associated playlist" do
+      assert {:ok, %Room{} = room} = Organizer.create_room(@valid_attrs)
+      assert room.slug == "some-slug"
+      assert room.title == "some title"
+      {:ok, playlist} = Collections.create_playlist()
+      {:ok, room} = Organizer.assoc_playlist(room, playlist)
+      assert room.playlist == playlist
     end
   end
 
