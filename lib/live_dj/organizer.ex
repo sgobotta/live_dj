@@ -4,6 +4,8 @@ defmodule LiveDj.Organizer do
   """
 
   import Ecto.Query, warn: false
+
+  alias Ecto.Changeset
   alias LiveDj.Repo
   alias LiveDj.Organizer.Room
   alias LiveDjWeb.Presence
@@ -159,6 +161,23 @@ defmodule LiveDj.Organizer do
 
   def viewers_quantity(room) do
     list_present(room.slug) |> length()
+  end
+
+  @doc """
+  Associates a playlist to a room
+
+  ## Examples
+
+      iex> assoc_playlist(room, playlist)
+      {:ok, %Room{...}
+
+  """
+  def assoc_playlist(room, playlist) do
+    room
+    |> Repo.preload(:playlist)
+    |> Changeset.change()
+    |> Changeset.put_assoc(:playlist, playlist)
+    |> Repo.update()
   end
 
   alias LiveDj.Organizer.UserRoom
