@@ -20,20 +20,21 @@ try do
 
   rooms_videos = Organizer.list_rooms()
   |> Enum.map(fn room ->
-    videos = Enum.map(room.queue, fn video ->
-      {video["video_id"], video["previous"], video["next"],
+    videos = Enum.map(Enum.with_index(room.queue), fn {video, index} ->
+      {index, video["video_id"], video["previous"], video["next"],
         video["added_by"]["username"]}
     end)
     {Repo.preload(room, [:playlist]), videos}
   end)
   room_playlists_videos = for {room, videos} <- rooms_videos do
-    playlist_video = for {video_id, previous_video_id, next_video_id, _added_by} <- videos do
+    playlist_video = for {position, video_id, previous_video_id, next_video_id, _added_by} <- videos do
       v_id = get_video_by.(video_id)
       p_id = get_video_by.(previous_video_id)
       n_id = get_video_by.(next_video_id)
 
       {:ok, playlist_video} = Collections.create_playlist_video(%{
         playlist_id: room.playlist.id,
+        position: position,
         video_id: v_id,
         previous_video_id: p_id,
         next_video_id: n_id
