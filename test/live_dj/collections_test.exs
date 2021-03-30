@@ -202,8 +202,8 @@ defmodule LiveDj.CollectionsTest do
     alias LiveDj.Collections.PlaylistVideo
     alias LiveDj.CollectionsFixtures
 
-    @valid_attrs %{}
-    @update_attrs %{}
+    @valid_attrs %{position: 0}
+    @update_attrs %{position: 1}
     @invalid_attrs %{}
 
     setup do
