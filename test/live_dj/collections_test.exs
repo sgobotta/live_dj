@@ -200,58 +200,92 @@ defmodule LiveDj.CollectionsTest do
 
   describe "playlists_videos" do
     alias LiveDj.Collections.PlaylistVideo
+    alias LiveDj.CollectionsFixtures
 
     @valid_attrs %{}
     @update_attrs %{}
-    # @invalid_attrs %{}
+    @invalid_attrs %{}
 
-    @tag wip: true
+    setup do
+      playlist = CollectionsFixtures.playlist_fixture()
+      video = CollectionsFixtures.video_fixture()
+
+      %{playlist: playlist, video: video}
+    end
+
     def playlist_video_fixture(attrs \\ %{}) do
       {:ok, playlist_video} =
         attrs
         |> Enum.into(@valid_attrs)
         |> Collections.create_playlist_video()
-
       playlist_video
     end
 
-    test "list_playlists_videos/0 returns all playlists_videos" do
-      playlist_video = playlist_video_fixture()
+    test "list_playlists_videos/0 returns all playlists_videos",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
       assert Collections.list_playlists_videos() == [playlist_video]
     end
 
-    test "get_playlist_video!/1 returns the playlist_video with given id" do
-      playlist_video = playlist_video_fixture()
+    test "get_playlist_video!/1 returns the playlist_video with given id",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
       assert Collections.get_playlist_video!(playlist_video.id) == playlist_video
     end
 
-    test "create_playlist_video/1 with valid data creates a playlist_video" do
-      assert {:ok, %PlaylistVideo{} = playlist_video} = Collections.create_playlist_video(@valid_attrs)
+    test "create_playlist_video/1 with valid data creates a playlist_video",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      valid_attrs = Enum.into(@valid_attrs, playlist_video_params)
+      assert {:ok, %PlaylistVideo{} = playlist_video} = Collections.create_playlist_video(valid_attrs)
     end
 
-    # test "create_playlist_video/1 with invalid data returns error changeset" do
-    #   assert {:error, %Ecto.Changeset{}} = Collections.create_playlist_video(@invalid_attrs)
-    # end
-
-    test "update_playlist_video/2 with valid data updates the playlist_video" do
-      playlist_video = playlist_video_fixture()
-      assert {:ok, %PlaylistVideo{} = playlist_video} = Collections.update_playlist_video(playlist_video, @update_attrs)
+    test "create_playlist_video/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Collections.create_playlist_video(@invalid_attrs)
     end
 
-    # test "update_playlist_video/2 with invalid data returns error changeset" do
-    #   playlist_video = playlist_video_fixture()
-    #   assert {:error, %Ecto.Changeset{}} = Collections.update_playlist_video(playlist_video, @invalid_attrs)
-    #   assert playlist_video == Collections.get_playlist_video!(playlist_video.id)
-    # end
+    test "update_playlist_video/2 with valid data updates the playlist_video",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
+      # Update attrs
+      playlist = CollectionsFixtures.playlist_fixture()
+      video = Enum.at(CollectionsFixtures.videos, 1)
+      video = CollectionsFixtures.video_fixture(video)
+      update_attrs = Enum.into(@update_attrs, %{playlist_id: playlist.id, video_id: video.id})
+      assert {:ok, %PlaylistVideo{} = playlist_video} = Collections.update_playlist_video(playlist_video, update_attrs)
+    end
 
-    test "delete_playlist_video/1 deletes the playlist_video" do
-      playlist_video = playlist_video_fixture()
+    test "update_playlist_video/2 with invalid data returns error changeset",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
+      invalid_attrs = Enum.into(@invalid_attrs, %{playlist_id: nil, video_id: nil})
+      assert {:error, %Ecto.Changeset{}} = Collections.update_playlist_video(playlist_video, invalid_attrs)
+      assert playlist_video == Collections.get_playlist_video!(playlist_video.id)
+    end
+
+    test "delete_playlist_video/1 deletes the playlist_video",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
       assert {:ok, %PlaylistVideo{}} = Collections.delete_playlist_video(playlist_video)
       assert_raise Ecto.NoResultsError, fn -> Collections.get_playlist_video!(playlist_video.id) end
     end
 
-    test "change_playlist_video/1 returns a playlist_video changeset" do
-      playlist_video = playlist_video_fixture()
+    test "change_playlist_video/1 returns a playlist_video changeset",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
       assert %Ecto.Changeset{} = Collections.change_playlist_video(playlist_video)
     end
   end
