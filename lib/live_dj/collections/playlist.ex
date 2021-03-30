@@ -6,6 +6,7 @@ defmodule LiveDj.Collections.Playlist do
 
   schema "playlists" do
 
+    has_one :room, LiveDj.Organizer.Room
     many_to_many :videos, Video, join_through: PlaylistVideo
 
     timestamps()
