@@ -14,17 +14,18 @@ require Logger
 
 try do
   seeds = [
-    "videos",
     "permissions",
     "groups",
     "permissions_groups",
     "plans",
     "rooms",
+    "videos",
     "users",
     "users_rooms",
     "badges",
     "badges_relations",
     "users_videos",
+    "playlists",
   ]
   for seed <- seeds do
     Code.require_file("seeds/#{seed}.exs", __DIR__)
@@ -35,5 +36,5 @@ rescue
     Logger.info("❌ Stopped seeds population due to errors.")
 else
   _ ->
-    Logger.info("✅ Seeds population finished succesfully")
+    Logger.info("🌱 Seeds population finished succesfully")
 end
