@@ -2,6 +2,7 @@ defmodule LiveDjWeb.Room.NewLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Accounts
+  alias LiveDj.Collections
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
@@ -156,9 +157,11 @@ defmodule LiveDjWeb.Room.NewLive do
       visitor: visitor
     } = assigns
 
-    # Move to a controller
+    # Move to a controller and refactor to an Organizer context
     case Repo.insert(changeset) do
       {:ok, room} ->
+        {:ok, playlist} = Collections.create_playlist()
+        {:ok, room} = Organizer.assoc_playlist(room, playlist)
         {socket, room} = case visitor do
           true -> {socket, room}
           false ->
