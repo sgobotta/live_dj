@@ -5,6 +5,7 @@ defmodule LiveDj.CollectionsFixtures do
   """
 
   alias LiveDj.AccountsFixtures
+  alias LiveDj.Collections
 
   @videos [
     %{
@@ -62,12 +63,20 @@ defmodule LiveDj.CollectionsFixtures do
     end
   end
 
+  def playlist_fixture(attrs \\ %{}) do
+    {:ok, playlist} =
+      attrs
+      |> Enum.into(%{})
+      |> Collections.create_playlist()
+      playlist
+  end
+
   def video_fixture(attrs \\ %{}) do
     video = Enum.at(@videos, 0)
     {:ok, video} =
       attrs
       |> Enum.into(video)
-      |> LiveDj.Collections.create_video()
+      |> Collections.create_video()
     video
   end
 
