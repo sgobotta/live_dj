@@ -14,6 +14,6 @@ defmodule LiveDj.Collections.PlaylistVideo do
   def changeset(playlist_video, attrs) do
     playlist_video
     |> cast(attrs, [:user_id, :playlist_id, :video_id])
-    |> validate_required([])
+    |> validate_required([:playlist_id, :video_id])
   end
 end
