@@ -3,6 +3,8 @@ defmodule LiveDj.Repo.Migrations.CreatePlaylistsVideos do
 
   def change do
     create table(:playlists_videos) do
+      add :position, :integer, null: false
+
       add :playlist_id, references(:playlists, on_delete: :nothing)
       add :video_id, references(:videos, on_delete: :nothing)
       add :added_by_user_id, references(:users, on_delete: :nothing)
@@ -13,6 +15,7 @@ defmodule LiveDj.Repo.Migrations.CreatePlaylistsVideos do
       timestamps()
     end
 
+    create unique_index(:playlists_videos, [:playlist_id, :position])
     create unique_index(:playlists_videos, [:playlist_id, :video_id])
   end
 end
