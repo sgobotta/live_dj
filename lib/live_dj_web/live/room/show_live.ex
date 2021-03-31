@@ -32,8 +32,12 @@ defmodule LiveDjWeb.Room.ShowLive do
       room ->
         socket = assign_defaults(socket, params, session)
         %{current_user: current_user, visitor: visitor} = socket.assigns
-        user = ConnectedUser.create_connected_user(current_user.username)
 
+        # Subscription channel Setup
+        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
+
+        # Permissions Group Setup
+        #
         # FIXME: refactor to a group management module
         user_room_group = case visitor do
           true -> Accounts.get_group_by_codename("anonymous-room-visitor")
@@ -51,11 +55,13 @@ defmodule LiveDjWeb.Room.ShowLive do
             end
         end
 
+        # Changeset Setup, used for room details form
         room_changeset = Ecto.Changeset.change(room)
 
-        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
-
-        # Refactor to a module that manages Presence (initial data, updates, etc.)
+        # Presence Setup, generates user data
+        #
+        # FIXME: Refactor to a module that manages Presence (initial data, updates, etc.)
+        user = ConnectedUser.create_connected_user(current_user.username)
         volume_data = VolumeControls.get_initial_state()
         presence_meta_user_id = case visitor do
           true -> 0
@@ -77,10 +83,13 @@ defmodule LiveDjWeb.Room.ShowLive do
         )
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
+        # Video Queue Setup
         parsed_queue = room.queue
         |> Enum.map(fn track -> QueueItem.from_jsonb(track) end)
 
+        # Player Setup
         player = Player.get_initial_state()
+
         {:ok,
           socket
           |> assign(:connected_users, [])
@@ -149,7 +158,6 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:request_current_player, _params}, socket) do
     %{assigns: %{player: player, slug: slug, video_queue: video_queue}} = socket
-
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
@@ -157,7 +165,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       {:receive_current_player, %{
         slug: slug, player: player, video_queue: video_queue}}
     )
-
     {:noreply, socket}
   end
 
