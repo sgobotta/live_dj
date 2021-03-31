@@ -13,7 +13,8 @@ config :live_dj, LiveDj.Repo,
   password: System.get_env("DB_PASSWORD_TEST"),
   database: "live_dj_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  timeout: :infinity
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
