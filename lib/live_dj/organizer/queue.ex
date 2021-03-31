@@ -76,15 +76,19 @@ defmodule LiveDj.Organizer.Queue do
     |> Enum.reverse()
   end
 
+  defp get_video(queue, prop, video_id) do
+    Enum.find(queue, fn video -> Map.get(video, prop) == video_id end)
+  end
+
   def get_video_by_id(queue, video_id) do
-    Enum.find(queue, fn video -> video.video_id == video_id end)
+    get_video(queue, :video_id, video_id)
   end
 
-  def get_next_video(queue, current_video_id) do
-    Enum.find(queue, fn video -> video.previous == current_video_id end)
+  def get_next_video(queue, previous_video_id) do
+    get_video(queue, :previous, previous_video_id)
   end
 
-  def get_previous_video(queue, current_video_id) do
-    Enum.find(queue, fn video -> video.next == current_video_id end)
+  def get_previous_video(queue, next_video_id) do
+    get_video(queue, :next, next_video_id)
   end
 end
