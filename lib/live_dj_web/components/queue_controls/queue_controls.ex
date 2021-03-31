@@ -5,6 +5,7 @@ defmodule LiveDjWeb.Components.QueueControls do
 
   use LiveDjWeb, :live_component
 
+  alias LiveDj.Collections
   alias LiveDj.Organizer
   alias LiveDj.Organizer.Queue
 
@@ -28,12 +29,20 @@ defmodule LiveDjWeb.Components.QueueControls do
     {:ok, _room} = Organizer.update_room(room, %{queue: video_queue})
 
     # Recreates a playlists_videos relationships
-    playlists_videos = Enum.map(Enum.with_index(video_queue), fn {video, index} ->
-      LiveDj.Collections.cast_playlist_video(
+    # FIXME: Move to a proper context
+    # FIXME: find a way to update only the affected video
+    updated_playlists_videos = Enum.map(Enum.with_index(video_queue), fn {video, index} ->
+      Collections.cast_playlist_video(
         Map.merge(video, %{position: index}), room.playlist_id
       )
     end)
-    LiveDj.Collections.create_or_update_playlists_videos(playlists_videos)
+    |> Collections.create_or_update_playlists_videos()
+    # Removes orphan playlist_video relationships
+    Collections.list_playlists_videos()
+    |> Enum.filter(fn opv -> !Enum.member?(Enum.map(updated_playlists_videos, fn upv -> upv.id end), opv.id) end)
+    |> Enum.map(fn orphan_playlist_video ->
+      {:ok, _result} = Collections.delete_playlist_video(orphan_playlist_video)
+    end)
 
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
