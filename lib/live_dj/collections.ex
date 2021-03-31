@@ -310,6 +310,20 @@ defmodule LiveDj.Collections do
   end
 
   @doc """
+  Returns the list of playlists_videos that match the given id.
+
+  ## Examples
+
+      iex> list_playlists_videos_by_id(id)
+      [%PlaylistVideo{}, ...]
+
+  """
+  def list_playlists_videos_by_id(id) do
+    from(pv in PlaylistVideo, where: pv.playlist_id == ^id)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single playlist_video.
 
   Raises `Ecto.NoResultsError` if the Playlist video does not exist.
@@ -426,7 +440,7 @@ defmodule LiveDj.Collections do
       {:ok, playlist_video} = PlaylistVideo.changeset(playlist_video, %{})
       |>  Repo.insert_or_update(
         on_conflict: :replace_all,
-        conflict_target: [:playlist_id, :position]
+        conflict_target: [:playlist_id, :position, :video_id]
       )
       playlist_video
     end
