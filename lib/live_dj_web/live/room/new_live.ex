@@ -31,6 +31,7 @@ defmodule LiveDjWeb.Room.NewLive do
       {String.to_atom(room.slug), nil}
     end
     rooms_queues = for room <- public_rooms do
+      # FIXME: use the Playlist model
       {String.to_atom(room.slug), room.queue}
     end
     viewers_quantity = for room <- public_rooms do

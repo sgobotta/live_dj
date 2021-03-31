@@ -84,6 +84,8 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
         # Video Queue Setup
+
+        # FIXME: use the Playlist model
         parsed_queue = room.queue
         |> Enum.map(fn track -> QueueItem.from_jsonb(track) end)
 
