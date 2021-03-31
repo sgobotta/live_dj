@@ -378,6 +378,61 @@ defmodule LiveDj.Collections do
   end
 
   @doc """
+  Given a video and a playlist, casts them into a PlaylistVideo struct
+
+  ## Examples
+
+      iex> cast_playlist_video(video, playlist)
+      %PlaylistVideo{}
+
+  """
+  def cast_playlist_video(video, playlist_id) do
+    get_by = fn video_id ->
+      case Repo.get_by(Video, %{video_id: video_id}) do
+        nil -> nil
+        video -> video.id
+      end
+    end
+    next_video = get_by.(video.next)
+    previous_video = get_by.(video.previous)
+    current_video = get_by.(video.video_id)
+    %LiveDj.Collections.PlaylistVideo{
+      position: video.position,
+      playlist_id: playlist_id,
+      video_id: current_video,
+      next_video_id: next_video,
+      previous_video_id: previous_video,
+    }
+  end
+
+  @doc """
+  Given a list of %PlaylistVideo{}, creates or updates each element.
+
+  ## Examples
+
+      iex> create_or_update_playlists_videos(playlists_videos)
+      {:ok, [%PlaylistVideo{}]}
+
+      iex> create_or_update_playlists_videos(playlists_videos)
+      {:error}
+
+  """
+  def create_or_update_playlists_videos(playlists_videos) do
+    for playlist_video <- playlists_videos do
+      playlist_video = Repo.preload(
+        playlist_video,
+        [:playlist, :video, :previous_video, :next_video]
+      )
+      {:ok, playlist_video} = PlaylistVideo.changeset(playlist_video, %{})
+      |>  Repo.insert_or_update(
+        on_conflict: :replace_all,
+        conflict_target: [:playlist_id, :position]
+      )
+      playlist_video
+    end
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking playlist_video changes.
 
   ## Examples
