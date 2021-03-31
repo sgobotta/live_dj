@@ -5,7 +5,7 @@ defmodule LiveDj.Collections.PlaylistVideo do
   schema "playlists_videos" do
     field :position, :integer
 
-    belongs_to :added_by_user, LiveDj.Accounts.User
+    belongs_to :user, LiveDj.Accounts.User, foreign_key: :added_by_user_id
     belongs_to :playlist, LiveDj.Collections.Playlist
     belongs_to :video, LiveDj.Collections.Video
 

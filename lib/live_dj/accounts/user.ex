@@ -14,7 +14,7 @@ defmodule LiveDj.Accounts.User do
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
 
-    has_many :playlists_videos, PlaylistVideo
+    has_many :playlists_videos, PlaylistVideo, foreign_key: :added_by_user_id
 
     many_to_many :badges, Badge, join_through: UserBadge
     many_to_many :rooms, Room, join_through: UserRoom
