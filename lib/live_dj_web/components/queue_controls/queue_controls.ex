@@ -38,7 +38,7 @@ defmodule LiveDjWeb.Components.QueueControls do
     end)
     |> Collections.create_or_update_playlists_videos()
     # Removes orphan playlist_video relationships
-    Collections.list_playlists_videos()
+    Collections.list_playlists_videos_by_id(room.playlist_id)
     |> Enum.filter(fn opv -> !Enum.member?(Enum.map(updated_playlists_videos, fn upv -> upv.id end), opv.id) end)
     |> Enum.map(fn orphan_playlist_video ->
       {:ok, _result} = Collections.delete_playlist_video(orphan_playlist_video)
