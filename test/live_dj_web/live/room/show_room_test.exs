@@ -751,7 +751,9 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Asserts the save button isn't enabled
       refute has_button(view, "save_queue")
       # Simulates another video removal
-      current_playlists_video_length = length(Collections.list_playlists_videos())
+      current_playlists_video_length = length(
+        Collections.list_playlists_videos_by_id(room.playlist_id)
+      )
       video_index = length(room.queue) - 1
       element_id = String.replace(@remove_video_button_id,
         "?", "#{video_index}")
@@ -763,7 +765,7 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Asserts the save button isn't enabled
       refute has_button(view, "save_queue")
       # Asserts an orphan playlist_video has been removed
-      updated_playlists_video_length = length(Collections.list_playlists_videos())
+      updated_playlists_video_length = length(Collections.list_playlists_videos_by_id(room.playlist_id))
       assert updated_playlists_video_length == current_playlists_video_length - 1
     end
   end
