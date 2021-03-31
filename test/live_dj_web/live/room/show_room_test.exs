@@ -17,6 +17,10 @@ defmodule LiveDjWeb.ShowRoomTest do
     # Clicks the remove button
     render_click(element)
     # Asserts the element has been removed from the DOM
+    # FIXME: this only works then looking up the last element.
+    # E.g: when we remove a video from the middle of a queue, positions are
+    # resetted and the element may still appear, except the last one of that
+    # queue.
     refute view |> element(element_id) |> has_element?()
   end
 
@@ -664,7 +668,6 @@ defmodule LiveDjWeb.ShowRoomTest do
       refute has_button(view, "save_queue")
     end
 
-    @tag wip: true
     test "As a User I can remove and add a video while saving the current queue", %{conn: conn, room: room} do
       url = "/room/#{room.slug}"
       # Gets a user view
@@ -705,6 +708,63 @@ defmodule LiveDjWeb.ShowRoomTest do
       click(view, "save_queue")
       # Asserts the save button isn't enabled
       refute has_button(view, "save_queue")
+    end
+
+    test "As a User I can remove the last video, add a video and then remove the last one again while saving the current queue", %{conn: conn, room: room} do
+      url = "/room/#{room.slug}"
+      # Gets a user view
+      # Fetches an initial video list
+      videos = Collections.list_videos()
+      {:ok, view, _html} = live(conn, url)
+      # Simulates a video removal
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Asserts the save queue button exists
+      assert has_button(view, "save_queue")
+      # Saves the queue
+      click(view, "save_queue")
+      # Asserts the save button isn't enabled
+      refute has_button(view, "save_queue")
+      # Simulates a search video interaction
+      search_query = "some video search"
+      view
+        |> element(@search_video_form_id)
+        |> render_change(%{search_field: %{query: search_query}})
+      view
+        |> element(@search_video_form_id)
+        |> render_submit(%{})
+      assert_push_event view, "receive_search_completed_signal", %{}
+      # Adds a video to the queue
+      view
+        |> element("#search-element-button-1")
+        |> render_click()
+      pos = length(room.queue)
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
+      # Asserts the save queue button exists
+      assert has_button(view, "save_queue")
+      # Saves the queue
+      click(view, "save_queue")
+      # Asserts the save button isn't enabled
+      refute has_button(view, "save_queue")
+      # Simulates another video removal
+      current_playlists_video_length = length(Collections.list_playlists_videos())
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Asserts the save queue button exists
+      assert has_button(view, "save_queue")
+      # Saves the queue
+      click(view, "save_queue")
+      # Asserts the save button isn't enabled
+      refute has_button(view, "save_queue")
+      # Asserts an orphan playlist_video has been removed
+      updated_playlists_video_length = length(Collections.list_playlists_videos())
+      assert updated_playlists_video_length == current_playlists_video_length - 1
     end
   end
 
