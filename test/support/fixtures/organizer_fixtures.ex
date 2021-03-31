@@ -5,6 +5,7 @@ defmodule LiveDj.OrganizerFixtures do
   """
 
   alias LiveDj.AccountsFixtures
+  alias LiveDj.CollectionsFixtures
 
   @room_queue [
     %{
@@ -73,7 +74,20 @@ defmodule LiveDj.OrganizerFixtures do
     }
   ]
 
-  def room_queue, do: @room_queue
+  def room_queue do
+    for video <- @room_queue do
+      CollectionsFixtures.video_fixture(%{
+        channel_title: video.channel_title,
+        description: video.description,
+        img_height: "#{video.img_height}",
+        img_url: video.img_url,
+        img_width: "#{video.img_width}",
+        title: video.title,
+        video_id: video.video_id,
+      })
+    end
+    @room_queue
+  end
 
   def rooms_fixture do
     for _n <- 0..3 do
@@ -88,10 +102,12 @@ defmodule LiveDj.OrganizerFixtures do
       |> Enum.into(%{
         title: random_words,
         slug: random_words,
-        queue: @room_queue
+        queue: room_queue()
       })
       |> LiveDj.Organizer.create_room()
-      room
+    {:ok, playlist} = LiveDj.Collections.create_playlist()
+    {:ok, room} = LiveDj.Organizer.assoc_playlist(room, playlist)
+    room
   end
 
   def user_room_fixture(
