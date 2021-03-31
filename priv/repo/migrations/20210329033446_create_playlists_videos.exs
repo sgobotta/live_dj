@@ -15,7 +15,6 @@ defmodule LiveDj.Repo.Migrations.CreatePlaylistsVideos do
       timestamps()
     end
 
-    create unique_index(:playlists_videos, [:playlist_id, :position])
-    create unique_index(:playlists_videos, [:playlist_id, :video_id])
+    create unique_index(:playlists_videos, [:playlist_id, :position, :video_id])
   end
 end
