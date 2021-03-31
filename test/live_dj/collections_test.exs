@@ -229,6 +229,14 @@ defmodule LiveDj.CollectionsTest do
       assert Collections.list_playlists_videos() == [playlist_video]
     end
 
+    test "list_playlists_videos_by_id/0 returns all playlists_videos",
+      %{playlist: playlist, video: video}
+    do
+      playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
+      playlist_video = playlist_video_fixture(playlist_video_params)
+      assert Collections.list_playlists_videos_by_id(playlist_video.playlist_id) == [playlist_video]
+    end
+
     test "get_playlist_video!/1 returns the playlist_video with given id",
       %{playlist: playlist, video: video}
     do
