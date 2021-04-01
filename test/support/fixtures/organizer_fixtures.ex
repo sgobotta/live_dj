@@ -4,6 +4,7 @@ defmodule LiveDj.OrganizerFixtures do
   entities via the `LiveDj.Organizer` context.
   """
 
+  alias LiveDj.Collections
   alias LiveDj.AccountsFixtures
   alias LiveDj.CollectionsFixtures
 
@@ -105,7 +106,15 @@ defmodule LiveDj.OrganizerFixtures do
         queue: room_queue()
       })
       |> LiveDj.Organizer.create_room()
-    {:ok, playlist} = LiveDj.Collections.create_playlist()
+    # Creates a playlist, generates the proper playlist video relationships and
+    # associates the playlist to this room
+    {:ok, playlist} = Collections.create_playlist()
+    for {video, index} <- Enum.with_index(room.queue) do
+      Collections.cast_playlist_video(
+        Map.merge(video, %{position: index}), playlist.id
+      )
+    end
+    |> Collections.create_or_update_playlists_videos()
     {:ok, room} = LiveDj.Organizer.assoc_playlist(room, playlist)
     room
   end
