@@ -2,8 +2,9 @@ defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
 
   alias LiveDj.Organizer.PlaylistVideoQueueItem
 
-  @enforce_keys [:channel_title, :description, :img_height, :img_url, :img_width, :title, :video_id, :previous, :next]
-  defstruct [channel_title: nil, description: nil, img_height: nil, img_url: nil, img_width: nil, title: nil, video_id: nil, previous: nil, next: nil]
+  @enforce_keys [:channel_title, :description, :img_height, :img_url, :img_width, :next, :previous, :title, :video_id]
+
+  defstruct [channel_title: nil, description: nil, img_height: nil, img_url: nil, img_width: nil, next: nil, previous: nil, title: nil, video_id: nil]
 
   defp get_video_id(video) do
     case video do
@@ -35,7 +36,7 @@ defmodule LiveDj.Organizer.Queue do
   def from_playlist(playlist_id) do
     Collections.list_playlists_videos_by_id(playlist_id)
     |> Enum.map(fn playlist_video ->
-      Collections.preload_playlist_video(playlist_video, [:user, :next_video, :previous_video, :video])
+      Collections.preload_playlist_video(playlist_video, [:next_video, :previous_video, :video])
       |> PlaylistVideoQueueItem.create()
       |> QueueItem.from_playlist_video_queue_item()
     end)
