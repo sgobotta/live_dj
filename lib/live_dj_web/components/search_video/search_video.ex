@@ -62,7 +62,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
       end
     )
     _video = Collections.create_video(Video.from_tubex(selected_video))
-    user_id = if visitor do "" else current_user.id end
+    user_id = if visitor do nil else current_user.id end
     selected_video = QueueItem.assign_user(selected_video, user, user_id)
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
       |> Queue.add_to_queue(selected_video)
