@@ -53,7 +53,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
   @impl true
   def handle_event("add_to_queue", selected_video, socket) do
     %{assigns: %{search_result: search_result, video_queue: video_queue,
-      user: user}} = socket
+      user: user, current_user: current_user, visitor: visitor}} = socket
     {selected_video, _index} = Enum.find(
       search_result,
       fn {_search, index} ->
@@ -62,7 +62,8 @@ defmodule LiveDjWeb.Components.SearchVideo do
       end
     )
     _video = Collections.create_video(Video.from_tubex(selected_video))
-    selected_video = QueueItem.assign_user(selected_video, user)
+    user_id = if visitor do "" else current_user.id end
+    selected_video = QueueItem.assign_user(selected_video, user, user_id)
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
       |> Queue.add_to_queue(selected_video)
 
