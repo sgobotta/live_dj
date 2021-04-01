@@ -15,7 +15,8 @@ defmodule LiveDj.OrganizerFixtures do
       img_url: "https://i.ytimg.com/vi/wUF9DeWJ0Dk/default.jpg",
       added_by: %{
         uuid: "071db349-de96-49dd-b084-00134aeca2d1",
-        username: "guest-576460752303413630"
+        username: "guest-576460752303413630",
+        user_id: nil,
       },
       previous: "",
       video_id: "wUF9DeWJ0Dk",
@@ -31,7 +32,8 @@ defmodule LiveDj.OrganizerFixtures do
       img_url: "https://i.ytimg.com/vi/dyp2mLYhRkw/default.jpg",
       added_by: %{
         uuid: "9dc9c9be-5c71-4b9d-88b8-0ca362d0f28c",
-        username: "sann"
+        username: "sann",
+        user_id: nil,
       },
       previous: "wUF9DeWJ0Dk",
       video_id: "dyp2mLYhRkw",
@@ -47,7 +49,8 @@ defmodule LiveDj.OrganizerFixtures do
       img_url: "https://i.ytimg.com/vi/FJ5pRIZXVks/default.jpg",
       added_by: %{
         uuid: "9dc9c9be-5c71-4b9d-88b8-0ca362d0f28c",
-        username: "sann"
+        username: "sann",
+        user_id: nil,
       },
       previous: "dyp2mLYhRkw",
       video_id: "FJ5pRIZXVks",
@@ -63,7 +66,8 @@ defmodule LiveDj.OrganizerFixtures do
       img_url: "https://i.ytimg.com/vi/qu_uJQQo_Us/default.jpg",
       added_by: %{
         uuid: "05ffb9af-ea4b-485f-9860-3264c3cdf404",
-        username: "wasabi"
+        username: "wasabi",
+        user_id: nil,
       },
       previous: "FJ5pRIZXVks",
       video_id: "qu_uJQQo_Us",
@@ -110,9 +114,10 @@ defmodule LiveDj.OrganizerFixtures do
     # associates the playlist to this room
     {:ok, playlist} = Collections.create_playlist()
     for {video, index} <- Enum.with_index(room.queue) do
-      Collections.cast_playlist_video(
-        Map.merge(video, %{position: index}), playlist.id
-      )
+      video = Map.merge(video, %{
+        position: index, added_by_user_id: video.added_by.user_id
+      })
+      Collections.cast_playlist_video(video, playlist.id)
     end
     |> Collections.create_or_update_playlists_videos()
     {:ok, room} = LiveDj.Organizer.assoc_playlist(room, playlist)
