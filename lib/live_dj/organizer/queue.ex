@@ -1,6 +1,45 @@
+defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
+
+  alias LiveDj.Organizer.PlaylistVideoQueueItem
+
+  @enforce_keys [:channel_title, :description, :img_height, :img_url, :img_width, :title, :video_id, :previous, :next]
+  defstruct [channel_title: nil, description: nil, img_height: nil, img_url: nil, img_width: nil, title: nil, video_id: nil, previous: nil, next: nil]
+
+  defp get_video_id(video) do
+    case video do
+      nil -> ""
+      video -> video.video_id
+    end
+  end
+
+  def create(playlist_video) do
+    %PlaylistVideoQueueItem{
+      channel_title: playlist_video.video.channel_title,
+      description: playlist_video.video.description,
+      img_height: playlist_video.video.img_height,
+      img_url: playlist_video.video.img_url,
+      img_width: playlist_video.video.img_width,
+      title: playlist_video.video.title,
+      video_id: playlist_video.video.video_id,
+      previous: get_video_id(playlist_video.previous_video),
+      next: get_video_id(playlist_video.next_video),
+    }
+  end
+end
+
 defmodule LiveDj.Organizer.Queue do
 
-  alias LiveDj.Organizer.QueueItem
+  alias LiveDj.Collections
+  alias LiveDj.Organizer.{PlaylistVideoQueueItem, QueueItem}
+
+  def from_playlist(playlist_id) do
+    Collections.list_playlists_videos_by_id(playlist_id)
+    |> Enum.map(fn playlist_video ->
+      Collections.preload_playlist_video(playlist_video, [:user, :next_video, :previous_video, :video])
+      |> PlaylistVideoQueueItem.create()
+      |> QueueItem.from_playlist_video_queue_item()
+    end)
+  end
 
   def get_initial_controls do
     %{is_save_enabled: false}
