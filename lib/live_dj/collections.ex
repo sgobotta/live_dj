@@ -458,4 +458,12 @@ defmodule LiveDj.Collections do
   def change_playlist_video(%PlaylistVideo{} = playlist_video, attrs \\ %{}) do
     PlaylistVideo.changeset(playlist_video, attrs)
   end
+
+  @doc """
+  Given a PlaylistVideo struct and a list of PlaylistVideo attributes, returns
+  a preloaded struct
+  """
+  def preload_playlist_video(playlist_video, attrs \\ []) do
+    Repo.preload(playlist_video, attrs)
+  end
 end
