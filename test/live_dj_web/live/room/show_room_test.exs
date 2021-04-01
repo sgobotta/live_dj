@@ -708,7 +708,6 @@ defmodule LiveDjWeb.ShowRoomTest do
       save_queue(view)
     end
 
-    @tag wip: true
     test "As a User I can remove the last video, add a video and then remove the last one again while saving the current queue", %{conn: conn, room: room} do
       url = "/room/#{room.slug}"
       # Gets a user view
@@ -748,7 +747,6 @@ defmodule LiveDjWeb.ShowRoomTest do
       assert updated_playlists_video_length == current_playlists_video_length - 1
     end
 
-    @tag wip: true
     test "As a Visitor User I can remove the last video, add a video and then remove the last one again while saving the current queue", %{room: room} do
       # Creates a new unauthenticated connection
       conn = build_conn()
