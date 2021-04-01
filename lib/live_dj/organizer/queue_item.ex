@@ -17,7 +17,8 @@ defmodule LiveDj.Organizer.QueueItem do
     next: "",
     added_by: %{
       uuid: "",
-      username: ""
+      username: "",
+      user_id: nil,
     }
   ]
 
@@ -25,8 +26,11 @@ defmodule LiveDj.Organizer.QueueItem do
     Map.merge(video, props)
   end
 
-  def assign_user(video, user) do
-    update(video, %{added_by: %{uuid: user.uuid, username: user.username}})
+  def assign_user(video, user, user_id) do
+    update(
+      video,
+      %{added_by: %{uuid: user.uuid, username: user.username, user_id: user_id}}
+    )
   end
 
   def from_playlist_video_queue_item(
