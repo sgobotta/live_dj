@@ -1,6 +1,46 @@
+defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
+
+  alias LiveDj.Organizer.PlaylistVideoQueueItem
+
+  @enforce_keys [:channel_title, :description, :img_height, :img_url, :img_width, :next, :previous, :title, :video_id]
+
+  defstruct [channel_title: nil, description: nil, img_height: nil, img_url: nil, img_width: nil, next: nil, previous: nil, title: nil, video_id: nil]
+
+  defp get_video_id(video) do
+    case video do
+      nil -> ""
+      video -> video.video_id
+    end
+  end
+
+  def create(playlist_video) do
+    %PlaylistVideoQueueItem{
+      channel_title: playlist_video.video.channel_title,
+      description: playlist_video.video.description,
+      img_height: playlist_video.video.img_height,
+      img_url: playlist_video.video.img_url,
+      img_width: playlist_video.video.img_width,
+      title: playlist_video.video.title,
+      video_id: playlist_video.video.video_id,
+      previous: get_video_id(playlist_video.previous_video),
+      next: get_video_id(playlist_video.next_video),
+    }
+  end
+end
+
 defmodule LiveDj.Organizer.Queue do
 
-  alias LiveDj.Organizer.Video
+  alias LiveDj.Collections
+  alias LiveDj.Organizer.{PlaylistVideoQueueItem, QueueItem}
+
+  def from_playlist(playlist_id) do
+    Collections.list_playlists_videos_by_id(playlist_id)
+    |> Enum.map(fn playlist_video ->
+      Collections.preload_playlist_video(playlist_video, [:next_video, :previous_video, :video])
+      |> PlaylistVideoQueueItem.create()
+      |> QueueItem.from_playlist_video_queue_item()
+    end)
+  end
 
   def get_initial_controls do
     %{is_save_enabled: false}
@@ -21,11 +61,11 @@ defmodule LiveDj.Organizer.Queue do
   def add_to_queue(queue, video) do
     case queue do
       []  -> [video]
-      [v] -> [Video.update(v, %{next: video.video_id}) | [Video.update(video, %{previous: v.video_id})]]
+      [v] -> [QueueItem.update(v, %{next: video.video_id}) | [QueueItem.update(video, %{previous: v.video_id})]]
       [v|vs] ->
         videos = Enum.drop(vs, -1)
-        last_video = Video.update(List.last(vs), %{next: video.video_id})
-        new_video = Video.update(video, %{previous: last_video.video_id})
+        last_video = QueueItem.update(List.last(vs), %{next: video.video_id})
+        new_video = QueueItem.update(video, %{previous: last_video.video_id})
         [v | videos ++ [last_video, new_video]]
     end
   end
@@ -35,10 +75,10 @@ defmodule LiveDj.Organizer.Queue do
     queue = Enum.filter(queue, fn video -> video.video_id != video_id end)
     Enum.map(queue, fn v ->
       case v.next == video.video_id do
-        true -> Video.update(v, %{next: video.next})
+        true -> QueueItem.update(v, %{next: video.next})
         false ->
           case v.previous == video.video_id do
-            true -> Video.update(v, %{previous: video.previous})
+            true -> QueueItem.update(v, %{previous: video.previous})
             false -> v
           end
       end
@@ -57,12 +97,12 @@ defmodule LiveDj.Organizer.Queue do
   def link_by_prop(queue, prop, from, to) do
     {_, queue} = Enum.reduce(queue, {"", []}, fn ({v,i}, {link_id, vs_acc}) ->
       video = case i do
-        ^from                -> Video.update(v, %{prop => link_id})
-        ^to                  -> Video.update(v, %{prop => link_id})
-        i when (from-1) == i -> Video.update(v, %{prop => link_id})
-        i when (from+1) == i -> Video.update(v, %{prop => link_id})
-        i when (to-1)   == i -> Video.update(v, %{prop => link_id})
-        i when (to+1)   == i -> Video.update(v, %{prop => link_id})
+        ^from                -> QueueItem.update(v, %{prop => link_id})
+        ^to                  -> QueueItem.update(v, %{prop => link_id})
+        i when (from-1) == i -> QueueItem.update(v, %{prop => link_id})
+        i when (from+1) == i -> QueueItem.update(v, %{prop => link_id})
+        i when (to-1)   == i -> QueueItem.update(v, %{prop => link_id})
+        i when (to+1)   == i -> QueueItem.update(v, %{prop => link_id})
         _                    -> v
       end
       {video.video_id, vs_acc ++ [{video,i}]}
@@ -76,15 +116,19 @@ defmodule LiveDj.Organizer.Queue do
     |> Enum.reverse()
   end
 
+  defp get_video(queue, prop, video_id) do
+    Enum.find(queue, fn video -> Map.get(video, prop) == video_id end)
+  end
+
   def get_video_by_id(queue, video_id) do
-    Enum.find(queue, fn video -> video.video_id == video_id end)
+    get_video(queue, :video_id, video_id)
   end
 
-  def get_next_video(queue, current_video_id) do
-    Enum.find(queue, fn video -> video.previous == current_video_id end)
+  def get_next_video(queue, previous_video_id) do
+    get_video(queue, :previous, previous_video_id)
   end
 
-  def get_previous_video(queue, current_video_id) do
-    Enum.find(queue, fn video -> video.next == current_video_id end)
+  def get_previous_video(queue, next_video_id) do
+    get_video(queue, :next, next_video_id)
   end
 end

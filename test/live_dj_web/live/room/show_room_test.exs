@@ -17,6 +17,10 @@ defmodule LiveDjWeb.ShowRoomTest do
     # Clicks the remove button
     render_click(element)
     # Asserts the element has been removed from the DOM
+    # FIXME: this only works then looking up the last element.
+    # E.g: when we remove a video from the middle of a queue, positions are
+    # resetted and the element may still appear, except the last one of that
+    # queue.
     refute view |> element(element_id) |> has_element?()
   end
 
@@ -31,6 +35,28 @@ defmodule LiveDjWeb.ShowRoomTest do
     # Asserts the element is the one that is being played
     assert element
     |> render() =~ "current-video"
+  end
+
+  def save_queue(view) do
+    # Asserts the save queue button exists
+    assert has_button(view, "save_queue")
+    # Saves the queue
+    click(view, "save_queue")
+    # Asserts the save button isn't enabled
+    refute has_button(view, "save_queue")
+  end
+
+  @search_video_form_id "#search-video-form"
+
+  def search_video(view, search_query) do
+    # Simulates a search video interaction
+    view
+      |> element(@search_video_form_id)
+      |> render_change(%{search_field: %{query: search_query}})
+    view
+      |> element(@search_video_form_id)
+      |> render_submit(%{})
+    assert_push_event view, "receive_search_completed_signal", %{}
   end
 
   describe "ShowLive client requests" do
@@ -194,12 +220,38 @@ defmodule LiveDjWeb.ShowRoomTest do
 
   describe "ShowLive search video behaviour" do
 
-    @search_video_form_id "#search-video-form"
+    alias LiveDj.Collections
 
     setup(%{conn: conn}) do
       %{group: group} = show_live_setup()
 
       %{conn: conn, group: group |> Repo.preload([:permissions])}
+    end
+
+    test "As a visitor User I can search and add a video to a queue",
+      %{group: group}
+    do
+      # Associates a group id to a new user for a new room
+      %{room: room, user: _user, user_room: _user_room} = user_room_fixture(%{
+        is_owner: false, group_id: group.id
+      })
+      # Fetches an initial video list
+      videos = Collections.list_videos()
+      # Creates a new unauthenticated connection
+      conn = build_conn()
+      {:ok, view, _html} = live(conn, "/room/#{room.slug}")
+      # Simulates a search video interaction
+      search_query = "some video search"
+      search_video(view, search_query)
+      # Adds a video to the queue
+      view
+        |> element("#search-element-button-1")
+        |> render_click()
+      pos = length(room.queue) + 1
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+      # Asserts the final queue length has changed
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
 
     test "As a registered User I can search and add a video to a queue",
@@ -209,18 +261,14 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: false, group_id: group.id
       })
+      # Fetches an initial video list
+      videos = Collections.list_videos()
       # Creates a new authenticated connection
       owner_conn = log_in_user(conn, user)
       {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
       # Simulates a search video interaction
       search_query = "some video search"
-      view
-        |> element(@search_video_form_id)
-        |> render_change(%{search_field: %{query: search_query}})
-      view
-        |> element(@search_video_form_id)
-        |> render_submit(%{})
-      assert_push_event view, "receive_search_completed_signal", %{}
+      search_video(view, search_query)
       # Adds a video to the queue
       view
         |> element("#search-element-button-1")
@@ -228,6 +276,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       pos = length(room.queue) + 1
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
+      # Asserts the final queue length has changed
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
 
     test "As a registered User I can search and add a video to an empty queue",
@@ -237,18 +287,14 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: false, group_id: group.id
       }, %{}, %{queue: []})
+      # Fetches an initial video list
+      videos = Collections.list_videos()
       # Creates a new authenticated connection
       owner_conn = log_in_user(conn, user)
       {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
       # Simulates a search video interaction
       search_query = "some video search"
-      view
-        |> element(@search_video_form_id)
-        |> render_change(%{search_field: %{query: search_query}})
-      view
-        |> element(@search_video_form_id)
-        |> render_submit(%{})
-      assert_push_event view, "receive_search_completed_signal", %{}
+      search_video(view, search_query)
       # Adds a video to the queue
       view
         |> element("#search-element-button-1")
@@ -256,9 +302,10 @@ defmodule LiveDjWeb.ShowRoomTest do
       pos = length(room.queue) + 1
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
+      # Asserts the final queue length has changed
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
 
-    @tag wip: true
     test "As a registered User I can search and add a video to a single video queue",
       %{conn: conn, group: group}
     do
@@ -266,18 +313,14 @@ defmodule LiveDjWeb.ShowRoomTest do
       %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
         is_owner: false, group_id: group.id
       }, %{}, %{queue: [hd(room_queue())]})
+      # Fetches an initial video list
+      videos = Collections.list_videos()
       # Creates a new authenticated connection
       owner_conn = log_in_user(conn, user)
       {:ok, view, _html} = live(owner_conn, "/room/#{room.slug}")
       # Simulates a search video interaction
       search_query = "some video search"
-      view
-        |> element(@search_video_form_id)
-        |> render_change(%{search_field: %{query: search_query}})
-      view
-        |> element(@search_video_form_id)
-        |> render_submit(%{})
-      assert_push_event view, "receive_search_completed_signal", %{}
+      search_video(view, search_query)
       # Adds a video to the queue
       view
         |> element("#search-element-button-1")
@@ -285,6 +328,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       pos = length(room.queue) + 1
       assert_push_event view, "video_added_to_queue", %{pos: ^pos}
       assert_push_event view, "receive_player_state", %{}
+      # Asserts the final queue length has changed
+      assert length(Collections.list_videos()) == length(videos) + 1
     end
   end
 
@@ -591,6 +636,8 @@ defmodule LiveDjWeb.ShowRoomTest do
 
   describe "ShowLive queue controls behaviour" do
 
+    alias LiveDj.Collections
+
     @remove_video_button_id "#remove-video-button-?"
 
     setup(%{conn: conn}) do
@@ -612,12 +659,133 @@ defmodule LiveDjWeb.ShowRoomTest do
       element_id = String.replace(@remove_video_button_id,
         "?", "#{video_index}")
       remove_video(view, element_id)
-      # Asserts the save queue button exists
-      assert has_button(view, "save_queue")
       # Saves the queue
-      click(view, "save_queue")
-      # Asserts the save button isn't enabled
-      refute has_button(view, "save_queue")
+      save_queue(view)
+    end
+
+    test "As a User I can add a video and save the current queue", %{conn: conn, room: room} do
+      url = "/room/#{room.slug}"
+      # Gets a user view
+      {:ok, view, _html} = live(conn, url)
+      # Fetches an initial video list
+      videos = Collections.list_videos()
+      # Simulates a search video interaction
+      search_query = "some video search"
+      search_video(view, search_query)
+      # Adds a video to the queue
+      view |> element("#search-element-button-1") |> render_click()
+      pos = length(room.queue) + 1
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
+      # Saves the queue
+      save_queue(view)
+    end
+
+    test "As a User I can remove and add a video while saving the current queue", %{conn: conn, room: room} do
+      url = "/room/#{room.slug}"
+      # Gets a user view
+      {:ok, view, _html} = live(conn, url)
+      # Simulates a video removal
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Saves the queue
+      save_queue(view)
+      # Fetches an initial video list
+      videos = Collections.list_videos()
+      # Simulates a search video interaction
+      search_query = "some video search"
+      search_video(view, search_query)
+      # Adds a video to the queue
+      view |> element("#search-element-button-1") |> render_click()
+      pos = length(room.queue)
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
+      # Saves the queue
+      save_queue(view)
+    end
+
+    test "As a User I can remove the last video, add a video and then remove the last one again while saving the current queue", %{conn: conn, room: room} do
+      url = "/room/#{room.slug}"
+      # Gets a user view
+      # Fetches an initial video list
+      videos = Collections.list_videos()
+      {:ok, view, _html} = live(conn, url)
+      # Simulates a video removal
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Saves the queue
+      save_queue(view)
+      # Simulates a search video interaction
+      search_query = "some video search"
+      search_video(view, search_query)
+      # Adds a video to the queue
+      view |> element("#search-element-button-1") |> render_click()
+      pos = length(room.queue)
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
+      # Saves the queue
+      save_queue(view)
+      # Simulates another video removal
+      current_playlists_video_length = length(
+        Collections.list_playlists_videos_by_id(room.playlist_id)
+      )
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Saves the queue
+      save_queue(view)
+      # Asserts an orphan playlist_video has been removed
+      updated_playlists_video_length = length(Collections.list_playlists_videos_by_id(room.playlist_id))
+      assert updated_playlists_video_length == current_playlists_video_length - 1
+    end
+
+    test "As a Visitor User I can remove the last video, add a video and then remove the last one again while saving the current queue", %{room: room} do
+      # Creates a new unauthenticated connection
+      conn = build_conn()
+      url = "/room/#{room.slug}"
+      # Gets a user view
+      # Fetches an initial video list
+      videos = Collections.list_videos()
+      {:ok, view, _html} = live(conn, url)
+      # Simulates a video removal
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Saves the queue
+      save_queue(view)
+      # Simulates a search video interaction
+      search_query = "some video search"
+      search_video(view, search_query)
+      # Adds a video to the queue
+      view |> element("#search-element-button-1") |> render_click()
+      pos = length(room.queue)
+      assert_push_event view, "video_added_to_queue", %{pos: ^pos}
+      assert_push_event view, "receive_player_state", %{}
+      assert length(Collections.list_videos()) == length(videos) + 1
+      # Saves the queue
+      save_queue(view)
+      # Simulates another video removal
+      current_playlists_video_length = length(
+        Collections.list_playlists_videos_by_id(room.playlist_id)
+      )
+      video_index = length(room.queue) - 1
+      element_id = String.replace(@remove_video_button_id,
+        "?", "#{video_index}")
+      remove_video(view, element_id)
+      # Saves the queue
+      save_queue(view)
+      # Asserts an orphan playlist_video has been removed
+      updated_playlists_video_length = length(Collections.list_playlists_videos_by_id(room.playlist_id))
+      assert updated_playlists_video_length == current_playlists_video_length - 1
     end
   end
 

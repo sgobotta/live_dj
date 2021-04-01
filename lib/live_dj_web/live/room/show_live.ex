@@ -9,7 +9,7 @@ defmodule LiveDjWeb.Room.ShowLive do
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.{Chat, Player, Queue, Video, VolumeControls}
+  alias LiveDj.Organizer.{Chat, Player, Queue, QueueItem, VolumeControls}
   alias LiveDj.Payments
   alias LiveDj.ConnectedUser
   alias LiveDjWeb.Presence
@@ -32,8 +32,12 @@ defmodule LiveDjWeb.Room.ShowLive do
       room ->
         socket = assign_defaults(socket, params, session)
         %{current_user: current_user, visitor: visitor} = socket.assigns
-        user = ConnectedUser.create_connected_user(current_user.username)
 
+        # Subscription channel Setup
+        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
+
+        # Permissions Group Setup
+        #
         # FIXME: refactor to a group management module
         user_room_group = case visitor do
           true -> Accounts.get_group_by_codename("anonymous-room-visitor")
@@ -51,11 +55,13 @@ defmodule LiveDjWeb.Room.ShowLive do
             end
         end
 
+        # Changeset Setup, used for room details form
         room_changeset = Ecto.Changeset.change(room)
 
-        Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug)
-
-        # Refactor to a module that manages Presence (initial data, updates, etc.)
+        # Presence Setup, generates user data
+        #
+        # FIXME: Refactor to a module that manages Presence (initial data, updates, etc.)
+        user = ConnectedUser.create_connected_user(current_user.username)
         volume_data = VolumeControls.get_initial_state()
         presence_meta_user_id = case visitor do
           true -> 0
@@ -77,10 +83,12 @@ defmodule LiveDjWeb.Room.ShowLive do
         )
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
-        parsed_queue = room.queue
-        |> Enum.map(fn track -> Video.from_jsonb(track) end)
+        # Video Queue Setup
+        video_queue = Queue.from_playlist(room.playlist_id)
 
+        # Player Setup
         player = Player.get_initial_state()
+
         {:ok,
           socket
           |> assign(:connected_users, [])
@@ -97,7 +105,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:user_room_group, user_room_group)
           |> assign(:username_input, user.username)
-          |> assign(:video_queue, Enum.with_index(parsed_queue))
+          |> assign(:video_queue, Enum.with_index(video_queue))
           |> assign(:video_queue_controls, Queue.get_initial_controls())
           |> assign(:volume_controls, volume_data)
           |> assign_tracker(room)
@@ -149,7 +157,6 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:request_current_player, _params}, socket) do
     %{assigns: %{player: player, slug: slug, video_queue: video_queue}} = socket
-
     :ok = Phoenix.PubSub.broadcast_from(
       LiveDj.PubSub,
       self(),
@@ -157,7 +164,6 @@ defmodule LiveDjWeb.Room.ShowLive do
       {:receive_current_player, %{
         slug: slug, player: player, video_queue: video_queue}}
     )
-
     {:noreply, socket}
   end
 
@@ -172,7 +178,7 @@ defmodule LiveDjWeb.Room.ShowLive do
       video_queue_controls: video_queue_controls} = assigns
     # Attempts to mark the selected song on each peer search result
     search_result = Enum.map(search_result, fn {video, index} ->
-      {Video.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
+      {QueueItem.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
     end)
     video_queue_controls = Queue.mark_as_unsaved(video_queue_controls)
     socket = socket
@@ -253,7 +259,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     %{current_queue: current_queue, messages: messages, player: player} = params
     current_queue = Enum.map(current_queue, fn {v, _} -> v end)
     search_result = Enum.map(search_result, fn {video, index} ->
-      video = Video.update(video, %{
+      video = QueueItem.update(video, %{
         is_queued: Queue.is_queued(video, current_queue)})
       {video, index}
     end)
@@ -382,7 +388,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     {:noreply,
       socket
       |> assign(:search_result, Enum.map(search_data, fn {video, index} ->
-        video = Video.update(video, %{
+        video = QueueItem.update(video, %{
           is_queued: Queue.is_queued(video, video_queue)})
         {video, index}
       end))
@@ -496,7 +502,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         player_props = %{video_id: video_id, time: 0, state: "playing"}
         player = Player.update(player, player_props)
         message = Chat.create_message(:track_notification, %{
-          video: next_video
+          video: next_video, user: video.added_by.user_id
         })
         messages = messages ++ [message]
 

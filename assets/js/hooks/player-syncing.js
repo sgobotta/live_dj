@@ -50,7 +50,7 @@ const onStateChange = (
     case 1: {
       // console.log('interval is on')
       const { target: player } = event
-      hookContext.pushEventTo(HOOK_ID, 'player_signal_playing')
+      // hookContext.pushEventTo(HOOK_ID, 'player_signal_playing')
       const trackTimeInterval = setInterval(() => {
         udpateTimeDisplays(
           startTimeTrackerElem,
@@ -63,7 +63,7 @@ const onStateChange = (
       break
     }
     case 2: {
-      hookContext.pushEventTo(HOOK_ID, 'player_signal_paused')
+      // hookContext.pushEventTo(HOOK_ID, 'player_signal_paused')
       const { trackTimeInterval } = hookContext.el.dataset
       clearInterval(trackTimeInterval)
       const { target: player } = event

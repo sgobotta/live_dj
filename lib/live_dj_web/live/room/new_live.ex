@@ -2,11 +2,11 @@ defmodule LiveDjWeb.Room.NewLive do
   use LiveDjWeb, :live_view
 
   alias LiveDj.Accounts
+  alias LiveDj.Collections
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.Room
-  alias LiveDj.Organizer.Queue
+  alias LiveDj.Organizer.{Queue, Room}
   alias LiveDj.Repo
   alias LiveDj.Stats
 
@@ -30,7 +30,8 @@ defmodule LiveDjWeb.Room.NewLive do
       {String.to_atom(room.slug), nil}
     end
     rooms_queues = for room <- public_rooms do
-      {String.to_atom(room.slug), room.queue}
+      video_queue = Queue.from_playlist(room.playlist_id)
+      {String.to_atom(room.slug), video_queue}
     end
     viewers_quantity = for room <- public_rooms do
       {String.to_atom(room.slug), Organizer.viewers_quantity(room)}
@@ -156,9 +157,11 @@ defmodule LiveDjWeb.Room.NewLive do
       visitor: visitor
     } = assigns
 
-    # Move to a controller
+    # Move to a controller and refactor to an Organizer context
     case Repo.insert(changeset) do
       {:ok, room} ->
+        {:ok, playlist} = Collections.create_playlist()
+        {:ok, room} = Organizer.assoc_playlist(room, playlist)
         {socket, room} = case visitor do
           true -> {socket, room}
           false ->

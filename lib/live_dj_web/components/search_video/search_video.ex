@@ -6,7 +6,9 @@ defmodule LiveDjWeb.Components.SearchVideo do
 
   use LiveDjWeb, :live_component
 
-  alias LiveDj.Organizer.{Queue, Video}
+  alias LiveDj.Collections
+  alias LiveDj.Collections.Video
+  alias LiveDj.Organizer.{Queue, QueueItem}
 
   @impl true
   def update(assigns, socket) do
@@ -30,9 +32,9 @@ defmodule LiveDjWeb.Components.SearchVideo do
         []
     end
     search_result = Enum.map(search_result, fn search ->
-      video = Video.from_tubex_video(search)
+      video = QueueItem.from_tubex_video(search)
       is_queued = Queue.is_queued(video, video_queue)
-      Video.update(video, %{is_queued: is_queued})
+      QueueItem.update(video, %{is_queued: is_queued})
     end)
       |> Enum.with_index()
 
@@ -51,7 +53,7 @@ defmodule LiveDjWeb.Components.SearchVideo do
   @impl true
   def handle_event("add_to_queue", selected_video, socket) do
     %{assigns: %{search_result: search_result, video_queue: video_queue,
-      user: user}} = socket
+      user: user, current_user: current_user, visitor: visitor}} = socket
     {selected_video, _index} = Enum.find(
       search_result,
       fn {_search, index} ->
@@ -59,7 +61,9 @@ defmodule LiveDjWeb.Components.SearchVideo do
         index == selected_video
       end
     )
-    selected_video = Video.assign_user(selected_video, user)
+    _video = Collections.create_video(Video.from_tubex(selected_video))
+    user_id = if visitor do nil else current_user.id end
+    selected_video = QueueItem.assign_user(selected_video, user, user_id)
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
       |> Queue.add_to_queue(selected_video)
 

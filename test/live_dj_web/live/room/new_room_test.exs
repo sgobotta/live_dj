@@ -2,6 +2,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
   use LiveDjWeb.ConnCase, async: true
 
   alias LiveDj.Organizer
+  alias LiveDj.Repo
 
   import LiveDj.AccountsFixtures
   import LiveDj.OrganizerFixtures
@@ -142,8 +143,8 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     test "The rooms assigns contain a public rooms list", %{conn: conn, rooms: rooms} do
       %{assigns: assigns} = _conn = get(conn, "/")
       %{public_rooms: public_rooms} = assigns
-
-      assert public_rooms == rooms
+      public_rooms = for room <- public_rooms, do: Repo.preload(room, :playlist)
+      assert Enum.sort(public_rooms, :asc) == Enum.sort(rooms, :asc)
     end
   end
 
@@ -158,7 +159,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
 
     test "The rooms assigns contain a public rooms list", %{conn: conn, rooms: rooms} do
       %{assigns: %{public_rooms: public_rooms}} = _conn = get(conn, "/")
-
+      public_rooms = for room <- public_rooms, do: Repo.preload(room, :playlist)
       for room <- rooms do
         assert Enum.member?(public_rooms, room)
       end

@@ -15,7 +15,11 @@ defmodule LiveDj.Organizer.Chat do
   end
 
   def create_message(:track_notification, %{video: video}) do
-    %{title: title, added_by: %{username: username}} = video
+    %{title: title, added_by: %{user_id: user_id}} = video
+    username = case user_id do
+      nil -> "visitor"
+      user_id -> LiveDj.Accounts.get_user!(user_id).username
+    end
     {:track_notification,
       %{
         added_by: username,

@@ -907,7 +907,7 @@ input.chat-text-input:focus {
 
 .use-prompt:after {
   color: $secondary;
-  content: ">";
+  content: ": ";
   margin-left: -4px;
   font-weight: bold;
 }

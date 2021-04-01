@@ -19,10 +19,14 @@ try do
     "permissions_groups",
     "plans",
     "rooms",
+    "videos",
     "users",
     "users_rooms",
     "badges",
-    "badges_relations"
+    "badges_relations",
+    "users_videos",
+    "playlists",
+    "room_playlists_videos",
   ]
   for seed <- seeds do
     Code.require_file("seeds/#{seed}.exs", __DIR__)
@@ -33,5 +37,5 @@ rescue
     Logger.info("❌ Stopped seeds population due to errors.")
 else
   _ ->
-    Logger.info("✅ Seeds population finished succesfully")
+    Logger.info("🌱 Seeds population finished succesfully")
 end
