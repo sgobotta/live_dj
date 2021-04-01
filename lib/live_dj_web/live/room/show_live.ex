@@ -84,10 +84,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
         # Video Queue Setup
-
-        # FIXME: use the Playlist model
-        parsed_queue = room.queue
-        |> Enum.map(fn track -> QueueItem.from_jsonb(track) end)
+        video_queue = Queue.from_playlist(room.playlist_id)
 
         # Player Setup
         player = Player.get_initial_state()
@@ -108,7 +105,7 @@ defmodule LiveDjWeb.Room.ShowLive do
           |> assign(:user, user)
           |> assign(:user_room_group, user_room_group)
           |> assign(:username_input, user.username)
-          |> assign(:video_queue, Enum.with_index(parsed_queue))
+          |> assign(:video_queue, Enum.with_index(video_queue))
           |> assign(:video_queue_controls, Queue.get_initial_controls())
           |> assign(:volume_controls, volume_data)
           |> assign_tracker(room)
