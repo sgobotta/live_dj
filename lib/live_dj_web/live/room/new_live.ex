@@ -6,8 +6,7 @@ defmodule LiveDjWeb.Room.NewLive do
   alias LiveDj.ConnectedUser
   alias LiveDj.Notifications
   alias LiveDj.Organizer
-  alias LiveDj.Organizer.Room
-  alias LiveDj.Organizer.Queue
+  alias LiveDj.Organizer.{Queue, Room}
   alias LiveDj.Repo
   alias LiveDj.Stats
 
@@ -31,8 +30,8 @@ defmodule LiveDjWeb.Room.NewLive do
       {String.to_atom(room.slug), nil}
     end
     rooms_queues = for room <- public_rooms do
-      # FIXME: use the Playlist model
-      {String.to_atom(room.slug), room.queue}
+      video_queue = Queue.from_playlist(room.playlist_id)
+      {String.to_atom(room.slug), video_queue}
     end
     viewers_quantity = for room <- public_rooms do
       {String.to_atom(room.slug), Organizer.viewers_quantity(room)}
