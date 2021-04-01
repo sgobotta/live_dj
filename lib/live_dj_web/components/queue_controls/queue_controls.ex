@@ -27,13 +27,12 @@ defmodule LiveDjWeb.Components.QueueControls do
     } = assigns
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     {:ok, _room} = Organizer.update_room(room, %{queue: video_queue})
-
     # Recreates a playlists_videos relationships
     # FIXME: Move to a proper context
     # FIXME: find a way to update only the affected video
     updated_playlists_videos = Enum.map(Enum.with_index(video_queue), fn {video, index} ->
       Collections.cast_playlist_video(
-        Map.merge(video, %{position: index}), room.playlist_id
+        Map.merge(video, %{position: index, added_by_user_id: video.added_by.user_id}), room.playlist_id
       )
     end)
     |> Collections.create_or_update_playlists_videos()
