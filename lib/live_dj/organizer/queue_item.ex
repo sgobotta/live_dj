@@ -5,21 +5,21 @@ defmodule LiveDj.Organizer.QueueItem do
   @derive Jason.Encoder
 
   defstruct [
+    added_by: %{
+      uuid: "",
+      username: "",
+      user_id: nil,
+    },
     channel_title: "",
     description: "",
     img_height: "",
     img_url: "",
     img_width: "",
     is_queued: false,
+    next: "",
+    previous: "",
     title: "",
     video_id: "",
-    previous: "",
-    next: "",
-    added_by: %{
-      uuid: "",
-      username: "",
-      user_id: nil,
-    }
   ]
 
   def update(video, props) do
@@ -33,9 +33,7 @@ defmodule LiveDj.Organizer.QueueItem do
     )
   end
 
-  def from_playlist_video_queue_item(
-    playlist_video
-  ) do
+  def from_playlist_video_queue_item(playlist_video) do
     %QueueItem{
       channel_title: playlist_video.channel_title,
       description: playlist_video.description,
