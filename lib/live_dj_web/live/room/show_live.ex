@@ -502,7 +502,7 @@ defmodule LiveDjWeb.Room.ShowLive do
         player_props = %{video_id: video_id, time: 0, state: "playing"}
         player = Player.update(player, player_props)
         message = Chat.create_message(:track_notification, %{
-          video: next_video
+          video: next_video, user: video.added_by.user_id
         })
         messages = messages ++ [message]
 
