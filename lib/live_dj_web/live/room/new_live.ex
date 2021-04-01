@@ -31,6 +31,7 @@ defmodule LiveDjWeb.Room.NewLive do
     end
     rooms_queues = for room <- public_rooms do
       video_queue = Queue.from_playlist(room.playlist_id)
+      |> Enum.with_index()
       {String.to_atom(room.slug), video_queue}
     end
     viewers_quantity = for room <- public_rooms do

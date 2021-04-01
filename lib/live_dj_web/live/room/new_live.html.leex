@@ -48,7 +48,10 @@
 
                     <div class="
                       col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
-                      <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView, "album_cover_grid.html", queue: room.queue %>
+                      <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView,
+                        "album_cover_grid.html",
+                        queue: @rooms_queues[String.to_atom(room.slug)]
+                      %>
                     </div>
 
                     <div

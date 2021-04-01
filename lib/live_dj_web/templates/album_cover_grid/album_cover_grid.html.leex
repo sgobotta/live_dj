@@ -8,16 +8,16 @@
 
     <%= if length(@queue) < 4 do %>
       <div>
-        <img class="track-cover-thumb" src="<%= hd(@queue)["img_url"] %>" />
+        <img class="track-cover-thumb" src="<%= elem(hd(@queue), 0).img_url %>" />
       </div>
     <% else %>
 
       <%= if length(@queue) >= 4 do %>
         <%= for chunk <- Enum.chunk_every(Enum.take(@queue, 4), 2) do %>
           <div>
-            <%= for track <- chunk do %>
+            <%= for {track, _i} <- chunk do %>
               <div>
-                <img class="track-cover-thumb-mini" src="<%= track["img_url"] %>" />
+                <img class="track-cover-thumb-mini" src="<%= track.img_url %>" />
               </div>
             <% end %>
           </div>
