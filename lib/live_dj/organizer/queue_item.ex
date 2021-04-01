@@ -29,6 +29,22 @@ defmodule LiveDj.Organizer.QueueItem do
     update(video, %{added_by: %{uuid: user.uuid, username: user.username}})
   end
 
+  def from_playlist_video_queue_item(
+    playlist_video
+  ) do
+    %QueueItem{
+      channel_title: playlist_video.channel_title,
+      description: playlist_video.description,
+      img_height: playlist_video.img_height,
+      img_url: playlist_video.img_url,
+      img_width: playlist_video.img_width,
+      title: playlist_video.title,
+      video_id: playlist_video.video_id,
+      previous: playlist_video.previous,
+      next: playlist_video.next,
+    }
+  end
+
   def from_jsonb(jsonb_video) do
     added_by = jsonb_video["added_by"]
     %QueueItem{
