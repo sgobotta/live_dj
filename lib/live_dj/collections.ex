@@ -411,6 +411,7 @@ defmodule LiveDj.Collections do
     previous_video = get_by.(video.previous)
     current_video = get_by.(video.video_id)
     %LiveDj.Collections.PlaylistVideo{
+      added_by_user_id: video.added_by_user_id,
       position: video.position,
       playlist_id: playlist_id,
       video_id: current_video,
