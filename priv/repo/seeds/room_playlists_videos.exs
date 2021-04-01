@@ -33,6 +33,7 @@ try do
       n_id = get_video_by.(next_video_id)
 
       {:ok, playlist_video} = Collections.create_playlist_video(%{
+        added_by_user_id: nil,
         playlist_id: room.playlist.id,
         position: position,
         video_id: v_id,
