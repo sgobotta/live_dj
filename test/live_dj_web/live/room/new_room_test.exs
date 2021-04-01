@@ -144,7 +144,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       %{assigns: assigns} = _conn = get(conn, "/")
       %{public_rooms: public_rooms} = assigns
       public_rooms = for room <- public_rooms, do: Repo.preload(room, :playlist)
-      assert public_rooms == rooms
+      assert Enum.sort(public_rooms, :asc) == Enum.sort(rooms, :asc)
     end
   end
 
