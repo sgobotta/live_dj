@@ -1,10 +1,4 @@
-<%= if !connected?(@socket) do %>
 
-  <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,
-    id: "live-dj-launching"
-  %>
-
-<% else %>
   <div
     class="overflow-x-hidden"
     id="notifications-handler-new-live"
@@ -15,126 +9,141 @@
       id: "live-dj-new-live-sidebar",
       visitor: @visitor
     do %>
-      <div class="
-        new-live-view
-        mx-2 mb-6 pt-10 px-0 sm:px-6 lg:mt-12 2xl:pb-8
-        overflow-y-hidden
-        grid grid-cols-1 sm:grid-cols-1 md:grid-cols-8 lg:grid-cols-8
-        md:grid-rows-2 lg:grid-rows-2
-        gap-2
-      ">
-        <div class="
-          live-section-box
-          p-4 m-0 mt-4
-          col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-6 row-span-2
-        ">
-
-          <div class="flex items-start mt-1 section-title mb-5">
-            <span class="rounded text-white p-2 leading-none flex title-pill">
-              Public Rooms
-            </span>
-          </div>
-
-          <div
-            class="rooms-container overflow-y-scroll new-live-rooms-list"
-          >
-            <%= if @public_rooms != [] do %>
-
-            <div class="mb-4">
-              <ul class="like-list grid gap-2 grid-cols-1 lg:grid-cols-2 m-2">
-              <%= for room <- @public_rooms do %>
-                <li class="room-item col-span-1 hover-card px-2">
-                  <div class="flex grid grid-cols-8 xl:grid-cols-12">
-
-                    <div class="
-                      col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
-                      <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView,
-                        "album_cover_grid.html",
-                        queue: @rooms_queues[String.to_atom(room.slug)],
-                        player: elem(@rooms_players[String.to_atom(room.slug)], 0)
-                      %>
-                    </div>
-
-                    <div
-                      class="
-                        p-4 clickeable
-                        col-span-6 row-span-1
-                        sm:col-span-5 md:col-span-6 lg:col-span-6 xl:col-span-10
-                      "
-                      phx-click="redirect_room"
-                      phx-value-slug="<%= room.slug %>"
-                    >
-                      <p class="text-2xl"><%= room.title %></p>
-                      <div class="p-2">
-                        <%= render_room_player_state(@rooms_players[String.to_atom(room.slug)], @socket) %>
-                      </div>
-                      <div class="p-2">
-                        <div class="text-base	text-color">
-                          <i class="mini fas fa-users primary"></i>
-                          <span>
-                            <%= @viewers_quantity[String.to_atom(room.slug)] %>
-                          </span>
-                          <i class="mini fas fa-compact-disc primary ml-4"></i>
-                          <span>
-                            <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              <% end %>
-              </ul>
-            </div>
-
-            <% else %>
-              <p><span>Go ahead, create the first room!</span></p>
-            <% end %>
-          </div>
+      <%= if !connected?(@socket) do %>
+        <div
+          class="
+            new-live-view
+            relative
+            mx-2 mb-6 pt-10 px-0 sm:px-6 lg:mt-4 2xl:pb-8
+          "
+          style="width: 100%; height: 87vh;"
+        >
+          <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,
+            id: "live-dj-launching"
+          %>
         </div>
 
+      <% else %>
         <div class="
-          live-section-box p-4 m-0 mt-4
-          col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 row-span-1
+          new-live-view
+          mx-2 mb-6 pt-10 px-0 sm:px-6 lg:mt-12 2xl:pb-8
+          overflow-y-hidden
+          grid grid-cols-1 sm:grid-cols-1 md:grid-cols-8 lg:grid-cols-8
+          md:grid-rows-2 lg:grid-rows-2
+          gap-2
         ">
-          <%= form_for @changeset, "#", [
-            id: "create_room",
-            phx_change: "validate",
-            phx_submit: "save",
-            class: "full-width mb-1"],
-            fn form -> %>
+          <div class="
+            live-section-box
+            p-4 m-0 mt-4
+            col-span-1 sm:col-span-1 md:col-span-6 lg:col-span-6 row-span-2
+          ">
 
-            <div class="flex items-start section-title mt-1 mb-4">
-              <span class="rounded text-white p-2 leading-none flex items-center title-pill full-width">
-                Create room
+            <div class="flex items-start mt-1 section-title mb-5">
+              <span class="rounded text-white p-2 leading-none flex title-pill">
+                Public Rooms
               </span>
             </div>
 
-            <div class="my-4">
-              <%= text_input form, :title, placeholder: "insert a title", class: "text-input-effect" %>
-              <%= error_tag form, :title %>
-            </div>
+            <div
+              class="rooms-container overflow-y-scroll new-live-rooms-list"
+            >
+              <%= if @public_rooms != [] do %>
 
-            <div class="my-4">
-              <%= text_input form, :slug, placeholder: "insert a room slug", class: "text-input-effect" %>
-              <%= error_tag form, :slug %>
-            </div>
+              <div class="mb-4">
+                <ul class="like-list grid gap-2 grid-cols-1 lg:grid-cols-2 m-2">
+                <%= for room <- @public_rooms do %>
+                  <li class="room-item col-span-1 hover-card px-2">
+                    <div class="flex grid grid-cols-8 xl:grid-cols-12">
 
-            <div class="mb-4">
-              <%= select(
-                form,
-                :management_type,
-                @management_type_options,
-                class: "select-input full-width text-color px-4")
-              %>
-            </div>
+                      <div class="
+                        col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
+                        <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView,
+                          "album_cover_grid.html",
+                          queue: @rooms_queues[String.to_atom(room.slug)],
+                          player: elem(@rooms_players[String.to_atom(room.slug)], 0)
+                        %>
+                      </div>
 
-            <div class="mt-auto flex items-center">
-              <%= submit "Save", class: "modal-button modal-submit-button full-width font-normal" %>
+                      <div
+                        class="
+                          p-4 clickeable
+                          col-span-6 row-span-1
+                          sm:col-span-5 md:col-span-6 lg:col-span-6 xl:col-span-10
+                        "
+                        phx-click="redirect_room"
+                        phx-value-slug="<%= room.slug %>"
+                      >
+                        <p class="text-2xl"><%= room.title %></p>
+                        <div class="p-2">
+                          <%= render_room_player_state(@rooms_players[String.to_atom(room.slug)], @socket) %>
+                        </div>
+                        <div class="p-2">
+                          <div class="text-base	text-color">
+                            <i class="mini fas fa-users primary"></i>
+                            <span>
+                              <%= @viewers_quantity[String.to_atom(room.slug)] %>
+                            </span>
+                            <i class="mini fas fa-compact-disc primary ml-4"></i>
+                            <span>
+                              <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+                </ul>
+              </div>
+
+              <% else %>
+                <p><span>Go ahead, create the first room!</span></p>
+              <% end %>
             </div>
-          <% end %>
+          </div>
+
+          <div class="
+            live-section-box p-4 m-0 mt-4
+            col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 row-span-1
+          ">
+            <%= form_for @changeset, "#", [
+              id: "create_room",
+              phx_change: "validate",
+              phx_submit: "save",
+              class: "full-width mb-1"],
+              fn form -> %>
+
+              <div class="flex items-start section-title mt-1 mb-4">
+                <span class="rounded text-white p-2 leading-none flex items-center title-pill full-width">
+                  Create room
+                </span>
+              </div>
+
+              <div class="my-4">
+                <%= text_input form, :title, placeholder: "insert a title", class: "text-input-effect" %>
+                <%= error_tag form, :title %>
+              </div>
+
+              <div class="my-4">
+                <%= text_input form, :slug, placeholder: "insert a room slug", class: "text-input-effect" %>
+                <%= error_tag form, :slug %>
+              </div>
+
+              <div class="mb-4">
+                <%= select(
+                  form,
+                  :management_type,
+                  @management_type_options,
+                  class: "select-input full-width text-color px-4")
+                %>
+              </div>
+
+              <div class="mt-auto flex items-center">
+                <%= submit "Save", class: "modal-button modal-submit-button full-width font-normal" %>
+              </div>
+            <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
   </div>
-<% end %>
