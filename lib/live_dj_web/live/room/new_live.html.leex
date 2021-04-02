@@ -50,7 +50,8 @@
                       col-span-2 row-span-1 sm:col-span-1 md:col-span-2 lg:col-span-2 xl:col-span-2 self-center justify-self-center">
                       <%= Phoenix.View.render LiveDjWeb.AlbumCoverGridView,
                         "album_cover_grid.html",
-                        queue: @rooms_queues[String.to_atom(room.slug)]
+                        queue: @rooms_queues[String.to_atom(room.slug)],
+                        player: elem(@rooms_players[String.to_atom(room.slug)], 0)
                       %>
                     </div>
 
@@ -63,18 +64,12 @@
                       phx-click="redirect_room"
                       phx-value-slug="<%= room.slug %>"
                     >
-                      <p class="text-3xl"><%= room.title %></p>
+                      <p class="text-2xl"><%= room.title %></p>
                       <div class="p-2">
-                        <p class="room-peers">
-                          <%= if @rooms_players[String.to_atom(room.slug)] != nil do %>
-                            Currently playing: <%= @rooms_players[String.to_atom(room.slug)].title %>
-                          <% else %>
-                            Things are quiet here
-                          <% end %>
-                        </p>
+                        <%= render_room_player_state(@rooms_players[String.to_atom(room.slug)], @socket) %>
                       </div>
                       <div class="p-2">
-                        <p class="room-peers">
+                        <div class="text-base	text-color">
                           <i class="mini fas fa-users primary"></i>
                           <span>
                             <%= @viewers_quantity[String.to_atom(room.slug)] %>
@@ -83,7 +78,7 @@
                           <span>
                             <%= length(@rooms_queues[String.to_atom(room.slug)]) %>
                           </span>
-                        </p>
+                        </div>
                       </div>
                     </div>
                   </div>

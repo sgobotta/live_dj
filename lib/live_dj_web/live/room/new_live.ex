@@ -27,7 +27,7 @@ defmodule LiveDjWeb.Room.NewLive do
     public_rooms = Organizer.list_rooms()
 
     rooms_players = for room <- public_rooms do
-      {String.to_atom(room.slug), nil}
+      {String.to_atom(room.slug), {nil, nil}}
     end
     rooms_queues = for room <- public_rooms do
       video_queue = Queue.from_playlist(room.playlist_id)
@@ -63,6 +63,25 @@ defmodule LiveDjWeb.Room.NewLive do
     {:ok, socket}
   end
 
+  def render_room_player_state(room_player, assigns) do
+    {player, video} = room_player
+    case player do
+      nil -> ""
+      _ -> case player.state do
+        "playing" -> render_equalizer(video.title, assigns)
+        _ -> ""
+      end
+    end
+  end
+
+  def render_equalizer(video_title, assigns) do
+    ~L"""
+      <p class="base-text text-color">
+        Currently playing: <%= video_title %>
+      <p>
+    """
+  end
+
   @impl true
   def handle_info(:reload_room_list, socket) do
     socket =
@@ -93,20 +112,18 @@ defmodule LiveDjWeb.Room.NewLive do
       rooms_players: rooms_players, rooms_queues: rooms_queues}} = socket
 
     current_slug = String.to_atom(slug)
-    %{player: player, video_queue: video_queue} = params
+    %{player: current_player, video_queue: video_queue} = params
 
-    rooms_players = case player.state do
-      "stopped" ->
-        rooms_players
+    rooms_players = case current_player.state do
+      "stopped" -> rooms_players
       _ ->
         current_track = Enum.map(video_queue, fn {v, _} -> v end)
-        |> Queue.get_video_by_id(player.video_id)
-
-        for player <- rooms_players do
-          {slug, player} = player
+        |> Queue.get_video_by_id(current_player.video_id)
+        for room_player <- rooms_players do
+          {slug, player_video} = room_player
           case slug do
-            ^current_slug -> {current_slug, current_track}
-            slug -> {slug, player}
+            ^current_slug -> {current_slug, {current_player, current_track}}
+            slug -> {slug, player_video}
           end
         end
     end

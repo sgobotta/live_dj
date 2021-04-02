@@ -7,21 +7,30 @@
   <% else %>
 
     <%= if length(@queue) < 4 do %>
-      <div>
-        <img class="track-cover-thumb" src="<%= elem(hd(@queue), 0).img_url %>" />
+      <div class="relative">
+        <img class="track-cover-thumb" src="<%= elem(hd(@queue), 0).img_url %>">
+          <%= if @player != nil and @player.state == "playing" do %>
+            <%= Phoenix.View.render LiveDjWeb.EqualizerView,
+              "equalizer.html", []
+            %>
+          <% end %>
+        </img>
       </div>
     <% else %>
 
       <%= if length(@queue) >= 4 do %>
-        <%= for chunk <- Enum.chunk_every(Enum.take(@queue, 4), 2) do %>
-          <div>
+        <div class="grid grid-cols-2 relative">
+          <%= for chunk <- Enum.chunk_every(Enum.take(@queue, 4), 2) do %>
             <%= for {track, _i} <- chunk do %>
-              <div>
-                <img class="track-cover-thumb-mini" src="<%= track.img_url %>" />
-              </div>
+              <img class="track-cover-thumb-mini" src="<%= track.img_url %>" />
             <% end %>
-          </div>
-        <% end %>
+          <% end %>
+          <%= if @player != nil and @player.state == "playing" do %>
+            <%= Phoenix.View.render LiveDjWeb.EqualizerView,
+              "equalizer.html", []
+            %>
+          <% end %>
+        </div>
       <% end %>
 
     <% end %>
