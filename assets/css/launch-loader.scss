@@ -1,14 +1,10 @@
 .launcher-container {
   display: flex;
-  position: fixed;
-  z-index: 999;
+  position: relative;
   height: 100%;
   width: 100%;
-  margin: auto;
   left: 0;
-  top: 0;
   align-items: center;
-  background-color: #000;
 }
 
 .launcher-loader-container *, .launcher-loader-container *:before, .launcher-loader-container *:after{
