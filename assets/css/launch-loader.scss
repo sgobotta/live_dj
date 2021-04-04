@@ -7,7 +7,14 @@
   align-items: center;
 }
 
-.launcher-loader-container *, .launcher-loader-container *:before, .launcher-loader-container *:after{
+.launcher-subcontainer, .launcher-subcontainer-ripple {
+	height: 220px;
+	width: 220px;
+	margin-top: -56px;
+	margin-right: -55px;
+}
+
+.launcher-loader *, .launcher-loader *:before, .launcher-loader *:after{
 	box-sizing: border-box;
 		-o-box-sizing: border-box;
 		-ms-box-sizing: border-box;
@@ -15,12 +22,12 @@
 		-moz-box-sizing: border-box;
 }
 
-.launcher-loader-container {
-	margin: 42px auto;
+.launcher-loader {
 	width: 110px;
 	height: 75px;
+	margin-top: 15px;
 }
-.launcher-loader-container > div {
+.launcher-loader > div {
   border-radius: 50px;
 	float: left;
 	background: $primary;
@@ -29,70 +36,70 @@
 	margin-right: 1px;
 }
 
-.launcher-loader-container .launcher-loader-shaft1 {
+.launcher-loader .launcher-loader-shaft1 {
 	animation-delay: 0.06s;
 		-o-animation-delay: 0.06s;
 		-ms-animation-delay: 0.06s;
 		-webkit-animation-delay: 0.06s;
 		-moz-animation-delay: 0.06s;
 }
-.launcher-loader-container .launcher-loader-shaft2 {
+.launcher-loader .launcher-loader-shaft2 {
 	animation-delay: 0.12s;
 		-o-animation-delay: 0.12s;
 		-ms-animation-delay: 0.12s;
 		-webkit-animation-delay: 0.12s;
 		-moz-animation-delay: 0.12s;
 }
-.launcher-loader-container .launcher-loader-shaft3 {
+.launcher-loader .launcher-loader-shaft3 {
 	animation-delay: 0.17s;
 		-o-animation-delay: 0.17s;
 		-ms-animation-delay: 0.17s;
 		-webkit-animation-delay: 0.17s;
 		-moz-animation-delay: 0.17s;
 }
-.launcher-loader-container .launcher-loader-shaft4 {
+.launcher-loader .launcher-loader-shaft4 {
 	animation-delay: 0.23s;
 		-o-animation-delay: 0.23s;
 		-ms-animation-delay: 0.23s;
 		-webkit-animation-delay: 0.23s;
 		-moz-animation-delay: 0.23s;
 }
-.launcher-loader-container .launcher-loader-shaft5 {
+.launcher-loader .launcher-loader-shaft5 {
 	animation-delay: 0.29s;
 		-o-animation-delay: 0.29s;
 		-ms-animation-delay: 0.29s;
 		-webkit-animation-delay: 0.29s;
 		-moz-animation-delay: 0.29s;
 }
-.launcher-loader-container .launcher-loader-shaft6 {
+.launcher-loader .launcher-loader-shaft6 {
 	animation-delay: 0.35s;
 		-o-animation-delay: 0.35s;
 		-ms-animation-delay: 0.35s;
 		-webkit-animation-delay: 0.35s;
 		-moz-animation-delay: 0.35s;
 }
-.launcher-loader-container .launcher-loader-shaft7 {
+.launcher-loader .launcher-loader-shaft7 {
 	animation-delay: 0.4s;
 		-o-animation-delay: 0.4s;
 		-ms-animation-delay: 0.4s;
 		-webkit-animation-delay: 0.4s;
 		-moz-animation-delay: 0.4s;
 }
-.launcher-loader-container .launcher-loader-shaft8 {
+.launcher-loader .launcher-loader-shaft8 {
 	animation-delay: 0.46s;
 		-o-animation-delay: 0.46s;
 		-ms-animation-delay: 0.46s;
 		-webkit-animation-delay: 0.46s;
 		-moz-animation-delay: 0.46s;
 }
-.launcher-loader-container .launcher-loader-shaft9 {
+.launcher-loader .launcher-loader-shaft9 {
 	animation-delay: 0.52s;
 		-o-animation-delay: 0.52s;
 		-ms-animation-delay: 0.52s;
 		-webkit-animation-delay: 0.52s;
 		-moz-animation-delay: 0.52s;
 }
-.launcher-loader-container .launcher-loader-shaft10 {
+.launcher-loader .launcher-loader-shaft10 {
 	animation-delay: 0.58s;
 		-o-animation-delay: 0.58s;
 		-ms-animation-delay: 0.58s;
@@ -100,7 +107,7 @@
 		-moz-animation-delay: 0.58s;
 }
 
-.launcher-loader-container > div {
+.launcher-loader > div {
 	animation: cssload-jellyfish 1.73s infinite ease-in-out;
 		-o-animation: cssload-jellyfish 1.73s infinite ease-in-out;
 		-ms-animation: cssload-jellyfish 1.73s infinite ease-in-out;
@@ -113,8 +120,85 @@
 		-moz-transform: scaleY(0.05) translateX(-4px);
 }
 
-.hide-launcher-loader {
+.launcher-container.hide-launcher-loader {
+	
+}
+
+.launcher-subcontainer.hide-launcher-loader {
+	animation: hide-launcher-loader-subcontainer-animation 2s infinite;
+}
+
+.launcher-subcontainer-ripple {
+	border-radius: 50%;
+	animation: launcher-loader-ripple-animation 0.5s linear infinite;
+}
+
+.launcher-subcontainer-ripple.hide-launcher-loader {
+	animation: none;
+}
+
+.launcher-logo.hide-launcher-loader {
+	animation: launcher-logo-animation 2s;
+}
+
+.launcher-loader.hide-launcher-loader {
 	animation: hide-launcher-loader-animation 2s;
+}
+
+@keyframes hide-launcher-loader-subcontainer-animation {
+	0% {
+    opacity: 1;
+		transform: scale(1);
+  }
+	30% {
+		transform: scale(1.8);
+		opacity: 1;
+	}
+	40% {
+		transform: scale(1.3);
+		opacity: 1;
+	}
+	80% {
+		transform: scale(1.3);
+		opacity: 1;
+	}
+  100% {
+		transform: scale(10);
+    opacity: 1;
+  }
+}
+
+@keyframes launcher-loader-ripple-animation {
+	0% {
+    box-shadow: 0 0 0 0 rgba($neutral-darker, 0.3),
+                0 0 0 1em rgba($neutral-darker, 0.3),
+                0 0 0 3em rgba($neutral-darker, 0.3),
+                0 0 0 5em rgba($neutral-darker, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 1em rgba($neutral-darker, 0.3),
+                0 0 0 3em rgba($neutral-darker, 0.3),
+                0 0 0 5em rgba($neutral-darker, 0.3),
+                0 0 0 8em rgba($neutral-darker, 0);
+  }
+}
+
+@keyframes launcher-logo-animation {
+	0% {
+    opacity: 1;
+  }
+	30% {
+		
+	}
+	40% {
+		
+	}
+	80% {
+		opacity: 0.7;
+	}
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes hide-launcher-loader-animation {
@@ -122,19 +206,19 @@
     opacity: 1;
   }
 	30% {
-		transform: scale(2.5);
+		transform: scale(2.0);
 		opacity: 1;
 	}
 	40% {
-		transform: scale(2.0);
+		transform: scale(1.5);
 		opacity: 1;
 	}
-	90% {
-		transform: scale(2.0);
+	80% {
+		transform: scale(1.5);
 		opacity: 1;
 	}
   100% {
-		transform: scale(0);
+		transform: scaleY(0);
     opacity: 0;
   }
 }
