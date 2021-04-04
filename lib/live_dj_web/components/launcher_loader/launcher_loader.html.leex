@@ -1,5 +1,34 @@
-<div class="launcher-container">
-  <div class="launcher-loader-container">
+<div class="relative top-0 left-0 bg-background-dark launcher-container w-screen h-screen z-10">
+  <div class="
+    absolute top-2/4 right-2/4
+    launcher-subcontainer
+    bg-neutral-darker
+    rounded-full
+    <%= @loader_animation %>
+  "
+  ></div>
+  <div class="
+    absolute top-2/4 right-2/4 z-20
+    launcher-subcontainer-ripple
+    bg-neutral-darker
+    rounded-full
+    <%= @loader_animation %>
+  "
+  ></div>
+  <div
+    class="absolute top-2/4 right-2/4 transparent z-20"
+  >
+    <%= PhoenixInlineSvg.Helpers.svg_image(
+        LiveDjWeb.Endpoint,
+        "logo/live-dj-iso-white",
+        class: "h-72 h-72 launcher-logo #{@loader_animation}",
+        style: "position: absolute; left: 50%; top: 50%; margin-top: -1rem; margin-left: -13rem;"
+      )
+    %>
+  </div>
+  <div class="
+    absolute top-2/4 left-2/4 launcher-loader <%= @loader_animation %> z-10
+  ">
     <div class="launcher-loader-shaft1"></div>
     <div class="launcher-loader-shaft2"></div>
     <div class="launcher-loader-shaft3"></div>

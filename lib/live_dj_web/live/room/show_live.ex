@@ -89,28 +89,45 @@ defmodule LiveDjWeb.Room.ShowLive do
         # Player Setup
         player = Player.get_initial_state()
 
-        {:ok,
-          socket
-          |> assign(:connected_users, [])
-          |> assign(:current_tab, "video_queue")
-          |> assign(:messages, [])
-          |> assign(:new_message, "")
-          |> assign(:player, player)
-          |> assign(:player_controls, Player.get_controls_state(player))
-          |> assign(:room_changeset, room_changeset)
-          |> assign(:room_management, room.management_type)
-          |> assign(:search_result, [])
-          |> assign(:sections_group_tab, "chat")
-          |> assign(:slug, slug)
-          |> assign(:user, user)
-          |> assign(:user_room_group, user_room_group)
-          |> assign(:username_input, user.username)
-          |> assign(:video_queue, Enum.with_index(video_queue))
-          |> assign(:video_queue_controls, Queue.get_initial_controls())
-          |> assign(:volume_controls, volume_data)
-          |> assign_tracker(room)
-        }
+        socket = socket
+        |> assign(:is_loading, true)
+        |> assign(:loader_animation, "")
+        |> assign(:connected_users, [])
+        |> assign(:current_tab, "video_queue")
+        |> assign(:messages, [])
+        |> assign(:new_message, "")
+        |> assign(:player, player)
+        |> assign(:player_controls, Player.get_controls_state(player))
+        |> assign(:room_changeset, room_changeset)
+        |> assign(:room_management, room.management_type)
+        |> assign(:search_result, [])
+        |> assign(:sections_group_tab, "chat")
+        |> assign(:slug, slug)
+        |> assign(:user, user)
+        |> assign(:user_room_group, user_room_group)
+        |> assign(:username_input, user.username)
+        |> assign(:video_queue, Enum.with_index(video_queue))
+        |> assign(:video_queue_controls, Queue.get_initial_controls())
+        |> assign(:volume_controls, volume_data)
+        |> assign_tracker(room)
+        if connected?(socket) do
+          send(self(), :hide_loader)
+          Process.send_after(self(), :update_loading_state, 2000)
+        end
+        {:ok, socket}
     end
+  end
+
+
+  def handle_info(:update_loading_state, socket) do
+    {:noreply, socket
+      |> assign(:is_loading, false)
+      |> assign(:loader_animation, "")}
+  end
+
+  def handle_info(:hide_loader, socket) do
+    {:noreply, socket
+      |> assign(:loader_animation, "hide-launcher-loader")}
   end
 
   @impl true

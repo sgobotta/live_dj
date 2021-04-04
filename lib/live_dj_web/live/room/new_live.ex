@@ -49,6 +49,8 @@ defmodule LiveDjWeb.Room.NewLive do
 
     socket =
       socket
+      |> assign(:is_loading, true)
+      |> assign(:loader_animation, "")
       |> assign(:management_type_options, management_type_options)
       |> assign(:user, user)
       |> assign(:public_rooms, public_rooms)
@@ -59,7 +61,10 @@ defmodule LiveDjWeb.Room.NewLive do
       |> put_changeset()
 
     send(self(), :tick)
-
+    if connected?(socket) do
+      send(self(), :hide_loader)
+      Process.send_after(self(), :update_loading_state, 2000)
+    end
     {:ok, socket}
   end
 
@@ -104,6 +109,17 @@ defmodule LiveDjWeb.Room.NewLive do
     request_rooms_player(public_rooms)
 
     {:noreply, socket}
+  end
+
+  def handle_info(:update_loading_state, socket) do
+    {:noreply, socket
+      |> assign(:is_loading, false)
+      |> assign(:loader_animation, "")}
+  end
+
+  def handle_info(:hide_loader, socket) do
+    {:noreply, socket
+      |> assign(:loader_animation, "hide-launcher-loader")}
   end
 
   def handle_info({:receive_current_player, %{slug: slug} = params}, socket) do
