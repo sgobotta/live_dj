@@ -9,21 +9,19 @@
       id: "live-dj-new-live-sidebar",
       visitor: @visitor
     do %>
-      <%= if !connected?(@socket) do %>
+      <%= if @is_loading do %>
         <div
-          class="
-            new-live-view
-            relative
-            mx-2 mb-6 pt-10 px-0 sm:px-6 lg:mt-4 2xl:pb-8
-          "
-          style="width: 100%; height: 87vh;"
+          class="new-live-view absolute top-0 right-0"
+          style="width: 100%; height: 100vh;"
         >
           <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,
-            id: "live-dj-launching"
+            id: "live-dj-launching",
+            loader_animation: @loader_animation
           %>
         </div>
 
-      <% else %>
+      <% end %>
+      <%= if connected?(@socket) and !@is_loading do %>
         <div class="
           new-live-view
           mx-2 mb-6 pt-10 px-0 sm:px-6 lg:mt-12 2xl:pb-8
