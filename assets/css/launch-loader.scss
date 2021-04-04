@@ -120,17 +120,14 @@
 		-moz-transform: scaleY(0.05) translateX(-4px);
 }
 
-.launcher-container.hide-launcher-loader {
-	
-}
 
 .launcher-subcontainer.hide-launcher-loader {
-	animation: hide-launcher-loader-subcontainer-animation 2s infinite;
+	animation: hide-launcher-loader-subcontainer-animation 2.0s infinite;
 }
 
 .launcher-subcontainer-ripple {
 	border-radius: 50%;
-	animation: launcher-loader-ripple-animation 0.5s linear infinite;
+	animation: launcher-loader-ripple-animation 0.45s linear infinite;
 }
 
 .launcher-subcontainer-ripple.hide-launcher-loader {
@@ -138,11 +135,11 @@
 }
 
 .launcher-logo.hide-launcher-loader {
-	animation: launcher-logo-animation 2s;
+	animation: launcher-logo-animation 2.0s;
 }
 
 .launcher-loader.hide-launcher-loader {
-	animation: hide-launcher-loader-animation 2s;
+	animation: hide-launcher-loader-animation 2.0s;
 }
 
 @keyframes hide-launcher-loader-subcontainer-animation {
@@ -206,15 +203,15 @@
     opacity: 1;
   }
 	30% {
-		transform: scale(2.0);
+		transform: scale(1.5);
 		opacity: 1;
 	}
 	40% {
-		transform: scale(1.5);
+		transform: scale(1.2);
 		opacity: 1;
 	}
 	80% {
-		transform: scale(1.5);
+		transform: scale(1.2);
 		opacity: 1;
 	}
   100% {
