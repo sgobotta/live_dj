@@ -113,7 +113,31 @@
 		-moz-transform: scaleY(0.05) translateX(-4px);
 }
 
+.hide-launcher-loader {
+	animation: hide-launcher-loader-animation 2s;
+}
 
+@keyframes hide-launcher-loader-animation {
+  0% {
+    opacity: 1;
+  }
+	30% {
+		transform: scale(2.5);
+		opacity: 1;
+	}
+	40% {
+		transform: scale(2.0);
+		opacity: 1;
+	}
+	90% {
+		transform: scale(2.0);
+		opacity: 1;
+	}
+  100% {
+		transform: scale(0);
+    opacity: 0;
+  }
+}
 
 @keyframes cssload-jellyfish {
 	10% {
