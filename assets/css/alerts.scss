@@ -1,0 +1,20 @@
+#livedj-alert {
+  
+  &.visible {
+    transform: translateY(0px);
+    animation: show-bottom-alert 0.5s linear;
+  }
+}
+
+
+@keyframes show-bottom-alert {
+  0% {
+
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

@@ -76,8 +76,31 @@ function initLiveview() {
 }
 
 // Show progress bar on live navigation and form submits
-window.addEventListener("phx:page-loading-start", info => NProgress.start())
-window.addEventListener("phx:page-loading-stop", info => NProgress.done())
+window.addEventListener("phx:page-loading-start", info => {
+  if (info.detail && info.detail.kind && info.detail.kind === "error") {
+    const alert = document.getElementById('livedj-alert')
+    alert.classList.remove('invisible')
+    alert.classList.add('visible')
+    const textContainer = document.getElementById('livedj-alert-container')
+    const text = document.createElement('p')
+    text.innerHTML = 'Connecting to server...'
+    textContainer.replaceChildren(text)
+  }
+  NProgress.start()
+})
+window.addEventListener("phx:page-loading-stop", info => {
+  const textContainer = document.getElementById('livedj-alert-container')
+  const alert = document.getElementById('livedj-alert')
+  const text = document.createElement('p')
+  text.innerHTML = ''
+  textContainer.replaceChildren(text)
+  setTimeout(() => {
+    alert.classList.remove('visible')
+    alert.classList.add('invisible')
+  }, 1000)
+
+  NProgress.done()
+})
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
