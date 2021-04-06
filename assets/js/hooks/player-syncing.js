@@ -86,93 +86,73 @@ const onStateChange = (
   }
 }
 
-// const initTimeSlider = hookContext => player => {
-  // const timeSlider = document.getElementById('video-time-control')
-
-  // const playerCurrentTime = player.getCurrentTime()
-  // const playerDuration = player.getDuration()
-  // console.log('[Player] Current time :: ', playerCurrentTime)
-  // console.log('[Player] Duration :: ', playerDuration)
-  // timeSlider.min = 0
-  // timeSlider.max = playerDuration
-  // timeSlider.value = playerCurrentTime
-
-  // const onTimeChange = debounce(({target}) => {
-    
-  //   console.log('target :: ', target)
-  //   console.log('value :: ',target.value)
-  //   // timeTracker.value = player.getCurrentTime()
-  
-  // }, 200)
-
-  // timeSlider.oninput = onTimeChange
-// }
-
 const PlayerSyncing = initPlayer => ({
   async mounted() {
-    const startTimeTrackerElem = document.getElementById('yt-video-start-time')
-    const endTimeTrackerElem = document.getElementById('yt-video-end-time')
-    const timeSliderElem = document.getElementById('video-time-control')
-    const player = await initPlayer(
-      onStateChange(
-        this,
-        startTimeTrackerElem, endTimeTrackerElem, timeSliderElem
-      ),
-    )
-    this.pushEvent('player_signal_ready')
-
-    this.handleEvent('receive_mute_signal', () => {
-      player.mute()
-    })
-    
-    this.handleEvent('receive_unmute_signal', () => {
-      player.unMute()
-    })
-
-    this.handleEvent('receive_playing_signal', () => {
-      player.playVideo()
-      udpateTimeDisplays(
-        startTimeTrackerElem,
-        endTimeTrackerElem,
-        timeSliderElem,
-        player,
+    setTimeout(async () => {
+      const startTimeTrackerElem = document.getElementById('yt-video-start-time')
+      const endTimeTrackerElem = document.getElementById('yt-video-end-time')
+      const timeSliderElem = document.getElementById('video-time-control')
+      const player = await initPlayer(
+        onStateChange(
+          this,
+          startTimeTrackerElem, endTimeTrackerElem, timeSliderElem
+        ),
       )
-    })
-
-    this.handleEvent('receive_paused_signal', () => {
-      player.pauseVideo()
-      udpateTimeDisplays(
-        startTimeTrackerElem,
-        endTimeTrackerElem,
-        timeSliderElem,
-        player,
-      )
-    })
-
-    this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
-      player.loadVideoById({ videoId, startSeconds: time })
-      setTimeout(() => {
-        document.scrollingElement.scrollIntoView({behavior: 'smooth'})
-
+      this.pushEvent('player_signal_ready')
+  
+      this.handleEvent('receive_mute_signal', () => {
+        player.mute()
+      })
+      
+      this.handleEvent('receive_unmute_signal', () => {
+        player.unMute()
+      })
+  
+      this.handleEvent('receive_playing_signal', () => {
+        player.playVideo()
         udpateTimeDisplays(
           startTimeTrackerElem,
           endTimeTrackerElem,
           timeSliderElem,
           player,
         )
-
-        !shouldPlay && player.pauseVideo()
-      }, 300)
-    })
-
-    this.handleEvent('receive_player_volume', ({level: volumeLevel}) => {
-      player.setVolume(volumeLevel)
-    })
-
-    setInterval(() => {
-      const currentTime = player.getCurrentTime()
-      this.pushEvent('player_signal_current_time', currentTime)
-    }, 500)
+      })
+  
+      this.handleEvent('receive_paused_signal', () => {
+        player.pauseVideo()
+        udpateTimeDisplays(
+          startTimeTrackerElem,
+          endTimeTrackerElem,
+          timeSliderElem,
+          player,
+        )
+      })
+  
+      this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
+        player.loadVideoById({ videoId, startSeconds: time })
+        setTimeout(() => {
+          document.scrollingElement.scrollIntoView({behavior: 'smooth'})
+  
+          udpateTimeDisplays(
+            startTimeTrackerElem,
+            endTimeTrackerElem,
+            timeSliderElem,
+            player,
+          )
+  
+          !shouldPlay && player.pauseVideo()
+        }, 300)
+      })
+  
+      this.handleEvent('receive_player_volume', ({level: volumeLevel}) => {
+        player.setVolume(volumeLevel)
+      })
+  
+      setInterval(() => {
+        const currentTime = player.getCurrentTime()
+        this.pushEvent('player_signal_current_time', currentTime)
+      }, 500)
+    }, 1800)
   }
 })
 
