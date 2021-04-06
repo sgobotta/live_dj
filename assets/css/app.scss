@@ -109,6 +109,7 @@ body {
   fill: $secondary-highlight-1;
 }
 
+@import "./alerts.scss";
 @import "./card.scss";
 @import "./search-loader.scss";
 @import "./launch-loader.scss";
