@@ -8,12 +8,6 @@
 	overflow: hidden;
 }
 
-.launcher-subcontainer, .launcher-subcontainer-ripple {
-	width: 2px;
-  height: 2px;
-	transform: scale(20);
-}
-
 .launcher-loader *, .launcher-loader *:before, .launcher-loader *:after{
 	box-sizing: border-box;
 		-o-box-sizing: border-box;
@@ -121,18 +115,26 @@
 		-moz-transform: scaleY(0.05) translateX(-4px);
 }
 
-
-.launcher-subcontainer.hide-launcher-loader {
-	animation: hide-launcher-loader-subcontainer-animation 2.0s infinite;
+.launcher-subcontainer, .launcher-subcontainer-ripple {
+	width: 10px;
+  height: 10px;
+	transform: scale(2);
+}
+.launcher-subcontainer-ripple {
+	transform: scale(1);
+	animation: launcher-loader-ripple-animation 0.45s linear infinite;
+}
+.launcher-logo {
+	opacity: 0;
+	transform: translate(38px, -78px) scale(0.04);
 }
 
-.launcher-subcontainer-ripple {
-	transform: scale(3);
-	animation: launcher-loader-ripple-animation 0.45s linear infinite;
+.launcher-subcontainer.hide-launcher-loader {
+	animation: hide-launcher-loader-subcontainer-animation 2.0s;
 }
 
 .launcher-subcontainer-ripple.hide-launcher-loader {
-	animation: none;
+	animation: hide-launcher-loader-ripple-animation 2.0s;
 }
 
 .launcher-logo.hide-launcher-loader {
@@ -143,33 +145,59 @@
 	animation: hide-launcher-loader-animation 2.0s;
 }
 
-@keyframes hide-launcher-loader-subcontainer-animation {
-	0% {
-    opacity: 1;
+@keyframes hide-launcher-loader-ripple-animation {
+  0% {
+		background-color: $neutral-darker;
+		transform: scale(1);
+    box-shadow: inset 4px 0px 10px #080a0a;
+	}
+  10% {
+    transform: scale(1) translate(-1px, 1px); 
   }
-	15% {
-		transform: scale(100)
+  50% {
+    transform: scale(20) translate(0px, 0px);
 	}
-	30% {
-		opacity: 1;
+	72% {
+		box-shadow: inset 4px 4px 4px #080a0a;
+		transform: scale(20);
 	}
-	50% {
-		transform: scale(100);
-		opacity: 1;
+	73% {
+		box-shadow: none;
+		transform: scale(20);
 	}
-  60% {
-		transform: scale(2000);
-    opacity: 1;
+	100% {
+		background-color: $neutral-darker;
+		transform: scale(1000);
+	}
+}
+
+@keyframes hide-launcher-loader-subcontainer-animation {
+  0% {
+    box-shadow: inset 4px 0px 10px #080a0a;
+	}
+  10% {
+    transform: scale(1) translate(-1px, 1px); 
+  }
+  50% {
+    transform: scale(20) translate(0px, 0px);
+  }
+  72% {
+    box-shadow: inset 4px 0px 10px #080a0a;
+    transform: scale(0);
+  }
+  73% {
+    transform: scale(0);
   }
   100% {
-		transform: scale(2000);
-    opacity: 1;
+		box-shadow: inset 4px 0px 10px #080a0a;
+    transform: scale(0) translate(0px, 0px);
   }
 }
 
 @keyframes launcher-loader-ripple-animation {
 	0% {
 		opacity: 1;
+		z-index: 0;
     box-shadow: 0 0 0 0 rgba($neutral-darker, 0.3),
                 0 0 0 1em rgba($neutral-darker, 0.3),
                 0 0 0 3em rgba($neutral-darker, 0.3),
@@ -177,6 +205,7 @@
   }
   100% {
 		opacity: 1;
+		z-index: 0;
     box-shadow: 0 0 0 1em rgba($neutral-darker, 0.3),
                 0 0 0 3em rgba($neutral-darker, 0.3),
                 0 0 0 5em rgba($neutral-darker, 0.3),
@@ -185,30 +214,25 @@
 }
 
 @keyframes launcher-logo-animation {
-	0% {
-		margin-top: -1rem;
-		margin-left: -13rem;
+  0% {
     opacity: 1;
+	}
+  10% {
+    transform: translate(18px, -43px) scale(0.51);
+	}
+  40% {
+		
+	}
+  70% {
+    transform: translate(36px, -70px) scale(0.95);
   }
-	15% {
-		margin-top: -7rem;
-		margin-left: -10rem;
-	}
-	50% {
-		transform: scale(0.7);
-	}
-	60% {
-		transform: scale(1);
-	}
-	90% {
-		opacity: 1;
+  90% {
+    opacity: 1;
 	}
   100% {
-		transform: scale(1);
     opacity: 0;
-		margin-top: -7rem;
-		margin-left: -10rem;
-  }
+    transform: translate(36px, -70px) scale(0.95);
+	}
 }
 
 @keyframes hide-launcher-loader-animation {
