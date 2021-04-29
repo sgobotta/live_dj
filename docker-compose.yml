@@ -1,8 +1,9 @@
-version: '3.1'
+version: '3.8'
 
 services:
 
-  postgres:
+  main_db:
+    container_name: 'livedj_main_db'
     image: postgres
     environment:
       POSTGRES_USER: ${DB_USERNAME}
@@ -13,12 +14,16 @@ services:
       - 'pg_data:/var/lib/postgresql/data'
 
   pgadmin:
+    container_name: 'livedj_pgadmin'
     image: dpage/pgadmin4
     environment:
         - PGADMIN_DEFAULT_EMAIL=${PG_ADMIN_DEFAULT_EMAIL}
         - PGADMIN_DEFAULT_PASSWORD=${PG_ADMIN_DEFAULT_PASSWORD}
     ports:
         - 5050:80
+    volumes:
+      - 'pgadmin_data:/var/lib/pgadmin'
 
 volumes:
   pg_data:
+  pgadmin_data:
