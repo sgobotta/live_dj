@@ -12,9 +12,8 @@ defmodule LiveDjWeb.Components.QueueControls do
   @impl true
   def update(assigns, socket) do
     {:ok,
-      socket
-      |> assign(assigns)
-    }
+     socket
+     |> assign(assigns)}
   end
 
   @impl true
@@ -25,29 +24,36 @@ defmodule LiveDjWeb.Components.QueueControls do
       video_queue: video_queue,
       video_queue_controls: video_queue_controls
     } = assigns
+
     video_queue = Enum.map(video_queue, fn {v, _} -> v end)
     {:ok, _room} = Organizer.update_room(room, %{queue: video_queue})
     # Recreates a playlists_videos relationships
     # FIXME: Move to a proper context
     # FIXME: find a way to update only the affected video
-    updated_playlists_videos = Enum.map(Enum.with_index(video_queue), fn {video, index} ->
-      Collections.cast_playlist_video(
-        Map.merge(video, %{position: index, added_by_user_id: video.added_by.user_id}), room.playlist_id
-      )
-    end)
-    |> Collections.create_or_update_playlists_videos()
+    updated_playlists_videos =
+      Enum.map(Enum.with_index(video_queue), fn {video, index} ->
+        Collections.cast_playlist_video(
+          Map.merge(video, %{position: index, added_by_user_id: video.added_by.user_id}),
+          room.playlist_id
+        )
+      end)
+      |> Collections.create_or_update_playlists_videos()
+
     # Removes orphan playlist_video relationships
-    Collections.list_playlists_videos_by_id(room.playlist_id)
-    |> Enum.filter(fn opv -> !Enum.member?(Enum.map(updated_playlists_videos, fn upv -> upv.id end), opv.id) end)
-    |> Enum.map(fn orphan_playlist_video ->
+    orphan_playlists_videos =
+      Collections.list_playlists_videos_by_id(room.playlist_id)
+      |> Enum.filter(fn opv ->
+        !Enum.member?(Enum.map(updated_playlists_videos, fn upv -> upv.id end), opv.id)
+      end)
+
+    for orphan_playlist_video <- orphan_playlists_videos do
       {:ok, _result} = Collections.delete_playlist_video(orphan_playlist_video)
-    end)
+    end
 
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> slug,
-      {:save_queue,
-        %{video_queue_controls: Queue.mark_as_saved(video_queue_controls)}}
+      {:save_queue, %{video_queue_controls: Queue.mark_as_saved(video_queue_controls)}}
     )
 
     {:noreply, socket}

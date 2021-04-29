@@ -25,10 +25,10 @@ defmodule LiveDjWeb.Room.ShowLive do
     case room do
       nil ->
         {:ok,
-          socket
-          |> put_flash(:error, "That room does not exist.")
-          |> push_redirect(to: Routes.new_path(socket, :new))
-        }
+         socket
+         |> put_flash(:error, "That room does not exist.")
+         |> push_redirect(to: Routes.new_path(socket, :new))}
+
       room ->
         socket = assign_defaults(socket, params, session)
         %{current_user: current_user, visitor: visitor} = socket.assigns
@@ -39,21 +39,26 @@ defmodule LiveDjWeb.Room.ShowLive do
         # Permissions Group Setup
         #
         # FIXME: refactor to a group management module
-        user_room_group = case visitor do
-          true -> Accounts.get_group_by_codename("anonymous-room-visitor")
-            |> Repo.preload([:permissions])
-          false ->
-            case Organizer.get_user_room_by(%{
-              user_id: current_user.id,
-              room_id: room.id
-            }) do
-              nil -> Accounts.get_group_by_codename("registered-room-visitor")
-                |> Repo.preload([:permissions])
-              user_room ->
-                user_room = Repo.preload(user_room, [:group])
-                user_room.group |> Repo.preload(:permissions)
-            end
-        end
+        user_room_group =
+          case visitor do
+            true ->
+              Accounts.get_group_by_codename("anonymous-room-visitor")
+              |> Repo.preload([:permissions])
+
+            false ->
+              case Organizer.get_user_room_by(%{
+                     user_id: current_user.id,
+                     room_id: room.id
+                   }) do
+                nil ->
+                  Accounts.get_group_by_codename("registered-room-visitor")
+                  |> Repo.preload([:permissions])
+
+                user_room ->
+                  user_room = Repo.preload(user_room, [:group])
+                  user_room.group |> Repo.preload(:permissions)
+              end
+          end
 
         # Changeset Setup, used for room details form
         room_changeset = Ecto.Changeset.change(room)
@@ -63,24 +68,29 @@ defmodule LiveDjWeb.Room.ShowLive do
         # FIXME: Refactor to a module that manages Presence (initial data, updates, etc.)
         user = ConnectedUser.create_connected_user(current_user.username)
         volume_data = VolumeControls.get_initial_state()
-        presence_meta_user_id = case visitor do
-          true -> 0
-          false -> current_user.id
-        end
-        presence_meta = Map.merge(
-          volume_data,
-          %{
-            typing: false,
-            username: user.username,
-            visitor: visitor,
-            group: %{
-              codename: user_room_group.codename,
-              name: user_room_group.name,
-              permissions: user_room_group.permissions,
-            },
-            user_id: presence_meta_user_id
-          }
-        )
+
+        presence_meta_user_id =
+          case visitor do
+            true -> 0
+            false -> current_user.id
+          end
+
+        presence_meta =
+          Map.merge(
+            volume_data,
+            %{
+              typing: false,
+              username: user.username,
+              visitor: visitor,
+              group: %{
+                codename: user_room_group.codename,
+                name: user_room_group.name,
+                permissions: user_room_group.permissions
+              },
+              user_id: presence_meta_user_id
+            }
+          )
+
         {:ok, _} = Presence.track(self(), "room:" <> slug, user.uuid, presence_meta)
 
         # Video Queue Setup
@@ -89,68 +99,76 @@ defmodule LiveDjWeb.Room.ShowLive do
         # Player Setup
         player = Player.get_initial_state()
 
-        socket = socket
-        |> assign(:is_loading, true)
-        |> assign(:loader_animation, "")
-        |> assign(:connected_users, [])
-        |> assign(:current_tab, "video_queue")
-        |> assign(:messages, [])
-        |> assign(:new_message, "")
-        |> assign(:player, player)
-        |> assign(:player_controls, Player.get_controls_state(player))
-        |> assign(:room_changeset, room_changeset)
-        |> assign(:room_management, room.management_type)
-        |> assign(:search_result, [])
-        |> assign(:sections_group_tab, "chat")
-        |> assign(:slug, slug)
-        |> assign(:user, user)
-        |> assign(:user_room_group, user_room_group)
-        |> assign(:username_input, user.username)
-        |> assign(:video_queue, Enum.with_index(video_queue))
-        |> assign(:video_queue_controls, Queue.get_initial_controls())
-        |> assign(:volume_controls, volume_data)
-        |> assign_tracker(room)
+        socket =
+          socket
+          |> assign(:is_loading, true)
+          |> assign(:loader_animation, "")
+          |> assign(:connected_users, [])
+          |> assign(:current_tab, "video_queue")
+          |> assign(:messages, [])
+          |> assign(:new_message, "")
+          |> assign(:player, player)
+          |> assign(:player_controls, Player.get_controls_state(player))
+          |> assign(:room_changeset, room_changeset)
+          |> assign(:room_management, room.management_type)
+          |> assign(:search_result, [])
+          |> assign(:sections_group_tab, "chat")
+          |> assign(:slug, slug)
+          |> assign(:user, user)
+          |> assign(:user_room_group, user_room_group)
+          |> assign(:username_input, user.username)
+          |> assign(:video_queue, Enum.with_index(video_queue))
+          |> assign(:video_queue_controls, Queue.get_initial_controls())
+          |> assign(:volume_controls, volume_data)
+          |> assign_tracker(room)
+
         if connected?(socket) do
           send(self(), :hide_loader)
           Process.send_after(self(), :update_loading_state, 2000)
         end
+
         {:ok, socket}
     end
   end
 
-
   def handle_info(:update_loading_state, socket) do
-    {:noreply, socket
-      |> assign(:is_loading, false)
-      |> assign(:loader_animation, "")}
+    {:noreply,
+     socket
+     |> assign(:is_loading, false)
+     |> assign(:loader_animation, "")}
   end
 
   def handle_info(:hide_loader, socket) do
-    {:noreply, socket
-      |> assign(:loader_animation, "hide-launcher-loader")}
+    {:noreply,
+     socket
+     |> assign(:loader_animation, "hide-launcher-loader")}
   end
 
   @impl true
   def handle_info(
-    %Broadcast{event: "presence_diff", payload: payload},
-    %{assigns: %{slug: slug, user: user}} = socket
-  ) do
+        %Broadcast{event: "presence_diff", payload: payload},
+        %{assigns: %{slug: slug, user: user}} = socket
+      ) do
+    connected_users =
+      Organizer.list_present_with_metas(slug)
+      |> Enum.map(fn u ->
+        %{username: username} = hd(u.metas)
 
-    connected_users = Organizer.list_present_with_metas(slug)
-    |> Enum.map(fn u ->
-      %{username: username} = hd(u.metas)
-      has_orders = case Accounts.get_user_by_username(username) do
-        nil -> false
-        user -> Payments.has_order_by_user_id(user.id)
-      end
-      Map.merge(u, %{metas: [Map.merge(hd(u.metas), %{is_donor: has_orders})]})
-    end)
+        has_orders =
+          case Accounts.get_user_by_username(username) do
+            nil -> false
+            user -> Payments.has_order_by_user_id(user.id)
+          end
+
+        Map.merge(u, %{metas: [Map.merge(hd(u.metas), %{is_donor: has_orders})]})
+      end)
 
     room = handle_video_tracker_activity(slug, connected_users, payload)
 
-    socket = socket
-    |> assign(:connected_users, connected_users)
-    |> assign(:room, room)
+    socket =
+      socket
+      |> assign(:connected_users, connected_users)
+      |> assign(:room, room)
 
     # TODO: refactor, there should be a way to receive the diff event only when
     # others joined
@@ -163,10 +181,10 @@ defmodule LiveDjWeb.Room.ShowLive do
         #   |> Enum.map(fn {uuid, _} -> Chat.create_message(:presence_leaves, %{uuid: uuid}) end)
 
         {:noreply,
-          socket
-          # |> assign(:messages, messages ++ joins ++ leaves)
-          |> push_event("presence-changed", %{})
-        }
+         socket
+         # |> assign(:messages, messages ++ joins ++ leaves)
+         |> push_event("presence-changed", %{})}
+
       true ->
         {:noreply, socket}
     end
@@ -174,13 +192,20 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:request_current_player, _params}, socket) do
     %{assigns: %{player: player, slug: slug, video_queue: video_queue}} = socket
-    :ok = Phoenix.PubSub.broadcast_from(
-      LiveDj.PubSub,
-      self(),
-      "room:" <> slug <> ":request_current_player",
-      {:receive_current_player, %{
-        slug: slug, player: player, video_queue: video_queue}}
-    )
+
+    :ok =
+      Phoenix.PubSub.broadcast_from(
+        LiveDj.PubSub,
+        self(),
+        "room:" <> slug <> ":request_current_player",
+        {:receive_current_player,
+         %{
+           slug: slug,
+           player: player,
+           video_queue: video_queue
+         }}
+      )
+
     {:noreply, socket}
   end
 
@@ -189,16 +214,23 @@ defmodule LiveDjWeb.Room.ShowLive do
   end
 
   def handle_info({:add_to_queue, params}, %{assigns: assigns} = socket) do
-    %{added_video_position: added_video_position,
-      updated_video_queue: updated_video_queue} = params
-    %{player: player, search_result: search_result,
-      video_queue_controls: video_queue_controls} = assigns
+    %{added_video_position: added_video_position, updated_video_queue: updated_video_queue} =
+      params
+
+    %{player: player, search_result: search_result, video_queue_controls: video_queue_controls} =
+      assigns
+
     # Attempts to mark the selected song on each peer search result
-    search_result = Enum.map(search_result, fn {video, index} ->
-      {QueueItem.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}), index}
-    end)
+    search_result =
+      Enum.map(search_result, fn {video, index} ->
+        {QueueItem.update(video, %{is_queued: Queue.is_queued(video, updated_video_queue)}),
+         index}
+      end)
+
     video_queue_controls = Queue.mark_as_unsaved(video_queue_controls)
-    socket = socket
+
+    socket =
+      socket
       |> assign(:search_result, search_result)
       |> assign(:video_queue, Enum.with_index(updated_video_queue))
       |> assign(:video_queue_controls, video_queue_controls)
@@ -207,6 +239,7 @@ defmodule LiveDjWeb.Room.ShowLive do
     case updated_video_queue do
       [video] ->
         selected_video = video
+
         props = %{
           time: 0,
           video_id: selected_video.video_id,
@@ -214,35 +247,44 @@ defmodule LiveDjWeb.Room.ShowLive do
           previous_id: "",
           next_id: ""
         }
+
         player = Player.update(player, props)
+
         {:noreply,
-          socket
-          |> assign(:player, player)
-          |> assign(:player_controls, Player.get_controls_state(player))
-          |> push_event("receive_player_state", Player.create_response(player))
-        }
-      [_v|_vs] ->
+         socket
+         |> assign(:player, player)
+         |> assign(:player_controls, Player.get_controls_state(player))
+         |> push_event("receive_player_state", Player.create_response(player))}
+
+      [_v | _vs] ->
         case player.state do
           "stopped" ->
             %{video_id: video_id} = player
-            video = case video_id do
-              "" -> %{video_id: "", previous: "", next: ""}
-              _  -> Queue.get_next_video(updated_video_queue, video_id)
-            end
-            player = Player.update(player, %{
-              state: "playing",
-              time: 0,
-              video_id: video.video_id,
-              previous_id: video.previous,
-              next_id: video.next
-            })
+
+            video =
+              case video_id do
+                "" -> %{video_id: "", previous: "", next: ""}
+                _ -> Queue.get_next_video(updated_video_queue, video_id)
+              end
+
+            player =
+              Player.update(player, %{
+                state: "playing",
+                time: 0,
+                video_id: video.video_id,
+                previous_id: video.previous,
+                next_id: video.next
+              })
+
             player_controls = Player.get_controls_state(player)
             player_state_response = Player.create_response(player)
+
             {:noreply,
-              socket
-              |> assign(:player, player)
-              |> assign(:player_controls, player_controls)
-              |> push_event("receive_player_state", player_state_response)}
+             socket
+             |> assign(:player, player)
+             |> assign(:player_controls, player_controls)
+             |> push_event("receive_player_state", player_state_response)}
+
           _ ->
             {:noreply, socket}
         end
@@ -251,22 +293,29 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:save_queue, params}, socket) do
     %{video_queue_controls: video_queue_controls} = params
+
     {:noreply,
-      socket
-      |> assign(:video_queue_controls, video_queue_controls)
-      |> push_event("queue_saved", %{})}
+     socket
+     |> assign(:video_queue_controls, video_queue_controls)
+     |> push_event("queue_saved", %{})}
   end
 
   def handle_info({:request_initial_state, _params}, socket) do
-    %{messages: messages, video_queue: video_queue,
-      player: player} = socket.assigns
-    :ok = Phoenix.PubSub.broadcast_from(
-      LiveDj.PubSub,
-      self(),
-      "room:" <> socket.assigns.slug <> ":request_initial_state",
-      {:receive_initial_state, %{
-        current_queue: video_queue, messages: messages, player: player}}
-    )
+    %{messages: messages, video_queue: video_queue, player: player} = socket.assigns
+
+    :ok =
+      Phoenix.PubSub.broadcast_from(
+        LiveDj.PubSub,
+        self(),
+        "room:" <> socket.assigns.slug <> ":request_initial_state",
+        {:receive_initial_state,
+         %{
+           current_queue: video_queue,
+           messages: messages,
+           player: player
+         }}
+      )
+
     {:noreply, socket}
   end
 
@@ -275,67 +324,87 @@ defmodule LiveDjWeb.Room.ShowLive do
     Organizer.unsubscribe(:request_initial_state, slug)
     %{current_queue: current_queue, messages: messages, player: player} = params
     current_queue = Enum.map(current_queue, fn {v, _} -> v end)
-    search_result = Enum.map(search_result, fn {video, index} ->
-      video = QueueItem.update(video, %{
-        is_queued: Queue.is_queued(video, current_queue)})
-      {video, index}
-    end)
-    socket = socket
+
+    search_result =
+      Enum.map(search_result, fn {video, index} ->
+        video =
+          QueueItem.update(video, %{
+            is_queued: Queue.is_queued(video, current_queue)
+          })
+
+        {video, index}
+      end)
+
+    socket =
+      socket
       |> assign(:messages, messages)
       |> assign(:video_queue, Enum.with_index(current_queue))
       |> assign(:player, player)
       |> assign(:player_controls, Player.get_controls_state(player))
       |> assign(:search_result, search_result)
+
     case current_queue do
-      []  -> {:noreply, socket}
+      [] ->
+        {:noreply, socket}
+
       _xs ->
         {:noreply,
-          socket
-          |> push_event("receive_player_state", Player.create_response(player))}
+         socket
+         |> push_event("receive_player_state", Player.create_response(player))}
     end
   end
 
   def handle_info({:player_signal_playing, %{state: state}}, socket) do
     %{player: player} = socket.assigns
     player = Player.update(player, %{state: state})
+
     {:noreply,
-      socket
-      |> assign(:player, player)
-      |> assign(:player_controls, Player.get_controls_state(player))
-      |> push_event("receive_playing_signal", %{})}
+     socket
+     |> assign(:player, player)
+     |> assign(:player_controls, Player.get_controls_state(player))
+     |> push_event("receive_playing_signal", %{})}
   end
 
   def handle_info({:player_signal_paused, %{state: state}}, socket) do
     %{player: player} = socket.assigns
     player = Player.update(player, %{state: state})
+
     {:noreply,
-    socket
-      |> assign(:player, player)
-      |> assign(:player_controls, Player.get_controls_state(player))
-      |> push_event("receive_paused_signal", %{})}
+     socket
+     |> assign(:player, player)
+     |> assign(:player_controls, Player.get_controls_state(player))
+     |> push_event("receive_paused_signal", %{})}
   end
 
-# ===========================================================================
-#
-# Similar functions, refactor if not used to perform specific tasks
-#
+  # ===========================================================================
+  #
+  # Similar functions, refactor if not used to perform specific tasks
+  #
 
-  def handle_info({:player_signal_play_next, %{player: player, player_controls: player_controls}}, socket) do
-    {:noreply, socket
-      |> assign(:player, player)
-      |> assign(:player_controls, player_controls)
-      |> push_event("receive_player_state", Player.create_response(player))}
+  def handle_info(
+        {:player_signal_play_next, %{player: player, player_controls: player_controls}},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(:player, player)
+     |> assign(:player_controls, player_controls)
+     |> push_event("receive_player_state", Player.create_response(player))}
   end
 
-  def handle_info({:player_signal_play_previous, %{player: player, player_controls: player_controls}}, socket) do
-    {:noreply, socket
-      |> assign(:player, player)
-      |> assign(:player_controls, player_controls)
-      |> push_event("receive_player_state", Player.create_response(player))}
+  def handle_info(
+        {:player_signal_play_previous, %{player: player, player_controls: player_controls}},
+        socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(:player, player)
+     |> assign(:player_controls, player_controls)
+     |> push_event("receive_player_state", Player.create_response(player))}
   end
 
-#
-# ===========================================================================
+  #
+  # ===========================================================================
 
   def handle_info({:player_signal_play_by_id, %{video_id: video_id}}, socket) do
     %{video_queue: video_queue, player: player} = socket.assigns
@@ -343,21 +412,25 @@ defmodule LiveDjWeb.Room.ShowLive do
     selected_video = Queue.get_video_by_id(video_queue, video_id)
 
     case selected_video do
-      nil -> {:noreply, socket}
+      nil ->
+        {:noreply, socket}
+
       video ->
         params = %{
           next_id: video.next,
           previous_id: video.previous,
           time: 0,
-          video_id: video.video_id,
+          video_id: video.video_id
         }
+
         player = Player.update(player, params)
         player_controls = Player.get_controls_state(player)
+
         {:noreply,
-          socket
-          |> assign(:player, player)
-          |> assign(:player_controls, player_controls)
-          |> push_event("receive_player_state", Player.create_response(player))}
+         socket
+         |> assign(:player, player)
+         |> assign(:player_controls, player_controls)
+         |> push_event("receive_player_state", Player.create_response(player))}
     end
   end
 
@@ -379,14 +452,17 @@ defmodule LiveDjWeb.Room.ShowLive do
       Map.merge(m, %{group: group})
     end)
 
-    socket = case socket.assigns.visitor do
-      true -> socket
-      false ->
-        case user_id == socket.assigns.current_user.id do
-          false -> socket
-          true -> assign(socket, :user_room_group, group)
-        end
-    end
+    socket =
+      case socket.assigns.visitor do
+        true ->
+          socket
+
+        false ->
+          case user_id == socket.assigns.current_user.id do
+            false -> socket
+            true -> assign(socket, :user_room_group, group)
+          end
+      end
 
     {:noreply, socket}
   end
@@ -398,19 +474,26 @@ defmodule LiveDjWeb.Room.ShowLive do
       video_queue_controls: video_queue_controls
     } = socket.assigns
 
-    video_queue = video_queue
-    |> Enum.map(fn {v, _} -> v end)
-    |> Queue.remove_video_by_id(video_id)
+    video_queue =
+      video_queue
+      |> Enum.map(fn {v, _} -> v end)
+      |> Queue.remove_video_by_id(video_id)
 
     {:noreply,
-      socket
-      |> assign(:search_result, Enum.map(search_data, fn {video, index} ->
-        video = QueueItem.update(video, %{
-          is_queued: Queue.is_queued(video, video_queue)})
-        {video, index}
-      end))
-      |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
-      |> assign(:video_queue, Enum.with_index(video_queue))}
+     socket
+     |> assign(
+       :search_result,
+       Enum.map(search_data, fn {video, index} ->
+         video =
+           QueueItem.update(video, %{
+             is_queued: Queue.is_queued(video, video_queue)
+           })
+
+         {video, index}
+       end)
+     )
+     |> assign(:video_queue_controls, Queue.mark_as_unsaved(video_queue_controls))
+     |> assign(:video_queue, Enum.with_index(video_queue))}
   end
 
   def handle_info({:player_signal_sort_video, params}, socket) do
@@ -421,31 +504,35 @@ defmodule LiveDjWeb.Room.ShowLive do
       video_queue: video_queue,
       video_queue_controls: video_queue_controls
     } = params
+
     {:noreply,
-    socket
-      |> assign(:player, player)
-      |> assign(:player_controls, player_controls)
-      |> assign(:video_queue, video_queue)
-      |> assign(:video_queue_controls, video_queue_controls)
-      |> push_event("video_sorted_to_queue", %{pos: sorted_video_position})}
+     socket
+     |> assign(:player, player)
+     |> assign(:player_controls, player_controls)
+     |> assign(:video_queue, video_queue)
+     |> assign(:video_queue_controls, video_queue_controls)
+     |> push_event("video_sorted_to_queue", %{pos: sorted_video_position})}
   end
 
   def handle_info({:player_signal_current_time, %{time: time}}, socket) do
     %{player: player} = socket.assigns
+
     {:noreply,
-    socket
-      |> assign(:player, Player.update(player, %{time: time}))}
+     socket
+     |> assign(:player, Player.update(player, %{time: time}))}
   end
 
   def handle_info({:receive_messages, %{messages: messages}}, socket) do
     {:noreply,
-      socket
-      |> assign(:messages, messages)
-      |> push_event("receive_new_message", %{})
-    }
+     socket
+     |> assign(:messages, messages)
+     |> push_event("receive_new_message", %{})}
   end
 
-  def handle_info({:username_changed, %{uuid: uuid, username: username}}, %{assigns: %{slug: slug}} = socket) do
+  def handle_info(
+        {:username_changed, %{uuid: uuid, username: username}},
+        %{assigns: %{slug: slug}} = socket
+      ) do
     Presence.update(self(), "room:" <> slug, uuid, fn m ->
       Map.merge(m, %{username: username})
     end)
@@ -455,10 +542,10 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   def handle_info({:update_room_assign, %{room: room}}, socket) do
     {:noreply,
-      socket
-      |> assign(:room, room)
-      |> assign(:room_changeset, Ecto.Changeset.change(room))
-      |> assign(:room_management, room.management_type)}
+     socket
+     |> assign(:room, room)
+     |> assign(:room_changeset, Ecto.Changeset.change(room))
+     |> assign(:room_management, room.management_type)}
   end
 
   @impl true
@@ -468,31 +555,42 @@ defmodule LiveDjWeb.Room.ShowLive do
     presence = Organizer.list_filtered_present(room.slug, user.uuid)
 
     case presence do
-      []  ->
+      [] ->
         %{video_queue: video_queue} = socket.assigns
+
         case video_queue do
           [] ->
             {:noreply,
-              socket
-              |> assign(:player_controls, Player.get_controls_state(player))}
-          [{v, _}|_vs]  ->
-            player = Player.update(player, %{video_id: v.video_id, previous_id: v.previous, next_id: v.next})
+             socket
+             |> assign(:player_controls, Player.get_controls_state(player))}
+
+          [{v, _} | _vs] ->
+            player =
+              Player.update(player, %{
+                video_id: v.video_id,
+                previous_id: v.previous,
+                next_id: v.next
+              })
+
             {:noreply,
-              socket
-              |> assign(:video_queue, video_queue)
-              |> assign(:player, player)
-              |> assign(:player_controls, Player.get_controls_state(player))
-              |> push_event("receive_player_state", Player.create_response(player))}
+             socket
+             |> assign(:video_queue, video_queue)
+             |> assign(:player, player)
+             |> assign(:player_controls, Player.get_controls_state(player))
+             |> push_event("receive_player_state", Player.create_response(player))}
         end
+
       _xs ->
         Organizer.subscribe(:request_initial_state, socket.assigns.slug)
         # Tells every node the requester node needs an initial state
-        :ok = Phoenix.PubSub.broadcast_from(
-          LiveDj.PubSub,
-          self(),
-          "room:" <> socket.assigns.slug,
-          {:request_initial_state, %{}}
-        )
+        :ok =
+          Phoenix.PubSub.broadcast_from(
+            LiveDj.PubSub,
+            self(),
+            "room:" <> socket.assigns.slug,
+            {:request_initial_state, %{}}
+          )
+
         {:noreply, socket}
     end
   end
@@ -509,29 +607,39 @@ defmodule LiveDjWeb.Room.ShowLive do
         player = Player.update(player, %{state: "stopped", time: 0})
 
         {:noreply,
-          socket
-          |> assign(:player, player)
-          |> assign(:player_controls, Player.get_controls_state(player))}
+         socket
+         |> assign(:player, player)
+         |> assign(:player_controls, Player.get_controls_state(player))}
+
       video ->
         %{messages: messages} = socket.assigns
         %{video_id: video_id} = video
 
         player_props = %{video_id: video_id, time: 0, state: "playing"}
         player = Player.update(player, player_props)
-        message = Chat.create_message(:track_notification, %{
-          video: next_video, user: video.added_by.user_id
-        })
+
+        message =
+          Chat.create_message(:track_notification, %{
+            video: next_video,
+            user: video.added_by.user_id
+          })
+
         messages = messages ++ [message]
 
         {:noreply,
-          socket
-          |> assign(:messages, messages)
-          |> assign(:player, player)
-          |> assign(:player_controls, Player.get_controls_state(player))
-          |> push_event("receive_player_state", Player.create_response(player))
-          |> push_event("receive_notification", Notifications.create(
-            :play_video, next_video, "playing-track"
-          ))}
+         socket
+         |> assign(:messages, messages)
+         |> assign(:player, player)
+         |> assign(:player_controls, Player.get_controls_state(player))
+         |> push_event("receive_player_state", Player.create_response(player))
+         |> push_event(
+           "receive_notification",
+           Notifications.create(
+             :play_video,
+             next_video,
+             "playing-track"
+           )
+         )}
     end
   end
 
@@ -545,37 +653,45 @@ defmodule LiveDjWeb.Room.ShowLive do
 
     {video, queue} = Queue.take_from_indexed_queue(video_queue, from)
 
-    video_queue = queue
-    |> List.insert_at(to, video)
-    |> Enum.with_index()
-    |> Queue.link_tracks(from, to)
+    video_queue =
+      queue
+      |> List.insert_at(to, video)
+      |> Enum.with_index()
+      |> Queue.link_tracks(from, to)
 
-    {%{previous: previous, next: next}, _} = Enum.find(video_queue, fn {v,_} ->
-      v.video_id == player.video_id
-    end)
+    {%{previous: previous, next: next}, _} =
+      Enum.find(video_queue, fn {v, _} ->
+        v.video_id == player.video_id
+      end)
 
     player = Player.update(player, %{previous_id: previous, next_id: next})
 
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:player_signal_sort_video, %{
-        player: player,
-        player_controls: Player.get_controls_state(player),
-        video_queue: video_queue,
-        video_queue_controls: Queue.mark_as_unsaved(video_queue_controls),
-        sorted_video_position: to+1}}
-    )
+    :ok =
+      Phoenix.PubSub.broadcast(
+        LiveDj.PubSub,
+        "room:" <> socket.assigns.slug,
+        {:player_signal_sort_video,
+         %{
+           player: player,
+           player_controls: Player.get_controls_state(player),
+           video_queue: video_queue,
+           video_queue_controls: Queue.mark_as_unsaved(video_queue_controls),
+           sorted_video_position: to + 1
+         }}
+      )
+
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("player_signal_play_by_id", params, socket) do
-    :ok = Phoenix.PubSub.broadcast(
-      LiveDj.PubSub,
-      "room:" <> socket.assigns.slug,
-      {:player_signal_play_by_id, %{video_id: params["video_id"]}}
-    )
+    :ok =
+      Phoenix.PubSub.broadcast(
+        LiveDj.PubSub,
+        "room:" <> socket.assigns.slug,
+        {:player_signal_play_by_id, %{video_id: params["video_id"]}}
+      )
+
     {:noreply, socket}
   end
 
@@ -590,7 +706,9 @@ defmodule LiveDjWeb.Room.ShowLive do
           "room:" <> socket.assigns.slug,
           {:player_signal_current_time, %{time: current_time}}
         )
+
         {:noreply, socket}
+
       false ->
         {:noreply, socket}
     end
@@ -621,13 +739,16 @@ defmodule LiveDjWeb.Room.ShowLive do
     video_tracker = room.video_tracker
 
     case video_tracker in Map.keys(leaves) do
-      false -> room
-      true  ->
+      false ->
+        room
+
+      true ->
         case presence do
           [] ->
             {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: ""})
             updated_room
-          [p|_ps] ->
+
+          [p | _ps] ->
             {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: p.uuid})
             updated_room
         end
@@ -636,11 +757,14 @@ defmodule LiveDjWeb.Room.ShowLive do
 
   defp assign_tracker(socket, room) do
     current_user = socket.assigns.user.uuid
+
     case Organizer.list_filtered_present(room.slug, current_user) do
-      []  ->
+      [] ->
         {:ok, updated_room} = Organizer.update_room(room, %{video_tracker: current_user})
+
         socket
         |> assign(:room, updated_room)
+
       _xs ->
         socket
         |> assign(:room, room)

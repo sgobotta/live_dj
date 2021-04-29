@@ -11,6 +11,5 @@ defmodule LiveDj.Repo.Migrations.CreatePlans do
 
       timestamps()
     end
-
   end
 end

@@ -12,14 +12,13 @@ defmodule LiveDj.StatsFixtures do
   end
 
   def user_badge_fixture(
-    attrs \\ %{},
-    user_attrs \\ %{},
-    badge_attrs \\ %{}
-  ) do
-    badge = badge_fixture(
-      Enum.into(badge_attrs, %{reference_name: "Another reference name"})
-    )
+        attrs \\ %{},
+        user_attrs \\ %{},
+        badge_attrs \\ %{}
+      ) do
+    badge = badge_fixture(Enum.into(badge_attrs, %{reference_name: "Another reference name"}))
     user = AccountsFixtures.user_fixture(user_attrs)
+
     {:ok, user_badge} =
       attrs
       |> Enum.into(%{
@@ -27,6 +26,7 @@ defmodule LiveDj.StatsFixtures do
         badge_id: badge.id
       })
       |> LiveDj.Stats.create_user_badge()
+
     user_badge
   end
 
@@ -43,7 +43,7 @@ defmodule LiveDj.StatsFixtures do
         reference_name: "123"
       })
       |> LiveDj.Stats.create_badge()
+
     badge
   end
-
 end

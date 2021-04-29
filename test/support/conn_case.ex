@@ -87,7 +87,7 @@ defmodule LiveDjWeb.ConnCase do
     Given a url, builds and returns n connections
   """
   def create_connections(url, n \\ 1) do
-    for _ <- 0..(n-1) do
+    for _ <- 0..(n - 1) do
       get(build_conn(), url)
     end
   end

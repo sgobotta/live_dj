@@ -28,8 +28,12 @@ defmodule LiveDj.MixProject do
     [
       mod: {LiveDj.Application, []},
       extra_applications: [
-        :tubex, :logger, :runtime_tools, :bamboo, :logger_file_backend
-      ],
+        :tubex,
+        :logger,
+        :runtime_tools,
+        :bamboo,
+        :logger_file_backend
+      ]
     ]
   end
 

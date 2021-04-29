@@ -78,11 +78,9 @@ config :live_dj, LiveDjWeb.Endpoint,
     ]
   ]
 
-config :tubex, Tubex,
-  api_key: System.get_env("YOUTUBE_API_KEY")
+config :tubex, Tubex, api_key: System.get_env("YOUTUBE_API_KEY")
 
-config :live_dj, LiveDj.Mailer,
-  adapter: Bamboo.LocalAdapter
+config :live_dj, LiveDj.Mailer, adapter: Bamboo.LocalAdapter
 
 # Do not include metadata nor timestamps in development logs
 config :logger,

@@ -26,8 +26,9 @@ try do
     "badges_relations",
     "users_videos",
     "playlists",
-    "room_playlists_videos",
+    "room_playlists_videos"
   ]
+
   for seed <- seeds do
     Code.require_file("seeds/#{seed}.exs", __DIR__)
   end

@@ -1,26 +1,23 @@
 defmodule LiveDj.Organizer.QueueItem do
-
   alias LiveDj.Organizer.QueueItem
 
   @derive Jason.Encoder
 
-  defstruct [
-    added_by: %{
-      uuid: "",
-      username: "",
-      user_id: nil,
-    },
-    channel_title: "",
-    description: "",
-    img_height: "",
-    img_url: "",
-    img_width: "",
-    is_queued: false,
-    next: "",
-    previous: "",
-    title: "",
-    video_id: "",
-  ]
+  defstruct added_by: %{
+              uuid: "",
+              username: "",
+              user_id: nil
+            },
+            channel_title: "",
+            description: "",
+            img_height: "",
+            img_url: "",
+            img_width: "",
+            is_queued: false,
+            next: "",
+            previous: "",
+            title: "",
+            video_id: ""
 
   def update(video, props) do
     Map.merge(video, props)
@@ -43,12 +40,13 @@ defmodule LiveDj.Organizer.QueueItem do
       title: playlist_video.title,
       video_id: playlist_video.video_id,
       previous: playlist_video.previous,
-      next: playlist_video.next,
+      next: playlist_video.next
     }
   end
 
   def from_jsonb(jsonb_video) do
     added_by = jsonb_video["added_by"]
+
     %QueueItem{
       added_by: %{username: added_by["username"], uuid: added_by["uuid"]},
       channel_title: jsonb_video["channel_title"],
@@ -75,7 +73,7 @@ defmodule LiveDj.Organizer.QueueItem do
       title: HtmlEntities.decode(tubex_video.title),
       video_id: tubex_video.video_id,
       previous: "",
-      next: "",
+      next: ""
     }
   end
 end

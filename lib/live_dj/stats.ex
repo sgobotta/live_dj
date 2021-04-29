@@ -53,8 +53,9 @@ defmodule LiveDj.Stats do
     from(ub in UserBadge,
       where:
         ub.user_id == ^user_id and
-        ub.badge_id == ^badge_id
-    ) |> Repo.exists?()
+          ub.badge_id == ^badge_id
+    )
+    |> Repo.exists?()
   end
 
   @doc """
@@ -133,14 +134,16 @@ defmodule LiveDj.Stats do
 
   """
   def assoc_user_badge(user_id, badge_reference_name) do
-    association_result = UserBadge.changeset(
-      %UserBadge{},
-      %{
-        user_id: user_id,
-        badge_id: Repo.get_by(Badge, reference_name: badge_reference_name).id
-      }
-    )
-    |> Repo.insert()
+    association_result =
+      UserBadge.changeset(
+        %UserBadge{},
+        %{
+          user_id: user_id,
+          badge_id: Repo.get_by(Badge, reference_name: badge_reference_name).id
+        }
+      )
+      |> Repo.insert()
+
     case association_result do
       {:ok, _user} -> :ok
       {:error, changeset} -> {:error, changeset}
@@ -164,14 +167,18 @@ defmodule LiveDj.Stats do
 
   """
   def assoc_user_badge(badge_type, user_id, entity_length) do
-    badge = from(b in Badge,
-      where:
-        b.type       == ^badge_type and
-        b.checkpoint == ^entity_length
-    ) |> Repo.one()
+    badge =
+      from(b in Badge,
+        where:
+          b.type == ^badge_type and
+            b.checkpoint == ^entity_length
+      )
+      |> Repo.one()
 
     case badge do
-      nil -> {:unchanged}
+      nil ->
+        {:unchanged}
+
       badge ->
         case create_user_badge(%{user_id: user_id, badge_id: badge.id}) do
           {:ok, user_badge} -> {:ok, user_badge |> Repo.preload([:badge])}

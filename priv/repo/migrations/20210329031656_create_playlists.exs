@@ -3,9 +3,7 @@ defmodule LiveDj.Repo.Migrations.CreatePlaylists do
 
   def change do
     create table(:playlists) do
-
       timestamps()
     end
-
   end
 end

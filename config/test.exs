@@ -22,11 +22,9 @@ config :live_dj, LiveDjWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :tubex, Tubex,
-  api_key: System.get_env("YOUTUBE_TEST_API_KEY")
+config :tubex, Tubex, api_key: System.get_env("YOUTUBE_TEST_API_KEY")
 
-config :live_dj, LiveDj.Mailer,
-  adapter: Bamboo.TestAdapter
+config :live_dj, LiveDj.Mailer, adapter: Bamboo.TestAdapter
 
 # Print only warnings and errors during test
 config :logger, level: :warn

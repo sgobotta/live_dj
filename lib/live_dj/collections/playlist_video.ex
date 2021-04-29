@@ -18,7 +18,14 @@ defmodule LiveDj.Collections.PlaylistVideo do
   @doc false
   def changeset(playlist_video, attrs) do
     playlist_video
-    |> cast(attrs, [:added_by_user_id, :next_video_id, :playlist_id, :position, :previous_video_id, :video_id])
+    |> cast(attrs, [
+      :added_by_user_id,
+      :next_video_id,
+      :playlist_id,
+      :position,
+      :previous_video_id,
+      :video_id
+    ])
     |> validate_required([:playlist_id, :position, :video_id])
   end
 end

@@ -5,7 +5,6 @@ defmodule LiveDj.Collections.Playlist do
   alias LiveDj.Collections.{PlaylistVideo, Video}
 
   schema "playlists" do
-
     has_one :room, LiveDj.Organizer.Room
     many_to_many :videos, Video, join_through: PlaylistVideo
 

@@ -7,8 +7,7 @@ defmodule LiveDjWeb.Components.Sidebar do
 
   def update(assigns, conn) do
     {:ok,
-      conn
-      |> assign(assigns)
-    }
+     conn
+     |> assign(assigns)}
   end
 end
