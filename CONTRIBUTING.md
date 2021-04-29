@@ -2,36 +2,30 @@
 
 Hi! We're really excited that you are interested in contributing to LiveDj. Before submitting your contribution, please make sure to take a moment and read through the following guidelines:
 
-+   [Code of Conduct](https://github.com/sgobotta/live_dj/blob/main/.github/CODE_OF_CONDUCT.md)
-+   [Issue Reporting Guidelines](#issue-reporting-guidelines)
-+   [Pull Request Guidelines](#pull-request-guidelines)
-+   [Development Setup](#development-setup)
-+   [Project Structure](#project-structure)
++ [Code of Conduct](https://github.com/sgobotta/live_dj/blob/main/.github/CODE_OF_CONDUCT.md)
++ [Issue Reporting Guidelines](#issue-reporting-guidelines)
++ [Pull Request Guidelines](#pull-request-guidelines)
++ [Development Setup](#development-setup)
++ [Project Structure](#project-structure)
 
 ## Issue Reporting Guidelines
 
-- Always use our [**bug**](https://github.com/sgobotta/live_dj/issues/new?assignees=&labels=bug&template=bug_report.md&title=) or [**feature**](https://github.com/sgobotta/live_dj/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=) templates to create an issue.
++ Always use our [**bug**](https://github.com/sgobotta/live_dj/issues/new?assignees=&labels=bug&template=bug_report.md&title=) or [**feature**](https://github.com/sgobotta/live_dj/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=) templates to create an issue.
 
 ## Pull Request Guidelines
 
-+  The `main` branch is just a snapshot of the latest stable release. All development should be done in dedicated branches. **Do not submit PRs against the `main` branch.**
-
-+  Checkout a topic branch from the relevant branch, e.g. `develop`, and merge back against that branch. Please follow this convention for the new branch: `issueNumber-githubUsername-commitTitle`.
-
-+  Most of the contributed work should generally target the `lib` directory or the `assets` directory on rare occasions when the client needs a `javascript` poke.
-
-+  It's OK to have multiple small commits as you work on the PR. We may squash them before merging if necessary.
-
-+   Make sure `make test` passes. (see [**development setup**](#development-setup))
-
-+   If adding a new feature:
-    +   Add accompanying test cases.
-    +   Provide a convincing reason to add this feature. Ideally, you should open a suggestion issue first and have it approved before working on it.
-
-+   If fixing a bug:
-    +   If you are resolving a special issue, please follow the branch naming convention mentioned above.
-    +   Provide a detailed description of the bug in the PR. Live demo preferred.
-    +   Add appropriate test coverage if applicable.
++ The `main` branch is just a snapshot of the latest stable release. All development should be done in dedicated branches. **Do not submit PRs against the `main` branch.**
++ Checkout a topic branch from the relevant branch, e.g. `develop`, and merge back against that branch. Please follow this convention for the new branch: `issueNumber-githubUsername-commitTitle`.
++ Most of the contributed work should generally target the `lib` directory or the `assets` directory on rare occasions when the client needs a `javascript` poke.
++ It's OK to have multiple small commits as you work on the PR. We may squash them before merging if necessary.
++ Make sure `make test` passes. (see [**development setup**](#development-setup))
++ If adding a new feature:
+  + Add accompanying test cases.
+  + Provide a convincing reason to add this feature. Ideally, you should open a suggestion issue first and have it approved before working on it.
++ If fixing a bug:
+  + If you are resolving a special issue, please follow the branch naming convention mentioned above.
+  + Provide a detailed description of the bug in the PR. Live demo preferred.
+    + Add appropriate test coverage if applicable.
 
 ## Development Setup
 
@@ -40,35 +34,43 @@ You will need the `mix` program, which is provided when installing [Elixir](http
 After cloning the forked repository, run:
 
 ```bash
-make install
+make setup
 ```
 
-This script will install Elixir and node dependencies.
+This script will install Elixir, node dependencies, set up a database and populate it with fixtures.
 
 ### Committing Changes
 
 We don't expect any strict convention, but we'd be grateful if you summarize what your modifications content is about when writing a commit.
 
+**Git hooks should be automatically installed after dependencies are installed. You should find them by listing files like `ls .git/hooks` to find some "pre hooks". If they're not there please run them manually by typing `mix git_hooks.install`. This help us guarantee code style consistency.**
+
 ### Commonly used scripts during development
 
 ``` bash
-# creates databases and loads fixture seeds
-make ecto.setup
+# Setups the whole environment. Also useful when checking out new branches.
+make setup
 
-# install server and client dependencies
+# Installs server and client dependencies
 make install
 
-# run all tests
+# Runs all tests
 make test
 
-# initialises a local server with hot-reload and an interactive elixir prompt
+# Runs only tests tagged with :wip e.g: `@tag :wip`
+make test.wip
+
+# Gets a test coverage report
+make test.cover
+
+# Initialises a local server with hot-reload and an interactive elixir prompt
 make server
 
-# run only tests tagged with :wip e.g: `@tag :wip`
-make test.only
-
-# re-creates databases, runs migrations and loads fixture seeds
+# Re-creates databases, runs migrations and loads fixture seeds
 make ecto.reset
+
+# Simulates a fresh installation
+make reset
 ```
 
 **Please make sure tests pass successfully before submitting a PR.** Although the same tests will be run against your PR on the CI server, it is better to have it working locally.
