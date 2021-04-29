@@ -3,74 +3,93 @@
 export MIX_ENV ?= dev
 export SECRET_KEY_BASE ?= $(shell mix phx.gen.secret)
 
-# Enables bash commands in the whole document
-# SHELL := /bin/bash
-
 APP_NAME ?= `grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g'`
 
 default: help
 
-#db: @ Bundles the services and the setup commands
-db: docker.services setup
+#clean: @ Cleans all dependencies
+clean: clean.npm clean.deps
 
-#docker.services: @ Starts a detached postgresql service with an adminer instance at port 8080
-docker.services: SHELL:=/bin/bash
-docker.services: 
+#clean.deps: @ Cleans server dependencies from mix.exs
+clean.deps:
+	@mix deps.clean --all
+	@mix deps.get
+
+#clean.npm: @ Cleans client dependencies from assets/package.json
+clean.npm:
+	@npm clean-install --prefix assets
+
+#dialyzer: @ Performs static code analysis.
+dialyzer:
+	@mix dialyzer --format dialyxir
+
+#docker.services.down: @ Shuts down docker-compose services
+docker.services.down:
+	@docker-compose down
+
+#docker.services.up: @ Starts docker-compose services
+docker.services.up: SHELL:=/bin/bash
+docker.services.up: 
 	source .env && docker-compose up -d
 
-#ecto.create: @ Creates the storage for the repo
-ecto.create: SHELL:=/bin/bash
-ecto.create: 
-	source .env && docker-compose up -d && mix ecto.create
-
-#ecto.migrate: @ Migrates the database
-ecto.migrate: SHELL:=/bin/bash
-ecto.migrate:
-	source .env && docker-compose up -d && POOL_SIZE=2 mix ecto.migrate
-
-#ecto.reset: @ Drops your current database, recreates and migrates it again
+#ecto.reset: @ Drops the database, then runs setup
 ecto.reset: SHELL:=/bin/bash
-ecto.reset:
-	source .env && docker-compose up -d && POOL_SIZE=2 mix ecto.reset
+ecto.reset: docker.services.up
+ecto.reset: 
+	source .env && POOL_SIZE=2 mix ecto.reset
 
-#ecto.setup: @ Creates and migrates the database
-ecto.setup: SHELL:=/bin/bash
-ecto.setup:
-	source .env && docker-compose up -d && mix ecto.setup
-
-#ecto.seed: @ Script for populating the database
-ecto.seed: SHELL:=/bin/bash
-ecto.seed:
-	source .env && docker-compose up -d && mix run priv/repo/seeds.exs
-
-#help: @ Shows help topics
+#help: @ Displays this message
 help:
 	@grep -E '[a-zA-Z\.\-]+:.*?@ .*$$' $(MAKEFILE_LIST)| tr -d '#'  | awk 'BEGIN {FS = ":.*?@ "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
 
 #install: @ Installs all dependencies
 install: install.deps install.npm
 
-#install.deps: @ Installs dependencies from mix.exs
+#install.deps: @ Installs server dependencies from mix.exs
 install.deps:
 	@mix deps.get
 
-#install.npm: @ Installs dependencies from assets/package.json
+#install.npm: @ Installs client dependencies from assets/package.json
 install.npm:
-	cd assets; npm i
+	@npm i --prefix assets
 
-#reset: @ Runs the ecto.reset command
+#lint: @ Runs a code formatter and code consistency analysis
+lint:
+	@mix format
+	@mix credo --strict
+
+#lint.ci: @ Strictly runs a code formatter and code consistency analysis
+lint.ci:
+	@mix format --check-formatted
+	@mix credo --strict
+
+#reset: @ Shuts down docker services and cleans all dependencies, then resets the database and re-installs all dependencies
+reset: docker.services.down
+reset: docker.services.up
+reset: clean.npm
 reset: ecto.reset
 
-#server: @ Starts an interactive elixir shell
+#security.check: @ Performs security checks
+security.check:
+	@mix sobelow --verbose
+
+#security.check.ci: @ Performs security checks
+security.check.ci:
+	@mix sobelow --exit
+
+#server: @ Starts a server with an interactive elixir shell.
 server: SHELL:=/bin/bash
-server: docker.services
+server: docker.services.up
 server:
 	source .env && iex --name $(APP_NAME)@127.0.0.1 -S mix phx.server
 
-#setup: @ Bundles the ecto.create and ecto.setup commands
-setup: ecto.create ecto.setup
+#setup: @ Installs all dependencies, recreates the database, runs migrations and loads database seeds up.
+setup: SHELL:=/bin/bash
+setup: docker.services.up
+setup:
+	source .env && POOL_SIZE=2 mix setup
 
-#test: @ Run mix tests
+#test: @ Runs all test suites
 test: MIX_ENV=test
 test: SHELL:=/bin/bash
 test:
@@ -82,14 +101,14 @@ test.cover: SHELL:=/bin/bash
 test.cover:
 	source .env && mix coveralls.html
 
-#test.only: @ Runs mix tests that matches the wip tag only
-test.only: MIX_ENV=test
-test.only: SHELL:=/bin/bash
-test.only:
-	source .env && mix test --only wip
-
 #test.drop: @ Drops the test database. Usually used after schemas change.
 test.drop: MIX_ENV=test
 test.drop: SHELL:=/bin/bash
 test.drop:
-	source .env && DB_DATABASE=live_dj_test && mix ecto.drop
+	source .env && mix ecto.drop
+
+#test.wip: @ Runs test suites that match the wip tag
+test.wip: MIX_ENV=test
+test.wip: SHELL:=/bin/bash
+test.wip:
+	source .env && mix test --only wip
