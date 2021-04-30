@@ -61,7 +61,6 @@ lint:
 #lint.ci: @ Strictly runs a code formatter and code consistency analysis
 lint.ci:
 	@mix format --check-formatted
-	@mix credo --strict
 
 #reset: @ Shuts down docker services and cleans all dependencies, then resets the database and re-installs all dependencies
 reset: docker.services.down
