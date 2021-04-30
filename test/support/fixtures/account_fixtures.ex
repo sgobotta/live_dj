@@ -32,10 +32,12 @@ defmodule LiveDj.AccountsFixtures do
 
   def permission_fixture(attrs \\ %{}) do
     words = Faker.Lorem.words(4)
+
     valid_attrs = %{
       codename: Enum.join(words, "-"),
       name: Enum.join(words, " ")
     }
+
     {:ok, permission} =
       attrs
       |> Enum.into(valid_attrs)
@@ -46,10 +48,12 @@ defmodule LiveDj.AccountsFixtures do
 
   def group_fixture(attrs \\ %{}) do
     words = Faker.Lorem.words(4)
+
     valid_attrs = %{
       codename: Enum.join(words, "-"),
       name: Enum.join(words, " ")
     }
+
     {:ok, group} =
       attrs
       |> Enum.into(valid_attrs)
@@ -62,12 +66,13 @@ defmodule LiveDj.AccountsFixtures do
     permission = permission_fixture()
     group = group_fixture()
     valid_attrs = %{permission_id: permission.id, group_id: group.id}
+
     {:ok, permission_group} =
       attrs
       |> Enum.into(valid_attrs)
       |> Accounts.create_permission_group()
 
-      permission_group
+    permission_group
   end
 
   @doc """
@@ -84,18 +89,22 @@ defmodule LiveDj.AccountsFixtures do
 
   """
   def permissions_group_fixture(
-      %{permissions: permissions, group_id: group_id},
-      extra_attrs \\ %{}
-  ) do
+        %{permissions: permissions, group_id: group_id},
+        extra_attrs \\ %{}
+      ) do
     mandatory_attrs = %{group_id: group_id}
-    permissions_groups = permissions
-    |> Enum.map(fn permission ->
-      {:ok, permission_group} =
-        extra_attrs
-        |> Enum.into(Map.merge(mandatory_attrs, %{permission_id: permission.id}))
-        |> Accounts.create_permission_group()
-      permission_group
-    end)
+
+    permissions_groups =
+      permissions
+      |> Enum.map(fn permission ->
+        {:ok, permission_group} =
+          extra_attrs
+          |> Enum.into(Map.merge(mandatory_attrs, %{permission_id: permission.id}))
+          |> Accounts.create_permission_group()
+
+        permission_group
+      end)
+
     {:ok, permissions_groups}
   end
 end

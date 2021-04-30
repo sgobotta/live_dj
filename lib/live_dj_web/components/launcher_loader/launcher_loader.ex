@@ -7,8 +7,7 @@ defmodule LiveDjWeb.Components.LauncherLoader do
 
   def update(assigns, socket) do
     {:ok,
-      socket
-      |> assign(assigns)
-    }
+     socket
+     |> assign(assigns)}
   end
 end

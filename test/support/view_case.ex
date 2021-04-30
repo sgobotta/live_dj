@@ -31,5 +31,4 @@ defmodule LiveDj.ViewCase do
   def click(view, type), do: button(view, type) |> render_click()
   def has_button(view, type), do: button(view, type) |> has_element?()
   def has_form(view, type), do: get_form(view, type) |> has_element?()
-
 end

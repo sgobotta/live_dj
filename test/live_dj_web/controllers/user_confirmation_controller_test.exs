@@ -72,6 +72,7 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
         confirmed_at: confirmed_at,
         badges: badges
       } = Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+
       assert confirmed_at
       refute get_session(conn, :user_token)
       assert Repo.all(Accounts.UserToken) == []
@@ -92,6 +93,7 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
         confirmed_at: confirmed_at,
         badges: badges
       } = Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+
       refute confirmed_at
       refute badge in badges
     end

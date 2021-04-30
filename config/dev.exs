@@ -54,6 +54,18 @@ config :live_dj, LiveDjWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
+# Configures git pre-commit hook to run the formatter
+config :git_hooks,
+  auto_install: true,
+  verbose: true,
+  hooks: [
+    pre_commit: [
+      tasks: [
+        {:mix_task, :format, ["--check-formatted"]}
+      ]
+    ]
+  ]
+
 # Watch static and templates for browser reloading.
 config :live_dj, LiveDjWeb.Endpoint,
   live_reload: [
@@ -66,11 +78,9 @@ config :live_dj, LiveDjWeb.Endpoint,
     ]
   ]
 
-config :tubex, Tubex,
-  api_key: System.get_env("YOUTUBE_API_KEY")
+config :tubex, Tubex, api_key: System.get_env("YOUTUBE_API_KEY")
 
-config :live_dj, LiveDj.Mailer,
-  adapter: Bamboo.LocalAdapter
+config :live_dj, LiveDj.Mailer, adapter: Bamboo.LocalAdapter
 
 # Do not include metadata nor timestamps in development logs
 config :logger,

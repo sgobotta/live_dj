@@ -122,21 +122,23 @@ defmodule LiveDj.Payments do
   def get_mercadopago_plans() do
     list_plans()
     |> Enum.filter(fn p -> p.gateway == "mercadopago" end)
-    |> Enum.map(
-      fn p ->
-        Map.merge(p, %{preference_id: hd(p.extra)["preference_id"], amount: floor(p.amount)})
-        |> Map.drop([:extra, :plan_id])
-      end)
+    |> Enum.map(fn p ->
+      Map.merge(p, %{preference_id: hd(p.extra)["preference_id"], amount: floor(p.amount)})
+      |> Map.drop([:extra, :plan_id])
+    end)
   end
 
   def get_paypal_plans() do
     list_plans()
     |> Enum.filter(fn p -> p.gateway == "paypal" end)
-    |> Enum.map(
-      fn p ->
-        Map.merge(p, %{input_value: hd(p.extra)["input_value"], host: hd(p.extra)["host"], amount: floor(p.amount)})
-        |> Map.drop([:extra, :plan_id])
-      end)
+    |> Enum.map(fn p ->
+      Map.merge(p, %{
+        input_value: hd(p.extra)["input_value"],
+        host: hd(p.extra)["host"],
+        amount: floor(p.amount)
+      })
+      |> Map.drop([:extra, :plan_id])
+    end)
   end
 
   alias LiveDj.Payments.Order
@@ -159,7 +161,8 @@ defmodule LiveDj.Payments do
       order in Order,
       where: order.user_id == ^id,
       order_by: [desc: order.inserted_at],
-      join: plan in Plan, on: order.plan_id == plan.id,
+      join: plan in Plan,
+      on: order.plan_id == plan.id,
       select: %{
         amount: order.amount,
         inserted_at: order.inserted_at,

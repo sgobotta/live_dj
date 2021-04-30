@@ -59,73 +59,98 @@ defmodule LiveDj.DataCase do
 
   def groups_setup do
     # Creates some mandatory groups
-    anonymous_room_visitor_group = group_fixture(%{
-      codename: "anonymous-room-visitor",
-      name: "Anonymous room visitor"
-    })
-    registered_room_visitor_group = group_fixture(%{
-      codename: "registered-room-visitor",
-      name: "Registered room visitor"
-    })
-    room_admin_group = group_fixture(%{
-      codename: "room-admin",
-      name: "Room admin"
-    })
-    room_collaborator_group = group_fixture(%{
-      codename: "room-collaborator",
-      name: "Room collaborator"
-    })
-    %{anonymous_room_visitor_group: anonymous_room_visitor_group,
+    anonymous_room_visitor_group =
+      group_fixture(%{
+        codename: "anonymous-room-visitor",
+        name: "Anonymous room visitor"
+      })
+
+    registered_room_visitor_group =
+      group_fixture(%{
+        codename: "registered-room-visitor",
+        name: "Registered room visitor"
+      })
+
+    room_admin_group =
+      group_fixture(%{
+        codename: "room-admin",
+        name: "Room admin"
+      })
+
+    room_collaborator_group =
+      group_fixture(%{
+        codename: "room-collaborator",
+        name: "Room collaborator"
+      })
+
+    %{
+      anonymous_room_visitor_group: anonymous_room_visitor_group,
       registered_room_visitor: registered_room_visitor_group,
       room_admin_group: room_admin_group,
-      room_collaborator_group: room_collaborator_group}
+      room_collaborator_group: room_collaborator_group
+    }
   end
 
   def permissions_setup do
     # Creates some mandatory permissions
-    can_add_room_collaborators_permission = permission_fixture(%{
-      codename: "can_add_room_collaborators",
-      name: "Can add room collaborators"
-    })
-    can_remove_room_collaborators_permission = permission_fixture(%{
-      codename: "can_remove_room_collaborators",
-      name: "Can remove room collaborators"
-    })
-    can_edit_room_management_type = permission_fixture(%{
-      codename: "can_edit_room_management_type",
-      name: "Can edit room management type"
-    })
-    can_edit_room_name = permission_fixture(%{
-      codename: "can_edit_room_name",
-      name: "Can edit room name"
-    })
-    can_play_track_permission = permission_fixture(%{
-      codename: "can_play_track",
-      name: "Can play tracks"
-    })
-    can_pause_track_permission = permission_fixture(%{
-      codename: "can_pause_track",
-      name: "Can pause tracks"
-    })
-    can_play_next_track_permission = permission_fixture(%{
-      codename: "can_play_next_track",
-      name: "Can play next track"
-    })
-    can_play_previous_track_permission = permission_fixture(%{
-      codename: "can_play_previous_track",
-      name: "Can play previous track"
-    })
+    can_add_room_collaborators_permission =
+      permission_fixture(%{
+        codename: "can_add_room_collaborators",
+        name: "Can add room collaborators"
+      })
 
-    %{can_add_room_collaborators_permission:
-        can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission:
-        can_remove_room_collaborators_permission,
+    can_remove_room_collaborators_permission =
+      permission_fixture(%{
+        codename: "can_remove_room_collaborators",
+        name: "Can remove room collaborators"
+      })
+
+    can_edit_room_management_type =
+      permission_fixture(%{
+        codename: "can_edit_room_management_type",
+        name: "Can edit room management type"
+      })
+
+    can_edit_room_name =
+      permission_fixture(%{
+        codename: "can_edit_room_name",
+        name: "Can edit room name"
+      })
+
+    can_play_track_permission =
+      permission_fixture(%{
+        codename: "can_play_track",
+        name: "Can play tracks"
+      })
+
+    can_pause_track_permission =
+      permission_fixture(%{
+        codename: "can_pause_track",
+        name: "Can pause tracks"
+      })
+
+    can_play_next_track_permission =
+      permission_fixture(%{
+        codename: "can_play_next_track",
+        name: "Can play next track"
+      })
+
+    can_play_previous_track_permission =
+      permission_fixture(%{
+        codename: "can_play_previous_track",
+        name: "Can play previous track"
+      })
+
+    %{
+      can_add_room_collaborators_permission: can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
       can_edit_room_management_type_permission: can_edit_room_management_type,
       can_edit_room_name_permission: can_edit_room_name,
       can_play_track_permission: can_play_track_permission,
       can_pause_track_permission: can_pause_track_permission,
       can_play_next_track_permission: can_play_next_track_permission,
-      can_play_previous_track_permission: can_play_previous_track_permission}
+      can_play_previous_track_permission: can_play_previous_track_permission
+    }
   end
 
   def badges_setup do
@@ -136,57 +161,66 @@ defmodule LiveDj.DataCase do
   A helper that initialises the needed data for a show live view
   """
   def show_live_setup do
-    %{room_admin_group: room_admin_group,
-      room_collaborator_group: room_collaborator_group} = groups_setup()
-    %{can_add_room_collaborators_permission:
-        can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission:
-        can_remove_room_collaborators_permission,
-      can_edit_room_management_type_permission:
-        can_edit_room_management_type_permission,
+    %{room_admin_group: room_admin_group, room_collaborator_group: room_collaborator_group} =
+      groups_setup()
+
+    %{
+      can_add_room_collaborators_permission: can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
+      can_edit_room_management_type_permission: can_edit_room_management_type_permission,
       can_edit_room_name_permission: can_edit_room_name_permission,
       can_play_track_permission: can_play_track_permission,
       can_pause_track_permission: can_pause_track_permission,
       can_play_next_track_permission: can_play_next_track_permission,
-      can_play_previous_track_permission: can_play_previous_track_permission,
+      can_play_previous_track_permission: can_play_previous_track_permission
     } = permissions_setup()
+
     # Creates permission group relationships
     permission_group_fixture(%{
       permission_id: can_add_room_collaborators_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_remove_room_collaborators_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_edit_room_management_type_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_edit_room_name_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_play_track_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_pause_track_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_play_next_track_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_play_previous_track_permission.id,
       group_id: room_admin_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_edit_room_management_type_permission.id,
       group_id: room_collaborator_group.id
     })
+
     permission_group_fixture(%{
       permission_id: can_edit_room_name_permission.id,
       group_id: room_collaborator_group.id
@@ -202,9 +236,16 @@ defmodule LiveDj.DataCase do
   def create_room_ownership(admin_group, room_attrs) do
     # Associates a group id to a new user for a new room and makes this user
     # an owner of the room
-    %{room: room, user: user, user_room: _user_room} = user_room_fixture(%{
-      is_owner: true, group_id: admin_group.id
-    }, %{}, room_attrs)
+    %{room: room, user: user, user_room: _user_room} =
+      user_room_fixture(
+        %{
+          is_owner: true,
+          group_id: admin_group.id
+        },
+        %{},
+        room_attrs
+      )
+
     %{room: room, user: user}
   end
 end

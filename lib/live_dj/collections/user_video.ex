@@ -3,7 +3,6 @@ defmodule LiveDj.Collections.UserVideo do
   import Ecto.Changeset
 
   schema "users_videos" do
-
     belongs_to :user, LiveDj.Accounts.User
     belongs_to :video, LiveDj.Collections.Video
 

@@ -37,7 +37,18 @@ npm-debug.log
 .iex.exs
 
 # Environment
-.env
+.env*
+!.env*.example
 
 # Logger configuration points to this directory
 /log
+
+# Dialyzer
+/priv/plts/*.plt
+/priv/plts/*.plt.hash
+
+# Sobelow
+.sobelow
+
+# Editor
+.vscode

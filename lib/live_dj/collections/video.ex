@@ -22,7 +22,15 @@ defmodule LiveDj.Collections.Video do
   @doc false
   def changeset(video, attrs) do
     video
-    |> cast(attrs, [:channel_title, :description, :img_height, :img_url, :img_width, :title, :video_id])
+    |> cast(attrs, [
+      :channel_title,
+      :description,
+      :img_height,
+      :img_url,
+      :img_width,
+      :title,
+      :video_id
+    ])
     |> validate_required([:img_height, :img_url, :img_width, :video_id])
     |> unique_constraint(:video_id)
   end
@@ -35,7 +43,7 @@ defmodule LiveDj.Collections.Video do
       img_url: video.img_url,
       img_width: Integer.to_string(video.img_width),
       title: HtmlEntities.decode(video.title),
-      video_id: video.video_id,
+      video_id: video.video_id
     }
   end
 end

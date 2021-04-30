@@ -86,7 +86,14 @@ defmodule LiveDj.AccountsTest do
     test "registers users with a hashed password" do
       username = unique_user_username()
       email = unique_user_email()
-      {:ok, user} = Accounts.register_user(%{username: username, email: email, password: valid_user_password()})
+
+      {:ok, user} =
+        Accounts.register_user(%{
+          username: username,
+          email: email,
+          password: valid_user_password()
+        })
+
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -508,7 +515,10 @@ defmodule LiveDj.AccountsTest do
 
     test "update_permission/2 with valid data updates the permission" do
       permission = permission_fixture(@valid_attrs)
-      assert {:ok, %Permission{} = permission} = Accounts.update_permission(permission, @update_attrs)
+
+      assert {:ok, %Permission{} = permission} =
+               Accounts.update_permission(permission, @update_attrs)
+
       assert permission.codename == "some updated codename"
       assert permission.name == "some updated name"
     end
@@ -600,7 +610,9 @@ defmodule LiveDj.AccountsTest do
       permission = permission_fixture()
       group = group_fixture()
       valid_attrs = %{permission_id: permission.id, group_id: group.id}
-      assert {:ok, %PermissionGroup{} = _permission_group} = Accounts.create_permission_group(valid_attrs)
+
+      assert {:ok, %PermissionGroup{} = _permission_group} =
+               Accounts.create_permission_group(valid_attrs)
     end
 
     test "create_permission_group/1 with invalid data returns error changeset" do
@@ -612,19 +624,27 @@ defmodule LiveDj.AccountsTest do
       permission = permission_fixture()
       group = group_fixture()
       update_attrs = %{permission_id: permission.id, group_id: group.id}
-      assert {:ok, %PermissionGroup{} = _permission_group} = Accounts.update_permission_group(permission_group, update_attrs)
+
+      assert {:ok, %PermissionGroup{} = _permission_group} =
+               Accounts.update_permission_group(permission_group, update_attrs)
     end
 
     test "update_permission_group/2 with invalid data returns error changeset" do
       permission_group = permission_group_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_permission_group(permission_group, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.update_permission_group(permission_group, @invalid_attrs)
+
       assert permission_group == Accounts.get_permission_group!(permission_group.id)
     end
 
     test "delete_permission_group/1 deletes the permission_group" do
       permission_group = permission_group_fixture()
       assert {:ok, %PermissionGroup{}} = Accounts.delete_permission_group(permission_group)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_permission_group!(permission_group.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Accounts.get_permission_group!(permission_group.id)
+      end
     end
 
     test "change_permission_group/1 returns a permission_group changeset" do

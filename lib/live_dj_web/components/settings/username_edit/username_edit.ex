@@ -9,16 +9,15 @@ defmodule LiveDjWeb.Components.Settings.UsernameEdit do
 
   def update(assigns, socket) do
     {:ok,
-      socket
-      |> assign(assigns)
-    }
+     socket
+     |> assign(assigns)}
   end
 
   def handle_event(
-    "submit_changeset",
-    %{"user" => user_params, "current_password" => password},
-    socket
-  ) do
+        "submit_changeset",
+        %{"user" => user_params, "current_password" => password},
+        socket
+      ) do
     %{current_user: current_user} = socket.assigns
     user = current_user
 
@@ -27,18 +26,22 @@ defmodule LiveDjWeb.Components.Settings.UsernameEdit do
         case Accounts.update_user_username(user, password, user_params) do
           {:ok, user} ->
             %{user: %{uuid: uuid}, room: %{slug: slug}} = socket.assigns
-            :ok = Phoenix.PubSub.broadcast(
-              LiveDj.PubSub,
-              "room:" <> slug,
-              {:username_changed, %{uuid: uuid, username: user.username}}
-            )
+
+            :ok =
+              Phoenix.PubSub.broadcast(
+                LiveDj.PubSub,
+                "room:" <> slug,
+                {:username_changed, %{uuid: uuid, username: user.username}}
+              )
+
             {:noreply,
-              socket
-              |> put_flash(:info, "Username updated successfully.")}
+             socket
+             |> put_flash(:info, "Username updated successfully.")}
 
           {:error, changeset} ->
             {:noreply, assign(socket, :user_changeset, changeset)}
         end
+
       {:error, changeset} ->
         {:noreply, assign(socket, :user_changeset, changeset)}
     end

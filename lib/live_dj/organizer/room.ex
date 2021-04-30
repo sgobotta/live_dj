@@ -36,5 +36,6 @@ defmodule LiveDj.Organizer.Room do
       |> String.replace(" ", "-")
     end)
   end
+
   defp format_slug(changeset), do: changeset
 end

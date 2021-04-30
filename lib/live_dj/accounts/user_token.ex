@@ -75,7 +75,7 @@ defmodule LiveDj.Accounts.UserToken do
      }}
   end
 
-    @doc """
+  @doc """
   Checks if the token is valid and returns its underlying lookup query.
 
   The query returns the user found by the token.

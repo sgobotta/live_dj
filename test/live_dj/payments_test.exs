@@ -9,8 +9,20 @@ defmodule LiveDj.PaymentsTest do
   describe "plans" do
     alias LiveDj.Payments.Plan
 
-    @valid_attrs %{amount: 120.5, gateway: "some gateway", name: "some name", plan_id: "some plan_id", type: "some type"}
-    @update_attrs %{amount: 456.7, gateway: "some updated gateway", name: "some updated name", plan_id: "some updated plan_id", type: "some updated type"}
+    @valid_attrs %{
+      amount: 120.5,
+      gateway: "some gateway",
+      name: "some name",
+      plan_id: "some plan_id",
+      type: "some type"
+    }
+    @update_attrs %{
+      amount: 456.7,
+      gateway: "some updated gateway",
+      name: "some updated name",
+      plan_id: "some updated plan_id",
+      type: "some updated type"
+    }
     @invalid_attrs %{amount: nil, gateway: nil, name: nil, plan_id: nil, type: nil}
 
     def _plan_fixture(attrs \\ %{}) do
@@ -111,7 +123,8 @@ defmodule LiveDj.PaymentsTest do
     end
 
     test "create_order/1 with valid data creates an order", %{plan: plan} do
-      assert {:ok, %Order{} = _order} = Payments.create_order(Map.merge(@valid_attrs, %{plan_id: plan.id}))
+      assert {:ok, %Order{} = _order} =
+               Payments.create_order(Map.merge(@valid_attrs, %{plan_id: plan.id}))
     end
 
     test "create_order/1 with invalid data returns error changeset" do

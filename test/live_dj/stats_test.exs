@@ -9,9 +9,30 @@ defmodule LiveDj.StatsTest do
   describe "badges" do
     alias LiveDj.Stats.Badge
 
-    @valid_attrs %{description: "some description", icon: "some icon", name: "some name", reference_name: "some reference name", type: "some type", checkpoint: 420 }
-    @update_attrs %{description: "some updated description", icon: "some updated icon", name: "some updated name", reference_name: "some updated reference name", type: "some updated type", checkpoint: 4200}
-    @invalid_attrs %{description: nil, icon: nil, name: nil, reference_name: nil, type: nil, checkpoint: nil}
+    @valid_attrs %{
+      description: "some description",
+      icon: "some icon",
+      name: "some name",
+      reference_name: "some reference name",
+      type: "some type",
+      checkpoint: 420
+    }
+    @update_attrs %{
+      description: "some updated description",
+      icon: "some updated icon",
+      name: "some updated name",
+      reference_name: "some updated reference name",
+      type: "some updated type",
+      checkpoint: 4200
+    }
+    @invalid_attrs %{
+      description: nil,
+      icon: nil,
+      name: nil,
+      reference_name: nil,
+      type: nil,
+      checkpoint: nil
+    }
 
     def badge_fixture(attrs \\ %{}) do
       {:ok, badge} =
@@ -130,10 +151,15 @@ defmodule LiveDj.StatsTest do
 
     test "update_user_badge/2 with valid data updates the user_badge", %{badge: badge, user: user} do
       user_badge = user_badge_fixture(%{user_id: user.id, badge_id: badge.id})
-      assert {:ok, %UserBadge{} = _user_badge} = Stats.update_user_badge(user_badge, @update_attrs)
+
+      assert {:ok, %UserBadge{} = _user_badge} =
+               Stats.update_user_badge(user_badge, @update_attrs)
     end
 
-    test "update_user_badge/2 with invalid data returns error changeset", %{badge: badge, user: user} do
+    test "update_user_badge/2 with invalid data returns error changeset", %{
+      badge: badge,
+      user: user
+    } do
       user_badge = user_badge_fixture(%{user_id: user.id, badge_id: badge.id})
       assert {:error, %Ecto.Changeset{}} = Stats.update_user_badge(user_badge, @invalid_attrs)
       assert user_badge == Stats.get_user_badge!(user_badge.id)

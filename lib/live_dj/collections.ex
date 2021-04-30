@@ -407,16 +407,18 @@ defmodule LiveDj.Collections do
         video -> video.id
       end
     end
+
     next_video = get_by.(video.next)
     previous_video = get_by.(video.previous)
     current_video = get_by.(video.video_id)
+
     %LiveDj.Collections.PlaylistVideo{
       added_by_user_id: video.added_by_user_id,
       position: video.position,
       playlist_id: playlist_id,
       video_id: current_video,
       next_video_id: next_video,
-      previous_video_id: previous_video,
+      previous_video_id: previous_video
     }
   end
 
@@ -434,15 +436,19 @@ defmodule LiveDj.Collections do
   """
   def create_or_update_playlists_videos(playlists_videos) do
     for playlist_video <- playlists_videos do
-      playlist_video = Repo.preload(
-        playlist_video,
-        [:playlist, :video, :previous_video, :next_video]
-      )
-      {:ok, playlist_video} = PlaylistVideo.changeset(playlist_video, %{})
-      |>  Repo.insert_or_update(
-        on_conflict: :replace_all,
-        conflict_target: [:playlist_id, :position, :video_id]
-      )
+      playlist_video =
+        Repo.preload(
+          playlist_video,
+          [:playlist, :video, :previous_video, :next_video]
+        )
+
+      {:ok, playlist_video} =
+        PlaylistVideo.changeset(playlist_video, %{})
+        |> Repo.insert_or_update(
+          on_conflict: :replace_all,
+          conflict_target: [:playlist_id, :position, :video_id]
+        )
+
       playlist_video
     end
   end

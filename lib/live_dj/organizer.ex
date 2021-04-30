@@ -56,8 +56,8 @@ defmodule LiveDj.Organizer do
   end
 
   def is_my_presence(user, presence_payload) do
-    Enum.any?(Map.to_list(presence_payload.joins), fn {x,_} -> x == user.uuid end) ||
-    Enum.any?(Map.to_list(presence_payload.leaves), fn {x,_} -> x == user.uuid end)
+    Enum.any?(Map.to_list(presence_payload.joins), fn {x, _} -> x == user.uuid end) ||
+      Enum.any?(Map.to_list(presence_payload.leaves), fn {x, _} -> x == user.uuid end)
   end
 
   @doc """
@@ -207,9 +207,10 @@ defmodule LiveDj.Organizer do
   def list_users_rooms_by(user_id, is_owner) do
     from(ur in UserRoom,
       where:
-        ur.user_id  == ^user_id  and
-        ur.is_owner == ^is_owner
-    ) |> Repo.all()
+        ur.user_id == ^user_id and
+          ur.is_owner == ^is_owner
+    )
+    |> Repo.all()
   end
 
   @doc """
@@ -262,9 +263,10 @@ defmodule LiveDj.Organizer do
     from(ur in UserRoom,
       where:
         ur.user_id == ^user_id and
-        ur.room_id == ^room_id and
-        ur.is_owner == ^is_owner
-    ) |> Repo.exists?()
+          ur.room_id == ^room_id and
+          ur.is_owner == ^is_owner
+    )
+    |> Repo.exists?()
   end
 
   @doc """

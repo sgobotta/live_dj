@@ -10,27 +10,29 @@ defmodule LiveDjWeb.Components.Chat do
   @impl true
   def update(assigns, socket) do
     {:ok,
-      socket
-      |> assign(assigns)
-    }
+     socket
+     |> assign(assigns)}
   end
 
   @impl true
   def handle_event(
-    "new_message",
-    %{"submit" => %{"message" => message}},
-    socket
-  ) do
+        "new_message",
+        %{"submit" => %{"message" => message}},
+        socket
+      ) do
     socket = socket |> assign(:new_message, "")
+
     case String.trim(message) do
       "" ->
         {:noreply, socket}
+
       _ ->
         %{assigns: assigns} = socket
         %{messages: messages, slug: slug, user: %{username: username}} = assigns
         new_message = %{message: message, username: username}
         message = Chat.create_message(:chat_message, new_message)
         messages = messages ++ [message]
+
         Phoenix.PubSub.broadcast(
           LiveDj.PubSub,
           "room:" <> slug,

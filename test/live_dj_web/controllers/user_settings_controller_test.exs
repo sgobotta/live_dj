@@ -37,7 +37,6 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
     end
   end
 
-
   describe "GET /users/settings/payments" do
     test "renders payments page with empty content", %{conn: conn} do
       conn = get(conn, Routes.user_settings_path(conn, :show_payments))
@@ -47,14 +46,14 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
     test "renders payments page with orders", %{conn: conn, user: user} do
       order_amount = "420.00"
       plan = plan_fixture()
-      _order = order_fixture(%{amount: order_amount, plan_id: plan.id,
-        user_id: user.id})
+      _order = order_fixture(%{amount: order_amount, plan_id: plan.id, user_id: user.id})
       conn = get(conn, Routes.user_settings_path(conn, :show_payments))
       _response = html_response(conn, 200)
       assert length(conn.assigns.orders) == 1
+
       assert Enum.any?(conn.assigns.orders, fn o ->
-        o.amount == order_amount
-      end)
+               o.amount == order_amount
+             end)
     end
 
     test "redirects if user is not logged in" do
@@ -105,6 +104,7 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
     @tag :capture_log
     test "updates the user username", %{conn: conn, user: user} do
       username = unique_user_username()
+
       conn =
         put(conn, Routes.user_settings_path(conn, :update_username), %{
           "current_password" => valid_user_password(),
@@ -263,15 +263,12 @@ defmodule LiveDjWeb.UserSettingsControllerTest do
   end
 
   describe "GET /users/settings/badges" do
-
     import LiveDj.StatsFixtures
 
     test "renders the badges and achievements page",
-      %{conn: conn, user: user}
-    do
+         %{conn: conn, user: user} do
       badge = badge_fixture()
-      _user_badge = user_badge_fixture(%{badge_id: badge.id,
-        user_id: user.id})
+      _user_badge = user_badge_fixture(%{badge_id: badge.id, user_id: user.id})
       conn = get(conn, Routes.user_settings_path(conn, :show_badges))
       response = html_response(conn, 200)
       assert response =~ "Badges & Achievements"

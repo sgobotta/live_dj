@@ -1,5 +1,4 @@
 defmodule LiveDj.Accounts.UserNotifier do
-
   alias LiveDj.{Email, Mailer}
 
   # For simplicity, this module simply logs messages to the terminal.
@@ -22,78 +21,95 @@ defmodule LiveDj.Accounts.UserNotifier do
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do
-    deliver(user.email, """
+    deliver(
+      user.email,
+      """
 
-    ==============================
+      ==============================
 
-    Hi #{user.email},
+      Hi #{user.email},
 
-    You can confirm your account by visiting the URL below:
+      You can confirm your account by visiting the URL below:
 
-    #{url}
+      #{url}
 
-    If you didn't create an account with us, please ignore this.
+      If you didn't create an account with us, please ignore this.
 
-    ==============================
-    """, "LiveDj: Account confirmation")
+      ==============================
+      """,
+      "LiveDj: Account confirmation"
+    )
   end
 
   @doc """
   Deliver instructions to reset a user password.
   """
   def deliver_reset_password_instructions(user, url) do
-    deliver(user.email, """
+    deliver(
+      user.email,
+      """
 
-    ==============================
+      ==============================
 
-    Hi #{user.email},
+      Hi #{user.email},
 
-    You can reset your password by visiting the URL below:
+      You can reset your password by visiting the URL below:
 
-    #{url}
+      #{url}
 
-    If you didn't request this change, please ignore this.
+      If you didn't request this change, please ignore this.
 
-    ==============================
-    """, "LiveDj: Password reset request")
+      ==============================
+      """,
+      "LiveDj: Password reset request"
+    )
   end
 
   @doc """
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    deliver(user.email, """
+    deliver(
+      user.email,
+      """
 
-    ==============================
+      ==============================
 
-    Hi #{user.email},
+      Hi #{user.email},
 
-    You can change your email by visiting the URL below:
+      You can change your email by visiting the URL below:
 
-    #{url}
+      #{url}
 
-    If you didn't request this change, please ignore this.
+      If you didn't request this change, please ignore this.
 
-    ==============================
-    """, "LiveDj: Email update verification")
+      ==============================
+      """,
+      "LiveDj: Email update verification"
+    )
   end
+
   @doc """
   Deliver instructions to send a payment confirmation.
   """
   def deliver_payment_confirmation(user) do
-    deliver(user.email, """
+    deliver(
+      user.email,
+      """
 
-    ==============================
+      ==============================
 
-    Hi #{user.email},
+      Hi #{user.email},
 
-    We'd like to thank you for your contribution to LiveDj. This surely helps
-    us keep doing what we love and improve this software for everyone. If you
-    have any feature request please let us know! :)
+      We'd like to thank you for your contribution to LiveDj. This surely helps
+      us keep doing what we love and improve this software for everyone. If you
+      have any feature request please let us know! :)
 
-    Sincelery, the LiveDj team.
+      Sincelery, the LiveDj team.
 
-    ==============================
-    """, "LiveDj: Payment received")
+      ==============================
+      """,
+      "LiveDj: Payment received"
+    )
   end
 end

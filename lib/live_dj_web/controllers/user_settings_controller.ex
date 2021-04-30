@@ -18,24 +18,35 @@ defmodule LiveDjWeb.UserSettingsController do
 
   def show_payments(conn, _params) do
     %{assigns: %{current_user: current_user}} = conn
-    orders = Payments.list_user_orders(current_user.id)
-    |> Enum.map(fn order -> Map.merge(order, %{
-      amount: ceil(order.amount)
-      |> Decimal.new()
-      |> Decimal.round(2)
-      |> Decimal.to_string()
-    }) end)
+
+    orders =
+      Payments.list_user_orders(current_user.id)
+      |> Enum.map(fn order ->
+        Map.merge(order, %{
+          amount:
+            ceil(order.amount)
+            |> Decimal.new()
+            |> Decimal.round(2)
+            |> Decimal.to_string()
+        })
+      end)
+
     render(conn, "show_payments.html", orders: orders)
   end
 
   def show_badges(conn, _params) do
     %{assigns: %{current_user: current_user}} = conn
-    current_user_badges = Accounts.preload_user(current_user, [:badges]).badges
-    |> Enum.map(fn b -> b.id end)
-    badges = Stats.list_badges()
-    |> Enum.map(fn badge ->
-      Map.merge(badge, %{acquired: badge.id in current_user_badges})
-    end)
+
+    current_user_badges =
+      Accounts.preload_user(current_user, [:badges]).badges
+      |> Enum.map(fn b -> b.id end)
+
+    badges =
+      Stats.list_badges()
+      |> Enum.map(fn badge ->
+        Map.merge(badge, %{acquired: badge.id in current_user_badges})
+      end)
+
     render(conn, "show_badges.html", badges: badges)
   end
 
@@ -54,6 +65,7 @@ defmodule LiveDjWeb.UserSettingsController do
           {:error, changeset} ->
             render(conn, "edit.html", username_changeset: changeset)
         end
+
       {:error, changeset} ->
         render(conn, "edit.html", username_changeset: changeset)
     end
@@ -112,10 +124,12 @@ defmodule LiveDjWeb.UserSettingsController do
   end
 
   defp assign_initial_changesets(conn, _opts) do
-    user = case conn.assigns.visitor do
-      true -> nil
-      false -> conn.assigns.current_user
-    end
+    user =
+      case conn.assigns.visitor do
+        true -> nil
+        false -> conn.assigns.current_user
+      end
+
     conn
     |> assign(:username_changeset, Accounts.change_user_username(user))
     |> assign(:email_changeset, Accounts.change_user_email(user))

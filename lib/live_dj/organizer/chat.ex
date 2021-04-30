@@ -1,33 +1,33 @@
 defmodule LiveDj.Organizer.Chat do
-
   use Phoenix.HTML
 
   alias LiveDjWeb.Presence
 
   def create_message(:chat_message, %{message: message, username: username}) do
     {:chat_message,
-      %{
-        text: message,
-        timestamp: create_timestamp(),
-        username: username,
-      }
-    }
+     %{
+       text: message,
+       timestamp: create_timestamp(),
+       username: username
+     }}
   end
 
   def create_message(:track_notification, %{video: video}) do
     %{title: title, added_by: %{user_id: user_id}} = video
-    username = case user_id do
-      nil -> "visitor"
-      user_id -> LiveDj.Accounts.get_user!(user_id).username
-    end
+
+    username =
+      case user_id do
+        nil -> "visitor"
+        user_id -> LiveDj.Accounts.get_user!(user_id).username
+      end
+
     {:track_notification,
-      %{
-        added_by: username,
-        video_title: title,
-        timestamp: create_timestamp(),
-        username: "info"
-      }
-    }
+     %{
+       added_by: username,
+       video_title: title,
+       timestamp: create_timestamp(),
+       username: "info"
+     }}
   end
 
   def start_typing(slug, uuid) do
@@ -54,16 +54,19 @@ defmodule LiveDj.Organizer.Chat do
   end
 
   defp create_timestamp do
-    timestamp = DateTime.now(System.get_env("TZ"), Tzdata.TimeZoneDatabase)
-    |> elem(1)
-    |> Time.to_string()
-    |> String.split(".")
-    |> hd
+    timestamp =
+      DateTime.now(System.get_env("TZ"), Tzdata.TimeZoneDatabase)
+      |> elem(1)
+      |> Time.to_string()
+      |> String.split(".")
+      |> hd
+
     highlight_style =
       case timestamp =~ "04:20:" || timestamp =~ "16:20:" do
         true -> "highlight-timestamp"
         false -> "timestamp-message"
       end
+
     %{
       value: timestamp,
       class: highlight_style

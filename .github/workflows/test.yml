@@ -1,4 +1,4 @@
-name: LiveDj CI
+name: Test Coverage CI
 
 on:
   push:

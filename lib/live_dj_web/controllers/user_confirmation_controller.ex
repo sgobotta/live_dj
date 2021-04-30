@@ -34,10 +34,19 @@ defmodule LiveDjWeb.UserConfirmationController do
     case Accounts.confirm_user(token) do
       {:ok, user} ->
         badge_reference_name = "users-confirmed_via_link"
+
         case Stats.assoc_user_badge(user.id, badge_reference_name) do
-          :ok -> Logger.info("Assigned badge #{badge_reference_name} to user #{user.id}")
-          {:error, changeset} -> Logger.error("An error occurred while assignnig the #{badge_reference_name} badge. Details: #{inspect(changeset)}.")
+          :ok ->
+            Logger.info("Assigned badge #{badge_reference_name} to user #{user.id}")
+
+          {:error, changeset} ->
+            Logger.error(
+              "An error occurred while assignnig the #{badge_reference_name} badge. Details: #{
+                inspect(changeset)
+              }."
+            )
         end
+
         conn
         |> put_flash(:info, "Account confirmed successfully.")
         |> redirect(to: "/")

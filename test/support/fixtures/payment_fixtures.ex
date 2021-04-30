@@ -18,12 +18,14 @@ defmodule LiveDj.PaymentsFixtures do
         extra: [%{"preference_id" => "asd123"}]
       })
       |> LiveDj.Payments.create_plan()
+
     plan
   end
 
   def order_fixture(attrs \\ %{}, user_attrs \\ %{}, plan_attrs \\ %{}) do
     plan = plan_fixture(plan_attrs)
     user = AccountsFixtures.user_fixture(user_attrs)
+
     {:ok, order} =
       attrs
       |> Enum.into(%{
@@ -32,7 +34,7 @@ defmodule LiveDj.PaymentsFixtures do
         plan_id: plan.id
       })
       |> LiveDj.Payments.create_order()
+
     order
   end
-
 end

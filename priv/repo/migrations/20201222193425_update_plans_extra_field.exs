@@ -5,6 +5,5 @@ defmodule LiveDj.Repo.Migrations.UpdatePlansExtraField do
     alter table(:plans) do
       add :extra, :jsonb, default: "[]"
     end
-
   end
 end
