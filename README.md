@@ -19,9 +19,21 @@
 ---
 
 <p align="center" style="margin-top: 14px;">
-  <a href="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml">
+  <a href="https://github.com/sgobotta/live_dj/actions/workflows/dialyzer.yml">
     <img
-      src="https://github.com/sgobotta/live_dj/actions/workflows/ci.yml/badge.svg"
+      src="https://github.com/sgobotta/live_dj/actions/workflows/dialyzer.yml/badge.svg"
+      alt="Build Status"
+    >
+  </a>
+  <a href="https://github.com/sgobotta/live_dj/actions/workflows/test.yml">
+    <img
+      src="https://github.com/sgobotta/live_dj/actions/workflows/test.yml/badge.svg"
+      alt="Build Status"
+    >
+  </a>
+  <a href="https://github.com/sgobotta/live_dj/actions/workflows/lint.yml">
+    <img
+      src="https://github.com/sgobotta/live_dj/actions/workflows/lint.yml/badge.svg"
       alt="Build Status"
     >
   </a>
