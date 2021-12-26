@@ -63,6 +63,11 @@ config :git_hooks,
       tasks: [
         {:mix_task, :format, ["--check-formatted"]}
       ]
+    ],
+    pre_push: [
+      tasks: [
+        {:mix_task, :check}
+      ]
     ]
   ]
 
