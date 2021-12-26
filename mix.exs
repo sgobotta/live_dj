@@ -38,8 +38,8 @@ defmodule LiveDj.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(:test), do: ["lib", "priv/repo/seeds", "test/support"]
+  defp elixirc_paths(_), do: ["lib", "priv/repo/seeds"]
 
   # Specifies your project dependencies.
   #
@@ -97,9 +97,38 @@ defmodule LiveDj.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      # General Setup and installation tasks
+      install: ["install.server", "install.client"],
+      "install.server": ["deps.get", "deps.compile", "compile"],
+      "install.client": ["cmd npm install --prefix assets"],
+      # setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      setup: ["install", "reset.ecto"],
+
+      # Persistance Setup tasks
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
+
+      # Run code checks
+      lint: ["format.check", "eslint"],
+      "format.check": ["format --check-formatted"],
+      eslint: ["cmd npm run eslint --prefix assets"],
+      "eslint.fix": ["cmd npm run eslint-fix --prefix assets"],
+      check: [
+        "check.format",
+        "check.credo",
+        "check.dialyzer"
+      ],
+      "check.format": ["cmd mix lint"],
+      "check.credo": ["credo --strict"],
+      "check.dialyzer": ["dialyzer --format dialyxir"],
+
+      # Reset tasks
+      "deps.reset": ["deps.reset.server", "deps.reset.client"],
+      "deps.reset.server": ["deps.clean --all"],
+      "deps.reset.client": ["cmd npm clean-install --prefix assets"],
+      "reset.ecto": ["ecto.drop", "ecto.setup"],
+      reset: ["ecto.drop", "deps.reset", "setup"],
+
+      # Test tasks
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
