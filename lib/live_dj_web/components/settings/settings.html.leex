@@ -6,12 +6,12 @@
 
   <%= @inner_content.([]) %>
 
-  <%= live_component @socket, LiveDjWeb.Components.Modal,
+  <%= live_component(%{
+    module: LiveDjWeb.Components.Modal,
     id: "#{@id}-settings-menu",
     title: "Settings",
     extra_classes: "large",
-    state: "CLOSED"
-    do %>
+    state: "CLOSED"}) do %>1
 
     <div class="
       flex flex-col
@@ -23,33 +23,34 @@
 
       <div class="live-section-box lg:order-1 lg:row-span-1 lg:col-span-1 md:col-span-1 m-0">
         <%= if !@visitor do %>
-          <%= live_component @socket, LiveDjWeb.Components.Settings.UsernameEdit,
+          <%= live_component(%{
+            module: LiveDjWeb.Components.Settings.UsernameEdit,
             id: "#{@id}-settings-username-edit",
             current_user: @current_user,
             room: @room,
             user: @user,
             user_changeset: @user_changeset
-          %>
+          }) %>
         <% else %>
-          <%= live_component @socket, LiveDjWeb.Components.Settings.UserRegistration,
+          <%= live_component(%{
+            module: LiveDjWeb.Components.Settings.UserRegistration,
             id: "#{@id}-settings-user-registration",
             room: @room,
             user_changeset: @user_changeset
-          %>
+          }) %>
         <% end %>
       </div>
 
       <div class="live-section-box lg:order-1 lg:row-span-1 lg:col-span-1 md:col-span-1 m-0">
-        <%= live_component @socket, LiveDjWeb.Components.Settings.RoomSettings,
+        <%= live_component(%{
+          module: LiveDjWeb.Components.Settings.RoomSettings,
           id: "#{@id}-settings-room-settings",
           room_changeset: @room_changeset,
           room_management: @room_management,
           user_room_group: @user_room_group
-        %>
+        }) %>
       </div>
 
     </div>
-
-
   <% end %>
 </div>

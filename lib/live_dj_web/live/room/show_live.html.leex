@@ -7,7 +7,8 @@
   />
 
   <!-- Start of Sidebar -->
-  <%= live_component @socket, LiveDjWeb.Components.Sidebar,
+  <%= live_component(%{
+    module: LiveDjWeb.Components.Sidebar,
     id: "live-dj-sidebar",
     current_user: @current_user,
     room: @room,
@@ -17,17 +18,18 @@
     user_changeset: @user_changeset,
     user_room_group: @user_room_group,
     visitor: @visitor
-  do %>
+  }) do %>
 
     <%= if @is_loading do %>
       <div
         class="new-live-view absolute top-0 right-0"
         style="width: 100%; height: 100vh;"
       >
-        <%= live_component @socket, LiveDjWeb.Components.LauncherLoader,
+        <%= live_component(%{
+          module: LiveDjWeb.Components.LauncherLoader,
           id: "live-dj-launching",
           loader_animation: @loader_animation
-        %>
+        }) %>
       </div>
     <% end %>
 
@@ -41,14 +43,16 @@
 
         <div class="live-section-box p-4 lg:order-1 lg:col-span-8 m-0 mt-4">
           <div>
-            <%= live_component @socket, LiveDjWeb.Components.VideoPlayer,
+            <%= live_component(%{
+              module: LiveDjWeb.Components.VideoPlayer,
               id: "live-dj-video-player",
               current_tab: @current_tab
-            %>
+            }) %>
           </div>
 
           <div>
-            <%= live_component @socket, LiveDjWeb.Components.PlayerControls,
+            <%= live_component(%{
+              module: LiveDjWeb.Components.PlayerControls,
               id: "live-dj-player-controls",
               current_tab: @current_tab,
               player: @player,
@@ -59,13 +63,14 @@
               user_room_group: @user_room_group,
               video_queue: @video_queue,
               volume_controls: @volume_controls
-            %>
+            }) %>
           </div>
         </div>
 
         <div class="lg:order-2 lg:row-span-1 lg:col-span-4 m-0">
 
-          <%= live_component @socket, LiveDjWeb.Components.SectionsGroup,
+          <%= live_component(%{
+            module: LiveDjWeb.Components.SectionsGroup,
             id: "live-dj-chat",
             connected_users: @connected_users,
             current_section: @sections_group_tab,
@@ -74,10 +79,11 @@
             new_message: @new_message,
             user: @user,
             room: @room,
-            slug: @slug
+            slug: @slug})
           do %>
 
-            <%= live_component @socket, LiveDjWeb.Components.Chat,
+            <%= live_component(%{
+              module: LiveDjWeb.Components.Chat,
               id: "live-dj-chat",
               current_section: @sections_group_tab,
               current_tab: @current_tab,
@@ -86,9 +92,10 @@
               user: @user,
               room: @room,
               slug: @slug
-            %>
+            }) %>
 
-            <%= live_component @socket, LiveDjWeb.Components.Peers,
+            <%= live_component(%{
+              module: LiveDjWeb.Components.Peers,
               id: "live-dj-peers-list",
               connected_users: @connected_users,
               current_section: @sections_group_tab,
@@ -99,7 +106,7 @@
               user_room_group: @user_room_group,
               user: @user,
               user_changeset: @user_changeset,
-              visitor: @visitor
+              visitor: @visitor})
             %>
 
           <% end %>
@@ -110,16 +117,18 @@
         >
           <div class="column">
 
-            <%= live_component @socket, LiveDjWeb.Components.QueueControls,
+            <%= live_component(%{
+              module: LiveDjWeb.Components.QueueControls,
               id: "live-dj-queue-controls",
               current_tab: @current_tab,
               room: @room,
               slug: @slug,
               video_queue: @video_queue,
               video_queue_controls: @video_queue_controls
-            %>
+            }) %>
 
-            <%= live_component @socket, LiveDjWeb.Components.Queue,
+            <%= live_component(%{
+              module: LiveDjWeb.Components.Queue,
               id: "live-dj-queue",
               current_tab: @current_tab,
               player: @player,
@@ -128,13 +137,14 @@
               slug: @slug,
               user_room_group: @user_room_group,
               video_queue: @video_queue
-            %>
+            }) %>
 
           </div>
         </div>
 
         <div class="lg:order-4 lg:row-span-2 2xl:row-span-2 lg:col-span-6 m-0">
-          <%= live_component @socket, LiveDjWeb.Components.SearchVideo,
+          <%= live_component(%{
+            module: LiveDjWeb.Components.SearchVideo,
             id: "live-dj-video-search",
             current_user: @current_user,
             current_tab: @current_tab,
@@ -143,7 +153,7 @@
             user: @user,
             video_queue: @video_queue,
             visitor: @visitor
-          %>
+          }) %>
         </div>
 
       </div>
