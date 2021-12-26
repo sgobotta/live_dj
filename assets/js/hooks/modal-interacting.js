@@ -1,4 +1,3 @@
-
 const ModalInteracting = () => ({
   mounted() {
     const handleOpenCloseEvent = event => {

@@ -1,7 +1,4 @@
-import debounce from 'lodash.debounce'
 import { secondsToTime } from '../lib/date-utils'
-
-const HOOK_ID = '#player-syncing-controls'
 
 const updateTimeDisplay = (timeTrackerElem, time) => {
   const videoTime = (time === 0 || time === undefined)
@@ -13,15 +10,19 @@ const updateTimeDisplay = (timeTrackerElem, time) => {
 const updateVideoSlider = (
   timeSliderElem,
   playerCurrentTime,
-  playerTotalTime,
+  playerTotalTime
 ) => {
   timeSliderElem.min = 0
   timeSliderElem.max = playerTotalTime
   timeSliderElem.value = playerCurrentTime
 }
 
-
-const udpateTimeDisplays = (startTimeTrackerElem, endTimeTrackerElem, timeSliderElem, player) => {
+const udpateTimeDisplays = (
+  startTimeTrackerElem,
+  endTimeTrackerElem,
+  timeSliderElem,
+  player
+) => {
   const currentTime = player.getCurrentTime()
   const totalTime = player.getDuration()
   updateTimeDisplay(startTimeTrackerElem, currentTime)
@@ -56,7 +57,7 @@ const onStateChange = (
           startTimeTrackerElem,
           endTimeTrackerElem,
           timeSliderElem,
-          player,
+          player
         )
       }, 1000)
       hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
@@ -71,7 +72,7 @@ const onStateChange = (
         startTimeTrackerElem,
         endTimeTrackerElem,
         timeSliderElem,
-        player,
+        player
       )
       break
     }
@@ -89,14 +90,16 @@ const onStateChange = (
 const PlayerSyncing = initPlayer => ({
   async mounted() {
     setTimeout(async () => {
-      const startTimeTrackerElem = document.getElementById('yt-video-start-time')
+      const startTimeTrackerElem = document.getElementById(
+        'yt-video-start-time'
+      )
       const endTimeTrackerElem = document.getElementById('yt-video-end-time')
       const timeSliderElem = document.getElementById('video-time-control')
       const player = await initPlayer(
         onStateChange(
           this,
           startTimeTrackerElem, endTimeTrackerElem, timeSliderElem
-        ),
+        )
       )
       this.pushEvent('player_signal_ready')
   
@@ -114,7 +117,7 @@ const PlayerSyncing = initPlayer => ({
           startTimeTrackerElem,
           endTimeTrackerElem,
           timeSliderElem,
-          player,
+          player
         )
       })
   
@@ -124,25 +127,27 @@ const PlayerSyncing = initPlayer => ({
           startTimeTrackerElem,
           endTimeTrackerElem,
           timeSliderElem,
-          player,
+          player
         )
       })
   
-      this.handleEvent('receive_player_state', ({shouldPlay, time, videoId}) => {
-        player.loadVideoById({ videoId, startSeconds: time })
-        setTimeout(() => {
-          document.scrollingElement.scrollIntoView({behavior: 'smooth'})
-  
-          udpateTimeDisplays(
-            startTimeTrackerElem,
-            endTimeTrackerElem,
-            timeSliderElem,
-            player,
-          )
-  
-          !shouldPlay && player.pauseVideo()
-        }, 300)
-      })
+      this.handleEvent(
+        'receive_player_state',
+        ({shouldPlay, time, videoId}) => {
+          player.loadVideoById({startSeconds: time, videoId})
+          setTimeout(() => {
+            document.scrollingElement.scrollIntoView({behavior: 'smooth'})
+
+            udpateTimeDisplays(
+              startTimeTrackerElem,
+              endTimeTrackerElem,
+              timeSliderElem,
+              player
+            )
+
+            !shouldPlay && player.pauseVideo()
+          }, 300)
+        })
   
       this.handleEvent('receive_player_volume', ({level: volumeLevel}) => {
         player.setVolume(volumeLevel)

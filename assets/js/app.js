@@ -10,20 +10,24 @@ import 'alpinejs'
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
 import "phoenix_html"
-import {Socket} from "phoenix"
-import NProgress from "nprogress"
-import {LiveSocket} from "phoenix_live_view"
 
 import ChatSyncing from "./hooks/chat-syncing"
 import DragAndDropping from "./hooks/drag-and-dropping"
+
+import {LiveSocket} from "phoenix_live_view"
+
+import LoadYTIframeAPI from './deps/yt-iframe-api'
+
 import ModalInteracting from "./hooks/modal-interacting"
+import NProgress from "nprogress"
 import NotificationsHandling from "./hooks/notifications-handling"
 import PlayerSyncing from "./hooks/player-syncing"
 import PresenceSyncing from "./hooks/presence-syncing"
 import SearchSyncing from "./hooks/search-syncing"
-import UiFeedback from "./hooks/ui-feedback"
 
-import LoadYTIframeAPI from './deps/yt-iframe-api'
+import {Socket} from "phoenix"
+
+import UiFeedback from "./hooks/ui-feedback"
 
 import createPlayer from './lib/player'
 
@@ -40,7 +44,7 @@ function initPlayer(onStateChange, onVolumeChange) {
 }
 
 function initLiveview() {
-  let csrfToken = document
+  const csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content")
 
@@ -54,7 +58,7 @@ function initLiveview() {
     PlayerSyncing: PlayerSyncing(initPlayer),
     PresenceSyncing: PresenceSyncing(),
     SearchSyncing: SearchSyncing(),
-    UiFeedback: UiFeedback(),
+    UiFeedback: UiFeedback()
   }
 
   const liveSocket = new LiveSocket("/live", Socket, {
@@ -88,7 +92,7 @@ window.addEventListener("phx:page-loading-start", info => {
   }
   NProgress.start()
 })
-window.addEventListener("phx:page-loading-stop", info => {
+window.addEventListener("phx:page-loading-stop", () => {
   const textContainer = document.getElementById('livedj-alert-container')
   const alert = document.getElementById('livedj-alert')
   const text = document.createElement('p')
@@ -102,9 +106,11 @@ window.addEventListener("phx:page-loading-stop", info => {
   NProgress.done()
 })
 
-// expose liveSocket on window for web console debug logs and latency simulation:
+// expose liveSocket on window for web console debug logs and latency
+// simulation:
 // >> liveSocket.enableDebug()
-// >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
+// enabled for duration of browser session
+// >> liveSocket.enableLatencySim(1000)
 // >> liveSocket.disableLatencySim()
 
 // console.log("[LiveDj] Loading YT Iframe API...")
