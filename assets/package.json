@@ -10,34 +10,38 @@
   "description": "Web client application for the LiveDj application.",
   "license": "GPL-3.0",
   "scripts": {
-    "deploy": "webpack --mode production",
+    "deploy": "NODE_ENV=production webpack --mode production",
+    "eslint": "node_modules/.bin/eslint --config .eslintrc.json js/",
+    "eslint-fix": "node_modules/.bin/eslint --fix --config .eslintrc.json js/",
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
-    "alpinejs": "^2.7.3",
-    "lodash.debounce": "^4.0.8",
+    "alpinejs": "^3.3.5",
     "nprogress": "^0.2.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
     "superagent": "^6.1.0",
-    "tailwindcss": "^2.0.3"
+    "topbar": "^0.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "autoprefixer": "^10.3.1",
     "babel-loader": "^8.0.0",
-    "copy-webpack-plugin": "^5.1.1",
-    "css-loader": "^3.4.2",
-    "hard-source-webpack-plugin": "^0.13.1",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.1",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "postcss": "^8.1.4",
-    "postcss-loader": "^4.0.4",
-    "sass-loader": "^8.0.2",
-    "terser-webpack-plugin": "^2.3.2",
-    "webpack": "4.41.5",
-    "webpack-cli": "^3.3.2"
+    "copy-webpack-plugin": "^7.x",
+    "css-loader": "^5.x",
+    "css-minimizer-webpack-plugin": "^3.3.1",
+    "eslint": "^7.31.0",
+    "eslint-plugin-react": "^7.24.0",
+    "mini-css-extract-plugin": "^1.x",
+    "postcss": "^8.4.5",
+    "postcss-import": "^14.0.2",
+    "postcss-loader": "^6.2.1",
+    "sass": "^1.45.1",
+    "sass-loader": "^12.4.0",
+    "tailwindcss": "^2.2.7",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
   }
 }
