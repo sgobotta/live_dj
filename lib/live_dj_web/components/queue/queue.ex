@@ -17,7 +17,9 @@ defmodule LiveDjWeb.Components.Queue do
     is_managed = room_management != "free"
 
     queue_permissions = %{
-      can_remove_track: !is_managed or Permission.has_permission(permissions, "can_remove_track")
+      can_remove_track:
+        !is_managed or
+          Permission.has_permission(permissions, "can_remove_track")
     }
 
     {:ok,
@@ -58,13 +60,13 @@ defmodule LiveDjWeb.Components.Queue do
       true ->
         id = "remove-video-button-#{video_index}"
 
-        ~L"""
+        ~H"""
           <a
             class="btn"
-            id="<%= id %>"
-            phx-click="<%= event%>"
-            phx-value-video_id="<%= video_id %>"
-            phx-target="<%= assigns %>"
+            id={id}
+            phx-click={event}
+            phx-value-video_id={video_id}
+            phx-target={assigns}
           >
             <i class="fas fa-trash trash clickeable"></i>
           </a>

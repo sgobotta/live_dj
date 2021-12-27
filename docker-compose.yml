@@ -1,29 +1,44 @@
-version: '3.8'
-
+version: "3.8"
 services:
-
-  main_db:
-    container_name: 'livedj_main_db'
-    image: postgres
+  # ----------------------------------------------------------------------------
+  # Setup the local postgres server.
+  #
+  postgres:
+    image: postgres:13
+    container_name: livedj_postgres_service
+    hostname: postgres
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - 'pg_data:/var/lib/postgresql/data'
+    networks:
+      close:
+        aliases:
+          - postgres
 
+  # ----------------------------------------------------------------------------
+  # Setup the local postgres server.
+  #
   pgadmin:
-    container_name: 'livedj_pgadmin'
+    container_name: 'livedj_pgadmin_service'
     image: dpage/pgadmin4
     environment:
-        - PGADMIN_DEFAULT_EMAIL=${PG_ADMIN_DEFAULT_EMAIL}
-        - PGADMIN_DEFAULT_PASSWORD=${PG_ADMIN_DEFAULT_PASSWORD}
+        - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+        - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     ports:
         - 5050:80
     volumes:
       - 'pgadmin_data:/var/lib/pgadmin'
-
+    networks:
+      close:
+        aliases:
+          - pgadmin
+networks:
+  close:
+    driver: bridge
 volumes:
   pg_data:
   pgadmin_data:

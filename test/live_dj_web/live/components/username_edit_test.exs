@@ -10,7 +10,9 @@ defmodule LiveDjWeb.Components.UsernameEditTest do
       current_user = user
       room = room_fixture()
       user = LiveDj.ConnectedUser.create_connected_user(user.username)
-      user_changeset = LiveDj.Accounts.change_user_username(%LiveDj.Accounts.User{})
+
+      user_changeset =
+        LiveDj.Accounts.change_user_username(%LiveDj.Accounts.User{})
 
       component_view =
         render_component(

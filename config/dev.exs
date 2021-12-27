@@ -25,7 +25,8 @@ config :live_dj, LiveDjWeb.Endpoint,
       "node_modules/webpack/bin/webpack.js",
       "--mode",
       "development",
-      "--watch-stdin",
+      "--watch",
+      "--watch-options-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
@@ -62,6 +63,11 @@ config :git_hooks,
     pre_commit: [
       tasks: [
         {:mix_task, :format, ["--check-formatted"]}
+      ]
+    ],
+    pre_push: [
+      tasks: [
+        {:mix_task, :check}
       ]
     ]
   ]

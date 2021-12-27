@@ -1,4 +1,6 @@
 defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
+  @moduledoc false
+
   alias LiveDj.Organizer.PlaylistVideoQueueItem
 
   @enforce_keys [
@@ -46,13 +48,19 @@ defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
 end
 
 defmodule LiveDj.Organizer.Queue do
+  @moduledoc false
+
   alias LiveDj.Collections
   alias LiveDj.Organizer.{PlaylistVideoQueueItem, QueueItem}
 
   def from_playlist(playlist_id) do
     Collections.list_playlists_videos_by_id(playlist_id)
     |> Enum.map(fn playlist_video ->
-      Collections.preload_playlist_video(playlist_video, [:next_video, :previous_video, :video])
+      Collections.preload_playlist_video(playlist_video, [
+        :next_video,
+        :previous_video,
+        :video
+      ])
       |> PlaylistVideoQueueItem.create()
       |> QueueItem.from_playlist_video_queue_item()
     end)

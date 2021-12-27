@@ -119,16 +119,19 @@ defmodule LiveDj.Payments do
     Plan.changeset(plan, attrs)
   end
 
-  def get_mercadopago_plans() do
+  def get_mercadopago_plans do
     list_plans()
     |> Enum.filter(fn p -> p.gateway == "mercadopago" end)
     |> Enum.map(fn p ->
-      Map.merge(p, %{preference_id: hd(p.extra)["preference_id"], amount: floor(p.amount)})
+      Map.merge(p, %{
+        preference_id: hd(p.extra)["preference_id"],
+        amount: floor(p.amount)
+      })
       |> Map.drop([:extra, :plan_id])
     end)
   end
 
-  def get_paypal_plans() do
+  def get_paypal_plans do
     list_plans()
     |> Enum.filter(fn p -> p.gateway == "paypal" end)
     |> Enum.map(fn p ->

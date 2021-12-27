@@ -1,22 +1,30 @@
 <div
-  class="
+  class={"
     column
-    <%= if @current_section == "peers" do %>
-      sections-group-show-section
-    <% else %>
-      sections-group-hide-section
-    <% end %>
-  "
+    #{if @current_section == "peers" do
+        "sections-group-show-section"
+      else
+        "sections-group-hide-section"
+      end
+    }
+  "}
   id="peers-list-data" phx-hook="PresenceSyncing"
 >
-  <div class="peers-panel scrollable-panel fixed-height-xl p-4 m-6 mb-7 rounded-lg">
+  <div class="
+    peers-panel
+    scrollable-panel
+    fixed-height-xl
+    p-4 m-6 mb-7 rounded-lg
+  ">
     <ul>
       <%= for user <- @connected_users do %>
         <li style="list-style: none;">
           <div class="flex space-x-4" style="align-items: center;">
             <div class="flex-1">
               <%= if user.uuid == @user.uuid do %>
-                <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                <p class={
+                  "peer #{if user.uuid == @user.uuid do "highlight" else "" end}"
+                }>
                   <%= if hd(user.metas).is_donor do %>
                     <i class="mini fas fa-hand-holding-heart secondary-highlight-1"></i>
                   <% end %>
@@ -28,14 +36,22 @@
                   </span>
                 </p>
               <% else %>
-                <p class="peer <%= if user.uuid == @user.uuid do %> highlight <% else %>  <% end %>">
+                <p class={
+                  "peer #{if user.uuid == @user.uuid do "highlight" else "" end}"
+                }>
                   <%= if hd(user.metas).is_donor do %>
                     <i class="mini fas fa-hand-holding-heart secondary-highlight-1"></i>
                   <% end %>
                   <%= if !hd(user.metas).visitor do %>
                     <i class="mini fas fa-certificate primary"></i>
                   <% end %>
-                  <span class="<%= if user.uuid !== @user.uuid && hd(user.metas).typing do %> typing-message <% end %>">
+                  <span class={
+                    if user.uuid !== @user.uuid && hd(user.metas).typing do
+                      "typing-message"
+                    else
+                      ""
+                    end
+                  }>
                     <%= hd(user.metas).username %>
                   </span>
                 </p>
@@ -44,7 +60,10 @@
 
             <div class="flex-1">
               <span>
-                <i class="mini fas <%= get_volume_icon_class(hd(user.metas).volume_icon) %>"></i>
+                <i class={"
+                mini fas
+                #{get_volume_icon_class(hd(user.metas).volume_icon)}
+              "}></i>
               </span>
 
               <%= render_group_avatar(

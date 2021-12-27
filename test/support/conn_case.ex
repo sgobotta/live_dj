@@ -17,6 +17,8 @@ defmodule LiveDjWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -37,10 +39,10 @@ defmodule LiveDjWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(LiveDj.Repo)
+    :ok = Sandbox.checkout(LiveDj.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(LiveDj.Repo, {:shared, self()})
+      Sandbox.mode(LiveDj.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

@@ -10,7 +10,10 @@ defmodule LiveDjWeb.DonationsControllerTest do
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, LiveDjWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(
+        :secret_key_base,
+        LiveDjWeb.Endpoint.config(:secret_key_base)
+      )
       |> init_test_session(%{})
 
     %{
@@ -30,7 +33,10 @@ defmodule LiveDjWeb.DonationsControllerTest do
                       "We're working on extra features and visuals. You can donate as a guest user but we recommend donating as a registered user to receive exclusive content."
     end
 
-    test "visits the donations page as a registered user", %{conn: conn, user: user} do
+    test "visits the donations page as a registered user", %{
+      conn: conn,
+      user: user
+    } do
       conn =
         log_in_user(conn, user)
         |> get(Routes.donations_path(conn, :index))
@@ -43,13 +49,18 @@ defmodule LiveDjWeb.DonationsControllerTest do
   end
 
   describe "GET /donations/:donation_id" do
-    test "receives a valid mercadopago donation as a visitor user", %{conn: conn, plan: plan} do
+    test "receives a valid mercadopago donation as a visitor user", %{
+      conn: conn,
+      plan: plan
+    } do
       attr = System.get_env("MERCADOPAGO_ATTR")
 
       conn =
         get(
           conn,
-          Routes.donations_path(conn, :new, "mercadopago_completed", %{[attr] => plan.plan_id})
+          Routes.donations_path(conn, :new, "mercadopago_completed", %{
+            [attr] => plan.plan_id
+          })
         )
 
       _response = html_response(conn, 302)
@@ -81,7 +92,10 @@ defmodule LiveDjWeb.DonationsControllerTest do
             conn,
             :new,
             "paypal_completed",
-            %{[attr] => "{\"#{id}\": \"#{plan.plan_id}\"}", [amount] => "420.01"}
+            %{
+              [attr] => "{\"#{id}\": \"#{plan.plan_id}\"}",
+              [amount] => "420.01"
+            }
           )
         )
 
@@ -112,10 +126,14 @@ defmodule LiveDjWeb.DonationsControllerTest do
       conn =
         log_in_user(conn, user)
         |> get(
-          Routes.donations_path(conn, :new, "mercadopago_completed", %{[attr] => plan.plan_id})
+          Routes.donations_path(conn, :new, "mercadopago_completed", %{
+            [attr] => plan.plan_id
+          })
         )
 
-      %{badges: badges} = Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+      %{badges: badges} =
+        Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+
       assert badge in badges
       _response = html_response(conn, 302)
       assert "/donations/thanks" = redir_path = redirected_to(conn)
@@ -150,11 +168,16 @@ defmodule LiveDjWeb.DonationsControllerTest do
             conn,
             :new,
             "paypal_completed",
-            %{[attr] => "{\"#{id}\": \"#{plan.plan_id}\"}", [amount] => "420.01"}
+            %{
+              [attr] => "{\"#{id}\": \"#{plan.plan_id}\"}",
+              [amount] => "420.01"
+            }
           )
         )
 
-      %{badges: badges} = Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+      %{badges: badges} =
+        Accounts.get_user!(user.id) |> Accounts.preload_user([:badges])
+
       assert badge in badges
       _response = html_response(conn, 302)
       assert "/donations/thanks" = redir_path = redirected_to(conn)
@@ -166,7 +189,10 @@ defmodule LiveDjWeb.DonationsControllerTest do
                "Your donation has been successfully processed. Contributions let us improve our efforts to make this site a better experience for you!"
     end
 
-    test "receives an invalid donation as a registered user", %{conn: conn, user: user} do
+    test "receives an invalid donation as a registered user", %{
+      conn: conn,
+      user: user
+    } do
       conn =
         log_in_user(conn, user)
         |> get(Routes.donations_path(conn, :new, "456"))

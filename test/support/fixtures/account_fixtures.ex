@@ -99,7 +99,9 @@ defmodule LiveDj.AccountsFixtures do
       |> Enum.map(fn permission ->
         {:ok, permission_group} =
           extra_attrs
-          |> Enum.into(Map.merge(mandatory_attrs, %{permission_id: permission.id}))
+          |> Enum.into(
+            Map.merge(mandatory_attrs, %{permission_id: permission.id})
+          )
           |> Accounts.create_permission_group()
 
         permission_group

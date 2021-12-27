@@ -3,7 +3,7 @@
 >
   <div class="p-4">
     <a id="volume-controls-toggle"
-      phx-click="player_signal_toggle_volume" phx-target="<%= @myself %>"
+      phx-click="player_signal_toggle_volume" phx-target={@myself}
     >
       <%= PhoenixInlineSvg.Helpers.svg_image(
         LiveDjWeb.Endpoint,
@@ -14,7 +14,7 @@
     </a>
   </div>
   <form id="volume-controls-slider" class="slider-form"
-    phx-target="<%= @myself %>" phx-change="volume_level_changed"
+    phx-target={@myself} phx-change="volume_level_changed"
   >
     <%=
       range_input :volume,

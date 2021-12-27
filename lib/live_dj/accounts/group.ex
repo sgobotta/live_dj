@@ -1,4 +1,6 @@
 defmodule LiveDj.Accounts.Group do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

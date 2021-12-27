@@ -35,7 +35,11 @@
             <%= link "Donate", to: Routes.donations_path(@conn, :index) %>
           </li>
         </ul>
-        <%= PhoenixInlineSvg.Helpers.svg_image(LiveDjWeb.Endpoint, "logo/live-dj-logo-white", class: "pt-1 h-20") %>
+        <%= PhoenixInlineSvg.Helpers.svg_image(
+          LiveDjWeb.Endpoint,
+          "logo/live-dj-logo-white",
+          class: "pt-1 h-20"
+        ) %>
       </section>
     </header>
 

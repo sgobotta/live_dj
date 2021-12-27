@@ -9,7 +9,12 @@ defmodule LiveDjWeb.Router do
     plug :fetch_live_flash
     plug :put_root_layout, {LiveDjWeb.LayoutView, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+
+    plug :put_secure_browser_headers, %{
+      "content-security-policy" =>
+        "default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: http://www.youtube.com/iframe_api https://www.youtube.com/s/player/; script-src-elem 'self' https://www.youtube.com/ http://www.youtube.com/iframe_api https://www.youtube.com/s/player/*; img-src *; frame-src 'self' https://www.youtube.com/; style-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'"
+    }
+
     plug :fetch_current_user
   end
 
@@ -71,10 +76,20 @@ defmodule LiveDjWeb.Router do
     get "/users/settings/account", UserSettingsController, :edit
     get "/users/settings/badges", UserSettingsController, :show_badges
     get "/users/settings/payments", UserSettingsController, :show_payments
-    put "/users/settings/update_username", UserSettingsController, :update_username
-    put "/users/settings/update_password", UserSettingsController, :update_password
+
+    put "/users/settings/update_username",
+        UserSettingsController,
+        :update_username
+
+    put "/users/settings/update_password",
+        UserSettingsController,
+        :update_password
+
     put "/users/settings/update_email", UserSettingsController, :update_email
-    get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    get "/users/settings/confirm_email/:token",
+        UserSettingsController,
+        :confirm_email
   end
 
   scope "/", LiveDjWeb do

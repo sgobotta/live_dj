@@ -56,57 +56,57 @@ defmodule LiveDjWeb.Components.Chat do
     {:noreply, assign(socket, new_message: message)}
   end
 
-  defp render_prompt(message) do
-    ~E"""
+  defp render_prompt(message, assigns) do
+    ~H"""
       <span class="use-prompt"><%= message %></span>
     """
   end
 
-  defp render_timestamp(timestamp) do
-    ~E"""
-      <span class="timestamp <%= timestamp.class %>">
+  defp render_timestamp(timestamp, assigns) do
+    ~H"""
+      <span class={"timestamp #{timestamp.class}"}>
         [<%= timestamp.value %>]
       </span>
     """
   end
 
-  defp render_username(username, class \\ "") do
-    ~E"""
-      <span class="chat-username <%= class %>"><%= username %></span>
+  defp render_username(username, class, assigns) do
+    ~H"""
+      <span class={"chat-username #{class}"}><%= username %></span>
     """
   end
 
-  defp render_text(message, class \\ "") do
-    ~E"""
-      <span class="chat-text <%= class %>"><%= message %></span>
+  defp render_text(message, class, assigns) do
+    ~H"""
+      <span class={"chat-text #{class}"}><%= message %></span>
     """
   end
 
-  def render_message({:chat_message, message}) do
-    ~E"""
-      <%= render_timestamp(message.timestamp) %>
-      <%= render_prompt(render_username(message.username)) %>
-      <%= render_text(message.text) %>
+  def render_message({:chat_message, message}, assigns) do
+    ~H"""
+      <%= render_timestamp(message.timestamp, assigns) %>
+      <%= render_prompt(render_username(message.username, "", assigns), assigns) %>
+      <%= render_text(message.text, "", assigns) %>
     """
   end
 
-  def render_message({:track_notification, message}) do
+  def render_message({:track_notification, message}, assigns) do
     %{video_title: video_title, added_by: added_by} = message
 
-    video_title = ~E"""
+    video_title = ~H"""
       <span class="highlight-video-title"><%= video_title %></span>
     """
 
-    text = ~E"""
+    text = ~H"""
       Playing
       <%= video_title %>,
       added by <span class="font-bold highlight-username"><%= added_by %></span>
     """
 
-    ~E"""
-      <%= render_timestamp(message.timestamp) %>
-      <%= render_prompt(render_username(message.username, "highlight-username")) %>
-      <%= render_text(text) %>
+    ~H"""
+      <%= render_timestamp(message.timestamp, assigns) %>
+      <%= render_prompt(render_username(message.username, "highlight-username", assigns), assigns) %>
+      <%= render_text(text, "", assigns) %>
     """
   end
 end

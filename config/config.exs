@@ -13,8 +13,13 @@ config :live_dj,
 # Configures the endpoint
 config :live_dj, LiveDjWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "eE2e6pkkr1eNnelAHPONdo7m7y62n1nAiujIgiTSvA97jf3QBZMzISlvSupW4ktk",
-  render_errors: [view: LiveDjWeb.ErrorView, accepts: ~w(html json), layout: false],
+  secret_key_base:
+    "eE2e6pkkr1eNnelAHPONdo7m7y62n1nAiujIgiTSvA97jf3QBZMzISlvSupW4ktk",
+  render_errors: [
+    view: LiveDjWeb.ErrorView,
+    accepts: ~w(html json),
+    layout: false
+  ],
   pubsub_server: LiveDj.PubSub,
   live_view: [signing_salt: "giHzpJwl"]
 

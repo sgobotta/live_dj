@@ -37,13 +37,14 @@
 
     </div>
 
-    <%= live_component @socket, LiveDjWeb.Components.VolumeControls,
-      id: "live-dj-volume-controls",
-      player_controls: @player_controls,
-      slug: @slug,
-      user: @user,
-      volume_controls: @volume_controls
-    %>
+    <.live_component
+      module={LiveDjWeb.Components.VolumeControls}
+      id="live-dj-volume-controls"
+      player_controls={@player_controls}
+      slug={@slug}
+      user={@user}
+      volume_controls={@volume_controls}
+    />
   </div>
   <div class="inline-flex items-center justify-center p-4 player-controls-video-tracking">
     <div class="inline-flex items-center justify-center p-4">

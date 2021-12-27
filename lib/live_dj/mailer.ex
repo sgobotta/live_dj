@@ -1,8 +1,12 @@
 defmodule LiveDj.Mailer do
+  @moduledoc false
+
   use Bamboo.Mailer, otp_app: :live_dj
 end
 
 defmodule LiveDj.Email do
+  @moduledoc false
+
   import Bamboo.Email
 
   def new(to, body, subject) do

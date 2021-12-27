@@ -1,4 +1,6 @@
 defmodule LiveDj.Organizer.Chat do
+  @moduledoc false
+
   use Phoenix.HTML
 
   alias LiveDjWeb.Presence

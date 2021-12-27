@@ -37,7 +37,9 @@ defmodule LiveDjWeb.UserConfirmationController do
 
         case Stats.assoc_user_badge(user.id, badge_reference_name) do
           :ok ->
-            Logger.info("Assigned badge #{badge_reference_name} to user #{user.id}")
+            Logger.info(
+              "Assigned badge #{badge_reference_name} to user #{user.id}"
+            )
 
           {:error, changeset} ->
             Logger.error(

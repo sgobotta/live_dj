@@ -6,8 +6,8 @@ defmodule LiveDj.Organizer do
   import Ecto.Query, warn: false
 
   alias Ecto.Changeset
-  alias LiveDj.Repo
   alias LiveDj.Organizer.Room
+  alias LiveDj.Repo
   alias LiveDjWeb.Presence
 
   def list_present(slug) do
@@ -27,37 +27,59 @@ defmodule LiveDj.Organizer do
     |> Enum.map(fn {k, _} -> k end)
   end
 
-  def subscribe() do
+  def subscribe do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "rooms")
   end
 
   def subscribe(:request_initial_state, slug) do
-    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+    Phoenix.PubSub.subscribe(
+      LiveDj.PubSub,
+      "room:" <> slug <> ":request_initial_state"
+    )
   end
 
   def subscribe(:request_current_player, slug) do
-    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":request_current_player")
+    Phoenix.PubSub.subscribe(
+      LiveDj.PubSub,
+      "room:" <> slug <> ":request_current_player"
+    )
   end
 
   def subscribe(:play_next_of, slug, video_id) do
-    Phoenix.PubSub.subscribe(LiveDj.PubSub, "room:" <> slug <> ":play_next_of:" <> video_id)
+    Phoenix.PubSub.subscribe(
+      LiveDj.PubSub,
+      "room:" <> slug <> ":play_next_of:" <> video_id
+    )
   end
 
   def unsubscribe(:request_initial_state, slug) do
-    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request_initial_state")
+    Phoenix.PubSub.unsubscribe(
+      LiveDj.PubSub,
+      "room:" <> slug <> ":request_initial_state"
+    )
   end
 
   def unsubscribe(:request_current_player, slug) do
-    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":request_current_player")
+    Phoenix.PubSub.unsubscribe(
+      LiveDj.PubSub,
+      "room:" <> slug <> ":request_current_player"
+    )
   end
 
   def unsubscribe(:play_next_of, slug, video_id) do
-    Phoenix.PubSub.unsubscribe(LiveDj.PubSub, "room:" <> slug <> ":play_next_of:" <> video_id)
+    Phoenix.PubSub.unsubscribe(
+      LiveDj.PubSub,
+      "room:" <> slug <> ":play_next_of:" <> video_id
+    )
   end
 
   def is_my_presence(user, presence_payload) do
-    Enum.any?(Map.to_list(presence_payload.joins), fn {x, _} -> x == user.uuid end) ||
-      Enum.any?(Map.to_list(presence_payload.leaves), fn {x, _} -> x == user.uuid end)
+    Enum.any?(Map.to_list(presence_payload.joins), fn {x, _} ->
+      x == user.uuid
+    end) ||
+      Enum.any?(Map.to_list(presence_payload.leaves), fn {x, _} ->
+        x == user.uuid
+      end)
   end
 
   @doc """

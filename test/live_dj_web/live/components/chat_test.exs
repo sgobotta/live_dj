@@ -84,12 +84,12 @@ defmodule LiveDjWeb.ChatTests do
                "<div><p class=\"chat-message\"><span class=\"timestamp timestamp-message\">\n"
 
       assert render(view) =~
-               "\n  </span><span class=\"use-prompt\"><span class=\"chat-username highlight-username\">info</span></span><span class=\"chat-text \">  Playing\n    <span class=\"highlight-video-title\">"
+               "<span class=\"use-prompt\"><span class=\"chat-username highlight-username\">info</span></span><span class=\"chat-text \">  Playing\n  <span class=\"highlight-video-title\">"
 
       assert render(view) =~
-               "</span>\n,\n  added by <span class=\"font-bold highlight-username\">#{
+               "</span>,\n  added by <span class=\"font-bold highlight-username\">#{
                  user.username
-               }"
+               }</span>"
 
       assert render(view) =~ "</span></span></p></div></div>"
     end
@@ -137,10 +137,10 @@ defmodule LiveDjWeb.ChatTests do
                "<div><p class=\"chat-message\"><span class=\"timestamp timestamp-message\">\n"
 
       assert render(view) =~
-               "\n  </span><span class=\"use-prompt\"><span class=\"chat-username highlight-username\">info</span></span><span class=\"chat-text \">  Playing\n    <span class=\"highlight-video-title\">"
+               "<span class=\"use-prompt\"><span class=\"chat-username highlight-username\">info</span></span><span class=\"chat-text \">  Playing\n  <span class=\"highlight-video-title\">"
 
       assert render(view) =~
-               "</span>\n,\n  added by <span class=\"font-bold highlight-username\">"
+               "</span>,\n  added by <span class=\"font-bold highlight-username\">"
 
       assert render(view) =~ "</span></span></p></div></div>"
     end

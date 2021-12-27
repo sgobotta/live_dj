@@ -34,8 +34,8 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-elixir@v1
         with:
-          elixir-version: '1.10.4'
-          otp-version: '23.0'
+          elixir-version: '1.11.4'
+          otp-version: '23.3'
       - name: Install Dependencies
         run: |
           mix local.rebar --force
@@ -43,4 +43,4 @@ jobs:
           mix deps.get
       - name: Run code analysis
         run: |
-          make dialyzer
+          make check.dialyzer

@@ -1,4 +1,6 @@
 defmodule LiveDjWeb.Components.Modal do
+  @moduledoc false
+
   use LiveDjWeb, :live_component
 
   @impl true

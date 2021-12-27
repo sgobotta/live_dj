@@ -1,14 +1,19 @@
 {
   "default_stop_words": [
     "apply",
+    "defdata",
     "defimpl",
     "defmodule",
     "defrecord",
     "defstruct",
-    "def.+(.+\/\/.+).+do"
+    "defsum",
+    "def.+(.+\/\/.+).+do",
+    "live_dashboard",
+    "use"
   ],
 
   "custom_stop_words": [
+    "Logger."
   ],
 
   "coverage_options": {

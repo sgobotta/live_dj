@@ -5,11 +5,11 @@ defmodule LiveDjWeb.Components.Peers do
 
   use LiveDjWeb, :live_component
 
-  alias LiveDj.Repo
   alias LiveDj.Accounts
   alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.UserRoom
+  alias LiveDj.Repo
   alias LiveDj.Stats
 
   def update(assigns, socket) do
@@ -137,7 +137,12 @@ defmodule LiveDjWeb.Components.Peers do
     end
   end
 
-  def render_assign_privileges_button(false, _user_room_group, _peer_metas, _target) do
+  def render_assign_privileges_button(
+        false,
+        _user_room_group,
+        _peer_metas,
+        _target
+      ) do
     {:safe, ""}
   end
 
@@ -204,13 +209,13 @@ defmodule LiveDjWeb.Components.Peers do
         presence_id: presence_id,
         target: assigns
       }) do
-    ~L"""
+    ~H"""
       <button
-        id="<%= event %>-<%= presence_id %>"
+        id={"#{event}-#{presence_id}"}
         class="svg-button-container"
-        phx-click="<%= event %>"
-        phx-target="<%= assigns %>"
-        phx-value-presence_id="<%= presence_id %>"
+        phx-click={event}
+        phx-target={assigns}
+        phx-value-presence_id={presence_id}
       >
         <%= PhoenixInlineSvg.Helpers.svg_image(
           LiveDjWeb.Endpoint,
@@ -233,7 +238,7 @@ defmodule LiveDjWeb.Components.Peers do
         _ -> ""
       end
 
-    ~L"""
+    ~H"""
       <a><%= icon %></a>
     """
   end

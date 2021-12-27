@@ -1,6 +1,10 @@
 defmodule LiveDj.Organizer.Room do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias LiveDj.Collections.Playlist
 
   schema "rooms" do
     field :queue, {:array, :map}, default: []
@@ -9,9 +13,10 @@ defmodule LiveDj.Organizer.Room do
     field :video_tracker, :string, default: ""
     field :management_type, :string, default: "free"
 
-    belongs_to :playlist, LiveDj.Collections.Playlist
+    belongs_to :playlist, Playlist
 
-    many_to_many :users, LiveDj.Accounts.User, join_through: LiveDj.Organizer.UserRoom
+    many_to_many :users, LiveDj.Accounts.User,
+      join_through: LiveDj.Organizer.UserRoom
 
     timestamps()
   end
@@ -22,7 +27,7 @@ defmodule LiveDj.Organizer.Room do
   def changeset(room, attrs) do
     room
     |> cast(attrs, @fields)
-    |> cast_assoc(:playlist, with: &LiveDj.Collections.Playlist.changeset/2)
+    |> cast_assoc(:playlist, with: &Playlist.changeset/2)
     |> validate_required([:slug, :title])
     |> format_slug()
     |> unique_constraint(:slug)

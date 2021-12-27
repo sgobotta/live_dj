@@ -150,13 +150,13 @@ defmodule LiveDjWeb.Components.SearchVideo do
          },
          assigns
        ) do
-    ~L"""
+    ~H"""
       <a
-        class="<%= classes %>"
-        id="<%= id %>"
-        phx-click="<%= click_event %>"
-        phx-target="<%= assigns %>"
-        phx-value-video_id="<%= value %>"
+        class={classes}
+        id={id}
+        phx-click={click_event}
+        phx-target={assigns}
+        phx-value-video_id={value}
       >
         <%= render_svg(icon, "h-8 w-8 #{icon_classes}") %>
       </a>

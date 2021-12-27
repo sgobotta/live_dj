@@ -1,4 +1,8 @@
 defmodule LiveDjWeb.UserAuth do
+  @moduledoc """
+  Controller for user authentication.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 
@@ -31,7 +35,10 @@ defmodule LiveDjWeb.UserAuth do
     conn
     |> renew_session()
     |> put_session(:user_token, token)
-    |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
+    |> put_session(
+      :live_socket_id,
+      "users_sessions:#{Base.url_encode64(token)}"
+    )
     |> maybe_write_remember_me_cookie(token, params)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
@@ -149,9 +156,7 @@ defmodule LiveDjWeb.UserAuth do
   end
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
-    %{request_path: request_path, query_string: query_string} = conn
-    return_to = if query_string == "", do: request_path, else: request_path <> "?" <> query_string
-    put_session(conn, :user_return_to, return_to)
+    put_session(conn, :user_return_to, current_path(conn))
   end
 
   defp maybe_store_return_to(conn), do: conn

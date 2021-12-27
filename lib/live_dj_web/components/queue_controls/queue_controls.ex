@@ -33,7 +33,10 @@ defmodule LiveDjWeb.Components.QueueControls do
     updated_playlists_videos =
       Enum.map(Enum.with_index(video_queue), fn {video, index} ->
         Collections.cast_playlist_video(
-          Map.merge(video, %{position: index, added_by_user_id: video.added_by.user_id}),
+          Map.merge(video, %{
+            position: index,
+            added_by_user_id: video.added_by.user_id
+          }),
           room.playlist_id
         )
       end)
@@ -43,7 +46,10 @@ defmodule LiveDjWeb.Components.QueueControls do
     orphan_playlists_videos =
       Collections.list_playlists_videos_by_id(room.playlist_id)
       |> Enum.filter(fn opv ->
-        !Enum.member?(Enum.map(updated_playlists_videos, fn upv -> upv.id end), opv.id)
+        !Enum.member?(
+          Enum.map(updated_playlists_videos, fn upv -> upv.id end),
+          opv.id
+        )
       end)
 
     for orphan_playlist_video <- orphan_playlists_videos do
@@ -53,7 +59,8 @@ defmodule LiveDjWeb.Components.QueueControls do
     Phoenix.PubSub.broadcast(
       LiveDj.PubSub,
       "room:" <> slug,
-      {:save_queue, %{video_queue_controls: Queue.mark_as_saved(video_queue_controls)}}
+      {:save_queue,
+       %{video_queue_controls: Queue.mark_as_saved(video_queue_controls)}}
     )
 
     {:noreply, socket}

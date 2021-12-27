@@ -1,4 +1,6 @@
 defmodule LiveDjWeb.Room.NewLive do
+  @moduledoc false
+
   use LiveDjWeb, :live_view
 
   alias LiveDj.Accounts
@@ -56,7 +58,8 @@ defmodule LiveDjWeb.Room.NewLive do
         false ->
           options ++
             [
-              "Anyone can join, but it's managed by admin and collaborators": "managed"
+              "Anyone can join, but it's managed by admin and collaborators":
+                "managed"
             ]
       end
 
@@ -99,10 +102,10 @@ defmodule LiveDjWeb.Room.NewLive do
   end
 
   def render_equalizer(video_title, assigns) do
-    ~L"""
+    ~H"""
       <p class="base-text text-color">
         Currently playing: <%= video_title %>
-      <p>
+      </p>
     """
   end
 
@@ -249,12 +252,18 @@ defmodule LiveDjWeb.Room.NewLive do
                   is_owner: true
                 })
 
-              rooms_length = length(Accounts.preload_user(current_user, [:rooms]).rooms)
+              rooms_length =
+                length(Accounts.preload_user(current_user, [:rooms]).rooms)
 
               socket =
-                case Stats.assoc_user_badge("rooms-creation", current_user.id, rooms_length) do
+                case Stats.assoc_user_badge(
+                       "rooms-creation",
+                       current_user.id,
+                       rooms_length
+                     ) do
                   {:ok, user_badge} ->
                     %{badge: badge} = user_badge
+
                     # FIXME: Not received. Maybe cause a redirection is performed.
                     push_event(
                       socket,
@@ -301,7 +310,7 @@ defmodule LiveDjWeb.Room.NewLive do
     |> assign(:changeset, Room.changeset(%Room{}, params))
   end
 
-  defp schedule_next_tick() do
+  defp schedule_next_tick do
     Process.send_after(self(), :tick, @tick_rate)
   end
 

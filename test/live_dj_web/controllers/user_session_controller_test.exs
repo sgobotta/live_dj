@@ -15,7 +15,9 @@ defmodule LiveDjWeb.UserSessionControllerTest do
     end
 
     test "redirects if already logged in", %{conn: conn, user: user} do
-      conn = conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
+      conn =
+        conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
+
       assert redirected_to(conn) == "/"
     end
   end
@@ -24,7 +26,10 @@ defmodule LiveDjWeb.UserSessionControllerTest do
     test "logs the user in", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => valid_user_password()}
+          "user" => %{
+            "email" => user.email,
+            "password" => valid_user_password()
+          }
         })
 
       assert get_session(conn, :user_token)
@@ -51,7 +56,10 @@ defmodule LiveDjWeb.UserSessionControllerTest do
       assert redirected_to(conn) =~ "/"
     end
 
-    test "emits error message with invalid credentials", %{conn: conn, user: user} do
+    test "emits error message with invalid credentials", %{
+      conn: conn,
+      user: user
+    } do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{"email" => user.email, "password" => "invalid_password"}
@@ -65,7 +73,11 @@ defmodule LiveDjWeb.UserSessionControllerTest do
 
   describe "DELETE /users/log_out" do
     test "logs the user out", %{conn: conn, user: user} do
-      conn = conn |> log_in_user(user) |> delete(Routes.user_session_path(conn, :delete))
+      conn =
+        conn
+        |> log_in_user(user)
+        |> delete(Routes.user_session_path(conn, :delete))
+
       assert redirected_to(conn) == "/"
       refute get_session(conn, :user_token)
       assert get_flash(conn, :info) =~ "Logged out successfully"

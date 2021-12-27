@@ -1,4 +1,6 @@
 defmodule LiveDj.Stats.Badge do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -20,7 +22,21 @@ defmodule LiveDj.Stats.Badge do
   @doc false
   def changeset(badge, attrs) do
     badge
-    |> cast(attrs, [:description, :icon, :name, :reference_name, :type, :checkpoint])
-    |> validate_required([:description, :icon, :name, :reference_name, :type, :checkpoint])
+    |> cast(attrs, [
+      :description,
+      :icon,
+      :name,
+      :reference_name,
+      :type,
+      :checkpoint
+    ])
+    |> validate_required([
+      :description,
+      :icon,
+      :name,
+      :reference_name,
+      :type,
+      :checkpoint
+    ])
   end
 end

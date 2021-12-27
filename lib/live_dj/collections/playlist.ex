@@ -1,4 +1,6 @@
 defmodule LiveDj.Collections.Playlist do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
