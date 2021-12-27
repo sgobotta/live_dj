@@ -12,7 +12,7 @@ defmodule LiveDjWeb.Router do
 
     plug :put_secure_browser_headers, %{
       "content-security-policy" =>
-        "default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: http://www.youtube.com/iframe_api https://www.youtube.com/s/player/; script-src-elem 'self' https://www.youtube.com/ http://www.youtube.com/iframe_api https://www.youtube.com/s/player/*; img-src *; frame-src 'self' https://www.youtube.com/; style-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'"
+        "default-src 'self' 'unsafe-eval' 'unsafe-inline' blob: http://www.youtube.com/iframe_api https://www.youtube.com/s/player/ https://kit.fontawesome.com/ https://ka-f.fontawesome.com/ https://api.github.com/repos/sgobotta/live_dj; script-src-elem 'self' https://kit.fontawesome.com/ https://www.youtube.com/ http://www.youtube.com/iframe_api https://www.youtube.com/s/player/* https://buttons.github.io/buttons.js https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js; img-src * data:; frame-src 'self' https://www.youtube.com/; style-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'"
     }
 
     plug :fetch_current_user
