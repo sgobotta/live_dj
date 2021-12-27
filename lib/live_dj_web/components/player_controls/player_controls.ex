@@ -235,12 +235,12 @@ defmodule LiveDjWeb.Components.PlayerControls do
           ""
       end
 
-    ~L"""
+    ~H"""
       <a
-        id="<%= player_event %>"
-        class="<%= anchor_class %>"
-        phx-click="<%= player_event %>"
-        phx-target="<%= assigns %>"
+        id={player_event}
+        class={anchor_class}
+        phx-click={player_event}
+        phx-target={assigns}
       >
         <%= render_svg(
           "icons/player/play-controls",
@@ -298,12 +298,12 @@ defmodule LiveDjWeb.Components.PlayerControls do
           }
       end
 
-    ~L"""
+    ~H"""
       <a
-        id="<%= link_props.id %>"
-        class="<%= link_props.class %>"
-        phx-click="<%= link_props.phx_click %>"
-        phx-target="<%= link_props.phx_target %>"
+        id={link_props.id}
+        class={link_props.class}
+        phx-click={link_props.phx_click}
+        phx-target={link_props.phx_target}
       >
         <%= render_svg("icons/player/#{button}", "h-12 w-12 #{svg_classes}") %>
       </a>

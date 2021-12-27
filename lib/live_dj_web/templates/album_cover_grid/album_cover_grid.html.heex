@@ -1,20 +1,24 @@
 <div class="flex align-center">
-
   <%= if @queue == [] do %>
     <div>
-      <img class="track-cover-thumb" src="https://millennialdiyer.com/wp1/wp-content/uploads/2018/11/Tips-Tricks-for-Assigning-Album-Cover-Art-to-your-Music-Library-Default-Image.jpg" />
+      <img
+        class="track-cover-thumb"
+        src="https://millennialdiyer.com/wp1/wp-content/uploads/2018/11/Tips-Tricks-for-Assigning-Album-Cover-Art-to-your-Music-Library-Default-Image.jpg"
+      />
     </div>
   <% else %>
 
     <%= if length(@queue) < 4 do %>
       <div class="relative">
-        <img class="track-cover-thumb" src="<%= elem(hd(@queue), 0).img_url %>">
+        <img
+          class="track-cover-thumb"
+          src={elem(hd(@queue), 0).img_url}
+        >
           <%= if @player != nil and @player.state == "playing" do %>
             <%= Phoenix.View.render LiveDjWeb.EqualizerView,
               "equalizer.html", []
             %>
           <% end %>
-        </img>
       </div>
     <% else %>
 
@@ -22,7 +26,10 @@
         <div class="grid grid-cols-2 relative">
           <%= for chunk <- Enum.chunk_every(Enum.take(@queue, 4), 2) do %>
             <%= for {track, _i} <- chunk do %>
-              <img class="track-cover-thumb-mini" src="<%= track.img_url %>" />
+              <img
+                class="track-cover-thumb-mini"
+                src={track.img_url}
+              />
             <% end %>
           <% end %>
           <%= if @player != nil and @player.state == "playing" do %>
@@ -35,5 +42,4 @@
 
     <% end %>
   <% end %>
-
 </div>

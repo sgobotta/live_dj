@@ -58,13 +58,13 @@ defmodule LiveDjWeb.Components.Queue do
       true ->
         id = "remove-video-button-#{video_index}"
 
-        ~L"""
+        ~H"""
           <a
             class="btn"
-            id="<%= id %>"
-            phx-click="<%= event%>"
-            phx-value-video_id="<%= video_id %>"
-            phx-target="<%= assigns %>"
+            id={id}
+            phx-click={event}
+            phx-value-video_id={video_id}
+            phx-target={assigns}
           >
             <i class="fas fa-trash trash clickeable"></i>
           </a>

@@ -1,45 +1,49 @@
 <div
-  class="
+  class={"
     m-4
     scrollable-panel fixed-height-sm mt-10
-    <%= if @current_tab == "video_queue" do %>show-section<% else %>hide-section<% end %>
-  "
+    #{if @current_tab == "video_queue" do "show-section" else "hide-section" end}
+  "}
 >
   <ul class="playlist">
     <li
       id="drag-data-xxxxxxxxxxx"
-      data-position="<%= 0 %>"
+      data-position={0}
       phx-hook="DragAndDropping"
     >
-      <span data-over-slot="<%= 0 %>" class="over-zone" />
+      <span data-over-slot={0} class="over-zone" />
     </li>
     <li
-      id="drag-data-ghost-<%= 0 %>"
-      data-ghost-slot="<%= 0 %>"
+      id={"drag-data-ghost-#{0}"}
+      data-ghost-slot={0}
       phx-hook="DragAndDropping"
     >
-      <span data-ghost-slot="<%= 0 %>" class="" />
+      <span data-ghost-slot={0} class="" />
     </li>
     <%= for {video, index} <- @video_queue do %>
       <li
         draggable="true"
-        id="drag-data-<%= index %>"
-        data-position="<%= index + 1 %>"
+        id={"drag-data-#{index}"}
+        data-position={index + 1}
         phx-hook="DragAndDropping"
       >
         <div
-          class="flex space-x-4 pill <%= if video.video_id == @player.video_id do %>current-video shinning-pill<% else %>hoverable<% end %> draggable"
+          class={"
+            flex space-x-4 pill
+            #{if video.video_id == @player.video_id do "current-video shinning-pill" else "hoverable" end}
+            draggable
+          "}
         >
           <div
-            id="<%= "play-button-#{index}" %>"
-            class="
+            id={"play-button-#{index}"}
+            class={"
               queue-thumb flex-1
-              <%= if video.video_id == @player.video_id do %>current-video<% end %>
-            "
+              #{if video.video_id == @player.video_id do "current-video" else "" end}
+            "}
             phx-click="player_signal_play_by_id"
-            phx-value-video_id="<%= video.video_id %>"
+            phx-value-video_id={video.video_id}
           >
-            <img src="<%= video.img_url %>" class="queue-thumb" />
+            <img src={video.img_url} class="queue-thumb" />
             <i class="fas fa-play-circle queue-thumb-icon clickeable"></i>
           </div>
 
@@ -60,14 +64,14 @@
           </div>
 
         </div>
-        <span data-over-slot="<%= index + 1 %>" class="over-zone" />
+        <span data-over-slot={index + 1} class="over-zone" />
       </li>
       <li
-        id="drag-data-ghost-<%= index + 1 %>"
-        data-ghost-slot="<%= index + 1 %>"
+        id={"drag-data-ghost-#{index + 1}"}
+        data-ghost-slot={index + 1}
         phx-hook="DragAndDropping"
       >
-        <span data-ghost-slot="<%= index + 1 %>" />
+        <span data-ghost-slot={index + 1} />
       </li>
     <% end %>
   </ul>

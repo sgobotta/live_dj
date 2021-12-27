@@ -9,25 +9,54 @@
     </p>
     <div class="flex flex-wrap items-center justify-center py-2 pt-0">
       <%= for plan <- @mercadopago_plans do %>
-        <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
-          <label class="flex flex-col rounded-lg shadow-lg group relative cursor-pointer hover:shadow-2xl">
-            <div class="w-full px-4 py-6 rounded-t-lg card-section-1 bg-primary">
-              <h3 class="mx-auto font-semibold text-center underline group-hover:text-white text-white">
+        <div class="
+          w-full p-4
+          lg:w-1/4
+          md:w-1/2
+          plan-card
+        ">
+          <label class="
+            flex flex-col
+            rounded-lg
+            shadow-lg
+            group relative
+            cursor-pointer
+            hover:shadow-2xl
+          ">
+            <div class="
+              w-full px-4 py-6
+              rounded-t-lg
+              card-section-1
+              bg-primary
+            ">
+              <h3 class="
+                mx-auto
+                font-semibold text-center underline
+                group-hover:text-white text-white
+              ">
                 <%= String.capitalize(plan.name) %>
               </h3>
-              <p class="text-5xl font-bold text-center group-hover:text-white text-white">
+              <p class="
+                text-5xl font-bold text-center
+                group-hover:text-white text-white
+              ">
                 AR $<%= plan.amount %>.<span class="text-3xl">00</span>
               </p>
-              <p class="text-2xs text-center uppercase group-hover:text-white text-white">
+              <p class="
+                text-2xs text-center uppercase
+                group-hover:text-white text-white
+              ">
                 donación única
               </p>
             </div>
-            <div
-              class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
-            >
+            <div class="
+              flex flex-col items-center justify-center
+              w-full h-full py-6 rounded-b-lg
+              bg-neutral-darker
+            ">
               <script
                 src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
-                data-preference-id="<%= plan.preference_id %>"
+                data-preference-id={"#{plan.preference_id}"}
               >
               </script>
             </div>
@@ -47,30 +76,54 @@
     <div class="flex flex-wrap items-center justify-center py-2 pt-0">
       <%= for plan <- @paypal_plans do %>
         <div class="w-full p-4 md:w-1/2 lg:w-1/4 plan-card">
-          <label class="flex flex-col rounded-lg shadow-lg group relative cursor-pointer hover:shadow-2xl">
-            <div class="w-full px-4 py-6 rounded-t-lg card-section-1 bg-primary">
-              <h3 class="mx-auto font-semibold text-center underline group-hover:text-white text-white">
+          <label class="
+            flex flex-col
+            rounded-lg
+            shadow-lg
+            group relative
+            cursor-pointer
+            hover:shadow-2xl
+          ">
+            <div class="
+              w-full px-4 py-6
+              rounded-t-lg
+              card-section-1
+              bg-primary
+            ">
+              <h3 class="
+                mx-auto
+                font-semibold text-center underline
+                group-hover:text-white text-white
+              ">
                 <%= String.capitalize(plan.name) %>
               </h3>
-              <p class="text-3xl font-bold text-center group-hover:text-white text-white">
+              <p class="
+                text-3xl font-bold text-center
+                group-hover:text-white text-white
+              ">
                 Check out available plans or choose any amount
               </p>
-              <p class="text-2xs text-center uppercase group-hover:text-white text-white">
+              <p class="
+                text-2xs text-center uppercase
+                group-hover:text-white text-white
+              ">
                 one time donation
               </p>
             </div>
-            <div
-              class="flex flex-col items-center justify-center w-full h-full py-6 rounded-b-lg bg-neutral-darker"
-            >
+            <div class="
+              flex flex-col items-center justify-center
+              w-full h-full py-6 rounded-b-lg
+              bg-neutral-darker
+            ">
               <form
-                action="<%= plan.host %>/donate"
+                action={"#{plan.host}/donate"}
                 method="post" target="_top"
                 style="margin-bottom:0px;"
               >
                 <input
                   type="hidden"
                   name="hosted_button_id"
-                  value="<%= plan.input_value %>"
+                  value={plan.input_value}
                 />
                 <input
                   type="image"

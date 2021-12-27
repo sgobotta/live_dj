@@ -1,22 +1,18 @@
 <div
-  class="
+  class={"
     live-section-box
     mb-4
     mt-0
     pb-4
-    <%= if @current_tab == "video_search" do %>
-      show-section
-    <% else %>
-      hide-section
-    <% end %>
-  "
+    #{if @current_tab == "video_search" do "show-section" else "hide-section" end}
+  "}
 >
   <div class="mx-6 mb-16">
     <form
       id="search-video-form"
       phx-change="search"
       phx-submit="submit"
-      phx-target="<%= @myself %>"
+      phx-target={@myself}
       class="mb-2"
     >
       <%=
@@ -46,10 +42,10 @@
     </div>
 
     <%= for {video, index} <- @search_result do %>
-      <div class="
+      <div class={"
         grid grid-cols-4 gap-2 search-result separator
-        <%= if video.is_queued do %>queued<% else %>unqueued<% end %>
-      ">
+        #{if video.is_queued do "queued" else "unqueued" end}
+      "}>
         <div class="align-center">
           <%= img_tag(video.img_url, width: video.img_width * 1.2) %>
         </div>

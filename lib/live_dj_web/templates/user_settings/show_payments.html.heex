@@ -7,13 +7,18 @@
 
           <div class="col-span-1 flex align-center">
             <img
-              alt="<%= String.capitalize(order.plan.gateway) %>"
-              src="<%= Routes.static_path(@conn, "/images/#{order.plan.gateway}.png") %>"
+              alt={String.capitalize(order.plan.gateway)}
+              src={Routes.static_path(
+                @conn,
+                "/images/#{order.plan.gateway}.png"
+              )}
               class="h-24 w-24 rounded mx-auto"
             />
           </div>
           <div class="col-span-3 p-4">
-            <h3 class="font-semibold"><%= String.capitalize(order.plan.type) %></h3>
+            <h3 class="font-semibold">
+              <%= String.capitalize(order.plan.type) %>
+            </h3>
             <p class="font-semibold">
               <%= String.capitalize(order.plan.name) %>
             </p>

@@ -1,19 +1,20 @@
 <div
-  class="
+  class={"
     column
-    <%= if @current_section == "chat" do %>
-      sections-group-show-section
-    <% else %>
-      sections-group-hide-section
-    <% end %>
-  "
+    #{if @current_section == "chat" do
+        "sections-group-show-section"
+      else
+        "sections-group-hide-section"
+      end
+    }
+  "}
 >
-  <div id="chat-data" phx-hook="ChatSyncing" class=>
+  <div id="chat-data" phx-hook="ChatSyncing" class="">
     <div id="chat" class="chat-panel scrollable-panel fixed-height-lg m-6 rounded-lg">
       <%= for message <- @messages do %>
         <div>
           <p class="chat-message">
-            <%= render_message(message) %>
+            <%= render_message(message, @socket) %>
           </p>
         </div>
       <% end %>
@@ -23,7 +24,7 @@
         id="new-message"
         phx-change="typing"
         phx-submit="new_message"
-        phx-target="<%= @myself %>"
+        phx-target={@myself}
         class="chat-form m-0"
       >
         <%=

@@ -1,4 +1,6 @@
 defmodule LiveDjWeb.Room.NewLive do
+  @moduledoc false
+
   use LiveDjWeb, :live_view
 
   alias LiveDj.Accounts
@@ -99,10 +101,10 @@ defmodule LiveDjWeb.Room.NewLive do
   end
 
   def render_equalizer(video_title, assigns) do
-    ~L"""
+    ~H"""
       <p class="base-text text-color">
         Currently playing: <%= video_title %>
-      <p>
+      </p>
     """
   end
 

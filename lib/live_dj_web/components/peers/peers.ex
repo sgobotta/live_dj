@@ -204,13 +204,13 @@ defmodule LiveDjWeb.Components.Peers do
         presence_id: presence_id,
         target: assigns
       }) do
-    ~L"""
+    ~H"""
       <button
-        id="<%= event %>-<%= presence_id %>"
+        id={"#{event}-#{presence_id}"}
         class="svg-button-container"
-        phx-click="<%= event %>"
-        phx-target="<%= assigns %>"
-        phx-value-presence_id="<%= presence_id %>"
+        phx-click={event}
+        phx-target={assigns}
+        phx-value-presence_id={presence_id}
       >
         <%= PhoenixInlineSvg.Helpers.svg_image(
           LiveDjWeb.Endpoint,
@@ -233,7 +233,7 @@ defmodule LiveDjWeb.Components.Peers do
         _ -> ""
       end
 
-    ~L"""
+    ~H"""
       <a><%= icon %></a>
     """
   end
