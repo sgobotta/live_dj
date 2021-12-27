@@ -14,7 +14,8 @@ defmodule LiveDj.Notifications do
   def create(:receive_badge, %{badge_icon: badge_icon, badge_name: badge_name}) do
     %{
       img: %{is_remote: false, value: "badges/#{badge_icon}.png"},
-      title: "LiveDj\nCongratulations, you just received the \"#{badge_name}\" badge!",
+      title:
+        "LiveDj\nCongratulations, you just received the \"#{badge_name}\" badge!",
       tag: "receive-badge"
     }
   end

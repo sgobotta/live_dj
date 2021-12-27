@@ -87,7 +87,9 @@ defmodule LiveDjWeb.ChatTests do
                "<span class=\"use-prompt\"><span class=\"chat-username highlight-username\">info</span></span><span class=\"chat-text \">  Playing\n  <span class=\"highlight-video-title\">"
 
       assert render(view) =~
-               "</span>,\n  added by <span class=\"font-bold highlight-username\">#{user.username}</span>"
+               "</span>,\n  added by <span class=\"font-bold highlight-username\">#{
+                 user.username
+               }</span>"
 
       assert render(view) =~ "</span></span></p></div></div>"
     end

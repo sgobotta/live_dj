@@ -8,7 +8,10 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
   import LiveDj.StatsFixtures
 
   setup do
-    %{user: user_fixture(), badge: badge_fixture(reference_name: "users-confirmed_via_link")}
+    %{
+      user: user_fixture(),
+      badge: badge_fixture(reference_name: "users-confirmed_via_link")
+    }
   end
 
   describe "GET /users/confirm" do
@@ -29,10 +32,15 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
 
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
-      assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "confirm"
+
+      assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context ==
+               "confirm"
     end
 
-    test "does not send confirmation token if account is confirmed", %{conn: conn, user: user} do
+    test "does not send confirmation token if account is confirmed", %{
+      conn: conn,
+      user: user
+    } do
       Repo.update!(Accounts.User.confirm_changeset(user))
 
       conn =
@@ -58,7 +66,11 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
   end
 
   describe "GET /users/confirm/:token" do
-    test "confirms the given token once", %{conn: conn, user: user, badge: badge} do
+    test "confirms the given token once", %{
+      conn: conn,
+      user: user,
+      badge: badge
+    } do
       token =
         extract_user_token(fn url ->
           Accounts.deliver_user_confirmation_instructions(user, url)
@@ -81,13 +93,21 @@ defmodule LiveDjWeb.UserConfirmationControllerTest do
 
       conn = get(conn, Routes.user_confirmation_path(conn, :confirm, token))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ "Confirmation link is invalid or it has expired"
+
+      assert get_flash(conn, :error) =~
+               "Confirmation link is invalid or it has expired"
     end
 
-    test "does not confirm email with invalid token", %{conn: conn, user: user, badge: badge} do
+    test "does not confirm email with invalid token", %{
+      conn: conn,
+      user: user,
+      badge: badge
+    } do
       conn = get(conn, Routes.user_confirmation_path(conn, :confirm, "oops"))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ "Confirmation link is invalid or it has expired"
+
+      assert get_flash(conn, :error) =~
+               "Confirmation link is invalid or it has expired"
 
       %{
         confirmed_at: confirmed_at,

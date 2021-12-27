@@ -68,7 +68,9 @@ defmodule LiveDjWeb.Components.VolumeControls do
         socket
       ) do
     {volume_level, _} = Integer.parse(volume_level)
-    %{slug: slug, user: %{uuid: uuid}, volume_controls: volume_controls} = socket.assigns
+
+    %{slug: slug, user: %{uuid: uuid}, volume_controls: volume_controls} =
+      socket.assigns
 
     volume_icon = VolumeControls.get_volume_icon(volume_level)
 

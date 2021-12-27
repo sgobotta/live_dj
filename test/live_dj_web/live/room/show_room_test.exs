@@ -392,7 +392,10 @@ defmodule LiveDjWeb.ShowRoomTest do
          %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, "/room/#{room.slug}")
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
     end
 
@@ -413,7 +416,9 @@ defmodule LiveDjWeb.ShowRoomTest do
              |> render() =~ "current-video"
 
       # Refutes the remove button exists for this element
-      remove_element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+      remove_element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       refute view |> element(remove_element_id) |> has_element?()
     end
   end
@@ -608,7 +613,9 @@ defmodule LiveDjWeb.ShowRoomTest do
          %{conn: owner_conn, room: room} do
       url = "/room/#{room.slug}"
       # Registers and logs in a user
-      %{conn: user_conn, user: _user} = register_and_log_in_user(%{conn: build_conn()})
+      %{conn: user_conn, user: _user} =
+        register_and_log_in_user(%{conn: build_conn()})
+
       # Obatains the user connection uuid to get buttons ids
       %{assigns: %{user: %{uuid: user_uuid}}} =
         user_conn =
@@ -647,8 +654,12 @@ defmodule LiveDjWeb.ShowRoomTest do
           url
         )
 
-      add_button_id = String.replace(@add_collaborator_button_id, "?", "#{user_uuid}")
-      remove_button_id = String.replace(@remove_collaborator_button_id, "?", "#{user_uuid}")
+      add_button_id =
+        String.replace(@add_collaborator_button_id, "?", "#{user_uuid}")
+
+      remove_button_id =
+        String.replace(@remove_collaborator_button_id, "?", "#{user_uuid}")
+
       refute owner_view |> element(add_button_id) |> has_element?()
       assert owner_view |> element(remove_button_id) |> has_element?()
       # Removes a user as a collaborator
@@ -662,8 +673,12 @@ defmodule LiveDjWeb.ShowRoomTest do
           url
         )
 
-      add_button_id = String.replace(@add_collaborator_button_id, "?", "#{user_uuid}")
-      remove_button_id = String.replace(@remove_collaborator_button_id, "?", "#{user_uuid}")
+      add_button_id =
+        String.replace(@add_collaborator_button_id, "?", "#{user_uuid}")
+
+      remove_button_id =
+        String.replace(@remove_collaborator_button_id, "?", "#{user_uuid}")
+
       assert owner_view |> element(add_button_id) |> has_element?()
       refute owner_view |> element(remove_button_id) |> has_element?()
     end
@@ -737,13 +752,19 @@ defmodule LiveDjWeb.ShowRoomTest do
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
       # Saves the queue
       save_queue(view)
     end
 
-    test "As a User I can add a video and save the current queue", %{conn: conn, room: room} do
+    test "As a User I can add a video and save the current queue", %{
+      conn: conn,
+      room: room
+    } do
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
@@ -762,16 +783,20 @@ defmodule LiveDjWeb.ShowRoomTest do
       save_queue(view)
     end
 
-    test "As a User I can remove and add a video while saving the current queue", %{
-      conn: conn,
-      room: room
-    } do
+    test "As a User I can remove and add a video while saving the current queue",
+         %{
+           conn: conn,
+           room: room
+         } do
       url = "/room/#{room.slug}"
       # Gets a user view
       {:ok, view, _html} = live(conn, url)
       # Simulates a video removal
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
       # Saves the queue
       save_queue(view)
@@ -799,7 +824,10 @@ defmodule LiveDjWeb.ShowRoomTest do
       {:ok, view, _html} = live(conn, url)
       # Simulates a video removal
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
       # Saves the queue
       save_queue(view)
@@ -819,7 +847,10 @@ defmodule LiveDjWeb.ShowRoomTest do
         length(Collections.list_playlists_videos_by_id(room.playlist_id))
 
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
       # Saves the queue
       save_queue(view)
@@ -827,7 +858,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       updated_playlists_video_length =
         length(Collections.list_playlists_videos_by_id(room.playlist_id))
 
-      assert updated_playlists_video_length == current_playlists_video_length - 1
+      assert updated_playlists_video_length ==
+               current_playlists_video_length - 1
     end
 
     test "As a Visitor User I can remove the last video, add a video and then remove the last one again while saving the current queue",
@@ -841,7 +873,10 @@ defmodule LiveDjWeb.ShowRoomTest do
       {:ok, view, _html} = live(conn, url)
       # Simulates a video removal
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
       # Saves the queue
       save_queue(view)
@@ -861,7 +896,10 @@ defmodule LiveDjWeb.ShowRoomTest do
         length(Collections.list_playlists_videos_by_id(room.playlist_id))
 
       video_index = length(room.queue) - 1
-      element_id = String.replace(@remove_video_button_id, "?", "#{video_index}")
+
+      element_id =
+        String.replace(@remove_video_button_id, "?", "#{video_index}")
+
       remove_video(view, element_id)
       # Saves the queue
       save_queue(view)
@@ -869,7 +907,8 @@ defmodule LiveDjWeb.ShowRoomTest do
       updated_playlists_video_length =
         length(Collections.list_playlists_videos_by_id(room.playlist_id))
 
-      assert updated_playlists_video_length == current_playlists_video_length - 1
+      assert updated_playlists_video_length ==
+               current_playlists_video_length - 1
     end
   end
 

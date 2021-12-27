@@ -17,7 +17,9 @@ defmodule LiveDjWeb.Components.Queue do
     is_managed = room_management != "free"
 
     queue_permissions = %{
-      can_remove_track: !is_managed or Permission.has_permission(permissions, "can_remove_track")
+      can_remove_track:
+        !is_managed or
+          Permission.has_permission(permissions, "can_remove_track")
     }
 
     {:ok,

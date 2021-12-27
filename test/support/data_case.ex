@@ -144,8 +144,10 @@ defmodule LiveDj.DataCase do
       })
 
     %{
-      can_add_room_collaborators_permission: can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
+      can_add_room_collaborators_permission:
+        can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission:
+        can_remove_room_collaborators_permission,
       can_edit_room_management_type_permission: can_edit_room_management_type,
       can_edit_room_name_permission: can_edit_room_name,
       can_play_track_permission: can_play_track_permission,
@@ -163,13 +165,18 @@ defmodule LiveDj.DataCase do
   A helper that initialises the needed data for a show live view
   """
   def show_live_setup do
-    %{room_admin_group: room_admin_group, room_collaborator_group: room_collaborator_group} =
-      groups_setup()
+    %{
+      room_admin_group: room_admin_group,
+      room_collaborator_group: room_collaborator_group
+    } = groups_setup()
 
     %{
-      can_add_room_collaborators_permission: can_add_room_collaborators_permission,
-      can_remove_room_collaborators_permission: can_remove_room_collaborators_permission,
-      can_edit_room_management_type_permission: can_edit_room_management_type_permission,
+      can_add_room_collaborators_permission:
+        can_add_room_collaborators_permission,
+      can_remove_room_collaborators_permission:
+        can_remove_room_collaborators_permission,
+      can_edit_room_management_type_permission:
+        can_edit_room_management_type_permission,
       can_edit_room_name_permission: can_edit_room_name_permission,
       can_play_track_permission: can_play_track_permission,
       can_pause_track_permission: can_pause_track_permission,

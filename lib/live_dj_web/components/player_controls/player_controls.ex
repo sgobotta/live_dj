@@ -18,12 +18,16 @@ defmodule LiveDjWeb.Components.PlayerControls do
     is_managed = room_management != "free"
 
     player_permissions = %{
-      can_play_track: !is_managed or Permission.has_permission(permissions, "can_play_track"),
-      can_pause_track: !is_managed or Permission.has_permission(permissions, "can_pause_track"),
+      can_play_track:
+        !is_managed or Permission.has_permission(permissions, "can_play_track"),
+      can_pause_track:
+        !is_managed or Permission.has_permission(permissions, "can_pause_track"),
       can_play_next_track:
-        !is_managed or Permission.has_permission(permissions, "can_play_next_track"),
+        !is_managed or
+          Permission.has_permission(permissions, "can_play_next_track"),
       can_play_previous_track:
-        !is_managed or Permission.has_permission(permissions, "can_play_previous_track")
+        !is_managed or
+          Permission.has_permission(permissions, "can_play_previous_track")
     }
 
     {:ok,
@@ -81,7 +85,8 @@ defmodule LiveDjWeb.Components.PlayerControls do
   def handle_event(
         "player_signal_play_previous",
         _params,
-        %{assigns: %{player_permissions: %{can_play_previous_track: true}}} = socket
+        %{assigns: %{player_permissions: %{can_play_previous_track: true}}} =
+          socket
       ) do
     {:noreply,
      socket
@@ -94,7 +99,8 @@ defmodule LiveDjWeb.Components.PlayerControls do
   def handle_event(
         "player_signal_play_previous",
         _params,
-        %{assigns: %{player_permissions: %{can_play_previous_track: false}}} = socket
+        %{assigns: %{player_permissions: %{can_play_previous_track: false}}} =
+          socket
       ) do
     {:noreply, socket}
   end
@@ -115,7 +121,8 @@ defmodule LiveDjWeb.Components.PlayerControls do
   def handle_event(
         "player_signal_play_next",
         _params,
-        %{assigns: %{player_permissions: %{can_play_next_track: false}}} = socket
+        %{assigns: %{player_permissions: %{can_play_next_track: false}}} =
+          socket
       ) do
     {:noreply, socket}
   end
@@ -154,7 +161,8 @@ defmodule LiveDjWeb.Components.PlayerControls do
           Phoenix.PubSub.broadcast(
             LiveDj.PubSub,
             "room:" <> slug,
-            {broadcast_event_name, %{player: player, player_controls: player_controls}}
+            {broadcast_event_name,
+             %{player: player, player_controls: player_controls}}
           )
 
         socket
@@ -173,7 +181,8 @@ defmodule LiveDjWeb.Components.PlayerControls do
       play_button_state: play_button_state
     } = player_controls
 
-    is_player_loading = pause_button_state == "disabled" && play_button_state == "disabled"
+    is_player_loading =
+      pause_button_state == "disabled" && play_button_state == "disabled"
 
     {play_button_class, anchor_class} =
       case is_player_loading do
@@ -250,7 +259,13 @@ defmodule LiveDjWeb.Components.PlayerControls do
     """
   end
 
-  def render_player_control_button(button, event_name, button_state, has_permission, assigns) do
+  def render_player_control_button(
+        button,
+        event_name,
+        button_state,
+        has_permission,
+        assigns
+      ) do
     %{link_props: link_props, svg_classes: svg_classes} =
       case button_state do
         "disabled" ->

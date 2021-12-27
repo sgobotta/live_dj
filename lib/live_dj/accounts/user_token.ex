@@ -32,7 +32,13 @@ defmodule LiveDj.Accounts.UserToken do
   """
   def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    {token, %LiveDj.Accounts.UserToken{token: token, context: "session", user_id: user.id}}
+
+    {token,
+     %LiveDj.Accounts.UserToken{
+       token: token,
+       context: "session",
+       user_id: user.id
+     }}
   end
 
   @doc """
@@ -89,7 +95,9 @@ defmodule LiveDj.Accounts.UserToken do
         query =
           from token in token_and_context_query(hashed_token, context),
             join: user in assoc(token, :user),
-            where: token.inserted_at > ago(^days, "day") and token.sent_to == user.email,
+            where:
+              token.inserted_at > ago(^days, "day") and
+                token.sent_to == user.email,
             select: user
 
         {:ok, query}
@@ -114,7 +122,8 @@ defmodule LiveDj.Accounts.UserToken do
 
         query =
           from token in token_and_context_query(hashed_token, context),
-            where: token.inserted_at > ago(@change_email_validity_in_days, "day")
+            where:
+              token.inserted_at > ago(@change_email_validity_in_days, "day")
 
         {:ok, query}
 

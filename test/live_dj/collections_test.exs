@@ -65,12 +65,16 @@ defmodule LiveDj.CollectionsTest do
     end
 
     test "create_video/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Collections.create_video(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} =
+               Collections.create_video(@invalid_attrs)
     end
 
     test "update_video/2 with valid data updates the video" do
       video = video_fixture()
-      assert {:ok, %Video{} = video} = Collections.update_video(video, @update_attrs)
+
+      assert {:ok, %Video{} = video} =
+               Collections.update_video(video, @update_attrs)
+
       assert video.channel_title == "some updated channel_title"
       assert video.description == "some updated description"
       assert video.img_height == "some updated img_height"
@@ -82,14 +86,20 @@ defmodule LiveDj.CollectionsTest do
 
     test "update_video/2 with invalid data returns error changeset" do
       video = video_fixture()
-      assert {:error, %Ecto.Changeset{}} = Collections.update_video(video, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Collections.update_video(video, @invalid_attrs)
+
       assert video == Collections.get_video!(video.id)
     end
 
     test "delete_video/1 deletes the video" do
       video = video_fixture()
       assert {:ok, %Video{}} = Collections.delete_video(video)
-      assert_raise Ecto.NoResultsError, fn -> Collections.get_video!(video.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Collections.get_video!(video.id)
+      end
     end
 
     test "change_video/1 returns a video changeset" do
@@ -123,29 +133,45 @@ defmodule LiveDj.CollectionsTest do
       user_video
     end
 
-    test "list_users_videos/0 returns all users_videos", %{user: user, video: video} do
+    test "list_users_videos/0 returns all users_videos", %{
+      user: user,
+      video: video
+    } do
       user_video = user_video_fixture(%{user_id: user.id, video_id: video.id})
       assert Collections.list_users_videos() == [user_video]
     end
 
-    test "get_user_video!/1 returns the user_video with given id", %{user: user, video: video} do
+    test "get_user_video!/1 returns the user_video with given id", %{
+      user: user,
+      video: video
+    } do
       user_video = user_video_fixture(%{user_id: user.id, video_id: video.id})
       assert Collections.get_user_video!(user_video.id) == user_video
     end
 
-    test "create_user_video/1 with valid data creates a user_video", %{user: user, video: video} do
-      valid_attrs = Enum.into(@valid_attrs, %{user_id: user.id, video_id: video.id})
+    test "create_user_video/1 with valid data creates a user_video", %{
+      user: user,
+      video: video
+    } do
+      valid_attrs =
+        Enum.into(@valid_attrs, %{user_id: user.id, video_id: video.id})
+
       assert {:ok, %UserVideo{}} = Collections.create_user_video(valid_attrs)
     end
 
     test "create_user_video/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Collections.create_user_video(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} =
+               Collections.create_user_video(@invalid_attrs)
     end
 
-    test "update_user_video/2 with valid data updates the user_video", %{user: user, video: video} do
+    test "update_user_video/2 with valid data updates the user_video", %{
+      user: user,
+      video: video
+    } do
       user_video = user_video_fixture(%{user_id: user.id, video_id: video.id})
 
-      assert {:ok, %UserVideo{}} = Collections.update_user_video(user_video, @update_attrs)
+      assert {:ok, %UserVideo{}} =
+               Collections.update_user_video(user_video, @update_attrs)
     end
 
     test "update_user_video/2 with invalid data returns error changeset", %{
@@ -160,13 +186,22 @@ defmodule LiveDj.CollectionsTest do
       assert user_video == Collections.get_user_video!(user_video.id)
     end
 
-    test "delete_user_video/1 deletes the user_video", %{user: user, video: video} do
+    test "delete_user_video/1 deletes the user_video", %{
+      user: user,
+      video: video
+    } do
       user_video = user_video_fixture(%{user_id: user.id, video_id: video.id})
       assert {:ok, %UserVideo{}} = Collections.delete_user_video(user_video)
-      assert_raise Ecto.NoResultsError, fn -> Collections.get_user_video!(user_video.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Collections.get_user_video!(user_video.id)
+      end
     end
 
-    test "change_user_video/1 returns a user_video changeset", %{user: user, video: video} do
+    test "change_user_video/1 returns a user_video changeset", %{
+      user: user,
+      video: video
+    } do
       user_video = user_video_fixture(%{user_id: user.id, video_id: video.id})
       assert %Ecto.Changeset{} = Collections.change_user_video(user_video)
     end
@@ -208,7 +243,9 @@ defmodule LiveDj.CollectionsTest do
 
     test "update_playlist/2 with valid data updates the playlist" do
       playlist = playlist_fixture()
-      assert {:ok, %Playlist{}} = Collections.update_playlist(playlist, @update_attrs)
+
+      assert {:ok, %Playlist{}} =
+               Collections.update_playlist(playlist, @update_attrs)
     end
 
     # test "update_playlist/2 with invalid data returns error changeset" do
@@ -220,7 +257,10 @@ defmodule LiveDj.CollectionsTest do
     test "delete_playlist/1 deletes the playlist" do
       playlist = playlist_fixture()
       assert {:ok, %Playlist{}} = Collections.delete_playlist(playlist)
-      assert_raise Ecto.NoResultsError, fn -> Collections.get_playlist!(playlist.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Collections.get_playlist!(playlist.id)
+      end
     end
 
     test "change_playlist/1 returns a playlist changeset" do
@@ -265,16 +305,19 @@ defmodule LiveDj.CollectionsTest do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       playlist_video = playlist_video_fixture(playlist_video_params)
 
-      assert Collections.list_playlists_videos_by_id(playlist_video.playlist_id) == [
-               playlist_video
-             ]
+      assert Collections.list_playlists_videos_by_id(playlist_video.playlist_id) ==
+               [
+                 playlist_video
+               ]
     end
 
     test "get_playlist_video!/1 returns the playlist_video with given id",
          %{playlist: playlist, video: video} do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       playlist_video = playlist_video_fixture(playlist_video_params)
-      assert Collections.get_playlist_video!(playlist_video.id) == playlist_video
+
+      assert Collections.get_playlist_video!(playlist_video.id) ==
+               playlist_video
     end
 
     test "create_playlist_video/1 with valid data creates a playlist_video",
@@ -282,11 +325,13 @@ defmodule LiveDj.CollectionsTest do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       valid_attrs = Enum.into(@valid_attrs, playlist_video_params)
 
-      assert {:ok, %PlaylistVideo{}} = Collections.create_playlist_video(valid_attrs)
+      assert {:ok, %PlaylistVideo{}} =
+               Collections.create_playlist_video(valid_attrs)
     end
 
     test "create_playlist_video/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Collections.create_playlist_video(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} =
+               Collections.create_playlist_video(@invalid_attrs)
     end
 
     test "update_playlist_video/2 with valid data updates the playlist_video",
@@ -297,7 +342,9 @@ defmodule LiveDj.CollectionsTest do
       playlist = CollectionsFixtures.playlist_fixture()
       video = Enum.at(CollectionsFixtures.videos(), 1)
       video = CollectionsFixtures.video_fixture(video)
-      update_attrs = Enum.into(@update_attrs, %{playlist_id: playlist.id, video_id: video.id})
+
+      update_attrs =
+        Enum.into(@update_attrs, %{playlist_id: playlist.id, video_id: video.id})
 
       assert {:ok, %PlaylistVideo{}} =
                Collections.update_playlist_video(playlist_video, update_attrs)
@@ -307,19 +354,24 @@ defmodule LiveDj.CollectionsTest do
          %{playlist: playlist, video: video} do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       playlist_video = playlist_video_fixture(playlist_video_params)
-      invalid_attrs = Enum.into(@invalid_attrs, %{playlist_id: nil, video_id: nil})
+
+      invalid_attrs =
+        Enum.into(@invalid_attrs, %{playlist_id: nil, video_id: nil})
 
       assert {:error, %Ecto.Changeset{}} =
                Collections.update_playlist_video(playlist_video, invalid_attrs)
 
-      assert playlist_video == Collections.get_playlist_video!(playlist_video.id)
+      assert playlist_video ==
+               Collections.get_playlist_video!(playlist_video.id)
     end
 
     test "delete_playlist_video/1 deletes the playlist_video",
          %{playlist: playlist, video: video} do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       playlist_video = playlist_video_fixture(playlist_video_params)
-      assert {:ok, %PlaylistVideo{}} = Collections.delete_playlist_video(playlist_video)
+
+      assert {:ok, %PlaylistVideo{}} =
+               Collections.delete_playlist_video(playlist_video)
 
       assert_raise Ecto.NoResultsError, fn ->
         Collections.get_playlist_video!(playlist_video.id)
@@ -330,7 +382,9 @@ defmodule LiveDj.CollectionsTest do
          %{playlist: playlist, video: video} do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       playlist_video = playlist_video_fixture(playlist_video_params)
-      assert %Ecto.Changeset{} = Collections.change_playlist_video(playlist_video)
+
+      assert %Ecto.Changeset{} =
+               Collections.change_playlist_video(playlist_video)
     end
   end
 end

@@ -14,7 +14,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "paused", previous_id: "", next_id: ""}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "paused",
+        previous_id: "",
+        next_id: ""
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -23,7 +28,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "paused", previous_id: _, next_id: ""}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "paused",
+        previous_id: _,
+        next_id: ""
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -32,7 +42,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "paused", previous_id: "", next_id: _}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "paused",
+        previous_id: "",
+        next_id: _
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -41,7 +56,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "paused", previous_id: _, next_id: _}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "paused",
+        previous_id: _,
+        next_id: _
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -50,7 +70,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "stopped", previous_id: "", next_id: ""}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "stopped",
+        previous_id: "",
+        next_id: ""
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -59,7 +84,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "stopped", previous_id: "", next_id: _}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "stopped",
+        previous_id: "",
+        next_id: _
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -68,7 +98,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "stopped", previous_id: _, next_id: ""}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "stopped",
+        previous_id: _,
+        next_id: ""
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -77,7 +112,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "stopped", previous_id: _, next_id: _}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "stopped",
+        previous_id: _,
+        next_id: _
+      }) do
     %{
       play_button_state: "",
       pause_button_state: "disabled",
@@ -86,7 +126,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "playing", previous_id: "", next_id: ""}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "playing",
+        previous_id: "",
+        next_id: ""
+      }) do
     %{
       play_button_state: "disabled",
       pause_button_state: "",
@@ -95,7 +140,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "playing", previous_id: "", next_id: _}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "playing",
+        previous_id: "",
+        next_id: _
+      }) do
     %{
       play_button_state: "disabled",
       pause_button_state: "",
@@ -104,7 +154,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "playing", previous_id: _, next_id: ""}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "playing",
+        previous_id: _,
+        next_id: ""
+      }) do
     %{
       play_button_state: "disabled",
       pause_button_state: "",
@@ -113,7 +168,12 @@ defmodule LiveDj.Organizer.Player do
     }
   end
 
-  def get_controls_state(%{video_id: _, state: "playing", previous_id: _, next_id: _}) do
+  def get_controls_state(%{
+        video_id: _,
+        state: "playing",
+        previous_id: _,
+        next_id: _
+      }) do
     %{
       play_button_state: "disabled",
       pause_button_state: "",

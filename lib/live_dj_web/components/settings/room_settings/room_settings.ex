@@ -9,12 +9,16 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
   alias LiveDj.Repo
 
   def update(assigns, socket) do
-    %{user_room_group: %{permissions: permissions}, room_management: room_management} = assigns
+    %{
+      user_room_group: %{permissions: permissions},
+      room_management: room_management
+    } = assigns
 
     is_managed = room_management != "free"
 
     legacy_room_details_permissions = %{
-      can_edit_room_management_type: has_permission(permissions, "can_edit_room_management_type"),
+      can_edit_room_management_type:
+        has_permission(permissions, "can_edit_room_management_type"),
       can_edit_room_name: has_permission(permissions, "can_edit_room_name")
     }
 
@@ -34,7 +38,8 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
     }
 
     {_, has_all_room_permissions} =
-      Enum.map_reduce(room_details_permissions, true, fn {_key, has_permission}, acc ->
+      Enum.map_reduce(room_details_permissions, true, fn {_key, has_permission},
+                                                         acc ->
         {has_permission, acc and has_permission}
       end)
 
@@ -54,7 +59,11 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
     Enum.any?(permissions, fn p -> p.codename == permission end)
   end
 
-  def handle_event("validate", _params, %{assigns: %{has_all_room_permissions: false}} = socket) do
+  def handle_event(
+        "validate",
+        _params,
+        %{assigns: %{has_all_room_permissions: false}} = socket
+      ) do
     {:noreply,
      socket
      # FIXME: use gettext
@@ -67,14 +76,22 @@ defmodule LiveDjWeb.Components.Settings.RoomSettings do
      |> assign_changeset(socket.assigns.changeset, room_params)}
   end
 
-  def handle_event("submit_changeset", _, %{assigns: %{has_all_room_permissions: false}} = socket) do
+  def handle_event(
+        "submit_changeset",
+        _,
+        %{assigns: %{has_all_room_permissions: false}} = socket
+      ) do
     {:noreply,
      socket
      # FIXME: use gettext
      |> put_flash(:error, "You don't have enough permissions to edit the room.")}
   end
 
-  def handle_event("submit_changeset", _, %{assigns: %{has_all_room_permissions: true}} = socket) do
+  def handle_event(
+        "submit_changeset",
+        _,
+        %{assigns: %{has_all_room_permissions: true}} = socket
+      ) do
     %{assigns: %{changeset: changeset}} = socket
 
     case Repo.update(changeset) do

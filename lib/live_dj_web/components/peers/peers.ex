@@ -137,7 +137,12 @@ defmodule LiveDjWeb.Components.Peers do
     end
   end
 
-  def render_assign_privileges_button(false, _user_room_group, _peer_metas, _target) do
+  def render_assign_privileges_button(
+        false,
+        _user_room_group,
+        _peer_metas,
+        _target
+      ) do
     {:safe, ""}
   end
 

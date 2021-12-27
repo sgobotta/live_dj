@@ -50,7 +50,10 @@ defmodule LiveDjWeb.UserSettingsController do
     render(conn, "show_badges.html", badges: badges)
   end
 
-  def update_username(conn, %{"current_password" => password, "user" => user_params}) do
+  def update_username(conn, %{
+        "current_password" => password,
+        "user" => user_params
+      }) do
     user = conn.assigns.current_user
 
     case Accounts.apply_user_username(user, password, user_params) do
@@ -59,7 +62,10 @@ defmodule LiveDjWeb.UserSettingsController do
           {:ok, _user} ->
             conn
             |> put_flash(:info, "Username updated successfully.")
-            |> put_session(:user_return_to, Routes.user_settings_path(conn, :index))
+            |> put_session(
+              :user_return_to,
+              Routes.user_settings_path(conn, :index)
+            )
             |> redirect(to: Routes.user_settings_path(conn, :index))
 
           {:error, changeset} ->
@@ -71,7 +77,10 @@ defmodule LiveDjWeb.UserSettingsController do
     end
   end
 
-  def update_email(conn, %{"current_password" => password, "user" => user_params}) do
+  def update_email(conn, %{
+        "current_password" => password,
+        "user" => user_params
+      }) do
     user = conn.assigns.current_user
 
     case Accounts.apply_user_email(user, password, user_params) do
@@ -108,7 +117,10 @@ defmodule LiveDjWeb.UserSettingsController do
     end
   end
 
-  def update_password(conn, %{"current_password" => password, "user" => user_params}) do
+  def update_password(conn, %{
+        "current_password" => password,
+        "user" => user_params
+      }) do
     user = conn.assigns.current_user
 
     case Accounts.update_user_password(user, password, user_params) do

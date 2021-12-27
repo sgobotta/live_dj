@@ -58,7 +58,8 @@ defmodule LiveDjWeb.Room.NewLive do
         false ->
           options ++
             [
-              "Anyone can join, but it's managed by admin and collaborators": "managed"
+              "Anyone can join, but it's managed by admin and collaborators":
+                "managed"
             ]
       end
 
@@ -251,12 +252,18 @@ defmodule LiveDjWeb.Room.NewLive do
                   is_owner: true
                 })
 
-              rooms_length = length(Accounts.preload_user(current_user, [:rooms]).rooms)
+              rooms_length =
+                length(Accounts.preload_user(current_user, [:rooms]).rooms)
 
               socket =
-                case Stats.assoc_user_badge("rooms-creation", current_user.id, rooms_length) do
+                case Stats.assoc_user_badge(
+                       "rooms-creation",
+                       current_user.id,
+                       rooms_length
+                     ) do
                   {:ok, user_badge} ->
                     %{badge: badge} = user_badge
+
                     # FIXME: Not received. Maybe cause a redirection is performed.
                     push_event(
                       socket,

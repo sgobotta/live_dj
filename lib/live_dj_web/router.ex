@@ -76,10 +76,20 @@ defmodule LiveDjWeb.Router do
     get "/users/settings/account", UserSettingsController, :edit
     get "/users/settings/badges", UserSettingsController, :show_badges
     get "/users/settings/payments", UserSettingsController, :show_payments
-    put "/users/settings/update_username", UserSettingsController, :update_username
-    put "/users/settings/update_password", UserSettingsController, :update_password
+
+    put "/users/settings/update_username",
+        UserSettingsController,
+        :update_username
+
+    put "/users/settings/update_password",
+        UserSettingsController,
+        :update_password
+
     put "/users/settings/update_email", UserSettingsController, :update_email
-    get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    get "/users/settings/confirm_email/:token",
+        UserSettingsController,
+        :confirm_email
   end
 
   scope "/", LiveDjWeb do

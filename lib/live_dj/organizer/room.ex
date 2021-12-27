@@ -15,7 +15,8 @@ defmodule LiveDj.Organizer.Room do
 
     belongs_to :playlist, Playlist
 
-    many_to_many :users, LiveDj.Accounts.User, join_through: LiveDj.Organizer.UserRoom
+    many_to_many :users, LiveDj.Accounts.User,
+      join_through: LiveDj.Organizer.UserRoom
 
     timestamps()
   end

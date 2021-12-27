@@ -23,7 +23,13 @@ defmodule LiveDj.PaymentsTest do
       plan_id: "some updated plan_id",
       type: "some updated type"
     }
-    @invalid_attrs %{amount: nil, gateway: nil, name: nil, plan_id: nil, type: nil}
+    @invalid_attrs %{
+      amount: nil,
+      gateway: nil,
+      name: nil,
+      plan_id: nil,
+      type: nil
+    }
 
     def _plan_fixture(attrs \\ %{}) do
       {:ok, plan} =
@@ -73,7 +79,10 @@ defmodule LiveDj.PaymentsTest do
 
     test "update_plan/2 with invalid data returns error changeset" do
       plan = _plan_fixture()
-      assert {:error, %Ecto.Changeset{}} = Payments.update_plan(plan, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Payments.update_plan(plan, @invalid_attrs)
+
       assert plan == Payments.get_plan!(plan.id)
     end
 
@@ -124,7 +133,9 @@ defmodule LiveDj.PaymentsTest do
 
     test "create_order/1 with valid data creates an order", %{plan: plan} do
       assert {:ok, %Order{} = _order} =
-               Payments.create_order(Map.merge(@valid_attrs, %{plan_id: plan.id}))
+               Payments.create_order(
+                 Map.merge(@valid_attrs, %{plan_id: plan.id})
+               )
     end
 
     test "create_order/1 with invalid data returns error changeset" do
@@ -133,12 +144,19 @@ defmodule LiveDj.PaymentsTest do
 
     test "update_order/2 with valid data updates the order", %{plan: plan} do
       order = order_fixture(%{plan_id: plan.id})
-      assert {:ok, %Order{} = _order} = Payments.update_order(order, @update_attrs)
+
+      assert {:ok, %Order{} = _order} =
+               Payments.update_order(order, @update_attrs)
     end
 
-    test "update_order/2 with invalid data returns error changeset", %{plan: plan} do
+    test "update_order/2 with invalid data returns error changeset", %{
+      plan: plan
+    } do
       order = order_fixture(%{plan_id: plan.id})
-      assert {:error, %Ecto.Changeset{}} = Payments.update_order(order, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Payments.update_order(order, @invalid_attrs)
+
       assert order == Payments.get_order!(order.id)
     end
 

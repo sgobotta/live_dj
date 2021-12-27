@@ -21,7 +21,11 @@ defmodule LiveDjWeb.DonationsController do
           )
 
         false ->
-          put_flash(conn, :info, "Receive a donor badge by contributing to this project.")
+          put_flash(
+            conn,
+            :info,
+            "Receive a donor badge by contributing to this project."
+          )
       end
 
     render(
@@ -94,7 +98,9 @@ defmodule LiveDjWeb.DonationsController do
             # Log this error to manually fix up potential errors.
             # Payment has been made but it was not registered.
             Logger.error(
-              "An error occurred while creating an Order. Details: #{inspect(changeset)}."
+              "An error occurred while creating an Order. Details: #{
+                inspect(changeset)
+              }."
             )
 
             conn

@@ -59,12 +59,16 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert room_viewers == 3
     end
 
-    test "handle_info/2 :receive_current_player", %{conn: new_live_conn, rooms: rooms} do
+    test "handle_info/2 :receive_current_player", %{
+      conn: new_live_conn,
+      rooms: rooms
+    } do
       initial_player_state = Player.get_initial_state()
 
       {player_states, room_urls} =
         _rooms_data =
-        Enum.reduce(rooms, {[], []}, fn %{slug: slug, queue: queue}, {player_states, room_urls} ->
+        Enum.reduce(rooms, {[], []}, fn %{slug: slug, queue: queue},
+                                        {player_states, room_urls} ->
           %{video_id: video_id, previous: previous, next: next} =
             Enum.at(
               queue,
@@ -74,7 +78,12 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
           player_state =
             Player.update(
               initial_player_state,
-              %{state: "playing", video_id: video_id, previous_id: previous, next_id: next}
+              %{
+                state: "playing",
+                video_id: video_id,
+                previous_id: previous,
+                next_id: next
+              }
             )
 
           {player_states ++ [player_state], room_urls ++ ["/room/#{slug}"]}
@@ -86,7 +95,10 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
 
       # FIXME: properly assign player states
       for {_conn, {:ok, view, _html}, _url} <- show_live_conns do
-        send(view.pid, {:player_signal_playing, %{state: Enum.at(player_states, 0)}})
+        send(
+          view.pid,
+          {:player_signal_playing, %{state: Enum.at(player_states, 0)}}
+        )
       end
 
       _show_live_conns =
@@ -98,7 +110,8 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
 
       send(new_live_view.pid, :tick)
       # Creates a connection to the new live view page
-      %{assigns: %{public_rooms: public_rooms}} = _new_live_conn = get(new_live_conn, "/")
+      %{assigns: %{public_rooms: public_rooms}} =
+        _new_live_conn = get(new_live_conn, "/")
 
       assert length(public_rooms) == length(rooms)
 
@@ -155,7 +168,10 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       %{rooms: rooms}
     end
 
-    test "The rooms assigns contain a public rooms list", %{conn: conn, rooms: rooms} do
+    test "The rooms assigns contain a public rooms list", %{
+      conn: conn,
+      rooms: rooms
+    } do
       %{assigns: assigns} = _conn = get(conn, "/")
       %{public_rooms: public_rooms} = assigns
       public_rooms = for room <- public_rooms, do: Repo.preload(room, :playlist)
@@ -171,7 +187,10 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       Map.merge(register_and_log_in_user(%{conn: conn}), %{rooms: rooms})
     end
 
-    test "The rooms assigns contain a public rooms list", %{conn: conn, rooms: rooms} do
+    test "The rooms assigns contain a public rooms list", %{
+      conn: conn,
+      rooms: rooms
+    } do
       %{assigns: %{public_rooms: public_rooms}} = _conn = get(conn, "/")
       public_rooms = for room <- public_rooms, do: Repo.preload(room, :playlist)
 
@@ -217,9 +236,10 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert_redirected(view, expected_redirection_path_value)
     end
 
-    test "An error alert is returned if I choose managed as the management_type option", %{
-      conn: conn
-    } do
+    test "An error alert is returned if I choose managed as the management_type option",
+         %{
+           conn: conn
+         } do
       {:ok, view, _html} = live(conn, "/")
 
       management = %{management_type: "managed"}
@@ -238,7 +258,10 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       register_and_log_in_user(%{conn: conn})
     end
 
-    test "An error alert is returned if the title input is empty", %{conn: conn, user: user} do
+    test "An error alert is returned if the title input is empty", %{
+      conn: conn,
+      user: user
+    } do
       conn = conn |> log_in_user(user)
       {:ok, view, _html} = live(conn, "/")
 
@@ -249,7 +272,10 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert render_click(view, :save) =~ "can&#39;t be blank"
     end
 
-    test "An error alert is returned if the slug input is empty", %{conn: conn, user: user} do
+    test "An error alert is returned if the slug input is empty", %{
+      conn: conn,
+      user: user
+    } do
       conn = conn |> log_in_user(user)
       {:ok, view, _html} = live(conn, "/")
 
@@ -275,7 +301,9 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       |> render_change(%{room: Enum.into(management, @valid_room_attrs)})
 
       rendered_view = render_click(view, :save)
-      assert {:error, {:redirect, %{to: ^expected_redirection_path_value}}} = rendered_view
+
+      assert {:error, {:redirect, %{to: ^expected_redirection_path_value}}} =
+               rendered_view
 
       {:ok, conn} = rendered_view |> follow_redirect(conn)
       %{assigns: %{room: room}} = conn
@@ -287,10 +315,11 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       assert room.management_type == "managed"
     end
 
-    test "A redirection is performed and a user/room relationship is created", %{
-      conn: conn,
-      user: user
-    } do
+    test "A redirection is performed and a user/room relationship is created",
+         %{
+           conn: conn,
+           user: user
+         } do
       group_fixture(%{codename: "room-admin", name: "Room admin"})
       conn = conn |> log_in_user(user)
       {:ok, view, _html} = live(conn, "/")
@@ -302,7 +331,9 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
       |> render_change(%{room: @valid_room_attrs})
 
       rendered_view = render_click(view, :save)
-      assert {:error, {:redirect, %{to: ^expected_redirection_path_value}}} = rendered_view
+
+      assert {:error, {:redirect, %{to: ^expected_redirection_path_value}}} =
+               rendered_view
 
       {:ok, conn} = rendered_view |> follow_redirect(conn)
       %{assigns: %{room: room}} = conn

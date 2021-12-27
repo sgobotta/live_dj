@@ -18,7 +18,10 @@ defmodule LiveDjWeb.MountHelpers do
     case visitor do
       true ->
         socket
-        |> assign(:user_changeset, Accounts.change_user_registration(%User{}, current_user))
+        |> assign(
+          :user_changeset,
+          Accounts.change_user_registration(%User{}, current_user)
+        )
 
       false ->
         socket

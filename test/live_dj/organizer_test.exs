@@ -61,7 +61,10 @@ defmodule LiveDj.OrganizerTest do
 
     test "update_room/2 with invalid data returns error changeset" do
       room = room_fixture()
-      assert {:error, %Ecto.Changeset{}} = Organizer.update_room(room, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Organizer.update_room(room, @invalid_attrs)
+
       assert room == Organizer.get_room!(room.id)
     end
 
@@ -112,20 +115,44 @@ defmodule LiveDj.OrganizerTest do
       user_room
     end
 
-    test "list_users_rooms/0 returns all users_rooms", %{user: user, room: room, group: group} do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
+    test "list_users_rooms/0 returns all users_rooms", %{
+      user: user,
+      room: room,
+      group: group
+    } do
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
       assert Organizer.list_users_rooms() == [user_room]
     end
 
     test "list_users_rooms_by/2 returns all users_rooms matching the given user id and room ownership",
          %{user: user, room: room, group: group} do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
       another_room = OrganizerFixtures.room_fixture()
 
       another_user_room =
-        user_room_fixture(%{user_id: user.id, room_id: another_room.id, group_id: group.id})
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: another_room.id,
+          group_id: group.id
+        })
 
-      assert Organizer.list_users_rooms_by(user.id, true) == [user_room, another_user_room]
+      assert Organizer.list_users_rooms_by(user.id, true) == [
+               user_room,
+               another_user_room
+             ]
+
       assert Organizer.list_users_rooms_by(user.id, false) == []
     end
 
@@ -134,7 +161,13 @@ defmodule LiveDj.OrganizerTest do
       room: room,
       group: group
     } do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
       assert Organizer.get_user_room!(user_room.id) == user_room
     end
 
@@ -144,14 +177,21 @@ defmodule LiveDj.OrganizerTest do
       group: group
     } do
       valid_attrs =
-        Enum.into(@valid_attrs, %{user_id: user.id, room_id: room.id, group_id: group.id})
+        Enum.into(@valid_attrs, %{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
 
-      assert {:ok, %UserRoom{} = user_room} = Organizer.create_user_room(valid_attrs)
+      assert {:ok, %UserRoom{} = user_room} =
+               Organizer.create_user_room(valid_attrs)
+
       assert user_room.is_owner == true
     end
 
     test "create_user_room/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Organizer.create_user_room(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} =
+               Organizer.create_user_room(@invalid_attrs)
     end
 
     test "create_user_room/1 with no parameters returns error changeset" do
@@ -163,8 +203,16 @@ defmodule LiveDj.OrganizerTest do
       room: room,
       group: group
     } do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
-      assert {:ok, %UserRoom{} = user_room} = Organizer.update_user_room(user_room, @update_attrs)
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
+      assert {:ok, %UserRoom{} = user_room} =
+               Organizer.update_user_room(user_room, @update_attrs)
+
       assert user_room.is_owner == false
     end
 
@@ -173,15 +221,36 @@ defmodule LiveDj.OrganizerTest do
       room: room,
       group: group
     } do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
-      assert {:error, %Ecto.Changeset{}} = Organizer.update_user_room(user_room, @invalid_attrs)
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
+      assert {:error, %Ecto.Changeset{}} =
+               Organizer.update_user_room(user_room, @invalid_attrs)
+
       assert user_room == Organizer.get_user_room!(user_room.id)
     end
 
-    test "delete_user_room/1 deletes the user_room", %{user: user, room: room, group: group} do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
+    test "delete_user_room/1 deletes the user_room", %{
+      user: user,
+      room: room,
+      group: group
+    } do
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
       assert {:ok, %UserRoom{}} = Organizer.delete_user_room(user_room)
-      assert_raise Ecto.NoResultsError, fn -> Organizer.get_user_room!(user_room.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Organizer.get_user_room!(user_room.id)
+      end
     end
 
     test "change_user_room/1 returns a user_room changeset", %{
@@ -189,7 +258,13 @@ defmodule LiveDj.OrganizerTest do
       room: room,
       group: group
     } do
-      user_room = user_room_fixture(%{user_id: user.id, room_id: room.id, group_id: group.id})
+      user_room =
+        user_room_fixture(%{
+          user_id: user.id,
+          room_id: room.id,
+          group_id: group.id
+        })
+
       assert %Ecto.Changeset{} = Organizer.change_user_room(user_room)
     end
   end
