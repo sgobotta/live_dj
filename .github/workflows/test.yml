@@ -47,7 +47,8 @@ jobs:
     - name: Output Node.js version
       run: node --version
     - name: Install dependencies
-      run: |
+      run: >
+        MIX_ENV=test
         mix install
         mix setup
     - name: Run tests
