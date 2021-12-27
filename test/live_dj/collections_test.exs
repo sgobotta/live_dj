@@ -135,7 +135,7 @@ defmodule LiveDj.CollectionsTest do
 
     test "create_user_video/1 with valid data creates a user_video", %{user: user, video: video} do
       valid_attrs = Enum.into(@valid_attrs, %{user_id: user.id, video_id: video.id})
-      assert {:ok, %UserVideo{} = user_video} = Collections.create_user_video(valid_attrs)
+      assert {:ok, %UserVideo{}} = Collections.create_user_video(valid_attrs)
     end
 
     test "create_user_video/1 with invalid data returns error changeset" do
@@ -145,8 +145,7 @@ defmodule LiveDj.CollectionsTest do
     test "update_user_video/2 with valid data updates the user_video", %{user: user, video: video} do
       user_video = user_video_fixture(%{user_id: user.id, video_id: video.id})
 
-      assert {:ok, %UserVideo{} = user_video} =
-               Collections.update_user_video(user_video, @update_attrs)
+      assert {:ok, %UserVideo{}} = Collections.update_user_video(user_video, @update_attrs)
     end
 
     test "update_user_video/2 with invalid data returns error changeset", %{
@@ -200,7 +199,7 @@ defmodule LiveDj.CollectionsTest do
     end
 
     test "create_playlist/1 with valid data creates a playlist" do
-      assert {:ok, %Playlist{} = playlist} = Collections.create_playlist(@valid_attrs)
+      assert {:ok, %Playlist{}} = Collections.create_playlist(@valid_attrs)
     end
 
     # test "create_playlist/1 with invalid data returns error changeset" do
@@ -209,7 +208,7 @@ defmodule LiveDj.CollectionsTest do
 
     test "update_playlist/2 with valid data updates the playlist" do
       playlist = playlist_fixture()
-      assert {:ok, %Playlist{} = playlist} = Collections.update_playlist(playlist, @update_attrs)
+      assert {:ok, %Playlist{}} = Collections.update_playlist(playlist, @update_attrs)
     end
 
     # test "update_playlist/2 with invalid data returns error changeset" do
@@ -283,8 +282,7 @@ defmodule LiveDj.CollectionsTest do
       playlist_video_params = %{playlist_id: playlist.id, video_id: video.id}
       valid_attrs = Enum.into(@valid_attrs, playlist_video_params)
 
-      assert {:ok, %PlaylistVideo{} = playlist_video} =
-               Collections.create_playlist_video(valid_attrs)
+      assert {:ok, %PlaylistVideo{}} = Collections.create_playlist_video(valid_attrs)
     end
 
     test "create_playlist_video/1 with invalid data returns error changeset" do
@@ -301,7 +299,7 @@ defmodule LiveDj.CollectionsTest do
       video = CollectionsFixtures.video_fixture(video)
       update_attrs = Enum.into(@update_attrs, %{playlist_id: playlist.id, video_id: video.id})
 
-      assert {:ok, %PlaylistVideo{} = playlist_video} =
+      assert {:ok, %PlaylistVideo{}} =
                Collections.update_playlist_video(playlist_video, update_attrs)
     end
 
