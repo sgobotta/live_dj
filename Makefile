@@ -11,7 +11,7 @@ export NOFORMAT=\033[0m
 default: help
 
 #🔍 check: @ Runs all code verifications
-check: check.lint check.sobelow check.dialyzer test
+check: check.lint check.dialyzer test
 
 #🔍 check.dialyzer: @ Runs a static code analysis
 check.dialyzer:

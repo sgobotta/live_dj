@@ -1,4 +1,6 @@
 defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
+  @moduledoc false
+
   alias LiveDj.Organizer.PlaylistVideoQueueItem
 
   @enforce_keys [
@@ -46,6 +48,8 @@ defmodule LiveDj.Organizer.PlaylistVideoQueueItem do
 end
 
 defmodule LiveDj.Organizer.Queue do
+  @moduledoc false
+
   alias LiveDj.Collections
   alias LiveDj.Organizer.{PlaylistVideoQueueItem, QueueItem}
 

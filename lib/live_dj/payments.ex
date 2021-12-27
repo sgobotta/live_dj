@@ -119,7 +119,7 @@ defmodule LiveDj.Payments do
     Plan.changeset(plan, attrs)
   end
 
-  def get_mercadopago_plans() do
+  def get_mercadopago_plans do
     list_plans()
     |> Enum.filter(fn p -> p.gateway == "mercadopago" end)
     |> Enum.map(fn p ->
@@ -128,7 +128,7 @@ defmodule LiveDj.Payments do
     end)
   end
 
-  def get_paypal_plans() do
+  def get_paypal_plans do
     list_plans()
     |> Enum.filter(fn p -> p.gateway == "paypal" end)
     |> Enum.map(fn p ->

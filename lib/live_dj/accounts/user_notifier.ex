@@ -1,4 +1,6 @@
 defmodule LiveDj.Accounts.UserNotifier do
+  @moduledoc false
+
   alias LiveDj.{Email, Mailer}
 
   # For simplicity, this module simply logs messages to the terminal.

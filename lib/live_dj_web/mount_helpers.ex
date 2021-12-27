@@ -1,4 +1,6 @@
 defmodule LiveDjWeb.MountHelpers do
+  @moduledoc false
+
   import Phoenix.LiveView
 
   alias LiveDj.Accounts
@@ -38,7 +40,7 @@ defmodule LiveDjWeb.MountHelpers do
     |> assign_new(:visitor, fn -> visitor end)
   end
 
-  defp create_random_name() do
+  defp create_random_name do
     adjectives = [
       fn -> Faker.Superhero.descriptor() end,
       fn -> Faker.Pizza.cheese() end,

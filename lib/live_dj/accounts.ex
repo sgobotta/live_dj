@@ -5,7 +5,7 @@ defmodule LiveDj.Accounts do
 
   import Ecto.Query, warn: false
   alias LiveDj.Repo
-  alias LiveDj.Accounts.{User, UserToken, UserNotifier}
+  alias LiveDj.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
 

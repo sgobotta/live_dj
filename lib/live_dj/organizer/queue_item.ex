@@ -1,4 +1,6 @@
 defmodule LiveDj.Organizer.QueueItem do
+  @moduledoc false
+
   alias LiveDj.Organizer.QueueItem
 
   @derive Jason.Encoder

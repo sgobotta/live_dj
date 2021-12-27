@@ -17,6 +17,8 @@ defmodule LiveDjWeb.ChannelCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with channels
@@ -29,10 +31,10 @@ defmodule LiveDjWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(LiveDj.Repo)
+    :ok = Sandbox.checkout(LiveDj.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(LiveDj.Repo, {:shared, self()})
+      Sandbox.mode(LiveDj.Repo, {:shared, self()})
     end
 
     :ok

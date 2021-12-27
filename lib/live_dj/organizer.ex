@@ -6,8 +6,8 @@ defmodule LiveDj.Organizer do
   import Ecto.Query, warn: false
 
   alias Ecto.Changeset
-  alias LiveDj.Repo
   alias LiveDj.Organizer.Room
+  alias LiveDj.Repo
   alias LiveDjWeb.Presence
 
   def list_present(slug) do
@@ -27,7 +27,7 @@ defmodule LiveDj.Organizer do
     |> Enum.map(fn {k, _} -> k end)
   end
 
-  def subscribe() do
+  def subscribe do
     Phoenix.PubSub.subscribe(LiveDj.PubSub, "rooms")
   end
 

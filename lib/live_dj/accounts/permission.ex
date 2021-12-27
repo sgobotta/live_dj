@@ -1,4 +1,6 @@
 defmodule LiveDj.Accounts.Permission do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

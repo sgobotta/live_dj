@@ -1,8 +1,10 @@
 defmodule LiveDj.Accounts.User do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias LiveDj.Collections.{Video, PlaylistVideo, UserVideo}
+  alias LiveDj.Collections.{PlaylistVideo, UserVideo, Video}
   alias LiveDj.Organizer.{Room, UserRoom}
   alias LiveDj.Stats.{Badge, UserBadge}
 

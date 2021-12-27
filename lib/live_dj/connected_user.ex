@@ -1,4 +1,6 @@
 defmodule LiveDj.ConnectedUser do
+  @moduledoc false
+
   defstruct uuid: "", username: ""
 
   alias LiveDj.ConnectedUser

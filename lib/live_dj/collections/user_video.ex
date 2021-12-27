@@ -1,4 +1,6 @@
 defmodule LiveDj.Collections.UserVideo do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

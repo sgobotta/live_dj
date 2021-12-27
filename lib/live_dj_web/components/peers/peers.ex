@@ -5,11 +5,11 @@ defmodule LiveDjWeb.Components.Peers do
 
   use LiveDjWeb, :live_component
 
-  alias LiveDj.Repo
   alias LiveDj.Accounts
   alias LiveDj.Notifications
   alias LiveDj.Organizer
   alias LiveDj.Organizer.UserRoom
+  alias LiveDj.Repo
   alias LiveDj.Stats
 
   def update(assigns, socket) do

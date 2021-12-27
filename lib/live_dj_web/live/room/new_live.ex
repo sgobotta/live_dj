@@ -303,7 +303,7 @@ defmodule LiveDjWeb.Room.NewLive do
     |> assign(:changeset, Room.changeset(%Room{}, params))
   end
 
-  defp schedule_next_tick() do
+  defp schedule_next_tick do
     Process.send_after(self(), :tick, @tick_rate)
   end
 

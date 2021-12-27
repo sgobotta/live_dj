@@ -2,6 +2,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
   use LiveDjWeb.ConnCase, async: true
 
   alias LiveDj.Organizer
+  alias LiveDj.Organizer.Player
   alias LiveDj.Repo
 
   import LiveDj.AccountsFixtures
@@ -59,7 +60,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
     end
 
     test "handle_info/2 :receive_current_player", %{conn: new_live_conn, rooms: rooms} do
-      initial_player_state = LiveDj.Organizer.Player.get_initial_state()
+      initial_player_state = Player.get_initial_state()
 
       {player_states, room_urls} =
         _rooms_data =
@@ -71,7 +72,7 @@ defmodule LiveDjWeb.Live.Room.NewRoomTest do
             )
 
           player_state =
-            LiveDj.Organizer.Player.update(
+            Player.update(
               initial_player_state,
               %{state: "playing", video_id: video_id, previous_id: previous, next_id: next}
             )

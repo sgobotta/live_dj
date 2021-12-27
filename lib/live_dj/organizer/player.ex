@@ -1,4 +1,6 @@
 defmodule LiveDj.Organizer.Player do
+  @moduledoc false
+
   def get_initial_state do
     %{state: "stopped", video_id: "", time: 0, previous_id: "", next_id: ""}
   end
@@ -138,6 +140,8 @@ defmodule LiveDj.Organizer.Player do
 end
 
 defmodule LiveDj.Organizer.VolumeControls do
+  @moduledoc false
+
   def get_initial_state do
     %{
       volume_level: 100,

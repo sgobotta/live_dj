@@ -1,4 +1,8 @@
 defmodule LiveDjWeb.UserAuth do
+  @moduledoc """
+  Controller for user authentication.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 

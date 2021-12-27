@@ -33,41 +33,4 @@ defmodule LiveDjWeb.BadgesAssignmentsTest do
       assert Stats.has_badge_by(user.id, badge.id)
     end
   end
-
-  # FIXME: Commented out due to deadlock conflicts
-  #
-  # describe "Queue track badges assignment" do
-
-  #   alias LiveDj.OrganizerFixtures
-
-  #   setup(%{conn: conn}) do
-  #     badge = badge_fixture(%{checkpoint: 1, type: "queue-track-contribution"})
-  #     group = group_fixture(%{codename: "room-admin", name: "Room admin"})
-  #     group_fixture(%{codename: "anonymous-room-visitor", name: "Anonymous room visitor"})
-  #     group_fixture(%{codename: "registered-room-visitor", name: "Registered room visitor"})
-  #     %{
-  #       user_room: another_user_room_relationship,
-  #       user: another_user,
-  #       room: another_user_room
-  #     } = OrganizerFixtures.user_room_fixture(%{group_id: group.id})
-
-  #     Map.merge(
-  #       register_and_log_in_user(%{conn: conn}),
-  #       %{another_user: another_user, another_user_room: another_user_room, another_user_room_relationship: another_user_room_relationship, badge: badge}
-  #     )
-  #   end
-
-  #   test "As a User When I add a track to another user's room queue A 'Cooperative Dj' badge is received",
-  #     %{another_user: _another_user, another_user_room: another_user_room, another_user_room_relationship: _another_user_room_relationship, conn: conn, badge: _badge, user: _user}
-  #   do
-  #     {:ok, _view, _html} = live(conn, "/room/#{another_user_room.slug}")
-
-  #     # view
-  #     #   |> element(@search_video_form_id)
-  #     #   |> render_change(%{search_field: @valid_search_video_attrs})
-
-  #     #   rendered_view = render_click(view, :save)
-
-  #   end
-  # end
 end
