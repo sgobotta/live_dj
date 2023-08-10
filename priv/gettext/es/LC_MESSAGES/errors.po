@@ -1,0 +1,145 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/livedj/accounts/user.ex:50
+#: lib/livedj/accounts/user.ex:70
+#, elixir-autogen
+msgid "can't be blank"
+msgstr "no puede estar en blanco"
+
+#: lib/livedj/accounts/user.ex:117
+#: lib/livedj/accounts/user.ex:120
+#, elixir-autogen
+msgid "has already been taken"
+msgstr "este valor ya existe"
+
+msgid "is invalid"
+msgstr "no es válido"
+
+msgid "must be accepted"
+msgstr "debe ser aceptado"
+
+msgid "has invalid format"
+msgstr "el formato no es válido"
+
+msgid "has an invalid entry"
+msgstr "entrada no válida"
+
+msgid "is reserved"
+msgstr "reservado"
+
+msgid "does not match confirmation"
+msgstr "no coincide la confirmación"
+
+msgid "is still associated with this entry"
+msgstr "está asociado con la entrada"
+
+msgid "are still associated with this entry"
+msgstr "están asociados con la entrada"
+
+msgid "should have %{count} item(s)"
+msgid_plural "should have %{count} item(s)"
+msgstr[0] "debe tener %{count} item"
+msgstr[1] "debe tener %{count} items"
+
+msgid "should be %{count} character(s)"
+msgid_plural "should be %{count} character(s)"
+msgstr[0] "debe tener %{count} caracter"
+msgstr[1] "debe tener %{count} caracteres"
+
+msgid "should be %{count} byte(s)"
+msgid_plural "should be %{count} byte(s)"
+msgstr[0] "debe tener %{count} byte"
+msgstr[1] "debe tener %{count} bytes"
+
+msgid "should have at least %{count} item(s)"
+msgid_plural "should have at least %{count} item(s)"
+msgstr[0] "debe tener al menos %{count} item"
+msgstr[1] "debe tener al menos %{count} items"
+
+msgid "should be at least %{count} character(s)"
+msgid_plural "should be at least %{count} character(s)"
+msgstr[0] "debe tener al menos %{count} caracter"
+msgstr[1] "debe tener al menos %{count} caracteres"
+
+msgid "should be at least %{count} byte(s)"
+msgid_plural "should be at least %{count} byte(s)"
+msgstr[0] "debe tener al menos %{count} byte"
+msgstr[1] "debe tener al menos %{count} bytes"
+
+msgid "should have at most %{count} item(s)"
+msgid_plural "should have at most %{count} item(s)"
+msgstr[0] "debe tener como máximo %{count} item"
+msgstr[1] "debe tener como máximo %{count} items"
+
+msgid "should be at most %{count} character(s)"
+msgid_plural "should be at most %{count} character(s)"
+msgstr[0] "debe tener como máximo %{count} caracter"
+msgstr[1] "debe tener como máximo %{count} caracteres"
+
+msgid "should be at most %{count} byte(s)"
+msgid_plural "should be at most %{count} byte(s)"
+msgstr[0] "debe tener como máximo %{count} byte"
+msgstr[1] "debe tener como máximo %{count} bytes"
+
+msgid "must be less than %{number}"
+msgstr "debe ser menor a %{number}"
+
+msgid "must be greater than %{number}"
+msgstr "debe ser mayor que %{number}"
+
+msgid "must be less than or equal to %{number}"
+msgstr "debe ser menor o igual a %{number}"
+
+msgid "must be greater than or equal to %{number}"
+msgstr "debe ser mayor o igual a %{number}"
+
+msgid "must be equal to %{number}"
+msgstr "debe ser igual a %{number}"
+
+#: lib/livedj/accounts/user.ex:57
+#, elixir-autogen, elixir-format, fuzzy
+msgid "should have at most %{count} caracters(s)"
+msgid_plural "should have at most %{count} caracters(s)"
+msgstr[0] "debe tener como máximo %{count} caracter"
+msgstr[1] "debe tener como máximo %{count} caracteres"
+
+#: lib/livedj/accounts/user.ex:141
+#, elixir-autogen, elixir-format
+msgid "did not change"
+msgstr "no cambió"
+
+#: lib/livedj/accounts/user.ex:161
+#, elixir-autogen, elixir-format
+msgid "does not match password"
+msgstr "la contraseña no coincide"
+
+#: lib/livedj/accounts/user.ex:203
+#, elixir-autogen, elixir-format, fuzzy
+msgid "is not valid"
+msgstr "no es válido"
+
+#: lib/livedj/accounts/user.ex:52
+#, elixir-autogen, elixir-format
+msgid "must have the @ sign and no spaces"
+msgstr "debe contener @ y no debe contener espacios"
+
+#: lib/livedj/accounts/user.ex:102
+#, elixir-autogen, elixir-format, fuzzy
+msgid "should be at most %{count} byte(s)"
+msgstr "debe tener como máximo %{count} byte"
+
+#: lib/livedj/accounts/user.ex:76
+#, elixir-autogen, elixir-format
+msgid "should be between %{min} and %{max} characters"
+msgstr "debe contener entre %{min} y %{max} caracteres"

@@ -1,0 +1,159 @@
+name: Prod
+
+description: Assemble release
+
+inputs:
+  ELIXIR_VERSION:
+    description: Elixir version
+    required: true
+  GITHUB_TOKEN:
+    description: A github token
+    required: true
+  MIX_ENV:
+    default: prod
+    description: The current elixir env
+    required: false
+  OTP_VERSION:
+    description: OTP version
+    required: true
+  POSTGRES_HOSTNAME:
+    description: Postgres database hostname
+    required: true
+  POSTGRES_PASSWORD:
+    description: Postgres database password
+    required: true
+  POSTGRES_USER:
+    description: Postgres database user
+    required: true
+  STAGE:
+    default: local
+    description: The production environment
+    required: false
+  UPLOADS_PATH:
+    description: The uploads path
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    # Checkout code ------------------------------------------------------------
+    - name: Check out code
+      uses: actions/checkout@v2.3.4
+
+    # Setup Elixir/OTP versions ------------------------------------------------
+    - name: Set up Elixir
+      uses: erlef/setup-elixir@v1
+      with:
+        elixir-version: ${{ inputs.ELIXIR_VERSION }}
+        otp-version: ${{ inputs.OTP_VERSION }}
+
+    # Print version names ------------------------------------------------------
+    - name: Output Elixir version
+      shell: bash
+      run: elixir --version
+    - name: Output PostgreSQL version
+      shell: bash
+      run: psql --version
+    - name: Output Node.js version
+      shell: bash
+      run: node --version
+
+    # Set vars for the cache step ----------------------------------------------
+    - name: Set mix file hash
+      id: set_vars
+      shell: bash
+      run: |
+        mix_hash="${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}"
+        echo "::set-output name=mix_hash::$mix_hash"
+
+    # Restores PLT cache -------------------------------------------------------
+    - name: Cache files
+      id: prod-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          deps
+          _build
+        key: ${{ runner.os }}-prod-mix-${{ steps.set_vars.outputs.mix_hash }}
+        restore-keys: |
+          ${{ runner.os }}-prod-mix-
+
+    # Get and build all the deps -----------------------------------------------
+    - name: Install Dependencies
+      shell: bash
+      run: |
+        mix do deps.get, deps.compile, compile
+      env:
+        MIX_ENV: ${{ inputs.MIX_ENV }}
+
+    # Setup the Phoenix Client -------------------------------------------------
+    - name: Setup web client
+      shell: bash
+      run: |
+        mix assets.install
+        mix assets.deploy
+      env:
+        MIX_ENV: ${{ inputs.MIX_ENV }}
+
+    # Create Release -----------------------------------------------------------
+    - name: Assemble release
+      shell: bash
+      run: |
+        mkdir -p /opt/release
+        mix release --overwrite
+        mv _build/${MIX_ENV}/rel/livedj /opt/release
+        mv devops/builder/entrypoint.sh /opt/release/livedj/entrypoint.sh
+        chmod +x /opt/release/livedj/entrypoint.sh
+      env:
+        MIX_ENV: ${{ inputs.MIX_ENV }}
+        STAGE: ${{ inputs.STAGE }}
+        UPLOADS_PATH: ${{ env.UPLOADS_PATH }}
+
+    # Run migrations -----------------------------------------------------------
+    - name: Run migrations
+      working-directory: /opt/release/livedj
+      shell: bash
+      run: |
+        ./entrypoint.sh setup_db
+      env:
+        # Application env
+        APP_HOST: 0.0.0.0
+        SECRET_KEY_BASE: some-secret-key
+        STAGE: local
+        # Postgres env
+        DB_DATABASE: livedj_local
+        DB_HOSTNAME: ${{ inputs.POSTGRES_HOSTNAME }}
+        DB_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
+        DB_USERNAME: ${{ inputs.POSTGRES_USER }}
+        # Sendgrid env
+        LIVEDJ_FROM_EMAIL: test@email.com
+        SENDGRID_API_KEY: some-sendgrid-api-key
+
+    # Test release -------------------------------------------------------------
+    - name: Test release
+      working-directory: /opt/release/livedj
+      shell: bash
+      run: |
+        echo "::set-output name=hello_app::$(./entrypoint.sh hello)"
+      id: test-application
+      env:
+        # Application env
+        APP_HOST: 0.0.0.0
+        SECRET_KEY_BASE: some-secret-key
+        STAGE: local
+        # Postgres env
+        DB_DATABASE: livedj_local
+        DB_HOSTNAME: ${{ inputs.POSTGRES_HOSTNAME }}
+        DB_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
+        DB_USERNAME: ${{ inputs.POSTGRES_USER }}
+        # Sendgrid env
+        LIVEDJ_FROM_EMAIL: test@email.com
+        SENDGRID_API_KEY: some-sendgrid-api-key
+
+    # Assert application output ------------------------------------------------
+    - name: Assert output
+      uses: nick-fields/assert-action@v1
+      with:
+        expected: world
+        actual: ${{ steps.test-application.outputs.hello_app }}
+        comparison: exact

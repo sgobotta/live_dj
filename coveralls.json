@@ -1,0 +1,32 @@
+{
+  "default_stop_words": [
+    "apply",
+    "defdata",
+    "defimpl",
+    "defmodule",
+    "defrecord",
+    "defstruct",
+    "defsum",
+    "def.+(.+\/\/.+).+do",
+    "live_dashboard",
+    "use"
+  ],
+
+  "custom_stop_words": [
+    "Logger."
+  ],
+
+  "skip_files": [
+    "priv/",
+    "test/",
+    "lib/livedj_web/telemetry.ex"
+  ],
+
+  "coverage_options": {
+    "minimum_coverage": 90,
+    "output_dir": "coverage/report",
+    "template_path": "coverage/templates/html/htmlcov/",
+    "treat_no_relevant_lines_as_covered": true
+  }
+
+}

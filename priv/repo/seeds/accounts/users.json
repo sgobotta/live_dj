@@ -1,0 +1,50 @@
+[
+  {
+    "id": "b41fbc4f-e55c-4cf1-afbd-250e266f5898",
+    "email": "demo0@livedj",
+    "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
+    "confirmed_at": "2020-11-15 22:14:57",
+    "inserted_at": "2020-11-15 22:13:29",
+    "updated_at": "2020-11-17 14:15:00"
+  },
+  {
+    "id": "f9b2bf41-b4f0-4f85-9914-88ac4830f39e",
+    "email": "demo1@livedj",
+    "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
+    "confirmed_at": "NULL",
+    "inserted_at": "2020-11-17 14:15:57",
+    "updated_at": "2020-11-17 14:15:57"
+  },
+  {
+    "id": "5e62c203-9fff-4d38-b970-d804d9ad21d4",
+    "email": "demo2@livedj",
+    "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
+    "confirmed_at": "NULL",
+    "inserted_at": "2020-11-18 21:08:20",
+    "updated_at": "2020-11-18 21:08:20"
+  },
+  {
+    "id": "fe6feb42-ab44-4ae8-bfd6-79e2d300f96a",
+    "email": "demo3@livedj",
+    "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
+    "confirmed_at": "NULL",
+    "inserted_at": "2020-11-18 21:10:28",
+    "updated_at": "2020-11-18 21:10:28"
+  },
+  {
+    "id": "9134d4d7-c71d-4042-9a26-54921a773ace",
+    "email": "demo4@livedj",
+    "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
+    "confirmed_at": "NULL",
+    "inserted_at": "2020-11-27 13:52:01",
+    "updated_at": "2020-11-27 13:52:01"
+  },
+  {
+    "id": "58ea33d9-9f84-48e7-9cbc-e4eb007409a7",
+    "email": "demo5@livedj",
+    "hashed_password": "$2b$12$Eivdo.1i26tBvOua/V606ejDMh5O6Uq.1.k6D9BT.edfPA3Gt.ajW",
+    "confirmed_at": "NULL",
+    "inserted_at": "2020-11-30 21:03:13",
+    "updated_at": "2020-11-30 21:03:13"
+  }
+]

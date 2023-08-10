@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  # This action is triggered on any branch that opens a pull request.
+  pull_request:
+    branches:
+      - "*"
+    # This action is not triggered when markdown files are modified.
+    paths-ignore:
+      - '**.md'
+
+env:
+  # Permissions env
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # General env
+  ELIXIR_VERSION: 1.14
+  OTP_VERSION: 25.2
+  # Captcha
+  RECAPTCHA_PUBLIC_KEY: ${{ secrets.RECAPTCHA_PUBLIC_KEY }}
+  RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
+  # Postgres env
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_HOSTNAME: localhost
+  # Misc env
+  UPLOADS_PATH: "priv/static/uploads/"
+
+jobs:
+  dev:
+    runs-on: ubuntu-22.04
+    services:
+      db:
+        image: postgres
+        ports: ['5432:5432']
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Run Development Checks
+        uses: ./.github/actions/dev
+        with:
+          ELIXIR_VERSION: ${{ env.ELIXIR_VERSION }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          MIX_ENV: dev
+          OTP_VERSION: ${{ env.OTP_VERSION }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          UPLOADS_PATH: priv/static/uploads/
+
+  test:
+    runs-on: ubuntu-22.04
+    services:
+      db:
+        image: postgres
+        ports: ['5432:5432']
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Run Unit Tests
+        uses: ./.github/actions/test
+        with:
+          ELIXIR_VERSION: ${{ env.ELIXIR_VERSION }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          MIX_ENV: test
+          OTP_VERSION: ${{ env.OTP_VERSION }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          UPLOADS_PATH: priv/static/uploads/
+
+  prod:
+    runs-on: ubuntu-22.04
+    services:
+      db:
+        image: postgres
+        ports: ['5432:5432']
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Assemble release
+        uses: ./.github/actions/prod
+        with:
+          ELIXIR_VERSION: ${{ env.ELIXIR_VERSION }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          MIX_ENV: prod
+          OTP_VERSION: ${{ env.OTP_VERSION }}
+          POSTGRES_HOSTNAME: ${{ env.POSTGRES_HOSTNAME }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          UPLOADS_PATH: priv/static/uploads/

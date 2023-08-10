@@ -1,0 +1,112 @@
+name: Test
+
+description: Run unit tests
+
+inputs:
+  ELIXIR_VERSION:
+    description: Elixir version
+    required: true
+  GITHUB_TOKEN:
+    description: A github token
+    required: true
+  MIX_ENV:
+    default: test
+    description: The current elixir env
+    required: false
+  OTP_VERSION:
+    description: OTP version
+    required: true
+  POSTGRES_PASSWORD:
+    description: Postgres database password
+    required: true
+  POSTGRES_USER:
+    description: Postgres database user
+    required: true
+  UPLOADS_PATH:
+    description: The uploads path
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    # Checkout code ------------------------------------------------------------
+    - name: Check out code
+      uses: actions/checkout@v2.3.4
+
+    # Setup Elixir/OTP versions ------------------------------------------------
+    - name: Set up Elixir
+      uses: erlef/setup-elixir@v1
+      with:
+        elixir-version: ${{ inputs.ELIXIR_VERSION }}
+        otp-version: ${{ inputs.OTP_VERSION }}
+
+    # Print version names ------------------------------------------------------
+    - name: Output Elixir version
+      shell: bash
+      run: elixir --version
+    - name: Output PostgreSQL version
+      shell: bash
+      run: psql --version
+    - name: Output Node.js version
+      shell: bash
+      run: node --version
+
+    # Set vars for the cache step ----------------------------------------------
+    - name: Set mix file hash
+      id: set_vars
+      shell: bash
+      run: |
+        mix_hash="${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}"
+        echo "::set-output name=mix_hash::$mix_hash"
+
+    # Restores PLT cache -------------------------------------------------------
+    - name: Cache files
+      id: test-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          deps
+          _build
+        key: ${{ runner.os }}-test-mix-${{ steps.set_vars.outputs.mix_hash }}
+        restore-keys: |
+          ${{ runner.os }}-test-mix-
+
+    # Get and build all the deps -----------------------------------------------
+    - name: Install Dependencies
+      shell: bash
+      run: |
+        mix do deps.get, deps.compile, compile
+      env:
+        MIX_ENV: ${{ inputs.MIX_ENV }}
+
+    # Setup Postgres -----------------------------------------------------------
+    - name: Setup Database
+      shell: bash
+      run: |
+        mix reset.ecto
+      env:
+        MIX_ENV: ${{ inputs.MIX_ENV }}
+
+    # Setup the Phoenix Client -------------------------------------------------
+    - name: Setup web client
+      shell: bash
+      run: |
+        mix assets.install
+        mix assets.deploy
+
+    # Run tests ----------------------------------------------------------------
+    - name: Run tests with coverage
+      shell: bash
+      env:
+        # Permissions env
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        # General env
+        MIX_ENV: ${{ inputs.MIX_ENV }}
+        # Postgres env
+        POSTGRES_USER: ${{ inputs.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
+        # Misc env
+        UPLOADS_PATH: ${{ inputs.UPLOADS_PATH }}
+      run: >
+        GITHUB_TOKEN=${GITHUB_TOKEN}
+        mix coveralls.github -u
