@@ -22,8 +22,12 @@ defmodule LivedjWeb.Router do
 
     get "/", PageController, :home
 
-    scope "/sessions", Sessions do
-      live "/rooms/:id", RoomLive.Show, :show
+    live_session :sessions,
+      root_layout: {LivedjWeb.Layouts, :root_session},
+      layout: {LivedjWeb.Layouts, :session} do
+      scope "/sessions", Sessions do
+        live "/rooms/:id", RoomLive.Show, :show
+      end
     end
 
     scope "/admin/sessions", Admin.Sessions do
