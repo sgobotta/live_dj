@@ -21,6 +21,17 @@ defmodule LivedjWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    scope "/admin/sessions", Admin.Sessions do
+      pipe_through [:require_authenticated_user]
+
+      live "/rooms", RoomLive.Index, :index
+      live "/rooms/new", RoomLive.Index, :new
+      live "/rooms/:id/edit", RoomLive.Index, :edit
+
+      live "/rooms/:id", RoomLive.Show, :show
+      live "/rooms/:id/show/edit", RoomLive.Show, :edit
+    end
   end
 
   # Other scopes may use custom stacks.
