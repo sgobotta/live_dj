@@ -22,6 +22,12 @@ if System.get_env("PHX_SERVER") do
   config :livedj, LivedjWeb.Endpoint, server: true
 end
 
+config :livedj, stage: System.fetch_env!("STAGE")
+
+config :livedj, Redis,
+  redis_host: System.fetch_env!("REDIS_HOST"),
+  redis_pass: System.fetch_env!("REDIS_PASS")
+
 if config_env() == :prod do
   maybe_ipv6 =
     if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
