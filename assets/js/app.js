@@ -26,7 +26,7 @@ import topbar from "../vendor/topbar"
 const Hooks = {}
 
 Hooks.Sortable = {
-  mounted(){
+  mounted() {
     let sorter = new Sortable(this.el, {
       animation: 150,
       delay: 100,
@@ -35,8 +35,23 @@ Hooks.Sortable = {
       ghostClass: "drag-ghost",
       onEnd: e => {
         const params = {new: e.newIndex, old: e.oldIndex, ...e.item.dataset}
-        this.pushEventTo(this.el, "reposition", params)
+        this.pushEventTo(this.el, "reposition_end", params)
+      },
+      onStart: e => {
+        this.pushEventTo(this.el, "reposition_start")
       }
+    })
+
+    this.handleEvent('disable-drag', () => {
+      console.log("DISABLE!")
+      console.log(this)
+      console.log(sorter.option("disabled", true))
+    })
+
+    this.handleEvent('enable-drag', () => {
+      console.log("ENABLE!")
+      console.log(this)
+      console.log(sorter.option("disabled", false))
     })
   }
 }

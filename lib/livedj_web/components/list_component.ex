@@ -6,35 +6,17 @@ defmodule LivedjWeb.ListComponent do
     ~H"""
     <div class="bg-gray-100 py-4 rounded-lg">
       <div class="space-y-5 mx-auto max-w-7xl px-4 space-y-4">
-        <.header>
-          <%= @list_name %>
-          <.simple_form
-            for={@form}
-            phx-change="validate"
-            phx-submit="save"
-            phx-target={@myself}
-            class="flex"
-          >
-            <div class="flex flex-row">
-              <.input field={@form[:name]} type="text" />
-            </div>
-            <:actions>
-              <.button class="align-middle ml-2">
-                <.icon name="hero-plus" />
-              </.button>
-            </:actions>
-          </.simple_form>
-        </.header>
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={item <- @list}
             id={"#{@id}-#{item.id}"}
             data-id={item.id}
-            class="
-              bg-white my-2 rounded-xl border-gray-300 border-2
+            class={"
+              #{if @state == :locked, do: "bg-gray-50 border-dashed", else: "bg-white"}
+              my-2 rounded-xl border-gray-300 border-2
               drag-item:focus-within:ring-0 drag-item:focus-within:ring-offset-0
               drag-ghost:bg-zinc-300 drag-ghost:border-0 drag-ghost:ring-0
-            "
+            "}
           >
             <div class="flex drag-ghost:opacity-0 gap-y-2">
               <button type="button" class="w-10">
@@ -64,12 +46,32 @@ defmodule LivedjWeb.ListComponent do
   end
 
   def update(assigns, socket) do
-    {:ok, assign(socket, assigns)}
+    {:ok,
+     socket
+     |> assign(assigns)}
   end
 
-  def handle_event("reposition", params, socket) do
-    # Put your logic here to deal with the changes to the list order
-    # and persist the data
+  def handle_event("reposition_start", params, socket) do
+    :ok =
+      LivedjWeb.Endpoint.broadcast_from(
+        self(),
+        socket.assigns.topic,
+        "dragging_locked",
+        %{}
+      )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("reposition_end", params, socket) do
+    :ok =
+      LivedjWeb.Endpoint.broadcast_from(
+        self(),
+        socket.assigns.topic,
+        "dragging_unlocked",
+        %{}
+      )
+
     {:noreply, socket}
   end
 end
