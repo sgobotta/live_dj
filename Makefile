@@ -139,14 +139,14 @@ reset.ecto.dev: SHELL:=/bin/bash
 reset.ecto.dev: MIX_ENV=dev
 reset.ecto.dev:
 	@echo "🧹 Cleaning db for dev env..."
-	@mix reset.ecto
+	@mix ecto.reset
 
 #💣 reset.ecto.test: @ Resets database for test env
 reset.ecto.test: SHELL:=/bin/bash
 reset.ecto.test: MIX_ENV=test
 reset.ecto.test:
 	@echo "🧹 Cleaning db for test env..."
-	@mix reset.ecto
+	@mix ecto.reset
 
 #📦 setup: @ Installs dependencies and set up database for dev and test envs
 setup: SHELL:=/bin/bash
