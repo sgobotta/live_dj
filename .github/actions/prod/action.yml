@@ -117,7 +117,7 @@ runs:
         ./entrypoint.sh setup_db
       env:
         # Application env
-        APP_HOST: 0.0.0.0
+        PHX_HOST: 0.0.0.0
         SECRET_KEY_BASE: some-secret-key
         STAGE: local
         # Postgres env
@@ -138,7 +138,7 @@ runs:
       id: test-application
       env:
         # Application env
-        APP_HOST: 0.0.0.0
+        PHX_HOST: 0.0.0.0
         SECRET_KEY_BASE: some-secret-key
         STAGE: local
         # Postgres env
