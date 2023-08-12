@@ -20,14 +20,34 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {LiveSocket} from "phoenix_live_view"
 import {Socket} from "phoenix"
+import Sortable from "../vendor/sortable"
 import topbar from "../vendor/topbar"
+
+const Hooks = {}
+
+Hooks.Sortable = {
+  mounted(){
+    let sorter = new Sortable(this.el, {
+      animation: 150,
+      delay: 100,
+      dragClass: "drag-item",
+      forceFallback: true,
+      ghostClass: "drag-ghost",
+      onEnd: e => {
+        const params = {new: e.newIndex, old: e.oldIndex, ...e.item.dataset}
+        this.pushEventTo(this.el, "reposition", params)
+      }
+    })
+  }
+}
 
 const csrfToken =
   document.querySelector("meta[name='csrf-token']")
   .getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
-  params: {_csrf_token: csrfToken
-}})
+  hooks: Hooks,
+  params: {_csrf_token: csrfToken }
+})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})

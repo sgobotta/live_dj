@@ -1,3 +1,13 @@
 <div>
   Room: <%= @room.name %>
+
+  <div id="lists" class="grid sm:grid-cols-1 md:grid-cols-3">
+    <.live_component
+      id="1"
+      module={LivedjWeb.ListComponent}
+      list={@shopping_list}
+      form={@form}
+      list_name="Shopping list"
+    />
+  </div>
 </div>

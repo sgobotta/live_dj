@@ -7,7 +7,15 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    list = [
+      %{name: "Bread", id: 1, position: 1, status: :in_progress},
+      %{name: "Butter", id: 2, position: 2, status: :in_progress},
+      %{name: "Milk", id: 3, position: 3, status: :in_progress},
+      %{name: "Bananas", id: 4, position: 4, status: :in_progress},
+      %{name: "Eggs", id: 5, position: 5, status: :in_progress}
+    ]
+
+    {:ok, assign(socket, shopping_list: list, form: to_form(%{}))}
   end
 
   @impl true
