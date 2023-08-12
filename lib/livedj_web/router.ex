@@ -22,6 +22,10 @@ defmodule LivedjWeb.Router do
 
     get "/", PageController, :home
 
+    scope "/sessions", Sessions do
+      live "/rooms/:id", RoomLive.Show, :show
+    end
+
     scope "/admin/sessions", Admin.Sessions do
       pipe_through [:require_authenticated_user]
 
