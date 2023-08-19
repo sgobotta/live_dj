@@ -3,10 +3,22 @@ defmodule Redis do
   Wrapper module for the Redix dep.
   """
 
-  def child_spec(_opts),
-    do: Redix.child_spec(host: host!(), name: :redix, password: password!())
+  defdelegate child_spec(_opts), to: Redis.Application
 
-  defp host!, do: Keyword.fetch!(env(), :redis_host)
-  defp password!, do: Keyword.fetch!(env(), :redis_pass)
-  defp env, do: Application.fetch_env!(:livedj, Redis)
+  def set(key, value) do
+    Redix.command(:redix, ["SET", key, value])
+    |> parse_response()
+  end
+
+  def get(key) do
+    Redix.command(:redix, ["GET", key])
+    |> parse_response
+  end
+
+  def zadd(key, score, member) do
+    Redix.command(:redix, ["ZADD", key, score, member])
+    |> parse_response()
+  end
+
+  defp parse_response({:ok, r}), do: r
 end
