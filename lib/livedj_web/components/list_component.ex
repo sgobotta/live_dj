@@ -22,13 +22,10 @@ defmodule LivedjWeb.ListComponent do
               <button type="button" class="w-10">
                 <.icon
                   name="hero-check-circle"
-                  class={[
-                    "w-7 h-7",
-                    if(item.status == :completed,
-                      do: "bg-green-600",
-                      else: "bg-gray-300"
-                    )
-                  ]}
+                  class={"
+                    w-7 h-7
+                    #{if item.status == :completed, do: "bg-green-600", else: "bg-gray-300"}
+                  "}
                 />
               </button>
               <div class="flex-auto block text-sm leading-6 text-zinc-900">
@@ -51,7 +48,7 @@ defmodule LivedjWeb.ListComponent do
      |> assign(assigns)}
   end
 
-  def handle_event("reposition_start", params, socket) do
+  def handle_event("reposition_start", _params, socket) do
     :ok =
       LivedjWeb.Endpoint.broadcast_from(
         self(),
@@ -63,7 +60,7 @@ defmodule LivedjWeb.ListComponent do
     {:noreply, socket}
   end
 
-  def handle_event("reposition_end", params, socket) do
+  def handle_event("reposition_end", _params, socket) do
     :ok =
       LivedjWeb.Endpoint.broadcast_from(
         self(),
