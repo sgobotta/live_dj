@@ -76,8 +76,8 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   end
 
   @doc """
-  Given a cart id, returns `nil` or a tuple where the first component is a
-  `#{PlaylistServer}` pid and the second component the cart server state.
+  Given a room id, returns `nil` or a tuple where the first component is a
+  `#{PlaylistServer}` pid and the second component the playlist server state.
   """
   @spec get_child(binary()) :: {pid(), map()} | nil
   def get_child(child_id) do
@@ -87,6 +87,21 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
 
       [{_pid, _state} = child] ->
         child
+    end
+  end
+
+  @doc """
+  Given a room id, returns `nil` or a tuple where the first component is a
+  `#{PlaylistServer}` pid and the second component the playlist server state.
+  """
+  @spec get_child_pid!(binary()) :: pid()
+  def get_child_pid!(child_id) do
+    case get_child(child_id) do
+      nil ->
+        raise "The child does not exist"
+
+      {pid, _state} when is_pid(pid) ->
+        pid
     end
   end
 

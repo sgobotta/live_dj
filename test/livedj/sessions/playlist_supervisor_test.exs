@@ -26,7 +26,7 @@ defmodule Livedj.Sessions.PlaylistSupervisorTest do
       pid: pid,
       room: %Room{id: room_id}
     } do
-      {:ok, pid} = start_child(pid, id: room_id)
+      {:ok, pid} = do_start_child(pid, id: room_id)
 
       assert valid_pid?(pid)
     end
@@ -35,18 +35,18 @@ defmodule Livedj.Sessions.PlaylistSupervisorTest do
       pid: pid,
       room: %Room{id: room_id}
     } do
-      {:ok, child_pid} = start_child(pid, id: room_id)
+      {:ok, child_pid} = do_start_child(pid, id: room_id)
 
-      assert Enum.member?(list_children(pid), child_pid)
+      assert Enum.member?(do_list_children(pid), child_pid)
     end
 
     test "get_child/1 returns a pid and state", %{
       pid: pid,
       room: %Room{id: room_id}
     } do
-      {:ok, child_pid} = start_child(pid, id: room_id)
+      {:ok, child_pid} = do_start_child(pid, id: room_id)
 
-      {^child_pid, %{id: ^room_id} = state} = get_child(room_id)
+      {^child_pid, %{id: ^room_id} = state} = do_get_child(room_id)
 
       valid_pid?(child_pid)
       assert is_map(state)
@@ -56,22 +56,22 @@ defmodule Livedj.Sessions.PlaylistSupervisorTest do
       pid: pid,
       room: %Room{id: room_id}
     } do
-      {:ok, child_pid} = start_child(pid, id: room_id)
+      {:ok, child_pid} = do_start_child(pid, id: room_id)
 
       assert valid_pid?(child_pid)
 
-      :ok = terminate_child(pid, child_pid)
+      :ok = do_terminate_child(pid, child_pid)
       refute valid_pid?(child_pid)
     end
 
-    defp start_child(pid, args), do: @subject.start_child(pid, args)
+    defp do_start_child(pid, args), do: @subject.start_child(pid, args)
 
-    defp list_children(pid), do: @subject.list_children(pid)
+    defp do_list_children(pid), do: @subject.list_children(pid)
 
-    defp get_child(cart_id),
+    defp do_get_child(cart_id),
       do: @subject.get_child(cart_id)
 
-    defp terminate_child(pid, child_pid),
+    defp do_terminate_child(pid, child_pid),
       do: @subject.terminate_child(pid, child_pid)
   end
 

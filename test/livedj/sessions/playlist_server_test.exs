@@ -28,11 +28,21 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       response = do_unlock(pid)
       assert response == :ok
     end
+
+    test "join/2 successfully adds a member and returns {:ok, :joined}", %{
+      pid: pid
+    } do
+      response = do_join(pid)
+
+      assert response == {:ok, :joined}
+    end
+
+    defp do_lock(pid), do: PlaylistServer.lock(pid)
+
+    defp do_unlock(pid), do: PlaylistServer.unlock(pid)
+
+    defp do_join(pid), do: PlaylistServer.join(pid)
   end
-
-  defp do_lock(pid), do: PlaylistServer.lock(pid)
-
-  defp do_unlock(pid), do: PlaylistServer.unlock(pid)
 
   describe "server implementation" do
     setup do
@@ -44,17 +54,26 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       %{state: state}
     end
 
-    test "handle_call/3 :do_lock replies with a locked status", %{state: state} do
+    test "handle_call/3 :lock replies with a locked status", %{state: state} do
       response = PlaylistServer.handle_call(:lock, self(), state)
 
-      {:reply, {:ok, :locked}, %{} = _state} = response
+      {:reply, {:ok, :locked}, ^state} = response
     end
 
-    test "handle_cast/2 :do_unlock unlocks a playlist and does not reply",
+    test "handle_call/3 :join replies with a locked status", %{state: state} do
+      pid = self()
+      response = PlaylistServer.handle_call(:join, {pid, nil}, state)
+
+      {:reply, {:ok, :joined}, state} = response
+
+      assert Enum.member?(Map.values(state.members), pid)
+    end
+
+    test "handle_cast/2 :unlock unlocks a playlist and does not reply",
          %{state: state} do
       response = PlaylistServer.handle_cast(:unlock, state)
 
-      {:noreply, %{} = _state} = response
+      {:noreply, ^state} = response
     end
   end
 end

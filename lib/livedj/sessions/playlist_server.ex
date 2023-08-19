@@ -10,6 +10,7 @@ defmodule Livedj.Sessions.PlaylistServer do
 
   @type state :: %{
           :id => binary(),
+          :members => map(),
           :timeout => pos_integer(),
           :timer_ref => reference() | nil
         }
@@ -25,6 +26,14 @@ defmodule Livedj.Sessions.PlaylistServer do
   @spec start_link(keyword()) :: {:ok, pid()}
   def start_link(init_args) do
     GenServer.start_link(__MODULE__, init_args)
+  end
+
+  @doc """
+  Given a pid, joins the current server
+  """
+  @spec join(pid()) :: {:ok, :joined}
+  def join(pid) do
+    GenServer.call(pid, :join)
   end
 
   @doc """
@@ -51,6 +60,7 @@ defmodule Livedj.Sessions.PlaylistServer do
   def initial_state(opts) do
     %{
       id: Keyword.fetch!(opts, :id),
+      members: Map.new(),
       timeout: Keyword.get(opts, :timeout, @timeout),
       timer_ref: nil
     }
@@ -76,6 +86,22 @@ defmodule Livedj.Sessions.PlaylistServer do
     :ok = on_start.(state)
 
     {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_call(:join, {pid, _ref}, state) do
+    ref = Process.monitor(pid)
+
+    Logger.debug(
+      "#{__MODULE__} :: User with pid: #{inspect(pid)} just joined the server."
+    )
+
+    state = %{
+      state
+      | members: Map.put(state.members, ref, pid)
+    }
+
+    {:reply, {:ok, :joined}, state}
   end
 
   @impl GenServer
