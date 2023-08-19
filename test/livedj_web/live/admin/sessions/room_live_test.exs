@@ -1,8 +1,10 @@
 defmodule LivedjWeb.Admin.Sessions.RoomLiveTest do
+  @moduledoc false
   use LivedjWeb.ConnCase
 
   import Phoenix.LiveViewTest
   import Livedj.SessionsFixtures
+  import LivedjWeb.Gettext
 
   @create_attrs %{name: "some name", slug: "some slug"}
   @update_attrs %{name: "some updated name", slug: "some updated slug"}
@@ -14,7 +16,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLiveTest do
   end
 
   describe "Index" do
-    setup [:create_room]
+    setup [:register_and_log_in_user, :create_room]
 
     test "lists all rooms", %{conn: conn, room: room} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/sessions/rooms")
@@ -33,7 +35,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLiveTest do
 
       assert index_live
              |> form("#room-form", room: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> render_change() =~ dgettext("errors", "can't be blank")
 
       assert index_live
              |> form("#room-form", room: @create_attrs)
@@ -58,7 +60,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLiveTest do
 
       assert index_live
              |> form("#room-form", room: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> render_change() =~ dgettext("errors", "can't be blank")
 
       assert index_live
              |> form("#room-form", room: @update_attrs)
@@ -83,7 +85,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLiveTest do
   end
 
   describe "Show" do
-    setup [:create_room]
+    setup [:register_and_log_in_user, :create_room]
 
     test "displays room", %{conn: conn, room: room} do
       {:ok, _show_live, html} = live(conn, ~p"/admin/sessions/rooms/#{room}")
@@ -102,7 +104,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLiveTest do
 
       assert show_live
              |> form("#room-form", room: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
+             |> render_change() =~ dgettext("errors", "can't be blank")
 
       assert show_live
              |> form("#room-form", room: @update_attrs)
