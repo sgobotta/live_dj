@@ -18,6 +18,7 @@ defmodule Livedj.Application do
       {Finch, name: Livedj.Finch},
       # Start the Endpoint (http/https)
       LivedjWeb.Endpoint,
+      Livedj.Sessions,
       Redis
       # Start a worker by calling: Livedj.Worker.start_link(arg)
       # {Livedj.Worker, arg}
