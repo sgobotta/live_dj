@@ -3,38 +3,50 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   use LivedjWeb, :live_view
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.Room
+  # alias Livedj.Sessions.Room
 
   @impl true
   def mount(params, _session, socket) do
-    socket =
-      socket
-      |> assign(:room, Sessions.get_room!(params["id"]))
-      |> assign(:current_track, Sessions.current_track(params["id"]))
+    case connected?(socket) do
+      true ->
+        socket =
+          socket
+          |> assign(:room, Sessions.get_room!(params["id"]))
+          |> assign(:current_track, Sessions.current_track(params["id"]))
 
-    :ok = LivedjWeb.Endpoint.subscribe("room:#{socket.assigns.room.id}")
+        :ok = LivedjWeb.Endpoint.subscribe("room:#{socket.assigns.room.id}")
 
-    list = [
-      %{name: "Bread", id: 1, position: 1, status: :in_progress},
-      %{name: "Butter", id: 2, position: 2, status: :in_progress},
-      %{name: "Milk", id: 3, position: 3, status: :in_progress},
-      %{name: "Bananas", id: 4, position: 4, status: :in_progress},
-      %{name: "Eggs", id: 5, position: 5, status: :in_progress}
-    ]
+        list = [
+          %{name: "Bread", id: 1, position: 1, status: :in_progress},
+          %{name: "Butter", id: 2, position: 2, status: :in_progress},
+          %{name: "Milk", id: 3, position: 3, status: :in_progress},
+          %{name: "Bananas", id: 4, position: 4, status: :in_progress},
+          %{name: "Eggs", id: 5, position: 5, status: :in_progress}
+        ]
 
-    {:ok,
-     assign(socket,
-       drag_state: :unlocked,
-       shopping_list: list,
-       form: to_form(%{})
-     )}
+        {:ok,
+         assign(socket,
+           drag_state: :unlocked,
+           shopping_list: list,
+           form: to_form(%{})
+         )}
+
+      false ->
+        {:ok, socket}
+    end
   end
 
   @impl true
-  def handle_params(%{"id" => id} = params, _url, socket) do
-    {:noreply,
-     socket
-     |> apply_action(socket.assigns.live_action, params)}
+  def handle_params(%{"id" => _id} = params, _url, socket) do
+    case connected?(socket) do
+      true ->
+        {:noreply,
+         socket
+         |> apply_action(socket.assigns.live_action, params)}
+
+      false ->
+        {:noreply, socket}
+    end
   end
 
   defp apply_action(socket, :show, _params) do
@@ -42,6 +54,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:page_title, "(#{socket.assigns.room.name})")
   end
 
+  @impl true
   def handle_event("validate", %{"_target" => ["name"], "name" => name}, socket) do
     # Put your logic here to deal with the changes to the list order
     # and persist the data
@@ -74,6 +87,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info(
         %Phoenix.Socket.Broadcast{
           topic: _topic,

@@ -1,25 +1,32 @@
-<div>
-  Room: <%= @room.name %>
+<%= if connected?(@socket) do %>
+  <div>
+    Room: <%= @room.name %>
 
-  <div id="lists" class="grid sm:grid-cols-1 mx-auto">
-    <.live_component
-      id="1"
-      module={LivedjWeb.ListComponent}
-      list={@shopping_list}
-      form={@form}
-      topic={"room:#{@room.id}"}
-      state={@drag_state}
-    />
-  </div>
-
-  <.simple_form for={@form} phx-change="validate" phx-submit="save" class="flex">
-    <div class="flex flex-row">
-      <.input field={@form[:name]} type="text" />
+    <div id="lists" class="grid sm:grid-cols-1 mx-auto">
+      <.live_component
+        id="1"
+        module={LivedjWeb.ListComponent}
+        list={@shopping_list}
+        form={@form}
+        topic={"room:#{@room.id}"}
+        state={@drag_state}
+      />
     </div>
-    <:actions>
-      <.button class="align-middle ml-2">
-        <.icon name="hero-plus" />
-      </.button>
-    </:actions>
-  </.simple_form>
-</div>
+
+    <.simple_form
+      for={@form}
+      phx-change="validate"
+      phx-submit="save"
+      class="flex"
+    >
+      <div class="flex flex-row">
+        <.input field={@form[:name]} type="text" />
+      </div>
+      <:actions>
+        <.button class="align-middle ml-2">
+          <.icon name="hero-plus" />
+        </.button>
+      </:actions>
+    </.simple_form>
+  </div>
+<% end %>
