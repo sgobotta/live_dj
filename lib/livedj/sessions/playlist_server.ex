@@ -142,13 +142,13 @@ defmodule Livedj.Sessions.PlaylistServer do
   end
 
   def handle_continue({@locked_cb, from}, state) do
-    :ok = Channels.notify_playlist_dragging_locked(from, state.id)
+    :ok = Channels.broadcast_playlist_dragging_locked!(from, state.id)
 
     {:noreply, state}
   end
 
   def handle_continue({@unlocked_cb, from}, state) do
-    :ok = Channels.notify_playlist_dragging_unlocked(from, state.id)
+    :ok = Channels.broadcast_playlist_dragging_unlocked!(from, state.id)
 
     {:noreply, state}
   end
