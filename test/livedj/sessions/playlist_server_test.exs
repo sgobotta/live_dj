@@ -5,7 +5,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
   use Livedj.DataCase
   use ExUnit.Case
 
-  alias Livedj.Sessions.{PlaylistServer, Room}
+  alias Livedj.Sessions.{Channels, PlaylistServer, Room}
 
   import Livedj.SessionsFixtures
   import Livedj.RuntimeHelpers
@@ -28,7 +28,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     end
 
     test "unlock/2 sets an unlocked status and returns :ok", %{pid: pid} do
-      response = do_unlock(pid)
+      response = do_unlock(pid, self())
       assert response == :ok
     end
 
@@ -42,7 +42,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     defp do_lock(pid), do: @subject.lock(pid)
 
-    defp do_unlock(pid), do: @subject.unlock(pid)
+    defp do_unlock(pid, from), do: @subject.unlock(pid, from)
 
     defp do_join(pid), do: @subject.join(pid)
   end
@@ -58,12 +58,16 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     end
 
     test "handle_call/3 :lock replies with a locked status", %{state: state} do
-      {:reply, {:ok, :locked}, ^state} = do_handle_lock(self(), state)
+      pid = self()
+
+      {:reply, {:ok, :locked}, %{drag_state: {:locked, ^pid}},
+       {:continue, {:locked, ^pid}}} =
+        do_handle_lock({pid, Process.monitor(pid)}, state)
     end
 
     test "handle_call/3 :join replies with a locked status", %{state: state} do
       pid = self()
-      response = do_handle_join({pid, nil}, state)
+      response = do_handle_join({pid, Process.monitor(pid)}, state)
 
       {:reply, {:ok, :joined}, state} = response
 
@@ -72,9 +76,36 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     test "handle_cast/2 :unlock unlocks a playlist and does not reply",
          %{state: state} do
-      response = do_handle_unlock(state)
+      pid = self()
+      response = do_handle_unlock(pid, state)
 
-      {:noreply, ^state} = response
+      {:noreply, ^state, {:continue, {:unlocked, ^pid}}} = response
+    end
+
+    test "handle_continue/2 {:locked, pid} notifies the locked state", %{
+      state: state
+    } do
+      [{client_pid, _client_user}] = spawn_client(1)
+
+      :ok = Channels.subscribe_playlist_topic(state.id)
+
+      {:noreply, _state} = do_handle_locked(client_pid, state)
+
+      message_name = Channels.dragging_locked_event()
+      assert_receive(^message_name)
+    end
+
+    test "handle_continue/2 {:unlocked, pid} notifies the unlocked state", %{
+      state: state
+    } do
+      [{client_pid, _client_user}] = spawn_client(1)
+
+      :ok = Channels.subscribe_playlist_topic(state.id)
+
+      {:noreply, _state} = do_handle_unlocked(client_pid, state)
+
+      message_name = Channels.dragging_unlocked_event()
+      assert_receive(^message_name)
     end
 
     test "handle_info/2 {:DOWN, ref, :process, pid, reason} is called once and returns a state without members",
@@ -108,12 +139,19 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       assert Enum.empty?(Map.values(state.members))
     end
 
-    defp do_handle_lock(pid, state),
-      do: @subject.handle_call(:lock, pid, state)
+    defp do_handle_lock(from, state),
+      do: @subject.handle_call(:lock, from, state)
 
-    defp do_handle_unlock(state), do: @subject.handle_cast(:unlock, state)
+    defp do_handle_unlock(from, state),
+      do: @subject.handle_cast({:unlock, from}, state)
 
-    defp do_handle_join({pid, ref}, state),
-      do: @subject.handle_call(:join, {pid, ref}, state)
+    defp do_handle_join(from, state),
+      do: @subject.handle_call(:join, from, state)
+
+    defp do_handle_locked(arg, state),
+      do: @subject.handle_continue({:locked, arg}, state)
+
+    defp do_handle_unlocked(arg, state),
+      do: @subject.handle_continue({:unlocked, arg}, state)
   end
 end
