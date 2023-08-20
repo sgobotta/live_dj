@@ -60,7 +60,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     test "handle_call/3 :lock replies with a locked status", %{state: state} do
       pid = self()
 
-      {:reply, {:ok, :locked}, %{drag_state: {:locked, ^pid}},
+      {:reply, {:ok, :locked}, %{drag_state: {:locked, ^pid, _timeout_ref}},
        {:continue, {:locked, ^pid}}} =
         do_handle_lock({pid, Process.monitor(pid)}, state)
     end
@@ -74,12 +74,21 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       assert Enum.member?(Map.values(state.members), pid)
     end
 
-    test "handle_cast/2 :unlock unlocks a playlist and does not reply",
+    test "handle_cast/2 :unlock unlocks drag playlist and does not reply",
+         %{state: state} do
+      pid = self()
+
+      response =
+        do_handle_unlock(pid, %{state | drag_state: {:locked, pid, make_ref()}})
+
+      {:noreply, ^state, {:continue, {:unlocked, ^pid}}} = response
+    end
+
+    test "handle_cast/2 :unlock does not continue when the state is :free",
          %{state: state} do
       pid = self()
       response = do_handle_unlock(pid, state)
-
-      {:noreply, ^state, {:continue, {:unlocked, ^pid}}} = response
+      {:noreply, ^state} = response
     end
 
     test "handle_continue/2 {:locked, pid} notifies the locked state", %{
@@ -106,6 +115,20 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
       message_name = Channels.dragging_unlocked_event()
       assert_receive(^message_name)
+    end
+
+    test "handle_info/2 {:lock_timeout, from} unlocks drag and does not reply",
+         %{state: state} do
+      pid = self()
+
+      response =
+        do_handle_lock_timeout(pid, %{
+          state
+          | drag_state: {:locked, pid, make_ref()}
+        })
+
+      assert {:noreply, %{drag_state: :free}, {:continue, {:unlocked, ^pid}}} =
+               response
     end
 
     test "handle_info/2 {:DOWN, ref, :process, pid, reason} is called once and returns a state without members",
@@ -153,5 +176,8 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     defp do_handle_unlocked(arg, state),
       do: @subject.handle_continue({:unlocked, arg}, state)
+
+    defp do_handle_lock_timeout(from, state),
+      do: @subject.handle_info({:lock_timeout, from}, state)
   end
 end
