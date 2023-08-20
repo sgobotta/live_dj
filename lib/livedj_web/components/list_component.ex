@@ -13,9 +13,7 @@ defmodule LivedjWeb.ListComponent do
             data-id={item.id}
             class={"
               #{if @state == :locked, do: "bg-gray-50 border-dashed", else: "bg-white"}
-              my-2 rounded-xl border-gray-300 border-2
-              drag-item:focus-within:ring-0 drag-item:focus-within:ring-offset-0
-              drag-ghost:bg-zinc-300 drag-ghost:border-0 drag-ghost:ring-0
+              draggable
             "}
           >
             <div class="flex drag-ghost:opacity-0 gap-y-2">

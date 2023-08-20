@@ -27,14 +27,21 @@ const Hooks = {}
 
 Hooks.Sortable = {
   mounted() {
+    const cancelledBgClass = 'bg-red-300'
+    const cancelledPointer = 'cursor-no-drop'
+
     const sorter = new Sortable(this.el, {
-      animation: 150,
-      delay: 100,
+      animation: 400,
+      delay: 75,
       dragClass: "drag-item",
       forceFallback: true,
       ghostClass: "drag-ghost",
       onEnd: e => {
         const params = {new: e.newIndex, old: e.oldIndex, ...e.item.dataset}
+
+        sorter.el.classList.remove(cancelledBgClass)
+        sorter.el.classList.remove(cancelledPointer)
+
         this.pushEventTo(this.el, "reposition_end", params)
       },
       onStart: () => {
@@ -48,6 +55,11 @@ Hooks.Sortable = {
 
     this.handleEvent('enable-drag', () => {
       sorter.option("disabled", false)
+    })
+
+    this.handleEvent('cancel-drag', () => {
+      sorter.el.classList.add(cancelledBgClass)
+      sorter.el.classList.add(cancelledPointer)
     })
   }
 }
