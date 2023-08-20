@@ -96,10 +96,7 @@ defmodule Livedj.Sessions.PlaylistServer do
       "#{__MODULE__} :: User with pid: #{inspect(pid)} just joined the server."
     )
 
-    state = %{
-      state
-      | members: Map.put(state.members, ref, pid)
-    }
+    state = add_member(state, ref, pid)
 
     {:reply, {:ok, :joined}, state}
   end
@@ -113,4 +110,21 @@ defmodule Livedj.Sessions.PlaylistServer do
   def handle_cast(:unlock, state) do
     {:noreply, state}
   end
+
+  @impl GenServer
+  def handle_info({:DOWN, ref, :process, pid, reason}, state) do
+    state = remove_member(state, ref)
+
+    Logger.debug(
+      "Member with pid=#{inspect(pid)} left with reason=#{inspect(reason)}"
+    )
+
+    {:noreply, state}
+  end
+
+  defp add_member(%{members: members} = state, ref, pid),
+    do: %{state | members: Map.put(members, ref, pid)}
+
+  defp remove_member(%{members: members} = state, ref),
+    do: %{state | members: Map.delete(members, ref)}
 end
