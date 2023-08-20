@@ -101,6 +101,21 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
      |> push_event("enable-drag", %{})}
   end
 
+  @impl true
+  def handle_info(
+        {:dragging_cancelled, room_id},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(:drag_state, :unlocked)
+     |> push_event("cancel-drag", %{})}
+  end
+
+  @impl true
+  def handle_info({:dragging_cancelled, _room_id}, socket),
+    do: {:noreply, socket}
+
   defp on_drag_start(room_id) do
     fn socket, _from ->
       case Sessions.lock_playlist_drag(room_id) do

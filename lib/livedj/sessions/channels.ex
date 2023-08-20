@@ -15,6 +15,7 @@ defmodule Livedj.Sessions.Channels do
   #
   @dragging_locked :dragging_locked
   @dragging_unlocked :dragging_unlocked
+  @dragging_cancelled :dragging_cancelled
 
   @doc """
   Returns the playlist topic
@@ -61,6 +62,13 @@ defmodule Livedj.Sessions.Channels do
   def notify_playlist_dragging_unlocked(from, room_id),
     do:
       broadcast_from!(from, playlist_topic(room_id), dragging_unlocked_event())
+
+  @doc """
+  Notify a #{@dragging_cancelled} message to the given topic.
+  """
+  @spec notify_playlsit_dragging_cancelled(pid(), binary()) :: :ok
+  def notify_playlsit_dragging_cancelled(from, room_id),
+    do: send(from, {:dragging_cancelled, room_id})
 
   @spec broadcast_from!(pid(), binary(), message()) :: :ok
   defp broadcast_from!(from, topic, message),
