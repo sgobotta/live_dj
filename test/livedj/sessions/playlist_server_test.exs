@@ -22,6 +22,16 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       %{pid: pid, id: room_id}
     end
 
+    test "add/2 returns {:ok, :added}", %{pid: pid} do
+      response = do_add(pid, "some element")
+      assert response == {:ok, :added}
+    end
+
+    test "remove/2 returns {:ok, :removed}", %{pid: pid} do
+      response = do_remove(pid, "some element")
+      assert response == {:ok, :removed}
+    end
+
     test "lock/2 sets a locked status and returns {:ok, :locked}", %{pid: pid} do
       response = do_lock(pid)
       assert response == {:ok, :locked}
@@ -41,6 +51,10 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     end
 
     defp do_lock(pid), do: @subject.lock(pid)
+
+    defp do_add(pid, arg), do: @subject.add(pid, arg)
+
+    defp do_remove(pid, arg), do: @subject.remove(pid, arg)
 
     defp do_unlock(pid, from), do: @subject.unlock(pid, from)
 
@@ -65,13 +79,31 @@ defmodule Livedj.Sessions.PlaylistServerTest do
         do_handle_lock({pid, Process.monitor(pid)}, state)
     end
 
-    test "handle_call/3 :join replies with a locked status", %{state: state} do
+    test "handle_call/3 :join replies with a joined status", %{state: state} do
       pid = self()
       response = do_handle_join({pid, Process.monitor(pid)}, state)
 
       {:reply, {:ok, :joined}, state} = response
 
       assert Enum.member?(Map.values(state.members), pid)
+    end
+
+    test "handle_call/3 {:add, args} replies with an added status", %{
+      state: state
+    } do
+      pid = self()
+      response = do_handle_add("some element", pid, state)
+
+      {:reply, {:ok, :added}, ^state} = response
+    end
+
+    test "handle_call/3 {:remove, args} replies with a removed status", %{
+      state: state
+    } do
+      pid = self()
+      response = do_handle_remove("some element", pid, state)
+
+      {:reply, {:ok, :removed}, ^state} = response
     end
 
     test "handle_cast/2 :unlock unlocks drag playlist and does not reply",
@@ -170,6 +202,12 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     defp do_handle_join(from, state),
       do: @subject.handle_call(:join, from, state)
+
+    defp do_handle_add(arg, from, state),
+      do: @subject.handle_call({:add, arg}, from, state)
+
+    defp do_handle_remove(arg, from, state),
+      do: @subject.handle_call({:remove, arg}, from, state)
 
     defp do_handle_locked(arg, state),
       do: @subject.handle_continue({:locked, arg}, state)

@@ -9,6 +9,8 @@ defmodule Livedj.Sessions.PlaylistServer do
   require Logger
 
   @join_msg :join
+  @add_msg :add
+  @remove_msg :remove
   @lock_msg :lock
   @unlock_msg :unlock
   @on_start_cb :on_start
@@ -24,6 +26,12 @@ defmodule Livedj.Sessions.PlaylistServer do
           :members => map(),
           :lock_timeout => pos_integer()
         }
+
+  @type element :: any()
+
+  @type join_response :: {:ok, :joined}
+  @type add_response :: {:ok, :added}
+  @type remove_response :: {:ok, :removed}
 
   @type lock_response ::
           {:ok, :locked} | {:error, :already_locked | :not_an_owner}
@@ -45,9 +53,25 @@ defmodule Livedj.Sessions.PlaylistServer do
   @doc """
   Given a pid, joins the current server
   """
-  @spec join(pid()) :: {:ok, :joined}
+  @spec join(pid()) :: join_response()
   def join(pid) do
     GenServer.call(pid, @join_msg)
+  end
+
+  @doc """
+  Given a pid, adds an element to the playlist.
+  """
+  @spec add(pid(), element()) :: add_response()
+  def add(pid, arg) do
+    GenServer.call(pid, {@add_msg, arg})
+  end
+
+  @doc """
+  Given a pid, removes an element to the playlist.
+  """
+  @spec remove(pid(), element()) :: remove_response()
+  def remove(pid, arg) do
+    GenServer.call(pid, {@remove_msg, arg})
   end
 
   @doc """
@@ -109,6 +133,14 @@ defmodule Livedj.Sessions.PlaylistServer do
   end
 
   @impl GenServer
+  def handle_call({@add_msg, _arg}, _from, state) do
+    {:reply, {:ok, :added}, state}
+  end
+
+  def handle_call({@remove_msg, _arg}, _from, state) do
+    {:reply, {:ok, :removed}, state}
+  end
+
   def handle_call(@lock_msg, from, %{drag_state: {:locked, from}} = state) do
     {:reply, {:error, :already_locked}, state}
   end
