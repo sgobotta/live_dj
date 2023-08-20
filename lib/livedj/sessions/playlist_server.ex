@@ -16,7 +16,7 @@ defmodule Livedj.Sessions.PlaylistServer do
   @unlocked_cb :unlocked
   @lock_timeout_cb :lock_timeout
 
-  @lock_timeout :timer.seconds(1)
+  @lock_timeout :timer.seconds(15)
 
   @type state :: %{
           :id => binary(),
@@ -149,7 +149,6 @@ defmodule Livedj.Sessions.PlaylistServer do
 
   def handle_continue({@unlocked_cb, from}, state) do
     :ok = Channels.notify_playlist_dragging_unlocked(from, state.id)
-    Channels.notify_playlsit_dragging_cancelled(from, state.id)
 
     {:noreply, state}
   end
@@ -159,6 +158,7 @@ defmodule Livedj.Sessions.PlaylistServer do
         {@lock_timeout_cb, from},
         %{drag_state: {:locked, from, _timer_ref}} = state
       ) do
+    Channels.notify_playlsit_dragging_cancelled(from, state.id)
     {:noreply, unlock_drag(state), {:continue, {@unlocked_cb, from}}}
   end
 
