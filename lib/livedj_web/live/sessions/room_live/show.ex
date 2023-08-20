@@ -1,5 +1,6 @@
 defmodule LivedjWeb.Sessions.RoomLive.Show do
   @moduledoc false
+  alias Livedj.Sessions.Room
   use LivedjWeb, :live_view
 
   alias Livedj.Sessions
@@ -7,31 +8,28 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   @impl true
   def mount(params, _session, socket) do
-    case connected?(socket) do
-      true ->
-        socket =
-          socket
-          |> assign(:room, Sessions.get_room!(params["id"]))
-          |> assign(:current_track, Sessions.current_track(params["id"]))
+    with true <- connected?(socket),
+         %Room{id: room_id} = room <- Sessions.get_room!(params["id"]),
+         {:ok, :joined} <- Sessions.join_playlist(room_id) do
+      # :ok = LivedjWeb.Endpoint.subscribe("room:#{room_id}")
 
-        :ok = LivedjWeb.Endpoint.subscribe("room:#{socket.assigns.room.id}")
+      list = [
+        %{name: "Bread", id: 1, position: 1, status: :in_progress},
+        %{name: "Butter", id: 2, position: 2, status: :in_progress},
+        %{name: "Milk", id: 3, position: 3, status: :in_progress},
+        %{name: "Bananas", id: 4, position: 4, status: :in_progress},
+        %{name: "Eggs", id: 5, position: 5, status: :in_progress}
+      ]
 
-        list = [
-          %{name: "Bread", id: 1, position: 1, status: :in_progress},
-          %{name: "Butter", id: 2, position: 2, status: :in_progress},
-          %{name: "Milk", id: 3, position: 3, status: :in_progress},
-          %{name: "Bananas", id: 4, position: 4, status: :in_progress},
-          %{name: "Eggs", id: 5, position: 5, status: :in_progress}
-        ]
-
-        {:ok,
-         assign(socket,
-           drag_state: :unlocked,
-           shopping_list: list,
-           form: to_form(%{})
-         )}
-
-      false ->
+      {:ok,
+       assign(socket,
+         drag_state: :unlocked,
+         form: to_form(%{}),
+         room: room,
+         shopping_list: list
+       )}
+    else
+      _err ->
         {:ok, socket}
     end
   end
@@ -88,31 +86,38 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   @impl true
-  def handle_info(
-        %Phoenix.Socket.Broadcast{
-          topic: _topic,
-          event: "dragging_locked",
-          payload: _payload
-        },
-        socket
-      ) do
+  def handle_info(:dragging_locked, socket) do
     {:noreply,
      socket
      |> assign(:drag_state, :locked)
      |> push_event("disable-drag", %{})}
   end
 
-  def handle_info(
-        %Phoenix.Socket.Broadcast{
-          topic: _topic,
-          event: "dragging_unlocked",
-          payload: _payload
-        },
-        socket
-      ) do
+  @impl true
+  def handle_info(:dragging_unlocked, socket) do
     {:noreply,
      socket
      |> assign(:drag_state, :unlocked)
      |> push_event("enable-drag", %{})}
+  end
+
+  defp on_drag_start(room_id) do
+    fn socket, _from ->
+      case Sessions.lock_playlist_drag(room_id) do
+        {:ok, :locked} ->
+          {:noreply, socket}
+
+        {:error, error} when error in [:already_locked, :not_an_owner] ->
+          {:noreply, socket}
+      end
+    end
+  end
+
+  defp on_drag_end(room_id) do
+    fn socket, from ->
+      :ok = Sessions.unlock_playlist_drag(room_id, from)
+
+      {:noreply, socket}
+    end
   end
 end

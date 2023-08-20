@@ -4,12 +4,15 @@
 
     <div id="lists" class="grid sm:grid-cols-1 mx-auto">
       <.live_component
-        id="1"
+        id={"playlist_#{@room.id}"}
         module={LivedjWeb.ListComponent}
         list={@shopping_list}
         form={@form}
-        topic={"room:#{@room.id}"}
+        on_drag_start={on_drag_start(@room.id)}
+        on_drag_end={on_drag_end(@room.id)}
+        room_id
         state={@drag_state}
+        topic={"room:#{@room.id}"}
       />
     </div>
 

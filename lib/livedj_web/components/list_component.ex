@@ -49,26 +49,10 @@ defmodule LivedjWeb.ListComponent do
   end
 
   def handle_event("reposition_start", _params, socket) do
-    :ok =
-      LivedjWeb.Endpoint.broadcast_from(
-        self(),
-        socket.assigns.topic,
-        "dragging_locked",
-        %{}
-      )
-
-    {:noreply, socket}
+    socket.assigns.on_drag_start.(socket, self())
   end
 
   def handle_event("reposition_end", _params, socket) do
-    :ok =
-      LivedjWeb.Endpoint.broadcast_from(
-        self(),
-        socket.assigns.topic,
-        "dragging_unlocked",
-        %{}
-      )
-
-    {:noreply, socket}
+    socket.assigns.on_drag_end.(socket, self())
   end
 end

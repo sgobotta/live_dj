@@ -6,9 +6,45 @@ defmodule Livedj.Sessions do
   import Ecto.Query, warn: false
   alias Livedj.Repo
 
-  alias Livedj.Sessions.{Room, Supervisor}
+  alias Livedj.Sessions.{
+    Channels,
+    PlaylistServer,
+    PlaylistSupervisor,
+    Room,
+    Supervisor
+  }
 
   defdelegate child_spec(init_arg), to: Supervisor
+
+  @doc """
+  Joins the playlist server and subscribes to the playlist topic for a room.
+  """
+  @spec join_playlist(binary()) :: {:ok, :joined}
+  def join_playlist(room_id) do
+    :ok = Channels.subscribe_playlist_topic(room_id)
+
+    PlaylistSupervisor.get_child_pid!(room_id)
+    |> PlaylistServer.join()
+  end
+
+  @doc """
+  Sends a locking request to the playlist server.
+  """
+  @spec lock_playlist_drag(binary()) :: PlaylistServer.lock_response()
+  def lock_playlist_drag(room_id) do
+    PlaylistSupervisor.get_child_pid!(room_id)
+    |> PlaylistServer.lock()
+  end
+
+  @doc """
+  Sends an unlocking request to the playlist server.
+  """
+  @spec unlock_playlist_drag(binary(), pid()) ::
+          PlaylistServer.unlock_response()
+  def unlock_playlist_drag(room_id, from) do
+    PlaylistSupervisor.get_child_pid!(room_id)
+    |> PlaylistServer.unlock(from)
+  end
 
   def pubsub_start do
     Redis.PubSub.start()
