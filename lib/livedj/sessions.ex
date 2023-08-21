@@ -28,11 +28,29 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
+  Adds a media element to the playlist
+  """
+  @spec add_media(binary(), any()) :: PlaylistServer.add_response()
+  def add_media(room_id, media) do
+    get_child_pid!(room_id)
+    |> PlaylistServer.add(media)
+  end
+
+  @doc """
+  Removes a media element from the playlist
+  """
+  @spec remove_media(binary(), any()) :: PlaylistServer.remove_response()
+  def remove_media(room_id, media) do
+    get_child_pid!(room_id)
+    |> PlaylistServer.remove(media)
+  end
+
+  @doc """
   Sends a locking request to the playlist server.
   """
   @spec lock_playlist_drag(binary()) :: PlaylistServer.lock_response()
   def lock_playlist_drag(room_id) do
-    PlaylistSupervisor.get_child_pid!(room_id)
+    get_child_pid!(room_id)
     |> PlaylistServer.lock()
   end
 
@@ -42,9 +60,11 @@ defmodule Livedj.Sessions do
   @spec unlock_playlist_drag(binary(), pid()) ::
           PlaylistServer.unlock_response()
   def unlock_playlist_drag(room_id, from) do
-    PlaylistSupervisor.get_child_pid!(room_id)
+    get_child_pid!(room_id)
     |> PlaylistServer.unlock(from)
   end
+
+  defp get_child_pid!(room_id), do: PlaylistSupervisor.get_child_pid!(room_id)
 
   def pubsub_start do
     Redis.PubSub.start()
