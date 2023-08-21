@@ -41,12 +41,27 @@ Hooks.Sortable = {
 
         sorter.el.classList.remove(cancelledBgClass)
         sorter.el.classList.remove(cancelledPointer)
+        sorter.el.classList.remove("hover:cursor-grabbing")
+        Array.from(sorter.el.children).forEach(c => {
+          c.classList.add("hover:cursor-grab")
+        })
 
         this.pushEventTo(this.el, "reposition_end", params)
       },
       onStart: () => {
+        Array.from(sorter.el.children).forEach(c => {
+          c.classList.remove("hover:cursor-grab")
+        })
+        sorter.el.classList.add("hover:cursor-grabbing")
+
         this.pushEventTo(this.el, "reposition_start")
       }
+      // onMove: (event, b) => {
+      //   console.log("event", event)
+      //   console.log("b", b)
+      //   // b.target.classList.add("hover:cursor-grabbing")
+      //   // same properties as onEnd
+      // }
     })
 
     this.handleEvent('disable-drag', () => {
