@@ -4,8 +4,8 @@ defmodule LivedjWeb.ListComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="bg-gray-100 py-4 rounded-lg">
-      <div class="space-y-5 mx-auto max-w-7xl px-4 space-y-4">
+    <div class="bg-transparent py-1 rounded-lg">
+      <div class="space-y-5 mx-auto max-w-7xl px-1 space-y-4">
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={item <- @list}
@@ -13,20 +13,19 @@ defmodule LivedjWeb.ListComponent do
             data-id={item.id}
             class={"
               #{if @state == :locked, do: "bg-gray-50 border-dashed", else: "bg-white"}
-              draggable
+              bg-white my-2 rounded-xl border-gray-300 border-[1px]
+              hover:cursor-grab
+              drag-item:focus-within:ring-2 drag-item:focus-within:ring-offset-0
+              drag-ghost:bg-zinc-200 drag-ghost:border-0 drag-ghost:ring-0 drag-ghost:cursor-grabbing
             "}
           >
-            <div class="flex drag-ghost:opacity-0 gap-y-2">
-              <button type="button" class="w-10">
-                <.icon
-                  name="hero-check-circle"
-                  class={"
-                    w-7 h-7
-                    #{if item.status == :completed, do: "bg-green-600", else: "bg-gray-300"}
-                  "}
-                />
-              </button>
-              <div class="flex-auto block text-sm leading-6 text-zinc-900">
+            <div class="flex drag-ghost:opacity-0 gap-y-2 h-14 items-center px-1">
+              <img
+                class="inline-block h-12 w-12 rounded-lg ring-2 ring-white"
+                src={item.thumbnail["url"]}
+                alt={item.name}
+              />
+              <div class="flex-auto block text-sm leading-6 text-zinc-900 p-1 px-1">
                 <%= item.name %>
               </div>
               <button type="button" class="w-10 -mt-1 flex-none">
