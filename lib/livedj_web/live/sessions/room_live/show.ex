@@ -11,22 +11,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     with true <- connected?(socket),
          %Room{id: room_id} = room <- Sessions.get_room!(params["id"]),
          {:ok, :joined} <- Sessions.join_playlist(room_id) do
-      # :ok = LivedjWeb.Endpoint.subscribe("room:#{room_id}")
-
-      list = [
-        %{name: "Bread", id: 1, position: 1, status: :in_progress},
-        %{name: "Butter", id: 2, position: 2, status: :in_progress},
-        %{name: "Milk", id: 3, position: 3, status: :in_progress},
-        %{name: "Bananas", id: 4, position: 4, status: :in_progress},
-        %{name: "Eggs", id: 5, position: 5, status: :in_progress}
-      ]
-
       {:ok,
        assign(socket,
          drag_state: :unlocked,
          form: to_form(%{}),
          room: room,
-         shopping_list: list
+         media_list: []
        )}
     else
       _err ->
@@ -53,28 +43,31 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   @impl true
-  def handle_event("validate", %{"_target" => ["name"], "name" => name}, socket) do
+  def handle_event("validate", %{"_target" => ["url"], "url" => url}, socket) do
     # Put your logic here to deal with the changes to the list order
     # and persist the data
 
-    {:noreply, assign(socket, form: to_form(%{"name" => name}))}
+    {:noreply, assign(socket, form: to_form(%{"url" => url}))}
   end
 
-  def handle_event("save", %{"name" => name}, socket) do
-    # Put your logic here to deal with the changes to the list order
-    # and persist the data
-
-    new_item = %{
-      name: name,
-      id: Ecto.UUID.generate(),
-      position: length(socket.assigns.shopping_list) + 1,
-      status: :in_progress
-    }
-
-    {:noreply,
-     socket
-     |> assign(form: to_form(%{}))
-     |> assign(shopping_list: socket.assigns.shopping_list ++ [new_item])}
+  def handle_event("save", %{"url" => url}, socket) do
+    with {:ok, media_id} <- validate_url(url),
+         {:ok, media} <- Sessions.fetch_media_metadata_by_id(media_id),
+         {:ok, media} <- Sessions.create_media(media),
+         {:ok, :added} <- Sessions.add_media(socket.assigns.room.id, media) do
+      {:noreply,
+       socket
+       |> assign(form: to_form(%{}))
+       |> assign(media_list: socket.assigns.media_list ++ [media])}
+    else
+      _else ->
+        {:noreply,
+         socket
+         |> put_flash(
+           :error,
+           dgettext("errors", "The youtube url is not valid")
+         )}
+    end
   end
 
   def handle_event("previous", _params, socket) do
@@ -150,6 +143,16 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       :ok = Sessions.unlock_playlist_drag(room_id, from)
 
       {:noreply, socket}
+    end
+  end
+
+  defp validate_url(url) do
+    case URI.parse(url) do
+      %URI{query: query} when not is_nil(query) ->
+        {:ok, String.replace(query, "v=", "")}
+
+      _uri ->
+        {:error, :invalid_url}
     end
   end
 end

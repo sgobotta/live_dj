@@ -14,6 +14,12 @@ defmodule Livedj.Sessions do
     Supervisor
   }
 
+  require Logger
+
+  # ----------------------------------------------------------------------------
+  # Playlist server management
+  #
+
   defdelegate child_spec(init_arg), to: Supervisor
 
   @doc """
@@ -65,6 +71,42 @@ defmodule Livedj.Sessions do
   end
 
   defp get_child_pid!(room_id), do: PlaylistSupervisor.get_child_pid!(room_id)
+
+  # ----------------------------------------------------------------------------
+  # Media management
+  #
+
+  @spec fetch_media_metadata_by_id(binary()) ::
+          {:error, :tubex_error} | {:ok, map()}
+  def fetch_media_metadata_by_id(media_id) do
+    case Tubex.Video.metadata(media_id) do
+      {:error, error} ->
+        Logger.error(
+          "#{__MODULE__} :: There was an error fetching a video metadata err=#{inspect(error)}"
+        )
+
+        {:error, :tubex_error}
+
+      media ->
+        {:ok, hd(media["items"])}
+    end
+  end
+
+  @spec create_media(map()) :: {:ok, map()}
+  def create_media(media) do
+    media = %{
+      name: media["snippet"]["localized"]["title"],
+      id: Ecto.UUID.generate(),
+      youtube_id: media["id"],
+      thumbnail: media["snippet"]["thumbnails"]["default"]
+    }
+
+    {:ok, media}
+  end
+
+  # ----------------------------------------------------------------------------
+  # Redis management
+  #
 
   def pubsub_start do
     Redis.PubSub.start()
