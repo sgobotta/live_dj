@@ -1,8 +1,8 @@
 <%= if connected?(@socket) do %>
-  <div>
+  <div class="h-full">
     Room: <%= @room.name %>
 
-    <div id="lists" class="grid sm:grid-cols-1 mx-auto">
+    <div id="lists" class="grid sm:grid-cols-1 mx-auto overflow-y-scroll h-64">
       <.live_component
         id={"playlist_#{@room.id}"}
         module={LivedjWeb.ListComponent}
@@ -15,20 +15,20 @@
       />
     </div>
 
-    <.simple_form
+    <.add_media_form
       for={@form}
       phx-change="validate"
       phx-submit="save"
       class="flex"
     >
-      <div class="flex flex-row">
-        <.input field={@form[:name]} type="text" />
-      </div>
+      <:field>
+        <.input field={@form[:name]} type="text" class="w-full" />
+      </:field>
       <:actions>
         <.button class="align-middle ml-2">
           <.icon name="hero-plus" />
         </.button>
       </:actions>
-    </.simple_form>
+    </.add_media_form>
   </div>
 <% end %>

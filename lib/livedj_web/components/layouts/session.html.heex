@@ -1,19 +1,60 @@
-<header class="px-4 sm:px-6 lg:px-8 fixed top-0">
-  <div class="flex items-center border-b border-zinc-100 py-3 text-sm justify-center">
+<header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
+  <div class="flex items-center border-b border-zinc-100 py-3 text-sm justify-center bg-white">
     <div class="flex items-center gap-4">
       <a href="/">
         <img src={~p"/images/logo-black.svg"} width="96" />
       </a>
     </div>
   </div>
+  <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
+    <%= if @current_user do %>
+      <li class="text-[0.8125rem] leading-6 text-zinc-900">
+        <%= @current_user.email %>
+      </li>
+      <li>
+        <.link
+          href={~p"/users/settings"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+        >
+          Settings
+        </.link>
+      </li>
+      <li>
+        <.link
+          href={~p"/users/log_out"}
+          method="delete"
+          class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+        >
+          Log out
+        </.link>
+      </li>
+    <% else %>
+      <li>
+        <.link
+          href={~p"/users/register"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+        >
+          Register
+        </.link>
+      </li>
+      <li>
+        <.link
+          href={~p"/users/log_in"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+        >
+          Log in
+        </.link>
+      </li>
+    <% end %>
+  </ul>
 </header>
-<main class="px-4 py-20 sm:px-6 lg:px-8 scrollable">
+<main class="px-4 py-20 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>
 </main>
-<footer class="fixed bottom-0 w-full">
+<footer class="fixed bottom-0 w-full bg-white">
   <div class="flex items-center border-t border-zinc-100 py-3 text-sm justify-center">
     <div class="flex items-center gap-4 h-12">
       <a phx-click="previous">
