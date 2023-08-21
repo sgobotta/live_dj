@@ -16,6 +16,7 @@ defmodule Livedj.Sessions.Channels do
   @dragging_locked :dragging_locked
   @dragging_unlocked :dragging_unlocked
   @dragging_cancelled :dragging_cancelled
+  @playlist_joined :playlist_joined
 
   @doc """
   Returns the playlist topic
@@ -42,6 +43,18 @@ defmodule Livedj.Sessions.Channels do
   def dragging_unlocked_event, do: @dragging_unlocked
 
   @doc """
+  Returns the message name for dragging cancelled events
+  """
+  @spec dragging_cancelled_event() :: :dragging_cancelled
+  def dragging_cancelled_event, do: @dragging_cancelled
+
+  @doc """
+  Returns the message name for playlist joined events
+  """
+  @spec playlsit_joined_event() :: :playlist_joined
+  def playlsit_joined_event, do: @playlist_joined
+
+  @doc """
   Subscribes to the playlist topic
   """
   @spec subscribe_playlist_topic(binary()) :: :ok | {:error, any()}
@@ -63,11 +76,18 @@ defmodule Livedj.Sessions.Channels do
       broadcast_from!(from, playlist_topic(room_id), dragging_unlocked_event())
 
   @doc """
+  Notify a #{@playlist_joined} message to the given topic.
+  """
+  @spec notify_playlsit_joined(pid(), binary(), any()) :: any()
+  def notify_playlsit_joined(from, room_id, payload),
+    do: send(from, {playlsit_joined_event(), room_id, payload})
+
+  @doc """
   Notify a #{@dragging_cancelled} message to the given topic.
   """
-  @spec notify_playlsit_dragging_cancelled(pid(), binary()) :: :ok
+  @spec notify_playlsit_dragging_cancelled(pid(), binary()) :: any()
   def notify_playlsit_dragging_cancelled(from, room_id),
-    do: send(from, {:dragging_cancelled, room_id})
+    do: send(from, {dragging_cancelled_event(), room_id})
 
   @spec subscribe(binary()) :: :ok | {:error, any()}
   defp subscribe(topic), do: Phoenix.PubSub.subscribe(Livedj.PubSub, topic)

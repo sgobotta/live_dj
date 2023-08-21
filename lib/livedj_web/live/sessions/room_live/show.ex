@@ -86,6 +86,23 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   @impl true
+  def handle_info(
+        {:playlist_joined, room_id, payload},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    drag_state =
+      case payload.drag_state do
+        :free ->
+          :unlocked
+
+        _other ->
+          :locked
+      end
+
+    {:noreply, assign(socket, :drag_state, drag_state)}
+  end
+
+  @impl true
   def handle_info(:dragging_locked, socket) do
     {:noreply,
      socket

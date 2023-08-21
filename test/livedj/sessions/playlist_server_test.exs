@@ -83,7 +83,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       pid = self()
       response = do_handle_join({pid, Process.monitor(pid)}, state)
 
-      {:reply, {:ok, :joined}, state} = response
+      {:reply, {:ok, :joined}, state, {:continue, {:joined, ^pid}}} = response
 
       assert Enum.member?(Map.values(state.members), pid)
     end
@@ -121,6 +121,25 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       pid = self()
       response = do_handle_unlock(pid, state)
       {:noreply, ^state} = response
+    end
+
+    test "handle_continue/2 {:joined, pid} notifies the joined state", %{
+      state: state
+    } do
+      state_id = state.id
+      [{client_pid, _client_user}] = spawn_client(1)
+
+      :ok = Channels.subscribe_playlist_topic(state_id)
+
+      {:noreply, _state} = do_handle_joined(client_pid, state)
+
+      message_name = Channels.playlsit_joined_event()
+
+      assert_receive(
+        {:trace, ^client_pid, :receive, {^message_name, ^state_id, state}}
+      )
+
+      assert state.drag_state == :free
     end
 
     test "handle_continue/2 {:locked, pid} notifies the locked state", %{
@@ -170,7 +189,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
       state =
         Enum.reduce(clients, state, fn {client_pid, _client_user}, acc ->
-          {:reply, {:ok, :joined}, state} =
+          {:reply, {:ok, :joined}, state, {:continue, {:joined, ^client_pid}}} =
             do_handle_join({client_pid, Process.monitor(client_pid)}, acc)
 
           state
@@ -208,6 +227,9 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     defp do_handle_remove(arg, from, state),
       do: @subject.handle_call({:remove, arg}, from, state)
+
+    defp do_handle_joined(from, state),
+      do: @subject.handle_continue({:joined, from}, state)
 
     defp do_handle_locked(arg, state),
       do: @subject.handle_continue({:locked, arg}, state)

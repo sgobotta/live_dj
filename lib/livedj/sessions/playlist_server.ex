@@ -13,6 +13,8 @@ defmodule Livedj.Sessions.PlaylistServer do
   @remove_msg :remove
   @lock_msg :lock
   @unlock_msg :unlock
+
+  @joined_cb :joined
   @on_start_cb :on_start
   @locked_cb :locked
   @unlocked_cb :unlocked
@@ -129,7 +131,7 @@ defmodule Livedj.Sessions.PlaylistServer do
 
     state = add_member(state, ref, pid)
 
-    {:reply, {:ok, :joined}, state}
+    {:reply, {:ok, :joined}, state, {:continue, {@joined_cb, pid}}}
   end
 
   @impl GenServer
@@ -169,6 +171,14 @@ defmodule Livedj.Sessions.PlaylistServer do
   @impl GenServer
   def handle_continue({@on_start_cb, on_start}, state) do
     :ok = on_start.(state)
+
+    {:noreply, state}
+  end
+
+  def handle_continue({@joined_cb, from}, state) do
+    Channels.notify_playlsit_joined(from, state.id, %{
+      drag_state: state.drag_state
+    })
 
     {:noreply, state}
   end
