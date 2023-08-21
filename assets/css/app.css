@@ -5,6 +5,4 @@
 @import "./widgets/scrollbar.css";
 
 /* This file is for your main application CSS */
-.draggable {
-  @apply bg-white my-2 rounded-xl border-gray-300 border-2 drag-item:focus-within:ring-0 drag-item:focus-within:ring-offset-0 drag-ghost:bg-zinc-300 drag-ghost:border-0 drag-ghost:ring-0;
-}
+
