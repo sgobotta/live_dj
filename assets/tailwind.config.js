@@ -11,13 +11,6 @@ module.exports = {
     "../lib/*_web.ex",
     "../lib/*_web/**/*.*ex"
   ],
-  theme: {
-    extend: {
-      colors: {
-        brand: "#FD4F00",
-      }
-    },
-  },
   plugins: [
     require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
@@ -48,35 +41,43 @@ module.exports = {
     // See your `CoreComponents.icon/1` for more information.
     //
     plugin(function({matchComponents, theme}) {
-      let iconsDir = path.join(__dirname, "./vendor/heroicons/optimized")
-      let values = {}
-      let icons = [
+      const iconsDir = path.join(__dirname, "./vendor/heroicons/optimized")
+      const values = {}
+      const icons = [
         ["", "/24/outline"],
         ["-solid", "/24/solid"],
         ["-mini", "/20/solid"]
       ]
       icons.forEach(([suffix, dir]) => {
         fs.readdirSync(path.join(iconsDir, dir)).map(file => {
-          let name = path.basename(file, ".svg") + suffix
-          values[name] = {name, fullPath: path.join(iconsDir, dir, file)}
+          const name = path.basename(file, ".svg") + suffix
+          values[name] = {fullPath: path.join(iconsDir, dir, file), name}
         })
       })
       matchComponents({
         "hero": ({name, fullPath}) => {
-          let content = fs.readFileSync(fullPath).toString().replace(/\r?\n|\r/g, "")
+          const content = fs
+            .readFileSync(fullPath).toString().replace(/\r?\n|\r/g, "")
           return {
             [`--hero-${name}`]: `url('data:image/svg+xml;utf8,${content}')`,
             "-webkit-mask": `var(--hero-${name})`,
+            "background-color": "currentColor",
+            "display": "inline-block",
+            "height": theme("spacing.5"),
             "mask": `var(--hero-${name})`,
             "mask-repeat": "no-repeat",
-            "background-color": "currentColor",
             "vertical-align": "middle",
-            "display": "inline-block",
-            "width": theme("spacing.5"),
-            "height": theme("spacing.5")
+            "width": theme("spacing.5")
           }
         }
       }, {values})
     })
-  ]
+  ],
+  theme: {
+    extend: {
+      colors: {
+        brand: "#FD4F00"
+      }
+    }
+  }
 }
