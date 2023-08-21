@@ -118,6 +118,10 @@ cp .env.example .env
 
 + `UPLOADS_PATH`: the assigned path for uploads.
 
+#### Youtube integration
+
++ `YOUTUBE_API_KEY`: api key for the YouTube 3 api. More information about [*how to get an API key*](https://console.developers.google.com/apis/api/youtube.googleapis.com/credentials).
+
 ### Useful commands
 
 This project uses **Makefile** to interact with the Elixir server, the postgres service, database and a variety of mix tools.

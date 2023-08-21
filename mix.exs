@@ -33,7 +33,7 @@ defmodule Livedj.MixProject do
   def application do
     [
       mod: {Livedj.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :tubex]
     ]
   end
 
@@ -75,6 +75,8 @@ defmodule Livedj.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      # Youtube deps
+      {:tubex, git: "https://github.com/sgobotta/tubex.git", tag: "0.0.10"},
       # Other
       {:redix, "~> 1.2"}
     ]
