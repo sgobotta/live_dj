@@ -15,6 +15,7 @@ defmodule Livedj.Sessions.PlaylistServer do
   @unlock_msg :unlock
 
   @joined_cb :joined
+  @added_cb :added
   @on_start_cb :on_start
   @locked_cb :locked
   @unlocked_cb :unlocked
@@ -135,8 +136,8 @@ defmodule Livedj.Sessions.PlaylistServer do
   end
 
   @impl GenServer
-  def handle_call({@add_msg, _arg}, _from, state) do
-    {:reply, {:ok, :added}, state}
+  def handle_call({@add_msg, arg}, _from, state) do
+    {:reply, {:ok, :added}, state, {:continue, {@added_cb, arg}}}
   end
 
   def handle_call({@remove_msg, _arg}, _from, state) do
@@ -179,6 +180,12 @@ defmodule Livedj.Sessions.PlaylistServer do
     Channels.notify_playlsit_joined(from, state.id, %{
       drag_state: state.drag_state
     })
+
+    {:noreply, state}
+  end
+
+  def handle_continue({@added_cb, arg}, state) do
+    :ok = Channels.broadcast_playlist_track_added!(state.id, arg)
 
     {:noreply, state}
   end

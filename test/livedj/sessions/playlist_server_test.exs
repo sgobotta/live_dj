@@ -71,14 +71,6 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       %{state: state}
     end
 
-    test "handle_call/3 :lock replies with a locked status", %{state: state} do
-      pid = self()
-
-      {:reply, {:ok, :locked}, %{drag_state: {:locked, ^pid, _timeout_ref}},
-       {:continue, {:locked, ^pid}}} =
-        do_handle_lock({pid, Process.monitor(pid)}, state)
-    end
-
     test "handle_call/3 :join replies with a joined status", %{state: state} do
       pid = self()
       response = do_handle_join({pid, Process.monitor(pid)}, state)
@@ -92,9 +84,11 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       state: state
     } do
       pid = self()
-      response = do_handle_add("some element", pid, state)
+      arg = "some element"
 
-      {:reply, {:ok, :added}, ^state} = response
+      response = do_handle_add(arg, pid, state)
+
+      {:reply, {:ok, :added}, ^state, {:continue, {:added, ^arg}}} = response
     end
 
     test "handle_call/3 {:remove, args} replies with a removed status", %{
@@ -104,6 +98,14 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       response = do_handle_remove("some element", pid, state)
 
       {:reply, {:ok, :removed}, ^state} = response
+    end
+
+    test "handle_call/3 :lock replies with a locked status", %{state: state} do
+      pid = self()
+
+      {:reply, {:ok, :locked}, %{drag_state: {:locked, ^pid, _timeout_ref}},
+       {:continue, {:locked, ^pid}}} =
+        do_handle_lock({pid, Process.monitor(pid)}, state)
     end
 
     test "handle_cast/2 :unlock unlocks drag playlist and does not reply",
@@ -140,6 +142,21 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       )
 
       assert state.drag_state == :free
+    end
+
+    test "handle_continue/2 {:added, arg} notifies the added element", %{
+      state: state
+    } do
+      state_id = state.id
+      arg = "some element"
+
+      :ok = Channels.subscribe_playlist_topic(state_id)
+
+      {:noreply, _state} = do_handle_added(arg, state)
+
+      message_name = Channels.track_added_event()
+
+      assert_receive({^message_name, ^state_id, ^arg})
     end
 
     test "handle_continue/2 {:locked, pid} notifies the locked state", %{
@@ -213,12 +230,6 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       assert Enum.empty?(Map.values(state.members))
     end
 
-    defp do_handle_lock(from, state),
-      do: @subject.handle_call(:lock, from, state)
-
-    defp do_handle_unlock(from, state),
-      do: @subject.handle_cast({:unlock, from}, state)
-
     defp do_handle_join(from, state),
       do: @subject.handle_call(:join, from, state)
 
@@ -228,8 +239,17 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     defp do_handle_remove(arg, from, state),
       do: @subject.handle_call({:remove, arg}, from, state)
 
+    defp do_handle_lock(from, state),
+      do: @subject.handle_call(:lock, from, state)
+
+    defp do_handle_unlock(from, state),
+      do: @subject.handle_cast({:unlock, from}, state)
+
     defp do_handle_joined(from, state),
       do: @subject.handle_continue({:joined, from}, state)
+
+    defp do_handle_added(arg, state),
+      do: @subject.handle_continue({:added, arg}, state)
 
     defp do_handle_locked(arg, state),
       do: @subject.handle_continue({:locked, arg}, state)

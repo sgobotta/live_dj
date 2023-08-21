@@ -3,7 +3,7 @@ defmodule Livedj.Sessions.Channels do
   Sessions channels and topic management.
   """
 
-  @type message :: atom()
+  @type message :: atom() | {atom(), binary(), any()}
 
   # ----------------------------------------------------------------------------
   # Topics
@@ -17,6 +17,7 @@ defmodule Livedj.Sessions.Channels do
   @dragging_unlocked :dragging_unlocked
   @dragging_cancelled :dragging_cancelled
   @playlist_joined :playlist_joined
+  @track_added :track_added
 
   @doc """
   Returns the playlist topic
@@ -49,6 +50,12 @@ defmodule Livedj.Sessions.Channels do
   def dragging_cancelled_event, do: @dragging_cancelled
 
   @doc """
+  Returns the message name for track adding events
+  """
+  @spec track_added_event() :: :track_added
+  def track_added_event, do: @track_added
+
+  @doc """
   Returns the message name for playlist joined events
   """
   @spec playlsit_joined_event() :: :playlist_joined
@@ -76,9 +83,20 @@ defmodule Livedj.Sessions.Channels do
       broadcast_from!(from, playlist_topic(room_id), dragging_unlocked_event())
 
   @doc """
+  Broadcasts a #{@track_added} message to the given topic.
+  """
+  @spec broadcast_playlist_track_added!(binary(), any()) :: :ok
+  def broadcast_playlist_track_added!(room_id, payload),
+    do:
+      broadcast!(
+        playlist_topic(room_id),
+        {track_added_event(), room_id, payload}
+      )
+
+  @doc """
   Notify a #{@playlist_joined} message to the given topic.
   """
-  @spec notify_playlsit_joined(pid(), binary(), any()) :: any()
+  @spec notify_playlsit_joined(pid(), binary(), any()) :: message()
   def notify_playlsit_joined(from, room_id, payload),
     do: send(from, {playlsit_joined_event(), room_id, payload})
 
@@ -95,4 +113,8 @@ defmodule Livedj.Sessions.Channels do
   @spec broadcast_from!(pid(), binary(), message()) :: :ok
   defp broadcast_from!(from, topic, message),
     do: Phoenix.PubSub.broadcast_from!(Livedj.PubSub, from, topic, message)
+
+  @spec broadcast!(binary(), message()) :: :ok
+  defp broadcast!(topic, message),
+    do: Phoenix.PubSub.broadcast!(Livedj.PubSub, topic, message)
 end
