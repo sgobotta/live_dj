@@ -9,7 +9,7 @@ defmodule LivedjWeb.ListComponent do
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={item <- @list}
-            id={"#{@id}-#{item.id}"}
+            id={"#{item.id}-item"}
             data-id={item.id}
             class={"
               #{if @state == :locked, do: "bg-gray-50 border-dashed", else: "bg-white"}
