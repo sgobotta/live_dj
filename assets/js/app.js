@@ -27,8 +27,13 @@ const Hooks = {}
 
 Hooks.Sortable = {
   mounted() {
-    const cancelledBgClass = 'bg-red-300'
-    const cancelledPointer = 'cursor-no-drop'
+    const noDropCursor = 'cursor-no-drop'
+    const grabCursor = 'cursor-grab'
+    const grabbingCursor = 'cursor-grabbing'
+
+    const cancelledPointerHover = `hover:${noDropCursor}`
+    const grabbablePointerHover = `hover:${grabCursor}`
+    const grabbingPointerHover = `hover:${grabbingCursor}`
 
     const sorter = new Sortable(this.el, {
       animation: 400,
@@ -39,29 +44,23 @@ Hooks.Sortable = {
       onEnd: e => {
         const params = {new: e.newIndex, old: e.oldIndex, ...e.item.dataset}
 
-        sorter.el.classList.remove(cancelledBgClass)
-        sorter.el.classList.remove(cancelledPointer)
-        sorter.el.classList.remove("hover:cursor-grabbing")
+        sorter.el.classList.remove(cancelledPointerHover)
+        sorter.el.classList.remove(grabbingPointerHover)
         Array.from(sorter.el.children).forEach(c => {
-          c.classList.add("hover:cursor-grab")
+          c.classList.add(grabbablePointerHover)
+          c.classList.remove(cancelledPointerHover)
         })
 
         this.pushEventTo(this.el, "reposition_end", params)
       },
       onStart: () => {
         Array.from(sorter.el.children).forEach(c => {
-          c.classList.remove("hover:cursor-grab")
+          c.classList.remove(grabbablePointerHover)
         })
-        sorter.el.classList.add("hover:cursor-grabbing")
+        sorter.el.classList.add(grabbingPointerHover)
 
         this.pushEventTo(this.el, "reposition_start")
       }
-      // onMove: (event, b) => {
-      //   console.log("event", event)
-      //   console.log("b", b)
-      //   // b.target.classList.add("hover:cursor-grabbing")
-      //   // same properties as onEnd
-      // }
     })
 
     this.handleEvent('disable-drag', () => {
@@ -73,8 +72,14 @@ Hooks.Sortable = {
     })
 
     this.handleEvent('cancel-drag', () => {
-      sorter.el.classList.add(cancelledBgClass)
-      sorter.el.classList.add(cancelledPointer)
+      sorter.el.classList.remove(grabbingPointerHover)
+      Array.from(sorter.el.children).forEach(c => {
+        c.classList.remove(grabbingPointerHover)
+        c.classList.remove(`drag-ghost:${grabbingCursor}`)
+        c.classList.add(`drag-ghost:${noDropCursor}`)
+        c.classList.add(cancelledPointerHover)
+      })
+      sorter.el.classList.add(cancelledPointerHover)
     })
   }
 }
