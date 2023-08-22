@@ -49,7 +49,7 @@ defmodule LivedjWeb.ListComponent do
     socket.assigns.on_drag_start.(socket, self())
   end
 
-  def handle_event("reposition_end", _params, socket) do
-    socket.assigns.on_drag_end.(socket, self())
+  def handle_event("reposition_end", params, socket) do
+    socket.assigns.on_drag_end.(socket, self(), params)
   end
 end
