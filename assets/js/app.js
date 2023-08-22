@@ -41,9 +41,7 @@ Hooks.Sortable = {
       dragClass: "drag-item",
       forceFallback: true,
       ghostClass: "drag-ghost",
-      onEnd: e => {
-        const params = {new: e.newIndex, old: e.oldIndex, ...e.item.dataset}
-
+      onEnd: ({item: item, newIndex: newIndex, oldIndex: oldIndex}) => {
         sorter.el.classList.remove(cancelledPointerHover)
         sorter.el.classList.remove(grabbingPointerHover)
         Array.from(sorter.el.children).forEach(c => {
@@ -51,7 +49,34 @@ Hooks.Sortable = {
           c.classList.remove(cancelledPointerHover)
         })
 
+        const {dataRelatedInsertedAfter, dataRelatedId} = this
+        let params
+
+        if ([
+          (newIndex !== oldIndex),
+          (dataRelatedInsertedAfter !== undefined),
+          (dataRelatedId !== undefined)
+        ].every(c => c === true)) {
+          params = {
+            insertedAfter: dataRelatedInsertedAfter,
+            new: newIndex,
+            old: oldIndex,
+            relatedId: dataRelatedId,
+            status: "update",
+            ...item.dataset
+          }
+
+        } else {
+          params.status = "noop"
+        }
+        
         this.pushEventTo(this.el, "reposition_end", params)
+        this.dataRelatedInsertedAfter = undefined
+        this.dataRelatedId = undefined
+      },
+      onMove: event => {
+        this.dataRelatedId = event.related.id
+        this.dataRelatedInsertedAfter = event.willInsertAfter
       },
       onStart: () => {
         Array.from(sorter.el.children).forEach(c => {
