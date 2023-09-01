@@ -3,7 +3,7 @@ defmodule Livedj.Sessions.Channels do
   Sessions channels and topic management.
   """
 
-  @type message :: atom() | {atom(), binary(), any()}
+  @type message :: atom() | {atom(), any()} | {atom(), binary(), any()}
 
   # ----------------------------------------------------------------------------
   # Topics
@@ -18,6 +18,7 @@ defmodule Livedj.Sessions.Channels do
   @dragging_cancelled :dragging_cancelled
   @playlist_joined :playlist_joined
   @track_added :track_added
+  @track_moved :track_moved
 
   @doc """
   Returns the playlist topic
@@ -56,6 +57,12 @@ defmodule Livedj.Sessions.Channels do
   def track_added_event, do: @track_added
 
   @doc """
+  Returns the message name for track moving events
+  """
+  @spec track_moved_event() :: :track_moved
+  def track_moved_event, do: @track_moved
+
+  @doc """
   Returns the message name for playlist joined events
   """
   @spec playlsit_joined_event() :: :playlist_joined
@@ -91,6 +98,17 @@ defmodule Livedj.Sessions.Channels do
       broadcast!(
         playlist_topic(room_id),
         {track_added_event(), room_id, payload}
+      )
+
+  @doc """
+  Broadcasts a #{@track_moved} message to the given topic.
+  """
+  @spec broadcast_playlist_track_moved!(binary(), any()) :: :ok
+  def broadcast_playlist_track_moved!(room_id, payload),
+    do:
+      broadcast!(
+        playlist_topic(room_id),
+        {track_moved_event(), room_id, payload}
       )
 
   @doc """
