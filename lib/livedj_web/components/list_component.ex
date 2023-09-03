@@ -9,8 +9,8 @@ defmodule LivedjWeb.ListComponent do
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={item <- @list}
-            id={"#{item.id}-item"}
-            data-id={item.id}
+            id={"#{item.youtube_id}-item"}
+            data-id={item.youtube_id}
             class={"
               #{if @state == :locked, do: "bg-gray-50 border-dashed", else: "bg-white"}
               bg-white my-2 rounded-xl border-gray-300 border-[1px]
@@ -22,7 +22,7 @@ defmodule LivedjWeb.ListComponent do
             <div class="flex drag-ghost:opacity-0 gap-y-2 h-14 items-center px-1">
               <img
                 class="inline-block h-12 w-12 rounded-lg ring-2 ring-white"
-                src={item.thumbnail["url"]}
+                src={item.thumbnail_url}
                 alt={item.name}
               />
               <div class="flex-auto block text-sm leading-6 text-zinc-900 p-1 px-1">

@@ -11,11 +11,13 @@ defmodule Livedj.Sessions.PlaylistServer do
   @join_msg :join
   @add_msg :add
   @remove_msg :remove
+  @move_msg :move
   @lock_msg :lock
   @unlock_msg :unlock
 
   @joined_cb :joined
   @added_cb :added
+  @moved_cb :moved
   @on_start_cb :on_start
   @locked_cb :locked
   @unlocked_cb :unlocked
@@ -35,6 +37,7 @@ defmodule Livedj.Sessions.PlaylistServer do
   @type join_response :: {:ok, :joined}
   @type add_response :: {:ok, :added}
   @type remove_response :: {:ok, :removed}
+  @type moved_response :: {:ok, :moved}
 
   @type lock_response ::
           {:ok, :locked} | {:error, :already_locked | :not_an_owner}
@@ -56,17 +59,17 @@ defmodule Livedj.Sessions.PlaylistServer do
   @doc """
   Given a pid, joins the current server
   """
-  @spec join(pid()) :: join_response()
-  def join(pid) do
-    GenServer.call(pid, @join_msg)
+  @spec join(pid(), keyword()) :: join_response()
+  def join(pid, cbs) do
+    GenServer.call(pid, {@join_msg, cbs})
   end
 
   @doc """
   Given a pid, adds an element to the playlist.
   """
-  @spec add(pid(), element()) :: add_response()
-  def add(pid, arg) do
-    GenServer.call(pid, {@add_msg, arg})
+  @spec add(pid(), keyword()) :: add_response()
+  def add(pid, cbs) do
+    GenServer.call(pid, {@add_msg, cbs})
   end
 
   @doc """
@@ -75,6 +78,14 @@ defmodule Livedj.Sessions.PlaylistServer do
   @spec remove(pid(), element()) :: remove_response()
   def remove(pid, arg) do
     GenServer.call(pid, {@remove_msg, arg})
+  end
+
+  @doc """
+  Given a pid, moves an element through the playlist.
+  """
+  @spec move(pid(), keyword()) :: moved_response()
+  def move(pid, cbs) do
+    GenServer.call(pid, {@move_msg, cbs})
   end
 
   @doc """
@@ -123,7 +134,7 @@ defmodule Livedj.Sessions.PlaylistServer do
   end
 
   @impl GenServer
-  def handle_call(@join_msg, {pid, _ref}, state) do
+  def handle_call({@join_msg, cbs}, {pid, _ref}, state) do
     ref = Process.monitor(pid)
 
     Logger.debug(
@@ -132,23 +143,47 @@ defmodule Livedj.Sessions.PlaylistServer do
 
     state = add_member(state, ref, pid)
 
-    {:reply, {:ok, :joined}, state, {:continue, {@joined_cb, pid}}}
+    {:reply, {:ok, :joined}, state, {:continue, {@joined_cb, pid, cbs}}}
   end
 
   @impl GenServer
-  def handle_call({@add_msg, arg}, _from, state) do
-    {:reply, {:ok, :added}, state, {:continue, {@added_cb, arg}}}
+  def handle_call({@add_msg, cbs}, _from, state) do
+    {{on_add, args}, cbs} = Keyword.pop!(cbs, :on_add)
+
+    case apply(on_add, args) do
+      :ok ->
+        {:reply, {:ok, :added}, state, {:continue, {@added_cb, cbs}}}
+
+      {:error, error} ->
+        {:reply, {:error, error}, state}
+    end
   end
 
   def handle_call({@remove_msg, _arg}, _from, state) do
     {:reply, {:ok, :removed}, state}
   end
 
-  def handle_call(@lock_msg, from, %{drag_state: {:locked, from}} = state) do
+  def handle_call({@move_msg, cbs}, {pid, _ref}, state) do
+    {{on_move, args}, cbs} = Keyword.pop!(cbs, :on_move)
+
+    case apply(on_move, args) do
+      {:ok, :moved = reply} ->
+        {:reply, {:ok, reply}, state, {:continue, {@moved_cb, pid, cbs}}}
+
+      {:error, error} ->
+        {:reply, {:error, error}, state}
+    end
+  end
+
+  def handle_call(@lock_msg, from, %{drag_state: {:locked, from, _ref}} = state) do
     {:reply, {:error, :already_locked}, state}
   end
 
-  def handle_call(@lock_msg, _from, %{drag_state: {:locked, _pid}} = state) do
+  def handle_call(
+        @lock_msg,
+        _from,
+        %{drag_state: {:locked, _pid, _ref}} = state
+      ) do
     {:reply, {:error, :not_an_owner}, state}
   end
 
@@ -176,18 +211,49 @@ defmodule Livedj.Sessions.PlaylistServer do
     {:noreply, state}
   end
 
-  def handle_continue({@joined_cb, from}, state) do
+  def handle_continue({@joined_cb, from, cbs}, state) do
+    {{on_joined, args}, _cbs} = Keyword.pop!(cbs, :on_joined)
+
+    media_list =
+      case apply(on_joined, args) do
+        {:ok, media_list} ->
+          media_list
+
+        {:error, _error} ->
+          []
+      end
+
     Channels.notify_playlsit_joined(from, state.id, %{
-      drag_state: state.drag_state
+      drag_state: state.drag_state,
+      media_list: media_list
     })
 
     {:noreply, state}
   end
 
-  def handle_continue({@added_cb, arg}, state) do
-    :ok = Channels.broadcast_playlist_track_added!(state.id, arg)
+  def handle_continue({@added_cb, cbs}, state) do
+    {{on_added, args}, _cbs} = Keyword.pop!(cbs, :on_added)
+
+    :ok = apply(on_added, args)
 
     {:noreply, state}
+  end
+
+  def handle_continue({@moved_cb, from, cbs}, state) do
+    {{on_moved, args}, _cbs} = Keyword.pop!(cbs, :on_moved)
+
+    case apply(on_moved, args) do
+      {:ok, media_list} ->
+        :ok =
+          Channels.broadcast_playlist_track_moved!(state.id, %{
+            media_list: media_list
+          })
+
+      {:error, _error} ->
+        :noop
+    end
+
+    {:noreply, unlock_drag(state), {:continue, {@unlocked_cb, from}}}
   end
 
   def handle_continue({@locked_cb, from}, state) do

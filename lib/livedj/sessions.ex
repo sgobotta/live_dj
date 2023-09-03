@@ -4,10 +4,13 @@ defmodule Livedj.Sessions do
   """
 
   import Ecto.Query, warn: false
+  import LivedjWeb.Gettext
+
   alias Livedj.Repo
 
   alias Livedj.Sessions.{
     Channels,
+    Playlist,
     PlaylistServer,
     PlaylistSupervisor,
     Room,
@@ -29,8 +32,8 @@ defmodule Livedj.Sessions do
   def join_playlist(room_id) do
     :ok = Channels.subscribe_playlist_topic(room_id)
 
-    PlaylistSupervisor.get_child_pid!(room_id)
-    |> PlaylistServer.join()
+    get_child_pid!(room_id)
+    |> PlaylistServer.join(on_joined: {&get_playlist/1, [room_id]})
   end
 
   @doc """
@@ -38,9 +41,34 @@ defmodule Livedj.Sessions do
   """
   @spec add_media(binary(), any()) :: PlaylistServer.add_response()
   def add_media(room_id, media) do
-    get_child_pid!(room_id)
-    |> PlaylistServer.add(media)
+    case Redis.Hash.hset("media:#{media.youtube_id}", media) do
+      {:ok, media} ->
+        get_child_pid!(room_id)
+        |> PlaylistServer.add(
+          on_add: {&on_add/2, [room_id, media]},
+          on_added: {&on_added/2, [room_id, media]}
+        )
+
+      {:error, :hset_error} ->
+        {:error, dgettext("errors", "Could not add track. Please try again.")}
+    end
   end
+
+  @spec on_add(Ecto.UUID.t(), any()) :: :ok | {:error, :element_exists}
+  defp on_add(room_id, media) do
+    case Playlist.add(room_id, media.youtube_id) do
+      :ok ->
+        :ok
+
+      {:error, :element_exists} ->
+        {:error,
+         dgettext("errors", "The video is already added to the playlist")}
+    end
+  end
+
+  @spec on_added(Ecto.UUID.t(), any()) :: :ok
+  defp on_added(room_id, media),
+    do: Channels.broadcast_playlist_track_added!(room_id, media)
 
   @doc """
   Removes a media element from the playlist
@@ -49,6 +77,83 @@ defmodule Livedj.Sessions do
   def remove_media(room_id, media) do
     get_child_pid!(room_id)
     |> PlaylistServer.remove(media)
+  end
+
+  @doc """
+  Given a room id, a media identifier, a condition, a target element and some
+  options, attempts to move the track referenced to a new index.
+
+  ### Opts:
+
+  - new_index: `integer()`
+  - old_index: `integer()`
+
+  """
+  @spec move_media(
+          Ecto.UUID.t(),
+          String.t(),
+          boolean(),
+          String.t(),
+          keyword()
+        ) :: {:ok, :moved} | {:error, any()}
+  def move_media(room_id, media_identifier, inserted_after?, target_id, _opts) do
+    get_child_pid!(room_id)
+    |> PlaylistServer.move(
+      on_move:
+        {&on_move/4, [room_id, media_identifier, inserted_after?, target_id]},
+      on_moved: {&get_playlist/1, [room_id]}
+    )
+  end
+
+  @spec on_move(Ecto.UUID.t(), String.t(), boolean(), String.t()) ::
+          {:ok, :moved} | {:error, any()}
+  defp on_move(room_id, media_identifier, inserted_after?, target_id) do
+    case Playlist.move(room_id, media_identifier, inserted_after?, target_id) do
+      {:ok, result} ->
+        Logger.debug("#{__MODULE__} :: Moved result=#{inspect(result)}")
+        {:ok, :moved}
+
+      {:error, error} = e ->
+        Logger.error(
+          "#{__MODULE__}.move_media/5 :: Error room_id=#{inspect(room_id)} media_identifier=#{inspect(media_identifier)} inserted_after?=#{inspect(inserted_after?)} target_id=#{inspect(target_id)} error=#{inspect(error)}"
+        )
+
+        e
+    end
+  end
+
+  @doc """
+  Given a room id, returns a list of media.
+  """
+  @spec get_playlist(Ecto.UUID.t()) ::
+          {:ok, list(map())} | {:error, any()}
+  def get_playlist(room_id) do
+    case Playlist.get(room_id) do
+      {:ok, result} ->
+        Logger.debug("#{__MODULE__} :: Get playlist result=#{inspect(result)}")
+
+        # Refactor to Media.list/1
+        list =
+          Enum.map(result, fn media_youtube_id ->
+            {:ok, media} = Redis.Hash.hgetall("media:#{media_youtube_id}")
+
+            media =
+              for {key, val} <- media,
+                  into: %{},
+                  do: {String.to_atom(key), val}
+
+            media
+          end)
+
+        {:ok, list}
+
+      {:error, error} = e ->
+        Logger.error(
+          "#{__MODULE__} :: Error on Redis.List.range error=#{inspect(error)}"
+        )
+
+        e
+    end
   end
 
   @doc """
@@ -78,8 +183,8 @@ defmodule Livedj.Sessions do
 
   @spec fetch_media_metadata_by_id(binary()) ::
           {:error, :tubex_error} | {:ok, map()}
-  def fetch_media_metadata_by_id(media_id) do
-    case Tubex.Video.metadata(media_id) do
+  def fetch_media_metadata_by_id(youtube_id) do
+    case Tubex.Video.metadata(youtube_id) do
       {:error, error} ->
         Logger.error(
           "#{__MODULE__} :: There was an error fetching a video metadata err=#{inspect(error)}"
@@ -93,12 +198,14 @@ defmodule Livedj.Sessions do
   end
 
   @spec create_media(map()) :: {:ok, map()}
-  def create_media(media) do
+  def create_media(media, id \\ nil) do
     media = %{
       name: media["snippet"]["localized"]["title"],
-      id: Ecto.UUID.generate(),
+      id: id || Ecto.UUID.generate(),
       youtube_id: media["id"],
-      thumbnail: media["snippet"]["thumbnails"]["default"]
+      thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
+      thumbnail_width: media["snippet"]["thumbnails"]["default"]["width"],
+      thumbnail_height: media["snippet"]["thumbnails"]["default"]["height"]
     }
 
     {:ok, media}

@@ -23,7 +23,12 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     end
 
     test "add/2 returns {:ok, :added}", %{pid: pid} do
-      response = do_add(pid, "some element")
+      cbs = [
+        on_add: {fn -> :ok end, []},
+        on_added: {fn -> :ok end, []}
+      ]
+
+      response = do_add(pid, cbs)
       assert response == {:ok, :added}
     end
 
@@ -45,7 +50,8 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     test "join/2 successfully adds a member and returns {:ok, :joined}", %{
       pid: pid
     } do
-      response = do_join(pid)
+      cbs = [{&sum_two/2, [1, 1]}]
+      response = do_join(pid, cbs)
 
       assert response == {:ok, :joined}
     end
@@ -58,7 +64,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     defp do_unlock(pid, from), do: @subject.unlock(pid, from)
 
-    defp do_join(pid), do: @subject.join(pid)
+    defp do_join(pid, arg), do: @subject.join(pid, arg)
   end
 
   describe "server implementation" do
@@ -73,9 +79,13 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     test "handle_call/3 :join replies with a joined status", %{state: state} do
       pid = self()
-      response = do_handle_join({pid, Process.monitor(pid)}, state)
 
-      {:reply, {:ok, :joined}, state, {:continue, {:joined, ^pid}}} = response
+      cbs = []
+
+      response = do_handle_join(cbs, {pid, Process.monitor(pid)}, state)
+
+      {:reply, {:ok, :joined}, state, {:continue, {:joined, ^pid, ^cbs}}} =
+        response
 
       assert Enum.member?(Map.values(state.members), pid)
     end
@@ -84,11 +94,17 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       state: state
     } do
       pid = self()
-      arg = "some element"
+
+      arg = [
+        on_add: {fn -> :ok end, []},
+        on_added: {&sum_two/2, [0, 2]}
+      ]
 
       response = do_handle_add(arg, pid, state)
 
-      {:reply, {:ok, :added}, ^state, {:continue, {:added, ^arg}}} = response
+      {:reply, {:ok, :added}, ^state, {:continue, {:added, cbs}}} = response
+
+      {_on_added, ^cbs} = Keyword.pop!(arg, :on_add)
     end
 
     test "handle_call/3 {:remove, args} replies with a removed status", %{
@@ -133,7 +149,10 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
       :ok = Channels.subscribe_playlist_topic(state_id)
 
-      {:noreply, _state} = do_handle_joined(client_pid, state)
+      media_list = ["some element", "some other element"]
+      cbs = [on_joined: {fn -> {:ok, media_list} end, []}]
+
+      {:noreply, _state} = do_handle_joined(cbs, client_pid, state)
 
       message_name = Channels.playlsit_joined_event()
 
@@ -148,7 +167,15 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       state: state
     } do
       state_id = state.id
-      arg = "some element"
+      media = "some element"
+
+      arg = [
+        on_added:
+          {fn ->
+             Channels.broadcast_playlist_track_added!(state_id, media)
+             :ok
+           end, []}
+      ]
 
       :ok = Channels.subscribe_playlist_topic(state_id)
 
@@ -156,7 +183,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
       message_name = Channels.track_added_event()
 
-      assert_receive({^message_name, ^state_id, ^arg})
+      assert_receive({^message_name, ^state_id, ^media})
     end
 
     test "handle_continue/2 {:locked, pid} notifies the locked state", %{
@@ -203,11 +230,18 @@ defmodule Livedj.Sessions.PlaylistServerTest do
          %{state: state} do
       # Setup
       clients = spawn_client(1)
+      media_list = ["some element", "some other element"]
+      cbs = [on_joined: {fn -> {:ok, media_list} end, []}]
 
       state =
         Enum.reduce(clients, state, fn {client_pid, _client_user}, acc ->
-          {:reply, {:ok, :joined}, state, {:continue, {:joined, ^client_pid}}} =
-            do_handle_join({client_pid, Process.monitor(client_pid)}, acc)
+          {:reply, {:ok, :joined}, state,
+           {:continue, {:joined, ^client_pid, ^cbs}}} =
+            do_handle_join(
+              cbs,
+              {client_pid, Process.monitor(client_pid)},
+              acc
+            )
 
           state
         end)
@@ -230,8 +264,8 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       assert Enum.empty?(Map.values(state.members))
     end
 
-    defp do_handle_join(from, state),
-      do: @subject.handle_call(:join, from, state)
+    defp do_handle_join(arg, from, state),
+      do: @subject.handle_call({:join, arg}, from, state)
 
     defp do_handle_add(arg, from, state),
       do: @subject.handle_call({:add, arg}, from, state)
@@ -245,8 +279,8 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     defp do_handle_unlock(from, state),
       do: @subject.handle_cast({:unlock, from}, state)
 
-    defp do_handle_joined(from, state),
-      do: @subject.handle_continue({:joined, from}, state)
+    defp do_handle_joined(arg, from, state),
+      do: @subject.handle_continue({:joined, from, arg}, state)
 
     defp do_handle_added(arg, state),
       do: @subject.handle_continue({:added, arg}, state)
@@ -260,4 +294,6 @@ defmodule Livedj.Sessions.PlaylistServerTest do
     defp do_handle_lock_timeout(from, state),
       do: @subject.handle_info({:lock_timeout, from}, state)
   end
+
+  defp sum_two(a, b), do: a + b
 end

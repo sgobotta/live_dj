@@ -52,21 +52,33 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("save", %{"url" => url}, socket) do
     with {:ok, media_id} <- validate_url(url),
-         {:ok, media} <- Sessions.fetch_media_metadata_by_id(media_id),
+         {:ok, media} <-
+           Sessions.fetch_media_metadata_by_id(media_id),
          {:ok, media} <- Sessions.create_media(media),
          {:ok, :added} <- Sessions.add_media(socket.assigns.room.id, media) do
       {:noreply,
        socket
        |> assign(form: to_form(%{}))
-       |> assign(media_list: socket.assigns.media_list ++ [media])}
+       |> put_flash(:info, gettext("Track queued to playlist"))}
     else
-      _else ->
+      {:error, :invalid_url} ->
         {:noreply,
          socket
          |> put_flash(
-           :error,
+           :warn,
            dgettext("errors", "The youtube url is not valid")
          )}
+
+      {:error, :tubex_error} ->
+        {:noreply,
+         put_flash(
+           socket,
+           :error,
+           dgettext("errors", "Could not fetch the video from youtube")
+         )}
+
+      {:error, msg} when is_binary(msg) ->
+        {:noreply, put_flash(socket, :warn, msg)}
     end
   end
 
@@ -83,6 +95,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:playlist_joined, room_id, payload},
         %{assigns: %{room: %Room{id: room_id}}} = socket
       ) do
+    # IO.inspect(payload, label:  "Joined payload")
     drag_state =
       case payload.drag_state do
         :free ->
@@ -92,7 +105,30 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
           :locked
       end
 
-    {:noreply, assign(socket, :drag_state, drag_state)}
+    {:noreply,
+     socket
+     |> assign(:drag_state, drag_state)
+     |> assign(:media_list, payload.media_list)}
+  end
+
+  @impl true
+  def handle_info(
+        {:track_added, room_id, media},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(media_list: socket.assigns.media_list ++ [media])}
+  end
+
+  @impl true
+  def handle_info(
+        {:track_moved, room_id, %{media_list: media_list}},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(media_list: media_list)}
   end
 
   @impl true
@@ -139,10 +175,32 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   defp on_drag_end(room_id) do
-    fn socket, from ->
-      :ok = Sessions.unlock_playlist_drag(room_id, from)
+    fn
+      socket, from, params ->
+        case params do
+          %{
+            "status" => "update",
+            "id" => media_identifier,
+            "insertedAfter" => inserted_after?,
+            "relatedId" => target_media_id,
+            "new" => new_index,
+            "old" => old_index
+          } ->
+            Sessions.move_media(
+              room_id,
+              media_identifier,
+              inserted_after?,
+              String.replace(target_media_id, "-item", ""),
+              new_index: new_index,
+              old_index: old_index
+            )
 
-      {:noreply, socket}
+            {:noreply, socket}
+
+          %{"status" => "noop"} ->
+            :ok = Sessions.unlock_playlist_drag(room_id, from)
+            {:noreply, socket}
+        end
     end
   end
 

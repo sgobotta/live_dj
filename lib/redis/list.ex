@@ -2,13 +2,24 @@ defmodule Redis.List do
   @moduledoc """
   Abstraction module for the [LIST commands](https://redis.io/commands/?group=list)
   """
+  require Logger
 
   @doc """
   Redis LPUSH command. [Docs](https://redis.io/commands/lpush/)
   """
-  @spec push(String.t(), Ecto.UUID.t()) :: Redis.redix_response()
+  @spec push(String.t(), String.t()) :: {:ok, integer()} | {:error, any()}
   def push(key, value) do
-    Redix.command(:redix, ~w(LPUSH #{key} #{value}))
+    case Redix.command(:redix, ~w(LPUSH #{key} #{value})) do
+      {:ok, _list_length} = res ->
+        res
+
+      {:error, error} = e ->
+        Logger.error(
+          "#{__MODULE__}.push/2 key=#{inspect(key)} value=#{inspect(value)} error=#{inspect(error)}"
+        )
+
+        e
+    end
   end
 
   @doc """
@@ -23,13 +34,21 @@ defmodule Redis.List do
   Given a key, a value, an insert strategy and an existent element, deletes the
   value from the list and immediately adds it before or after the given element.
   """
-  @spec move(String.t(), Ecto.UUID.t(), boolean(), Ecto.UUID.t()) ::
+  @spec move(String.t(), String.t(), boolean(), Ecto.UUID.t()) ::
           Redis.redix_response()
   def move(key, value, position, element) do
     Redix.transaction_pipeline(:redix, [
       ~w(LREM #{key} 0 #{value}),
       ~w(LINSERT #{key} #{parse_position(position)} #{element} #{value})
     ])
+  end
+
+  @doc """
+  Redis LPOS command. [Docs](https://redis.io/commands/lpos/)
+  """
+  @spec lpos(String.t(), String.t()) :: Redis.redix_response()
+  def lpos(key, value) do
+    Redix.command(:redix, ~w(LPOS #{key} #{value}))
   end
 
   defp parse_position(true), do: "AFTER"
