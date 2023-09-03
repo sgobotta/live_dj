@@ -3,7 +3,11 @@ defmodule Redis do
   Wrapper module for the Redix dep.
   """
 
-  defdelegate child_spec(_opts), to: Redis.Application
+  @type redix_response ::
+          {:ok, Redix.Protocol.redis_value()}
+          | {:error, atom() | Redix.Error.t() | Redix.ConnectionError.t()}
+
+  defdelegate child_spec(opts), to: Redis.Application
 
   def set(key, value) do
     Redix.command(:redix, ["SET", key, value])
