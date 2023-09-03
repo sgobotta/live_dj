@@ -37,7 +37,7 @@ Hooks.Sortable = {
 
     const sorter = new Sortable(this.el, {
       animation: 400,
-      delay: 75,
+      delay: 20,
       dragClass: "drag-item",
       forceFallback: true,
       ghostClass: "drag-ghost",
@@ -67,7 +67,7 @@ Hooks.Sortable = {
           }
 
         } else {
-          params.status = "noop"
+          params = {status: "noop"}
         }
         
         this.pushEventTo(this.el, "reposition_end", params)
