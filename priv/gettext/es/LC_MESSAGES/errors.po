@@ -11,14 +11,14 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/livedj/accounts/user.ex:50
-#: lib/livedj/accounts/user.ex:70
+#: lib/livedj/accounts/user.ex:52
+#: lib/livedj/accounts/user.ex:72
 #, elixir-autogen
 msgid "can't be blank"
 msgstr "no puede estar en blanco"
 
-#: lib/livedj/accounts/user.ex:117
-#: lib/livedj/accounts/user.ex:120
+#: lib/livedj/accounts/user.ex:119
+#: lib/livedj/accounts/user.ex:122
 #, elixir-autogen
 msgid "has already been taken"
 msgstr "este valor ya existe"
@@ -107,39 +107,79 @@ msgstr "debe ser mayor o igual a %{number}"
 msgid "must be equal to %{number}"
 msgstr "debe ser igual a %{number}"
 
-#: lib/livedj/accounts/user.ex:57
+#: lib/livedj/accounts/user.ex:59
 #, elixir-autogen, elixir-format, fuzzy
 msgid "should have at most %{count} caracters(s)"
 msgid_plural "should have at most %{count} caracters(s)"
 msgstr[0] "debe tener como máximo %{count} caracter"
 msgstr[1] "debe tener como máximo %{count} caracteres"
 
-#: lib/livedj/accounts/user.ex:141
+#: lib/livedj/accounts/user.ex:143
 #, elixir-autogen, elixir-format
 msgid "did not change"
 msgstr "no cambió"
 
-#: lib/livedj/accounts/user.ex:161
+#: lib/livedj/accounts/user.ex:163
 #, elixir-autogen, elixir-format
 msgid "does not match password"
 msgstr "la contraseña no coincide"
 
-#: lib/livedj/accounts/user.ex:203
+#: lib/livedj/accounts/user.ex:205
 #, elixir-autogen, elixir-format, fuzzy
 msgid "is not valid"
 msgstr "no es válido"
 
-#: lib/livedj/accounts/user.ex:52
+#: lib/livedj/accounts/user.ex:54
 #, elixir-autogen, elixir-format
 msgid "must have the @ sign and no spaces"
 msgstr "debe contener @ y no debe contener espacios"
 
-#: lib/livedj/accounts/user.ex:102
+#: lib/livedj/accounts/user.ex:104
 #, elixir-autogen, elixir-format, fuzzy
 msgid "should be at most %{count} byte(s)"
 msgstr "debe tener como máximo %{count} byte"
 
-#: lib/livedj/accounts/user.ex:76
+#: lib/livedj/accounts/user.ex:78
 #, elixir-autogen, elixir-format
 msgid "should be between %{min} and %{max} characters"
 msgstr "debe contener entre %{min} y %{max} caracteres"
+
+#: lib/livedj_web/components/core_components.ex:196
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Intentanto reconectar"
+
+#: lib/livedj/sessions.ex:53
+#, elixir-autogen, elixir-format
+msgid "Could not add track. Please try again."
+msgstr "No se pudo agregar la pista. Por favor intentá luego."
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:77
+#, elixir-autogen, elixir-format
+msgid "Could not fetch the video from youtube"
+msgstr "No se pudo recuperar el video de youtube"
+
+#: lib/livedj_web/components/core_components.ex:208
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Esperá mientras volvemos a estar en línea"
+
+#: lib/livedj/sessions.ex:65
+#, elixir-autogen, elixir-format
+msgid "The video is already added to the playlist"
+msgstr "El video ya está agregado en la lista"
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:69
+#, elixir-autogen, elixir-format
+msgid "The youtube url is not valid"
+msgstr "La url del video no es válida"
+
+#: lib/livedj_web/components/core_components.ex:191
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "No podemos conectarnos a internet"
+
+#: lib/livedj_web/components/core_components.ex:203
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Algo salió mal!"

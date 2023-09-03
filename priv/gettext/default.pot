@@ -11,13 +11,38 @@
 msgid ""
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:541
+#: lib/livedj_web/components/core_components.ex:598
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
 #: lib/livedj_web/components/core_components.ex:82
-#: lib/livedj_web/components/core_components.ex:156
+#: lib/livedj_web/components/core_components.ex:163
 #, elixir-autogen, elixir-format
 msgid "close"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:186
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:28
+#, elixir-autogen, elixir-format
+msgid "Insert a youtube url"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:185
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:62
+#, elixir-autogen, elixir-format
+msgid "Track queued to playlist"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:187
+#, elixir-autogen, elixir-format
+msgid "Warn!"
 msgstr ""
