@@ -108,7 +108,7 @@ defmodule LivedjWeb.CoreComponents do
   attr :title, :string, default: nil
 
   attr :kind, :atom,
-    values: [:info, :error],
+    values: [:info, :error, :warn],
     doc: "used for styling and flash lookup"
 
   attr :rest, :global,
@@ -129,7 +129,9 @@ defmodule LivedjWeb.CoreComponents do
         @kind == :info &&
           "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error &&
-          "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+          "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900",
+        @kind == :warn &&
+          "bg-yellow-50 text-yellow-900 shadow-md ring-yellow-500 fill-yellow-900"
       ]}
       {@rest}
     >
@@ -144,6 +146,11 @@ defmodule LivedjWeb.CoreComponents do
         />
         <.icon
           :if={@kind == :error}
+          name="hero-exclamation-circle-mini"
+          class="h-4 w-4"
+        />
+        <.icon
+          :if={@kind == :warn}
           name="hero-exclamation-circle-mini"
           class="h-4 w-4"
         />
@@ -175,29 +182,30 @@ defmodule LivedjWeb.CoreComponents do
 
   def flash_group(assigns) do
     ~H"""
-    <.flash kind={:info} title="Success!" flash={@flash} />
-    <.flash kind={:error} title="Error!" flash={@flash} />
+    <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
+    <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+    <.flash kind={:warn} title={gettext("Warn!")} flash={@flash} />
     <.flash
       id="client-error"
       kind={:error}
-      title="We can't find the internet"
+      title={dgettext("errors", "We can't find the internet")}
       phx-disconnected={show(".phx-client-error #client-error")}
       phx-connected={hide("#client-error")}
       hidden
     >
-      Attempting to reconnect
+      <%= dgettext("errors", "Attempting to reconnect") %>
       <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
     </.flash>
 
     <.flash
       id="server-error"
       kind={:error}
-      title="Something went wrong!"
+      title={dgettext("erros", "Something went wrong!")}
       phx-disconnected={show(".phx-server-error #server-error")}
       phx-connected={hide("#server-error")}
       hidden
     >
-      Hang in there while we get back on track
+      <%= dgettext("errors", "Hang in there while we get back on track") %>
       <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
     </.flash>
     """
