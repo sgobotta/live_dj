@@ -200,7 +200,7 @@ defmodule LivedjWeb.CoreComponents do
     <.flash
       id="server-error"
       kind={:error}
-      title={dgettext("erros", "Something went wrong!")}
+      title={dgettext("errors", "Something went wrong!")}
       phx-disconnected={show(".phx-server-error #server-error")}
       phx-connected={hide("#server-error")}
       hidden
