@@ -1,0 +1,58 @@
+<.header>
+  Listing Videos
+  <:actions>
+    <.link patch={~p"/admin/media/videos/new"}>
+      <.button>New Video</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="videos"
+  rows={@streams.videos}
+  row_click={
+    fn {_id, video} -> JS.navigate(~p"/admin/media/videos/#{video}") end
+  }
+>
+  <:col :let={{_id, video}} label="Title"><%= video.title %></:col>
+  <:col :let={{_id, video}} label="Url"><%= video.url %></:col>
+  <:col :let={{_id, video}} label="Title"><%= video.title %></:col>
+  <:col :let={{_id, video}} label="Thumbnail url">
+    <%= video.thumbnail_url %>
+  </:col>
+  <:col :let={{_id, video}} label="External id"><%= video.external_id %></:col>
+  <:col :let={{_id, video}} label="Etag"><%= video.etag %></:col>
+  <:col :let={{_id, video}} label="Published at">
+    <%= video.published_at %>
+  </:col>
+  <:action :let={{_id, video}}>
+    <div class="sr-only">
+      <.link navigate={~p"/admin/media/videos/#{video}"}>Show</.link>
+    </div>
+    <.link patch={~p"/admin/media/videos/#{video}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, video}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: video.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="video-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/media/videos")}
+>
+  <.live_component
+    module={LivedjWeb.Admin.Media.VideoLive.FormComponent}
+    id={@video.id || :new}
+    title={@page_title}
+    action={@live_action}
+    video={@video}
+    patch={~p"/admin/media/videos"}
+  />
+</.modal>
