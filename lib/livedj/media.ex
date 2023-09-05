@@ -8,6 +8,8 @@ defmodule Livedj.Media do
 
   alias Livedj.Media.Video
 
+  require Logger
+
   @spec from_tubex_metadata(map()) :: {:ok, map()}
   def from_tubex_metadata(media_metadata) do
     media =
@@ -52,7 +54,9 @@ defmodule Livedj.Media do
       ** (Ecto.NoResultsError)
 
   """
-  def get_video!(id), do: Repo.get!(Video, id)
+  def get_video!(id) do
+    Repo.get!(Video, id)
+  end
 
   @doc """
   Creates a video.
@@ -66,11 +70,31 @@ defmodule Livedj.Media do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_video(map()) :: {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
   def create_video(attrs \\ %{}) do
     %Video{}
     |> Video.changeset(attrs)
     |> Repo.insert()
+    |> after_video_save()
   end
+
+  @spec after_video_save({:ok, Video.t()} | {:error, Ecto.Changeset.t()}) ::
+          {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
+  defp after_video_save({:ok, %Video{external_id: external_id} = video}) do
+    case Redis.Hash.hset("media:#{external_id}", Video.from_struct(video)) do
+      {:ok, video_hset} ->
+        {:ok, video}
+
+      {:error, :hset_error} ->
+        Logger.error(
+          "#{__MODULE__}.after_video_save/1 :: There was an error caching the video with id=#{video.id} external_id=#{external_id}"
+        )
+
+        {:ok, video}
+    end
+  end
+
+  defp after_video_save(error), do: error
 
   @doc """
   Updates a video.

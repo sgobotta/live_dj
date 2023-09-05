@@ -6,6 +6,7 @@ defmodule Livedj.Sessions do
   import Ecto.Query, warn: false
   import LivedjWeb.Gettext
 
+  alias Livedj.Media
   alias Livedj.Repo
 
   alias Livedj.Sessions.{
@@ -49,23 +50,23 @@ defmodule Livedj.Sessions do
   Adds a media element to the playlist
   """
   @spec add_media(Ecto.UUID.t(), map()) :: PlaylistServer.add_response()
-  def add_media(room_id, media) do
-    case Redis.Hash.hset("media:#{media.external_id}", media) do
-      {:ok, media} ->
+  def add_media(room_id, media_attrs) do
+    case Media.create_video(media_attrs) do
+      {:ok, %Media.Video{} = media} ->
         get_child_pid!(room_id)
         |> PlaylistServer.add(
           on_add: {&on_add/2, [room_id, media]},
           on_added: {&on_added/2, [room_id, media]}
         )
 
-      {:error, :hset_error} ->
-        {:error, dgettext("errors", "Could not add track. Please try again.")}
+      {:error, %Ecto.Changeset{}} ->
+        {:error, dgettext("errors", "Could not save track. Please try again.")}
     end
   end
 
   @spec on_add(Ecto.UUID.t(), any()) :: :ok | {:error, :element_exists}
   defp on_add(room_id, media) do
-    case Playlist.add(room_id, media.youtube_id) do
+    case Playlist.add(room_id, media.external_id) do
       :ok ->
         :ok
 
@@ -143,8 +144,8 @@ defmodule Livedj.Sessions do
 
         # Refactor to Media.list/1
         list =
-          Enum.map(result, fn media_youtube_id ->
-            {:ok, media} = Redis.Hash.hgetall("media:#{media_youtube_id}")
+          Enum.map(result, fn media_external_id ->
+            {:ok, media} = Redis.Hash.hgetall("media:#{media_external_id}")
 
             media =
               for {key, val} <- media,
@@ -190,10 +191,13 @@ defmodule Livedj.Sessions do
   # Media management
   #
 
+  @doc """
+  Given an external_id, fetches a video metadata through the Tubex api.
+  """
   @spec fetch_media_metadata_by_id(binary()) ::
           {:error, :tubex_error} | {:ok, map()}
-  def fetch_media_metadata_by_id(youtube_id) do
-    case Tubex.Video.metadata(youtube_id) do
+  def fetch_media_metadata_by_id(external_id) do
+    case Tubex.Video.metadata(external_id) do
       {:error, error} ->
         Logger.error(
           "#{__MODULE__} :: There was an error fetching a video metadata err=#{inspect(error)}"
@@ -211,7 +215,7 @@ defmodule Livedj.Sessions do
     media = %{
       name: media["snippet"]["localized"]["title"],
       id: id || Ecto.UUID.generate(),
-      youtube_id: media["id"],
+      external_id: media["id"],
       thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
       thumbnail_width: media["snippet"]["thumbnails"]["default"]["width"],
       thumbnail_height: media["snippet"]["thumbnails"]["default"]["height"]
