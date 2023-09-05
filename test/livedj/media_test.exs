@@ -1,4 +1,5 @@
 defmodule Livedj.MediaTest do
+  @moduledoc false
   use Livedj.DataCase
 
   alias Livedj.Media
@@ -13,8 +14,7 @@ defmodule Livedj.MediaTest do
       external_id: nil,
       published_at: nil,
       thumbnail_url: nil,
-      title: nil,
-      url: nil
+      title: nil
     }
 
     test "list_videos/0 returns all videos" do
@@ -33,8 +33,7 @@ defmodule Livedj.MediaTest do
         external_id: "some external_id",
         published_at: ~N[2023-09-02 23:08:00],
         thumbnail_url: "some thumbnail_url",
-        title: "some title",
-        url: "some url"
+        title: "some title"
       }
 
       assert {:ok, %Video{} = video} = Media.create_video(valid_attrs)
@@ -43,7 +42,6 @@ defmodule Livedj.MediaTest do
       assert video.published_at == ~N[2023-09-02 23:08:00]
       assert video.thumbnail_url == "some thumbnail_url"
       assert video.title == "some title"
-      assert video.url == "some url"
     end
 
     test "create_video/1 with invalid data returns error changeset" do
@@ -58,8 +56,7 @@ defmodule Livedj.MediaTest do
         external_id: "some updated external_id",
         published_at: ~N[2023-09-03 23:08:00],
         thumbnail_url: "some updated thumbnail_url",
-        title: "some updated title",
-        url: "some updated url"
+        title: "some updated title"
       }
 
       assert {:ok, %Video{} = video} = Media.update_video(video, update_attrs)
@@ -68,7 +65,6 @@ defmodule Livedj.MediaTest do
       assert video.published_at == ~N[2023-09-03 23:08:00]
       assert video.thumbnail_url == "some updated thumbnail_url"
       assert video.title == "some updated title"
-      assert video.url == "some updated url"
     end
 
     test "update_video/2 with invalid data returns error changeset" do

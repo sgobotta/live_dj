@@ -12,24 +12,21 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
     external_id: "some external_id",
     published_at: "2023-09-02T23:08:00",
     thumbnail_url: "some thumbnail_url",
-    title: "some title",
-    url: "some url"
+    title: "some title"
   }
   @update_attrs %{
     etag: "some updated etag",
     external_id: "some updated external_id",
     published_at: "2023-09-03T23:08:00",
     thumbnail_url: "some updated thumbnail_url",
-    title: "some updated title",
-    url: "some updated url"
+    title: "some updated title"
   }
   @invalid_attrs %{
     etag: nil,
     external_id: nil,
     published_at: nil,
     thumbnail_url: nil,
-    title: nil,
-    url: nil
+    title: nil
   }
 
   defp create_video(_context) do

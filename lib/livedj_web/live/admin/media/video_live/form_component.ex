@@ -22,7 +22,6 @@ defmodule LivedjWeb.Admin.Media.VideoLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:title]} type="text" label={gettext("Title")} />
-        <.input field={@form[:url]} type="text" label={gettext("Url")} />
         <.input field={@form[:title]} type="text" label={gettext("Title")} />
         <.input
           field={@form[:thumbnail_url]}
