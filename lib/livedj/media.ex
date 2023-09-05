@@ -6,25 +6,30 @@ defmodule Livedj.Media do
   import Ecto.Query, warn: false
   alias Livedj.Repo
 
-  alias Livedj.Media.Video
+  alias Livedj.Media.{MediaCache, Video}
 
   require Logger
 
-  @spec from_tubex_metadata(map()) :: {:ok, map()}
+  @doc """
+  Given a metadata reponse returns a success tuple when the result contains
+  media metadata.
+  """
+  @spec from_tubex_metadata(map()) :: {:ok, map()} | {:error, :no_metadata}
   def from_tubex_metadata(media_metadata) do
-    media =
-      hd(media_metadata["items"])
-      |> then(fn media ->
-        %{
-          etag: media["etag"],
-          external_id: media["id"],
-          published_at: media["snippet"]["publishedAt"],
-          thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
-          title: media["snippet"]["title"]
-        }
-      end)
+    case media_metadata["items"] do
+      [] ->
+        {:error, :no_metadata}
 
-    {:ok, media}
+      [media] ->
+        {:ok,
+         %{
+           etag: media["etag"],
+           external_id: media["id"],
+           published_at: media["snippet"]["publishedAt"],
+           thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
+           title: media["snippet"]["title"]
+         }}
+    end
   end
 
   @doc """
@@ -81,7 +86,7 @@ defmodule Livedj.Media do
   @spec after_video_save({:ok, Video.t()} | {:error, Ecto.Changeset.t()}) ::
           {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
   defp after_video_save({:ok, %Video{external_id: external_id} = video}) do
-    case Redis.Hash.hset("media:#{external_id}", Video.from_struct(video)) do
+    case MediaCache.insert(external_id, Video.from_struct(video)) do
       {:ok, _video_hset} ->
         {:ok, video}
 
