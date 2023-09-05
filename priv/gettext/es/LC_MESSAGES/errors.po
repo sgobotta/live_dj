@@ -183,7 +183,7 @@ msgstr "Algo salió mal!"
 #: lib/livedj/sessions.ex:63
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Could not save track. Please try again."
-msgstr "No se pudo agregar la pista. Por favor intentá luego."
+msgstr "No se pudo guardar la pista. Por favor intentá luego."
 
 #: lib/livedj_web/live/sessions/room_live/show.ex:33
 #, elixir-autogen, elixir-format
