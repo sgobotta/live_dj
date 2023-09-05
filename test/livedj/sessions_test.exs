@@ -1,7 +1,9 @@
 defmodule Livedj.SessionsTest do
+  @moduledoc false
   use Livedj.DataCase
 
   alias Livedj.Sessions
+  alias Livedj.Sessions.Exceptions.SessionRoomError
 
   describe "rooms" do
     alias Livedj.Sessions.Room
@@ -53,7 +55,7 @@ defmodule Livedj.SessionsTest do
     test "delete_room/1 deletes the room" do
       room = room_fixture()
       assert {:ok, %Room{}} = Sessions.delete_room(room)
-      assert_raise Ecto.NoResultsError, fn -> Sessions.get_room!(room.id) end
+      assert_raise SessionRoomError, fn -> Sessions.get_room!(room.id) end
     end
 
     test "change_room/1 returns a room changeset" do

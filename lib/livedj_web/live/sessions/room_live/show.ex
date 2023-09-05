@@ -4,24 +4,41 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   use LivedjWeb, :live_view
 
   alias Livedj.Sessions
-  # alias Livedj.Sessions.Room
+  alias Livedj.Sessions.Exceptions.SessionRoomError
 
   @impl true
   def mount(params, _session, socket) do
-    with true <- connected?(socket),
-         %Room{id: room_id} = room <- Sessions.get_room!(params["id"]),
-         {:ok, :joined} <- Sessions.join_playlist(room_id) do
-      {:ok,
-       assign(socket,
-         drag_state: :unlocked,
-         form: to_form(%{}),
-         room: room,
-         media_list: []
-       )}
-    else
-      _err ->
+    case connected?(socket) do
+      true ->
+        %Room{id: room_id} = room = Sessions.get_room!(params["id"])
+        {:ok, :joined} = Sessions.join_playlist(room_id)
+
+        {:ok,
+         assign(socket,
+           drag_state: :unlocked,
+           form: to_form(%{}),
+           room: room,
+           media_list: []
+         )}
+
+      false ->
         {:ok, socket}
     end
+  rescue
+    error in SessionRoomError ->
+      case error do
+        %SessionRoomError{reason: :room_not_found} ->
+          {:ok,
+           socket
+           |> put_flash(:error, dgettext("errors", "The room doesn't exist"))
+           |> redirect(to: ~p"/")}
+      end
+
+    _error ->
+      {:ok,
+       socket
+       |> put_flash(:error, dgettext("errors", "Something went wrong!"))
+       |> redirect(to: ~p"/")}
   end
 
   @impl true
@@ -52,9 +69,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("save", %{"url" => url}, socket) do
     with {:ok, media_id} <- validate_url(url),
-         {:ok, media} <-
+         {:ok, media_metadata} <-
            Sessions.fetch_media_metadata_by_id(media_id),
-         {:ok, media} <- Sessions.create_media(media),
+         {:ok, media} <- Livedj.Media.from_tubex_metadata(media_metadata),
          {:ok, :added} <- Sessions.add_media(socket.assigns.room.id, media) do
       {:noreply,
        socket
@@ -95,7 +112,6 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:playlist_joined, room_id, payload},
         %{assigns: %{room: %Room{id: room_id}}} = socket
       ) do
-    # IO.inspect(payload, label:  "Joined payload")
     drag_state =
       case payload.drag_state do
         :free ->

@@ -17,6 +17,8 @@ defmodule Livedj.Sessions do
     Supervisor
   }
 
+  alias Livedj.Sessions.Exceptions.SessionRoomError
+
   require Logger
 
   # ----------------------------------------------------------------------------
@@ -32,16 +34,23 @@ defmodule Livedj.Sessions do
   def join_playlist(room_id) do
     :ok = Channels.subscribe_playlist_topic(room_id)
 
-    get_child_pid!(room_id)
+    case PlaylistSupervisor.get_child(room_id) do
+      nil ->
+        {:ok, pid} = PlaylistSupervisor.start_child(id: room_id)
+        pid
+
+      {pid, _state} when is_pid(pid) ->
+        pid
+    end
     |> PlaylistServer.join(on_joined: {&get_playlist/1, [room_id]})
   end
 
   @doc """
   Adds a media element to the playlist
   """
-  @spec add_media(binary(), any()) :: PlaylistServer.add_response()
+  @spec add_media(Ecto.UUID.t(), map()) :: PlaylistServer.add_response()
   def add_media(room_id, media) do
-    case Redis.Hash.hset("media:#{media.youtube_id}", media) do
+    case Redis.Hash.hset("media:#{media.external_id}", media) do
       {:ok, media} ->
         get_child_pid!(room_id)
         |> PlaylistServer.add(
@@ -192,8 +201,8 @@ defmodule Livedj.Sessions do
 
         {:error, :tubex_error}
 
-      media ->
-        {:ok, hd(media["items"])}
+      metadata ->
+        {:ok, metadata}
     end
   end
 
@@ -268,7 +277,12 @@ defmodule Livedj.Sessions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_room!(id), do: Repo.get!(Room, id)
+  def get_room!(id) do
+    Repo.get!(Room, id)
+  rescue
+    Ecto.NoResultsError ->
+      reraise SessionRoomError, [reason: :room_not_found], __STACKTRACE__
+  end
 
   @doc """
   Creates a room.

@@ -8,6 +8,23 @@ defmodule Livedj.Media do
 
   alias Livedj.Media.Video
 
+  @spec from_tubex_metadata(map()) :: {:ok, map()}
+  def from_tubex_metadata(media_metadata) do
+    media =
+      hd(media_metadata["items"])
+      |> then(fn media ->
+        %{
+          etag: media["etag"],
+          external_id: media["id"],
+          published_at: media["snippet"]["publishedAt"],
+          thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
+          title: media["snippet"]["title"]
+        }
+      end)
+
+    {:ok, media}
+  end
+
   @doc """
   Returns the list of videos.
 

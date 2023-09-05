@@ -7,6 +7,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   require Logger
 
   alias Livedj.Sessions
+  alias Livedj.Sessions.Exceptions.PlaylistServerError
   alias Livedj.Sessions.PlaylistServer
 
   @server_module PlaylistServer
@@ -98,7 +99,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   def get_child_pid!(child_id) do
     case get_child(child_id) do
       nil ->
-        raise "The child does not exist"
+        raise PlaylistServerError, reason: :child_not_found
 
       {pid, _state} when is_pid(pid) ->
         pid
