@@ -37,7 +37,7 @@ msgstr ""
 msgid "Success!"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:62
+#: lib/livedj_web/live/sessions/room_live/show.ex:79
 #, elixir-autogen, elixir-format
 msgid "Track queued to playlist"
 msgstr ""
@@ -47,7 +47,7 @@ msgstr ""
 msgid "Warn!"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:24
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:26
 #, elixir-autogen, elixir-format
 msgid "Back to videos"
 msgstr ""
@@ -58,13 +58,13 @@ msgstr ""
 msgid "Edit Video"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:9
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:11
 #, elixir-autogen, elixir-format
 msgid "Edit video"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:29
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:20
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:36
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:21
 #, elixir-autogen, elixir-format
 msgid "Etag"
 msgstr ""
@@ -79,18 +79,18 @@ msgstr ""
 msgid "New Video"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:33
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:21
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:40
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:22
 #, elixir-autogen, elixir-format
 msgid "Published at"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:37
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:44
 #, elixir-autogen, elixir-format
 msgid "Save Video"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:36
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -100,29 +100,23 @@ msgstr ""
 msgid "Show Video"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:3
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:4
 #, elixir-autogen, elixir-format
 msgid "This is a video record from your database."
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:27
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:18
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:29
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Thumbnail url"
 msgstr ""
 
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:24
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:26
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:15
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:25
 #: lib/livedj_web/live/admin/media/video_live/show.html.heex:17
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:18
 #, elixir-autogen, elixir-format
 msgid "Title"
-msgstr ""
-
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:25
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:16
-#, elixir-autogen, elixir-format
-msgid "Url"
 msgstr ""
 
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:13
@@ -135,18 +129,18 @@ msgstr ""
 msgid "Video"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:91
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:98
 #, elixir-autogen, elixir-format
 msgid "Video created successfully"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:76
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:83
 #, elixir-autogen, elixir-format
 msgid "Video updated successfully"
 msgstr ""
 
-#: lib/livedj_web/live/admin/media/video_live/form_component.ex:28
-#: lib/livedj_web/live/admin/media/video_live/show.html.heex:19
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:34
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:20
 #, elixir-autogen, elixir-format, fuzzy
 msgid "External id"
 msgstr ""
