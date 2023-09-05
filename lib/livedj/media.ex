@@ -64,6 +64,30 @@ defmodule Livedj.Media do
   end
 
   @doc """
+  Given an external id, fetches from the cache and fallbacks to the postgres
+  db if no results were found.
+  """
+  @spec get_by_external_id(String.t()) ::
+          {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
+  def get_by_external_id(external_id) do
+    case MediaCache.get(external_id) do
+      nil ->
+        case Repo.get_by(Video, external_id: external_id) do
+          nil ->
+            {:error, :video_not_found}
+
+          %Video{} = video ->
+            MediaCache.insert(external_id, Video.from_struct(video))
+
+            {:ok, video}
+        end
+
+      media ->
+        {:ok, Video.from_hset(media)}
+    end
+  end
+
+  @doc """
   Creates a video.
 
   ## Examples

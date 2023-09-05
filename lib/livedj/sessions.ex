@@ -145,12 +145,7 @@ defmodule Livedj.Sessions do
         # Refactor to Media.list/1
         list =
           Enum.map(result, fn media_external_id ->
-            {:ok, media} = Redis.Hash.hgetall("media:#{media_external_id}")
-
-            media =
-              for {key, val} <- media,
-                  into: %{},
-                  do: {String.to_atom(key), val}
+            {:ok, media} = Media.get_by_external_id(media_external_id)
 
             media
           end)

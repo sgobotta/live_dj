@@ -64,14 +64,14 @@ defmodule Livedj.Media.Video do
 
   @spec from_hset(map()) :: t()
   def from_hset(%{
-        id: id,
-        etag: etag,
-        external_id: external_id,
-        published_at: published_at,
-        thumbnail_url: thumbnail_url,
-        title: title,
-        inserted_at: inserted_at,
-        updated_at: updated_at
+        "id" => id,
+        "etag" => etag,
+        "external_id" => external_id,
+        "published_at" => published_at,
+        "thumbnail_url" => thumbnail_url,
+        "title" => title,
+        "inserted_at" => inserted_at,
+        "updated_at" => updated_at
       }) do
     %__MODULE__{
       id: id,
