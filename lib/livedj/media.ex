@@ -82,7 +82,7 @@ defmodule Livedj.Media do
           {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
   defp after_video_save({:ok, %Video{external_id: external_id} = video}) do
     case Redis.Hash.hset("media:#{external_id}", Video.from_struct(video)) do
-      {:ok, video_hset} ->
+      {:ok, _video_hset} ->
         {:ok, video}
 
       {:error, :hset_error} ->
