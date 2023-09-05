@@ -86,7 +86,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            dgettext("errors", "The youtube url is not valid")
          )}
 
-      {:error, :tubex_error} ->
+      {:error, error} when error in [:tubex_error, :no_metadata] ->
         {:noreply,
          put_flash(
            socket,
