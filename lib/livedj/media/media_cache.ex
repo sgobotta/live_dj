@@ -1,4 +1,4 @@
-defmodule Livedj.Media.CachedMedia do
+defmodule Livedj.Media.MediaCache do
   @moduledoc false
 
   @key_prefix "media"
