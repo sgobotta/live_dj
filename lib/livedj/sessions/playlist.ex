@@ -58,5 +58,5 @@ defmodule Livedj.Sessions.Playlist do
   end
 
   @spec build_key(Ecto.UUID.t()) :: String.t()
-  def build_key(key), do: @key_prefix <> ":" <> key
+  defp build_key(key), do: @key_prefix <> ":" <> key
 end
