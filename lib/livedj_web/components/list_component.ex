@@ -28,7 +28,12 @@ defmodule LivedjWeb.ListComponent do
               <div class="flex-auto block text-sm leading-6 text-zinc-900 p-1 px-1">
                 <%= item.title %>
               </div>
-              <button type="button" class="w-10 -mt-1 flex-none">
+              <button
+                type="button"
+                class="w-10 -mt-1 flex-none"
+                phx-click="remove_track"
+                phx-value-track_id={item.external_id}
+              >
                 <.icon name="hero-x-mark" />
               </button>
             </div>

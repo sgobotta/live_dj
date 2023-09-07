@@ -67,12 +67,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, assign(socket, form: to_form(%{"url" => url}))}
   end
 
-  def handle_event("save", %{"url" => url}, socket) do
+  def handle_event("add", %{"url" => url}, socket) do
     with {:ok, media_id} <- validate_url(url),
-         {:ok, media_metadata} <-
-           Sessions.fetch_media_metadata_by_id(media_id),
-         {:ok, media} <- Livedj.Media.from_tubex_metadata(media_metadata),
-         {:ok, :added} <- Sessions.add_media(socket.assigns.room.id, media) do
+         {:ok, :added} <- Sessions.add_media(socket.assigns.room.id, media_id) do
       {:noreply,
        socket
        |> assign(form: to_form(%{}))
@@ -86,17 +83,15 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            dgettext("errors", "The youtube url is not valid")
          )}
 
-      {:error, error} when error in [:tubex_error, :no_metadata] ->
-        {:noreply,
-         put_flash(
-           socket,
-           :error,
-           dgettext("errors", "Could not fetch the video from youtube")
-         )}
-
-      {:error, msg} when is_binary(msg) ->
-        {:noreply, put_flash(socket, :warn, msg)}
+      {:error, {type, msg}} when type in [:warn, :error] and is_binary(msg) ->
+        {:noreply, put_flash(socket, type, msg)}
     end
+  end
+
+  def handle_event("remove_track", %{"track_id" => track_id}, socket) do
+    :ok = Sessions.remove_media(socket.assigns.room.id, track_id)
+
+    {:noreply, socket}
   end
 
   def handle_event("previous", _params, socket) do
@@ -135,6 +130,22 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply,
      socket
      |> assign(media_list: socket.assigns.media_list ++ [media])}
+  end
+
+  @impl true
+  def handle_info(
+        {:track_removed, room_id, media_identifier},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    # IO.inspect(media_identifier, label: "Media identifier")
+    alias Livedj.Media.Video
+
+    media_list =
+      Enum.filter(socket.assigns.media_list, fn %Video{external_id: external_id} ->
+        external_id != media_identifier
+      end)
+
+    {:noreply, assign(socket, media_list: media_list)}
   end
 
   @impl true
