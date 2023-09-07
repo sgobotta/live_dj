@@ -68,7 +68,7 @@ defmodule Livedj.Media do
   db if no results were found.
   """
   @spec get_by_external_id(String.t()) ::
-          {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
+          {:ok, Video.t()} | {:error, :video_not_found}
   def get_by_external_id(external_id) do
     case MediaCache.get(external_id) do
       nil ->
@@ -83,7 +83,7 @@ defmodule Livedj.Media do
         end
 
       media ->
-        {:ok, Video.from_hset(media)}
+        {:ok, %Video{} = Video.from_hset(media)}
     end
   end
 
