@@ -32,9 +32,9 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       assert response == {:ok, :added}
     end
 
-    test "remove/2 returns {:ok, :removed}", %{pid: pid} do
+    test "remove/2 returns :ok", %{pid: pid} do
       response = do_remove(pid, "some element")
-      assert response == {:ok, :removed}
+      assert response == :ok
     end
 
     test "lock/2 sets a locked status and returns {:ok, :locked}", %{pid: pid} do
@@ -113,7 +113,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       pid = self()
       response = do_handle_remove("some element", pid, state)
 
-      {:reply, {:ok, :removed}, ^state} = response
+      {:reply, :ok, ^state} = response
     end
 
     test "handle_call/3 :lock replies with a locked status", %{state: state} do
@@ -184,6 +184,35 @@ defmodule Livedj.Sessions.PlaylistServerTest do
       message_name = Channels.track_added_event()
 
       assert_receive({^message_name, ^state_id, ^media})
+    end
+
+    test "handle_continue/2 {:removal, arg} executes the on_remove and on_removed callbacks",
+         %{
+           state: state
+         } do
+      state_id = state.id
+      media_identifier = "some element identifier"
+
+      arg = [
+        on_remove:
+          {fn _room_id, _media_identifier ->
+             :ok
+           end, [state_id, media_identifier]},
+        on_removed:
+          {fn id, media_identifier ->
+             Channels.broadcast_playlist_track_removed!(id, media_identifier)
+           end, [state_id, media_identifier]}
+      ]
+
+      :ok = Channels.subscribe_playlist_topic(state_id)
+
+      timer_ref = Process.send_after(self(), :some_message, 5_000)
+      state = Map.put(state, :drag_state, {:locked, self(), timer_ref})
+      {:noreply, _state} = do_handle_removed(arg, state)
+
+      message_name = Channels.track_removed_event()
+
+      assert_receive({^message_name, ^state_id, ^media_identifier})
     end
 
     test "handle_continue/2 {:locked, pid} notifies the locked state", %{
@@ -284,6 +313,9 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
     defp do_handle_added(arg, state),
       do: @subject.handle_continue({:added, arg}, state)
+
+    defp do_handle_removed(arg, state),
+      do: @subject.handle_continue({:removal, arg}, state)
 
     defp do_handle_locked(arg, state),
       do: @subject.handle_continue({:locked, arg}, state)
