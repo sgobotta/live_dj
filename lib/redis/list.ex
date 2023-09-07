@@ -51,6 +51,14 @@ defmodule Redis.List do
     Redix.command(:redix, ~w(LPOS #{key} #{value}))
   end
 
+  @doc """
+  Redis LREM command. [Docs](https://redis.io/commands/lrem/)
+  """
+  @spec lrem(String.t(), String.t()) :: Redis.redix_response()
+  def lrem(key, value) do
+    Redix.command(:redix, ~w(LREM #{key} 1 #{value}))
+  end
+
   defp parse_position(true), do: "AFTER"
   defp parse_position(false), do: "BEFORE"
 end
