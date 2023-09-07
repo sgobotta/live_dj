@@ -17,6 +17,7 @@ defmodule Livedj.Sessions.PlaylistServer do
 
   @joined_cb :joined
   @added_cb :added
+  @removal_cb :removal
   @moved_cb :moved
   @on_start_cb :on_start
   @locked_cb :locked
@@ -35,8 +36,8 @@ defmodule Livedj.Sessions.PlaylistServer do
   @type element :: any()
 
   @type join_response :: {:ok, :joined}
-  @type add_response :: {:ok, :added}
-  @type remove_response :: {:ok, :removed}
+  @type add_response :: {:ok, :added} | {:error, any()}
+  @type remove_response :: :ok
   @type moved_response :: {:ok, :moved}
 
   @type lock_response ::
@@ -159,8 +160,12 @@ defmodule Livedj.Sessions.PlaylistServer do
     end
   end
 
+  def handle_call({@remove_msg, cbs}, {pid, _ref}, %{drag_state: :free} = state) do
+    {:reply, :ok, lock_drag(state, pid), {:continue, {@removal_cb, cbs}}}
+  end
+
   def handle_call({@remove_msg, _arg}, _from, state) do
-    {:reply, {:ok, :removed}, state}
+    {:reply, :ok, state}
   end
 
   def handle_call({@move_msg, cbs}, {pid, _ref}, state) do
@@ -237,6 +242,21 @@ defmodule Livedj.Sessions.PlaylistServer do
     :ok = apply(on_added, args)
 
     {:noreply, state}
+  end
+
+  def handle_continue({@removal_cb, cbs}, state) do
+    {{on_remove, args}, _cbs} = Keyword.pop!(cbs, :on_remove)
+
+    case apply(on_remove, args) do
+      :ok ->
+        {{on_removed, args}, _cbs} = Keyword.pop!(cbs, :on_removed)
+        apply(on_removed, args)
+
+      _error ->
+        nil
+    end
+
+    {:noreply, unlock_drag(state)}
   end
 
   def handle_continue({@moved_cb, from, cbs}, state) do

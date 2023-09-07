@@ -49,18 +49,38 @@ defmodule Livedj.Sessions do
   @doc """
   Adds a media element to the playlist
   """
-  @spec add_media(Ecto.UUID.t(), map()) :: PlaylistServer.add_response()
-  def add_media(room_id, media_attrs) do
-    case Media.create_video(media_attrs) do
-      {:ok, %Media.Video{} = media} ->
-        get_child_pid!(room_id)
-        |> PlaylistServer.add(
-          on_add: {&on_add/2, [room_id, media]},
-          on_added: {&on_added/2, [room_id, media]}
+  @spec add_media(Ecto.UUID.t(), String.t()) ::
+          PlaylistServer.add_response() | {:error, String.t()}
+  def add_media(room_id, media_identifier) do
+    with :ok <- Playlist.can_insert?(room_id, media_identifier),
+         {:ok, %Media.Video{} = media} <-
+           get_or_fetch_media_metadata_by_id(media_identifier) do
+      get_child_pid!(room_id)
+      |> PlaylistServer.add(
+        on_add: {&on_add/2, [room_id, media]},
+        on_added: {&on_added/2, [room_id, media]}
+      )
+    else
+      {:error, :element_exists} ->
+        {:error,
+         {:warn,
+          dgettext("errors", "The video is already added to the playlist")}}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error(
+          "#{__MODULE__}.add_media/2 :: There was an error while creating the media, changeset=#{inspect(changeset)}"
         )
 
-      {:error, %Ecto.Changeset{}} ->
-        {:error, dgettext("errors", "Could not save track. Please try again.")}
+        {:error,
+         {:error,
+          dgettext(
+            "errors",
+            "Could not save video. Please try again later."
+          )}}
+
+      {:error, error} when error in [:tubex_error, :no_metadata] ->
+        {:error,
+         {:warn, dgettext("errors", "Could not fetch the video from youtube")}}
     end
   end
 
@@ -84,9 +104,28 @@ defmodule Livedj.Sessions do
   Removes a media element from the playlist
   """
   @spec remove_media(binary(), any()) :: PlaylistServer.remove_response()
-  def remove_media(room_id, media) do
+  def remove_media(room_id, media_identifier) do
     get_child_pid!(room_id)
-    |> PlaylistServer.remove(media)
+    |> PlaylistServer.remove(
+      on_remove: {&on_remove/2, [room_id, media_identifier]},
+      on_removed: {&on_removed/2, [room_id, media_identifier]}
+    )
+  end
+
+  @spec on_remove(Ecto.UUID.t(), String.t()) :: :ok
+  defp on_remove(room_id, media_identifier) do
+    case Playlist.remove(room_id, media_identifier) do
+      {:ok, :removed} ->
+        :ok
+
+      {:error, :noop} ->
+        :ok
+    end
+  end
+
+  @spec on_removed(Ecto.UUID.t(), String.t()) :: :ok
+  defp on_removed(room_id, media_identifier) do
+    Channels.broadcast_playlist_track_removed!(room_id, media_identifier)
   end
 
   @doc """
@@ -205,18 +244,29 @@ defmodule Livedj.Sessions do
     end
   end
 
-  @spec create_media(map()) :: {:ok, map()}
-  def create_media(media, id \\ nil) do
-    media = %{
-      name: media["snippet"]["localized"]["title"],
-      id: id || Ecto.UUID.generate(),
-      external_id: media["id"],
-      thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
-      thumbnail_width: media["snippet"]["thumbnails"]["default"]["width"],
-      thumbnail_height: media["snippet"]["thumbnails"]["default"]["height"]
-    }
+  @doc """
+  Given a media indentifier, tries to get media data locally. If no records were
+  found in Redis or Postgres, then a Tubex call is made to fetch they media's
+  metadata. Finally, the media is persisted before returning a success value.
+  """
+  @spec get_or_fetch_media_metadata_by_id(String.t()) ::
+          {:ok, Media.Video.t()}
+          | {:error, :tubex_error}
+          | {:error, :no_metadata}
+          | {:error, :unexpected_error}
+  def get_or_fetch_media_metadata_by_id(external_id) do
+    case Media.get_by_external_id(external_id) do
+      {:error, :video_not_found} ->
+        with {:ok, metadata} when is_map(metadata) <-
+               fetch_media_metadata_by_id(external_id),
+             {:ok, media_attrs} when is_map(media_attrs) <-
+               Livedj.Media.from_tubex_metadata(metadata) do
+          Media.create_video(media_attrs)
+        end
 
-    {:ok, media}
+      {:ok, %Media.Video{external_id: ^external_id}} = response ->
+        response
+    end
   end
 
   # ----------------------------------------------------------------------------
@@ -248,6 +298,10 @@ defmodule Livedj.Sessions do
   defp track_queue_key(key) do
     "track_queue_#{key}"
   end
+
+  # ----------------------------------------------------------------------------
+  # Repo operations
+  #
 
   @doc """
   Returns the list of rooms.
