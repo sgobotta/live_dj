@@ -33,6 +33,7 @@ defmodule LivedjWeb.ListComponent do
                 class="w-10 -mt-1 flex-none"
                 phx-click="remove_track"
                 phx-value-track_id={item.external_id}
+                data-confirm={gettext("Remove '%{title}'?", title: item.title)}
               >
                 <.icon name="hero-x-mark" />
               </button>
