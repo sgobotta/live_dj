@@ -1,8 +1,8 @@
 <.header>
-  Listing Videos
+  <%= gettext("Listing Videos") %>
   <:actions>
     <.link patch={~p"/admin/media/videos/new"}>
-      <.button>New Video</.button>
+      <.button><%= gettext("New Video") %></.button>
     </.link>
   </:actions>
 </.header>
@@ -14,28 +14,37 @@
     fn {_id, video} -> JS.navigate(~p"/admin/media/videos/#{video}") end
   }
 >
-  <:col :let={{_id, video}} label="Title"><%= video.title %></:col>
-  <:col :let={{_id, video}} label="Title"><%= video.title %></:col>
-  <:col :let={{_id, video}} label="Thumbnail url">
-    <%= video.thumbnail_url %>
+  <:col :let={{_id, video}}>
+    <img
+      class="rounded-lg"
+      alt={video.title}
+      src={video.thumbnail_url}
+      width="240"
+    />
   </:col>
-  <:col :let={{_id, video}} label="External id"><%= video.external_id %></:col>
-  <:col :let={{_id, video}} label="Etag"><%= video.etag %></:col>
-  <:col :let={{_id, video}} label="Published at">
+  <:col :let={{_id, video}} label={gettext("Title")}><%= video.title %></:col>
+  <:col :let={{_id, video}} label={gettext("External id")}>
+    <%= video.external_id %>
+  </:col>
+  <:col :let={{_id, video}} label={gettext("Published at")}>
     <%= video.published_at %>
   </:col>
   <:action :let={{_id, video}}>
     <div class="sr-only">
-      <.link navigate={~p"/admin/media/videos/#{video}"}>Show</.link>
+      <.link navigate={~p"/admin/media/videos/#{video}"}>
+        <%= gettext("Show") %>
+      </.link>
     </div>
-    <.link patch={~p"/admin/media/videos/#{video}/edit"}>Edit</.link>
+    <.link patch={~p"/admin/media/videos/#{video}/edit"}>
+      <%= gettext("Edit") %>
+    </.link>
   </:action>
   <:action :let={{id, video}}>
     <.link
       phx-click={JS.push("delete", value: %{id: video.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
+      data-confirm={gettext("Are you sure?")}
     >
-      Delete
+      <%= gettext("Delete") %>
     </.link>
   </:action>
 </.table>

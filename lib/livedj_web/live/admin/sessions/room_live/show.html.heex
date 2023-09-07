@@ -1,22 +1,26 @@
 <.header>
-  Room <%= @room.id %>
-  <:subtitle>This is a room record from your database.</:subtitle>
+  <%= gettext("Room") %> <%= @room.id %>
+  <:subtitle>
+    <%= gettext("This is a room record from your database.") %>
+  </:subtitle>
   <:actions>
     <.link
       patch={~p"/admin/sessions/rooms/#{@room}/show/edit"}
       phx-click={JS.push_focus()}
     >
-      <.button>Edit room</.button>
+      <.button><%= gettext("Edit room") %></.button>
     </.link>
   </:actions>
 </.header>
 
 <.list>
-  <:item title="Name"><%= @room.name %></:item>
-  <:item title="Slug"><%= @room.slug %></:item>
+  <:item title={gettext("Name")}><%= @room.name %></:item>
+  <:item title={gettext("Slug")}><%= @room.slug %></:item>
 </.list>
 
-<.back navigate={~p"/admin/sessions/rooms"}>Back to rooms</.back>
+<.back navigate={~p"/admin/sessions/rooms"}>
+  <%= gettext("Back to rooms") %>
+</.back>
 
 <.modal
   :if={@live_action == :edit}

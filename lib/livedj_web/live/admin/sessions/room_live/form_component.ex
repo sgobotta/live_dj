@@ -1,6 +1,8 @@
 defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
   use LivedjWeb, :live_component
 
+  import LivedjWeb.Gettext
+
   alias Livedj.Sessions
 
   @impl true
@@ -10,7 +12,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
       <.header>
         <%= @title %>
         <:subtitle>
-          Use this form to manage room records in your database.
+          <%= gettext("Use this form to manage room records in your database.") %>
         </:subtitle>
       </.header>
 
@@ -21,10 +23,12 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:slug]} type="text" label="Slug" />
+        <.input field={@form[:name]} type="text" label={gettext("Name")} />
+        <.input field={@form[:slug]} type="text" label={gettext("Slug")} />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Room</.button>
+          <.button phx-disable-with={gettext("Saving...")}>
+            <%= gettext("Save Room") %>
+          </.button>
         </:actions>
       </.simple_form>
     </div>
@@ -62,7 +66,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Room updated successfully")
+         |> put_flash(:info, gettext("Room updated successfully"))
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -77,7 +81,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Room created successfully")
+         |> put_flash(:info, gettext("Room created successfully"))
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

@@ -1,8 +1,8 @@
 <.header>
-  Listing Rooms
+  <%= gettext("Listing Rooms") %>
   <:actions>
     <.link patch={~p"/admin/sessions/rooms/new"}>
-      <.button>New Room</.button>
+      <.button><%= gettext("New Room") %></.button>
     </.link>
   </:actions>
 </.header>
@@ -14,20 +14,24 @@
     fn {_id, room} -> JS.navigate(~p"/admin/sessions/rooms/#{room}") end
   }
 >
-  <:col :let={{_id, room}} label="Name"><%= room.name %></:col>
-  <:col :let={{_id, room}} label="Slug"><%= room.slug %></:col>
+  <:col :let={{_id, room}} label={gettext("Name")}><%= room.name %></:col>
+  <:col :let={{_id, room}} label={gettext("Slug")}><%= room.slug %></:col>
   <:action :let={{_id, room}}>
     <div class="sr-only">
-      <.link navigate={~p"/admin/sessions/rooms/#{room}"}>Show</.link>
+      <.link navigate={~p"/admin/sessions/rooms/#{room}"}>
+        <%= gettext("Show") %>
+      </.link>
     </div>
-    <.link patch={~p"/admin/sessions/rooms/#{room}/edit"}>Edit</.link>
+    <.link patch={~p"/admin/sessions/rooms/#{room}/edit"}>
+      <%= gettext("Edit") %>
+    </.link>
   </:action>
   <:action :let={{id, room}}>
     <.link
       phx-click={JS.push("delete", value: %{id: room.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
+      data-confirm={gettext("Are you sure?")}
     >
-      Delete
+      <%= gettext("Delete") %>
     </.link>
   </:action>
 </.table>

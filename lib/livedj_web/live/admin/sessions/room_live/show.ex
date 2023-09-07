@@ -1,6 +1,8 @@
 defmodule LivedjWeb.Admin.Sessions.RoomLive.Show do
   use LivedjWeb, :live_view
 
+  import LivedjWeb.Gettext
+
   alias Livedj.Sessions
 
   @impl true
@@ -16,6 +18,6 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.Show do
      |> assign(:room, Sessions.get_room!(id))}
   end
 
-  defp page_title(:show), do: "Show Room"
-  defp page_title(:edit), do: "Edit Room"
+  defp page_title(:show), do: gettext("Show Room")
+  defp page_title(:edit), do: gettext("Edit Room")
 end

@@ -156,7 +156,7 @@ msgstr ""
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:94
+#: lib/livedj/sessions.ex:83
 #, elixir-autogen, elixir-format
 msgid "Could not fetch the video from youtube"
 msgstr ""
@@ -166,12 +166,13 @@ msgstr ""
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/livedj/sessions.ex:75
+#: lib/livedj/sessions.ex:67
+#: lib/livedj/sessions.ex:95
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:86
+#: lib/livedj_web/live/sessions/room_live/show.ex:84
 #, elixir-autogen, elixir-format
 msgid "The youtube url is not valid"
 msgstr ""
@@ -187,11 +188,6 @@ msgstr ""
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/livedj/sessions.ex:63
-#, elixir-autogen, elixir-format
-msgid "Could not save track. Please try again."
-msgstr ""
-
 #: lib/livedj_web/live/sessions/room_live/show.ex:33
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
@@ -200,4 +196,9 @@ msgstr ""
 #: lib/livedj/media/video.ex:39
 #, elixir-autogen, elixir-format
 msgid "video with this id already exists"
+msgstr ""
+
+#: lib/livedj/sessions.ex:76
+#, elixir-autogen, elixir-format
+msgid "Could not save video. Please try again later."
 msgstr ""

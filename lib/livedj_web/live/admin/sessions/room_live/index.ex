@@ -1,6 +1,8 @@
 defmodule LivedjWeb.Admin.Sessions.RoomLive.Index do
   use LivedjWeb, :live_view
 
+  import LivedjWeb.Gettext
+
   alias Livedj.Sessions
   alias Livedj.Sessions.Room
 
@@ -16,19 +18,19 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Room")
+    |> assign(:page_title, gettext("Edit Room"))
     |> assign(:room, Sessions.get_room!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Room")
+    |> assign(:page_title, gettext("New Room"))
     |> assign(:room, %Room{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Rooms")
+    |> assign(:page_title, gettext("Listing Rooms"))
     |> assign(:room, nil)
   end
 
