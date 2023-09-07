@@ -40,15 +40,17 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
     test "lists all videos", %{conn: conn, video: video} do
       {:ok, _index_live, html} = live(conn, ~p"/admin/media/videos")
 
-      assert html =~ "Listing Videos"
-      assert html =~ video.etag
+      assert html =~ gettext("Listing Videos")
+      assert html =~ video.thumbnail_url
+      assert html =~ video.title
+      assert html =~ video.external_id
     end
 
     test "saves new video", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/admin/media/videos")
 
-      assert index_live |> element("a", "New Video") |> render_click() =~
-               "New Video"
+      assert index_live |> element("a", gettext("New Video")) |> render_click() =~
+               gettext("New Video")
 
       assert_patch(index_live, ~p"/admin/media/videos/new")
 
@@ -64,14 +66,16 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
 
       html = render(index_live)
       assert html =~ gettext("Video created successfully")
-      assert html =~ "some etag"
+      assert html =~ @create_attrs.thumbnail_url
+      assert html =~ @create_attrs.title
+      assert html =~ @create_attrs.external_id
     end
 
     test "updates video in listing", %{conn: conn, video: video} do
       {:ok, index_live, _html} = live(conn, ~p"/admin/media/videos")
 
       assert index_live
-             |> element("#videos-#{video.id} a", "Edit")
+             |> element("#videos-#{video.id} a", gettext("Edit"))
              |> render_click() =~
                gettext("Edit Video")
 
@@ -89,14 +93,16 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
 
       html = render(index_live)
       assert html =~ gettext("Video updated successfully")
-      assert html =~ "some updated etag"
+      assert html =~ @update_attrs.thumbnail_url
+      assert html =~ @update_attrs.title
+      assert html =~ @update_attrs.external_id
     end
 
     test "deletes video in listing", %{conn: conn, video: video} do
       {:ok, index_live, _html} = live(conn, ~p"/admin/media/videos")
 
       assert index_live
-             |> element("#videos-#{video.id} a", "Delete")
+             |> element("#videos-#{video.id} a", gettext("Delete"))
              |> render_click()
 
       refute has_element?(index_live, "#videos-#{video.id}")
