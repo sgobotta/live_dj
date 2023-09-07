@@ -78,13 +78,17 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       {:error, :invalid_url} ->
         {:noreply,
          socket
+         |> assign(form: to_form(%{}))
          |> put_flash(
            :warn,
            dgettext("errors", "The youtube url is not valid")
          )}
 
       {:error, {type, msg}} when type in [:warn, :error] and is_binary(msg) ->
-        {:noreply, put_flash(socket, type, msg)}
+        {:noreply,
+         socket
+         |> assign(form: to_form(%{}))
+         |> put_flash(type, msg)}
     end
   end
 
