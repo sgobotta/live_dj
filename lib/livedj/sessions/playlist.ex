@@ -5,7 +5,7 @@ defmodule Livedj.Sessions.Playlist do
 
   @doc """
   Given a room id and a media indentifier (generally a youtube id), adds the
-  value to the room playlist list.
+  value to the room playlist.
   """
   @spec add(Ecto.UUID.t(), String.t()) ::
           :ok | {:error, :element_exists} | {:error, any()}
@@ -14,6 +14,21 @@ defmodule Livedj.Sessions.Playlist do
          {:ok, res} when is_integer(res) <-
            Redis.List.push(build_key(room_id), media_identifier) do
       :ok
+    end
+  end
+
+  @doc """
+  Given a room id and a media identifier (generally a youtube id), removes the
+  value from the room playlist.
+  """
+  @spec remove(Ecto.UUID.t(), String.t()) :: {:ok, :removed} | {:error, :noop}
+  def remove(room_id, media_identifier) do
+    case Redis.List.lrem(build_key(room_id), media_identifier) do
+      {:ok, 0} ->
+        {:error, :noop}
+
+      {:ok, _n_removed} ->
+        {:ok, :removed}
     end
   end
 
