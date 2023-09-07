@@ -18,6 +18,7 @@ defmodule Livedj.Sessions.Channels do
   @dragging_cancelled :dragging_cancelled
   @playlist_joined :playlist_joined
   @track_added :track_added
+  @track_removed :track_removed
   @track_moved :track_moved
 
   @doc """
@@ -55,6 +56,12 @@ defmodule Livedj.Sessions.Channels do
   """
   @spec track_added_event() :: :track_added
   def track_added_event, do: @track_added
+
+  @doc """
+  Returns the message name for track removed events
+  """
+  @spec track_removed_event() :: :track_removed
+  def track_removed_event, do: @track_removed
 
   @doc """
   Returns the message name for track moving events
@@ -98,6 +105,17 @@ defmodule Livedj.Sessions.Channels do
       broadcast!(
         playlist_topic(room_id),
         {track_added_event(), room_id, payload}
+      )
+
+  @doc """
+  Broadcasts a #{@track_removed} message to the given topic.
+  """
+  @spec broadcast_playlist_track_removed!(binary(), any()) :: :ok
+  def broadcast_playlist_track_removed!(room_id, payload),
+    do:
+      broadcast!(
+        playlist_topic(room_id),
+        {track_removed_event(), room_id, payload}
       )
 
   @doc """
