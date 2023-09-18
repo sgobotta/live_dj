@@ -1,0 +1,32 @@
+name: CD-dev
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: [dev]
+    types: 
+      - completed
+
+jobs:
+  on-success:
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          # specify the `main` branch as the remote branch to push to
+          branch: 'main'
+          git_remote_url: ${{ secrets.SSH_REMOTE_DEV_URL }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+  on-failure:
+    runs-on: ubuntu-20.04
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The triggering workflow failed'
