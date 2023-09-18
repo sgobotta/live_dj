@@ -134,6 +134,7 @@ runs:
         # Sendgrid env
         LIVEDJ_FROM_EMAIL: test@email.com
         SENDGRID_API_KEY: some-sendgrid-api-key
+        MIX_ENV: ${{ inputs.MIX_ENV }}
 
     # Test release -------------------------------------------------------------
     - name: Test release
