@@ -42,7 +42,7 @@ if config_env() == :prod do
   port = String.to_integer(System.get_env("PORT", "443"))
 
   case System.get_env("STAGE") do
-    "local" ->
+    stage when stage in ["local", "dev", "staging", "prod"] ->
       :ok =
         Logger.warn(
           "Ignoring variable DATABASE_URL as Postgrex connection protocol, proceding with default tcp connection."
