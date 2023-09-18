@@ -121,6 +121,7 @@ runs:
         POSTGRES_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
         # Misc env
         UPLOADS_PATH: ${{ inputs.UPLOADS_PATH }}
+        STAGE: ${{ inputs.STAGE }}
       run: >
         GITHUB_TOKEN=${GITHUB_TOKEN}
         mix coveralls.github -u
