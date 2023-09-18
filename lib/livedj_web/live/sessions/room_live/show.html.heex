@@ -1,5 +1,9 @@
 <%= if connected?(@socket) do %>
   <div class="h-full">
+    <div id="video-player-hook" phx-hook="Youtube">
+      <div id="video-player"></div>
+    </div>
+
     <div id="lists" class="grid sm:grid-cols-1 overflow-y-scroll h-64 my-4">
       <.live_component
         id={"playlist_#{@room.id}"}
