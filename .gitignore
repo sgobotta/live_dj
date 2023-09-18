@@ -40,3 +40,4 @@ npm-debug.log
 
 # Env
 .env
+.env.prod

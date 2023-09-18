@@ -11,15 +11,15 @@ msgstr ""
 "Language: en\n"
 
 ## From Ecto.Changeset.cast/4
-#: lib/livedj/accounts/user.ex:50
-#: lib/livedj/accounts/user.ex:70
+#: lib/livedj/accounts/user.ex:52
+#: lib/livedj/accounts/user.ex:72
 #, elixir-autogen
 msgid "can't be blank"
 msgstr ""
 
 ## From Ecto.Changeset.unique_constraint/3
-#: lib/livedj/accounts/user.ex:117
-#: lib/livedj/accounts/user.ex:120
+#: lib/livedj/accounts/user.ex:119
+#: lib/livedj/accounts/user.ex:122
 #, elixir-autogen
 msgid "has already been taken"
 msgstr ""
@@ -117,40 +117,92 @@ msgstr ""
 msgid "must be equal to %{number}"
 msgstr ""
 
-#: lib/livedj/accounts/user.ex:57
+#: lib/livedj/accounts/user.ex:59
 #, elixir-autogen, elixir-format, fuzzy
 msgid "should have at most %{count} caracters(s)"
 msgid_plural "should have at most %{count} caracters(s)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/livedj/accounts/user.ex:141
+#: lib/livedj/accounts/user.ex:143
 #, elixir-autogen, elixir-format
 msgid "did not change"
 msgstr ""
 
-#: lib/livedj/accounts/user.ex:161
+#: lib/livedj/accounts/user.ex:163
 #, elixir-autogen, elixir-format
 msgid "does not match password"
 msgstr ""
 
 ## From Ecto.Changeset.put_change/3
-#: lib/livedj/accounts/user.ex:203
+#: lib/livedj/accounts/user.ex:205
 #, elixir-autogen, elixir-format, fuzzy
 msgid "is not valid"
 msgstr ""
 
-#: lib/livedj/accounts/user.ex:52
+#: lib/livedj/accounts/user.ex:54
 #, elixir-autogen, elixir-format
 msgid "must have the @ sign and no spaces"
 msgstr ""
 
-#: lib/livedj/accounts/user.ex:102
+#: lib/livedj/accounts/user.ex:104
 #, elixir-autogen, elixir-format, fuzzy
 msgid "should be at most %{count} byte(s)"
 msgstr ""
 
-#: lib/livedj/accounts/user.ex:76
+#: lib/livedj/accounts/user.ex:78
 #, elixir-autogen, elixir-format
 msgid "should be between %{min} and %{max} characters"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:196
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/livedj/sessions.ex:83
+#, elixir-autogen, elixir-format
+msgid "Could not fetch the video from youtube"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:208
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr ""
+
+#: lib/livedj/sessions.ex:67
+#: lib/livedj/sessions.ex:95
+#, elixir-autogen, elixir-format
+msgid "The video is already added to the playlist"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:84
+#, elixir-autogen, elixir-format
+msgid "The youtube url is not valid"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:191
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:203
+#: lib/livedj_web/live/sessions/room_live/show.ex:40
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:33
+#, elixir-autogen, elixir-format
+msgid "The room doesn't exist"
+msgstr ""
+
+#: lib/livedj/media/video.ex:39
+#, elixir-autogen, elixir-format
+msgid "video with this id already exists"
+msgstr ""
+
+#: lib/livedj/sessions.ex:76
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Could not save video. Please try again later."
 msgstr ""

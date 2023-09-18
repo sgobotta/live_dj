@@ -2,4 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import "./widgets/scrollbar.css";
+
 /* This file is for your main application CSS */
+

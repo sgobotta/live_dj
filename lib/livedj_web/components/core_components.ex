@@ -108,7 +108,7 @@ defmodule LivedjWeb.CoreComponents do
   attr :title, :string, default: nil
 
   attr :kind, :atom,
-    values: [:info, :error],
+    values: [:info, :error, :warn],
     doc: "used for styling and flash lookup"
 
   attr :rest, :global,
@@ -125,11 +125,13 @@ defmodule LivedjWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
+        "fixed top-2 right-3 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1 cursor-pointer",
         @kind == :info &&
           "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
         @kind == :error &&
-          "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+          "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900",
+        @kind == :warn &&
+          "bg-yellow-50 text-yellow-900 shadow-md ring-yellow-500 fill-yellow-900"
       ]}
       {@rest}
     >
@@ -144,6 +146,11 @@ defmodule LivedjWeb.CoreComponents do
         />
         <.icon
           :if={@kind == :error}
+          name="hero-exclamation-circle-mini"
+          class="h-4 w-4"
+        />
+        <.icon
+          :if={@kind == :warn}
           name="hero-exclamation-circle-mini"
           class="h-4 w-4"
         />
@@ -175,29 +182,30 @@ defmodule LivedjWeb.CoreComponents do
 
   def flash_group(assigns) do
     ~H"""
-    <.flash kind={:info} title="Success!" flash={@flash} />
-    <.flash kind={:error} title="Error!" flash={@flash} />
+    <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
+    <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+    <.flash kind={:warn} title={gettext("Warn!")} flash={@flash} />
     <.flash
       id="client-error"
       kind={:error}
-      title="We can't find the internet"
+      title={dgettext("errors", "We can't find the internet")}
       phx-disconnected={show(".phx-client-error #client-error")}
       phx-connected={hide("#client-error")}
       hidden
     >
-      Attempting to reconnect
+      <%= dgettext("errors", "Attempting to reconnect") %>
       <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
     </.flash>
 
     <.flash
       id="server-error"
       kind={:error}
-      title="Something went wrong!"
+      title={dgettext("errors", "Something went wrong!")}
       phx-disconnected={show(".phx-server-error #server-error")}
       phx-connected={hide("#server-error")}
       hidden
     >
-      Hang in there while we get back on track
+      <%= dgettext("errors", "Hang in there while we get back on track") %>
       <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
     </.flash>
     """
@@ -241,6 +249,55 @@ defmodule LivedjWeb.CoreComponents do
         >
           <%= render_slot(action, f) %>
         </div>
+      </div>
+    </.form>
+    """
+  end
+
+  @doc """
+  Renders a simple form for search use cases.
+
+  ## Examples
+
+      <.add_media_form for={@form} phx-change="validate" phx-submit="save">
+        <.input field={@form[:email]} label="Email"/>
+        <.input field={@form[:username]} label="Username" />
+        <:actions>
+          <.button>Save</.button>
+        </:actions>
+      </.add_media_form>
+  """
+  attr :for, :any, required: true, doc: "the datastructure for the form"
+
+  attr :as, :any,
+    default: nil,
+    doc: "the server side parameter to collect all input under"
+
+  attr :rest, :global,
+    include:
+      ~w(autocomplete name rel action enctype method novalidate target multipart),
+    doc: "the arbitrary HTML attributes to apply to the form tag"
+
+  slot :inner_block, required: true
+  slot :field, doc: "the slot for the form input, such as a text input"
+  slot :actions, doc: "the slot for form actions, such as a submit button"
+
+  def add_media_form(assigns) do
+    ~H"""
+    <.form :let={f} for={@for} as={@as} {@rest}>
+      <div class="space-y-8 bg-white w-full px-2">
+        <div class="flex flex-row">
+          <div class="w-full">
+            <%= render_slot(@field, f) %>
+          </div>
+          <div
+            :for={action <- @actions}
+            class="mt-2 flex items-center justify-between gap-6"
+          >
+            <%= render_slot(action, f) %>
+          </div>
+        </div>
+        <%= render_slot(@inner_block, f) %>
       </div>
     </.form>
     """

@@ -103,7 +103,7 @@ cp .env.example .env
 
 #### App
 
-+ `APP_HOST`: a hsot IP. Example: `127.0.0.1` (local), `192.168.0.xxx` (lan), `0.0.0.0` (lan). This is mostly using in staging or production environments.
++ `PHX_HOST`: a hsot IP. Example: `127.0.0.1` (local), `192.168.0.xxx` (lan), `0.0.0.0` (lan). This is mostly using in staging or production environments.
 
 #### Database
 
@@ -117,6 +117,10 @@ cp .env.example .env
 #### The assigned directory for uploads
 
 + `UPLOADS_PATH`: the assigned path for uploads.
+
+#### Youtube integration
+
++ `YOUTUBE_API_KEY`: api key for the YouTube 3 api. More information about [*how to get an API key*](https://console.developers.google.com/apis/api/youtube.googleapis.com/credentials).
 
 ### Useful commands
 
@@ -219,9 +223,31 @@ make check.lint
 make check
 ```
 
+#### Docker commands
+
+There are a group of commands that let developers test a production like distribution of the application, using docker. Copy the *.env.prod.example* to an *.env.prod* file and fill in the missing values before trying the commands below.
+
+> Run the docker release command to build and run a new, fresh container.
+
+```bash
+make docker.release
+```
+
+> Use docker rerun to stop any running container. This is useful to test a new *.env.prod* configuration without having to rebuild the whole project.
+
+```bash
+make docker.rerun
+```
+
+> Check the logs of the container that's currently running
+
+```bash
+make docker.logs
+```
+
 ### Development server
 
-Once the environment file and the project is properly set up, a development server can be started using the command `make start` explained above.
+Once the environment file and the project is properly set up, a development server can be started using the `make server` command.
 
 + Visit [`localhost:4000`](http://localhost:4000) from your browser to access the application main page.
 + Visit [`localhost:4000/dashboard`](http://localhost:4000/dashboard/home) from your browser to access a devellopment dashboard with information about your app.

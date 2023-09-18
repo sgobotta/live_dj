@@ -1,0 +1,53 @@
+<.header>
+  <%= gettext("Listing Rooms") %>
+  <:actions>
+    <.link patch={~p"/admin/sessions/rooms/new"}>
+      <.button><%= gettext("New Room") %></.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="rooms"
+  rows={@streams.rooms}
+  row_click={
+    fn {_id, room} -> JS.navigate(~p"/admin/sessions/rooms/#{room}") end
+  }
+>
+  <:col :let={{_id, room}} label={gettext("Name")}><%= room.name %></:col>
+  <:col :let={{_id, room}} label={gettext("Slug")}><%= room.slug %></:col>
+  <:action :let={{_id, room}}>
+    <div class="sr-only">
+      <.link navigate={~p"/admin/sessions/rooms/#{room}"}>
+        <%= gettext("Show") %>
+      </.link>
+    </div>
+    <.link patch={~p"/admin/sessions/rooms/#{room}/edit"}>
+      <%= gettext("Edit") %>
+    </.link>
+  </:action>
+  <:action :let={{id, room}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: room.id}) |> hide("##{id}")}
+      data-confirm={gettext("Are you sure?")}
+    >
+      <%= gettext("Delete") %>
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="room-modal"
+  show
+  on_cancel={JS.patch(~p"/admin/sessions/rooms")}
+>
+  <.live_component
+    module={LivedjWeb.Admin.Sessions.RoomLive.FormComponent}
+    id={@room.id || :new}
+    title={@page_title}
+    action={@live_action}
+    room={@room}
+    patch={~p"/admin/sessions/rooms"}
+  />
+</.modal>

@@ -97,3 +97,5 @@ config :git_hooks,
       ]
     ]
   ]
+
+config :tubex, Tubex, api_key: System.get_env("YOUTUBE_API_KEY")

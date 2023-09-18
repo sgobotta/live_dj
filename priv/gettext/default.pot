@@ -11,13 +11,248 @@
 msgid ""
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:541
+#: lib/livedj_web/components/core_components.ex:598
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
 #: lib/livedj_web/components/core_components.ex:82
-#: lib/livedj_web/components/core_components.ex:156
+#: lib/livedj_web/components/core_components.ex:163
 #, elixir-autogen, elixir-format
 msgid "close"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:186
+#, elixir-autogen, elixir-format
+msgid "Error!"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:28
+#, elixir-autogen, elixir-format
+msgid "Insert a youtube url"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:185
+#, elixir-autogen, elixir-format
+msgid "Success!"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:76
+#, elixir-autogen, elixir-format
+msgid "Track queued to playlist"
+msgstr ""
+
+#: lib/livedj_web/components/core_components.ex:187
+#, elixir-autogen, elixir-format
+msgid "Warn!"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:26
+#, elixir-autogen, elixir-format
+msgid "Back to videos"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.ex:21
+#: lib/livedj_web/live/admin/media/video_live/show.ex:22
+#, elixir-autogen, elixir-format
+msgid "Edit Video"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "Edit video"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:36
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Etag"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.ex:33
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Listing Videos"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.ex:27
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "New Video"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:40
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:25
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:22
+#, elixir-autogen, elixir-format
+msgid "Published at"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:44
+#, elixir-autogen, elixir-format
+msgid "Save Video"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/show.ex:21
+#, elixir-autogen, elixir-format
+msgid "Show Video"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:4
+#, elixir-autogen, elixir-format
+msgid "This is a video record from your database."
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:29
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:19
+#, elixir-autogen, elixir-format
+msgid "Thumbnail url"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:24
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:25
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:23
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:17
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:18
+#, elixir-autogen, elixir-format
+msgid "Title"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:13
+#, elixir-autogen, elixir-format
+msgid "Use this form to manage video records in your database."
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Video"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:98
+#, elixir-autogen, elixir-format
+msgid "Video created successfully"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:83
+#, elixir-autogen, elixir-format
+msgid "Video updated successfully"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/form_component.ex:34
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:24
+#: lib/livedj_web/live/admin/media/video_live/show.html.heex:20
+#, elixir-autogen, elixir-format
+msgid "External id"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:37
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:28
+#, elixir-autogen, elixir-format
+msgid "Are you sure?"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:19
+#, elixir-autogen, elixir-format
+msgid "Back to rooms"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:39
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:30
+#, elixir-autogen, elixir-format
+msgid "Delete"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:32
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:23
+#, elixir-autogen, elixir-format
+msgid "Edit"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/index.ex:21
+#: lib/livedj_web/live/admin/sessions/room_live/show.ex:22
+#, elixir-autogen, elixir-format
+msgid "Edit Room"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:9
+#, elixir-autogen, elixir-format
+msgid "Edit room"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/index.ex:33
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Listing Rooms"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:26
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:17
+#: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:15
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/index.ex:27
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:5
+#, elixir-autogen, elixir-format
+msgid "New Room"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:2
+#, elixir-autogen, elixir-format
+msgid "Room"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:84
+#, elixir-autogen, elixir-format
+msgid "Room created successfully"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:69
+#, elixir-autogen, elixir-format
+msgid "Room updated successfully"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:30
+#, elixir-autogen, elixir-format
+msgid "Save Room"
+msgstr ""
+
+#: lib/livedj_web/live/admin/media/video_live/index.html.heex:30
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:21
+#, elixir-autogen, elixir-format
+msgid "Show"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/show.ex:21
+#, elixir-autogen, elixir-format
+msgid "Show Room"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:27
+#: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:18
+#: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:16
+#, elixir-autogen, elixir-format
+msgid "Slug"
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:3
+#, elixir-autogen, elixir-format
+msgid "This is a room record from your database."
+msgstr ""
+
+#: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:15
+#, elixir-autogen, elixir-format
+msgid "Use this form to manage room records in your database."
+msgstr ""
+
+#: lib/livedj_web/components/list_component.ex:36
+#, elixir-autogen, elixir-format
+msgid "Remove '%{title}'?"
 msgstr ""

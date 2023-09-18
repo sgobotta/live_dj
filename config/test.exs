@@ -35,3 +35,5 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :tubex, Tubex, api_key: System.get_env("YOUTUBE_TEST_API_KEY")

@@ -63,22 +63,22 @@ docker.logs:
 	@docker logs $(CONTAINER_NAME) -f
 
 #🐳 docker.release: @ Re-create a docker image and run it
-docker.release: PORT:=5000
+docker.release: CONTAINER_PORT:=5000
 docker.release: INTERNAL_PORT:=5001
 docker.release: docker.stop docker.delete docker.build docker.run
 
 #🐳 docker.rerun: @ Stops and deletes old container to re-run a fresh new container
-docker.rerun: PORT:=5000
+docker.rerun: CONTAINER_PORT:=5000
 docker.rerun: INTERNAL_PORT:=5001
 docker.rerun: docker.stop docker.delete docker.run
 
 #🐳 docker.run: @ Run the docker container
-docker.run: PORT:=5000
+docker.run: CONTAINER_PORT:=5000
 docker.run: INTERNAL_PORT:=5001
 docker.run: CONTAINER_NAME:=$(CONTAINER_NAME)
 docker.run: IMAGE_NAME:=$(IMAGE_NAME)
 docker.run:
-	@docker run --detach --name $(CONTAINER_NAME) --network devops_livedj_storage -p $(PORT):$(INTERNAL_PORT) --env PORT=$(INTERNAL_PORT) --env-file .env.prod $(IMAGE_NAME)
+	@docker run --detach --name $(CONTAINER_NAME) --network devops_livedj_storage -p $(CONTAINER_PORT):$(INTERNAL_PORT) --env PORT=$(INTERNAL_PORT) --env-file .env.prod $(IMAGE_NAME)
 
 #🐳 docker.stop: @ Stop the docker container
 docker.stop: CONTAINER_NAME:=$(CONTAINER_NAME)
@@ -139,14 +139,14 @@ reset.ecto.dev: SHELL:=/bin/bash
 reset.ecto.dev: MIX_ENV=dev
 reset.ecto.dev:
 	@echo "🧹 Cleaning db for dev env..."
-	@mix reset.ecto
+	@mix ecto.reset
 
 #💣 reset.ecto.test: @ Resets database for test env
 reset.ecto.test: SHELL:=/bin/bash
 reset.ecto.test: MIX_ENV=test
 reset.ecto.test:
 	@echo "🧹 Cleaning db for test env..."
-	@mix reset.ecto
+	@mix ecto.reset
 
 #📦 setup: @ Installs dependencies and set up database for dev and test envs
 setup: SHELL:=/bin/bash

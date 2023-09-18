@@ -25,6 +25,12 @@ inputs:
   POSTGRES_USER:
     description: Postgres database user
     required: true
+  REDIS_HOST:
+    description: The Redis host
+    required: true
+  REDIS_PASS:
+    description: The Redis pass
+    required: true
   STAGE:
     default: local
     description: The production environment
@@ -117,7 +123,7 @@ runs:
         ./entrypoint.sh setup_db
       env:
         # Application env
-        APP_HOST: 0.0.0.0
+        PHX_HOST: 0.0.0.0
         SECRET_KEY_BASE: some-secret-key
         STAGE: local
         # Postgres env
@@ -128,6 +134,7 @@ runs:
         # Sendgrid env
         LIVEDJ_FROM_EMAIL: test@email.com
         SENDGRID_API_KEY: some-sendgrid-api-key
+        MIX_ENV: ${{ inputs.MIX_ENV }}
 
     # Test release -------------------------------------------------------------
     - name: Test release
@@ -138,7 +145,7 @@ runs:
       id: test-application
       env:
         # Application env
-        APP_HOST: 0.0.0.0
+        PHX_HOST: 0.0.0.0
         SECRET_KEY_BASE: some-secret-key
         STAGE: local
         # Postgres env
