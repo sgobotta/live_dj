@@ -25,6 +25,12 @@ inputs:
   POSTGRES_USER:
     description: Postgres database user
     required: true
+  REDIS_HOST:
+    description: The Redis host
+    required: true
+  REDIS_PASS:
+    description: The Redis pass
+    required: true
   STAGE:
     default: local
     description: The production environment

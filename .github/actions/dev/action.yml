@@ -22,6 +22,16 @@ inputs:
   POSTGRES_USER:
     description: Postgres database user
     required: true
+  REDIS_HOST:
+    description: The Redis host
+    required: true
+  REDIS_PASS:
+    description: The Redis host
+    required: true
+  STAGE:
+    default: local
+    description: The production environment
+    required: false
   UPLOADS_PATH:
     description: The uploads path
     required: true
@@ -87,6 +97,9 @@ runs:
       env:
         STAGE: ${{ inputs.STAGE }}
         MIX_ENV: ${{ inputs.MIX_ENV }}
+        # Postgres env
+        POSTGRES_USER: ${{ inputs.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ inputs.POSTGRES_PASSWORD }}
 
     # Setup the Phoenix Client -------------------------------------------------
     - name: Setup web client
