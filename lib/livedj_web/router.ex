@@ -27,6 +27,7 @@ defmodule LivedjWeb.Router do
       on_mount: [{LivedjWeb.UserAuth, :mount_current_user}],
       root_layout: {LivedjWeb.Layouts, :root_session} do
       scope "/sessions", Sessions do
+        live "/rooms", RoomLive.Index, :index
         live "/rooms/:id", RoomLive.Show, :show
       end
     end
