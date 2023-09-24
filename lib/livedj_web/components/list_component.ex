@@ -4,8 +4,8 @@ defmodule LivedjWeb.ListComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="bg-transparent py-1 rounded-lg">
-      <div class="space-y-5 mx-auto max-w-7xl px-1 space-y-4 select-none">
+    <div class="bg-transparent py-1 rounded-lg pr-1">
+      <div class="space-y-5 mx-auto max-w-7xl space-y-4 select-none">
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={item <- @list}
