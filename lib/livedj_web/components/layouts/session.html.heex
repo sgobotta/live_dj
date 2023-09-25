@@ -60,6 +60,12 @@
       <a phx-click="previous">
         <.icon name="hero-chevron-left-solid" class="h-7 w-7" />
       </a>
+      <a phx-click={if @is_playing, do: "pause", else: "play"}>
+        <.icon
+          name={if @is_playing, do: "hero-pause", else: "hero-play"}
+          class="h-7 w-7"
+        />
+      </a>
       <a phx-click="next">
         <.icon name="hero-chevron-right-solid" class="h-7 w-7" />
       </a>

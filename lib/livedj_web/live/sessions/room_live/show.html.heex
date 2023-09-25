@@ -1,9 +1,31 @@
 <%= if connected?(@socket) do %>
   <div class="h-full">
-    <div id="video-player-hook" phx-hook="Youtube" class="mx-1">
-      <div id="video-player" class="w-full h-72 bg-red-100 rounded-lg" />
+    <div
+      id="video-player-hook"
+      phx-hook="Youtube"
+      phx-mounted={JS.push("on_player_container_mount")}
+      phx-update="ignore"
+      class="mx-1 w-full h-72 relative flex"
+    >
+      <div
+        id={"player-#{@player_container_id}"}
+        class="w-full h-72 rounded-lg transition duration-1000 hidden mr-1"
+      />
+      <div class="
+          absolute w-full h-full grid
+        ">
+        <div
+          id={"spinner-#{@spinner_container_id}"}
+          class="
+            animate-ping
+            w-36 h-36
+            self-center justify-self-center
+            rounded-full
+            bg-blue-200
+          "
+        />
+      </div>
     </div>
-
     <div
       id="lists"
       class="grid sm:grid-cols-1 overflow-y-scroll h-64 my-4 mx-1 p-0"

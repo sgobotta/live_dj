@@ -15,6 +15,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
         {:ok,
          assign(socket,
+           player_container_id: Ecto.UUID.generate(),
+           spinner_container_id: Ecto.UUID.generate(),
+           is_playing: false,
            drag_state: :unlocked,
            form: to_form(%{}),
            room: room,
@@ -22,7 +25,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
          )}
 
       false ->
-        {:ok, socket}
+        {:ok, assign(socket, is_playing: false)}
     end
   rescue
     error in SessionRoomError ->
@@ -103,6 +106,51 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_event("next", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("play", _params, socket) do
+    {:noreply, push_event(socket, "play_video", %{})}
+  end
+
+  def handle_event("on_player_playing", _params, socket) do
+    {:noreply, assign(socket, is_playing: true)}
+  end
+
+  def handle_event("pause", _params, socket) do
+    {:noreply, push_event(socket, "pause_video", %{})}
+  end
+
+  def handle_event("on_player_paused", _params, socket) do
+    {:noreply, assign(socket, is_playing: false)}
+  end
+
+  def handle_event("on_player_container_mount", _params, socket) do
+    socket =
+      if connected?(socket),
+        do:
+          push_event(socket, "on_container_mounted", %{
+            container_id: "player-#{socket.assigns.player_container_id}"
+          }),
+        else: socket
+
+    {:noreply, socket}
+  end
+
+  def handle_event("player_loaded", _params, socket) do
+    socket =
+      if connected?(socket),
+        do:
+          push_event(socket, "show_player", %{
+            loader_container_id:
+              "spinner-#{socket.assigns.spinner_container_id}"
+          }),
+        else: socket
+
+    {:noreply, socket}
+  end
+
+  def handle_event("player_visible", _params, socket) do
     {:noreply, socket}
   end
 
