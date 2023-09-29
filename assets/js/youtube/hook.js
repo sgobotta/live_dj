@@ -9,14 +9,16 @@ export default {
      */
     this.handleEvent('on_container_mounted', ({container_id}) => {
       console.debug(
-        '[Player :: on_container_mounted]', `contaienr_id=${container_id}`)
+        '[Player :: on_container_mounted]', `container_id=${container_id}`)
 
       const onPlayerReady = player => {
         console.debug('[Player :: Ready]', player)
+        player.g.classList.add("rounded-lg")
+
         this.player = player
         this.pushEventTo(this.el, 'player_loaded')
       }
-        
+
       const playerContainer = document.getElementById(container_id)
       initPlayer(playerContainer, onPlayerReady)
     })
