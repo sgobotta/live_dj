@@ -285,7 +285,7 @@ defmodule LivedjWeb.CoreComponents do
   def add_media_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="space-y-8 bg-white w-full px-2">
+      <div class="space-y-8 bg-white w-full">
         <div class="flex flex-row">
           <div class="w-full">
             <%= render_slot(@field, f) %>
