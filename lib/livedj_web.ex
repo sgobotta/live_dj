@@ -49,10 +49,15 @@ defmodule LivedjWeb do
     end
   end
 
-  def live_view do
+  def live_view(opts \\ []) do
     quote do
-      use Phoenix.LiveView,
-        layout: {LivedjWeb.Layouts, :app}
+      @opts Keyword.merge(
+              [
+                layout: {LivedjWeb.Layouts, :app}
+              ],
+              unquote(opts)
+            )
+      use Phoenix.LiveView, @opts
 
       unquote(html_helpers())
     end
@@ -107,6 +112,10 @@ defmodule LivedjWeb do
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """
+  defmacro __using__({which, opts}) when is_atom(which) do
+    apply(__MODULE__, which, [opts])
+  end
+
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
