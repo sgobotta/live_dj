@@ -12,6 +12,7 @@ defmodule LivedjWeb.ListComponent do
             id={"#{item.external_id}-item"}
             data-id={item.external_id}
             class={"
+              first:mt-0 last:mb-0
               #{if @state == :locked, do: "bg-gray-50 border-dashed", else: "bg-white"}
               bg-white my-2 rounded-xl border-gray-300 border-[1px]
               hover:cursor-grab
