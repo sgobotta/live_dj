@@ -15,7 +15,6 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
 
         {:ok,
          assign(socket,
-           is_playing: false,
            drag_state: :unlocked,
            form: to_form(%{}),
            layout: false,
@@ -24,7 +23,7 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
          ), layout: {LivedjWeb.Layouts, :flash}}
 
       false ->
-        {:ok, assign(socket, is_playing: false), layout: false}
+        {:ok, socket, layout: false}
     end
   rescue
     error in SessionRoomError ->
