@@ -1,0 +1,20 @@
+<%= if connected?(@socket) do %>
+  <.header>
+    <%= gettext("Rooms") %>
+  </.header>
+
+  <.table
+    id="rooms"
+    rows={@streams.rooms}
+    row_click={fn {_id, room} -> JS.navigate(~p"/sessions/rooms/#{room}") end}
+  >
+    <:col :let={{_id, room}} label={gettext("Name")}><%= room.name %></:col>
+    <:action :let={{_id, room}}>
+      <div class="sr-only">
+        <.link navigate={~p"/sessions/rooms/#{room}"}>
+          <%= gettext("Show") %>
+        </.link>
+      </div>
+    </:action>
+  </.table>
+<% end %>

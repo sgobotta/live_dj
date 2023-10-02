@@ -1,0 +1,34 @@
+<div id="lists" class="grid sm:grid-cols-1 overflow-y-scroll h-64 p-0 my-4">
+  <.live_component
+    id={"playlist_#{@room.id}"}
+    module={LivedjWeb.ListComponent}
+    list={@media_list}
+    form={@form}
+    on_drag_start={on_drag_start(@room.id)}
+    on_drag_end={on_drag_end(@room.id)}
+    state={@drag_state}
+    topic={"room:#{@room.id}"}
+  />
+</div>
+<div class="flex mt-4">
+  <.add_media_form
+    for={@form}
+    phx-change="validate"
+    phx-submit="add"
+    class="w-full"
+  >
+    <:field>
+      <.input
+        field={@form[:url]}
+        type="text"
+        class="w-full"
+        placeholder={gettext("Insert a youtube url")}
+      />
+    </:field>
+    <:actions>
+      <.button class="align-middle ml-2">
+        <.icon name="hero-plus" />
+      </.button>
+    </:actions>
+  </.add_media_form>
+</div>

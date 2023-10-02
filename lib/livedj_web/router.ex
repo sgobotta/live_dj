@@ -23,10 +23,10 @@ defmodule LivedjWeb.Router do
     get "/", PageController, :home
 
     live_session :sessions,
-      layout: {LivedjWeb.Layouts, :session},
       on_mount: [{LivedjWeb.UserAuth, :mount_current_user}],
       root_layout: {LivedjWeb.Layouts, :root_session} do
       scope "/sessions", Sessions do
+        live "/rooms", RoomLive.Index, :index
         live "/rooms/:id", RoomLive.Show, :show
       end
     end

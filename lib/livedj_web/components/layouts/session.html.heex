@@ -48,8 +48,8 @@
     <% end %>
   </ul>
 </header>
-<main class="py-20 lg:px-8">
-  <div class="mx-auto max-w-xl">
+<main class="py-10 lg:px-8">
+  <div class="mx-1 sm:mx-auto max-w-xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>
@@ -59,6 +59,12 @@
     <div class="flex items-center gap-4 h-12">
       <a phx-click="previous">
         <.icon name="hero-chevron-left-solid" class="h-7 w-7" />
+      </a>
+      <a phx-click={if @is_playing, do: "pause", else: "play"}>
+        <.icon
+          name={if @is_playing, do: "hero-pause", else: "hero-play"}
+          class="h-7 w-7"
+        />
       </a>
       <a phx-click="next">
         <.icon name="hero-chevron-right-solid" class="h-7 w-7" />
