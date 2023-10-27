@@ -1,9 +1,10 @@
 export default (container, onReady) => {
-  return new Promise((resolve) => {
+return new Promise((resolve, reject) => {
     new YT.Player(container, {
       events: {
         onError: (error) => {
           console.error('[YT :: On Player Error] ', error)
+          reject(error)
         },
         onReady: async event => {
           console.debug("[YT :: On Player Ready]")
