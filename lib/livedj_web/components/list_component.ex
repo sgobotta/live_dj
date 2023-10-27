@@ -20,13 +20,18 @@ defmodule LivedjWeb.ListComponent do
               drag-ghost:bg-zinc-200 drag-ghost:border-0 drag-ghost:ring-0 drag-ghost:cursor-grabbing
             "}
           >
-            <div class="flex drag-ghost:opacity-0 gap-y-2 h-14 items-center px-1">
+            <div class="flex drag-ghost:opacity-0 gap-y-2 h-14 items-center px-1 h-14">
               <img
                 class="inline-block h-12 w-12 rounded-lg ring-2 ring-white"
                 src={item.thumbnail_url}
                 alt={item.title}
               />
-              <div class="flex-auto block text-sm leading-6 text-zinc-900 p-1 px-1">
+              <div class="
+                flex-auto block
+                text-sm leading-6 text-zinc-900
+                p-1 px-1 h-8
+                text-ellipsis overflow-hidden
+              ">
                 <%= item.title %>
               </div>
               <button
