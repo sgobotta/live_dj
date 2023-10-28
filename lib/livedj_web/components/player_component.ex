@@ -13,13 +13,11 @@ defmodule LivedjWeb.PlayerLiveView do
   def mount(_params, %{"player_id" => player_id}, socket) do
     {:ok,
      socket
-     |> assign(:player_id, prefix_player_id(player_id))
+     |> assign(:player_id, player_id)
      |> assign(layout: false)}
   end
 
   def update(_assigns, socket) do
     {:ok, socket}
   end
-
-  defp prefix_player_id(id), do: "player-#{id}"
 end

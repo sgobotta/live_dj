@@ -17,9 +17,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
         {:ok,
          assign(socket,
-           list_lv_id: Ecto.UUID.generate(),
-           player_container_id: Ecto.UUID.generate(),
-           spinner_container_id: Ecto.UUID.generate(),
+           list_lv_id: playlist_liveview_id(),
+           player_container_id: player_container_id(),
+           spinner_id: spinner_id(),
+           backdrop_id: backdrop_id(),
            is_playing: false,
            form: to_form(%{}),
            room: room
@@ -93,7 +94,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       if connected?(socket),
         do:
           push_event(socket, "on_container_mounted", %{
-            container_id: "player-#{socket.assigns.player_container_id}"
+            backdrop_id: socket.assigns.backdrop_id,
+            player_container_id: socket.assigns.player_container_id,
+            spinner_id: socket.assigns.spinner_id
           }),
         else: socket
 
@@ -103,11 +106,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   def handle_event("player_loaded", _params, socket) do
     socket =
       if connected?(socket),
-        do:
-          push_event(socket, "show_player", %{
-            loader_container_id:
-              "spinner-#{socket.assigns.spinner_container_id}"
-          }),
+        do: push_event(socket, "show_player", %{}),
         else: socket
 
     {:noreply, socket}
@@ -124,4 +123,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       ) do
     {:noreply, socket}
   end
+
+  defp playlist_liveview_id, do: "playlist-lv-#{Ecto.UUID.generate()}"
+  defp player_container_id, do: "player-container-#{Ecto.UUID.generate()}"
+  defp spinner_id, do: "spinner-#{Ecto.UUID.generate()}"
+  defp backdrop_id, do: "backdrop-#{Ecto.UUID.generate()}"
 end
