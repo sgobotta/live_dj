@@ -5,11 +5,11 @@ defmodule Redis.List do
   require Logger
 
   @doc """
-  Redis LPUSH command. [Docs](https://redis.io/commands/lpush/)
+  Redis RPUSH command. [Docs](https://redis.io/commands/rpush/)
   """
   @spec push(String.t(), String.t()) :: {:ok, integer()} | {:error, any()}
   def push(key, value) do
-    case Redix.command(:redix, ~w(LPUSH #{key} #{value})) do
+    case Redix.command(:redix, ~w(RPUSH #{key} #{value})) do
       {:ok, _list_length} = res ->
         res
 
