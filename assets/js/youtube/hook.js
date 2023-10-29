@@ -33,8 +33,34 @@ export default {
         this.pushEventTo(this.el, 'player_loaded')
       }
 
+      const onStateChange = event => {
+        switch (event.data) {
+          case YT.PlayerState.UNSTARTED:
+            console.debug("[Player State :: UNSTARTED")
+            break
+          case YT.PlayerState.ENDED:
+            console.debug("[Player State :: ENDED")
+            break
+          case YT.PlayerState.PLAYING:
+            console.debug("[Player State :: PLAYING")
+            break
+          case YT.PlayerState.PAUSED:
+            console.debug("[Player State :: PAUSED")
+            break
+          case YT.PlayerState.BUFFERINGS:
+            console.debug("[Player State :: BUFFERING")
+            break
+          case YT.PlayerState.CUED:
+            console.debug("[Player State :: CUED")
+            break
+
+          default:
+            console.debug("[Player :: Unknown state")
+        }
+      }
+
       const playerContainer = document.getElementById(player_container_id)
-      await initPlayer(playerContainer, onPlayerReady)
+      await initPlayer(playerContainer, {onReady: onPlayerReady, onStateChange})
     })
 
     /**

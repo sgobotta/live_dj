@@ -1,4 +1,4 @@
-export default (container, onReady) => {
+export default (container, {onReady, onStateChange}) => {
 return new Promise((resolve, reject) => {
     new YT.Player(container, {
       events: {
@@ -11,8 +11,8 @@ return new Promise((resolve, reject) => {
           await onReady(event.target)
           const player = event.target
           resolve(player)
-        }
-        // onStateChange
+        },
+        onStateChange
       },
       height: "100%",
       playerVars: {
@@ -23,7 +23,7 @@ return new Promise((resolve, reject) => {
         rel: 0,
         showinfo: 0
       },
-      videoId: 'oCcks-fwq2c',
+      videoId: 'fc3EIAC--bU',
       width: "100%"
     })
   })
