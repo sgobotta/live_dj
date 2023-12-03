@@ -13,6 +13,12 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   @server_module PlaylistServer
   @registry_module Registry.Playlist
 
+  @spec server_module() :: module()
+  def server_module, do: @server_module
+
+  @spec registry_module() :: module()
+  def registry_module, do: @registry_module
+
   @doc """
   Given a keyword of args, initialises the dynamic Playlist Supervisor.
   """
@@ -45,7 +51,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   end
 
   @doc """
-  Given a reference and some arguments starts a `#{PlaylistServer}` child and
+  Given a reference and some arguments starts a `#{@server_module}` child and
   returns it's pid.
   """
   @spec start_child(module(), keyword()) :: {:ok, pid()}
@@ -60,7 +66,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
 
     args = Keyword.put(args, :on_start, on_start)
 
-    DynamicSupervisor.start_child(supervisor, {PlaylistServer, args})
+    DynamicSupervisor.start_child(supervisor, {server_module(), args})
   end
 
   @doc """
@@ -78,7 +84,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
 
   @doc """
   Given a room id, returns `nil` or a tuple where the first component is a
-  `#{PlaylistServer}` pid and the second component the playlist server state.
+  `#{@server_module}` pid and the second component the playlist server state.
   """
   @spec get_child(binary()) :: {pid(), map()} | nil
   def get_child(child_id) do
@@ -93,7 +99,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
 
   @doc """
   Given a room id, returns `nil` or a tuple where the first component is a
-  `#{PlaylistServer}` pid and the second component the playlist server state.
+  `#{@server_module}` pid and the second component the playlist server state.
   """
   @spec get_child_pid!(binary()) :: pid()
   def get_child_pid!(child_id) do
