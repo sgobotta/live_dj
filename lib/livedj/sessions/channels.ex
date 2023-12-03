@@ -3,11 +3,14 @@ defmodule Livedj.Sessions.Channels do
   Sessions channels and topic management.
   """
 
+  require Logger
+
   @type message :: atom() | {atom(), any()} | {atom(), binary(), any()}
 
   # ----------------------------------------------------------------------------
   # Topics
   #
+  @player_topic "player"
   @playlist_topic "playlist"
 
   # ----------------------------------------------------------------------------
@@ -16,10 +19,23 @@ defmodule Livedj.Sessions.Channels do
   @dragging_locked :dragging_locked
   @dragging_unlocked :dragging_unlocked
   @dragging_cancelled :dragging_cancelled
+  @player_joined :player_joined
   @playlist_joined :playlist_joined
   @track_added :track_added
   @track_removed :track_removed
   @track_moved :track_moved
+
+  @doc """
+  Returns the player topic
+  """
+  @spec player_topic() :: binary()
+  def player_topic, do: @player_topic
+
+  @doc """
+  Returns the player topic for a room
+  """
+  @spec player_topic(binary()) :: binary()
+  def player_topic(room_id), do: player_topic() <> ":" <> room_id
 
   @doc """
   Returns the playlist topic
@@ -70,10 +86,22 @@ defmodule Livedj.Sessions.Channels do
   def track_moved_event, do: @track_moved
 
   @doc """
+  Returns the message name for player joined events
+  """
+  @spec player_joined_event() :: :player_joined
+  def player_joined_event, do: @player_joined
+
+  @doc """
   Returns the message name for playlist joined events
   """
   @spec playlsit_joined_event() :: :playlist_joined
   def playlsit_joined_event, do: @playlist_joined
+
+  @doc """
+  Subscribes to the player topic
+  """
+  @spec subscribe_player_topic(binary()) :: :ok | {:error, any()}
+  def subscribe_player_topic(room_id), do: subscribe(player_topic(room_id))
 
   @doc """
   Subscribes to the playlist topic
@@ -128,6 +156,14 @@ defmodule Livedj.Sessions.Channels do
         playlist_topic(room_id),
         {track_moved_event(), room_id, payload}
       )
+
+  @doc """
+  Notify a #{@player_joined} message to the given topic.
+  """
+  @spec notify_player_joined(pid(), binary(), any()) :: message()
+  def notify_player_joined(from, room_id, payload) do
+    send(from, {player_joined_event(), room_id, payload})
+  end
 
   @doc """
   Notify a #{@playlist_joined} message to the given topic.

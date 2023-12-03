@@ -10,6 +10,8 @@ defmodule Livedj.Application do
     children = [
       # Start the Telemetry supervisor
       LivedjWeb.Telemetry,
+      # Start the Redis service
+      Redis,
       # Start the Ecto repository
       Livedj.Repo,
       # Start the PubSub system
@@ -18,8 +20,7 @@ defmodule Livedj.Application do
       {Finch, name: Livedj.Finch},
       # Start the Endpoint (http/https)
       LivedjWeb.Endpoint,
-      Livedj.Sessions,
-      Redis
+      Livedj.Sessions
       # Start a worker by calling: Livedj.Worker.start_link(arg)
       # {Livedj.Worker, arg}
     ]

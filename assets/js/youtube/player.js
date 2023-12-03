@@ -14,7 +14,6 @@ return new Promise((resolve, reject) => {
         },
         onStateChange
       },
-      height: "100%",
       playerVars: {
         controls: 0,
         disablekb: 1,
@@ -23,8 +22,7 @@ return new Promise((resolve, reject) => {
         rel: 0,
         showinfo: 0
       },
-      videoId: 'fc3EIAC--bU',
-      width: "100%"
+      videoId: 'fc3EIAC--bU'
     })
   })
 }

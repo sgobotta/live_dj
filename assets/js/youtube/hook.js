@@ -33,19 +33,22 @@ export default {
         this.pushEventTo(this.el, 'player_loaded')
       }
 
-      const onStateChange = event => {
+      const onStateChange = async event => {
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:
             console.debug("[Player State :: UNSTARTED")
             break
           case YT.PlayerState.ENDED:
             console.debug("[Player State :: ENDED")
+            await this.pushEventTo(this.el, 'on_player_ended')
             break
           case YT.PlayerState.PLAYING:
             console.debug("[Player State :: PLAYING")
+            await this.pushEventTo(this.el, 'on_player_playing')
             break
           case YT.PlayerState.PAUSED:
             console.debug("[Player State :: PAUSED")
+            await this.pushEventTo(this.el, 'on_player_paused')
             break
           case YT.PlayerState.BUFFERINGS:
             console.debug("[Player State :: BUFFERING")
@@ -92,7 +95,7 @@ export default {
     this.handleEvent('play_video', async () => {
       console.debug('[Player :: play_video]')
       await this.player.playVideo()
-      await this.pushEventTo(this.el, 'on_player_playing')
+      await this.pushEventTo(this.el, 'on_player_play')
 
       const backdrop = document.getElementById(this.backdrop_id)
       backdrop.classList.add('opacity-0')
@@ -107,7 +110,7 @@ export default {
     this.handleEvent('pause_video', async () => {
       console.debug('[Player :: pause_video]', this.spinner_id)
       await this.player.pauseVideo()
-      await this.pushEventTo(this.el, 'on_player_paused')
+      await this.pushEventTo(this.el, 'on_player_pause')
 
       const spinner = document.getElementById(this.spinner_id)
       spinner.classList.add("animate-ping")

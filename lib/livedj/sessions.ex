@@ -11,6 +11,9 @@ defmodule Livedj.Sessions do
 
   alias Livedj.Sessions.{
     Channels,
+    Player,
+    PlayerServer,
+    PlayerSupervisor,
     Playlist,
     PlaylistServer,
     PlaylistSupervisor,
@@ -22,11 +25,11 @@ defmodule Livedj.Sessions do
 
   require Logger
 
+  defdelegate child_spec(init_arg), to: Supervisor
+
   # ----------------------------------------------------------------------------
   # Playlist server management
   #
-
-  defdelegate child_spec(init_arg), to: Supervisor
 
   @doc """
   Joins the playlist server and subscribes to the playlist topic for a room.
@@ -55,7 +58,7 @@ defmodule Livedj.Sessions do
     with :ok <- Playlist.can_insert?(room_id, media_identifier),
          {:ok, %Media.Video{} = media} <-
            get_or_fetch_media_metadata_by_id(media_identifier) do
-      get_child_pid!(room_id)
+      get_playlist_child_pid!(room_id)
       |> PlaylistServer.add(
         on_add: {&on_add/2, [room_id, media]},
         on_added: {&on_added/2, [room_id, media]}
@@ -105,7 +108,7 @@ defmodule Livedj.Sessions do
   """
   @spec remove_media(binary(), any()) :: PlaylistServer.remove_response()
   def remove_media(room_id, media_identifier) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.remove(
       on_remove: {&on_remove/2, [room_id, media_identifier]},
       on_removed: {&on_removed/2, [room_id, media_identifier]}
@@ -146,7 +149,7 @@ defmodule Livedj.Sessions do
           keyword()
         ) :: {:ok, :moved} | {:error, any()}
   def move_media(room_id, media_identifier, inserted_after?, target_id, _opts) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.move(
       on_move:
         {&on_move/4, [room_id, media_identifier, inserted_after?, target_id]},
@@ -205,7 +208,7 @@ defmodule Livedj.Sessions do
   """
   @spec lock_playlist_drag(binary()) :: PlaylistServer.lock_response()
   def lock_playlist_drag(room_id) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.lock()
   end
 
@@ -215,11 +218,54 @@ defmodule Livedj.Sessions do
   @spec unlock_playlist_drag(binary(), pid()) ::
           PlaylistServer.unlock_response()
   def unlock_playlist_drag(room_id, from) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.unlock(from)
   end
 
-  defp get_child_pid!(room_id), do: PlaylistSupervisor.get_child_pid!(room_id)
+  defp get_playlist_child_pid!(room_id),
+    do: PlaylistSupervisor.get_child_pid!(room_id)
+
+  # ----------------------------------------------------------------------------
+  # Player server management
+  #
+
+  @doc """
+  Joins the player server and subscribes to the player topic for a room.
+  """
+  @spec join_player(binary()) :: {:ok, :joined}
+  def join_player(room_id) do
+    :ok = Channels.subscribe_player_topic(room_id)
+
+    case PlayerSupervisor.get_child(room_id) do
+      nil ->
+        {:ok, pid} = PlayerSupervisor.start_child(id: room_id)
+        pid
+
+      {pid, _state} when is_pid(pid) ->
+        pid
+    end
+    |> PlayerServer.join(on_joined: {&get_player/1, [room_id]})
+  end
+
+  @doc """
+  Given a room id, returns a player.
+  """
+  @spec get_player(Ecto.UUID.t()) :: {:ok, map()} | {:error, any()}
+  def get_player(room_id) do
+    case Player.get(room_id) do
+      {:ok, result} = response ->
+        Logger.debug("#{__MODULE__} :: Get player result=#{inspect(result)}")
+
+        response
+
+      {:error, error} = e ->
+        Logger.error(
+          "#{__MODULE__} :: Error on player fetch error=#{inspect(error)}"
+        )
+
+        e
+    end
+  end
 
   # ----------------------------------------------------------------------------
   # Media management

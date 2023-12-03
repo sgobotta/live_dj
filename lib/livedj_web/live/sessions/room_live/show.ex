@@ -12,8 +12,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   def mount(params, _session, socket) do
     case connected?(socket) do
       true ->
-        %Room{} = room = Sessions.get_room!(params["id"])
-        # {:ok, :joined} = Sessions.join_playlist(room_id)
+        %Room{id: room_id} = room = Sessions.get_room!(params["id"])
+        {:ok, :joined} = Sessions.join_player(room_id)
 
         {:ok,
          assign(socket,
@@ -77,15 +77,32 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, push_event(socket, "play_video", %{})}
   end
 
-  def handle_event("on_player_playing", _params, socket) do
-    {:noreply, assign(socket, is_playing: true)}
-  end
-
   def handle_event("pause", _params, socket) do
     {:noreply, push_event(socket, "pause_video", %{})}
   end
 
+  def handle_event("on_player_play", _params, socket) do
+    # A request to play a song has been sent to the player..
+    {:noreply, assign(socket, is_playing: true)}
+  end
+
+  def handle_event("on_player_playing", _params, socket) do
+    # The player state changed to playing.
+    {:noreply, socket}
+  end
+
+  def handle_event("on_player_pause", _params, socket) do
+    # A request to pause a song has been sent to the player.
+    {:noreply, assign(socket, is_playing: false)}
+  end
+
   def handle_event("on_player_paused", _params, socket) do
+    # The player state changed to paused.
+    {:noreply, socket}
+  end
+
+  def handle_event("on_player_ended", _params, socket) do
+    # The player state changed to ended.
     {:noreply, assign(socket, is_playing: false)}
   end
 
@@ -121,6 +138,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:playlist_joined, room_id, _payload},
         %{assigns: %{room: %Room{id: room_id}}} = socket
       ) do
+    {:noreply, socket}
+  end
+
+  def handle_info({:player_joined, _room_id, _payload}, socket) do
     {:noreply, socket}
   end
 
