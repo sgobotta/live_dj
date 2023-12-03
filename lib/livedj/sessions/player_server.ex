@@ -13,12 +13,10 @@ defmodule Livedj.Sessions.PlayerServer do
   @pause_msg :pause
 
   @joined_cb :joined
-  @playing_cb :playing
-  @paused_cb :paused
-  @ended_cb :ended
+  # @playing_cb :playing
+  # @paused_cb :paused
+  # @ended_cb :ended
   @on_start_cb :on_start
-
-  @lock_timeout :timer.seconds(15)
 
   @type state :: %{
           :id => binary(),
@@ -57,7 +55,7 @@ defmodule Livedj.Sessions.PlayerServer do
   """
   @spec play(pid(), keyword()) :: play_response()
   def play(pid, cbs) do
-    GenServer.call(pid, {@play_msg, cbs})
+    GenServer.cast(pid, {@play_msg, cbs})
   end
 
   @doc """
@@ -65,7 +63,7 @@ defmodule Livedj.Sessions.PlayerServer do
   """
   @spec pause(pid(), keyword()) :: pause_response()
   def pause(pid, cbs) do
-    GenServer.call(pid, {@pause_msg, cbs})
+    GenServer.cast(pid, {@pause_msg, cbs})
   end
 
   @doc """
@@ -108,15 +106,21 @@ defmodule Livedj.Sessions.PlayerServer do
     {:reply, {:ok, :joined}, state, {:continue, {@joined_cb, pid, cbs}}}
   end
 
-  def handle_call({@play_msg, _cbs}, _from, state) do
-    # {{_on_play, _args}, _cbs} = Keyword.pop!(cbs, :on_play)
-    {:reply, :ok, state}
+  @impl GenServer
+  def handle_cast({@play_msg, cbs}, state) do
+    {{on_play, args}, []} = Keyword.pop!(cbs, :on_play)
+
+    :ok = apply(on_play, args)
+
+    {:noreply, state}
   end
 
-  def handle_call({@pause_msg, cbs}, {_pid, _ref}, state) do
-    {{_on_pause, _args}, _cbs} = Keyword.pop!(cbs, :on_pause)
+  def handle_cast({@pause_msg, cbs}, state) do
+    {{on_pause, args}, []} = Keyword.pop!(cbs, :on_pause)
 
-    {:reply, :ok, state}
+    :ok = apply(on_pause, args)
+
+    {:noreply, state}
   end
 
   @impl GenServer

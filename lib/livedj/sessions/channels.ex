@@ -20,6 +20,8 @@ defmodule Livedj.Sessions.Channels do
   @dragging_unlocked :dragging_unlocked
   @dragging_cancelled :dragging_cancelled
   @player_joined :player_joined
+  @player_play :player_play
+  @player_pause :player_pause
   @playlist_joined :playlist_joined
   @track_added :track_added
   @track_removed :track_removed
@@ -92,6 +94,18 @@ defmodule Livedj.Sessions.Channels do
   def player_joined_event, do: @player_joined
 
   @doc """
+  Returns the message name for player play events
+  """
+  @spec player_play_event() :: :player_play
+  def player_play_event, do: @player_play
+
+  @doc """
+  Returns the message name for player pause events
+  """
+  @spec player_pause_event() :: :player_pause
+  def player_pause_event, do: @player_pause
+
+  @doc """
   Returns the message name for playlist joined events
   """
   @spec playlsit_joined_event() :: :playlist_joined
@@ -102,6 +116,20 @@ defmodule Livedj.Sessions.Channels do
   """
   @spec subscribe_player_topic(binary()) :: :ok | {:error, any()}
   def subscribe_player_topic(room_id), do: subscribe(player_topic(room_id))
+
+  @doc """
+  Broadcasts a #{@player_play} message to the given topic.
+  """
+  @spec broadcast_player_play!(binary()) :: :ok
+  def broadcast_player_play!(room_id),
+    do: broadcast!(player_topic(room_id), player_play_event())
+
+  @doc """
+  Broadcasts a #{@player_pause} message to the given topic.
+  """
+  @spec broadcast_player_pause!(binary()) :: :ok
+  def broadcast_player_pause!(room_id),
+    do: broadcast!(player_topic(room_id), player_pause_event())
 
   @doc """
   Subscribes to the playlist topic

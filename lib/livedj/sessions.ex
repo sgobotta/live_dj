@@ -247,6 +247,28 @@ defmodule Livedj.Sessions do
     |> PlayerServer.join(on_joined: {&get_player/1, [room_id]})
   end
 
+  @spec play(binary()) :: :ok
+  def play(room_id) do
+    :ok =
+      room_id
+      |> get_player_child_pid!()
+      |> PlayerServer.play(on_play: {&on_play/1, [room_id]})
+  end
+
+  @spec on_play(binary()) :: :ok
+  defp on_play(room_id),
+    do: Channels.broadcast_player_play!(room_id)
+
+  @spec pause(binary()) :: :ok
+  def pause(room_id) do
+    get_player_child_pid!(room_id)
+    |> PlayerServer.pause(on_pause: {&on_pause/1, [room_id]})
+  end
+
+  @spec on_pause(binary()) :: :ok
+  defp on_pause(room_id),
+    do: Channels.broadcast_player_pause!(room_id)
+
   @doc """
   Given a room id, returns a player.
   """
@@ -266,6 +288,9 @@ defmodule Livedj.Sessions do
         e
     end
   end
+
+  defp get_player_child_pid!(room_id),
+    do: PlayerSupervisor.get_child_pid!(room_id)
 
   # ----------------------------------------------------------------------------
   # Media management
