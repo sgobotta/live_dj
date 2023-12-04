@@ -5,6 +5,6 @@ defmodule LivedjWeb.PageControllerTest do
     conn = get(conn, ~p"/")
 
     assert html_response(conn, 200) =~
-             "Peace of mind from prototype to production"
+             "Share and listen to youtube videos in real time with others"
   end
 end
