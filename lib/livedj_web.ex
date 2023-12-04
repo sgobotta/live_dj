@@ -42,6 +42,8 @@ defmodule LivedjWeb do
         formats: [:html, :json],
         layouts: [html: LivedjWeb.Layouts]
 
+      use PhoenixInlineSvg.Helpers
+
       import Plug.Conn
       import LivedjWeb.Gettext
 
