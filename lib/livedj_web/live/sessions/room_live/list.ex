@@ -196,8 +196,11 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   end
 
   @impl true
-  def handle_info({:player_load_media, _room_id, %Sessions.Player{}}, socket) do
-    {:noreply, socket}
+  def handle_info(
+        {:player_load_media, _room_id, %Sessions.Player{media_id: media_id}},
+        socket
+      ) do
+    {:noreply, assign_current_media(socket, media_id)}
   end
 
   @spec assign_current_media(Phoenix.LiveView.Socket.t(), binary() | nil) ::

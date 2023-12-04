@@ -66,10 +66,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   @impl true
   def handle_event("previous", _params, socket) do
+    Sessions.previous_track(socket.assigns.room.id)
     {:noreply, socket}
   end
 
   def handle_event("next", _params, socket) do
+    Sessions.next_track(socket.assigns.room.id)
     {:noreply, socket}
   end
 

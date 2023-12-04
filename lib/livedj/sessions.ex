@@ -306,6 +306,40 @@ defmodule Livedj.Sessions do
     end
   end
 
+  @doc """
+  Given a room id, loads the previous track and broadcasts an update.
+  """
+  @spec previous_track(Ecto.UUID.t()) :: :ok
+  def previous_track(room_id) do
+    with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
+         {:ok, previous_media_id} <- Playlist.get_previous(room_id, media_id),
+         {:ok, media} <- Media.get_by_external_id(previous_media_id) do
+      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    else
+      _error ->
+        :ok
+    end
+  end
+
+  @doc """
+  Given a room id, loads the next track and broadcasts an update.
+  """
+  @spec next_track(Ecto.UUID.t()) :: :ok
+  def next_track(room_id) do
+    with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
+         {:ok, next_media_id} <- Playlist.get_next(room_id, media_id),
+         {:ok, media} <- Media.get_by_external_id(next_media_id) do
+      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    else
+      _error ->
+        :ok
+    end
+  end
+
   defp get_player_child_pid!(room_id),
     do: PlayerSupervisor.get_child_pid!(room_id)
 

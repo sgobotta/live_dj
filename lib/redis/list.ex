@@ -52,6 +52,22 @@ defmodule Redis.List do
   end
 
   @doc """
+  Redis LINDEX command. [Docs](https://redis.io/commands/lindex/)
+  """
+  @spec lindex(String.t(), non_neg_integer()) :: Redis.redix_response()
+  def lindex(key, value) do
+    Redix.command(:redix, ~w(LINDEX #{key} #{value}))
+  end
+
+  @doc """
+  Redis LLEN command. [Docs](https://redis.io/commands/llen/)
+  """
+  @spec llen(String.t()) :: Redis.redix_response()
+  def llen(key) do
+    Redix.command(:redix, ~w(LLEN #{key}))
+  end
+
+  @doc """
   Redis LREM command. [Docs](https://redis.io/commands/lrem/)
   """
   @spec lrem(String.t(), String.t()) :: Redis.redix_response()
