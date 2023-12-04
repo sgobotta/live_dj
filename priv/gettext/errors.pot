@@ -151,44 +151,46 @@ msgstr ""
 msgid "should be between %{min} and %{max} characters"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:196
+#: lib/livedj_web/components/core_components.ex:198
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/livedj/sessions.ex:83
+#: lib/livedj/sessions.ex:86
 #, elixir-autogen, elixir-format
 msgid "Could not fetch the video from youtube"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:208
+#: lib/livedj_web/components/core_components.ex:210
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/livedj/sessions.ex:67
-#: lib/livedj/sessions.ex:95
+#: lib/livedj/sessions.ex:70
+#: lib/livedj/sessions.ex:98
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:84
+#: lib/livedj_web/live/sessions/room_live/list.ex:69
 #, elixir-autogen, elixir-format
 msgid "The youtube url is not valid"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:191
+#: lib/livedj_web/components/core_components.ex:193
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:203
-#: lib/livedj_web/live/sessions/room_live/show.ex:40
+#: lib/livedj_web/components/core_components.ex:205
+#: lib/livedj_web/live/sessions/room_live/list.ex:43
+#: lib/livedj_web/live/sessions/room_live/show.ex:46
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:33
+#: lib/livedj_web/live/sessions/room_live/list.ex:36
+#: lib/livedj_web/live/sessions/room_live/show.ex:39
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
 msgstr ""
@@ -198,7 +200,7 @@ msgstr ""
 msgid "video with this id already exists"
 msgstr ""
 
-#: lib/livedj/sessions.ex:76
+#: lib/livedj/sessions.ex:79
 #, elixir-autogen, elixir-format
 msgid "Could not save video. Please try again later."
 msgstr ""
