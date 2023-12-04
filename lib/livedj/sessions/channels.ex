@@ -156,8 +156,8 @@ defmodule Livedj.Sessions.Channels do
   @doc """
   Returns the message name for playlist joined events
   """
-  @spec playlsit_joined_event() :: :playlist_joined
-  def playlsit_joined_event, do: @playlist_joined
+  @spec playlist_joined_event() :: :playlist_joined
+  def playlist_joined_event, do: @playlist_joined
 
   # ----------------------------------------------------------------------------
   # Player brodcasting
@@ -257,15 +257,15 @@ defmodule Livedj.Sessions.Channels do
   @doc """
   Notify a #{@playlist_joined} message to the given topic.
   """
-  @spec notify_playlsit_joined(pid(), binary(), any()) :: message()
-  def notify_playlsit_joined(from, room_id, payload),
-    do: send(from, {playlsit_joined_event(), room_id, payload})
+  @spec notify_playlist_joined(pid(), binary(), any()) :: message()
+  def notify_playlist_joined(from, room_id, payload),
+    do: send(from, {playlist_joined_event(), room_id, payload})
 
   @doc """
   Notify a #{@dragging_cancelled} message to the given topic.
   """
-  @spec notify_playlsit_dragging_cancelled(pid(), binary()) :: any()
-  def notify_playlsit_dragging_cancelled(from, room_id),
+  @spec notify_playlist_dragging_cancelled(pid(), binary()) :: any()
+  def notify_playlist_dragging_cancelled(from, room_id),
     do: send(from, {dragging_cancelled_event(), room_id})
 
   # ----------------------------------------------------------------------------

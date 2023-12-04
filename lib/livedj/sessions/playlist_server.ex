@@ -228,7 +228,7 @@ defmodule Livedj.Sessions.PlaylistServer do
           []
       end
 
-    Channels.notify_playlsit_joined(from, state.id, %{
+    Channels.notify_playlist_joined(from, state.id, %{
       drag_state: state.drag_state,
       media_list: media_list
     })
@@ -293,7 +293,7 @@ defmodule Livedj.Sessions.PlaylistServer do
         {@lock_timeout_cb, from},
         %{drag_state: {:locked, from, _timer_ref}} = state
       ) do
-    Channels.notify_playlsit_dragging_cancelled(from, state.id)
+    Channels.notify_playlist_dragging_cancelled(from, state.id)
     {:noreply, unlock_drag(state), {:continue, {@unlocked_cb, from}}}
   end
 
