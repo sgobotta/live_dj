@@ -124,9 +124,16 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("player_loaded", _params, socket) do
     socket =
-      if connected?(socket),
-        do: push_event(socket, "show_player", %{}),
-        else: socket
+      if connected?(socket) do
+        {:ok, %Sessions.Player{} = player} =
+          Sessions.get_player(socket.assigns.room.id)
+
+        socket
+        |> push_event("show_player", %{})
+        |> push_event("load_video", player)
+      else
+        socket
+      end
 
     {:noreply, socket}
   end
@@ -143,7 +150,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
-  def handle_info({:player_joined, _room_id, _payload}, socket) do
+  def handle_info(
+        {:player_joined, _room_id, %{player: %Sessions.Player{}}},
+        socket
+      ) do
     {:noreply, socket}
   end
 
@@ -153,6 +163,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_info(:player_pause, socket) do
     {:noreply, push_event(socket, "pause_video", %{})}
+  end
+
+  def handle_info(
+        {:player_load_media, _room_id, %Sessions.Player{} = player},
+        socket
+      ) do
+    {:noreply, push_event(socket, "load_video", player)}
   end
 
   defp playlist_liveview_id, do: "playlist-lv-#{Ecto.UUID.generate()}"

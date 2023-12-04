@@ -120,6 +120,21 @@ export default {
       backdrop.classList.remove("opacity-0")
       backdrop.classList.add("opacity-50")
     })
+
+    /**
+     * load_video
+     * 
+     * Received when the player should load a video
+     */
+    this.handleEvent('load_video', async (player) => {
+      console.debug('[Player :: load_video]', player)
+      await this.player.loadVideoById(player.media_id, 0, "large")
+      if (player.media_id) {
+        await this.player.pauseVideo()
+      } else {
+        await this.player.stopVideo()
+      }
+    })
   },
   player: null,
   spinner_id: null

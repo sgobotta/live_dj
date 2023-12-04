@@ -12,6 +12,7 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
         %Room{id: ^room_id} = room = Sessions.get_room!(room_id)
 
         {:ok, :joined} = Sessions.join_playlist(room_id)
+        {:ok, :joined} = Sessions.join_player(room_id)
 
         {:ok,
          assign(socket,
@@ -80,6 +81,10 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
 
     {:noreply, socket}
   end
+
+  # ----------------------------------------------------------------------------
+  # Playlist event handling
+  #
 
   @impl true
   def handle_info(
@@ -166,6 +171,33 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   @impl true
   def handle_info({:dragging_cancelled, _room_id}, socket),
     do: {:noreply, socket}
+
+  # ----------------------------------------------------------------------------
+  # Player event handling
+  #
+
+  @impl true
+  def handle_info(
+        {:player_joined, _room_id, %{player: %Sessions.Player{}}},
+        socket
+      ) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:player_play, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:player_pause, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:player_load_media, _room_id, %Sessions.Player{}}, socket) do
+    {:noreply, socket}
+  end
 
   defp on_drag_start(room_id) do
     fn socket, _from ->

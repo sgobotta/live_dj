@@ -1,17 +1,20 @@
 defmodule Livedj.Sessions.Player do
   @moduledoc false
 
+  @derive {Jason.Encoder, only: [:id, :state, :media_id]}
   defstruct id: nil, state: nil, media_id: nil
 
   @key_prefix "player"
 
   @type t :: %__MODULE__{}
 
+  @idle_state :idle
+
   @spec initial_player(Ecto.UUID.t()) :: map()
   defp initial_player(id),
     do: %__MODULE__{
       id: id,
-      state: :idle,
+      state: @idle_state,
       media_id: nil
     }
 
@@ -45,11 +48,41 @@ defmodule Livedj.Sessions.Player do
   @spec get(Ecto.UUID.t()) :: {:ok, t()} | {:error, :player_not_found}
   def get(room_id) do
     case Redis.Hash.hgetall(build_key(room_id)) do
-      {:ok, map} ->
-        {:ok, from_hset(map)}
+      {:ok, player} ->
+        {:ok, from_hset(player)}
 
       {:error, :hash_not_found} ->
         {:error, :player_not_found}
+    end
+  end
+
+  @doc """
+  Given a room id sets a media id and returns a player struct.
+  """
+  @spec load_media(Ecto.UUID.t(), Livedj.Media.Video.t()) ::
+          {:ok, t()} | {:error, :player_load_media_error | :player_not_found}
+  def load_media(room_id, media) do
+    case Redis.Hash.hset(build_key(room_id), %{media_id: media.external_id}) do
+      {:ok, _changes} ->
+        get(room_id)
+
+      {:error, :hset_error} ->
+        {:error, :player_load_media_error}
+    end
+  end
+
+  @doc """
+  Given a room id unsets the media id and returns a player struct.
+  """
+  @spec clear_media(Ecto.UUID.t()) ::
+          {:ok, t()} | {:error, :player_clear_media_error | :player_not_found}
+  def clear_media(room_id) do
+    case Redis.Hash.hset(build_key(room_id), %{media_id: nil}) do
+      {:ok, _changes} ->
+        get(room_id)
+
+      {:error, :hset_error} ->
+        {:error, :player_clear_media_error}
     end
   end
 
@@ -74,7 +107,7 @@ defmodule Livedj.Sessions.Player do
   def from_hset(%{"id" => id, "state" => state, "media_id" => media_id}) do
     %__MODULE__{
       id: id,
-      state: state,
+      state: String.to_existing_atom(state),
       media_id: media_id
     }
   end

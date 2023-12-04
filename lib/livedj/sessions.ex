@@ -100,8 +100,17 @@ defmodule Livedj.Sessions do
   end
 
   @spec on_added(Ecto.UUID.t(), any()) :: :ok
-  defp on_added(room_id, media),
-    do: Channels.broadcast_playlist_track_added!(room_id, media)
+  defp on_added(room_id, media) do
+    {:ok, media_list} = Playlist.get(room_id)
+
+    if length(media_list) == 1 do
+      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    end
+
+    :ok = Channels.broadcast_playlist_track_added!(room_id, media)
+  end
 
   @doc """
   Removes a media element from the playlist
@@ -128,6 +137,14 @@ defmodule Livedj.Sessions do
 
   @spec on_removed(Ecto.UUID.t(), String.t()) :: :ok
   defp on_removed(room_id, media_identifier) do
+    {:ok, media_list} = Playlist.get(room_id)
+
+    if media_list == [] do
+      {:ok, %Player{} = player} = Player.clear_media(room_id)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    end
+
     Channels.broadcast_playlist_track_removed!(room_id, media_identifier)
   end
 
@@ -272,7 +289,7 @@ defmodule Livedj.Sessions do
   @doc """
   Given a room id, returns a player.
   """
-  @spec get_player(Ecto.UUID.t()) :: {:ok, map()} | {:error, any()}
+  @spec get_player(Ecto.UUID.t()) :: {:ok, Player.t()} | {:error, any()}
   def get_player(room_id) do
     case Player.get(room_id) do
       {:ok, result} = response ->
