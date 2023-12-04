@@ -23,6 +23,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            backdrop_id: backdrop_id(),
            is_playing: false,
            form: to_form(%{}),
+           player: nil,
            room: room
          )}
 
@@ -131,6 +132,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
           Sessions.get_player(socket.assigns.room.id)
 
         socket
+        |> assign_player(player)
         |> push_event("show_player", %{})
         |> push_event("load_video", player)
       else
@@ -171,8 +173,15 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:player_load_media, _room_id, %Sessions.Player{} = player},
         socket
       ) do
-    {:noreply, push_event(socket, "load_video", player)}
+    {:noreply,
+     socket
+     |> assign_player(player)
+     |> push_event("load_video", player)}
   end
+
+  @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_player(socket, player), do: assign(socket, :player, player)
 
   defp playlist_liveview_id, do: "playlist-lv-#{Ecto.UUID.generate()}"
   defp player_container_id, do: "player-container-#{Ecto.UUID.generate()}"
