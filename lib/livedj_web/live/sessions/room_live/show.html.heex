@@ -1,11 +1,11 @@
 <%= if connected?(@socket) do %>
-  <div class="h-full">
+  <div class="h-full pr-2">
     <div
       id="video-player-hook"
       phx-hook="Youtube"
       phx-mounted={JS.push("on_player_container_mount")}
       phx-update="ignore"
-      class="mx-1 w-full h-72 relative flex"
+      class="mx-1 w-[98%] h-72 relative flex"
     >
       <%= live_render(@socket, LivedjWeb.PlayerLiveView,
         id: "player-lv-#{@player_container_id}",
@@ -14,15 +14,15 @@
         sticky: true
       ) %>
 
-      <div class={"
-          absolute w-full h-full grid bg-black rounded-lg
-          #{if @is_playing, do: "opacity-0", else: "opacity-50"}
-        "}>
+      <div
+        id={@backdrop_id}
+        class="absolute w-full h-full grid bg-black rounded-lg"
+      >
         <div
-          id={"spinner-#{@spinner_container_id}"}
+          id={@spinner_id}
           class="
-            animate-ping
-            w-36 h-36
+            hidden
+            w-24 h-24
             self-center justify-self-center
             rounded-full
             bg-blue-200
@@ -33,7 +33,7 @@
     <%= live_render(
       @socket,
       LivedjWeb.Sessions.RoomLive.List,
-      id: "playlist-lv-#{@list_lv_id}",
+      id: @list_lv_id,
       sticky: true
     ) %>
   </div>

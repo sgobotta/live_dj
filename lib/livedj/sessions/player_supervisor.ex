@@ -1,17 +1,18 @@
-defmodule Livedj.Sessions.PlaylistSupervisor do
+defmodule Livedj.Sessions.PlayerSupervisor do
   @moduledoc """
-  Specific implementation for the Playlist Supervisor
+  Specific implementation for the Player Supervisor
   """
   use DynamicSupervisor
 
   require Logger
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.Exceptions.PlaylistServerError
-  alias Livedj.Sessions.PlaylistServer
+  alias Livedj.Sessions.Exceptions.PlayerServerError
+  alias Livedj.Sessions.Player
+  alias Livedj.Sessions.PlayerServer
 
-  @server_module PlaylistServer
-  @registry_module Registry.Playlist
+  @server_module PlayerServer
+  @registry_module Registry.Player
 
   @spec server_module() :: module()
   def server_module, do: @server_module
@@ -34,7 +35,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
     Sessions.list_rooms()
     |> then(fn rooms ->
       :ok =
-        Logger.info("Starting #{length(rooms)} #{@server_module} process(es).")
+        Logger.info("Starting #{length(rooms)} #{server_module()} process(es).")
 
       rooms
     end)
@@ -51,7 +52,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   end
 
   @doc """
-  Given a reference and some arguments starts a `#{@server_module}` child and
+  Given a reference and some arguments starts a `#{PlayerServer}` child and
   returns it's pid.
   """
   @spec start_child(module(), keyword()) :: {:ok, pid()}
@@ -59,8 +60,8 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
     id = Keyword.fetch!(args, :id)
 
     on_start = fn state ->
-      {:ok, _registry_pid} = Registry.register(@registry_module, id, state)
-
+      {:ok, _response} = Player.maybe_initialise_player(id)
+      {:ok, _registry_pid} = Registry.register(registry_module(), id, state)
       :ok
     end
 
@@ -84,11 +85,11 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
 
   @doc """
   Given a room id, returns `nil` or a tuple where the first component is a
-  `#{@server_module}` pid and the second component the playlist server state.
+  `#{PlayerServer}` pid and the second component the playlist server state.
   """
   @spec get_child(binary()) :: {pid(), map()} | nil
   def get_child(child_id) do
-    case Registry.lookup(@registry_module, child_id) do
+    case Registry.lookup(registry_module(), child_id) do
       [] ->
         nil
 
@@ -99,13 +100,13 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
 
   @doc """
   Given a room id, returns `nil` or a tuple where the first component is a
-  `#{@server_module}` pid and the second component the playlist server state.
+  `#{PlayerServer}` pid and the second component the playlist server state.
   """
   @spec get_child_pid!(binary()) :: pid()
   def get_child_pid!(child_id) do
     case get_child(child_id) do
       nil ->
-        raise PlaylistServerError, reason: :child_not_found
+        raise PlayerServerError, reason: :child_not_found
 
       {pid, _state} when is_pid(pid) ->
         pid
@@ -113,7 +114,7 @@ defmodule Livedj.Sessions.PlaylistSupervisor do
   end
 
   @doc """
-  Given a reference and a child pid, terminates a `#{PlaylistServer}` process.
+  Given a reference and a child pid, terminates a `#{PlayerServer}` process.
   """
   @spec terminate_child(module(), pid()) :: :ok | {:error, :not_found}
   def terminate_child(supervisor \\ __MODULE__, pid) do

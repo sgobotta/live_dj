@@ -11,6 +11,9 @@ defmodule Livedj.Sessions do
 
   alias Livedj.Sessions.{
     Channels,
+    Player,
+    PlayerServer,
+    PlayerSupervisor,
     Playlist,
     PlaylistServer,
     PlaylistSupervisor,
@@ -22,11 +25,11 @@ defmodule Livedj.Sessions do
 
   require Logger
 
+  defdelegate child_spec(init_arg), to: Supervisor
+
   # ----------------------------------------------------------------------------
   # Playlist server management
   #
-
-  defdelegate child_spec(init_arg), to: Supervisor
 
   @doc """
   Joins the playlist server and subscribes to the playlist topic for a room.
@@ -55,7 +58,7 @@ defmodule Livedj.Sessions do
     with :ok <- Playlist.can_insert?(room_id, media_identifier),
          {:ok, %Media.Video{} = media} <-
            get_or_fetch_media_metadata_by_id(media_identifier) do
-      get_child_pid!(room_id)
+      get_playlist_child_pid!(room_id)
       |> PlaylistServer.add(
         on_add: {&on_add/2, [room_id, media]},
         on_added: {&on_added/2, [room_id, media]}
@@ -97,15 +100,24 @@ defmodule Livedj.Sessions do
   end
 
   @spec on_added(Ecto.UUID.t(), any()) :: :ok
-  defp on_added(room_id, media),
-    do: Channels.broadcast_playlist_track_added!(room_id, media)
+  defp on_added(room_id, media) do
+    {:ok, media_list} = Playlist.get(room_id)
+
+    if length(media_list) == 1 do
+      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    end
+
+    :ok = Channels.broadcast_playlist_track_added!(room_id, media)
+  end
 
   @doc """
   Removes a media element from the playlist
   """
   @spec remove_media(binary(), any()) :: PlaylistServer.remove_response()
   def remove_media(room_id, media_identifier) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.remove(
       on_remove: {&on_remove/2, [room_id, media_identifier]},
       on_removed: {&on_removed/2, [room_id, media_identifier]}
@@ -125,6 +137,14 @@ defmodule Livedj.Sessions do
 
   @spec on_removed(Ecto.UUID.t(), String.t()) :: :ok
   defp on_removed(room_id, media_identifier) do
+    {:ok, media_list} = Playlist.get(room_id)
+
+    if media_list == [] do
+      {:ok, %Player{} = player} = Player.clear_media(room_id)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    end
+
     Channels.broadcast_playlist_track_removed!(room_id, media_identifier)
   end
 
@@ -146,7 +166,7 @@ defmodule Livedj.Sessions do
           keyword()
         ) :: {:ok, :moved} | {:error, any()}
   def move_media(room_id, media_identifier, inserted_after?, target_id, _opts) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.move(
       on_move:
         {&on_move/4, [room_id, media_identifier, inserted_after?, target_id]},
@@ -205,7 +225,7 @@ defmodule Livedj.Sessions do
   """
   @spec lock_playlist_drag(binary()) :: PlaylistServer.lock_response()
   def lock_playlist_drag(room_id) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.lock()
   end
 
@@ -215,11 +235,113 @@ defmodule Livedj.Sessions do
   @spec unlock_playlist_drag(binary(), pid()) ::
           PlaylistServer.unlock_response()
   def unlock_playlist_drag(room_id, from) do
-    get_child_pid!(room_id)
+    get_playlist_child_pid!(room_id)
     |> PlaylistServer.unlock(from)
   end
 
-  defp get_child_pid!(room_id), do: PlaylistSupervisor.get_child_pid!(room_id)
+  defp get_playlist_child_pid!(room_id),
+    do: PlaylistSupervisor.get_child_pid!(room_id)
+
+  # ----------------------------------------------------------------------------
+  # Player server management
+  #
+
+  @doc """
+  Joins the player server and subscribes to the player topic for a room.
+  """
+  @spec join_player(binary()) :: {:ok, :joined}
+  def join_player(room_id) do
+    :ok = Channels.subscribe_player_topic(room_id)
+
+    case PlayerSupervisor.get_child(room_id) do
+      nil ->
+        {:ok, pid} = PlayerSupervisor.start_child(id: room_id)
+        pid
+
+      {pid, _state} when is_pid(pid) ->
+        pid
+    end
+    |> PlayerServer.join(on_joined: {&get_player/1, [room_id]})
+  end
+
+  @spec play(binary()) :: :ok
+  def play(room_id) do
+    :ok =
+      room_id
+      |> get_player_child_pid!()
+      |> PlayerServer.play(on_play: {&on_play/1, [room_id]})
+  end
+
+  @spec on_play(binary()) :: :ok
+  defp on_play(room_id),
+    do: Channels.broadcast_player_play!(room_id)
+
+  @spec pause(binary()) :: :ok
+  def pause(room_id) do
+    get_player_child_pid!(room_id)
+    |> PlayerServer.pause(on_pause: {&on_pause/1, [room_id]})
+  end
+
+  @spec on_pause(binary()) :: :ok
+  defp on_pause(room_id),
+    do: Channels.broadcast_player_pause!(room_id)
+
+  @doc """
+  Given a room id, returns a player.
+  """
+  @spec get_player(Ecto.UUID.t()) :: {:ok, Player.t()} | {:error, any()}
+  def get_player(room_id) do
+    case Player.get(room_id) do
+      {:ok, result} = response ->
+        Logger.debug("#{__MODULE__} :: Get player result=#{inspect(result)}")
+
+        response
+
+      {:error, error} = e ->
+        Logger.error(
+          "#{__MODULE__} :: Error on player fetch error=#{inspect(error)}"
+        )
+
+        e
+    end
+  end
+
+  @doc """
+  Given a room id, loads the previous track and broadcasts an update.
+  """
+  @spec previous_track(Ecto.UUID.t()) :: :ok
+  def previous_track(room_id) do
+    with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
+         {:ok, previous_media_id} <- Playlist.get_previous(room_id, media_id),
+         {:ok, media} <- Media.get_by_external_id(previous_media_id) do
+      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    else
+      _error ->
+        :ok
+    end
+  end
+
+  @doc """
+  Given a room id, loads the next track and broadcasts an update.
+  """
+  @spec next_track(Ecto.UUID.t()) :: :ok
+  def next_track(room_id) do
+    with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
+         {:ok, next_media_id} <- Playlist.get_next(room_id, media_id),
+         {:ok, media} <- Media.get_by_external_id(next_media_id) do
+      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    else
+      _error ->
+        :ok
+    end
+  end
+
+  defp get_player_child_pid!(room_id),
+    do: PlayerSupervisor.get_child_pid!(room_id)
 
   # ----------------------------------------------------------------------------
   # Media management

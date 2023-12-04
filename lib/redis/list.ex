@@ -5,11 +5,11 @@ defmodule Redis.List do
   require Logger
 
   @doc """
-  Redis LPUSH command. [Docs](https://redis.io/commands/lpush/)
+  Redis RPUSH command. [Docs](https://redis.io/commands/rpush/)
   """
   @spec push(String.t(), String.t()) :: {:ok, integer()} | {:error, any()}
   def push(key, value) do
-    case Redix.command(:redix, ~w(LPUSH #{key} #{value})) do
+    case Redix.command(:redix, ~w(RPUSH #{key} #{value})) do
       {:ok, _list_length} = res ->
         res
 
@@ -49,6 +49,22 @@ defmodule Redis.List do
   @spec lpos(String.t(), String.t()) :: Redis.redix_response()
   def lpos(key, value) do
     Redix.command(:redix, ~w(LPOS #{key} #{value}))
+  end
+
+  @doc """
+  Redis LINDEX command. [Docs](https://redis.io/commands/lindex/)
+  """
+  @spec lindex(String.t(), non_neg_integer()) :: Redis.redix_response()
+  def lindex(key, value) do
+    Redix.command(:redix, ~w(LINDEX #{key} #{value}))
+  end
+
+  @doc """
+  Redis LLEN command. [Docs](https://redis.io/commands/llen/)
+  """
+  @spec llen(String.t()) :: Redis.redix_response()
+  def llen(key) do
+    Redix.command(:redix, ~w(LLEN #{key}))
   end
 
   @doc """

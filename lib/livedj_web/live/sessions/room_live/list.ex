@@ -12,6 +12,7 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
         %Room{id: ^room_id} = room = Sessions.get_room!(room_id)
 
         {:ok, :joined} = Sessions.join_playlist(room_id)
+        {:ok, :joined} = Sessions.join_player(room_id)
 
         {:ok,
          assign(socket,
@@ -19,7 +20,8 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
            form: to_form(%{}),
            layout: false,
            room: room,
-           media_list: []
+           media_list: [],
+           current_media: nil
          ), layout: {LivedjWeb.Layouts, :flash}}
 
       false ->
@@ -80,6 +82,10 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
 
     {:noreply, socket}
   end
+
+  # ----------------------------------------------------------------------------
+  # Playlist event handling
+  #
 
   @impl true
   def handle_info(
@@ -166,6 +172,44 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   @impl true
   def handle_info({:dragging_cancelled, _room_id}, socket),
     do: {:noreply, socket}
+
+  # ----------------------------------------------------------------------------
+  # Player event handling
+  #
+
+  @impl true
+  def handle_info(
+        {:player_joined, _room_id, %{player: %Sessions.Player{} = player}},
+        socket
+      ) do
+    {:noreply, assign_current_media(socket, player.media_id)}
+  end
+
+  @impl true
+  def handle_info(:player_play, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:player_pause, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(
+        {:player_load_media, _room_id, %Sessions.Player{media_id: media_id}},
+        socket
+      ) do
+    {:noreply, assign_current_media(socket, media_id)}
+  end
+
+  @spec assign_current_media(Phoenix.LiveView.Socket.t(), binary() | nil) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_current_media(socket, ""),
+    do: assign(socket, :current_media, nil)
+
+  defp assign_current_media(socket, media_id),
+    do: assign(socket, :current_media, media_id)
 
   defp on_drag_start(room_id) do
     fn socket, _from ->

@@ -4,7 +4,7 @@ defmodule Livedj.Sessions.Supervisor do
   """
   use Supervisor
 
-  alias Livedj.Sessions.PlaylistSupervisor
+  alias Livedj.Sessions.{PlayerSupervisor, PlaylistSupervisor}
 
   @spec start_link(keyword()) :: {:ok, pid()}
   def start_link(init_arg) do
@@ -14,7 +14,9 @@ defmodule Livedj.Sessions.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
-      {Registry, keys: :unique, name: Registry.Playlist},
+      {Registry, keys: :unique, name: PlayerSupervisor.registry_module()},
+      {Registry, keys: :unique, name: PlaylistSupervisor.registry_module()},
+      {PlayerSupervisor, []},
       {PlaylistSupervisor, []}
     ]
 

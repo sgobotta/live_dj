@@ -181,16 +181,18 @@ defmodule LivedjWeb.CoreComponents do
   attr :flash, :map, required: true, doc: "the map of flash messages"
 
   def flash_group(assigns) do
+    assigns = assign(assigns, :id, Ecto.UUID.generate())
+
     ~H"""
     <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
     <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
     <.flash kind={:warn} title={gettext("Warn!")} flash={@flash} />
     <.flash
-      id="client-error"
+      id={"client-error-#{@id}"}
       kind={:error}
       title={dgettext("errors", "We can't find the internet")}
-      phx-disconnected={show(".phx-client-error #client-error")}
-      phx-connected={hide("#client-error")}
+      phx-disconnected={show(".phx-client-error #client-error-#{@id}")}
+      phx-connected={hide("#client-error-#{@id}")}
       hidden
     >
       <%= dgettext("errors", "Attempting to reconnect") %>
@@ -198,11 +200,11 @@ defmodule LivedjWeb.CoreComponents do
     </.flash>
 
     <.flash
-      id="server-error"
+      id={"server-error-#{@id}"}
       kind={:error}
       title={dgettext("errors", "Something went wrong!")}
-      phx-disconnected={show(".phx-server-error #server-error")}
-      phx-connected={hide("#server-error")}
+      phx-disconnected={show(".phx-server-error #server-error-#{@id}")}
+      phx-connected={hide("#server-error-#{@id}")}
       hidden
     >
       <%= dgettext("errors", "Hang in there while we get back on track") %>
@@ -362,6 +364,7 @@ defmodule LivedjWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
+  attr :class, :string, default: ""
 
   attr :type, :string,
     default: "text",
@@ -478,12 +481,14 @@ defmodule LivedjWeb.CoreComponents do
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-        class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
-        ]}
+        class={
+          [
+            "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+            "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+            @errors == [] && "border-zinc-300 focus:border-zinc-400",
+            @errors != [] && "border-rose-400 focus:border-rose-400"
+          ] ++ [@class]
+        }
         {@rest}
       />
       <.error :for={msg <- @errors}><%= msg %></.error>

@@ -55,20 +55,31 @@
   </div>
 </main>
 <footer class="fixed bottom-0 w-full bg-white">
-  <div class="flex items-center border-t border-zinc-100 py-3 text-sm justify-center">
-    <div class="flex items-center gap-4 h-12">
-      <a phx-click="previous">
-        <.icon name="hero-chevron-left-solid" class="h-7 w-7" />
-      </a>
-      <a phx-click={if @is_playing, do: "pause", else: "play"}>
-        <.icon
-          name={if @is_playing, do: "hero-pause", else: "hero-play"}
-          class="h-7 w-7"
+  <div class="grid grid-cols-12 border-t border-zinc-100 py-1 text-sm justify-center">
+    <div class="col-span-3">
+      <%!-- <div class="h-12 w-12 rounded-lg ring-2 ring-white m-1">
+        <img
+          class="h-12 w-12 rounded-md ring-2 ring-white"
+          src="https://i.ytimg.com/vi/oCcks-fwq2c/default.jpg"
         />
-      </a>
-      <a phx-click="next">
-        <.icon name="hero-chevron-right-solid" class="h-7 w-7" />
-      </a>
+      </div> --%>
     </div>
+    <div class="col-span-6 justify-self-center">
+      <div class="flex items-center gap-4 h-12">
+        <a phx-click="previous">
+          <.icon name="hero-chevron-left-solid" class="h-7 w-7" />
+        </a>
+        <a phx-click={if @is_playing, do: "pause", else: "play"}>
+          <.icon
+            name={if @is_playing, do: "hero-pause", else: "hero-play"}
+            class="h-7 w-7"
+          />
+        </a>
+        <a phx-click="next">
+          <.icon name="hero-chevron-right-solid" class="h-7 w-7" />
+        </a>
+      </div>
+    </div>
+    <div class="col-span-3"></div>
   </div>
 </footer>

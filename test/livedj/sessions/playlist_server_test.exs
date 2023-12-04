@@ -154,7 +154,7 @@ defmodule Livedj.Sessions.PlaylistServerTest do
 
       {:noreply, _state} = do_handle_joined(cbs, client_pid, state)
 
-      message_name = Channels.playlsit_joined_event()
+      message_name = Channels.playlist_joined_event()
 
       assert_receive(
         {:trace, ^client_pid, :receive, {^message_name, ^state_id, state}}
