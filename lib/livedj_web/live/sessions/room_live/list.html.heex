@@ -1,6 +1,7 @@
 <div id="lists" class="grid sm:grid-cols-1 overflow-y-scroll h-64 p-0 my-4">
   <.live_component
     id={"playlist_#{@room.id}"}
+    current_media={@current_media}
     module={LivedjWeb.ListComponent}
     list={@media_list}
     form={@form}

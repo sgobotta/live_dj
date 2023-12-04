@@ -20,7 +20,8 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
            form: to_form(%{}),
            layout: false,
            room: room,
-           media_list: []
+           media_list: [],
+           current_media: nil
          ), layout: {LivedjWeb.Layouts, :flash}}
 
       false ->
@@ -178,10 +179,10 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
 
   @impl true
   def handle_info(
-        {:player_joined, _room_id, %{player: %Sessions.Player{}}},
+        {:player_joined, _room_id, %{player: %Sessions.Player{} = player}},
         socket
       ) do
-    {:noreply, socket}
+    {:noreply, assign_current_media(socket, player.media_id)}
   end
 
   @impl true
@@ -198,6 +199,14 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   def handle_info({:player_load_media, _room_id, %Sessions.Player{}}, socket) do
     {:noreply, socket}
   end
+
+  @spec assign_current_media(Phoenix.LiveView.Socket.t(), binary() | nil) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_current_media(socket, ""),
+    do: assign(socket, :current_media, nil)
+
+  defp assign_current_media(socket, media_id),
+    do: assign(socket, :current_media, media_id)
 
   defp on_drag_start(room_id) do
     fn socket, _from ->
