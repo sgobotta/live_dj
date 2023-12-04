@@ -78,7 +78,7 @@ export default {
 
       const spinner = document.getElementById(this.spinner_id)
       spinner.classList.add('hidden')
-      spinner.classList.remove('animate-ping')
+      spinner.classList.remove('animate-pulse')
 
       const backdrop = document.getElementById(this.backdrop_id)
       backdrop.classList.add('opacity-0')
