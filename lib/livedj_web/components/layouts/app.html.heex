@@ -1,5 +1,5 @@
 <header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+  <div class="flex items-center justify-between border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm">
     <div class="flex items-center gap-4">
       <a href="/">
         <.livedj_logo theme={@theme} />
@@ -11,7 +11,7 @@
     <.toggle_theme_button theme={@theme} />
   </div>
 </header>
-<main class="px-4 py-20 sm:px-6 lg:px-8 bg-white dark:bg-black">
+<main class="px-4 py-4 sm:px-6 lg:px-8 h-full">
   <div class="mx-auto max-w-2xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>

@@ -73,4 +73,65 @@ defmodule LivedjWeb.CustomComponents do
     </p>
     """
   end
+
+  attr :id, :string, required: true
+  attr :modules, :list, required: true
+
+  attr :module_id, :any,
+    default: nil,
+    doc: "the function for generating the module id"
+
+  attr :module_click, :any,
+    default: nil,
+    doc: "the function for handling phx-click on each module"
+
+  attr :module_item, :any,
+    default: &Function.identity/1,
+    doc: "the function for mapping each module before calling the :module slots"
+
+  slot :inner_block, required: true
+
+  @doc """
+  Renders a grid to display room shortcuts
+  """
+  def room_grid(assigns) do
+    assigns =
+      with %{modules: %Phoenix.LiveView.LiveStream{}} <- assigns do
+        assign(
+          assigns,
+          module_id: assigns.module_id || fn {id, _item} -> id end
+        )
+      end
+
+    ~H"""
+    <div
+      id={@id}
+      class="
+        grid grid-rows-2 grid-flow-col
+        my-4 py-4 w-full gap-4
+        overflow-x-scroll
+      "
+    >
+      <div
+        :for={module <- @modules}
+        id={@module_id && @module_id.(module)}
+        class="
+          group
+          h-52 w-40 rounded-lg
+          bg-zinc-50 hover:bg-zinc-200 border-[1px] border-zinc-200 dark:border-0
+          dark:bg-zinc-800 dark:hover:bg-zinc-700
+        "
+      >
+        <div
+          phx-click={@module_click && @module_click.(module)}
+          class={["relative p-0", @module_click && "hover:cursor-pointer"]}
+        >
+          <div class="relative leading-6 text-zinc-900 hover:text-zinc-700">
+            <%= render_slot(@inner_block, module) %>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
 end
