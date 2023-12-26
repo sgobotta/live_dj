@@ -331,8 +331,8 @@ defmodule LivedjWeb.CoreComponents do
       type={@type}
       class={[
         "phx-submit-loading:opacity-75 rounded-lg py-2 px-3",
-        "bg-zinc-900 hover:bg-zinc-700 text-white active:text-white/80",
-        "dark:bg-zinc-100 dark:hover:bg-zinc-300 dark:text-black dark:active:text-black/80",
+        "bg-zinc-300 hover:bg-zinc-400 text-zinc-800 active:text-zinc-800/80",
+        "dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-100 dark:active:text-zinc-100/80",
         "text-sm font-semibold leading-6",
         @class
       ]}
@@ -492,7 +492,7 @@ defmodule LivedjWeb.CoreComponents do
         class={
           [
             "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
-            "bg-zinc-800 dark:bg-zinc-200",
+            "bg-zinc-200 dark:bg-zinc-200",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
             "phx-no-feedback:dark:border-zinc-700 phx-no-feedback:dark:focus:border-zinc-600",
             @errors == [] &&
