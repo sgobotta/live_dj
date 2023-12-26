@@ -96,6 +96,7 @@ defmodule LivedjWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import LivedjWeb.CoreComponents
+      import LivedjWeb.CustomComponents
       import LivedjWeb.Gettext
 
       # Shortcut for generating JS commands
