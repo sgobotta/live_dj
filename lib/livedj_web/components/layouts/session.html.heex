@@ -1,5 +1,5 @@
 <header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
-  <div class="flex items-center border-b border-zinc-100 py-3 text-sm justify-center bg-white">
+  <div class="flex items-center border-b border-zinc-100 py-3 text-sm justify-center">
     <div class="flex items-center gap-4">
       <a href="/">
         <img src={~p"/images/logo-black.svg"} width="96" />
@@ -48,13 +48,13 @@
     <% end %>
   </ul>
 </header>
-<main class="py-10 lg:px-8">
+<main class="sm:py-10 lg:px-8">
   <div class="mx-1 sm:mx-auto max-w-xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>
 </main>
-<footer class="fixed bottom-0 w-full bg-white">
+<footer class="fixed bottom-0 w-full">
   <div class="grid grid-cols-12 border-t border-zinc-100 py-1 text-sm justify-center">
     <div class="col-span-3">
       <%!-- <div class="h-12 w-12 rounded-lg ring-2 ring-white m-1">
