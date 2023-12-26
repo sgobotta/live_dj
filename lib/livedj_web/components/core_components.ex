@@ -293,7 +293,7 @@ defmodule LivedjWeb.CoreComponents do
   def add_media_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="space-y-8 bg-white w-full">
+      <div class="space-y-8 bg-none w-full">
         <div class="flex flex-row">
           <div class="w-full">
             <%= render_slot(@field, f) %>
@@ -492,6 +492,7 @@ defmodule LivedjWeb.CoreComponents do
         class={
           [
             "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
+            "bg-zinc-800 dark:bg-zinc-200",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
             "phx-no-feedback:dark:border-zinc-700 phx-no-feedback:dark:focus:border-zinc-600",
             @errors == [] &&
@@ -736,6 +737,19 @@ defmodule LivedjWeb.CoreComponents do
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
     <span class={[@name, @class]} {@rest} />
+    """
+  end
+
+  @doc """
+  Renders text
+  """
+
+  attr :class, :string, default: "text-zinc-900 dark:text-zinc-100"
+  slot :inner_block, required: true
+
+  def text(assigns) do
+    ~H"""
+    <span class={@class}><%= render_slot(@inner_block) %></span>
     """
   end
 
