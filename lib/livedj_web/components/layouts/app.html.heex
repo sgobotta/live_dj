@@ -1,35 +1,17 @@
 <header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+  <div class="flex items-center justify-between border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm">
     <div class="flex items-center gap-4">
       <a href="/">
-        <%= PhoenixInlineSvg.Helpers.svg_image(LivedjWeb.Endpoint, "logo-black",
-          class: "w-28 h-18"
-        ) %>
+        <.livedj_logo theme={@theme} />
       </a>
-      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
-        v<%= Application.spec(:livedj, :vsn) %>
-      </p>
+      <div>
+        <.version_pill version={Application.spec(:livedj, :vsn)} />
+      </div>
     </div>
-    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href="https://twitter.com/elixirphoenix" class="hover:text-zinc-700">
-        @elixirphoenix
-      </a>
-      <a
-        href="https://github.com/phoenixframework/phoenix"
-        class="hover:text-zinc-700"
-      >
-        GitHub
-      </a>
-      <a
-        href="https://hexdocs.pm/phoenix/overview.html"
-        class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-      >
-        Get Started <span aria-hidden="true">&rarr;</span>
-      </a>
-    </div>
+    <.toggle_theme_button theme={@theme} />
   </div>
 </header>
-<main class="px-4 py-20 sm:px-6 lg:px-8">
+<main class="px-4 py-4 sm:px-6 lg:px-8 h-full">
   <div class="mx-auto max-w-2xl">
     <.flash_group flash={@flash} />
     <%= @inner_content %>

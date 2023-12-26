@@ -54,7 +54,7 @@ defmodule LivedjWeb.CoreComponents do
     >
       <div
         id={"#{@id}-bg"}
-        class="bg-zinc-50/90 fixed inset-0 transition-opacity"
+        class="bg-zinc-50/90 dark:bg-zinc-900/90 fixed inset-0 transition-opacity"
         aria-hidden="true"
       />
       <div
@@ -72,7 +72,10 @@ defmodule LivedjWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="
+                shadow-zinc-700/10 dark:shadow-300/10 ring-zinc-700/10 dark:ring-zinc-300/10
+                relative hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 p-14 shadow-lg ring-1 transition
+              "
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -81,7 +84,10 @@ defmodule LivedjWeb.CoreComponents do
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}
                 >
-                  <.icon name="hero-x-mark-solid" class="h-5 w-5" />
+                  <.icon
+                    name="hero-x-mark-solid"
+                    class="h-5 w-5 text-zinc-900 dark:text-zinc-100"
+                  />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
@@ -243,7 +249,7 @@ defmodule LivedjWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8 bg-transparent">
         <%= render_slot(@inner_block, f) %>
         <div
           :for={action <- @actions}
@@ -287,7 +293,7 @@ defmodule LivedjWeb.CoreComponents do
   def add_media_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="space-y-8 bg-white w-full">
+      <div class="space-y-8 bg-none w-full">
         <div class="flex flex-row">
           <div class="w-full">
             <%= render_slot(@field, f) %>
@@ -324,8 +330,10 @@ defmodule LivedjWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-75 rounded-lg py-2 px-3",
+        "bg-zinc-300 hover:bg-zinc-400 text-zinc-800 active:text-zinc-800/80",
+        "dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-100 dark:active:text-zinc-100/80",
+        "text-sm font-semibold leading-6",
         @class
       ]}
       {@rest}
@@ -483,9 +491,12 @@ defmodule LivedjWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={
           [
-            "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+            "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
+            "bg-zinc-200 dark:bg-zinc-200",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-            @errors == [] && "border-zinc-300 focus:border-zinc-400",
+            "phx-no-feedback:dark:border-zinc-700 phx-no-feedback:dark:focus:border-zinc-600",
+            @errors == [] &&
+              "border-zinc-300 focus:border-zinc-400 dark:border-zinc-700 dark:focus:border-zinc-700",
             @errors != [] && "border-rose-400 focus:border-rose-400"
           ] ++ [@class]
         }
@@ -504,7 +515,10 @@ defmodule LivedjWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label
+      for={@for}
+      class="block text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-100"
+    >
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -540,10 +554,13 @@ defmodule LivedjWeb.CoreComponents do
       @class
     ]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-100">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p
+          :if={@subtitle != []}
+          class="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-100"
+        >
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -715,10 +732,24 @@ defmodule LivedjWeb.CoreComponents do
   """
   attr :name, :string, required: true
   attr :class, :string, default: nil
+  attr :rest, :global
 
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
-    <span class={[@name, @class]} />
+    <span class={[@name, @class]} {@rest} />
+    """
+  end
+
+  @doc """
+  Renders text
+  """
+
+  attr :class, :string, default: "text-zinc-900 dark:text-zinc-100"
+  slot :inner_block, required: true
+
+  def text(assigns) do
+    ~H"""
+    <span class={@class}><%= render_slot(@inner_block) %></span>
     """
   end
 

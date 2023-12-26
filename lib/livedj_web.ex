@@ -61,6 +61,10 @@ defmodule LivedjWeb do
             )
       use Phoenix.LiveView, @opts
 
+      def handle_event("toggle-theme", %{"theme" => theme}, socket) do
+        {:noreply, assign(socket, :theme, theme)}
+      end
+
       unquote(html_helpers())
     end
   end
@@ -92,6 +96,7 @@ defmodule LivedjWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import LivedjWeb.CoreComponents
+      import LivedjWeb.CustomComponents
       import LivedjWeb.Gettext
 
       # Shortcut for generating JS commands

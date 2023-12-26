@@ -22,13 +22,13 @@
       <.input
         field={@form[:url]}
         type="text"
-        class="w-full bg-gray-50"
+        class="w-full bg-zinc-300 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100"
         placeholder={gettext("Insert a youtube url")}
       />
     </:field>
     <:actions>
-      <.button class="align-middle ml-2">
-        <.icon name="hero-plus" />
+      <.button class="align-middle ml-2 bg-zinc-300 dark:bg-zinc-700">
+        <.icon name="hero-plus" class="text-zinc-900 dark:text-zinc-100" />
       </.button>
     </:actions>
   </.add_media_form>

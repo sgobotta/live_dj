@@ -21,15 +21,32 @@ import "phoenix_html"
 import {LiveSocket} from "phoenix_live_view"
 import {Socket} from "phoenix"
 import Sortable from "../vendor/sortable"
+import ThemeHook from './theme/hook'
 import YoutubeAPI from './youtube/api'
 import YoutubeHook from './youtube/hook'
 import topbar from "../vendor/topbar"
+
+// On page load or when changing themes, best to add inline in `head` to avoid
+// FOUC
+if (
+    localStorage.getItem('theme') === 'dark' ||
+    (!('theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    )
+  ) {
+  document.documentElement.classList.add('dark')
+  localStorage.setItem("theme", "dark")
+} else {
+  document.documentElement.classList.remove('dark')
+  localStorage.setItem("theme", "light")
+}
 
 // eslint-disable-next-line no-unexpected-multiline
 (async () => {
   await YoutubeAPI()
 
   const Hooks = {}
+  Hooks.Theme = ThemeHook
   Hooks.Youtube = YoutubeHook
   Hooks.Sortable = {
     mounted() {
@@ -118,9 +135,13 @@ import topbar from "../vendor/topbar"
   const csrfToken =
     document.querySelector("meta[name='csrf-token']")
     .getAttribute("content")
+  const _theme = localStorage.getItem("theme")
   const liveSocket = new LiveSocket("/live", Socket, {
     hooks: Hooks,
-    params: {_csrf_token: csrfToken }
+    params: {
+      _csrf_token: csrfToken,
+      _theme
+    }
   })
   
   // Show progress bar on live navigation and form submits

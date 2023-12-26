@@ -23,35 +23,44 @@ defmodule LivedjWeb.Router do
     get "/", PageController, :home
 
     live_session :sessions,
-      on_mount: [{LivedjWeb.UserAuth, :mount_current_user}],
+      on_mount: [
+        {LivedjWeb.UserAuth, :mount_current_user},
+        {LivedjWeb.Theme, :fetch_theme}
+      ],
       root_layout: {LivedjWeb.Layouts, :root_session} do
       scope "/sessions", Sessions do
         live "/rooms", RoomLive.Index, :index
+        live "/rooms/new", RoomLive.Index, :new
         live "/rooms/:id", RoomLive.Show, :show
       end
     end
 
-    scope "/admin" do
-      scope "/sessions", Admin.Sessions do
-        pipe_through [:require_authenticated_user]
+    live_session :admin,
+      on_mount: [
+        {LivedjWeb.Theme, :fetch_theme}
+      ] do
+      scope "/admin" do
+        scope "/sessions", Admin.Sessions do
+          pipe_through [:require_authenticated_user]
 
-        live "/rooms", RoomLive.Index, :index
-        live "/rooms/new", RoomLive.Index, :new
-        live "/rooms/:id/edit", RoomLive.Index, :edit
+          live "/rooms", RoomLive.Index, :index
+          live "/rooms/new", RoomLive.Index, :new
+          live "/rooms/:id/edit", RoomLive.Index, :edit
 
-        live "/rooms/:id", RoomLive.Show, :show
-        live "/rooms/:id/show/edit", RoomLive.Show, :edit
-      end
+          live "/rooms/:id", RoomLive.Show, :show
+          live "/rooms/:id/show/edit", RoomLive.Show, :edit
+        end
 
-      scope "/media", Admin.Media do
-        pipe_through [:require_authenticated_user]
+        scope "/media", Admin.Media do
+          pipe_through [:require_authenticated_user]
 
-        live "/videos", VideoLive.Index, :index
-        live "/videos/new", VideoLive.Index, :new
-        live "/videos/:id/edit", VideoLive.Index, :edit
+          live "/videos", VideoLive.Index, :index
+          live "/videos/new", VideoLive.Index, :new
+          live "/videos/:id/edit", VideoLive.Index, :edit
 
-        live "/videos/:id", VideoLive.Show, :show
-        live "/videos/:id/show/edit", VideoLive.Show, :edit
+          live "/videos/:id", VideoLive.Show, :show
+          live "/videos/:id/show/edit", VideoLive.Show, :edit
+        end
       end
     end
   end
@@ -84,7 +93,10 @@ defmodule LivedjWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{LivedjWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      on_mount: [
+        {LivedjWeb.UserAuth, :redirect_if_user_is_authenticated},
+        {LivedjWeb.Theme, :fetch_theme}
+      ] do
       live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
@@ -98,7 +110,10 @@ defmodule LivedjWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{LivedjWeb.UserAuth, :ensure_authenticated}] do
+      on_mount: [
+        {LivedjWeb.UserAuth, :ensure_authenticated},
+        {LivedjWeb.Theme, :fetch_theme}
+      ] do
       live "/users/settings", UserSettingsLive, :edit
 
       live "/users/settings/confirm_email/:token",
@@ -113,7 +128,10 @@ defmodule LivedjWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
-      on_mount: [{LivedjWeb.UserAuth, :mount_current_user}] do
+      on_mount: [
+        {LivedjWeb.UserAuth, :mount_current_user},
+        {LivedjWeb.Theme, :fetch_theme}
+      ] do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end

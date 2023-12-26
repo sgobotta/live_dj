@@ -1,20 +1,55 @@
 <%= if connected?(@socket) do %>
-  <.header>
-    <%= gettext("Rooms") %>
+  <.header class="text-zinc-900 dark:text-zinc-100">
+    <%= gettext("Playing now...") %>
   </.header>
 
-  <.table
-    id="rooms"
-    rows={@streams.rooms}
-    row_click={fn {_id, room} -> JS.navigate(~p"/sessions/rooms/#{room}") end}
-  >
-    <:col :let={{_id, room}} label={gettext("Name")}><%= room.name %></:col>
-    <:action :let={{_id, room}}>
-      <div class="sr-only">
-        <.link navigate={~p"/sessions/rooms/#{room}"}>
-          <%= gettext("Show") %>
-        </.link>
+  <div class="w-full overflow-x-scroll">
+    <.room_grid
+      :let={{_id, room}}
+      id="room-grid"
+      modules={@streams.rooms}
+      module_click={
+        fn {_id, room} -> JS.navigate(~p"/sessions/rooms/#{room}") end
+      }
+    >
+      <div class="flex flex-col bg-zin">
+        <div class="h-40 w-40 py-2 px-2">
+          <div class="bg-red-300 h-full w-full rounded-lg" />
+        </div>
+        <div class="
+          h-12 w-40 px-2 font-semibold
+          text-zinc-900 dark:text-zinc-100
+        ">
+          <p>
+            <%= room.name %>
+          </p>
+          <p class="font-normal text-xs">
+            <%= room.name %>
+          </p>
+        </div>
       </div>
-    </:action>
-  </.table>
+    </.room_grid>
+  </div>
+
+  <div class="my-2 w-full">
+    <.link patch={~p"/sessions/rooms/new"}>
+      <.button class="w-full"><%= gettext("New Room") %></.button>
+    </.link>
+  </div>
+
+  <.modal
+    :if={@live_action in [:new]}
+    id="room-modal"
+    show
+    on_cancel={JS.patch(~p"/sessions/rooms")}
+  >
+    <.live_component
+      module={LivedjWeb.Sessions.RoomLive.FormComponent}
+      id={@room.id || :new}
+      title={@page_title}
+      action={@live_action}
+      room={@room}
+      patch={~p"/sessions/rooms"}
+    />
+  </.modal>
 <% end %>
