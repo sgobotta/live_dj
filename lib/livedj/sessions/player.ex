@@ -9,6 +9,10 @@ defmodule Livedj.Sessions.Player do
   @type t :: %__MODULE__{}
 
   @idle_state :idle
+  @playing_state :playing
+  @paused_state :paused
+
+  @type state :: :idle | :playing | :paused
 
   @spec initial_player(Ecto.UUID.t()) :: map()
   defp initial_player(id),
@@ -39,7 +43,7 @@ defmodule Livedj.Sessions.Player do
   """
   @spec new(Ecto.UUID.t()) :: Redis.redix_response()
   def new(room_id) do
-    Redis.Hash.hset(build_key(room_id), from_struct(initial_player(room_id)))
+    set(room_id, from_struct(initial_player(room_id)))
   end
 
   @doc """
@@ -62,7 +66,7 @@ defmodule Livedj.Sessions.Player do
   @spec load_media(Ecto.UUID.t(), Livedj.Media.Video.t()) ::
           {:ok, t()} | {:error, :player_load_media_error | :player_not_found}
   def load_media(room_id, media) do
-    case Redis.Hash.hset(build_key(room_id), %{media_id: media.external_id}) do
+    case set(room_id, %{media_id: media.external_id}) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -77,7 +81,7 @@ defmodule Livedj.Sessions.Player do
   @spec clear_media(Ecto.UUID.t()) ::
           {:ok, t()} | {:error, :player_clear_media_error | :player_not_found}
   def clear_media(room_id) do
-    case Redis.Hash.hset(build_key(room_id), %{media_id: nil}) do
+    case set(room_id, %{media_id: nil}) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -85,6 +89,42 @@ defmodule Livedj.Sessions.Player do
         {:error, :player_clear_media_error}
     end
   end
+
+  @doc """
+  Updates player state to playing
+  """
+  @spec play(Ecto.UUID.t()) ::
+          {:ok, t()}
+          | {:error, :player_update_play_state_error | :player_not_found}
+  def play(room_id) do
+    case set(room_id, %{state: @playing_state}) do
+      {:ok, _changes} ->
+        get(room_id)
+
+      {:error, :hset_error} ->
+        {:error, :player_update_play_state_error}
+    end
+  end
+
+  @doc """
+  Updates player state to paused
+  """
+  @spec pause(Ecto.UUID.t()) ::
+          {:ok, t()}
+          | {:error, :player_update_pause_state_error | :player_not_found}
+  def pause(room_id) do
+    case set(room_id, %{state: @paused_state}) do
+      {:ok, _changes} ->
+        get(room_id)
+
+      {:error, :hset_error} ->
+        {:error, :player_update_pause_state_error}
+    end
+  end
+
+  @spec set(Ecto.UUID.t(), map()) :: {:ok, map()} | {:error, :hset_error}
+  def set(room_id, changes),
+    do: Redis.Hash.hset(build_key(room_id), changes)
 
   @spec build_key(Ecto.UUID.t()) :: String.t()
   defp build_key(key), do: @key_prefix <> ":" <> key

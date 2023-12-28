@@ -21,14 +21,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            player_container_id: player_container_id(),
            spinner_id: spinner_id(),
            backdrop_id: backdrop_id(),
-           is_playing: false,
            form: to_form(%{}),
            player: nil,
            room: room
          )}
 
       false ->
-        {:ok, assign(socket, is_playing: false)}
+        {:ok, socket}
     end
   rescue
     error in SessionRoomError ->
@@ -65,30 +64,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:page_title, "(#{socket.assigns.room.name})")
   end
 
-  @impl true
-  def handle_event("previous", _params, socket) do
-    Sessions.previous_track(socket.assigns.room.id)
-    {:noreply, socket}
-  end
-
-  def handle_event("next", _params, socket) do
-    Sessions.next_track(socket.assigns.room.id)
-    {:noreply, socket}
-  end
-
-  def handle_event("play", _params, socket) do
-    :ok = Sessions.play(socket.assigns.room.id)
-    {:noreply, socket}
-  end
-
-  def handle_event("pause", _params, socket) do
-    :ok = Sessions.pause(socket.assigns.room.id)
-    {:noreply, socket}
-  end
-
   def handle_event("on_player_play", _params, socket) do
-    # A request to play a song has been sent to the player..
-    {:noreply, assign(socket, is_playing: true)}
+    # A request to play a song has been sent to the player.
+    {:noreply, socket}
   end
 
   def handle_event("on_player_playing", _params, socket) do
@@ -98,7 +76,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("on_player_pause", _params, socket) do
     # A request to pause a song has been sent to the player.
-    {:noreply, assign(socket, is_playing: false)}
+    {:noreply, socket}
   end
 
   def handle_event("on_player_paused", _params, socket) do
@@ -108,7 +86,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("on_player_ended", _params, socket) do
     # The player state changed to ended.
-    {:noreply, assign(socket, is_playing: false)}
+    {:noreply, socket}
   end
 
   def handle_event("on_player_container_mount", _params, socket) do
@@ -146,6 +124,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
+  # ----------------------------------------------------------------------------
+  # Playlist event handling
+  #
+
   @impl true
   def handle_info(
         {:playlist_joined, room_id, _payload},
@@ -154,6 +136,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
+  # ----------------------------------------------------------------------------
+  # Player event handling
+  #
+
   def handle_info(
         {:player_joined, _room_id, %{player: %Sessions.Player{}}},
         socket
@@ -161,11 +147,20 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
-  def handle_info(:player_play, socket) do
+  def handle_info(
+        {:player_state_changed, room_id, %Sessions.Player{}},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    {:noreply, socket}
+  end
+
+  def handle_info({:player_play, _player}, socket) do
+    # Broadcasted request to send a play signal to the player
     {:noreply, push_event(socket, "play_video", %{})}
   end
 
-  def handle_info(:player_pause, socket) do
+  def handle_info({:player_pause, _player}, socket) do
+    # Broadcasted request to send a pause signal to the player
     {:noreply, push_event(socket, "pause_video", %{})}
   end
 

@@ -25,6 +25,8 @@ defmodule Livedj.Sessions do
 
   require Logger
 
+  @type player_state :: :playing | :paused
+
   defdelegate child_spec(init_arg), to: Supervisor
 
   # ----------------------------------------------------------------------------
@@ -264,6 +266,20 @@ defmodule Livedj.Sessions do
     |> PlayerServer.join(on_joined: {&get_player/1, [room_id]})
   end
 
+  @spec player_state_change(binary(), Player.t()) :: :ok
+  def player_state_change(room_id, player) do
+    :ok =
+      room_id
+      |> get_player_child_pid!()
+      |> PlayerServer.state_change(
+        on_state_change: {&on_state_change/2, [room_id, player]}
+      )
+  end
+
+  @spec on_state_change(binary(), Player.t()) :: :ok
+  defp on_state_change(room_id, player),
+    do: Channels.broadcast_player_state_change!(room_id, %{player: player})
+
   @spec play(binary()) :: :ok
   def play(room_id) do
     :ok =
@@ -273,8 +289,10 @@ defmodule Livedj.Sessions do
   end
 
   @spec on_play(binary()) :: :ok
-  defp on_play(room_id),
-    do: Channels.broadcast_player_play!(room_id)
+  defp on_play(room_id) do
+    {:ok, %Player{} = player} = Player.play(room_id)
+    :ok = Channels.broadcast_player_play!(room_id, player)
+  end
 
   @spec pause(binary()) :: :ok
   def pause(room_id) do
@@ -283,8 +301,10 @@ defmodule Livedj.Sessions do
   end
 
   @spec on_pause(binary()) :: :ok
-  defp on_pause(room_id),
-    do: Channels.broadcast_player_pause!(room_id)
+  defp on_pause(room_id) do
+    {:ok, %Player{} = player} = Player.pause(room_id)
+    :ok = Channels.broadcast_player_pause!(room_id, player)
+  end
 
   @doc """
   Given a room id, returns a player.
