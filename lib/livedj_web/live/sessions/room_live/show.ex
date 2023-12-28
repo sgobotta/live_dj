@@ -64,18 +64,24 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:page_title, "(#{socket.assigns.room.name})")
   end
 
+  # ----------------------------------------------------------------------------
+  # Client side event handling
+  #
+
   def handle_event("on_player_play", _params, socket) do
-    # A request to play a song has been sent to the player.
+    # On click event callback
+    :ok = Sessions.play(socket.assigns.room.id)
+    {:noreply, socket}
+  end
+
+  def handle_event("on_player_pause", %{"current_time" => current_time}, socket) do
+    # On click event callback
+    :ok = Sessions.pause(socket.assigns.room.id, at: current_time)
     {:noreply, socket}
   end
 
   def handle_event("on_player_playing", _params, socket) do
     # The player state changed to playing.
-    {:noreply, socket}
-  end
-
-  def handle_event("on_player_pause", _params, socket) do
-    # A request to pause a song has been sent to the player.
     {:noreply, socket}
   end
 
@@ -103,7 +109,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
-  def handle_event("player_loaded", _params, socket) do
+  def handle_event("on_player_loaded", _params, socket) do
     socket =
       if connected?(socket) do
         {:ok, %Sessions.Player{} = player} =
@@ -111,7 +117,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
         socket
         |> assign_player(player)
-        |> push_event("show_player", %{})
+        |> push_event("show_player", %{callback_event: "on_player_visible"})
         |> push_event("load_video", player)
       else
         socket
@@ -120,12 +126,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
-  def handle_event("player_visible", _params, socket) do
+  def handle_event("on_player_visible", _params, socket) do
     {:noreply, socket}
   end
 
   # ----------------------------------------------------------------------------
-  # Playlist event handling
+  # Server side Playlist event handling
   #
 
   @impl true
@@ -137,7 +143,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   # ----------------------------------------------------------------------------
-  # Player event handling
+  # Server side Player event handling
   #
 
   def handle_info(
@@ -154,14 +160,21 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
-  def handle_info({:player_play, _player}, socket) do
+  def handle_info(
+        {:player_play, %Sessions.Player{}},
+        socket
+      ) do
     # Broadcasted request to send a play signal to the player
-    {:noreply, push_event(socket, "play_video", %{})}
+    {:noreply,
+     push_event(socket, "play_video", %{
+       callback_event: "on_player_playing"
+     })}
   end
 
-  def handle_info({:player_pause, _player}, socket) do
+  def handle_info({:player_pause, %Sessions.Player{}}, socket) do
     # Broadcasted request to send a pause signal to the player
-    {:noreply, push_event(socket, "pause_video", %{})}
+    {:noreply,
+     push_event(socket, "pause_video", %{callback_event: "on_player_paused"})}
   end
 
   def handle_info(

@@ -266,6 +266,10 @@ defmodule Livedj.Sessions do
     |> PlayerServer.join(on_joined: {&get_player/1, [room_id]})
   end
 
+  @doc """
+  Called when a state change is performed on the player. Broadcasts the player
+  struct.
+  """
   @spec player_state_change(binary(), Player.t()) :: :ok
   def player_state_change(room_id, player) do
     :ok =
@@ -280,29 +284,35 @@ defmodule Livedj.Sessions do
   defp on_state_change(room_id, player),
     do: Channels.broadcast_player_state_change!(room_id, %{player: player})
 
-  @spec play(binary()) :: :ok
-  def play(room_id) do
+  @doc """
+  Calls the player server to broadcast a play signal.
+  """
+  @spec play(binary(), keyword()) :: :ok
+  def play(room_id, opts \\ []) do
     :ok =
       room_id
       |> get_player_child_pid!()
-      |> PlayerServer.play(on_play: {&on_play/1, [room_id]})
+      |> PlayerServer.play(on_play: {&on_play/2, [room_id, opts]})
   end
 
-  @spec on_play(binary()) :: :ok
-  defp on_play(room_id) do
-    {:ok, %Player{} = player} = Player.play(room_id)
+  @spec on_play(binary(), keyword()) :: :ok
+  defp on_play(room_id, _opts) do
+    {:ok, %Player{} = player} = Player.play(room_id, [])
     :ok = Channels.broadcast_player_play!(room_id, player)
   end
 
-  @spec pause(binary()) :: :ok
-  def pause(room_id) do
+  @doc """
+  Calls the player server to broadcast a pause signal.
+  """
+  @spec pause(binary(), keyword()) :: :ok
+  def pause(room_id, opts) do
     get_player_child_pid!(room_id)
-    |> PlayerServer.pause(on_pause: {&on_pause/1, [room_id]})
+    |> PlayerServer.pause(on_pause: {&on_pause/2, [room_id, opts]})
   end
 
-  @spec on_pause(binary()) :: :ok
-  defp on_pause(room_id) do
-    {:ok, %Player{} = player} = Player.pause(room_id)
+  @spec on_pause(binary(), keyword()) :: :ok
+  defp on_pause(room_id, opts) do
+    {:ok, %Player{} = player} = Player.pause(room_id, opts)
     :ok = Channels.broadcast_player_pause!(room_id, player)
   end
 

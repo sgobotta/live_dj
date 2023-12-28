@@ -4,6 +4,9 @@ defmodule LivedjWeb.PlayerControlsLive do
   alias Livedj.Sessions
   alias Livedj.Sessions.{Player, Room}
 
+  @on_play_click :on_play_click
+  @on_pause_click :on_pause_click
+
   def render(assigns) do
     ~H"""
     <%= if @player do %>
@@ -33,7 +36,7 @@ defmodule LivedjWeb.PlayerControlsLive do
                 />
               </a>
               <%= if @player && @player.state in [:playing] do %>
-                <a phx-click="pause" class="cursor-pointer">
+                <a phx-click={on_pause_click_event()} class="cursor-pointer">
                   <.icon
                     name="hero-pause"
                     class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
@@ -41,7 +44,7 @@ defmodule LivedjWeb.PlayerControlsLive do
                 </a>
               <% end %>
               <%= if @player && @player.state in [:idle, :paused] do %>
-                <a phx-click="play" class="cursor-pointer">
+                <a phx-click={on_play_click_event()} class="cursor-pointer">
                   <.icon
                     name="hero-play"
                     class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
@@ -86,14 +89,18 @@ defmodule LivedjWeb.PlayerControlsLive do
     {:ok, socket}
   end
 
-  def handle_event("play", _params, socket) do
-    :ok = Sessions.play(socket.assigns.room.id)
-    {:noreply, socket}
+  def handle_event(@on_play_click, _params, socket) do
+    {:noreply,
+     push_event(socket, "request_current_time", %{
+       callback_event: "on_player_play"
+     })}
   end
 
-  def handle_event("pause", _params, socket) do
-    :ok = Sessions.pause(socket.assigns.room.id)
-    {:noreply, socket}
+  def handle_event(@on_pause_click, _params, socket) do
+    {:noreply,
+     push_event(socket, "request_current_time", %{
+       callback_event: "on_player_pause"
+     })}
   end
 
   @impl true
@@ -147,4 +154,7 @@ defmodule LivedjWeb.PlayerControlsLive do
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)
+
+  defp on_play_click_event, do: @on_play_click
+  defp on_pause_click_event, do: @on_pause_click
 end
