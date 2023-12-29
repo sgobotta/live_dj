@@ -21,6 +21,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            player_container_id: player_container_id(),
            spinner_id: spinner_id(),
            backdrop_id: backdrop_id(),
+           start_time_tracker_id: "player-controls-start-time-tracker",
+           end_time_tracker_id: "player-controls-end-time-tracker",
+           time_slider_id: "player-controls-time-slider",
            form: to_form(%{}),
            player: nil,
            room: room
@@ -102,7 +105,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
           push_event(socket, "on_container_mounted", %{
             backdrop_id: socket.assigns.backdrop_id,
             player_container_id: socket.assigns.player_container_id,
-            spinner_id: socket.assigns.spinner_id
+            spinner_id: socket.assigns.spinner_id,
+            start_time_tracker_id: socket.assigns.start_time_tracker_id,
+            end_time_tracker_id: socket.assigns.end_time_tracker_id,
+            time_slider_id: socket.assigns.time_slider_id
           }),
         else: socket
 

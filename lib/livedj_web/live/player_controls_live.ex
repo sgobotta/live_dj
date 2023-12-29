@@ -4,64 +4,91 @@ defmodule LivedjWeb.PlayerControlsLive do
   alias Livedj.Sessions
   alias Livedj.Sessions.{Player, Room}
 
-  @on_play_click :on_play_click
-  @on_pause_click :on_pause_click
+  @on_play_click "on_play_click"
+  @on_pause_click "on_pause_click"
 
   def render(assigns) do
     ~H"""
-    <%= if @player do %>
-      <div
-        id={@player_controls_id}
-        class="
-          bg-zinc-100 dark:bg-zinc-900
-          border-t-[1px] border-zinc-300 dark:border-zinc-700
-          h-16
-        "
-      >
-        <div class="grid grid-cols-12 py-1 text-sm justify-center">
-          <div class="col-span-3">
-            <%!-- <div class="h-12 w-12 rounded-lg ring-2 ring-white m-1">
-              <img
-                class="h-12 w-12 rounded-md ring-2 ring-white"
-                src="https://i.ytimg.com/vi/oCcks-fwq2c/default.jpg"
-              />
-            </div> --%>
-          </div>
-          <div class="col-span-6 justify-self-center">
-            <div class="flex items-center gap-4 h-12">
-              <a phx-click="previous" class="cursor-pointer">
-                <.icon
-                  name="hero-chevron-left-solid"
-                  class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
+    <%= if connected?(@socket) do %>
+      <%= if @player do %>
+        <div
+          id={@player_controls_id}
+          class="
+            bg-zinc-100 dark:bg-zinc-900
+            border-t-[1px] border-zinc-300 dark:border-zinc-700
+            h-24
+          "
+        >
+          <div class="grid grid-cols-12 grid-rows-2 py-1 text-sm justify-center">
+            <div class="col-span-3 row-span-2">
+              <%!-- <div class="h-12 w-12 rounded-lg ring-2 ring-white m-1">
+                <img
+                  class="h-12 w-12 rounded-md ring-2 ring-white"
+                  src="https://i.ytimg.com/vi/oCcks-fwq2c/default.jpg"
                 />
-              </a>
-              <%= if @player && @player.state in [:playing] do %>
-                <a phx-click={on_pause_click_event()} class="cursor-pointer">
-                  <.icon
-                    name="hero-pause"
-                    class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
-                  />
-                </a>
-              <% end %>
-              <%= if @player && @player.state in [:idle, :paused] do %>
-                <a phx-click={on_play_click_event()} class="cursor-pointer">
-                  <.icon
-                    name="hero-play"
-                    class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
-                  />
-                </a>
-              <% end %>
-              <a phx-click="next" class="cursor-pointer">
-                <.icon
-                  name="hero-chevron-right-solid"
-                  class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
-                />
-              </a>
+              </div> --%>
             </div>
+            <div class="col-span-6 row-span-1 w-full flex justify-center">
+              <div class="flex items-center gap-4 h-12">
+                <a phx-click="previous" class="cursor-pointer">
+                  <.icon
+                    name="hero-backward-solid"
+                    class="h-7 w-7 text-zinc-700 hover:text-zinc-500 dark:text-zinc-300 dark:hover:bg-zinc-50"
+                  />
+                </a>
+                <%= if @player && @player.state in [:playing] do %>
+                  <a phx-click={on_pause_click_event()} class="cursor-pointer">
+                    <.icon
+                      name="hero-pause-circle-solid"
+                      class="h-10 w-10 text-zinc-700 hover:scale-[1.1] dark:text-zinc-50"
+                    />
+                  </a>
+                <% end %>
+                <%= if @player && @player.state in [:idle, :paused] do %>
+                  <a phx-click={on_play_click_event()} class="cursor-pointer">
+                    <.icon
+                      name="hero-play-circle-solid"
+                      class="h-10 w-10 text-zinc-700 hover:scale-[1.1] dark:text-zinc-50"
+                    />
+                  </a>
+                <% end %>
+                <a phx-click="next" class="cursor-pointer">
+                  <.icon
+                    name="hero-forward-solid"
+                    class="h-7 w-7 text-zinc-700 hover:text-zinc-500 dark:text-zinc-300 dark:hover:bg-zinc-50"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="col-span-6 row-span-1 w-full flex justify-center">
+              <div class="flex items-center justify-center p-4 h-12 w-full">
+                <div class="inline-flex items-center justify-center p-4">
+                  <span id={@start_time_tracker_id} class="video-time-tracker">
+                    -
+                  </span>
+                </div>
+                <form class="slider-form w-full">
+                  <input
+                    class="seek-bar p-4 w-full"
+                    id={@time_slider_id}
+                    value="0"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                  />
+                </form>
+                <div class="inline-flex items-center justify-center p-4">
+                  <span id={@end_time_tracker_id} class="video-time-tracker">
+                    -
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-3 row-span-2"></div>
           </div>
-          <div class="col-span-3"></div>
         </div>
-      </div>
+      <% end %>
     <% end %>
     """
   end
@@ -75,13 +102,22 @@ defmodule LivedjWeb.PlayerControlsLive do
         {:ok,
          assign(socket,
            player_controls_id: "player-controls-#{Ecto.UUID.generate()}",
+           start_time_tracker_id: "player-controls-start-time-tracker",
+           end_time_tracker_id: "player-controls-end-time-tracker",
+           time_slider_id: "player-controls-time-slider",
            layout: false,
            player: nil,
            room: room
          )}
 
       false ->
-        {:ok, assign(socket, player: nil)}
+        {:ok,
+         assign(socket,
+           player: nil,
+           start_time_tracker_id: nil,
+           end_time_tracker_id: nil,
+           time_slider_id: nil
+         )}
     end
   end
 

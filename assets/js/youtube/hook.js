@@ -1,4 +1,35 @@
 import initPlayer from './player'
+import { secondsToTime } from '../lib/date-utils'
+
+const updateTimeDisplay = (timeTrackerElem, time) => {
+  const videoTime = (time === 0 || time === undefined)
+    ? '-'
+    : secondsToTime(parseInt(time))
+  timeTrackerElem.innerText = videoTime
+}
+
+const updateVideoSlider = (
+  timeSliderElem,
+  playerCurrentTime,
+  playerTotalTime
+) => {
+  timeSliderElem.min = 0
+  timeSliderElem.max = playerTotalTime
+  timeSliderElem.value = playerCurrentTime
+}
+
+const udpateTimeDisplays = (
+  startTimeTrackerElem,
+  endTimeTrackerElem,
+  timeSliderElem,
+  player
+) => {
+  const currentTime = player.getCurrentTime()
+  const totalTime = player.getDuration()
+  updateTimeDisplay(startTimeTrackerElem, currentTime)
+  updateTimeDisplay(endTimeTrackerElem, totalTime)
+  updateVideoSlider(timeSliderElem, currentTime, totalTime)
+}
 
 export default {
   backdrop_id: null,
@@ -11,7 +42,10 @@ export default {
     this.handleEvent('on_container_mounted', async ({
       backdrop_id,
       player_container_id,
-      spinner_id
+      spinner_id,
+      start_time_tracker_id: startTimeTrackerElem,
+      end_time_tracker_id: endTimeTrackerElem,
+      time_slider_id: timeSliderElem
     }) => {
       this.spinner_id = spinner_id
       this.backdrop_id = backdrop_id
@@ -33,22 +67,48 @@ export default {
         this.pushEventTo(this.el, 'on_player_loaded')
       }
 
-      const onStateChange = async event => {
+      const onStateChange = (hookContext,
+        {
+          startTimeTrackerElem,
+          endTimeTrackerElem,
+          timeSliderElem
+        }
+      ) => async event => {
+        /* eslint-disable no-case-declarations */
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:
             console.debug("[Player State :: UNSTARTED")
             break
           case YT.PlayerState.ENDED:
             console.debug("[Player State :: ENDED")
+            clearInterval(hookContext.el.dataset.trackTimeInterval)
             await this.pushEventTo(this.el, 'on_player_ended')
             break
           case YT.PlayerState.PLAYING:
             console.debug("[Player State :: PLAYING")
+
             await this.pushEventTo(this.el, 'on_player_playing')
+            const trackTimeInterval = setInterval(() => {
+              udpateTimeDisplays(
+                startTimeTrackerElem,
+                endTimeTrackerElem,
+                timeSliderElem,
+                event.target
+              )
+            }, 1000)
+            hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
             break
           case YT.PlayerState.PAUSED:
             console.debug("[Player State :: PAUSED")
+
             await this.pushEventTo(this.el, 'on_player_paused')
+            clearInterval(hookContext.el.dataset.trackTimeInterval)
+            udpateTimeDisplays(
+              startTimeTrackerElem,
+              endTimeTrackerElem,
+              timeSliderElem,
+              event.target
+            )
             break
           case YT.PlayerState.BUFFERINGS:
             console.debug("[Player State :: BUFFERING")
@@ -63,7 +123,16 @@ export default {
       }
 
       const playerContainer = document.getElementById(player_container_id)
-      await initPlayer(playerContainer, {onReady: onPlayerReady, onStateChange})
+      await initPlayer(playerContainer, {
+        onReady: onPlayerReady,
+        onStateChange: onStateChange(
+          this, {
+            endTimeTrackerElem,
+            startTimeTrackerElem,
+            timeSliderElem
+          }
+        )
+      })
     })
 
     /**
