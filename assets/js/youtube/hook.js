@@ -120,7 +120,7 @@ export default {
               event.target
             )
             break
-          case YT.PlayerState.BUFFERINGS:
+          case YT.PlayerState.BUFFERING:
             console.debug("[Player State :: BUFFERING")
             break
           case YT.PlayerState.CUED:
@@ -128,7 +128,7 @@ export default {
             break
 
           default:
-            console.debug("[Player :: Unknown state")
+            console.debug("[Player :: Unknown state", event.data)
         }
       }
 
