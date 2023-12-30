@@ -1,130 +1,190 @@
-/* Define your variables */
-:root {
-  --thumb-height: 12px;
-  --track-height: 2px;
-  --track-progress-color: #007bff;
-}
-
 @layer components {
   /* Container class */
   .seek-bar {
-    @apply w-full bg-transparent block appearance-none m-0 h-10 overflow-hidden cursor-default
+    @apply w-full bg-transparent block appearance-none m-0 cursor-default border-0 outline-0;
   }
   .seek-bar:focus {
     @apply outline-none
   }
 
-  /* Webkit */
-  .seek-bar::-webkit-slider-runnable-track {
-    @apply w-full h-1 bg-gradient-to-br from-zinc-300 to-zinc-400 rounded-full overflow-hidden;
-  }
-  .dark .seek-bar::-webkit-slider-runnable-track {
-    @apply w-full h-1 bg-gradient-to-br from-zinc-700 to-zinc-600;
+  /* === range theme and appearance === */
+  input[type="range"] {
+    @apply appearance-none w-full text-base;
   }
 
-  .seek-bar::-webkit-slider-thumb {
-    @apply appearance-none h-3 w-3 bg-transparent rounded-full border-0 -mt-[0.25rem] transition-all duration-200;
+  input[type="range"] {
+    @apply text-zinc-600 rounded-full !important;
+    
+    --thumb-height: 0.675em;
+    --track-height: 0.125em;
+    --track-color: theme('colors.zinc.500');
+    --brightness-hover: 110%;
+    --brightness-down: 90%;
+    --clip-edges: 0.125em;
   }
-  .seek-bar::-webkit-slider-thumb {
-    @apply shadow-[-3000px_0_0_3000px_rgb(14,165,233)] 
-    /* box-shadow: -100px 0 0px 100px red; */
-    /* -2px 0 0px 4px red,
-    -3px 0 0px 4px red,
-    -4px 0 0px 4px red,
-    -5px 0 0px 4px red; */
-  }
-  .dark .seek-bar::-webkit-slider-thumb {
-    @apply bg-transparent;
-  }
-
-  .seek-bar::-webkit-slider-runnable-track {
-    @apply bg-transparent;
+  input[type="range"]:hover {
+    @apply text-green-500 !important;
   }
 
-  .seek-bar:hover, .seek-bar:focus {
-    &::-webkit-slider-runnable-track {
-      @apply block;
-    }
-    &::-webkit-slider-thumb {
-      @apply block bg-transparent !important;
-    }
-    &::-ms-thumb {
-      @apply block bg-sky-500 !important;
-    }
-  }  
-
-  .dark .seek-bar:hover, .dark .seek-bar:focus {
-    @apply cursor-default;
-
-    &::-webkit-slider-thumb {
-      @apply block bg-zinc-50;
-    }
+  .dark input[type="range"] {
+    @apply text-zinc-100 !important;
+    --track-color: theme('colors.zinc.700');
+  }
+  
+  .dark input[type="range"]:hover {
+    @apply text-green-500 !important;
+    --track-color: theme('colors.zinc.700');
   }
 
-  /* Firefox */
-  .seek-bar::-moz-range-track,
-  .seek-bar::-moz-range-progress {
-    @apply rounded-full w-full h-1 bg-gradient-to-br from-zinc-600 to-zinc-500;
+  /* === range commons === */
+  input[type="range"] {
+    @apply relative bg-transparent overflow-hidden outline-none
   }
 
-  .seek-bar::-moz-range-thumb {
-    @apply m-0 h-3 w-3 bg-transparent hidden rounded-full border-0 transition-colors duration-200;
+  input[type="range"]:active {
+    /* cursor: grabbing; */
   }
 
-  .seek-bar:hover, .seek-bar:focus {
-    &::-moz-range-progress {
-      @apply bg-gradient-to-br from-sky-500 to-sky-600 cursor-default;
-    }
-    &::-moz-range-thumb {
-      @apply block bg-zinc-700 !important;
-    }
-  }
-  .dark .seek-bar:hover, .seek-bar:focus {
-    &::-moz-range-thumb {
-      @apply bg-zinc-50 !important;
-    }
+  input[type="range"]:disabled {
+    filter: grayscale(1);
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 
-  /* Internet Exploder */
-  .seek-bar::-ms-track {
-    /* color needed to hide track marks */
-    @apply w-full h-1 border-0 text-transparent bg-transparent;
+  /* === WebKit specific styles === */
+  input[type="range"],
+  input[type="range"]::-webkit-slider-runnable-track,
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    transition: all ease 100ms;
+    height: var(--thumb-height);
   }
 
-  .seek-bar::-ms-fill-lower {
-    @apply bg-gradient-to-br from-zinc-300 to-zinc-400;
-  }
-  .dark .seek-bar::-ms-fill-lower {
-    @apply bg-gradient-to-br from-zinc-700 to-zinc-600
+  input[type="range"]::-webkit-slider-runnable-track,
+  input[type="range"]::-webkit-slider-thumb {
+    position: relative;
   }
 
-  .seek-bar::-ms-fill-upper {
-    @apply bg-gradient-to-br from-zinc-700 to-zinc-600
-  }
-  .dark .seek-bar::-ms-fill-upper {
-    @apply bg-gradient-to-br from-zinc-300 to-zinc-400;
+  input[type="range"]::-webkit-slider-thumb {
+    @apply rounded-full bg-zinc-600;
+    --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
+    --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
+    --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
+    --clip-further: calc(100% + 1px);
+    --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+      100vmax currentColor;
+
+    width: var(--thumb-width, var(--thumb-height));
+    box-shadow: var(--box-fill);
+
+    filter: brightness(100%);
+    clip-path: polygon(
+      100% -1px,
+      var(--clip-edges) -1px,
+      0 var(--clip-top),
+      -100vmax var(--clip-top),
+      -100vmax var(--clip-bottom),
+      0 var(--clip-bottom),
+      var(--clip-edges) 100%,
+      var(--clip-further) var(--clip-further)
+    );
   }
 
-  .seek-bar::-ms-thumb {
-    @apply appearance-none h-3 w-3 bg-transparent hidden rounded-full border-0 top-0 m-0 shadow-none transition-colors duration-200;
+  input[type="range"]:hover::-webkit-slider-thumb {
   }
 
-  .seek-bar:hover,
-  .seek-bar:focus {
-    &::-ms-thumb {
-      @apply bg-zinc-50 !important;
-    }
+  .dark input[type="range"]::-webkit-slider-thumb {
+    @apply bg-zinc-200;
   }
+
+  .dark input[type="range"]:hover::-webkit-slider-thumb {
+  }
+
+  input[type="range"]:active::-webkit-slider-thumb {
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    @apply rounded-full;
+    background: linear-gradient(theme('colors.zinc.400') 0 0) scroll no-repeat center /
+      100% calc(var(--track-height) + 2px);
+  }
+ 
+  .dark input[type="range"]::-webkit-slider-runnable-track {
+    @apply rounded-full;
+    background: linear-gradient(theme('colors.zinc.700') 0 0) scroll no-repeat center /
+      100% calc(var(--track-height) + 2px);
+  }
+
+  input[type="range"]:hover::-webkit-slider-runnable-track {
+  }
+
+  input[type="range"]:disabled::-webkit-slider-thumb {
+    cursor: not-allowed;
+  }
+
+  /* === Firefox specific styles === */
+  input[type="range"],
+  input[type="range"]::-moz-range-track,
+  input[type="range"]::-moz-range-thumb {
+    appearance: none;
+    transition: all ease 100ms;
+    height: var(--thumb-height);
+  }
+
+  input[type="range"]::-moz-range-track,
+  input[type="range"]::-moz-range-thumb,
+  input[type="range"]::-moz-range-progress {
+    background: #fff0;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    @apply rounded-full;
+    background: currentColor;
+    border: 0;
+    width: var(--thumb-width, var(--thumb-height));
+    /* border-radius: var(--thumb-width, var(--thumb-height)); */
+    cursor: grab;
+  }
+
+  input[type="range"]:active::-moz-range-thumb {
+    cursor: grabbing;
+  }
+
+  input[type="range"]::-moz-range-track {
+    width: 100%;
+    background: var(--track-color);
+  }
+
+  input[type="range"]::-moz-range-progress {
+    appearance: none;
+    background: currentColor;
+    transition-delay: 30ms;
+  }
+
+  input[type="range"]::-moz-range-track,
+  input[type="range"]::-moz-range-progress {
+    @apply rounded-full;
+    height: calc(var(--track-height) + 1px);
+    /* border-radius: var(--track-height); */
+  }
+
+  input[type="range"]::-moz-range-thumb,
+  input[type="range"]::-moz-range-progress {
+    filter: brightness(100%);
+  }
+
+  input[type="range"]:hover::-moz-range-thumb,
+  input[type="range"]:hover::-moz-range-progress {
+    filter: brightness(var(--brightness-hover));
+  }
+
+  input[type="range"]:active::-moz-range-thumb,
+  input[type="range"]:active::-moz-range-progress {
+    filter: brightness(var(--brightness-down));
+  }
+
+  input[type="range"]:disabled::-moz-range-thumb {
+    cursor: not-allowed;
+  }
+
 }
-
-/* Webkit cannot style progress so we fake it with a long shadow
-on the thumb element */
-/* @function webkit-slider-thumb-shadow($i: 1) {
-  $val: #{$i}px 0 0 -#{($thumb-height - $track-height) / 2} #{$track-progress-color};
-  @if $i == 1 {
-    @for $k from 2 through 3000 {
-      $val: #{$val}, webkit-slider-thumb-shadow($k);
-    }
-  }
-  @return $val;
-} */

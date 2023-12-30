@@ -70,7 +70,7 @@ defmodule LivedjWeb.ListComponent do
   end
 
   defp get_background_color_by_track(current_media_id, current_media_id),
-    do: "bg-sky-500"
+    do: "bg-green-600"
 
   defp get_background_color_by_track(_media_id, _current_media),
     do: "bg-zinc-200 dark:bg-zinc-800"

@@ -61,15 +61,15 @@ defmodule LivedjWeb.PlayerControlsLive do
               </div>
             </div>
             <div class="col-span-6 row-span-1 w-full flex justify-center">
-              <div class="flex items-center justify-center p-4 h-12 w-full">
-                <div class="inline-flex items-center justify-center p-4">
+              <div class="flex items-center justify-center p-2 h-12 w-full text-[0.5rem] text-zinc-600 dark:text-zinc-400">
+                <div class="inline-flex items-center justify-center pl-2 w-10">
                   <span id={@start_time_tracker_id} class="video-time-tracker">
-                    -
+                    0:00
                   </span>
                 </div>
-                <form class="slider-form w-full">
+                <form class="slider-form w-full p-4">
                   <input
-                    class="seek-bar p-4 w-full"
+                    class="seek-bar w-full"
                     id={@time_slider_id}
                     value="0"
                     type="range"
@@ -78,9 +78,9 @@ defmodule LivedjWeb.PlayerControlsLive do
                     step="1"
                   />
                 </form>
-                <div class="inline-flex items-center justify-center p-4">
+                <div class="inline-flex items-center justify-center pr-2 w-10">
                   <span id={@end_time_tracker_id} class="video-time-tracker">
-                    -
+                    0:00
                   </span>
                 </div>
               </div>
