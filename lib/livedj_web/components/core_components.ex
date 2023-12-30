@@ -300,7 +300,7 @@ defmodule LivedjWeb.CoreComponents do
           </div>
           <div
             :for={action <- @actions}
-            class="mt-2 flex items-center justify-between gap-6"
+            class="mt-0 flex items-center justify-between gap-6"
           >
             <%= render_slot(action, f) %>
           </div>
