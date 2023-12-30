@@ -2,6 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import "./fonts.css";
 @import "./widgets/scrollbar.css";
 @import "./widgets/slider.css";
 
