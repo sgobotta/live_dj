@@ -1,102 +1,72 @@
-<header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
-  <div class="flex items-center border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm justify-between">
-    <div class="h-5 w-5" />
-    <div class="flex items-center gap-4">
-      <a href="/">
-        <.livedj_logo theme={@theme} />
-      </a>
-    </div>
-    <div class="">
-      <.toggle_theme_button theme={@theme} />
-    </div>
-  </div>
-  <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-    <%= if @current_user do %>
-      <li class="text-[0.8125rem] leading-6">
-        <.text><%= @current_user.email %></.text>
-      </li>
-      <li>
-        <.link
-          href={~p"/users/settings"}
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-        >
-          <.text><%= gettext("Settings") %></.text>
-        </.link>
-      </li>
-      <li>
-        <.link
-          href={~p"/users/log_out"}
-          method="delete"
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-        >
-          <.text><%= gettext("Log out") %></.text>
-        </.link>
-      </li>
-    <% else %>
-      <li>
-        <.link
-          href={~p"/users/register"}
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-        >
-          <.text><%= gettext("Register") %></.text>
-        </.link>
-      </li>
-      <li>
-        <.link
-          href={~p"/users/log_in"}
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-        >
-          <.text><%= gettext("Log in") %></.text>
-        </.link>
-      </li>
-    <% end %>
-  </ul>
-</header>
-<main class="sm:py-10 lg:px-8">
-  <div class="mx-1 sm:mx-auto max-w-xl">
-    <.flash_group flash={@flash} />
-    <%= @inner_content %>
-  </div>
-</main>
-<footer class="
-  fixed bottom-0 w-full
-  bg-zinc-100 dark:bg-zinc-900
-  border-t-[1] border-zinc-300 dark:border-zinc-700
-">
-  <div class="grid grid-cols-12 border-t border-zinc-100 py-1 text-sm justify-center">
-    <div class="col-span-3">
-      <%!-- <div class="h-12 w-12 rounded-lg ring-2 ring-white m-1">
-        <img
-          class="h-12 w-12 rounded-md ring-2 ring-white"
-          src="https://i.ytimg.com/vi/oCcks-fwq2c/default.jpg"
-        />
-      </div> --%>
-    </div>
-    <div class="col-span-6 justify-self-center">
-      <div class="flex items-center gap-4 h-12">
-        <a phx-click="previous" class="cursor-pointer">
-          <.icon
-            name="hero-chevron-left-solid"
-            class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
-          />
-        </a>
-        <a
-          phx-click={if @is_playing, do: "pause", else: "play"}
-          class="cursor-pointer"
-        >
-          <.icon
-            name={if @is_playing, do: "hero-pause", else: "hero-play"}
-            class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
-          />
-        </a>
-        <a phx-click="next" class="cursor-pointer">
-          <.icon
-            name="hero-chevron-right-solid"
-            class="h-7 w-7 text-zinc-900 dark:text-zinc-100"
-          />
+<div class="flex flex-col h-screen">
+  <header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
+    <div class="flex items-center border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm justify-between">
+      <div class="h-5 w-5" />
+      <div class="flex items-center gap-4">
+        <a href="/">
+          <.livedj_logo theme={@theme} />
         </a>
       </div>
+      <div class="">
+        <.toggle_theme_button theme={@theme} />
+      </div>
     </div>
-    <div class="col-span-3"></div>
-  </div>
-</footer>
+    <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
+      <%= if @current_user do %>
+        <li class="text-[0.8125rem] leading-6">
+          <.text><%= @current_user.email %></.text>
+        </li>
+        <li>
+          <.link
+            href={~p"/users/settings"}
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          >
+            <.text><%= gettext("Settings") %></.text>
+          </.link>
+        </li>
+        <li>
+          <.link
+            href={~p"/users/log_out"}
+            method="delete"
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          >
+            <.text><%= gettext("Log out") %></.text>
+          </.link>
+        </li>
+      <% else %>
+        <li>
+          <.link
+            href={~p"/users/register"}
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          >
+            <.text><%= gettext("Register") %></.text>
+          </.link>
+        </li>
+        <li>
+          <.link
+            href={~p"/users/log_in"}
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          >
+            <.text><%= gettext("Log in") %></.text>
+          </.link>
+        </li>
+      <% end %>
+    </ul>
+  </header>
+
+  <main class="sm:py-10 lg:px-8">
+    <div class="mx-1 sm:mx-auto max-w-xl">
+      <.flash_group flash={@flash} />
+      <%= @inner_content %>
+    </div>
+  </main>
+
+  <footer class="absolute bottom-0 w-full">
+    <%= live_render(
+      @socket,
+      LivedjWeb.PlayerControlsLive,
+      id: "player-controls",
+      sticky: true
+    ) %>
+  </footer>
+</div>

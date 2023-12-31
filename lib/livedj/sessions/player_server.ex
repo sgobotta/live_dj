@@ -11,6 +11,7 @@ defmodule Livedj.Sessions.PlayerServer do
   @join_msg :join
   @play_msg :play
   @pause_msg :pause
+  @state_change_msg :state_change
 
   @joined_cb :joined
   # @playing_cb :playing
@@ -26,6 +27,7 @@ defmodule Livedj.Sessions.PlayerServer do
   @type element :: any()
 
   @type join_response :: {:ok, :joined}
+  @type state_change_response :: :ok
   @type play_response :: :ok
   @type pause_response :: :ok
 
@@ -48,6 +50,14 @@ defmodule Livedj.Sessions.PlayerServer do
   @spec join(pid(), keyword()) :: join_response()
   def join(pid, cbs) do
     GenServer.call(pid, {@join_msg, cbs})
+  end
+
+  @doc """
+  Given a pid, notifies the player state.
+  """
+  @spec state_change(pid(), keyword()) :: state_change_response()
+  def state_change(pid, cbs) do
+    GenServer.cast(pid, {@state_change_msg, cbs})
   end
 
   @doc """
@@ -107,6 +117,14 @@ defmodule Livedj.Sessions.PlayerServer do
   end
 
   @impl GenServer
+  def handle_cast({@state_change_msg, cbs}, state) do
+    {{on_state_change, args}, []} = Keyword.pop!(cbs, :on_state_change)
+
+    :ok = apply(on_state_change, args)
+
+    {:noreply, state}
+  end
+
   def handle_cast({@play_msg, cbs}, state) do
     {{on_play, args}, []} = Keyword.pop!(cbs, :on_play)
 

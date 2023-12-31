@@ -186,12 +186,20 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   end
 
   @impl true
-  def handle_info(:player_play, socket) do
+  def handle_info(
+        {:player_state_changed, room_id, %Sessions.Player{}},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info(:player_pause, socket) do
+  def handle_info({:player_play, _player}, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:player_pause, _player}, socket) do
     {:noreply, socket}
   end
 

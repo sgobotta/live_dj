@@ -17,6 +17,7 @@ defmodule Livedj.Sessions.Channels do
   # Player event aliases
   #
   @player_joined :player_joined
+  @player_state_changed :player_state_changed
   @player_play :player_play
   @player_pause :player_pause
   @player_load_media :player_load_media
@@ -96,6 +97,12 @@ defmodule Livedj.Sessions.Channels do
   def player_joined_event, do: @player_joined
 
   @doc """
+  Returns the message name for player state change events
+  """
+  @spec player_state_changed_event() :: :player_state_changed
+  def player_state_changed_event, do: @player_state_changed
+
+  @doc """
   Returns the message name for player play events
   """
   @spec player_play_event() :: :player_play
@@ -163,6 +170,9 @@ defmodule Livedj.Sessions.Channels do
   # Player brodcasting
   #
 
+  @doc """
+  Broadcasts a #{@player_load_media} message to the player topic.
+  """
   @spec broadcast_player_load_media!(binary(), Livedj.Sessions.Player.t()) ::
           :ok
   def broadcast_player_load_media!(room_id, player),
@@ -173,32 +183,46 @@ defmodule Livedj.Sessions.Channels do
       )
 
   @doc """
-  Broadcasts a #{@player_play} message to the given topic.
+  Broadcasts a #{@player_play} message to the player topic.
   """
-  @spec broadcast_player_play!(binary()) :: :ok
-  def broadcast_player_play!(room_id),
-    do: broadcast!(player_topic(room_id), player_play_event())
+  @spec broadcast_player_state_change!(binary(), map()) :: :ok
+  def broadcast_player_state_change!(
+        room_id,
+        %{player: %Livedj.Sessions.Player{}} = payload
+      ),
+      do:
+        broadcast!(
+          player_topic(room_id),
+          {player_state_changed_event(), room_id, payload}
+        )
 
   @doc """
-  Broadcasts a #{@player_pause} message to the given topic.
+  Broadcasts a #{@player_play} message to the player topic.
   """
-  @spec broadcast_player_pause!(binary()) :: :ok
-  def broadcast_player_pause!(room_id),
-    do: broadcast!(player_topic(room_id), player_pause_event())
+  @spec broadcast_player_play!(binary(), Livedj.Sessions.Player.t()) :: :ok
+  def broadcast_player_play!(room_id, %Livedj.Sessions.Player{} = player),
+    do: broadcast!(player_topic(room_id), {player_play_event(), player})
+
+  @doc """
+  Broadcasts a #{@player_pause} message to the player topic.
+  """
+  @spec broadcast_player_pause!(binary(), Livedj.Sessions.Player.t()) :: :ok
+  def broadcast_player_pause!(room_id, %Livedj.Sessions.Player{} = player),
+    do: broadcast!(player_topic(room_id), {player_pause_event(), player})
 
   # ----------------------------------------------------------------------------
   # Playlist brodcasting
   #
 
   @doc """
-  Broadcasts a #{@dragging_locked} message to the given topic.
+  Broadcasts a #{@dragging_locked} message to the playlist topic.
   """
   @spec broadcast_playlist_dragging_locked!(pid(), binary()) :: :ok
   def broadcast_playlist_dragging_locked!(from, room_id),
     do: broadcast_from!(from, playlist_topic(room_id), dragging_locked_event())
 
   @doc """
-  Broadcasts a #{@dragging_unlocked} message to the given topic.
+  Broadcasts a #{@dragging_unlocked} message to the playlist topic.
   """
   @spec broadcast_playlist_dragging_unlocked!(pid(), binary()) :: :ok
   def broadcast_playlist_dragging_unlocked!(from, room_id),
@@ -206,7 +230,7 @@ defmodule Livedj.Sessions.Channels do
       broadcast_from!(from, playlist_topic(room_id), dragging_unlocked_event())
 
   @doc """
-  Broadcasts a #{@track_added} message to the given topic.
+  Broadcasts a #{@track_added} message to the playlist topic.
   """
   @spec broadcast_playlist_track_added!(binary(), any()) :: :ok
   def broadcast_playlist_track_added!(room_id, payload),
@@ -217,7 +241,7 @@ defmodule Livedj.Sessions.Channels do
       )
 
   @doc """
-  Broadcasts a #{@track_removed} message to the given topic.
+  Broadcasts a #{@track_removed} message to the playlist topic.
   """
   @spec broadcast_playlist_track_removed!(binary(), any()) :: :ok
   def broadcast_playlist_track_removed!(room_id, payload),
@@ -228,7 +252,7 @@ defmodule Livedj.Sessions.Channels do
       )
 
   @doc """
-  Broadcasts a #{@track_moved} message to the given topic.
+  Broadcasts a #{@track_moved} message to the playlist topic.
   """
   @spec broadcast_playlist_track_moved!(binary(), any()) :: :ok
   def broadcast_playlist_track_moved!(room_id, payload),
@@ -243,7 +267,7 @@ defmodule Livedj.Sessions.Channels do
   #
 
   @doc """
-  Notify a #{@player_joined} message to the given topic.
+  Notify a #{@player_joined} message.
   """
   @spec notify_player_joined(pid(), binary(), any()) :: message()
   def notify_player_joined(from, room_id, payload) do
@@ -255,14 +279,14 @@ defmodule Livedj.Sessions.Channels do
   #
 
   @doc """
-  Notify a #{@playlist_joined} message to the given topic.
+  Notify a #{@playlist_joined} message.
   """
   @spec notify_playlist_joined(pid(), binary(), any()) :: message()
   def notify_playlist_joined(from, room_id, payload),
     do: send(from, {playlist_joined_event(), room_id, payload})
 
   @doc """
-  Notify a #{@dragging_cancelled} message to the given topic.
+  Notify a #{@dragging_cancelled} message.
   """
   @spec notify_playlist_dragging_cancelled(pid(), binary()) :: any()
   def notify_playlist_dragging_cancelled(from, room_id),

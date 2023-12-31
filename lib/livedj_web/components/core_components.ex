@@ -54,7 +54,7 @@ defmodule LivedjWeb.CoreComponents do
     >
       <div
         id={"#{@id}-bg"}
-        class="bg-zinc-50/90 dark:bg-zinc-900/90 fixed inset-0 transition-opacity"
+        class="bg-zinc-100/90 dark:bg-zinc-900/90 fixed inset-0 transition-opacity"
         aria-hidden="true"
       />
       <div
@@ -74,7 +74,7 @@ defmodule LivedjWeb.CoreComponents do
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
               class="
                 shadow-zinc-700/10 dark:shadow-300/10 ring-zinc-700/10 dark:ring-zinc-300/10
-                relative hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 p-14 shadow-lg ring-1 transition
+                relative hidden rounded-2xl bg-zinc-200 border-[1px] border-zinc-400 dark:bg-zinc-900 p-14 shadow-lg ring-1 transition
               "
             >
               <div class="absolute top-6 right-5">
@@ -300,7 +300,7 @@ defmodule LivedjWeb.CoreComponents do
           </div>
           <div
             :for={action <- @actions}
-            class="mt-2 flex items-center justify-between gap-6"
+            class="mt-0 flex items-center justify-between gap-6"
           >
             <%= render_slot(action, f) %>
           </div>
@@ -492,7 +492,8 @@ defmodule LivedjWeb.CoreComponents do
         class={
           [
             "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
-            "bg-zinc-200 dark:bg-zinc-200",
+            "bg-zinc-200 dark:bg-zinc-700",
+            "shadow-[inset_0_0_30px_1px_rgba(161,161,170,0.7)] dark:shadow-[inset_0_0_30px_1px_rgba(24,24,27,0.7)]",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
             "phx-no-feedback:dark:border-zinc-700 phx-no-feedback:dark:focus:border-zinc-600",
             @errors == [] &&
