@@ -60,11 +60,15 @@ defmodule LivedjWeb.PlayerControlsLive do
                 </a>
               </div>
             </div>
-            <div class="col-span-6 row-span-1 w-full flex justify-center">
+            <div
+              class="col-span-6 row-span-1 w-full flex justify-center"
+              id="seek-bar-container"
+              phx-update="ignore"
+            >
               <div class="flex items-center justify-center p-2 h-12 w-full text-[0.525rem] text-zinc-600 dark:text-zinc-400 cursor-default">
                 <div class="inline-flex items-center justify-center pl-2 w-10">
-                  <span id={@start_time_tracker_id} class="video-time-tracker">
-                    0:00
+                  <span id={@start_time_tracker_id}>
+                    <%= render_default_seek_bar_value() %>
                   </span>
                 </div>
                 <form class="slider-form w-full p-4">
@@ -79,8 +83,8 @@ defmodule LivedjWeb.PlayerControlsLive do
                   />
                 </form>
                 <div class="inline-flex items-center justify-center pr-2 w-10">
-                  <span id={@end_time_tracker_id} class="video-time-tracker">
-                    0:00
+                  <span id={@end_time_tracker_id}>
+                    <%= render_default_seek_bar_value() %>
                   </span>
                 </div>
               </div>
@@ -193,4 +197,6 @@ defmodule LivedjWeb.PlayerControlsLive do
 
   defp on_play_click_event, do: @on_play_click
   defp on_pause_click_event, do: @on_pause_click
+
+  defp render_default_seek_bar_value, do: "0:00"
 end

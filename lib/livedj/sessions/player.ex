@@ -7,6 +7,9 @@ defmodule Livedj.Sessions.Player do
   @key_prefix "player"
 
   @type t :: %__MODULE__{}
+  @type player_opts :: [
+          {:seek_to, non_neg_integer()}
+        ]
 
   @idle_state :idle
   @playing_state :playing
@@ -71,10 +74,12 @@ defmodule Livedj.Sessions.Player do
   @doc """
   Given a room id sets a media id and returns a player struct.
   """
-  @spec load_media(Ecto.UUID.t(), Livedj.Media.Video.t()) ::
+  @spec load_media(Ecto.UUID.t(), Livedj.Media.Video.t(), player_opts()) ::
           {:ok, t()} | {:error, :player_load_media_error | :player_not_found}
-  def load_media(room_id, media) do
-    case set(room_id, %{media_id: media.external_id}) do
+  def load_media(room_id, media, opts) do
+    params = maybe_merge_opts(%{media_id: media.external_id}, opts)
+
+    case set(room_id, params) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -182,5 +187,16 @@ defmodule Livedj.Sessions.Player do
       media_id: media_id,
       current_time: current_time
     }
+  end
+
+  @spec maybe_merge_opts(map(), player_opts()) :: map()
+  defp maybe_merge_opts(params, opts) do
+    case Keyword.get(opts, :seek_to) do
+      seek_to when is_integer(seek_to) ->
+        Map.put(params, :current_time, seek_to)
+
+      _else ->
+        params
+    end
   end
 end

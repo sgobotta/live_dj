@@ -106,7 +106,7 @@ defmodule Livedj.Sessions do
     {:ok, media_list} = Playlist.get(room_id)
 
     if length(media_list) == 1 do
-      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+      {:ok, %Player{} = player} = Player.load_media(room_id, media, seek_to: 0)
 
       :ok = Channels.broadcast_player_load_media!(room_id, player)
     end
@@ -344,7 +344,7 @@ defmodule Livedj.Sessions do
     with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
          {:ok, previous_media_id} <- Playlist.get_previous(room_id, media_id),
          {:ok, media} <- Media.get_by_external_id(previous_media_id) do
-      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+      {:ok, %Player{} = player} = Player.load_media(room_id, media, seek_to: 0)
 
       :ok = Channels.broadcast_player_load_media!(room_id, player)
     else
@@ -361,7 +361,7 @@ defmodule Livedj.Sessions do
     with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
          {:ok, next_media_id} <- Playlist.get_next(room_id, media_id),
          {:ok, media} <- Media.get_by_external_id(next_media_id) do
-      {:ok, %Player{} = player} = Player.load_media(room_id, media)
+      {:ok, %Player{} = player} = Player.load_media(room_id, media, seek_to: 0)
 
       :ok = Channels.broadcast_player_load_media!(room_id, player)
     else
