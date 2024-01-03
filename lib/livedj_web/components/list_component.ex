@@ -5,7 +5,7 @@ defmodule LivedjWeb.ListComponent do
   def render(assigns) do
     ~H"""
     <div class="bg-transparent py-1 rounded-lg pr-1">
-      <div class="space-y-5 mx-auto max-w-7xl space-y-4 select-none">
+      <div class="space-y-5 mx-auto max-w-7xl space-y-4 select-none pl-1">
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={{item, index} <- Enum.with_index(@list)}
@@ -17,7 +17,7 @@ defmodule LivedjWeb.ListComponent do
                 item.external_id,
                 @current_media,
                 "text-zinc-900 dark:text-zinc-100 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800",
-                "text-green-500 dark:text-green-500 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                "text-green-500 dark:text-green-500 bg-zinc-300 dark:bg-zinc-600 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-500"
               )}
               #{if @state == :locked, do: "border-dashed", else: ""}
               my-2 rounded-xl border-zinc-300 dark:border-zinc-700 border-[0px]
@@ -27,25 +27,23 @@ defmodule LivedjWeb.ListComponent do
             "}
           >
             <div class="
-              flex items-center h-10 px-1 h-10
+              relative flex items-center h-10 px-1 h-10
               drag-ghost:opacity-0 gap-y-2 gap-x-2
             ">
-              <div class="absolute h-4 w-4">
-                <div class="absolute top-3 -left-1 h-4 w-4 rounded-full">
-                  <p class={"
-                    rounded-full
-                    text-center text-xs
-                    text-zinc-100 dark:text-zinc-900
-                    #{classes_by_media(
-                      item.external_id,
-                      @current_media,
-                      "bg-zinc-900 dark:bg-zinc-100",
-                      "bg-green-500 text-zinc-100"
-                    )}
-                  "}>
-                    <%= index + 1 %>
-                  </p>
-                </div>
+              <div class="absolute top-6 -left-1 h-4 w-4 rounded-full">
+                <p class={"
+                  rounded-full
+                  text-center text-xs
+                  text-zinc-100 dark:text-zinc-900
+                  #{classes_by_media(
+                    item.external_id,
+                    @current_media,
+                    "bg-zinc-900 dark:bg-zinc-100",
+                    "bg-green-500 text-zinc-100"
+                  )}
+                "}>
+                  <%= index + 1 %>
+                </p>
               </div>
               <img
                 class="inline-block h-8 w-8 rounded-lg ring-[1px] ring-zinc-300 dark:ring-zinc-700"
