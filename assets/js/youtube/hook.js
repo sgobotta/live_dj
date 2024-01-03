@@ -1,6 +1,11 @@
 import initPlayer from './player'
 import { secondsToTime } from '../lib/date-utils'
 
+function scrollToElement(elementId) {
+  const element = document.getElementById(elementId)
+  if (element) element.scrollIntoView()
+}
+
 const updateTimeDisplay = (timeTrackerElem, time) => {
   const videoTime = (time === 0 || time === undefined)
     ? '0:00'
@@ -262,7 +267,8 @@ export default {
           console.debug(`Unkown player state=${player.state}`)
           break
       }
-      
+
+      scrollToElement(`${player.media_id}-item`)
     })
   },
   player: null,
