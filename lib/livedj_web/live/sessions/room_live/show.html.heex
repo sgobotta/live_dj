@@ -30,11 +30,13 @@
         />
       </div>
     </div>
-    <%= live_render(
-      @socket,
-      LivedjWeb.Sessions.RoomLive.List,
-      id: @list_lv_id,
-      sticky: true
-    ) %>
+    <div class="border-t-[1px] border-zinc-200 dark:border-zinc-800 my-4 py-4 mx-2">
+      <%= live_render(
+        @socket,
+        LivedjWeb.Sessions.RoomLive.List,
+        id: @list_lv_id,
+        sticky: true
+      ) %>
+    </div>
   </div>
 <% end %>
