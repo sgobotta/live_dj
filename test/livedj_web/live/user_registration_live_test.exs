@@ -3,13 +3,14 @@ defmodule LivedjWeb.UserRegistrationLiveTest do
 
   import Phoenix.LiveViewTest
   import Livedj.AccountsFixtures
+  import LivedjWeb.Gettext
 
   describe "Registration page" do
     test "renders registration page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
-      assert html =~ "Register"
-      assert html =~ "Log in"
+      assert html =~ gettext("Register")
+      assert html =~ gettext("Log in")
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -32,7 +33,7 @@ defmodule LivedjWeb.UserRegistrationLiveTest do
           user: %{"email" => "with spaces", "password" => "too short"}
         )
 
-      assert result =~ gettext("Register")
+      assert result =~ "Register"
       assert result =~ dgettext("errors", "must have the @ sign and no spaces")
 
       assert result =~
@@ -63,8 +64,8 @@ defmodule LivedjWeb.UserRegistrationLiveTest do
       conn = get(conn, "/")
       response = html_response(conn, 200)
       assert response =~ email
-      assert response =~ "Settings"
-      assert response =~ "Log out"
+      assert response =~ gettext("Settings")
+      assert response =~ gettext("Log out")
     end
 
     test "renders errors for duplicated email", %{conn: conn} do
@@ -95,7 +96,7 @@ defmodule LivedjWeb.UserRegistrationLiveTest do
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert login_html =~ "Log in"
+      assert login_html =~ gettext("Log in")
     end
   end
 end

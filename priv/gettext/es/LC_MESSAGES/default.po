@@ -37,7 +37,7 @@ msgstr "Ingresa una url de youtube"
 msgid "Success!"
 msgstr "¡Exito!"
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:61
+#: lib/livedj_web/live/sessions/room_live/list.ex:75
 #, elixir-autogen, elixir-format
 msgid "Track queued to playlist"
 msgstr "La pista se agregó a la lista"
@@ -260,12 +260,12 @@ msgstr "Esta es una sala de la base de datos."
 msgid "Use this form to manage room records in your database."
 msgstr "Utiliza este formulario para administrar salas de tu base de datos."
 
-#: lib/livedj_web/components/list_component.ex:70
+#: lib/livedj_web/components/list_component.ex:96
 #, elixir-autogen, elixir-format
 msgid "Remove '%{title}'?"
 msgstr "¿Eliminar '%{title}'?"
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:74
+#: lib/livedj_web/controllers/page_html/home.html.heex:76
 #, elixir-autogen, elixir-format
 msgid "Rooms"
 msgstr "Salas"
@@ -319,7 +319,7 @@ msgstr "Crea tu propia sala o unite a alguna ya existente, agregá videos de you
 msgid "Share and listen to youtube videos in real time with others"
 msgstr "Compartí y escuchá videos en tiempo real con otrxs"
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:92
+#: lib/livedj_web/controllers/page_html/home.html.heex:94
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr "Código fuente"

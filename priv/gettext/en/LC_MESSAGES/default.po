@@ -37,7 +37,7 @@ msgstr ""
 msgid "Success!"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:61
+#: lib/livedj_web/live/sessions/room_live/list.ex:75
 #, elixir-autogen, elixir-format
 msgid "Track queued to playlist"
 msgstr ""
@@ -260,12 +260,12 @@ msgstr ""
 msgid "Use this form to manage room records in your database."
 msgstr ""
 
-#: lib/livedj_web/components/list_component.ex:70
+#: lib/livedj_web/components/list_component.ex:96
 #, elixir-autogen, elixir-format
 msgid "Remove '%{title}'?"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:74
+#: lib/livedj_web/controllers/page_html/home.html.heex:76
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Rooms"
 msgstr ""
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Share and listen to youtube videos in real time with others"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:92
+#: lib/livedj_web/controllers/page_html/home.html.heex:94
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr ""
