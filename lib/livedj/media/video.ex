@@ -14,6 +14,7 @@ defmodule Livedj.Media.Video do
     field :published_at, :naive_datetime
     field :thumbnail_url, :string
     field :title, :string
+    field :channel, :string
 
     timestamps()
   end
@@ -22,6 +23,7 @@ defmodule Livedj.Media.Video do
   def changeset(video, attrs) do
     video
     |> cast(attrs, [
+      :channel,
       :title,
       :thumbnail_url,
       :external_id,
@@ -29,6 +31,7 @@ defmodule Livedj.Media.Video do
       :published_at
     ])
     |> validate_required([
+      :channel,
       :title,
       :thumbnail_url,
       :external_id,
@@ -43,6 +46,7 @@ defmodule Livedj.Media.Video do
   @spec from_struct(t()) :: map()
   def from_struct(%__MODULE__{
         id: id,
+        channel: channel,
         etag: etag,
         external_id: external_id,
         published_at: published_at,
@@ -53,6 +57,7 @@ defmodule Livedj.Media.Video do
       }),
       do: %{
         id: id,
+        channel: channel,
         etag: etag,
         external_id: external_id,
         published_at: published_at,
@@ -63,25 +68,13 @@ defmodule Livedj.Media.Video do
       }
 
   @spec from_hset(map()) :: t()
-  def from_hset(%{
-        "id" => id,
-        "etag" => etag,
-        "external_id" => external_id,
-        "published_at" => published_at,
-        "thumbnail_url" => thumbnail_url,
-        "title" => title,
-        "inserted_at" => inserted_at,
-        "updated_at" => updated_at
-      }) do
-    %__MODULE__{
-      id: id,
-      etag: etag,
-      external_id: external_id,
-      published_at: published_at,
-      thumbnail_url: thumbnail_url,
-      title: title,
-      inserted_at: inserted_at,
-      updated_at: updated_at
-    }
-  end
+  def from_hset(hset),
+    do:
+      Enum.reduce(hset, %__MODULE__{}, fn {k, v}, acc ->
+        key = String.to_atom(k)
+        Map.put(acc, key, parse_hset_value(key, v))
+      end)
+
+  @spec parse_hset_value(atom(), any()) :: any()
+  defp parse_hset_value(_key, value), do: value
 end

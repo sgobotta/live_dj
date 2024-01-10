@@ -27,7 +27,8 @@ defmodule Livedj.Media do
            external_id: media["id"],
            published_at: media["snippet"]["publishedAt"],
            thumbnail_url: media["snippet"]["thumbnails"]["default"]["url"],
-           title: media["snippet"]["title"]
+           title: media["snippet"]["title"],
+           channel: media["snippet"]["channelTitle"]
          }}
     end
   end

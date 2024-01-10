@@ -1,8 +1,23 @@
 defmodule Livedj.Sessions.Player do
   @moduledoc false
 
-  @derive {Jason.Encoder, only: [:id, :state, :media_id, :current_time]}
-  defstruct id: nil, state: nil, media_id: nil, current_time: 0
+  @derive {Jason.Encoder,
+           only: [
+             :id,
+             :state,
+             :media_id,
+             :media_thumbnail_url,
+             :current_time,
+             :title,
+             :channel
+           ]}
+  defstruct id: nil,
+            state: nil,
+            media_id: nil,
+            media_thumbnail_url: nil,
+            current_time: 0,
+            title: nil,
+            channel: nil
 
   @key_prefix "player"
 
@@ -23,7 +38,10 @@ defmodule Livedj.Sessions.Player do
       id: id,
       state: @idle_state,
       media_id: nil,
-      current_time: 0
+      media_thumbnail_url: nil,
+      current_time: 0,
+      title: nil,
+      channel: nil
     }
 
   @doc """
@@ -77,7 +95,16 @@ defmodule Livedj.Sessions.Player do
   @spec load_media(Ecto.UUID.t(), Livedj.Media.Video.t(), player_opts()) ::
           {:ok, t()} | {:error, :player_load_media_error | :player_not_found}
   def load_media(room_id, media, opts) do
-    params = maybe_merge_opts(%{media_id: media.external_id}, opts)
+    params =
+      maybe_merge_opts(
+        %{
+          media_id: media.external_id,
+          media_thumbnail_url: media.thumbnail_url,
+          title: media.title,
+          channel: media.channel
+        },
+        opts
+      )
 
     case set(room_id, params) do
       {:ok, _changes} ->
@@ -162,32 +189,35 @@ defmodule Livedj.Sessions.Player do
         id: id,
         state: state,
         media_id: media_id,
-        current_time: current_time
+        media_thumbnail_url: media_thumbnail_url,
+        current_time: current_time,
+        title: title,
+        channel: channel
       }),
       do: %{
         id: id,
         state: state,
         media_id: media_id,
-        current_time: current_time
+        media_thumbnail_url: media_thumbnail_url,
+        current_time: current_time,
+        title: title,
+        channel: channel
       }
 
   @doc """
   Given a Redis hash, returns a Player representation.
   """
   @spec from_hset(map()) :: t()
-  def from_hset(%{
-        "id" => id,
-        "state" => state,
-        "media_id" => media_id,
-        "current_time" => current_time
-      }) do
-    %__MODULE__{
-      id: id,
-      state: String.to_existing_atom(state),
-      media_id: media_id,
-      current_time: current_time
-    }
-  end
+  def from_hset(hset),
+    do:
+      Enum.reduce(hset, %__MODULE__{}, fn {k, v}, acc ->
+        key = String.to_atom(k)
+        Map.put(acc, key, parse_hset_value(key, v))
+      end)
+
+  @spec parse_hset_value(atom(), any()) :: any()
+  defp parse_hset_value(:state, value), do: String.to_atom(value)
+  defp parse_hset_value(_key, value), do: value
 
   @spec maybe_merge_opts(map(), player_opts()) :: map()
   defp maybe_merge_opts(params, opts) do

@@ -8,6 +8,7 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
   import Livedj.MediaFixtures
 
   @create_attrs %{
+    channel: "some channel",
     etag: "some etag",
     external_id: "some external_id",
     published_at: "2023-09-02T23:08:00",
@@ -15,6 +16,7 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
     title: "some title"
   }
   @update_attrs %{
+    channel: "some updated channel",
     etag: "some updated etag",
     external_id: "some updated external_id",
     published_at: "2023-09-03T23:08:00",
@@ -22,6 +24,7 @@ defmodule LivedjWeb.Admin.Media.VideoLiveTest do
     title: "some updated title"
   }
   @invalid_attrs %{
+    channel: nil,
     etag: nil,
     external_id: nil,
     published_at: nil,

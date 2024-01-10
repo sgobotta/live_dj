@@ -29,6 +29,7 @@ defmodule Livedj.MediaTest do
 
     test "create_video/1 with valid data creates a video" do
       valid_attrs = %{
+        channel: "some channel",
         etag: "some etag",
         external_id: "some external_id",
         published_at: ~N[2023-09-02 23:08:00],
@@ -37,6 +38,7 @@ defmodule Livedj.MediaTest do
       }
 
       assert {:ok, %Video{} = video} = Media.create_video(valid_attrs)
+      assert video.channel == "some channel"
       assert video.etag == "some etag"
       assert video.external_id == "some external_id"
       assert video.published_at == ~N[2023-09-02 23:08:00]

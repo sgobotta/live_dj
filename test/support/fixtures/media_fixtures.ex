@@ -13,6 +13,7 @@ defmodule Livedj.MediaFixtures do
     {:ok, video} =
       attrs
       |> Enum.into(%{
+        channel: "some channel",
         etag: "some etag",
         external_id: unique_external_id(),
         published_at: ~N[2023-09-02 23:08:00],
