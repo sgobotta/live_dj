@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
+    <.live_title suffix=" · Liveapps">
       <%= assigns[:page_title] || "Livedj" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
@@ -27,7 +27,7 @@
             href={~p"/users/settings"}
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Settings
+            <%= gettext("Settings") %>
           </.link>
         </li>
         <li>
@@ -36,7 +36,7 @@
             method="delete"
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Log out
+            <%= gettext("Log out") %>
           </.link>
         </li>
       <% else %>
@@ -45,7 +45,7 @@
             href={~p"/users/register"}
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Register
+            <%= gettext("Register") %>
           </.link>
         </li>
         <li>
@@ -53,7 +53,7 @@
             href={~p"/users/log_in"}
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Log in
+            <%= gettext("Log in") %>
           </.link>
         </li>
       <% end %>

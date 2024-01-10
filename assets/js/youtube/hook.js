@@ -1,9 +1,14 @@
 import initPlayer from './player'
 import { secondsToTime } from '../lib/date-utils'
 
+function scrollToElement(elementId) {
+  const element = document.getElementById(elementId)
+  if (element) element.scrollIntoView()
+}
+
 const updateTimeDisplay = (timeTrackerElem, time) => {
   const videoTime = (time === 0 || time === undefined)
-    ? '-'
+    ? '0:00'
     : secondsToTime(parseInt(time))
   timeTrackerElem.innerText = videoTime
 }
@@ -243,11 +248,27 @@ export default {
         player.current_time,
         "large"
       )
-      if (player.media_id) {
-        await this.player.pauseVideo()
-      } else {
-        await this.player.stopVideo()
+      console.log("player", player)
+
+      switch (player.state) {
+        case "playing":
+          await this.player.playVideo()
+          break
+
+        case "paused":
+          await this.player.pauseVideo()
+          break
+
+        case "idle":
+          await this.player.stopVideo()
+          break
+
+        default:
+          console.debug(`Unkown player state=${player.state}`)
+          break
       }
+
+      scrollToElement(`${player.media_id}-item`)
     })
   },
   player: null,
