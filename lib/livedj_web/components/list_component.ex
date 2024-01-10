@@ -60,12 +60,16 @@ defmodule LivedjWeb.ListComponent do
               </div>
               <button
                 type="button"
-                class="w-10 -mt-1 flex-none"
+                class="
+                  transition-all duration-300
+                  w-6 h-6 rounded mr-1 flex-none hover:bg-gray-300 hover:dark:bg-gray-700
+                  text-zinc-900 dark:text-zinc-100 hover:text-red-500 hover:dark:text-red-500
+                "
                 phx-click="remove_track"
                 phx-value-track_id={item.external_id}
                 data-confirm={gettext("Remove '%{title}'?", title: item.title)}
               >
-                <.icon name="hero-x-mark" class="text-zinc-900 dark:text-zinc-100" />
+                <.icon name="hero-x-mark" class="" />
               </button>
             </div>
           </div>
