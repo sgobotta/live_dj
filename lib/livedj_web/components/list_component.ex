@@ -2,6 +2,8 @@ defmodule LivedjWeb.ListComponent do
   @moduledoc false
   use LivedjWeb, :live_component
 
+  @on_play_click "on_play_click"
+
   def render(assigns) do
     ~H"""
     <div class="bg-transparent py-1 rounded-lg pr-1">
@@ -24,12 +26,40 @@ defmodule LivedjWeb.ListComponent do
               hover:cursor-grab
               drag-item:focus-within:ring-2 drag-item:focus-within:ring-offset-0
               drag-ghost:bg-zinc-200 drag-ghost:dark:bg-zinc-800 drag-ghost:border-0 drag-ghost:ring-0 drag-ghost:cursor-grabbing
+              group
             "}
           >
             <div class="
               relative flex items-center h-10 px-1 h-10
               drag-ghost:opacity-0 gap-y-2 gap-x-2
             ">
+              <div class="relative">
+                <img
+                  class={"
+                    inline-block h-8 w-8 rounded-lg ring-[1px] ring-zinc-300 dark:ring-zinc-700
+                    #{if not current_media?(@current_media, item.external_id), do: "transition duration-100 opacity-100 group-hover:opacity-0"}
+                  "}
+                  src={item.thumbnail_url}
+                  alt={item.title}
+                />
+                <%= if not current_media?(@current_media, item.external_id) do %>
+                  <div
+                    class="
+                      absolute bottom-0 left-0
+                      transition duration-300 opacity-0 group-hover:opacity-100
+                      w-8 h-8 rounded-lg
+                      bg-transparent
+                      cursor-pointer
+                      text-zinc-900 dark:text-zinc-100
+                      hover:text-green-500 dark:hover:text-green-500 hover:scale-110 active:scale-[0.95] active:text-green-300 dark:active:text-green-700
+                    "
+                    phx-click={on_play_click_event()}
+                    phx-value-media_id={item.external_id}
+                  >
+                    <.icon name="hero-play-circle-solid" class="h-8 w-8" />
+                  </div>
+                <% end %>
+              </div>
               <div class="absolute top-6 -left-1 h-4 w-4 rounded-full">
                 <p class={"
                   rounded-full
@@ -45,11 +75,6 @@ defmodule LivedjWeb.ListComponent do
                   <%= index + 1 %>
                 </p>
               </div>
-              <img
-                class="inline-block h-8 w-8 rounded-lg ring-[1px] ring-zinc-300 dark:ring-zinc-700"
-                src={item.thumbnail_url}
-                alt={item.title}
-              />
               <div class="
                 flex-auto block
                 text-xs leading-6 font-semibold
@@ -93,6 +118,9 @@ defmodule LivedjWeb.ListComponent do
     socket.assigns.on_drag_end.(socket, self(), params)
   end
 
+  defp current_media?(media_id, media_id), do: true
+  defp current_media?(_media_id, _another_media_id), do: false
+
   defp classes_by_media(
          current_media_id,
          current_media_id,
@@ -108,4 +136,6 @@ defmodule LivedjWeb.ListComponent do
          _current_media_classes
        ),
        do: default_classes
+
+  defp on_play_click_event, do: @on_play_click
 end

@@ -5,6 +5,8 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   alias Livedj.Sessions.Exceptions.SessionRoomError
   alias Livedj.Sessions.Room
 
+  @on_play_click "on_play_click"
+
   @impl true
   def mount(%{"id" => room_id}, _session, socket) do
     case connected?(socket) do
@@ -50,6 +52,21 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
     # and persist the data
 
     {:noreply, assign(socket, form: to_form(%{"url" => url}))}
+  end
+
+  def handle_event(@on_play_click, %{"media_id" => media_id}, socket) do
+    case Sessions.play_track(socket.assigns.room.id, media_id) do
+      :ok ->
+        {:noreply, socket}
+
+      :error ->
+        {:noreply,
+         socket
+         |> put_flash(
+           :warn,
+           dgettext("errors", "The selected track could not be played")
+         )}
+    end
   end
 
   def handle_event("add", %{"url" => url}, socket) do

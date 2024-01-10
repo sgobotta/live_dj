@@ -370,6 +370,21 @@ defmodule Livedj.Sessions do
     end
   end
 
+  @doc """
+  Given a room id and a media id loads the given track and broadcasts an update.
+  """
+  @spec play_track(Ecto.UUID.t(), String.t()) :: :ok | :error
+  def play_track(room_id, selected_media_id) do
+    with {:ok, media} <- Media.get_by_external_id(selected_media_id),
+         {:ok, %Player{} = player} <-
+           Player.load_media(room_id, media, seek_to: 0) do
+      :ok = Channels.broadcast_player_load_media!(room_id, player)
+    else
+      _error ->
+        :error
+    end
+  end
+
   defp get_player_child_pid!(room_id),
     do: PlayerSupervisor.get_child_pid!(room_id)
 

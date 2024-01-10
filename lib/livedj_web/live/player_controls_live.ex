@@ -95,7 +95,7 @@ defmodule LivedjWeb.PlayerControlsLive do
               id="seek-bar-container"
               phx-update="ignore"
             >
-              <div class="flex items-center justify-center h-12 w-full text-[0.525rem] text-zinc-600 dark:text-zinc-400 cursor-default">
+              <div class="flex items-center justify-center h-12 w-full text-[0.725rem] text-zinc-600 dark:text-zinc-400 cursor-default">
                 <div class="inline-flex items-center justify-center pl-2 w-10">
                   <span id={@start_time_tracker_id}>
                     <%= render_default_seek_bar_value() %>
