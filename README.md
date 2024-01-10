@@ -6,7 +6,8 @@
     target="_blank" rel="noopener noreferrer"
   >
     <img
-      width="150px" src="logo.svg"
+      style="background-color: white; border-radius: 5%; padding: 0.5rem"
+      width="150px" src="priv/static/svg/generic/live-dj-iso-black.svg"
       alt="Livedj logo"
     />
   </a>
