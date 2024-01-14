@@ -201,14 +201,16 @@ defmodule Livedj.Sessions.Channels do
   """
   @spec broadcast_player_play!(binary(), Livedj.Sessions.Player.t()) :: :ok
   def broadcast_player_play!(room_id, %Livedj.Sessions.Player{} = player),
-    do: broadcast!(player_topic(room_id), {player_play_event(), player})
+    do:
+      broadcast!(player_topic(room_id), {player_play_event(), room_id, player})
 
   @doc """
   Broadcasts a #{@player_pause} message to the player topic.
   """
   @spec broadcast_player_pause!(binary(), Livedj.Sessions.Player.t()) :: :ok
   def broadcast_player_pause!(room_id, %Livedj.Sessions.Player{} = player),
-    do: broadcast!(player_topic(room_id), {player_pause_event(), player})
+    do:
+      broadcast!(player_topic(room_id), {player_pause_event(), room_id, player})
 
   # ----------------------------------------------------------------------------
   # Playlist brodcasting

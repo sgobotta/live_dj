@@ -213,11 +213,11 @@ defmodule LivedjWeb.PlayerControlsLive do
     {:noreply, assign_player(socket, player)}
   end
 
-  def handle_info({:player_play, %Player{} = player}, socket) do
+  def handle_info({:player_play, _room_id, %Player{} = player}, socket) do
     {:noreply, assign_player(socket, player)}
   end
 
-  def handle_info({:player_pause, %Player{} = player}, socket) do
+  def handle_info({:player_pause, _room_id, %Player{} = player}, socket) do
     {:noreply, assign_player(socket, player)}
   end
 

@@ -96,10 +96,10 @@ defmodule LivedjWeb.CustomComponents do
   """
   def room_grid(assigns) do
     assigns =
-      with %{modules: %Phoenix.LiveView.LiveStream{}} <- assigns do
+      with %{modules: _modules} <- assigns do
         assign(
           assigns,
-          module_id: assigns.module_id || fn {id, _item} -> id end
+          module_id: assigns.module_id || fn %{id: id} -> id end
         )
       end
 
@@ -118,8 +118,9 @@ defmodule LivedjWeb.CustomComponents do
         class="
           group
           h-52 w-40 rounded-lg
-          bg-zinc-50 hover:bg-zinc-200 border-[1px] border-zinc-200 dark:border-0
-          dark:bg-zinc-800 dark:hover:bg-zinc-700
+          transition duration-300
+          bg-zinc-50 hover:brightness-90 border-[1px] border-zinc-200 dark:border-0
+          dark:bg-zinc-800 dark:hover:bg-zinc-800 dark:hover:brightness-110
         "
       >
         <div

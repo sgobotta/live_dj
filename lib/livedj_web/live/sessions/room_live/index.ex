@@ -9,7 +9,18 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   def mount(_params, _session, socket) do
     case connected?(socket) do
       true ->
-        {:ok, stream(socket, :rooms, Sessions.list_rooms())}
+        rooms = Sessions.list_rooms()
+
+        for %Room{id: room_id} <- rooms do
+          {:ok, :joined} = Sessions.join_player(room_id)
+        end
+
+        rooms_players =
+          Enum.map(rooms, fn %Room{id: room_id} = room ->
+            %{id: room_id, room: room, player: nil}
+          end)
+
+        {:ok, assign(socket, :rooms_players, rooms_players)}
 
       false ->
         {:ok, socket}
@@ -23,10 +34,51 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
 
   @impl true
   def handle_info(
-        {LivedjWeb.Sessions.RoomLive.FormComponent, {:saved, room}},
+        {LivedjWeb.Sessions.RoomLive.FormComponent,
+         {:saved, %Room{id: room_id} = room}},
         socket
       ) do
-    {:noreply, stream_insert(socket, :rooms, room)}
+    {:ok, :joined} = Sessions.join_player(room_id)
+
+    {:noreply,
+     assign(
+       socket,
+       :rooms_players,
+       socket.assigns.rooms_players ++ [%{id: room_id, room: room, player: nil}]
+     )}
+  end
+
+  # ----------------------------------------------------------------------------
+  # Server side Player event handling
+  #
+
+  def handle_info(
+        {:player_joined, room_id, %{player: %Sessions.Player{} = player}},
+        socket
+      ) do
+    {:noreply, assign_player_by_room_id(socket, room_id, player)}
+  end
+
+  def handle_info(
+        {:player_state_changed, room_id, %Sessions.Player{} = player},
+        socket
+      ) do
+    {:noreply, assign_player_by_room_id(socket, room_id, player)}
+  end
+
+  def handle_info(
+        {:player_load_media, room_id, %Sessions.Player{} = player},
+        socket
+      ) do
+    {:noreply, assign_player_by_room_id(socket, room_id, player)}
+  end
+
+  def handle_info({:player_play, room_id, %Sessions.Player{} = player}, socket) do
+    {:noreply, assign_player_by_room_id(socket, room_id, player)}
+  end
+
+  def handle_info({:player_pause, room_id, %Sessions.Player{} = player}, socket) do
+    {:noreply, assign_player_by_room_id(socket, room_id, player)}
   end
 
   defp apply_action(socket, :index, _params) do
@@ -39,5 +91,19 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
     socket
     |> assign(:page_title, gettext("New Room"))
     |> assign(:room, %Room{})
+  end
+
+  defp assign_player_by_room_id(socket, room_id, player) do
+    rooms_players =
+      Enum.map(socket.assigns.rooms_players, fn
+        %{id: ^room_id, room: %Room{id: ^room_id}, player: _maybe_player} =
+            room_player ->
+          Map.put(room_player, :player, player)
+
+        room_player ->
+          room_player
+      end)
+
+    assign(socket, :rooms_players, rooms_players)
   end
 end
