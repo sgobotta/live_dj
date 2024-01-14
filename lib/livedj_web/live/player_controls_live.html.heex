@@ -8,9 +8,10 @@
         h-26
       "
     >
+      <%!-- Player Details --%>
       <div class="grid grid-cols-12 grid-rows-2 py-1 text-sm justify-center">
         <div class="col-span-3 row-span-2 self-center pl-2">
-          <div class="flex">
+          <div class="flex items-center h-full">
             <div class="
               basis-28 sm:basis-28 md:basis-28 lg:basis-24 xl:basis-24 2xl:basis-24
               h-16 w-16 ring-0 ring-white m-1">
@@ -47,6 +48,8 @@
             </div>
           </div>
         </div>
+
+        <%!-- Playback Controls --%>
         <div class="col-span-6 row-span-1 w-full flex justify-center items-center">
           <div class="flex items-center gap-4 h-10">
             <a phx-click="previous" class="cursor-default">
@@ -91,6 +94,33 @@
             </a>
           </div>
         </div>
+
+        <%!-- Actions --%>
+        <div class="
+          col-span-3 row-span-2 self-center pl-2 pr-3 w-full
+          flex justify-end gap-3 items-center
+        ">
+          <%!-- Volume --%>
+          <.live_component
+            id={@volume_control_id}
+            module={LivedjWeb.Components.PlayerControls.VolumeControlComponent}
+          />
+          <div>
+            <%= PhoenixInlineSvg.Helpers.svg_image(
+              LivedjWeb.Endpoint,
+              "fullscreen",
+              "icons/misc",
+              class: "
+                  h-4 w-4 stroke-2 cursor-pointer
+                  fill-zinc-800 hover:fill-zinc-500 active:fill-zinc-700 focus:fill-zinc-700
+                  dark:fill-zinc-400 dark:hover:fill-zinc-50 dark:active:fill-zinc-300 dark:focus:fill-zinc-300
+                  scale-100 hover:scale-[1.1] focus:scale-100 active:scale-100
+                "
+            ) %>
+          </div>
+        </div>
+
+        <%!-- Seek bar --%>
         <div
           class="col-span-6 row-span-1 w-full flex justify-center"
           id="seek-bar-container"
@@ -120,7 +150,6 @@
             </div>
           </div>
         </div>
-        <div class="col-span-3 row-span-2"></div>
       </div>
     </div>
   <% end %>
