@@ -39,6 +39,11 @@ const udpateTimeDisplays = (
 export default {
   backdrop_id: null,
   endTimeTrackerId: null,
+  handleCallbackEvent: async (callbackEvent, args = {}) => {
+    if (callbackEvent) {
+      await this.pushEventTo(this.el, callbackEvent, args)
+    }
+  },
   mounted() {
     /**
      * on_container_mounted
@@ -269,6 +274,48 @@ export default {
       }
 
       scrollToElement(`${player.media_id}-item`)
+    })
+
+    /**
+     * change_volume
+     * 
+     * Received when the player should change the volume level
+     */
+    this.handleEvent('change_volume', async ({
+      volume_level: volumeLevel,
+      callback_event: callbackEvent = null
+    }) => {
+      console.debug('[Player :: change_volume', volumeLevel)
+      this.player.unMute()
+      this.player.setVolume(volumeLevel)
+
+      await this.handleCallbackEvent(callbackEvent)
+    })
+
+    /**
+     * mute
+     * 
+     * Received when the player should mute
+     */
+    this.handleEvent('mute', async ({callback_event: callbackEvent = null}) => {
+      console.debug('[Player :: mute')
+      this.player.mute()
+
+      await this.handleCallbackEvent(callbackEvent)
+    })
+
+    /**
+     * unmute
+     * 
+     * Received when the player should unmute
+     */
+    this.handleEvent('unmute', async ({
+      callback_event: callbackEvent = null
+    }) => {
+      console.debug('[Player :: unmute')
+      this.player.unMute()
+
+      await this.handleCallbackEvent(callbackEvent)
     })
   },
   player: null,
