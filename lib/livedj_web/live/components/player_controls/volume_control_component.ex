@@ -6,16 +6,19 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="hidden sm:inline-flex w-24">
-      <div class="m-2 ">
+    <div class="
+      hidden sm:inline-flex w-24
+      fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
+      dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
+    ">
+      <div class="m-2" phx-click="on_volume_click" phx-target={@myself}>
         <%= PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,
-          "speaker-4",
+          get_volume_icon(@muted?, @level),
           "icons/volume",
           class: "
-              h-5 w-5 stroke-2
-              fill-zinc-700 hover:fill-zinc-500 active:fill-zinc-700 focus:fill-zinc-700
-              dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:active:fill-zinc-300 dark:focus:fill-zinc-300
+              h-5 w-5
+
             "
         ) %>
       </div>
@@ -32,13 +35,13 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
             field={f[:volume]}
             class="seek-bar w-full !m-0 shadow-none !bg-transparent"
             id="volume-slider"
-            value={100}
+            value={if @muted?, do: 0, else: @level}
             type="range"
             min="0"
             max="100"
             step="1"
             phx-debounce={500}
-            phx-value-volume={get_volume(@player)}
+            phx-value-key="volume"
           />
         </.form>
       </div>
@@ -61,11 +64,46 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
   end
 
   @impl true
-  def handle_event("on_volume_change", %{"volume" => _volume}, socket) do
-    {:noreply, socket}
+  def handle_event(
+        "on_volume_click",
+        _params,
+        %{assigns: %{muted?: muted?}} = socket
+      ) do
+    {:noreply,
+     socket
+     |> assign(muted?: !muted?)
+     |> push_event(if(muted?, do: "unmute", else: "mute"), %{})}
   end
 
-  defp get_volume(_form) do
-    100
+  @impl true
+  def handle_event("on_volume_change", %{"volume" => volume}, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       level: String.to_integer(volume),
+       muted?: false
+     )
+     |> push_event("change_volume", %{volume_level: volume})}
   end
+
+  defp get_volume_icon(true, _volume_level) do
+    "speaker-0"
+  end
+
+  defp get_volume_icon(_muted?, volume_level) do
+    get_volume_icon_by_volume_level(volume_level)
+  end
+
+  defp get_volume_icon_by_volume_level(0), do: "speaker-0"
+
+  defp get_volume_icon_by_volume_level(volume) when volume <= 10,
+    do: "speaker-1"
+
+  defp get_volume_icon_by_volume_level(volume) when volume <= 30,
+    do: "speaker-2"
+
+  defp get_volume_icon_by_volume_level(volume) when volume <= 70,
+    do: "speaker-3"
+
+  defp get_volume_icon_by_volume_level(_volume), do: "speaker-4"
 end

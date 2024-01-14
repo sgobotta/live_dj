@@ -104,6 +104,8 @@
           <.live_component
             id={@volume_control_id}
             module={LivedjWeb.Components.PlayerControls.VolumeControlComponent}
+            level={100}
+            muted?={false}
           />
           <div>
             <%= PhoenixInlineSvg.Helpers.svg_image(
@@ -112,8 +114,8 @@
               "icons/misc",
               class: "
                   h-4 w-4 stroke-2 cursor-pointer
-                  fill-zinc-800 hover:fill-zinc-500 active:fill-zinc-700 focus:fill-zinc-700
-                  dark:fill-zinc-400 dark:hover:fill-zinc-50 dark:active:fill-zinc-300 dark:focus:fill-zinc-300
+                  fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
+                  dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
                   scale-100 hover:scale-[1.1] focus:scale-100 active:scale-100
                 "
             ) %>
