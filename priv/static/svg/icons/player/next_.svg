@@ -18,7 +18,7 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs /><sodipodi:namedview
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -27,22 +27,22 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="960"
+   inkscape:window-width="1258"
    inkscape:window-height="1009"
-      showgrid="false"
-   inkscape:zoom="5.6190476"
-   inkscape:cx="13.258475"
-   inkscape:cy="48.762712"
+   showgrid="false"
+   inkscape:zoom="5.6190475"
+   inkscape:cx="7.3855934"
+   inkscape:cy="61.398306"
    inkscape:window-x="1920"
    inkscape:window-y="42"
    inkscape:window-maximized="0"
    inkscape:current-layer="Capa_1"
    inkscape:pagecheckerboard="0" />
 <path
-   d="M 47.952381,6 C 47.268953,6 44.714285,6.5534286 44.714285,7.2380952 V 29.641429 L 14.750857,6.2191429 C 14.372,5.9579048 13.879238,5.9294286 13.471905,6.1411429 13.064571,6.3553334 12.809524,6.7775238 12.809524,7.2380952 V 56.761904 c 0,0.460572 0.255047,0.882763 0.662381,1.096953 C 13.652667,57.952952 13.850762,58 14.047619,58 14.294,58 14.539142,57.92571 14.750857,57.780857 L 44.714285,34.358571 v 22.403333 c 0,0.684667 2.554668,1.238096 3.238095,1.238096 0.683429,0 3.238095,-0.553429 3.238095,-1.238096 V 7.2380952 C 51.190476,6.5534286 48.635809,6 47.952381,6 Z"
+   d="m 13.471906,57.858858 c 0.407331,0.211714 0.898857,0.183238 1.278952,-0.078 L 42.714285,34.358571 v 22.403334 c 0,0.684667 3.554288,1.238095 4.237717,1.238095 0.683429,0 4.238475,-0.553428 4.238475,-1.238095 V 7.2380967 c 0,-0.684666 -3.555046,-1.238096 -4.238475,-1.238096 -0.683429,0 -4.298597,0.556142 -4.237717,1.2380961 V 29.64143 L 14.75086,6.2179047 c -0.211717,-0.143617 -0.45686,-0.217904 -0.70324,-0.217904 -0.196857,0 -0.394951,0.04704 -0.575714,0.141143 -0.407333,0.21419 -0.662382,0.636381 -0.662382,1.096953 V 56.761905 c 0,0.460572 0.255049,0.882762 0.662382,1.096953 z"
       inkscape:connector-curvature="0"
    style="stroke-width:1.2381"
-   sodipodi:nodetypes="sscccsscsccssscs" />
+   sodipodi:nodetypes="cccssssssccscssc" />
 <g
       transform="translate(0,22)">
 </g>

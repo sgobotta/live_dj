@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    version="1.1"
-   id="Capa_1"
+   id="livedj-back-ico"
    x="0px"
    y="0px"
    viewBox="0 0 64 64"
@@ -16,11 +16,10 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata
-   id="metadata39"><rdf:RDF><cc:Work
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><metadata><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
-   id="defs37" /><sodipodi:namedview
+   /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -31,8 +30,7 @@
    inkscape:pageshadow="2"
    inkscape:window-width="1258"
    inkscape:window-height="1009"
-   id="namedview35"
-   showgrid="false"
+      showgrid="false"
    inkscape:zoom="11.238095"
    inkscape:cx="35.28178"
    inkscape:cy="36.927967"
@@ -43,68 +41,52 @@
    inkscape:pagecheckerboard="0" />
 <path
    d="m 50.528095,6.1411426 c -0.407331,-0.2117138 -0.898857,-0.1832376 -1.278952,0.078 L 21.285716,29.641429 V 7.238095 C 21.285716,6.5534288 17.731428,6 17.048,6 16.36457,6 12.809524,6.5534288 12.809524,7.238095 V 56.761904 C 12.809524,57.44657 16.36457,58 17.048,58 c 0.683429,0 4.298597,-0.556142 4.237717,-1.238096 V 34.35857 L 49.249142,57.782096 C 49.460858,57.925713 49.706001,58 49.952381,58 c 0.196857,0 0.394951,-0.04704 0.575714,-0.141143 0.407333,-0.21419 0.662382,-0.636381 0.662382,-1.096953 V 7.238095 c 0,-0.4605712 -0.255049,-0.8827614 -0.662382,-1.0969524 z"
-   id="path2"
-   inkscape:connector-curvature="0"
+      inkscape:connector-curvature="0"
    style="stroke-width:1.2381"
    sodipodi:nodetypes="cccssssssccscssc" />
 <g
-   id="g4"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g6"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g8"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g10"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g12"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g14"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g16"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g18"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g20"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g22"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g24"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g26"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g28"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g30"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 <g
-   id="g32"
-   transform="translate(0,22)">
+      transform="translate(0,22)">
 </g>
 </svg>
