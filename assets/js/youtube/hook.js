@@ -117,6 +117,11 @@ export default {
               )
             }, 1000)
             hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
+            
+            const backdrop = document.getElementById(this.backdropId)
+            backdrop.classList.add('opacity-0')
+            backdrop.classList.remove('opacity-50')
+
             break
           case YT.PlayerState.PAUSED:
             console.debug("[Player State :: PAUSED")
@@ -316,6 +321,29 @@ export default {
       this.player.unMute()
 
       await this.handleCallbackEvent(callbackEvent)
+    })
+
+    /**
+     * fullscreen
+     *
+     * Switches to fullscreen mode
+     */
+    this.handleEvent('fullscreen', () => {
+      console.debug('[Player :: fullscreen')
+      const videoIframe = this.player.getIframe()
+
+      console.log("iframe", videoIframe)
+
+      const requestFullScreen =
+        videoIframe.requestFullScreen
+        || videoIframe.mozRequestFullScreen
+        || videoIframe.webkitRequestFullScreen
+
+      console.log(requestFullScreen)
+
+      if (requestFullScreen) {
+        requestFullScreen.bind(videoIframe)();
+      }
     })
   },
   player: null,

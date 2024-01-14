@@ -20,6 +20,7 @@ defmodule LivedjWeb.PlayerControlsLive do
            end_time_tracker_id: "player-controls-end-time-tracker",
            time_slider_id: "player-controls-time-slider",
            volume_control_id: "volume-control-#{room_id}",
+           fullscreen_control_id: "fullscreen-control-#{room_id}",
            layout: false,
            player: nil,
            room: room
