@@ -24,13 +24,13 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
           :let={f}
           for={@player}
           id="volume-controls-slider"
-          class="slider-form"
+          class=""
           phx-target={@myself}
           phx-change="on_volume_change"
         >
           <.input
             field={f[:volume]}
-            class="seek-bar w-full !m-0 !bg-transparent"
+            class="seek-bar w-full !m-0 shadow-none !bg-transparent"
             id="volume-slider"
             value={100}
             type="range"
