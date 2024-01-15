@@ -167,7 +167,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_info(
-        {:player_play, %Sessions.Player{}},
+        {:player_play, _room_id, %Sessions.Player{}},
         socket
       ) do
     # Broadcasted request to send a play signal to the player
@@ -177,7 +177,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
      })}
   end
 
-  def handle_info({:player_pause, %Sessions.Player{}}, socket) do
+  def handle_info({:player_pause, _room_id, %Sessions.Player{}}, socket) do
     # Broadcasted request to send a pause signal to the player
     {:noreply,
      push_event(socket, "pause_video", %{callback_event: "on_player_paused"})}

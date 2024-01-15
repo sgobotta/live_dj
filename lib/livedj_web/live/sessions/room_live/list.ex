@@ -211,12 +211,12 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   end
 
   @impl true
-  def handle_info({:player_play, _player}, socket) do
+  def handle_info({:player_play, _room_id, _player}, socket) do
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info({:player_pause, _player}, socket) do
+  def handle_info({:player_pause, _room_id, _player}, socket) do
     {:noreply, socket}
   end
 

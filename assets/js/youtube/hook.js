@@ -39,6 +39,11 @@ const udpateTimeDisplays = (
 export default {
   backdrop_id: null,
   endTimeTrackerId: null,
+  handleCallbackEvent: async (callbackEvent, args = {}) => {
+    if (callbackEvent) {
+      await this.pushEventTo(this.el, callbackEvent, args)
+    }
+  },
   mounted() {
     /**
      * on_container_mounted
@@ -112,6 +117,11 @@ export default {
               )
             }, 1000)
             hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
+            
+            const backdrop = document.getElementById(this.backdropId)
+            backdrop.classList.add('opacity-0')
+            backdrop.classList.remove('opacity-50')
+
             break
           case YT.PlayerState.PAUSED:
             console.debug("[Player State :: PAUSED")
@@ -269,6 +279,71 @@ export default {
       }
 
       scrollToElement(`${player.media_id}-item`)
+    })
+
+    /**
+     * change_volume
+     * 
+     * Received when the player should change the volume level
+     */
+    this.handleEvent('change_volume', async ({
+      volume_level: volumeLevel,
+      callback_event: callbackEvent = null
+    }) => {
+      console.debug('[Player :: change_volume', volumeLevel)
+      this.player.unMute()
+      this.player.setVolume(volumeLevel)
+
+      await this.handleCallbackEvent(callbackEvent)
+    })
+
+    /**
+     * mute
+     * 
+     * Received when the player should mute
+     */
+    this.handleEvent('mute', async ({callback_event: callbackEvent = null}) => {
+      console.debug('[Player :: mute')
+      this.player.mute()
+
+      await this.handleCallbackEvent(callbackEvent)
+    })
+
+    /**
+     * unmute
+     * 
+     * Received when the player should unmute
+     */
+    this.handleEvent('unmute', async ({
+      callback_event: callbackEvent = null
+    }) => {
+      console.debug('[Player :: unmute')
+      this.player.unMute()
+
+      await this.handleCallbackEvent(callbackEvent)
+    })
+
+    /**
+     * fullscreen
+     *
+     * Switches to fullscreen mode
+     */
+    this.handleEvent('fullscreen', () => {
+      console.debug('[Player :: fullscreen')
+      const videoIframe = this.player.getIframe()
+
+      console.log("iframe", videoIframe)
+
+      const requestFullScreen =
+        videoIframe.requestFullScreen
+        || videoIframe.mozRequestFullScreen
+        || videoIframe.webkitRequestFullScreen
+
+      console.log(requestFullScreen)
+
+      if (requestFullScreen) {
+        requestFullScreen.bind(videoIframe)();
+      }
     })
   },
   player: null,
