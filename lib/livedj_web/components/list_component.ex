@@ -86,6 +86,7 @@ defmodule LivedjWeb.ListComponent do
               <button
                 type="button"
                 class="
+                  cursor-default
                   transition-all duration-300
                   w-6 h-6 rounded mr-1 flex-none hover:bg-gray-300 hover:dark:bg-gray-700
                   text-zinc-900 dark:text-zinc-100 hover:text-red-500 hover:dark:text-red-500

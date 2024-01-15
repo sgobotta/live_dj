@@ -60,7 +60,7 @@ if (
   
       const sorter = new Sortable(this.el, {
         animation: 400,
-        delay: 600,
+        delay: 300,
         dragClass: "drag-item",
         forceFallback: true,
         ghostClass: "drag-ghost",
