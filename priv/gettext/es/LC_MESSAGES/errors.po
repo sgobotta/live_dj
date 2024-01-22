@@ -165,7 +165,8 @@ msgstr "Esperá mientras volvemos a estar en línea"
 msgid "The video is already added to the playlist"
 msgstr "El video ya está agregado en la lista"
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:83
+#: lib/livedj_web/live/sessions/room_live/list.ex:88
+#: lib/livedj_web/live/sessions/room_live/list.ex:278
 #, elixir-autogen, elixir-format
 msgid "The youtube url is not valid"
 msgstr "La url del video no es válida"
@@ -176,19 +177,19 @@ msgid "We can't find the internet"
 msgstr "No podemos conectarnos a internet"
 
 #: lib/livedj_web/components/core_components.ex:211
-#: lib/livedj_web/live/sessions/room_live/list.ex:45
+#: lib/livedj_web/live/sessions/room_live/list.ex:47
 #: lib/livedj_web/live/sessions/room_live/show.ex:48
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Algo salió mal!"
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:38
+#: lib/livedj_web/live/sessions/room_live/list.ex:40
 #: lib/livedj_web/live/sessions/room_live/show.ex:41
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
 msgstr "La sala no existe"
 
-#: lib/livedj/media/video.ex:42
+#: lib/livedj/media/video.ex:41
 #, elixir-autogen, elixir-format
 msgid "video with this id already exists"
 msgstr "ya existe un video con ese id"
@@ -198,7 +199,7 @@ msgstr "ya existe un video con ese id"
 msgid "Could not save video. Please try again later."
 msgstr "No se pudo guardar la pista. Por favor intentá luego."
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:65
+#: lib/livedj_web/live/sessions/room_live/list.ex:69
 #, elixir-autogen, elixir-format
 msgid "The selected track could not be played"
 msgstr "El video seleccionado no se puede reproducir"

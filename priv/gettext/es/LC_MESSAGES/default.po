@@ -11,7 +11,7 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/livedj_web/components/core_components.ex:621
+#: lib/livedj_web/components/core_components.ex:623
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acciones"
@@ -27,7 +27,7 @@ msgstr "cerrar"
 msgid "Error!"
 msgstr "¡Error!"
 
-#: lib/livedj_web/live/sessions/room_live/list.html.heex:28
+#: lib/livedj_web/live/components/search_bar_component.html.heex:87
 #, elixir-autogen, elixir-format
 msgid "Insert a youtube url"
 msgstr "Ingresa una url de youtube"
@@ -37,7 +37,8 @@ msgstr "Ingresa una url de youtube"
 msgid "Success!"
 msgstr "¡Exito!"
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:75
+#: lib/livedj_web/live/sessions/room_live/list.ex:80
+#: lib/livedj_web/live/sessions/room_live/list.ex:270
 #, elixir-autogen, elixir-format
 msgid "Track queued to playlist"
 msgstr "La pista se agregó a la lista"
@@ -187,10 +188,10 @@ msgstr "Actualizar sala"
 
 #: lib/livedj_web/live/admin/sessions/room_live/index.ex:33
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:2
-#: lib/livedj_web/live/sessions/room_live/index.ex:34
+#: lib/livedj_web/live/sessions/room_live/index.ex:86
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Listing Rooms"
-msgstr "Listado de salas"
+msgstr "Salas"
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:26
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:17
@@ -202,8 +203,8 @@ msgstr "Nombre"
 
 #: lib/livedj_web/live/admin/sessions/room_live/index.ex:27
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:5
-#: lib/livedj_web/live/sessions/room_live/index.ex:40
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:36
+#: lib/livedj_web/live/sessions/room_live/index.ex:92
+#: lib/livedj_web/live/sessions/room_live/index.html.heex:39
 #, elixir-autogen, elixir-format
 msgid "New Room"
 msgstr "Nueva Sala"
@@ -281,13 +282,11 @@ msgid "Create a public room and start adding songs"
 msgstr "Creá una sala pública y empezá a cargar canciones"
 
 #: lib/livedj_web/components/layouts/root.html.heex:56
-#: lib/livedj_web/components/layouts/session.html.heex:50
 #, elixir-autogen, elixir-format
 msgid "Log in"
 msgstr "Acceder"
 
 #: lib/livedj_web/components/layouts/root.html.heex:39
-#: lib/livedj_web/components/layouts/session.html.heex:33
 #, elixir-autogen, elixir-format
 msgid "Log out"
 msgstr "Salir"
@@ -298,13 +297,11 @@ msgid "Playing now..."
 msgstr "Sonando ahora..."
 
 #: lib/livedj_web/components/layouts/root.html.heex:48
-#: lib/livedj_web/components/layouts/session.html.heex:42
 #, elixir-autogen, elixir-format
 msgid "Register"
 msgstr "Registrarse"
 
 #: lib/livedj_web/components/layouts/root.html.heex:30
-#: lib/livedj_web/components/layouts/session.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr "Configuración"
