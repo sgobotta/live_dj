@@ -73,7 +73,7 @@
                   border-slate-200 focus:border-slate-200
                   focus:ring-0 focus:shadow-none
                   placeholder:text-zinc-500 focus:w-full focus:flex-none
-                  sm:text-sm
+                  text-xs md:text-sm
                   [&::-webkit-search-cancel-button]:hidden
                   [&::-webkit-search-decoration]:hidden
                   [&::-webkit-search-results-button]:hidden
@@ -84,7 +84,9 @@
                   false &&
                     "border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none"
                 }
-                placeholder={gettext("Insert a youtube url")}
+                placeholder={
+                  gettext("Insert a youtube url or search for a video")
+                }
                 name="search[query]"
                 aria-autocomplete="both"
                 aria-controls="searchbox__results_list"
@@ -97,12 +99,12 @@
 
               <div class="
                 absolute right-3 top-[5px] stroke-zinc-300
-                w-10 m-0 h-8 rounded-md
+                w-10 m-0 h-6 sm:h-7 rounded-md
                 flex justify-center items-center
                 border-2 border-zinc-300 dark:border-zinc-600
                 text-zinc-900 dark:text-zinc-50
                 bg-zinc-200 dark:bg-zinc-700
-                text-xs font-medium
+                text-xs md:text-sm font-medium
                 cursor-default
               ">
                 ESC
@@ -117,7 +119,7 @@
                 border-t-0 border-zinc-200 text-sm leading-6
                 mx-2 max-h-96
                 bg-transparent
-                #{if @search_result != [], do: "!py-2"}
+                #{if @search_result != [], do: "!py-2 !my-1"}
               "}
               id="searchbox__results_list"
               role="listbox"

@@ -10,18 +10,18 @@
     >
       <%!-- Player Details --%>
       <div class="grid grid-cols-12 grid-rows-2 py-1 text-sm justify-center">
-        <div class="col-span-3 row-span-2 self-center pl-2">
+        <div class="col-span-3 row-span-2 self-center pl-1">
           <div class="flex items-center h-full">
             <div class="
               basis-28 sm:basis-28 md:basis-28 lg:basis-24 xl:basis-24 2xl:basis-24
-              h-16 w-16 ring-0 ring-white m-1">
+              h-14 w-14 ring-0 ring-white m-0">
               <%= if @player.media_thumbnail_url != "" do %>
                 <img
-                  class="h-16 w-16 rounded-md ring-0 ring-white"
+                  class="h-14 w-14 rounded-md ring-0 ring-white"
                   src={@player.media_thumbnail_url}
                 />
               <% else %>
-                <div class="h-16 w-16 rounded-md ring-0 ring-white bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                <div class="h-14 w-14 rounded-md ring-0 ring-white bg-gray-200 dark:bg-gray-800 animate-pulse" />
               <% end %>
             </div>
             <div class="
