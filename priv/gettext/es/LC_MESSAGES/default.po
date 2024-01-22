@@ -27,11 +27,6 @@ msgstr "cerrar"
 msgid "Error!"
 msgstr "¡Error!"
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:87
-#, elixir-autogen, elixir-format
-msgid "Insert a youtube url"
-msgstr "Ingresa una url de youtube"
-
 #: lib/livedj_web/components/core_components.ex:193
 #, elixir-autogen, elixir-format
 msgid "Success!"
@@ -320,3 +315,7 @@ msgstr "Compartí y escuchá videos en tiempo real con otrxs"
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr "Código fuente"
+
+#: lib/livedj_web/live/components/search_bar_component.html.heex:87
+msgid "Insert a youtube url or search for a video"
+msgstr "Ingresa una url de youtube o realiza una búsqueda"

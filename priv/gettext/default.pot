@@ -27,11 +27,6 @@ msgstr ""
 msgid "Error!"
 msgstr ""
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:87
-#, elixir-autogen, elixir-format
-msgid "Insert a youtube url"
-msgstr ""
-
 #: lib/livedj_web/components/core_components.ex:193
 #, elixir-autogen, elixir-format
 msgid "Success!"
@@ -319,4 +314,9 @@ msgstr ""
 #: lib/livedj_web/controllers/page_html/home.html.heex:94
 #, elixir-autogen, elixir-format
 msgid "Source Code"
+msgstr ""
+
+#: lib/livedj_web/live/components/search_bar_component.html.heex:87
+#, elixir-autogen, elixir-format
+msgid "Insert a youtube url or search for a video"
 msgstr ""
