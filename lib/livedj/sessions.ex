@@ -436,6 +436,39 @@ defmodule Livedj.Sessions do
     end
   end
 
+  @doc """
+  Given a query, searches for videos through the Tubex api.
+  """
+  @spec search_by_query(String.t()) ::
+          {:ok, [Media.Video.t()]} | {:error, :service_unavailable}
+  def search_by_query(query) do
+    opts = [maxResults: 20]
+
+    case Tubex.Video.search_by_query(query, opts) do
+      {:ok, search_result, _pag_opts} ->
+        with medias <- Media.from_tubex_search(search_result),
+             :ok <- create_videos(medias) do
+          {:ok, medias}
+        end
+
+      {:error, %{"error" => %{"errors" => errors}}} ->
+        for error <- errors do
+          Logger.error(error["message"])
+        end
+
+        {:error, :service_unavailable}
+    end
+  end
+
+  @spec create_videos([Media.Video.t()]) :: :ok
+  defp create_videos(medias) do
+    Enum.each(medias, fn media ->
+      # TODO: handle constraints to the external_id to update those entities,
+      # and cache the result.
+      Media.create_video(media)
+    end)
+  end
+
   # ----------------------------------------------------------------------------
   # Redis management
   #
