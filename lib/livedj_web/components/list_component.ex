@@ -62,8 +62,9 @@ defmodule LivedjWeb.ListComponent do
               </div>
               <div class="absolute top-6 -left-1 h-4 w-4 rounded-full">
                 <p class={"
-                  rounded-full
-                  text-center text-xs
+                  rounded-full h-4 w-4
+                  flex justify-center items-center
+                  text-center text-[0.5rem]
                   text-zinc-100 dark:text-zinc-900
                   #{classes_by_media(
                     item.external_id,
@@ -78,7 +79,7 @@ defmodule LivedjWeb.ListComponent do
               <div class="
                 flex-auto block
                 text-xs leading-6 font-semibold
-                p-1 px-1 h-8
+                p-1 px-1 h-8 w-5/6
                 text-ellipsis overflow-hidden
               ">
                 <%= item.title %>

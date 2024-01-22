@@ -144,7 +144,7 @@
                   dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
                   active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
                   dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
-                  active:scale-[0.99]
+                  active:scale-[0.99] grayscale-[50%] hover:grayscale-0
                 "
               >
                 <div class="
@@ -155,7 +155,7 @@
                     <img
                       class="
                         inline-block h-12 w-12 rounded-lg ring-[1px] ring-zinc-300 dark:ring-zinc-700
-                        transition duration-200 opacity-80 group-hover:opacity-100 group-hover:scale-[1.05]
+                        transition duration-200 group-hover:scale-[1.05]
                       "
                       src={item.thumbnail_url}
                       alt={item.title}
@@ -163,8 +163,9 @@
                   </div>
                   <div class="absolute top-10 -left-1 h-4 w-4 rounded-full">
                     <p class="
-                      rounded-full
-                      text-center text-xs
+                      rounded-full h-4 w-4
+                      flex justify-center items-center
+                      text-center text-[0.5rem]
                       text-zinc-100 dark:text-zinc-900
                         bg-zinc-900 dark:bg-zinc-100
                     ">
