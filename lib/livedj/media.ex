@@ -10,6 +10,8 @@ defmodule Livedj.Media do
 
   require Logger
 
+  @type tubex_video :: %Tubex.Video{}
+
   @doc """
   Given a metadata reponse returns a success tuple when the result contains
   media metadata.
@@ -31,6 +33,31 @@ defmodule Livedj.Media do
            channel: media["snippet"]["channelTitle"]
          }}
     end
+  end
+
+  @doc """
+  Given a search reponse returns a success tuple when the result contains
+  search results.
+  """
+  @spec from_tubex_search([tubex_video()]) :: [map()]
+  def from_tubex_search(media_search) do
+    Enum.map(media_search, fn %Tubex.Video{
+                                etag: etag,
+                                video_id: external_id,
+                                published_at: published_at,
+                                thumbnails: %{"high" => %{"url" => url}},
+                                title: title,
+                                channel_title: channel
+                              } ->
+      %{
+        etag: etag,
+        external_id: external_id,
+        published_at: published_at,
+        thumbnail_url: url,
+        title: HtmlEntities.decode(title),
+        channel: HtmlEntities.decode(channel)
+      }
+    end)
   end
 
   @doc """
