@@ -64,7 +64,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   defp apply_action(socket, :show, _params) do
     socket
-    |> assign(:page_title, "(#{socket.assigns.room.name})")
+    |> assign(:page_title, "#{socket.assigns.room.name}")
   end
 
   # ----------------------------------------------------------------------------
