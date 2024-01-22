@@ -19,7 +19,8 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
         {:ok,
          assign(socket,
            drag_state: :unlocked,
-           form: to_form(%{}),
+           search_form: to_form(%{}),
+           search_result: [],
            layout: false,
            room: room,
            media_list: [],
@@ -97,6 +98,28 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   def handle_event("remove_track", %{"track_id" => track_id}, socket) do
     :ok = Sessions.remove_media(socket.assigns.room.id, track_id)
 
+    {:noreply, socket}
+  end
+
+  def handle_event("change", %{"search" => %{"query" => ""}}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("change", %{"search" => %{"query" => _search_query}}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("submit", %{"search" => %{"query" => search_query}}, socket) do
+    case validate_url(search_query) do
+      {:ok, media_id} ->
+        add_media(socket, media_id)
+
+      {:error, :invalid_url} ->
+        search_media(socket, search_query)
+    end
+  end
+
+  def handle_event("submit", _params, socket) do
     {:noreply, socket}
   end
 
@@ -235,6 +258,50 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
 
   defp assign_current_media(socket, media_id),
     do: assign(socket, :current_media, media_id)
+
+  defp add_media(socket, media_id) do
+    case Sessions.add_media(socket.assigns.room.id, media_id) do
+      {:ok, :added} ->
+        {:noreply,
+         socket
+         |> assign(form: to_form(%{}))
+         |> assign(search_form: to_form(%{}))
+         |> put_flash(:info, gettext("Track queued to playlist"))}
+
+      {:error, :invalid_url} ->
+        {:noreply,
+         socket
+         |> assign(form: to_form(%{}))
+         |> put_flash(
+           :warn,
+           dgettext("errors", "The youtube url is not valid")
+         )}
+
+      {:error, {type, msg}} when type in [:warn, :error] and is_binary(msg) ->
+        {:noreply,
+         socket
+         |> assign(form: to_form(%{}))
+         |> put_flash(type, msg)}
+    end
+  end
+
+  def search_media(socket, query) do
+    case Sessions.search_by_query(query) do
+      {:ok, result} ->
+        {:noreply, assign(socket, search_result: result)}
+
+      {:error, :service_unavailable} ->
+        {:noreply,
+         socket
+         |> put_flash(
+           :warn,
+           dgettext(
+             "warnings",
+             "Search service unavailable. Please try inserting a youtube url."
+           )
+         )}
+    end
+  end
 
   defp on_drag_start(room_id) do
     fn socket, _from ->

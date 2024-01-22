@@ -6,7 +6,6 @@
     current_media={@current_media}
     module={LivedjWeb.ListComponent}
     list={@media_list}
-    form={@form}
     on_drag_start={on_drag_start(@room.id)}
     on_drag_end={on_drag_end(@room.id)}
     state={@drag_state}
@@ -14,21 +13,13 @@
   />
 </div>
 <div class="flex mt-4">
-  <.add_media_form
-    for={@form}
-    phx-change="validate"
-    phx-submit="add"
-    class="w-full"
+  <.live_component
+    id={"video_search_bar_#{@room.id}"}
+    module={LivedjWeb.Components.SearchBarComponent}
+    form={@search_form}
+    search_result={@search_result}
   >
-    <:field>
-      <.input
-        field={@form[:url]}
-        type="text"
-        class="text-sm w-full bg-zinc-300 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100"
-        placeholder={gettext("Insert a youtube url")}
-      />
-    </:field>
-    <:actions>
+    <:button>
       <.button class="
         cursor-default
         align-middle ml-2 bg-zinc-300 dark:bg-zinc-700
@@ -44,9 +35,8 @@
         text-zinc-900 dark:text-zinc-100
         active:text-green-500 dark:active:text-green-500
       ">
-        <.icon name="hero-plus" class="
-        " />
+        <.icon name="hero-plus" class="" />
       </.button>
-    </:actions>
-  </.add_media_form>
+    </:button>
+  </.live_component>
 </div>
