@@ -108,7 +108,12 @@
             muted?={false}
           />
           <.live_component
-            id={@volume_control_id}
+            id={@add_video_control_id}
+            module={LivedjWeb.Components.AddVideoComponent}
+            room={@room}
+          />
+          <.live_component
+            id={@fullscreen_control_id}
             module={
               LivedjWeb.Components.PlayerControls.FullscreenControlComponent
             }

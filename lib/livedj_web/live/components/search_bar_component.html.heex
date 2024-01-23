@@ -43,6 +43,7 @@
             role="search"
             phx-change="change"
             phx-submit="submit"
+            phx-target={@myself}
             class="bg-zinc-100 dark:bg-zinc-900"
           >
             <div class="group relative flex">
@@ -117,7 +118,7 @@
                 overflow-y-scroll
                 rounded-b-lg
                 border-t-0 border-zinc-200 text-sm leading-6
-                mx-2 max-h-96
+                mx-2 max-h-[80vh]
                 bg-transparent
                 #{if @search_result != [], do: "!py-2 !my-1"}
               "}
@@ -144,7 +145,7 @@
                   dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
                   active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
                   dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
-                  active:scale-[0.99] grayscale-[50%] hover:grayscale-0
+                  active:scale-[0.99] grayscale-[70%] hover:grayscale-0
                 "
               >
                 <div class="

@@ -21,6 +21,7 @@ defmodule LivedjWeb.PlayerControlsLive do
            time_slider_id: "player-controls-time-slider",
            volume_control_id: "volume-control-#{room_id}",
            fullscreen_control_id: "fullscreen-control-#{room_id}",
+           add_video_control_id: "add-video-control-#{room_id}",
            layout: false,
            player: nil,
            room: room
