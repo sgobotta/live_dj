@@ -11,6 +11,7 @@ defmodule LivedjWeb.Components.AddVideoComponent do
         module={LivedjWeb.Components.SearchBarComponent}
         form={@search_form}
         search_result={@search_result}
+        room={@room}
       >
         <:button>
           <.button class="
