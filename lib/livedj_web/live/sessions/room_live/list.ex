@@ -19,7 +19,8 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
         {:ok,
          assign(socket,
            drag_state: :unlocked,
-           form: to_form(%{}),
+           search_form: to_form(%{}),
+           search_result: [],
            layout: false,
            room: room,
            media_list: [],
@@ -66,31 +67,6 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
            :warn,
            dgettext("errors", "The selected track could not be played")
          )}
-    end
-  end
-
-  def handle_event("add", %{"url" => url}, socket) do
-    with {:ok, media_id} <- validate_url(url),
-         {:ok, :added} <- Sessions.add_media(socket.assigns.room.id, media_id) do
-      {:noreply,
-       socket
-       |> assign(form: to_form(%{}))
-       |> put_flash(:info, gettext("Track queued to playlist"))}
-    else
-      {:error, :invalid_url} ->
-        {:noreply,
-         socket
-         |> assign(form: to_form(%{}))
-         |> put_flash(
-           :warn,
-           dgettext("errors", "The youtube url is not valid")
-         )}
-
-      {:error, {type, msg}} when type in [:warn, :error] and is_binary(msg) ->
-        {:noreply,
-         socket
-         |> assign(form: to_form(%{}))
-         |> put_flash(type, msg)}
     end
   end
 
@@ -275,16 +251,6 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
             :ok = Sessions.unlock_playlist_drag(room_id, from)
             {:noreply, socket}
         end
-    end
-  end
-
-  defp validate_url(url) do
-    case URI.parse(url) do
-      %URI{query: query} when not is_nil(query) ->
-        {:ok, String.replace(query, "v=", "")}
-
-      _uri ->
-        {:error, :invalid_url}
     end
   end
 end

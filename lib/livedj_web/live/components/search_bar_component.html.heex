@@ -1,0 +1,214 @@
+<div is={@id}>
+  <div phx-click={open_modal()}>
+    <%= render_slot(@button) %>
+  </div>
+  <div
+    id="searchbar-dialog"
+    class="
+      hidden
+      fixed inset-0 z-50
+    "
+    role="dialog"
+    aria-modal="true"
+    phx-window-keyup={hide_modal()}
+    phx-key="escape"
+  >
+    <div class="fixed inset-0 bg-zinc-400/25 backdrop-blur-sm opacity-100">
+    </div>
+    <div class="
+      fixed inset-0 overflow-y-auto
+      px-4 py-4 sm:py-20 sm:px-6 md:py-32 lg:px-8 lg:py-[15vh]
+    ">
+      <div
+        id="searchbox_container"
+        class="
+          mx-auto overflow-hidden rounded-md
+          bg-zinc-50 dark:bg-zinc-900 shadow-xl ring-zinc-900/7.5
+          sm:max-w-xl
+          opacity-100 scale-100
+        "
+        phx-hook="SearchBar"
+      >
+        <div
+          role="combobox"
+          aria-haspopup="listbox"
+          phx-click-away={hide_modal()}
+          aria-expanded={false}
+        >
+          <.form
+            :let={f}
+            for={@form}
+            action=""
+            novalidate=""
+            role="search"
+            phx-change="change"
+            phx-submit="submit"
+            phx-target={@myself}
+            class="bg-zinc-100 dark:bg-zinc-900"
+          >
+            <div class="group relative flex">
+              <svg
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+                class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-zinc-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12.01 12a4.25 4.25 0 1 0-6.02-6 4.25 4.25 0 0 0 6.02 6Zm0 0 3.24 3.25"
+                >
+                </path>
+              </svg>
+
+              <.input
+                container_class="w-full"
+                id="search-input"
+                field={f[:value]}
+                type="search"
+                class="
+                  w-full !m-0
+                  flex-auto rounded-md appearance-none bg-transparent pl-10 pr-10
+                  text-zinc-900
+                  outline-none focus:outline-none
+                  border-slate-200 focus:border-slate-200
+                  focus:ring-0 focus:shadow-none
+                  placeholder:text-zinc-500 focus:w-full focus:flex-none
+                  text-xs md:text-sm
+                  [&::-webkit-search-cancel-button]:hidden
+                  [&::-webkit-search-decoration]:hidden
+                  [&::-webkit-search-results-button]:hidden
+                  [&::-webkit-search-results-decoration]:hidden
+                  shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+                "
+                style={
+                  false &&
+                    "border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none"
+                }
+                placeholder={
+                  gettext("Insert a youtube url or search for a video")
+                }
+                name="search[query]"
+                aria-autocomplete="both"
+                aria-controls="searchbox__results_list"
+                autocomplete="off"
+                autocapitalize="off"
+                enterkeyhint="search"
+                spellcheck="false"
+                tabindex="0"
+              />
+
+              <div class="
+                absolute right-3 top-[5px] stroke-zinc-300
+                w-10 m-0 h-6 sm:h-7 rounded-md
+                flex justify-center items-center
+                border-2 border-zinc-300 dark:border-zinc-600
+                text-zinc-900 dark:text-zinc-50
+                bg-zinc-200 dark:bg-zinc-700
+                text-xs md:text-sm font-medium
+                cursor-default
+              ">
+                ESC
+              </div>
+            </div>
+
+            <ul
+              class={"
+                divide-y pr-3
+                overflow-y-scroll
+                rounded-b-lg
+                border-t-0 border-zinc-200 text-sm leading-6
+                mx-2 max-h-[80vh]
+                bg-transparent
+                #{if @search_result != [], do: "!py-2 !my-1"}
+              "}
+              id="searchbox__results_list"
+              role="listbox"
+            >
+              <li
+                :for={{item, index} <- Enum.with_index(@search_result)}
+                id={"#{item.external_id}-item"}
+                data-id={item.external_id}
+                class="
+                  group my-2
+                  cursor-default
+                  rounded-md hover:rounded-lg
+                  first:mt-0 last:mb-0
+                  transition-all duration-300
+                  text-zinc-900 dark:text-zinc-100
+                  bg-zinc-200 dark:bg-zinc-800
+                  hover:bg-zinc-300 dark:hover:bg-zinc-700
+                  border-zinc-100 dark:border-zinc-700 border-[0px]
+                  shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+                  dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.4)]
+                  hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
+                  dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
+                  active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+                  dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+                  active:scale-[0.99] grayscale-[70%] hover:grayscale-0
+                "
+              >
+                <div class="
+                  relative flex items-center h-14 mx-1
+                  gap-y-2 gap-x-2
+                ">
+                  <div class="relative h-12 w-12">
+                    <img
+                      class="
+                        inline-block h-12 w-12 rounded-lg ring-[1px] ring-zinc-300 dark:ring-zinc-700
+                        transition duration-200 group-hover:scale-[1.05]
+                      "
+                      src={item.thumbnail_url}
+                      alt={item.title}
+                    />
+                  </div>
+                  <div class="absolute top-10 -left-1 h-4 w-4 rounded-full">
+                    <p class="
+                      rounded-full h-4 w-4
+                      flex justify-center items-center
+                      text-center text-[0.5rem]
+                      text-zinc-100 dark:text-zinc-900
+                        bg-zinc-900 dark:bg-zinc-100
+                    ">
+                      <%= index + 1 %>
+                    </p>
+                  </div>
+                  <div class="
+                    block
+                    text-xs leading-6 font-semibold
+                    p-1 px-1 h-8 w-5/6
+                    text-ellipsis overflow-hidden
+                  ">
+                    <%= item.title %>
+                  </div>
+                  <div
+                    class="
+                      flex items-center justify-center
+                      transition duration-300 opacity-0 group-hover:opacity-100
+                      w-12 h-12 rounded-lg
+                      bg-transparent
+                      cursor-default
+                      text-zinc-900 dark:text-zinc-100
+                      hover:text-green-500 dark:hover:text-green-500 hover:scale-110
+                      active:scale-[0.95] active:text-green-300 dark:active:text-green-700
+                    "
+                    phx-value-media_id={item.external_id}
+                  >
+                    <%= PhoenixInlineSvg.Helpers.svg_image(
+                      LivedjWeb.Endpoint,
+                      "queue-add",
+                      "icons/misc",
+                      class: "
+                          
+                        "
+                    ) %>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </.form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

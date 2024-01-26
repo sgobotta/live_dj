@@ -35,7 +35,6 @@ defmodule Livedj.Media.Video do
       :title,
       :thumbnail_url,
       :external_id,
-      :etag,
       :published_at
     ])
     |> unique_constraint(:external_id,
