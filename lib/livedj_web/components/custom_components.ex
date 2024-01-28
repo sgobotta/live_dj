@@ -22,6 +22,8 @@ defmodule LivedjWeb.CustomComponents do
       <a
         class="hover:text-zinc-700 cursor-pointer h-5 w-5 leading-3"
         href="#"
+        phx-key=";"
+        phx-window-keydown={JS.dispatch("toggle-theme")}
         phx-click={JS.dispatch("toggle-theme")}
         tabindex="0"
       >
