@@ -52,7 +52,7 @@
         <%!-- Playback Controls --%>
         <div class="col-span-6 row-span-1 w-full flex justify-center items-center">
           <div class="flex items-center gap-4 h-10">
-            <a phx-click="previous" class="cursor-default">
+            <a href="#" phx-click="previous" class="cursor-default" tabindex="0">
               <%= PhoenixInlineSvg.Helpers.svg_image(
                 LivedjWeb.Endpoint,
                 "back",
@@ -65,7 +65,12 @@
               ) %>
             </a>
             <%= if @player && @player.state in [:playing] do %>
-              <a phx-click={on_pause_click_event()} class="cursor-default">
+              <a
+                href="#"
+                phx-click={on_pause_click_event()}
+                class="cursor-default rounded-full"
+                tabindex="0"
+              >
                 <.icon
                   name="hero-pause-circle-solid"
                   class="h-8 w-8 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
@@ -73,14 +78,19 @@
               </a>
             <% end %>
             <%= if @player && @player.state in [:idle, :paused] do %>
-              <a phx-click={on_play_click_event()} class="cursor-default">
+              <a
+                href="#"
+                phx-click={on_play_click_event()}
+                class="cursor-default rounded-full"
+                tabindex="0"
+              >
                 <.icon
                   name="hero-play-circle-solid"
                   class="h-8 w-8 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
                 />
               </a>
             <% end %>
-            <a phx-click="next" class="cursor-default">
+            <a href="#" phx-click="next" class="cursor-default" tabindex="0">
               <%= PhoenixInlineSvg.Helpers.svg_image(
                 LivedjWeb.Endpoint,
                 "next",
@@ -134,6 +144,7 @@
             </div>
             <form class="w-full p-4">
               <input
+                tabindex="0"
                 class="seek-bar w-full"
                 id={@time_slider_id}
                 value="0"

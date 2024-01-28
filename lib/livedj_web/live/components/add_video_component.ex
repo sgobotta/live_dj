@@ -17,7 +17,7 @@ defmodule LivedjWeb.Components.AddVideoComponent do
           <.button class="
             rounded-md
             cursor-default w-5 h-5 !p-0 flex flex-wrap justify-center content-center
-            align-middle ml-2 bg-zinc-300 dark:bg-zinc-700
+            align-middle bg-zinc-300 dark:bg-zinc-700
             transition-all duration-300
             shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
             hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
@@ -30,7 +30,7 @@ defmodule LivedjWeb.Components.AddVideoComponent do
             text-zinc-900 dark:text-zinc-100
             active:text-green-500 dark:active:text-green-500
           ">
-            <.icon name="hero-plus" class="w-3 h-3" />
+            <.icon name="hero-magnifying-glass" class="w-3 h-3" />
           </.button>
         </:button>
       </.live_component>
