@@ -52,7 +52,12 @@
         <%!-- Playback Controls --%>
         <div class="col-span-6 row-span-1 w-full flex justify-center items-center">
           <div class="flex items-center gap-4 h-10">
-            <a href="#" phx-click="previous" class="cursor-default" tabindex="0">
+            <a
+              href="#"
+              phx-click="previous"
+              class="cursor-default h-8 w-8 flex justify-center items-center"
+              tabindex="0"
+            >
               <%= PhoenixInlineSvg.Helpers.svg_image(
                 LivedjWeb.Endpoint,
                 "back",
@@ -68,7 +73,7 @@
               <a
                 href="#"
                 phx-click={on_pause_click_event()}
-                class="cursor-default rounded-full"
+                class="cursor-default rounded-full h-8 w-8 flex justify-center items-center"
                 tabindex="0"
               >
                 <.icon
@@ -81,7 +86,7 @@
               <a
                 href="#"
                 phx-click={on_play_click_event()}
-                class="cursor-default rounded-full"
+                class="cursor-default rounded-full h-8 w-8 flex justify-center items-center"
                 tabindex="0"
               >
                 <.icon
@@ -90,7 +95,12 @@
                 />
               </a>
             <% end %>
-            <a href="#" phx-click="next" class="cursor-default" tabindex="0">
+            <a
+              href="#"
+              phx-click="next"
+              class="cursor-default h-8 w-8 flex justify-center items-center"
+              tabindex="0"
+            >
               <%= PhoenixInlineSvg.Helpers.svg_image(
                 LivedjWeb.Endpoint,
                 "next",
