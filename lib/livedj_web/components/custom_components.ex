@@ -126,16 +126,17 @@ defmodule LivedjWeb.CustomComponents do
           bg-zinc-50 hover:brightness-90 border-[1px] border-zinc-200 dark:border-0
           dark:bg-zinc-800 dark:hover:bg-zinc-800 dark:hover:brightness-110
         "
-        tabindex="0"
       >
-        <div
+        <.link
           phx-click={@module_click && @module_click.(module)}
+          href="#"
           class={["relative p-0", @module_click && "hover:cursor-pointer"]}
+          tabindex="0"
         >
           <div class="relative leading-6 text-zinc-900 hover:text-zinc-700">
             <%= render_slot(@inner_block, module) %>
           </div>
-        </div>
+        </.link>
       </div>
     </div>
     """
