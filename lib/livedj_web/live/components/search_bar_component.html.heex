@@ -208,6 +208,8 @@
                     "
                     href="#"
                     phx-value-media_id={item.external_id}
+                    phx-click="add_to_playlist"
+                    phx-target={@myself}
                     tabindex="0"
                   >
                     <%= PhoenixInlineSvg.Helpers.svg_image(

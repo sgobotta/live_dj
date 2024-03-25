@@ -13,6 +13,11 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   end
 
   @impl true
+  def handle_event("add_to_playlist", %{"media_id" => media_id}, socket) do
+    Sessions.add_media(socket.assigns.room.id, media_id)
+    {:noreply, socket}
+  end
+
   def handle_event("change", %{"search" => %{"query" => ""}}, socket) do
     {:noreply, socket}
   end
