@@ -1,5 +1,5 @@
 defmodule LivedjWeb.PlayerControlsLive do
-  use LivedjWeb, {:live_view, layout: false}
+  use LivedjWeb, {:live_view, layout: {LivedjWeb.Layouts, :flash}}
 
   alias Livedj.Sessions
   alias Livedj.Sessions.{Player, Room}

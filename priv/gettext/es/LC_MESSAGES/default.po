@@ -32,11 +32,6 @@ msgstr "¡Error!"
 msgid "Success!"
 msgstr "¡Exito!"
 
-#: lib/livedj_web/live/components/search_bar_component.ex:91
-#, elixir-autogen, elixir-format
-msgid "Track queued to playlist"
-msgstr "La pista se agregó a la lista"
-
 #: lib/livedj_web/components/core_components.ex:198
 #, elixir-autogen, elixir-format
 msgid "Warn!"
@@ -324,3 +319,8 @@ msgstr "Sesiones grupales de YouTube"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Join or create a room with your friends, add videos and watch to youtube content in real time."
 msgstr "Unete o crea una sala con amigos, agrega videos y comparte contenido de youtube en tiempo real."
+
+#: lib/livedj_web/live/components/search_bar_component.ex:92
+#, elixir-autogen, elixir-format
+msgid "%{title} queued to the playlist"
+msgstr "Se agregó %{title} a la lista"

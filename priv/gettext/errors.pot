@@ -156,7 +156,7 @@ msgstr ""
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/livedj/sessions.ex:88
+#: lib/livedj/sessions.ex:94
 #, elixir-autogen, elixir-format
 msgid "Could not fetch the video from youtube"
 msgstr ""
@@ -166,15 +166,10 @@ msgstr ""
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/livedj/sessions.ex:72
-#: lib/livedj/sessions.ex:100
+#: lib/livedj/sessions.ex:78
+#: lib/livedj/sessions.ex:106
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
-msgstr ""
-
-#: lib/livedj_web/live/components/search_bar_component.ex:99
-#, elixir-autogen, elixir-format
-msgid "The youtube url is not valid"
 msgstr ""
 
 #: lib/livedj_web/components/core_components.ex:202
@@ -200,7 +195,7 @@ msgstr ""
 msgid "video with this id already exists"
 msgstr ""
 
-#: lib/livedj/sessions.ex:81
+#: lib/livedj/sessions.ex:87
 #, elixir-autogen, elixir-format
 msgid "Could not save video. Please try again later."
 msgstr ""

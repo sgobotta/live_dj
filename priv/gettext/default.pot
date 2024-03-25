@@ -32,11 +32,6 @@ msgstr ""
 msgid "Success!"
 msgstr ""
 
-#: lib/livedj_web/live/components/search_bar_component.ex:91
-#, elixir-autogen, elixir-format
-msgid "Track queued to playlist"
-msgstr ""
-
 #: lib/livedj_web/components/core_components.ex:198
 #, elixir-autogen, elixir-format
 msgid "Warn!"
@@ -323,4 +318,9 @@ msgstr ""
 #: lib/livedj_web/controllers/page_html/home.html.heex:61
 #, elixir-autogen, elixir-format
 msgid "Join or create a room with your friends, add videos and watch to youtube content in real time."
+msgstr ""
+
+#: lib/livedj_web/live/components/search_bar_component.ex:92
+#, elixir-autogen, elixir-format
+msgid "%{title} queued to the playlist"
 msgstr ""

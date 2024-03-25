@@ -149,7 +149,7 @@ msgstr "debe contener entre %{min} y %{max} caracteres"
 msgid "Attempting to reconnect"
 msgstr "Intentanto reconectar"
 
-#: lib/livedj/sessions.ex:88
+#: lib/livedj/sessions.ex:94
 #, elixir-autogen, elixir-format
 msgid "Could not fetch the video from youtube"
 msgstr "No se pudo recuperar el video de youtube"
@@ -159,16 +159,11 @@ msgstr "No se pudo recuperar el video de youtube"
 msgid "Hang in there while we get back on track"
 msgstr "Esperá mientras volvemos a estar en línea"
 
-#: lib/livedj/sessions.ex:72
-#: lib/livedj/sessions.ex:100
+#: lib/livedj/sessions.ex:78
+#: lib/livedj/sessions.ex:106
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr "El video ya está agregado en la lista"
-
-#: lib/livedj_web/live/components/search_bar_component.ex:99
-#, elixir-autogen, elixir-format
-msgid "The youtube url is not valid"
-msgstr "La url del video no es válida"
 
 #: lib/livedj_web/components/core_components.ex:202
 #, elixir-autogen, elixir-format
@@ -193,7 +188,7 @@ msgstr "La sala no existe"
 msgid "video with this id already exists"
 msgstr "ya existe un video con ese id"
 
-#: lib/livedj/sessions.ex:81
+#: lib/livedj/sessions.ex:87
 #, elixir-autogen, elixir-format
 msgid "Could not save video. Please try again later."
 msgstr "No se pudo guardar la pista. Por favor intentá luego."

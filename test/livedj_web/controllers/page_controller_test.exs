@@ -7,8 +7,6 @@ defmodule LivedjWeb.PageControllerTest do
     conn = get(conn, ~p"/")
 
     assert html_response(conn, 200) =~
-             gettext(
-               "Share and listen to youtube videos in real time with others"
-             )
+             gettext("Shared youtube sessions")
   end
 end
