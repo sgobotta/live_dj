@@ -5,7 +5,12 @@
         <.livedj_logo theme={@theme} />
       </a>
       <div class="cursor-default">
-        <.version_pill version={Application.spec(:livedj, :vsn)} />
+        <.link
+          target="_blank"
+          href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
+        >
+          <.version_pill version={Application.spec(:livedj, :vsn)} />
+        </.link>
       </div>
     </div>
     <.toggle_theme_button theme={@theme} />
