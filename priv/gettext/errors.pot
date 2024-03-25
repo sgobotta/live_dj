@@ -151,46 +151,40 @@ msgstr ""
 msgid "should be between %{min} and %{max} characters"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:204
+#: lib/livedj_web/components/core_components.ex:207
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/livedj/sessions.ex:88
+#: lib/livedj/sessions.ex:94
 #, elixir-autogen, elixir-format
 msgid "Could not fetch the video from youtube"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:216
+#: lib/livedj_web/components/core_components.ex:219
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/livedj/sessions.ex:72
-#: lib/livedj/sessions.ex:100
+#: lib/livedj/sessions.ex:78
+#: lib/livedj/sessions.ex:106
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:88
-#: lib/livedj_web/live/sessions/room_live/list.ex:278
-#, elixir-autogen, elixir-format
-msgid "The youtube url is not valid"
-msgstr ""
-
-#: lib/livedj_web/components/core_components.ex:199
+#: lib/livedj_web/components/core_components.ex:202
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:211
-#: lib/livedj_web/live/sessions/room_live/list.ex:47
+#: lib/livedj_web/components/core_components.ex:214
+#: lib/livedj_web/live/sessions/room_live/list.ex:46
 #: lib/livedj_web/live/sessions/room_live/show.ex:48
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:40
+#: lib/livedj_web/live/sessions/room_live/list.ex:39
 #: lib/livedj_web/live/sessions/room_live/show.ex:41
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
@@ -201,12 +195,12 @@ msgstr ""
 msgid "video with this id already exists"
 msgstr ""
 
-#: lib/livedj/sessions.ex:81
+#: lib/livedj/sessions.ex:87
 #, elixir-autogen, elixir-format
 msgid "Could not save video. Please try again later."
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:69
+#: lib/livedj_web/live/sessions/room_live/list.ex:68
 #, elixir-autogen, elixir-format
 msgid "The selected track could not be played"
 msgstr ""

@@ -7,22 +7,30 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
   def render(assigns) do
     ~H"""
     <div class="
-      hidden sm:inline-flex w-24
+      inline-flex
+      md:w-28 w-5
       fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
       dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
     ">
-      <div class="m-2" phx-click="on_volume_click" phx-target={@myself}>
+      <.link
+        tabindex="0"
+        phx-key="m"
+        phx-window-keydown="on_volume_click"
+        class="
+          fill-zinc-900 dark:fill-zinc-50
+          focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:dark:ring-zinc-50"
+        href="#"
+        phx-click="on_volume_click"
+        phx-target={@myself}
+      >
         <%= PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,
           get_volume_icon(@muted?, @level),
           "icons/volume",
-          class: "
-              h-5 w-5
-
-            "
+          class: "h-5 w-5"
         ) %>
-      </div>
-      <div class="self-center">
+      </.link>
+      <div class="ml-2 self-center hidden md:block">
         <.form
           :let={f}
           for={@player}
@@ -33,13 +41,13 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
         >
           <.input
             field={f[:volume]}
-            class="seek-bar w-full !m-0 shadow-none !bg-transparent"
+            class="seek-bar w-full !m-0 shadow-none !bg-transparent focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
             id="volume-slider"
             value={if @muted?, do: 0, else: @level}
             type="range"
             min="0"
             max="100"
-            step="1"
+            step="5"
             phx-debounce={500}
             phx-value-key="volume"
           />
