@@ -54,6 +54,7 @@ ENV RECAPTCHA_PUBLIC_KEY=${RECAPTCHA_PUBLIC_KEY}
 ENV RECAPTCHA_SECRET=${RECAPTCHA_SECRET}
 
 # install mix dependencies
+COPY version.txt ./version.txt
 COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
