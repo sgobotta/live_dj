@@ -4,8 +4,6 @@ defmodule Livedj.Sessions.PlayerServer do
   """
   use GenServer, restart: :transient
 
-  alias Livedj.Sessions.Channels
-
   require Logger
 
   @join_msg :join
@@ -151,13 +149,7 @@ defmodule Livedj.Sessions.PlayerServer do
   def handle_continue({@joined_cb, from, cbs}, state) do
     {{on_joined, args}, _cbs} = Keyword.pop!(cbs, :on_joined)
 
-    case apply(on_joined, args) do
-      {:ok, response} ->
-        Channels.notify_player_joined(from, state.id, %{player: response})
-
-      {:error, _error} ->
-        :error
-    end
+    apply(on_joined, args ++ [from])
 
     {:noreply, state}
   end

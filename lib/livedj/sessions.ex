@@ -261,6 +261,16 @@ defmodule Livedj.Sessions do
   def join_player(room_id) do
     :ok = Channels.subscribe_player_topic(room_id)
 
+    on_joined = fn room_id, from ->
+      case get_player(room_id) do
+        {:ok, response} ->
+          Channels.notify_player_joined(from, room_id, %{player: response})
+
+        {:error, _error} ->
+          :error
+      end
+    end
+
     case PlayerSupervisor.get_child(room_id) do
       nil ->
         {:ok, pid} = PlayerSupervisor.start_child(id: room_id)
@@ -269,7 +279,7 @@ defmodule Livedj.Sessions do
       {pid, _state} when is_pid(pid) ->
         pid
     end
-    |> PlayerServer.join(on_joined: {&get_player/1, [room_id]})
+    |> PlayerServer.join(on_joined: {on_joined, [room_id]})
   end
 
   @doc """
