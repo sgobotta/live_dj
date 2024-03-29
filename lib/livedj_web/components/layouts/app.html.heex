@@ -5,14 +5,19 @@
         <.livedj_logo theme={@theme} />
       </a>
       <div class="cursor-default">
-        <.version_pill version={Application.spec(:livedj, :vsn)} />
+        <.link
+          target="_blank"
+          href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
+        >
+          <.version_pill version={Application.spec(:livedj, :vsn)} />
+        </.link>
       </div>
     </div>
     <.toggle_theme_button theme={@theme} />
   </div>
 </header>
 <main class="px-4 py-4 sm:px-6 lg:px-8 h-full">
-  <div class="mx-auto max-w-2xl">
+  <div class="mx-auto max-w-2xl z-50">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
   </div>

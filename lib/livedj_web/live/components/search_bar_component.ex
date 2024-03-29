@@ -13,6 +13,10 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   end
 
   @impl true
+  def handle_event("add_to_playlist", %{"media_id" => media_id}, socket) do
+    add_media(socket, media_id)
+  end
+
   def handle_event("change", %{"search" => %{"query" => ""}}, socket) do
     {:noreply, socket}
   end
@@ -78,20 +82,14 @@ defmodule LivedjWeb.Components.SearchBarComponent do
 
   defp add_media(socket, media_id) do
     case Sessions.add_media(socket.assigns.room.id, media_id) do
-      {:ok, :added} ->
+      {:ok, {:added, media}} ->
         {:noreply,
          socket
          |> assign(form: to_form(%{}))
          |> assign(search_form: to_form(%{}))
-         |> put_flash(:info, gettext("Track queued to playlist"))}
-
-      {:error, :invalid_url} ->
-        {:noreply,
-         socket
-         |> assign(form: to_form(%{}))
          |> put_flash(
-           :warn,
-           dgettext("errors", "The youtube url is not valid")
+           :info,
+           gettext("%{title} queued to the playlist", title: media.title)
          )}
 
       {:error, {type, msg}} when type in [:warn, :error] and is_binary(msg) ->

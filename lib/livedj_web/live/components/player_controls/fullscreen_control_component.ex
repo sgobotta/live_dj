@@ -6,18 +6,20 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div phx-click="on_click" phx-target={@myself}>
-      <%= PhoenixInlineSvg.Helpers.svg_image(
-        LivedjWeb.Endpoint,
-        "fullscreen",
-        "icons/misc",
-        class: "
-            h-4 w-4 stroke-2 cursor-pointer
-            fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
-            dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
-            scale-100 hover:scale-[1.1] focus:scale-100 active:scale-100
-          "
-      ) %>
+    <div>
+      <.link phx-click="on_click" phx-target={@myself} tabindex="0">
+        <%= PhoenixInlineSvg.Helpers.svg_image(
+          LivedjWeb.Endpoint,
+          "fullscreen",
+          "icons/misc",
+          class: "
+              h-5 w-5 stroke-2 cursor-pointer
+              fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
+              dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
+              scale-100 hover:scale-[1.1] focus:scale-100 active:scale-100
+            "
+        ) %>
+      </.link>
     </div>
     """
   end

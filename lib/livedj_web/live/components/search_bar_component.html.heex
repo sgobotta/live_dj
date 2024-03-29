@@ -13,7 +13,11 @@
     phx-window-keyup={hide_modal()}
     phx-key="escape"
   >
-    <div class="fixed inset-0 bg-zinc-400/25 backdrop-blur-sm opacity-100">
+    <div class="
+      fixed inset-0
+      backdrop-blur-lg opacity-100
+      bg-zinc-900/60 dark:bg-zinc-600/60
+    ">
     </div>
     <div class="
       fixed inset-0 overflow-y-auto
@@ -23,7 +27,7 @@
         id="searchbox_container"
         class="
           mx-auto overflow-hidden rounded-md
-          bg-zinc-50 dark:bg-zinc-900 shadow-xl ring-zinc-900/7.5
+          bg-none shadow-xl ring-zinc-900/7.5
           sm:max-w-xl
           opacity-100 scale-100
         "
@@ -44,14 +48,14 @@
             phx-change="change"
             phx-submit="submit"
             phx-target={@myself}
-            class="bg-zinc-100 dark:bg-zinc-900"
+            class=""
           >
             <div class="group relative flex">
               <svg
                 viewBox="0 0 20 20"
                 fill="none"
                 aria-hidden="true"
-                class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-zinc-500"
+                class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-zinc-600"
               >
                 <path
                   stroke-linecap="round"
@@ -69,11 +73,17 @@
                 class="
                   w-full !m-0
                   flex-auto rounded-md appearance-none bg-transparent pl-10 pr-10
-                  text-zinc-900
+                  !bg-zinc-400 !dark:bg-zinc-600
+                  !text-zinc-700 !dark:text-zinc-300
                   outline-none focus:outline-none
-                  border-slate-200 focus:border-slate-200
+                  !border-zinc-400 focus:border-zinc-400
+                  dark:!border-zinc-600 focus:dark:!border-zinc-600
                   focus:ring-0 focus:shadow-none
-                  placeholder:text-zinc-500 focus:w-full focus:flex-none
+                  focus:tracking-widest
+                  transition-all duration-500
+                  placeholder:text-zinc-600 focus:placeholder:opacity-50
+                  dark:placeholder:text-zinc-300 focus:dark:placeholder:opacity-50
+                  focus:w-full focus:flex-none
                   text-xs md:text-sm
                   [&::-webkit-search-cancel-button]:hidden
                   [&::-webkit-search-decoration]:hidden
@@ -102,9 +112,11 @@
                 absolute right-3 top-[5px] stroke-zinc-300
                 w-10 m-0 h-6 sm:h-7 rounded-md
                 flex justify-center items-center
-                border-2 border-zinc-300 dark:border-zinc-600
-                text-zinc-900 dark:text-zinc-50
-                bg-zinc-200 dark:bg-zinc-700
+                border-[1px]
+                border-zinc-500 dark:border-zinc-600
+                opacity-50
+                bg-zinc-500 dark:bg-zinc-700
+                text-zinc-300 dark:text-zinc-200
                 text-xs md:text-sm font-medium
                 cursor-default
               ">
@@ -118,8 +130,8 @@
                 overflow-y-scroll
                 rounded-b-lg
                 border-t-0 border-zinc-200 text-sm leading-6
-                mx-2 max-h-[80vh]
-                bg-transparent
+                px-2 max-h-[80vh]
+                bg-none
                 #{if @search_result != [], do: "!py-2 !my-1"}
               "}
               id="searchbox__results_list"
@@ -130,15 +142,16 @@
                 id={"#{item.external_id}-item"}
                 data-id={item.external_id}
                 class="
-                  group my-2
+                  group my-4
                   cursor-default
                   rounded-md hover:rounded-lg
                   first:mt-0 last:mb-0
                   transition-all duration-300
-                  text-zinc-900 dark:text-zinc-100
-                  bg-zinc-200 dark:bg-zinc-800
-                  hover:bg-zinc-300 dark:hover:bg-zinc-700
-                  border-zinc-100 dark:border-zinc-700 border-[0px]
+                  text-zinc-700 dark:text-zinc-300
+                  bg-zinc-300 dark:bg-zinc-800
+                  hover:bg-zinc-200 dark:hover:bg-zinc-700
+                  border-zinc-200 dark:border-zinc-700 border-[0px]
+                  hover:tracking-widest focus:tracking-widest
                   shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
                   dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.4)]
                   hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
@@ -155,20 +168,20 @@
                   <div class="relative h-12 w-12">
                     <img
                       class="
-                        inline-block h-12 w-12 rounded-lg ring-[1px] ring-zinc-300 dark:ring-zinc-700
+                        inline-block h-12 w-12 rounded-lg 
                         transition duration-200 group-hover:scale-[1.05]
                       "
                       src={item.thumbnail_url}
                       alt={item.title}
                     />
                   </div>
-                  <div class="absolute top-10 -left-1 h-4 w-4 rounded-full">
+                  <div class="absolute top-10 -left-1 h-4 w-4 rounded-lg">
                     <p class="
-                      rounded-full h-4 w-4
+                      rounded-lg h-4 w-4
                       flex justify-center items-center
                       text-center text-[0.5rem]
-                      text-zinc-100 dark:text-zinc-900
-                        bg-zinc-900 dark:bg-zinc-100
+                      text-zinc-200 dark:text-zinc-700
+                      bg-zinc-800 dark:bg-zinc-300
                     ">
                       <%= index + 1 %>
                     </p>
@@ -188,19 +201,22 @@
                       w-12 h-12 rounded-lg
                       bg-transparent
                       cursor-default
-                      text-zinc-900 dark:text-zinc-100
+                      text-zinc-700 dark:text-zinc-300
                       hover:text-green-500 dark:hover:text-green-500 hover:scale-110
+                      focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100
                       active:scale-[0.95] active:text-green-300 dark:active:text-green-700
                     "
+                    href="#"
                     phx-value-media_id={item.external_id}
+                    phx-click="add_to_playlist"
+                    phx-target={@myself}
+                    tabindex="0"
                   >
                     <%= PhoenixInlineSvg.Helpers.svg_image(
                       LivedjWeb.Endpoint,
                       "queue-add",
                       "icons/misc",
-                      class: "
-                          
-                        "
+                      class: ""
                     ) %>
                   </div>
                 </div>

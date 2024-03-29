@@ -23,8 +23,18 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label={gettext("Name")} />
-        <.input field={@form[:slug]} type="text" label={gettext("Slug")} />
+        <.input
+          field={@form[:name]}
+          type="text"
+          label={gettext("Name")}
+          class="focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
+        />
+        <.input
+          field={@form[:slug]}
+          type="text"
+          label={gettext("Slug")}
+          class="focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
+        />
         <:actions>
           <.button phx-disable-with={gettext("Saving...")}>
             <%= gettext("Save Room") %>

@@ -11,34 +11,28 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lib/livedj_web/components/core_components.ex:623
+#: lib/livedj_web/components/core_components.ex:626
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr "Acciones"
 
-#: lib/livedj_web/components/core_components.ex:85
-#: lib/livedj_web/components/core_components.ex:169
+#: lib/livedj_web/components/core_components.ex:88
+#: lib/livedj_web/components/core_components.ex:172
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "cerrar"
 
-#: lib/livedj_web/components/core_components.ex:194
+#: lib/livedj_web/components/core_components.ex:197
 #, elixir-autogen, elixir-format
 msgid "Error!"
 msgstr "¡Error!"
 
-#: lib/livedj_web/components/core_components.ex:193
+#: lib/livedj_web/components/core_components.ex:196
 #, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr "¡Exito!"
 
-#: lib/livedj_web/live/sessions/room_live/list.ex:80
-#: lib/livedj_web/live/sessions/room_live/list.ex:270
-#, elixir-autogen, elixir-format
-msgid "Track queued to playlist"
-msgstr "La pista se agregó a la lista"
-
-#: lib/livedj_web/components/core_components.ex:195
+#: lib/livedj_web/components/core_components.ex:198
 #, elixir-autogen, elixir-format
 msgid "Warn!"
 msgstr "¡Atención!"
@@ -91,7 +85,7 @@ msgstr "Guardar video"
 
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:29
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:39
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr "Guardando..."
@@ -191,7 +185,7 @@ msgstr "Salas"
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:26
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:17
 #: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:17
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:26
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:29
 #, elixir-autogen, elixir-format
 msgid "Name"
 msgstr "Nombre"
@@ -210,19 +204,19 @@ msgid "Room"
 msgstr "Sala"
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:84
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:84
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:94
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Room created successfully"
 msgstr "Sala creado con éxito"
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:69
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:69
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:79
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Room updated successfully"
 msgstr "Sala actualizado con éxito"
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:30
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:30
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:40
 #, elixir-autogen, elixir-format
 msgid "Save Room"
 msgstr "Guardar Sala"
@@ -241,7 +235,7 @@ msgstr "Detalles de Sala"
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:27
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:18
 #: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:18
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:27
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Slug"
 msgstr ""
@@ -256,12 +250,12 @@ msgstr "Esta es una sala de la base de datos."
 msgid "Use this form to manage room records in your database."
 msgstr "Utiliza este formulario para administrar salas de tu base de datos."
 
-#: lib/livedj_web/components/list_component.ex:96
+#: lib/livedj_web/components/list_component.ex:117
 #, elixir-autogen, elixir-format
 msgid "Remove '%{title}'?"
 msgstr "¿Eliminar '%{title}'?"
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:76
+#: lib/livedj_web/controllers/page_html/home.html.heex:81
 #, elixir-autogen, elixir-format
 msgid "Rooms"
 msgstr "Salas"
@@ -301,21 +295,32 @@ msgstr "Registrarse"
 msgid "Settings"
 msgstr "Configuración"
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:56
-#, elixir-autogen, elixir-format
-msgid "Join a room or create one of your own, add youtube videos and connect with others listening to music at the same time."
-msgstr "Crea tu propia sala o unite a alguna ya existente, agregá videos de youtube y escuchá la misma música con otrxs en tiempo real."
-
-#: lib/livedj_web/controllers/page_html/home.html.heex:53
-#, elixir-autogen, elixir-format
-msgid "Share and listen to youtube videos in real time with others"
-msgstr "Compartí y escuchá videos en tiempo real con otrxs"
-
-#: lib/livedj_web/controllers/page_html/home.html.heex:94
+#: lib/livedj_web/controllers/page_html/home.html.heex:99
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr "Código fuente"
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:87
+#: lib/livedj_web/live/components/search_bar_component.html.heex:99
+#, elixir-autogen, elixir-format
 msgid "Insert a youtube url or search for a video"
 msgstr "Ingresa una url de youtube o realiza una búsqueda"
+
+#: lib/livedj_web/components/layouts/session.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "Exit session?"
+msgstr "Salir?"
+
+#: lib/livedj_web/controllers/page_html/home.html.heex:58
+#, elixir-autogen, elixir-format
+msgid "Shared youtube sessions"
+msgstr "Sesiones grupales de YouTube"
+
+#: lib/livedj_web/controllers/page_html/home.html.heex:61
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Join or create a room with your friends, add videos and watch to youtube content in real time."
+msgstr "Unete o crea una sala con amigos, agrega videos y comparte contenido de youtube en tiempo real."
+
+#: lib/livedj_web/live/components/search_bar_component.ex:92
+#, elixir-autogen, elixir-format
+msgid "%{title} queued to the playlist"
+msgstr "Se agregó %{title} a la lista"

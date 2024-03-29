@@ -55,16 +55,22 @@ defmodule Livedj.Sessions do
   Adds a media element to the playlist
   """
   @spec add_media(Ecto.UUID.t(), String.t()) ::
-          PlaylistServer.add_response() | {:error, String.t()}
+          {:ok, {:added, Media.Video.t()}}
+          | {:error, {:error | :warn, String.t()}}
   def add_media(room_id, media_identifier) do
-    with :ok <- Playlist.can_insert?(room_id, media_identifier),
-         {:ok, %Media.Video{} = media} <-
-           get_or_fetch_media_metadata_by_id(media_identifier) do
+    add_video = fn media ->
       get_playlist_child_pid!(room_id)
       |> PlaylistServer.add(
         on_add: {&on_add/2, [room_id, media]},
         on_added: {&on_added/2, [room_id, media]}
       )
+    end
+
+    with :ok <- Playlist.can_insert?(room_id, media_identifier),
+         {:ok, %Media.Video{} = media} <-
+           get_or_fetch_media_metadata_by_id(media_identifier),
+         {:ok, :added} <- add_video.(media) do
+      {:ok, {:added, media}}
     else
       {:error, :element_exists} ->
         {:error,

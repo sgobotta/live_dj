@@ -46,15 +46,20 @@
     <h1 class="text-brand mt-10 flex items-center text-sm font-semibold leading-6">
       LiveDj
       <small class="bg-brand/5 text-[0.8125rem] ml-3 rounded-full px-2 font-medium leading-6">
-        v<%= Application.spec(:livedj, :vsn) %>
+        <.link
+          target="_blank"
+          href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
+        >
+          <.version_pill version={Application.spec(:livedj, :vsn)} />
+        </.link>
       </small>
     </h1>
     <p class="text-[2rem] mt-4 font-semibold leading-10 tracking-tighter text-zinc-900">
-      <%= gettext("Share and listen to youtube videos in real time with others") %>
+      <%= gettext("Shared youtube sessions") %>
     </p>
     <p class="mt-4 text-base leading-7 text-zinc-600">
       <%= gettext(
-        "Join a room or create one of your own, add youtube videos and connect with others listening to music at the same time."
+        "Join or create a room with your friends, add videos and watch to youtube content in real time."
       ) %>
     </p>
     <div class="flex">

@@ -20,8 +20,12 @@ defmodule LivedjWeb.CustomComponents do
       id="theme-hook"
     >
       <a
-        class="hover:text-zinc-700 cursor-pointer"
+        class="hover:text-zinc-700 cursor-pointer h-5 w-5 leading-3"
+        href="#"
+        phx-key=";"
+        phx-window-keydown={JS.dispatch("toggle-theme")}
         phx-click={JS.dispatch("toggle-theme")}
+        tabindex="0"
       >
         <%= if @theme === "dark" do %>
           <CoreComponents.icon
@@ -108,7 +112,7 @@ defmodule LivedjWeb.CustomComponents do
       id={@id}
       class="
         grid grid-rows-2 grid-flow-col
-        my-4 py-4 w-full gap-4
+        my-4 py-4 w-full gap-4 px-1
         overflow-x-scroll
       "
     >
@@ -123,14 +127,16 @@ defmodule LivedjWeb.CustomComponents do
           dark:bg-zinc-800 dark:hover:bg-zinc-800 dark:hover:brightness-110
         "
       >
-        <div
+        <.link
           phx-click={@module_click && @module_click.(module)}
+          href="#"
           class={["relative p-0", @module_click && "hover:cursor-pointer"]}
+          tabindex="0"
         >
           <div class="relative leading-6 text-zinc-900 hover:text-zinc-700">
             <%= render_slot(@inner_block, module) %>
           </div>
-        </div>
+        </.link>
       </div>
     </div>
     """
