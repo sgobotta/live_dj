@@ -94,7 +94,6 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_event("on_player_ended", _params, socket) do
-    # The player state changed to ended.
     {:noreply, socket}
   end
 
@@ -124,11 +123,22 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         socket
         |> assign_player(player)
         |> push_event("show_player", %{callback_event: "on_player_visible"})
-        |> push_event("load_video", player)
+        |> push_event("load_video", %{
+          callback_event: "on_total_duration_received",
+          player: player
+        })
       else
         socket
       end
 
+    {:noreply, socket}
+  end
+
+  def handle_event(
+        "on_total_duration_received",
+        %{"duration" => _duration},
+        socket
+      ) do
     {:noreply, socket}
   end
 
@@ -190,7 +200,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply,
      socket
      |> assign_player(player)
-     |> push_event("load_video", player)}
+     |> push_event("load_video", %{
+       callback_event: "on_total_duration_received",
+       player: player
+     })}
   end
 
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::

@@ -65,7 +65,7 @@ export default {
       this.endTimeTrackerId = endTimeTrackerId
       this.timeSliderId = timeSliderId
       console.debug(
-        '[Player :: on_container_mounted]',
+        'Player :: on_container_mounted',
         `backdrop_container_id=${this.backdropId}`,
         `player_container_id=${this.playerContainerId}`,
         `spinner_container_id=${this.spinnerId}`
@@ -75,7 +75,7 @@ export default {
       document.getElementById(this.spinnerId).classList.add("animate-ping")
 
       const onPlayerReady = player => {
-        console.debug('[Player :: Ready]', player)
+        console.debug('Player :: Ready', player)
         player.g.classList.add("rounded-lg")
 
         this.player = player
@@ -97,15 +97,15 @@ export default {
         /* eslint-disable no-case-declarations */
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:
-            console.debug("[Player State :: UNSTARTED")
+            console.debug("Player State :: UNSTARTED")
             break
           case YT.PlayerState.ENDED:
-            console.debug("[Player State :: ENDED")
+            console.debug("Player State :: ENDED")
             clearInterval(hookContext.el.dataset.trackTimeInterval)
             await this.pushEventTo(this.el, 'on_player_ended')
             break
           case YT.PlayerState.PLAYING:
-            console.debug("[Player State :: PLAYING")
+            console.debug("Player State :: PLAYING")
 
             await this.pushEventTo(this.el, 'on_player_playing')
             const trackTimeInterval = setInterval(() => {
@@ -124,7 +124,7 @@ export default {
 
             break
           case YT.PlayerState.PAUSED:
-            console.debug("[Player State :: PAUSED")
+            console.debug("Player State :: PAUSED")
 
             await this.pushEventTo(this.el, 'on_player_paused')
             clearInterval(hookContext.el.dataset.trackTimeInterval)
@@ -136,14 +136,14 @@ export default {
             )
             break
           case YT.PlayerState.BUFFERING:
-            console.debug("[Player State :: BUFFERING")
+            console.debug("Player State :: BUFFERING")
             break
           case YT.PlayerState.CUED:
-            console.debug("[Player State :: CUED")
+            console.debug("Player State :: CUED")
             break
 
           default:
-            console.debug("[Player :: Unknown state", event.data)
+            console.debug("Player :: Unknown state", event.data)
         }
       }
 
@@ -166,7 +166,7 @@ export default {
      * Received when the player is ready to be displayed
      */
     this.handleEvent('show_player', ({ callback_event: callbackEvent}) => {
-      console.debug('[Player :: show_player]')
+      console.debug('Player :: show_player')
 
       this.player.g.classList.remove('hidden')
 
@@ -189,8 +189,10 @@ export default {
     this.handleEvent('request_current_time', async ({
       callback_event: callbackEvent
     }) => {
-      console.debug('[Player :: request_current_time]')
+      console.debug('Player :: request_current_time')
+
       const currentTime = await this.player.getCurrentTime()
+
       await this.pushEventTo(this.el, callbackEvent, {
         current_time: currentTime
       })
@@ -204,7 +206,8 @@ export default {
     this.handleEvent('set_current_time', async ({
       current_time: currentTime
     }) => {
-      console.debug('[Player :: set_current_time]')
+      console.debug('Player :: set_current_time')
+
       this.player.seekTo(currentTime, true)
     })
 
@@ -216,13 +219,11 @@ export default {
     this.handleEvent('play_video', async ({
       callback_event: callbackEvent
     }) => {
-      console.debug('[Player :: play_video]')
-      await this.player.playVideo()
-      await this.pushEventTo(this.el, callbackEvent)
+      console.debug('Player :: play_video')
 
-      const backdrop = document.getElementById(this.backdropId)
-      backdrop.classList.add('opacity-0')
-      backdrop.classList.remove('opacity-50')
+      this.playVideo()
+
+      await this.pushEventTo(this.el, callbackEvent)
     })
 
     /**
@@ -233,17 +234,11 @@ export default {
     this.handleEvent('pause_video', async ({
       callback_event: callbackEvent
     }) => {
-      console.debug('[Player :: pause_video]', this.spinnerId)
-      await this.player.pauseVideo()
+      console.debug('Player :: pause_video')
+
+      this.pauseVideo()
+
       await this.pushEventTo(this.el, callbackEvent)
-
-      const spinner = document.getElementById(this.spinnerId)
-      spinner.classList.add("animate-ping")
-      spinner.classList.remove("hidden")
-
-      const backdrop = document.getElementById(this.backdropId)
-      backdrop.classList.remove("opacity-0")
-      backdrop.classList.add("opacity-50")
     })
 
     /**
@@ -251,32 +246,48 @@ export default {
      * 
      * Received when the player should load a video
      */
-    this.handleEvent('load_video', async (player) => {
-      console.debug('[Player :: load_video]', player)
+    this.handleEvent('load_video', async ({
+      callback_event: callbackEvent, player
+    }) => {
+      console.debug('Player :: load_video')
+      await this.player.mute()
       await this.player.loadVideoById(
         player.media_id,
         player.current_time,
         "large"
       )
-      console.log("player", player)
 
-      switch (player.state) {
-        case "playing":
-          await this.player.playVideo()
-          break
+      setTimeout(async () => {
+        await this.pauseVideo()
+        await this.player.unMute()
 
-        case "paused":
-          await this.player.pauseVideo()
-          break
+        this.pushEventTo(this.el, callbackEvent, {
+          duration: this.player.getDuration()
+        })
+      }, 500)
 
-        case "idle":
-          await this.player.stopVideo()
-          break
+      // Commenting this to avoid triggering player changes at this point.
+      // What I want to do is to trigger player events once the server
+      // recognises the total duration of the track, which is going to be sent
+      // on this function
 
-        default:
-          console.debug(`Unkown player state=${player.state}`)
-          break
-      }
+      // switch (player.state) {
+      //   case "playing":
+      //     await this.player.playVideo()
+      //     break
+
+      //   case "paused":
+      //     await this.player.pauseVideo()
+      //     break
+
+      //   case "idle":
+      //     await this.player.stopVideo()
+      //     break
+
+      //   default:
+      //     console.debug(`Unkown player state=${player.state}`)
+      //     break
+      // }
 
       scrollToElement(`${player.media_id}-item`)
     })
@@ -290,7 +301,7 @@ export default {
       volume_level: volumeLevel,
       callback_event: callbackEvent = null
     }) => {
-      console.debug('[Player :: change_volume', volumeLevel)
+      console.debug('Player :: change_volume', volumeLevel)
       this.player.unMute()
       this.player.setVolume(volumeLevel)
 
@@ -303,7 +314,7 @@ export default {
      * Received when the player should mute
      */
     this.handleEvent('mute', async ({callback_event: callbackEvent = null}) => {
-      console.debug('[Player :: mute')
+      console.debug('Player :: mute')
       this.player.mute()
 
       await this.handleCallbackEvent(callbackEvent)
@@ -317,7 +328,7 @@ export default {
     this.handleEvent('unmute', async ({
       callback_event: callbackEvent = null
     }) => {
-      console.debug('[Player :: unmute')
+      console.debug('Player :: unmute')
       this.player.unMute()
 
       await this.handleCallbackEvent(callbackEvent)
@@ -329,22 +340,35 @@ export default {
      * Switches to fullscreen mode
      */
     this.handleEvent('fullscreen', () => {
-      console.debug('[Player :: fullscreen')
+      console.debug('Player :: fullscreen')
       const videoIframe = this.player.getIframe()
-
-      console.log("iframe", videoIframe)
-
       const requestFullScreen =
         videoIframe.requestFullScreen
         || videoIframe.mozRequestFullScreen
         || videoIframe.webkitRequestFullScreen
 
-      console.log(requestFullScreen)
-
       if (requestFullScreen) {
         requestFullScreen.bind(videoIframe)();
       }
     })
+  },
+  async pauseVideo() {
+    const spinner = document.getElementById(this.spinnerId)
+    spinner.classList.add("animate-ping")
+    spinner.classList.remove("hidden")
+
+    const backdrop = document.getElementById(this.backdropId)
+    backdrop.classList.remove("opacity-0")
+    backdrop.classList.add("opacity-50")
+
+    await this.player.pauseVideo()
+  },
+  async playVideo() {
+    await this.player.playVideo()
+      
+    const backdrop = document.getElementById(this.backdropId)
+    backdrop.classList.add('opacity-0')
+    backdrop.classList.remove('opacity-50')
   },
   player: null,
   playerContainerId: null,
