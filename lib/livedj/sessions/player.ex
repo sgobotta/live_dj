@@ -8,6 +8,7 @@ defmodule Livedj.Sessions.Player do
              :media_id,
              :media_thumbnail_url,
              :current_time,
+             :duration,
              :title,
              :channel
            ]}
@@ -16,6 +17,7 @@ defmodule Livedj.Sessions.Player do
             media_id: nil,
             media_thumbnail_url: nil,
             current_time: 0,
+            duration: nil,
             title: nil,
             channel: nil
 
@@ -40,6 +42,7 @@ defmodule Livedj.Sessions.Player do
       media_id: nil,
       media_thumbnail_url: nil,
       current_time: 0,
+      duration: nil,
       title: nil,
       channel: nil
     }
@@ -143,6 +146,22 @@ defmodule Livedj.Sessions.Player do
 
       {:error, :hset_error} ->
         {:error, :player_set_current_time_error}
+    end
+  end
+
+  @doc """
+  Given a room id sets the total duration to return a player struct.
+  """
+  @spec set_duration(Ecto.UUID.t(), non_neg_integer()) ::
+          {:ok, t()}
+          | {:error, :player_set_duration_error | :player_not_found}
+  def set_duration(room_id, duration) do
+    case set(room_id, %{duration: duration}) do
+      {:ok, _changes} ->
+        get(room_id)
+
+      {:error, :hset_error} ->
+        {:error, :player_set_duration_error}
     end
   end
 

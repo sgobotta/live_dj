@@ -300,6 +300,30 @@ defmodule Livedj.Sessions do
   defp on_state_change(room_id, player),
     do: Channels.broadcast_player_state_change!(room_id, %{player: player})
 
+  @spec prepare_player_duration(binary(), non_neg_integer()) :: :ok
+  def prepare_player_duration(room_id, duration) do
+    :ok =
+      room_id
+      |> get_player_child_pid!()
+      |> PlayerServer.prepare_media_duration(
+        on_media_duration_prepare:
+          {&on_media_duration_prepare/2, [room_id, duration]},
+        on_media_duration_prepared: {&on_media_duration_prepared/2, [room_id]}
+      )
+  end
+
+  @spec on_media_duration_prepare(binary(), non_neg_integer()) ::
+          {:ok, Player.t()}
+          | {:error, :player_set_duration_error | :player_not_found}
+  defp on_media_duration_prepare(room_id, duration) do
+    Player.set_duration(room_id, duration)
+  end
+
+  @spec on_media_duration_prepared(binary(), Player.t()) :: :ok
+  defp on_media_duration_prepared(_room_id, _player) do
+    :ok
+  end
+
   @doc """
   Calls the player server to broadcast a play signal.
   """

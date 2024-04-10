@@ -136,9 +136,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event(
         "on_total_duration_received",
-        %{"duration" => _duration},
+        %{"duration" => duration},
         socket
       ) do
+    :ok = Sessions.prepare_player_duration(socket.assigns.room.id, duration)
     {:noreply, socket}
   end
 

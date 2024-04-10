@@ -10,11 +10,13 @@ defmodule Livedj.Sessions.PlayerServer do
   @play_msg :play
   @pause_msg :pause
   @state_change_msg :state_change
+  @prepare_duration_msg :prepare_duration
 
   @joined_cb :joined
   # @playing_cb :playing
   # @paused_cb :paused
   # @ended_cb :ended
+  @prepared_duration_cb :prepared_duration
   @on_start_cb :on_start
 
   @type state :: %{
@@ -28,6 +30,7 @@ defmodule Livedj.Sessions.PlayerServer do
   @type state_change_response :: :ok
   @type play_response :: :ok
   @type pause_response :: :ok
+  @type prepare_media_duration_response :: :ok | :noop
 
   # ----------------------------------------------------------------------------
   # Client interface
@@ -75,6 +78,15 @@ defmodule Livedj.Sessions.PlayerServer do
   end
 
   @doc """
+  Given a pid, sends a signal to prepare the duration to the player.
+  """
+  @spec prepare_media_duration(pid(), keyword()) ::
+          prepare_media_duration_response()
+  def prepare_media_duration(pid, cbs) do
+    GenServer.call(pid, {@prepare_duration_msg, cbs})
+  end
+
+  @doc """
   Given a keyword of args returns a new map that represents the #{__MODULE__}
   state.
   """
@@ -82,7 +94,8 @@ defmodule Livedj.Sessions.PlayerServer do
   def initial_state(opts) do
     %{
       id: Keyword.fetch!(opts, :id),
-      members: Map.new()
+      members: Map.new(),
+      duration_locked?: false
     }
   end
 
@@ -112,6 +125,35 @@ defmodule Livedj.Sessions.PlayerServer do
     state = add_member(state, ref, pid)
 
     {:reply, {:ok, :joined}, state, {:continue, {@joined_cb, pid, cbs}}}
+  end
+
+  @impl GenServer
+  def handle_call(
+        {@prepare_duration_msg, cbs},
+        _from,
+        %{duration_locked?: false} = state
+      ) do
+    Logger.debug("#{__MODULE__} :: Preparing player duration.")
+
+    {{on_media_duration_prepare, args}, cbs} =
+      Keyword.pop!(cbs, :on_media_duration_prepare)
+
+    {:ok, player} = apply(on_media_duration_prepare, args)
+
+    {:reply, :ok, state, {:continue, {@prepared_duration_cb, player, cbs}}}
+  end
+
+  @impl GenServer
+  def handle_call(
+        {@prepared_duration_cb, _cbs},
+        _from,
+        %{duration_locked?: true} = state
+      ) do
+    Logger.debug(
+      "#{__MODULE__} :: Skipping player duration preparation, duration state is locked."
+    )
+
+    {:reply, :noop, state}
   end
 
   @impl GenServer
@@ -150,6 +192,15 @@ defmodule Livedj.Sessions.PlayerServer do
     {{on_joined, args}, _cbs} = Keyword.pop!(cbs, :on_joined)
 
     apply(on_joined, args ++ [from])
+
+    {:noreply, state}
+  end
+
+  def handle_continue({@prepared_duration_cb, player, cbs}, state) do
+    {{on_media_duration_prepared, args}, []} =
+      Keyword.pop!(cbs, :on_media_duration_prepared)
+
+    apply(on_media_duration_prepared, args ++ [player])
 
     {:noreply, state}
   end
