@@ -87,8 +87,8 @@ defmodule LivedjWeb.ListComponent do
                   text-center text-[0.5rem]
                   text-zinc-100 dark:text-zinc-900
                   #{if current_media?(@current_media, item.external_id),
-                    do: "bg-zinc-900 dark:bg-zinc-100",
-                    else: "bg-green-500 text-zinc-100"}
+                    do: "bg-green-500 text-zinc-100",
+                    else: "bg-zinc-900 dark:bg-zinc-100"}
                 "}>
                   <%= index + 1 %>
                 </p>
@@ -106,7 +106,7 @@ defmodule LivedjWeb.ListComponent do
                 class="
                   cursor-default
                   transition-all duration-300
-                  w-6 h-6 rounded mr-1 flex-none hover:bg-gray-300 hover:dark:bg-gray-700
+                  w-6 h-6 rounded-md mr-1 flex-none hover:bg-gray-300 hover:dark:bg-gray-700
                   text-zinc-900 dark:text-zinc-100 hover:text-red-500 hover:dark:text-red-500
                   focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50
                 "

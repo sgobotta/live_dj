@@ -14,7 +14,7 @@
           <div class="flex items-center h-full">
             <div class="
               basis-28 sm:basis-28 md:basis-28 lg:basis-24 xl:basis-24 2xl:basis-24
-              h-14 w-14 ring-0 ring-white m-0">
+              h-14 w-14 ring-0 ring-white m-0 pl-2">
               <%= if @player.media_thumbnail_url != "" do %>
                 <img
                   class="h-14 w-14 rounded-md ring-0 ring-white"
@@ -31,9 +31,11 @@
               cursor-default
             ">
               <%= if media_loaded?(@player.media_id) do %>
-                <p class="text-zinc-900 dark:text-zinc-100 font-semibold text-sm overflow-hidden text-ellipsis h-5">
-                  <%= @player.title %>
-                </p>
+                <div class="overflow-hidden box-border">
+                  <p class="text-zinc-900 dark:text-zinc-100 font-semibold text-sm h-5 animate-text-overflow">
+                    <%= @player.title %>
+                  </p>
+                </div>
                 <p class="text-zinc-700 dark:text-zinc-300 font-normal text-xs overflow-hidden text-ellipsis h-5">
                   <%= @player.channel %>
                 </p>
@@ -63,7 +65,7 @@
                 "back",
                 "icons/player",
                 class: "
-                  h-4 w-4 stroke-2
+                  h-6 w-6 stroke-2
                   fill-zinc-700 hover:fill-zinc-500 active:fill-zinc-700 focus:fill-zinc-700
                   dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:active:fill-zinc-300 dark:focus:fill-zinc-300
                 "
@@ -73,12 +75,12 @@
               <a
                 href="#"
                 phx-click={on_pause_click_event()}
-                class="cursor-default rounded-full h-8 w-8 flex justify-center items-center"
+                class="cursor-default rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
                 tabindex="0"
               >
                 <.icon
                   name="hero-pause-circle-solid"
-                  class="h-8 w-8 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
+                  class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
                 />
               </a>
             <% end %>
@@ -86,12 +88,12 @@
               <a
                 href="#"
                 phx-click={on_play_click_event()}
-                class="cursor-default rounded-full h-8 w-8 flex justify-center items-center"
+                class="cursor-default rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
                 tabindex="0"
               >
                 <.icon
                   name="hero-play-circle-solid"
-                  class="h-8 w-8 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
+                  class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
                 />
               </a>
             <% end %>
@@ -106,7 +108,7 @@
                 "next",
                 "icons/player",
                 class: "
-                  h-4 w-4 stroke-2
+                  h-6 w-6 stroke-2
                   fill-zinc-700 hover:fill-zinc-500 active:fill-zinc-700 focus:fill-zinc-700
                   dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:active:fill-zinc-300 dark:focus:fill-zinc-300
                 "
@@ -120,6 +122,12 @@
           col-span-3 row-span-2 self-center pl-2 pr-3 w-full
           flex justify-end gap-3 items-center
         ">
+          <%!-- Search videos --%>
+          <.live_component
+            id={@add_video_control_id}
+            module={LivedjWeb.Components.AddVideoComponent}
+            room={@room}
+          />
           <%!-- Volume --%>
           <.live_component
             id={@volume_control_id}
@@ -127,11 +135,7 @@
             level={100}
             muted?={false}
           />
-          <.live_component
-            id={@add_video_control_id}
-            module={LivedjWeb.Components.AddVideoComponent}
-            room={@room}
-          />
+          <%!-- Fullscreen --%>
           <.live_component
             id={@fullscreen_control_id}
             module={
