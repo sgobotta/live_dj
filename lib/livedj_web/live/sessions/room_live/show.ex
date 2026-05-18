@@ -94,7 +94,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_event("on_player_ended", _params, socket) do
-    # The player state changed to ended.
+    :ok = Sessions.report_track_ended(socket.assigns.room.id)
     {:noreply, socket}
   end
 

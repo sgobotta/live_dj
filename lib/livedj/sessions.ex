@@ -323,6 +323,27 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
+  Reports that the YouTube player reached the end of the current track.
+
+  Only the room controller (first joined LiveView, or next after disconnect)
+  advances the playlist via `next_track/1`.
+  """
+  @spec report_track_ended(binary()) :: :ok
+  def report_track_ended(room_id) do
+    _response =
+      room_id
+      |> get_player_child_pid!()
+      |> PlayerServer.report_track_ended(
+        on_track_ended: {&on_track_ended/1, [room_id]}
+      )
+
+    :ok
+  end
+
+  @spec on_track_ended(binary()) :: :ok
+  defp on_track_ended(room_id), do: next_track(room_id)
+
+  @doc """
   Given a room id, returns a player.
   """
   @spec get_player(Ecto.UUID.t()) :: {:ok, Player.t()} | {:error, any()}
