@@ -191,9 +191,8 @@ server:
 
 #🧪 test: @ Runs all test suites
 test: SHELL:=/bin/bash
-test: MIX_ENV=test
 test:
-	@mix test
+	@MIX_ENV=test mix test
 
 #🧪 test.cover: @ Runs all tests and generates a coverage report
 test.cover: SHELL:=/bin/bash
