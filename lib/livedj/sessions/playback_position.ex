@@ -18,6 +18,23 @@ defmodule Livedj.Sessions.PlaybackPosition do
   def sync(%Player{} = player),
     do: %{player | current_time: to_integer(player.current_time)}
 
+  @doc """
+  Returns true when a playing track has reached its stored duration.
+  """
+  @spec track_ended?(Player.t(), non_neg_integer()) :: boolean()
+  def track_ended?(player, epsilon \\ 1) do
+    player = sync(player)
+
+    case player do
+      %Player{state: :playing, duration: duration, current_time: position}
+      when is_integer(duration) and duration > 0 ->
+        position >= duration - epsilon
+
+      _else ->
+        false
+    end
+  end
+
   @spec to_integer(non_neg_integer() | binary() | any()) :: non_neg_integer()
   defp to_integer(value) when is_integer(value) and value >= 0, do: value
 

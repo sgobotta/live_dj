@@ -3,6 +3,7 @@ defmodule Livedj.Sessions.PlaybackClockTest do
 
   alias Livedj.Sessions.{PlaybackClock, PlaybackPosition, Player, Room}
 
+  import Livedj.MediaFixtures
   import Livedj.SessionsFixtures
 
   describe "play/1 and pause/2" do
@@ -45,6 +46,35 @@ defmodule Livedj.Sessions.PlaybackClockTest do
 
       {:ok, %Player{played_at: nil, state: :paused, current_time: 5}} =
         Player.get(room_id)
+    end
+
+    test "load_media persists duration in redis", %{room_id: room_id} do
+      media = video_fixture()
+
+      assert {:ok, %Player{duration: 120}} =
+               Player.load_media(room_id, media, seek_to: 0, duration: 120)
+    end
+
+    test "load_media with autoplay clears stale played_at so track is not instantly ended",
+         %{
+           room_id: room_id
+         } do
+      _media = video_fixture()
+      other = video_fixture()
+
+      {:ok, _} = Player.play(room_id)
+      Process.sleep(1100)
+
+      assert {:ok, %Player{state: :playing, played_at: played_at}} =
+               Player.load_media(room_id, other,
+                 seek_to: 0,
+                 duration: 300,
+                 autoplay: true
+               )
+
+      assert %DateTime{} = played_at
+      {:ok, player} = Player.get(room_id)
+      refute PlaybackPosition.track_ended?(player)
     end
   end
 end

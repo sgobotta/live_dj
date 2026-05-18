@@ -30,4 +30,31 @@ defmodule Livedj.Sessions.PlaybackPositionTest do
       assert %Player{current_time: 15} = PlaybackPosition.sync(player)
     end
   end
+
+  describe "track_ended?/2" do
+    test "is true when playing position reached duration" do
+      played_at = DateTime.utc_now() |> DateTime.add(-100, :second)
+
+      player = %Player{
+        state: :playing,
+        current_time: 0,
+        played_at: played_at,
+        duration: 90
+      }
+
+      assert PlaybackPosition.track_ended?(player)
+    end
+
+    test "is false without duration" do
+      player = %Player{state: :playing, current_time: 999, duration: nil}
+
+      refute PlaybackPosition.track_ended?(player)
+    end
+
+    test "is false when paused" do
+      player = %Player{state: :paused, current_time: 100, duration: 10}
+
+      refute PlaybackPosition.track_ended?(player)
+    end
+  end
 end

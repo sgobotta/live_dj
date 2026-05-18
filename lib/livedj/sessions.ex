@@ -20,7 +20,8 @@ defmodule Livedj.Sessions do
     PlaylistServer,
     PlaylistSupervisor,
     Room,
-    Supervisor
+    Supervisor,
+    VideoDuration
   }
 
   alias Livedj.Sessions.Exceptions.SessionRoomError
@@ -114,9 +115,8 @@ defmodule Livedj.Sessions do
     {:ok, media_list} = Playlist.get(room_id)
 
     if length(media_list) == 1 do
-      {:ok, %Player{} = player} = Player.load_media(room_id, media, seek_to: 0)
-
-      :ok = Channels.broadcast_player_load_media!(room_id, player)
+      {:ok, player} = load_player_media(room_id, media, seek_to: 0)
+      :ok = broadcast_player_load_media!(room_id, player)
     end
 
     :ok = Channels.broadcast_playlist_track_added!(room_id, media)
@@ -151,7 +151,7 @@ defmodule Livedj.Sessions do
 
     if media_list == [] do
       {:ok, %Player{} = player} = Player.clear_media(room_id)
-
+      notify_playback_clock_track_loaded(room_id)
       :ok = Channels.broadcast_player_load_media!(room_id, player)
     end
 
@@ -351,7 +351,16 @@ defmodule Livedj.Sessions do
   end
 
   @spec on_track_ended(binary()) :: :ok
-  defp on_track_ended(room_id), do: next_track(room_id)
+  defp on_track_ended(room_id) do
+    case Player.get(room_id) do
+      {:ok, %Player{duration: duration}}
+      when is_integer(duration) and duration > 0 ->
+        :ok
+
+      _else ->
+        next_track(room_id)
+    end
+  end
 
   @doc """
   Given a room id, returns a player.
@@ -383,9 +392,10 @@ defmodule Livedj.Sessions do
     with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
          {:ok, previous_media_id} <- Playlist.get_previous(room_id, media_id),
          {:ok, media} <- Media.get_by_external_id(previous_media_id) do
-      {:ok, %Player{} = player} = Player.load_media(room_id, media, seek_to: 0)
+      {:ok, player} =
+        load_player_media(room_id, media, seek_to: 0, autoplay: true)
 
-      :ok = Channels.broadcast_player_load_media!(room_id, player)
+      :ok = broadcast_player_load_media!(room_id, player)
     else
       _error ->
         :ok
@@ -400,9 +410,10 @@ defmodule Livedj.Sessions do
     with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
          {:ok, next_media_id} <- Playlist.get_next(room_id, media_id),
          {:ok, media} <- Media.get_by_external_id(next_media_id) do
-      {:ok, %Player{} = player} = Player.load_media(room_id, media, seek_to: 0)
+      {:ok, player} =
+        load_player_media(room_id, media, seek_to: 0, autoplay: true)
 
-      :ok = Channels.broadcast_player_load_media!(room_id, player)
+      :ok = broadcast_player_load_media!(room_id, player)
     else
       _error ->
         :ok
@@ -415,9 +426,9 @@ defmodule Livedj.Sessions do
   @spec play_track(Ecto.UUID.t(), String.t()) :: :ok | :error
   def play_track(room_id, selected_media_id) do
     with {:ok, media} <- Media.get_by_external_id(selected_media_id),
-         {:ok, %Player{} = player} <-
-           Player.load_media(room_id, media, seek_to: 0) do
-      :ok = Channels.broadcast_player_load_media!(room_id, player)
+         {:ok, player} <-
+           load_player_media(room_id, media, seek_to: 0, autoplay: true) do
+      :ok = broadcast_player_load_media!(room_id, player)
     else
       _error ->
         :error
@@ -439,18 +450,40 @@ defmodule Livedj.Sessions do
   end
 
   @spec sync_player_position(binary(), Player.t()) :: Player.t()
-  defp sync_player_position(room_id, player) do
-    case PlayerSupervisor.get_child(room_id) do
-      nil ->
-        PlaybackPosition.sync(player)
+  defp sync_player_position(_room_id, player) do
+    PlaybackPosition.sync(player)
+  end
 
-      {_pid, _state} ->
-        case room_id
-             |> ensure_playback_clock_pid!()
-             |> PlaybackClock.sync_player() do
-          {:ok, synced} -> synced
-          _error -> PlaybackPosition.sync(player)
-        end
+  @spec load_player_media(binary(), Media.Video.t(), keyword()) ::
+          {:ok, Player.t()} | {:error, any()}
+  defp load_player_media(room_id, media, opts) do
+    opts =
+      case Keyword.get(opts, :duration) do
+        duration when is_integer(duration) and duration > 0 ->
+          opts
+
+        _else ->
+          case VideoDuration.fetch_seconds(media.external_id) do
+            {:ok, seconds} -> Keyword.put(opts, :duration, seconds)
+            {:error, _error} -> opts
+          end
+      end
+
+    with {:ok, player} <- Player.load_media(room_id, media, opts) do
+      notify_playback_clock_track_loaded(room_id)
+      {:ok, PlaybackPosition.sync(player)}
+    end
+  end
+
+  @spec broadcast_player_load_media!(binary(), Player.t()) :: :ok
+  defp broadcast_player_load_media!(room_id, player),
+    do: Channels.broadcast_player_load_media!(room_id, player)
+
+  @spec notify_playback_clock_track_loaded(binary()) :: :ok
+  defp notify_playback_clock_track_loaded(room_id) do
+    case PlayerSupervisor.get_playback_clock(room_id) do
+      {pid, _} -> PlaybackClock.track_loaded(pid)
+      nil -> :ok
     end
   end
 
