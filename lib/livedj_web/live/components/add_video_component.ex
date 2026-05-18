@@ -14,7 +14,7 @@ defmodule LivedjWeb.Components.AddVideoComponent do
         <:button>
           <.button class="
             rounded-md
-            cursor-default w-6 h-6 !p-0 flex flex-wrap justify-center content-center
+            cursor-pointer w-6 h-6 !p-0 flex flex-wrap justify-center content-center
             align-middle bg-zinc-300 dark:bg-zinc-700
             transition-all duration-300
             shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
