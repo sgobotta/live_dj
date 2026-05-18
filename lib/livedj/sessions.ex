@@ -352,6 +352,8 @@ defmodule Livedj.Sessions do
 
   @spec on_track_ended(binary()) :: :ok
   defp on_track_ended(room_id) do
+    :ok = Channels.broadcast_player_track_ended!(room_id)
+
     case Player.get(room_id) do
       {:ok, %Player{duration: duration}}
       when is_integer(duration) and duration > 0 ->
