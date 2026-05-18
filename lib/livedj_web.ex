@@ -102,6 +102,7 @@ defmodule LivedjWeb do
       # Core UI components and translation
       import LivedjWeb.CoreComponents
       import LivedjWeb.CustomComponents
+      import LivedjWeb.MiniAvatarStackComponent
       import LivedjWeb.Gettext
 
       # Shortcut for generating JS commands

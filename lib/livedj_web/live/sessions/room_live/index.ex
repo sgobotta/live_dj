@@ -17,7 +17,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
 
         rooms_players =
           Enum.map(rooms, fn %Room{id: room_id} = room ->
-            %{id: room_id, room: room, player: nil}
+            %{id: room_id, room: room, player: nil, users: []}
           end)
 
         {:ok, assign(socket, :rooms_players, rooms_players)}
@@ -44,7 +44,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
      assign(
        socket,
        :rooms_players,
-       socket.assigns.rooms_players ++ [%{id: room_id, room: room, player: nil}]
+       socket.assigns.rooms_players ++
+         [%{id: room_id, room: room, player: nil, users: []}]
      )}
   end
 
