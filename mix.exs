@@ -76,7 +76,7 @@ defmodule Livedj.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       # Youtube deps
-      {:tubex, git: "https://github.com/sgobotta/tubex.git", tag: "0.0.10"},
+      {:tubex, git: "https://github.com/sgobotta/tubex.git", tag: "0.0.11"},
       # Other
       {:html_entities, "~> 0.5.2"},
       {:phoenix_inline_svg, "~> 1.4"},
