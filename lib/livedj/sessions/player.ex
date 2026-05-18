@@ -16,6 +16,8 @@ defmodule Livedj.Sessions.Player do
             media_id: nil,
             media_thumbnail_url: nil,
             current_time: 0,
+            played_at: nil,
+            duration: nil,
             title: nil,
             channel: nil
 
@@ -23,7 +25,10 @@ defmodule Livedj.Sessions.Player do
 
   @type t :: %__MODULE__{}
   @type player_opts :: [
-          {:seek_to, non_neg_integer()}
+          {:seek_to, non_neg_integer()},
+          {:played_at, DateTime.t()},
+          {:duration, non_neg_integer()},
+          {:autoplay, boolean()}
         ]
 
   @idle_state :idle
@@ -96,15 +101,15 @@ defmodule Livedj.Sessions.Player do
           {:ok, t()} | {:error, :player_load_media_error | :player_not_found}
   def load_media(room_id, media, opts) do
     params =
-      maybe_merge_opts(
-        %{
-          media_id: media.external_id,
-          media_thumbnail_url: media.thumbnail_url,
-          title: media.title,
-          channel: media.channel
-        },
-        opts
-      )
+      %{
+        media_id: media.external_id,
+        media_thumbnail_url: media.thumbnail_url,
+        title: media.title,
+        channel: media.channel
+      }
+      |> maybe_merge_opts(opts)
+      |> maybe_merge_duration(opts)
+      |> apply_load_playback_state(opts)
 
     case set(room_id, params) do
       {:ok, _changes} ->
@@ -121,7 +126,7 @@ defmodule Livedj.Sessions.Player do
   @spec clear_media(Ecto.UUID.t()) ::
           {:ok, t()} | {:error, :player_clear_media_error | :player_not_found}
   def clear_media(room_id) do
-    case set(room_id, %{media_id: nil}) do
+    case set(room_id, %{media_id: nil, duration: ""}) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -152,8 +157,14 @@ defmodule Livedj.Sessions.Player do
   @spec play(Ecto.UUID.t(), keyword()) ::
           {:ok, t()}
           | {:error, :player_update_play_state_error | :player_not_found}
-  def play(room_id, _opts) do
-    case set(room_id, %{state: @playing_state}) do
+  def play(room_id, opts \\ []) do
+    played_at =
+      case Keyword.get(opts, :played_at) do
+        %DateTime{} = dt -> DateTime.to_iso8601(dt)
+        _else -> DateTime.utc_now() |> DateTime.to_iso8601()
+      end
+
+    case set(room_id, %{state: @playing_state, played_at: played_at}) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -169,7 +180,11 @@ defmodule Livedj.Sessions.Player do
           {:ok, t()}
           | {:error, :player_update_pause_state_error | :player_not_found}
   def pause(room_id, at: current_time) do
-    case set(room_id, %{current_time: current_time, state: @paused_state}) do
+    case set(room_id, %{
+           current_time: current_time,
+           state: @paused_state,
+           played_at: ""
+         }) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -217,7 +232,66 @@ defmodule Livedj.Sessions.Player do
 
   @spec parse_hset_value(atom(), any()) :: any()
   defp parse_hset_value(:state, value), do: String.to_atom(value)
+
+  defp parse_hset_value(:current_time, value) when is_binary(value) do
+    case Integer.parse(value) do
+      {int, _offset} when int >= 0 -> int
+      _other_error -> 0
+    end
+  end
+
+  defp parse_hset_value(:current_time, value) when is_integer(value), do: value
+
+  defp parse_hset_value(:played_at, ""), do: nil
+  defp parse_hset_value(:played_at, nil), do: nil
+
+  defp parse_hset_value(:played_at, value) when is_binary(value) do
+    case DateTime.from_iso8601(value) do
+      {:ok, datetime, _offset} -> datetime
+      _other_error -> nil
+    end
+  end
+
+  defp parse_hset_value(:duration, ""), do: nil
+  defp parse_hset_value(:duration, nil), do: nil
+
+  defp parse_hset_value(:duration, value) when is_binary(value) do
+    case Integer.parse(value) do
+      {int, _offset} when int > 0 -> int
+      _other_error -> nil
+    end
+  end
+
+  defp parse_hset_value(:duration, value) when is_integer(value) and value > 0,
+    do: value
+
   defp parse_hset_value(_key, value), do: value
+
+  @spec maybe_merge_duration(map(), player_opts()) :: map()
+  defp maybe_merge_duration(params, opts) do
+    case Keyword.get(opts, :duration) do
+      duration when is_integer(duration) and duration > 0 ->
+        Map.put(params, :duration, duration)
+
+      _else ->
+        Map.put(params, :duration, "")
+    end
+  end
+
+  # Clears timing from the previous track so the playback clock does not
+  # treat the new load as already finished.
+  @spec apply_load_playback_state(map(), player_opts()) :: map()
+  defp apply_load_playback_state(params, opts) do
+    if Keyword.get(opts, :autoplay, false) do
+      params
+      |> Map.put(:state, @playing_state)
+      |> Map.put(:played_at, DateTime.utc_now() |> DateTime.to_iso8601())
+    else
+      params
+      |> Map.put(:state, @paused_state)
+      |> Map.put(:played_at, "")
+    end
+  end
 
   @spec maybe_merge_opts(map(), player_opts()) :: map()
   defp maybe_merge_opts(params, opts) do

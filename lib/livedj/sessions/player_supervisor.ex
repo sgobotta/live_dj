@@ -8,17 +8,24 @@ defmodule Livedj.Sessions.PlayerSupervisor do
 
   alias Livedj.Sessions
   alias Livedj.Sessions.Exceptions.PlayerServerError
-  alias Livedj.Sessions.Player
-  alias Livedj.Sessions.PlayerServer
+  alias Livedj.Sessions.{PlaybackClock, Player, PlayerServer}
 
   @server_module PlayerServer
+  @clock_module PlaybackClock
   @registry_module Registry.Player
+  @clock_registry_module Registry.PlaybackClock
 
   @spec server_module() :: module()
   def server_module, do: @server_module
 
   @spec registry_module() :: module()
   def registry_module, do: @registry_module
+
+  @spec clock_module() :: module()
+  def clock_module, do: @clock_module
+
+  @spec clock_registry_module() :: module()
+  def clock_registry_module, do: @clock_registry_module
 
   @doc """
   Given a keyword of args, initialises the dynamic Playlist Supervisor.
@@ -67,7 +74,51 @@ defmodule Livedj.Sessions.PlayerSupervisor do
 
     args = Keyword.put(args, :on_start, on_start)
 
-    DynamicSupervisor.start_child(supervisor, {server_module(), args})
+    with {:ok, player_pid} <-
+           DynamicSupervisor.start_child(supervisor, {server_module(), args}),
+         {:ok, _clock_pid} <- start_playback_clock(supervisor, id) do
+      {:ok, player_pid}
+    end
+  end
+
+  @doc """
+  Starts a `#{PlaybackClock}` for a room when one is not already running.
+  """
+  @spec start_playback_clock(module(), binary()) ::
+          {:ok, pid()} | {:error, any()}
+  def start_playback_clock(supervisor \\ __MODULE__, room_id) do
+    case get_playback_clock(room_id) do
+      {pid, _state} when is_pid(pid) ->
+        {:ok, pid}
+
+      nil ->
+        DynamicSupervisor.start_child(
+          supervisor,
+          {@clock_module, [id: room_id]}
+        )
+    end
+  end
+
+  @doc """
+  Returns `nil` or `{pid, state}` for the room's playback clock.
+  """
+  @spec get_playback_clock(binary()) :: {pid(), map()} | nil
+  def get_playback_clock(room_id) do
+    case Registry.lookup(@clock_registry_module, room_id) do
+      [] -> nil
+      [{pid, state}] -> {pid, state}
+    end
+  end
+
+  @doc """
+  Returns the playback clock pid for a room, raising if missing.
+  """
+  @spec get_playback_clock_pid!(binary()) :: pid()
+  def get_playback_clock_pid!(room_id) do
+    case get_playback_clock(room_id) do
+      nil -> raise PlayerServerError, reason: :playback_clock_not_found
+      {pid, _state} -> pid
+    end
   end
 
   @doc """
