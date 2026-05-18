@@ -10,9 +10,11 @@
     "
     role="dialog"
     aria-modal="true"
-    phx-window-keyup={hide_modal()}
+    aria-label={gettext("Search videos")}
+    phx-window-keydown={hide_modal()}
     phx-key="escape"
   >
+    <p class="sr-only"><%= gettext("Press Escape to close") %></p>
     <div class="
       fixed inset-0
       backdrop-blur-lg opacity-100
@@ -72,7 +74,7 @@
                 type="search"
                 class="
                   w-full !m-0
-                  flex-auto rounded-md appearance-none bg-transparent pl-10 pr-10
+                  flex-auto rounded-md appearance-none bg-transparent pl-10 pr-28
                   !bg-zinc-400 !dark:bg-zinc-600
                   !text-zinc-700 !dark:text-zinc-300
                   outline-none focus:outline-none
@@ -105,39 +107,34 @@
                 enterkeyhint="search"
                 spellcheck="false"
                 tabindex="0"
+                phx-keydown={hide_modal()}
+                phx-key="escape"
                 phx-keyup="change"
                 phx-target={@myself}
               />
 
-              <button
-                type="submit"
-                disabled={!search_submit_enabled?(@form)}
-                aria-disabled={!search_submit_enabled?(@form)}
-                aria-label={gettext("Search")}
-                class="
-                  absolute right-3 top-[5px] stroke-zinc-300
-                  w-10 m-0 h-6 sm:h-7 rounded-md
-                  flex justify-center items-center
-                  border-[1px]
-                  border-zinc-500 dark:border-zinc-600
-                  opacity-50 hover:opacity-80 active:opacity-100
-                  disabled:opacity-30 disabled:hover:opacity-30 disabled:active:opacity-30
-                  bg-zinc-500 dark:bg-zinc-700
-                  text-zinc-300 dark:text-zinc-200
-                  text-xs md:text-sm font-medium
-                  cursor-pointer disabled:cursor-not-allowed
-                  shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
-                  hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
-                  active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
-                  disabled:shadow-none disabled:hover:shadow-none disabled:active:shadow-none
-                  dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
-                  dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
-                  dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
-                  dark:disabled:shadow-none dark:disabled:hover:shadow-none dark:disabled:active:shadow-none
-                "
-              >
-                (↵)
-              </button>
+              <div class="absolute right-3 top-[4px] flex items-center gap-2">
+                <button
+                  type="button"
+                  phx-click={hide_modal()}
+                  aria-label={gettext("Close search")}
+                  class={search_kbd_class()}
+                >
+                  esc
+                </button>
+                <button
+                  type="submit"
+                  disabled={!search_submit_enabled?(@form)}
+                  aria-disabled={!search_submit_enabled?(@form)}
+                  aria-label={gettext("Search")}
+                  class={
+                    search_kbd_class() <>
+                      " disabled:opacity-30 disabled:hover:opacity-30 disabled:active:opacity-30 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none disabled:active:shadow-none dark:disabled:shadow-none dark:disabled:hover:shadow-none dark:disabled:active:shadow-none"
+                  }
+                >
+                  (↵)
+                </button>
+              </div>
             </div>
 
             <ul

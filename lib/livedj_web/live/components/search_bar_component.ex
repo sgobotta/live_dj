@@ -49,6 +49,23 @@ defmodule LivedjWeb.Components.SearchBarComponent do
     query_present?(form[:query].value)
   end
 
+  def search_kbd_class do
+    """
+    stroke-zinc-300 w-10 m-0 h-6 sm:h-7 rounded-md
+    flex justify-center items-center border-[1px]
+    border-zinc-500 dark:border-zinc-600 opacity-50
+    hover:opacity-80 active:opacity-100
+    bg-zinc-500 dark:bg-zinc-700 text-zinc-300 dark:text-zinc-200
+    text-xs md:text-sm font-medium cursor-pointer
+    shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+    hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
+    active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+    dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+    dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
+    dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+    """
+  end
+
   defp query_present?(query) do
     query |> to_string() |> String.trim() != ""
   end
@@ -72,7 +89,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   def hide_modal(js \\ %JS{}) do
     js
     |> JS.hide(
-      to: "#searchbar-searchbox_container",
+      to: "#searchbox_container",
       transition:
         {"transition ease-in duration-300", "opacity-100 scale-100",
          "opacity-0 scale-95"}
