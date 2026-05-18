@@ -21,6 +21,7 @@ defmodule Livedj.Sessions.Channels do
   @player_play :player_play
   @player_pause :player_pause
   @player_load_media :player_load_media
+  @track_ended :track_ended
 
   # ----------------------------------------------------------------------------
   # Playlist event aliases
@@ -120,6 +121,12 @@ defmodule Livedj.Sessions.Channels do
   @spec player_load_media_event() :: :player_load_media
   def player_load_media_event, do: @player_load_media
 
+  @doc """
+  Returns the message name for track ended events
+  """
+  @spec track_ended_event() :: :track_ended
+  def track_ended_event, do: @track_ended
+
   # ----------------------------------------------------------------------------
   # Playlist events
   #
@@ -211,6 +218,13 @@ defmodule Livedj.Sessions.Channels do
   def broadcast_player_pause!(room_id, %Livedj.Sessions.Player{} = player),
     do:
       broadcast!(player_topic(room_id), {player_pause_event(), room_id, player})
+
+  @doc """
+  Broadcasts a #{@track_ended} message to the player topic.
+  """
+  @spec broadcast_player_track_ended!(binary()) :: :ok
+  def broadcast_player_track_ended!(room_id),
+    do: broadcast!(player_topic(room_id), {track_ended_event(), room_id})
 
   # ----------------------------------------------------------------------------
   # Playlist brodcasting

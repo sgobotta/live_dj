@@ -10,9 +10,11 @@
     "
     role="dialog"
     aria-modal="true"
-    phx-window-keyup={hide_modal()}
+    aria-label={gettext("Search videos")}
+    phx-window-keydown={hide_modal()}
     phx-key="escape"
   >
+    <p class="sr-only"><%= gettext("Press Escape to close") %></p>
     <div class="
       fixed inset-0
       backdrop-blur-lg opacity-100
@@ -68,11 +70,11 @@
               <.input
                 container_class="w-full"
                 id="search-input"
-                field={f[:value]}
+                field={f[:query]}
                 type="search"
                 class="
                   w-full !m-0
-                  flex-auto rounded-md appearance-none bg-transparent pl-10 pr-10
+                  flex-auto rounded-md appearance-none bg-transparent pl-10 pr-28
                   !bg-zinc-400 !dark:bg-zinc-600
                   !text-zinc-700 !dark:text-zinc-300
                   outline-none focus:outline-none
@@ -81,8 +83,8 @@
                   focus:ring-0 focus:shadow-none
                   focus:tracking-widest
                   transition-all duration-500
-                  placeholder:text-zinc-600 focus:placeholder:opacity-50
-                  dark:placeholder:text-zinc-300 focus:dark:placeholder:opacity-50
+                  placeholder:text-zinc-900 focus:placeholder:opacity-70
+                  dark:placeholder:text-zinc-100 focus:dark:placeholder:opacity-70
                   focus:w-full focus:flex-none
                   text-xs md:text-sm
                   [&::-webkit-search-cancel-button]:hidden
@@ -98,7 +100,6 @@
                 placeholder={
                   gettext("Insert a youtube url or search for a video")
                 }
-                name="search[query]"
                 aria-autocomplete="both"
                 aria-controls="searchbox__results_list"
                 autocomplete="off"
@@ -106,21 +107,33 @@
                 enterkeyhint="search"
                 spellcheck="false"
                 tabindex="0"
+                phx-keydown={hide_modal()}
+                phx-key="escape"
+                phx-keyup="change"
+                phx-target={@myself}
               />
 
-              <div class="
-                absolute right-3 top-[5px] stroke-zinc-300
-                w-10 m-0 h-6 sm:h-7 rounded-md
-                flex justify-center items-center
-                border-[1px]
-                border-zinc-500 dark:border-zinc-600
-                opacity-50
-                bg-zinc-500 dark:bg-zinc-700
-                text-zinc-300 dark:text-zinc-200
-                text-xs md:text-sm font-medium
-                cursor-default
-              ">
-                ESC
+              <div class="absolute right-3 top-[4px] flex items-center gap-2">
+                <button
+                  type="button"
+                  phx-click={hide_modal()}
+                  aria-label={gettext("Close search")}
+                  class={search_kbd_class()}
+                >
+                  esc
+                </button>
+                <button
+                  type="submit"
+                  disabled={!search_submit_enabled?(@form)}
+                  aria-disabled={!search_submit_enabled?(@form)}
+                  aria-label={gettext("Search")}
+                  class={
+                    search_kbd_class() <>
+                      " disabled:opacity-30 disabled:hover:opacity-30 disabled:active:opacity-30 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none disabled:active:shadow-none dark:disabled:shadow-none dark:disabled:hover:shadow-none dark:disabled:active:shadow-none"
+                  }
+                >
+                  (↵)
+                </button>
               </div>
             </div>
 
@@ -200,7 +213,7 @@
                       transition duration-300 opacity-0 group-hover:opacity-100
                       w-12 h-12 rounded-lg
                       bg-transparent
-                      cursor-default
+                      cursor-pointer
                       text-zinc-700 dark:text-zinc-300
                       hover:text-green-500 dark:hover:text-green-500 hover:scale-110
                       focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100

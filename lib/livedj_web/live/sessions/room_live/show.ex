@@ -193,6 +193,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
      |> push_event("load_video", player)}
   end
 
+  def handle_info({:track_ended, _room_id}, socket), do: {:noreply, socket}
+
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)

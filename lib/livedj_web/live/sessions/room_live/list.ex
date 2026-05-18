@@ -19,8 +19,6 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
         {:ok,
          assign(socket,
            drag_state: :unlocked,
-           search_form: to_form(%{}),
-           search_result: [],
            layout: false,
            room: room,
            media_list: [],
@@ -68,6 +66,20 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
            dgettext("errors", "The selected track could not be played")
          )}
     end
+  end
+
+  def handle_event(
+        "remove_track",
+        %{"track_id" => track_id},
+        %{assigns: %{current_media: current_media}} = socket
+      )
+      when current_media == track_id do
+    {:noreply,
+     socket
+     |> put_flash(
+       :warn,
+       dgettext("errors", "The currently playing track can't be removed")
+     )}
   end
 
   def handle_event("remove_track", %{"track_id" => track_id}, socket) do
@@ -203,6 +215,17 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
       ) do
     {:noreply, assign_current_media(socket, media_id)}
   end
+
+  @impl true
+  def handle_info(
+        {:track_ended, room_id},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    {:noreply, assign(socket, :current_media, nil)}
+  end
+
+  @impl true
+  def handle_info({:track_ended, _room_id}, socket), do: {:noreply, socket}
 
   @spec assign_current_media(Phoenix.LiveView.Socket.t(), binary() | nil) ::
           Phoenix.LiveView.Socket.t()
