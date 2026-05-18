@@ -11,6 +11,8 @@ defmodule Livedj.Sessions do
 
   alias Livedj.Sessions.{
     Channels,
+    PlaybackClock,
+    PlaybackPosition,
     Player,
     PlayerServer,
     PlayerSupervisor,
@@ -303,7 +305,11 @@ defmodule Livedj.Sessions do
 
   @spec on_play(binary(), keyword()) :: :ok
   defp on_play(room_id, _opts) do
-    {:ok, %Player{} = player} = Player.play(room_id, [])
+    {:ok, %Player{} = player} =
+      room_id
+      |> ensure_playback_clock_pid!()
+      |> PlaybackClock.play()
+
     :ok = Channels.broadcast_player_play!(room_id, player)
   end
 
@@ -318,7 +324,11 @@ defmodule Livedj.Sessions do
 
   @spec on_pause(binary(), keyword()) :: :ok
   defp on_pause(room_id, opts) do
-    {:ok, %Player{} = player} = Player.pause(room_id, opts)
+    {:ok, %Player{} = player} =
+      room_id
+      |> ensure_playback_clock_pid!()
+      |> PlaybackClock.pause(opts)
+
     :ok = Channels.broadcast_player_pause!(room_id, player)
   end
 
@@ -349,10 +359,12 @@ defmodule Livedj.Sessions do
   @spec get_player(Ecto.UUID.t()) :: {:ok, Player.t()} | {:error, any()}
   def get_player(room_id) do
     case Player.get(room_id) do
-      {:ok, result} = response ->
-        Logger.debug("#{__MODULE__} :: Get player result=#{inspect(result)}")
+      {:ok, player} ->
+        synced = sync_player_position(room_id, player)
 
-        response
+        Logger.debug("#{__MODULE__} :: Get player result=#{inspect(synced)}")
+
+        {:ok, synced}
 
       {:error, error} = e ->
         Logger.error(
@@ -414,6 +426,33 @@ defmodule Livedj.Sessions do
 
   defp get_player_child_pid!(room_id),
     do: PlayerSupervisor.get_child_pid!(room_id)
+
+  @spec ensure_playback_clock_pid!(binary()) :: pid()
+  defp ensure_playback_clock_pid!(room_id) do
+    case PlayerSupervisor.start_playback_clock(room_id) do
+      {:ok, pid} ->
+        pid
+
+      {:error, {:already_started, pid}} when is_pid(pid) ->
+        pid
+    end
+  end
+
+  @spec sync_player_position(binary(), Player.t()) :: Player.t()
+  defp sync_player_position(room_id, player) do
+    case PlayerSupervisor.get_child(room_id) do
+      nil ->
+        PlaybackPosition.sync(player)
+
+      {_pid, _state} ->
+        case room_id
+             |> ensure_playback_clock_pid!()
+             |> PlaybackClock.sync_player() do
+          {:ok, synced} -> synced
+          _error -> PlaybackPosition.sync(player)
+        end
+    end
+  end
 
   # ----------------------------------------------------------------------------
   # Media management

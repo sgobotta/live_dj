@@ -16,6 +16,7 @@ defmodule Livedj.Sessions.Player do
             media_id: nil,
             media_thumbnail_url: nil,
             current_time: 0,
+            played_at: nil,
             title: nil,
             channel: nil
 
@@ -23,7 +24,8 @@ defmodule Livedj.Sessions.Player do
 
   @type t :: %__MODULE__{}
   @type player_opts :: [
-          {:seek_to, non_neg_integer()}
+          {:seek_to, non_neg_integer()},
+          {:played_at, DateTime.t()}
         ]
 
   @idle_state :idle
@@ -152,8 +154,14 @@ defmodule Livedj.Sessions.Player do
   @spec play(Ecto.UUID.t(), keyword()) ::
           {:ok, t()}
           | {:error, :player_update_play_state_error | :player_not_found}
-  def play(room_id, _opts) do
-    case set(room_id, %{state: @playing_state}) do
+  def play(room_id, opts \\ []) do
+    played_at =
+      case Keyword.get(opts, :played_at) do
+        %DateTime{} = dt -> DateTime.to_iso8601(dt)
+        _else -> DateTime.utc_now() |> DateTime.to_iso8601()
+      end
+
+    case set(room_id, %{state: @playing_state, played_at: played_at}) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -169,7 +177,11 @@ defmodule Livedj.Sessions.Player do
           {:ok, t()}
           | {:error, :player_update_pause_state_error | :player_not_found}
   def pause(room_id, at: current_time) do
-    case set(room_id, %{current_time: current_time, state: @paused_state}) do
+    case set(room_id, %{
+           current_time: current_time,
+           state: @paused_state,
+           played_at: ""
+         }) do
       {:ok, _changes} ->
         get(room_id)
 
@@ -217,6 +229,26 @@ defmodule Livedj.Sessions.Player do
 
   @spec parse_hset_value(atom(), any()) :: any()
   defp parse_hset_value(:state, value), do: String.to_atom(value)
+
+  defp parse_hset_value(:current_time, value) when is_binary(value) do
+    case Integer.parse(value) do
+      {int, _offset} when int >= 0 -> int
+      _other_error -> 0
+    end
+  end
+
+  defp parse_hset_value(:current_time, value) when is_integer(value), do: value
+
+  defp parse_hset_value(:played_at, ""), do: nil
+  defp parse_hset_value(:played_at, nil), do: nil
+
+  defp parse_hset_value(:played_at, value) when is_binary(value) do
+    case DateTime.from_iso8601(value) do
+      {:ok, datetime, _offset} -> datetime
+      _other_error -> nil
+    end
+  end
+
   defp parse_hset_value(_key, value), do: value
 
   @spec maybe_merge_opts(map(), player_opts()) :: map()
