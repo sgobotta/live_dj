@@ -68,7 +68,7 @@
               <.input
                 container_class="w-full"
                 id="search-input"
-                field={f[:value]}
+                field={f[:query]}
                 type="search"
                 class="
                   w-full !m-0
@@ -81,8 +81,8 @@
                   focus:ring-0 focus:shadow-none
                   focus:tracking-widest
                   transition-all duration-500
-                  placeholder:text-zinc-600 focus:placeholder:opacity-50
-                  dark:placeholder:text-zinc-300 focus:dark:placeholder:opacity-50
+                  placeholder:text-zinc-900 focus:placeholder:opacity-70
+                  dark:placeholder:text-zinc-100 focus:dark:placeholder:opacity-70
                   focus:w-full focus:flex-none
                   text-xs md:text-sm
                   [&::-webkit-search-cancel-button]:hidden
@@ -98,7 +98,6 @@
                 placeholder={
                   gettext("Insert a youtube url or search for a video")
                 }
-                name="search[query]"
                 aria-autocomplete="both"
                 aria-controls="searchbox__results_list"
                 autocomplete="off"
@@ -106,22 +105,39 @@
                 enterkeyhint="search"
                 spellcheck="false"
                 tabindex="0"
+                phx-keyup="change"
+                phx-target={@myself}
               />
 
-              <div class="
-                absolute right-3 top-[5px] stroke-zinc-300
-                w-10 m-0 h-6 sm:h-7 rounded-md
-                flex justify-center items-center
-                border-[1px]
-                border-zinc-500 dark:border-zinc-600
-                opacity-50
-                bg-zinc-500 dark:bg-zinc-700
-                text-zinc-300 dark:text-zinc-200
-                text-xs md:text-sm font-medium
-                cursor-default
-              ">
-                ESC
-              </div>
+              <button
+                type="submit"
+                disabled={!search_submit_enabled?(@form)}
+                aria-disabled={!search_submit_enabled?(@form)}
+                aria-label={gettext("Search")}
+                class="
+                  absolute right-3 top-[5px] stroke-zinc-300
+                  w-10 m-0 h-6 sm:h-7 rounded-md
+                  flex justify-center items-center
+                  border-[1px]
+                  border-zinc-500 dark:border-zinc-600
+                  opacity-50 hover:opacity-80 active:opacity-100
+                  disabled:opacity-30 disabled:hover:opacity-30 disabled:active:opacity-30
+                  bg-zinc-500 dark:bg-zinc-700
+                  text-zinc-300 dark:text-zinc-200
+                  text-xs md:text-sm font-medium
+                  cursor-pointer disabled:cursor-not-allowed
+                  shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+                  hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
+                  active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+                  disabled:shadow-none disabled:hover:shadow-none disabled:active:shadow-none
+                  dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+                  dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
+                  dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+                  dark:disabled:shadow-none dark:disabled:hover:shadow-none dark:disabled:active:shadow-none
+                "
+              >
+                (↵)
+              </button>
             </div>
 
             <ul

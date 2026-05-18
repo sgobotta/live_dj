@@ -19,8 +19,6 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
         {:ok,
          assign(socket,
            drag_state: :unlocked,
-           search_form: to_form(%{}),
-           search_result: [],
            layout: false,
            room: room,
            media_list: [],

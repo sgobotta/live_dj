@@ -9,7 +9,9 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   def update(assigns, socket) do
     {:ok,
      socket
-     |> assign(assigns)}
+     |> assign(assigns)
+     |> assign_new(:form, &empty_search_form/0)
+     |> assign_new(:search_result, fn -> [] end)}
   end
 
   @impl true
@@ -17,26 +19,38 @@ defmodule LivedjWeb.Components.SearchBarComponent do
     add_media(socket, media_id)
   end
 
-  def handle_event("change", %{"search" => %{"query" => ""}}, socket) do
-    {:noreply, socket}
+  def handle_event("change", %{"search" => %{"query" => query}}, socket) do
+    {:noreply, assign(socket, form: search_form(query))}
   end
 
-  def handle_event("change", %{"search" => %{"query" => _search_query}}, socket) do
+  def handle_event("change", _params, socket) do
     {:noreply, socket}
   end
 
   def handle_event("submit", %{"search" => %{"query" => search_query}}, socket) do
-    case validate_url(search_query) do
-      {:ok, media_id} ->
-        add_media(socket, media_id)
+    if query_present?(search_query) do
+      case validate_url(search_query) do
+        {:ok, media_id} ->
+          add_media(socket, media_id)
 
-      {:error, :invalid_url} ->
-        search_media(socket, search_query)
+        {:error, :invalid_url} ->
+          search_media(socket, search_query)
+      end
+    else
+      {:noreply, socket}
     end
   end
 
   def handle_event("submit", _params, socket) do
     {:noreply, socket}
+  end
+
+  def search_submit_enabled?(form) do
+    query_present?(form[:query].value)
+  end
+
+  defp query_present?(query) do
+    query |> to_string() |> String.trim() != ""
   end
 
   def open_modal(js \\ %JS{}) do
@@ -70,6 +84,10 @@ defmodule LivedjWeb.Components.SearchBarComponent do
     )
   end
 
+  defp empty_search_form, do: search_form("")
+
+  defp search_form(query), do: to_form(%{"query" => query}, as: :search)
+
   defp validate_url(url) do
     case URI.parse(url) do
       %URI{query: query} when not is_nil(query) ->
@@ -85,8 +103,8 @@ defmodule LivedjWeb.Components.SearchBarComponent do
       {:ok, {:added, media}} ->
         {:noreply,
          socket
-         |> assign(form: to_form(%{}))
-         |> assign(search_form: to_form(%{}))
+         |> assign(form: empty_search_form())
+         |> assign(search_result: [])
          |> put_flash(
            :info,
            gettext("%{title} queued to the playlist", title: media.title)
@@ -95,7 +113,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
       {:error, {type, msg}} when type in [:warn, :error] and is_binary(msg) ->
         {:noreply,
          socket
-         |> assign(form: to_form(%{}))
+         |> assign(form: empty_search_form())
          |> put_flash(type, msg)}
     end
   end
@@ -103,7 +121,10 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   def search_media(socket, query) do
     case Sessions.search_by_query(query) do
       {:ok, result} ->
-        {:noreply, assign(socket, search_result: result)}
+        {:noreply,
+         socket
+         |> assign(search_result: result)
+         |> assign(form: search_form(query))}
 
       {:error, :service_unavailable} ->
         {:noreply,

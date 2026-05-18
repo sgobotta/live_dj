@@ -9,8 +9,6 @@ defmodule LivedjWeb.Components.AddVideoComponent do
       <.live_component
         id={"video_search_bar_#{@room.id}"}
         module={LivedjWeb.Components.SearchBarComponent}
-        form={@search_form}
-        search_result={@search_result}
         room={@room}
       >
         <:button>
@@ -30,7 +28,7 @@ defmodule LivedjWeb.Components.AddVideoComponent do
             text-zinc-900 dark:text-zinc-100
             active:text-green-500 dark:active:text-green-500
           ">
-            <.icon name="hero-magnifying-glass" class="w-4 h-4" />
+            <.icon name="hero-plus" class="w-4 h-4" />
           </.button>
         </:button>
       </.live_component>
@@ -42,11 +40,7 @@ defmodule LivedjWeb.Components.AddVideoComponent do
   def mount(socket) do
     {:ok,
      socket
-     |> assign(
-       player: to_form(%{}),
-       search_form: to_form(%{}),
-       search_result: []
-     )}
+     |> assign(player: to_form(%{}))}
   end
 
   @impl true
