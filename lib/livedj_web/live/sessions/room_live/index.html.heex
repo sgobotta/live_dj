@@ -32,11 +32,17 @@
     </.room_grid>
   </div>
 
-  <div class="my-2 w-full">
-    <.link patch={~p"/sessions/rooms/new"} tabindex="-1">
-      <.button class="w-full"><%= gettext("New Room") %></.button>
-    </.link>
-  </div>
+  <.link patch={~p"/sessions/rooms/new"} tabindex="-1">
+    <.button class="
+      fixed bottom-6 right-6
+      flex items-center gap-2
+      rounded-full shadow-lg
+      px-5 py-3
+    ">
+      <.icon name="hero-plus" class="h-5 w-5" />
+      <%= gettext("New Room") %>
+    </.button>
+  </.link>
 
   <.modal
     :if={@live_action in [:new]}

@@ -111,9 +111,8 @@ defmodule LivedjWeb.CustomComponents do
     <div
       id={@id}
       class="
-        grid grid-rows-2 grid-flow-col
-        my-4 py-4 w-full gap-4 px-1
-        overflow-x-scroll
+        grid grid-rows-1 grid-flow-col auto-cols-max
+        my-4 py-4 w-max gap-4 px-1
       "
     >
       <div
