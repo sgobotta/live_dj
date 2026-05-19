@@ -16,16 +16,16 @@
     >
     </script>
   </head>
-  <body class="antialiased">
+  <body class="antialiased bg-white dark:bg-zinc-900">
     <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6 text-zinc-900">
+        <li class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100">
           <%= @current_user.username %>
         </li>
         <li>
           <.link
             href={~p"/users/settings"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
             <%= gettext("Settings") %>
           </.link>
@@ -34,7 +34,7 @@
           <.link
             href={~p"/users/log_out"}
             method="delete"
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
             <%= gettext("Log out") %>
           </.link>
@@ -43,7 +43,7 @@
         <li>
           <.link
             href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
             <%= gettext("Register") %>
           </.link>
@@ -51,7 +51,7 @@
         <li>
           <.link
             href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
             <%= gettext("Log in") %>
           </.link>
