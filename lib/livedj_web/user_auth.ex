@@ -6,6 +6,7 @@ defmodule LivedjWeb.UserAuth do
   import Phoenix.Controller
 
   alias Livedj.Accounts
+  alias Livedj.Accounts.{Guest, User}
 
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
@@ -92,7 +93,22 @@ defmodule LivedjWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
-    assign(conn, :current_user, user)
+
+    if user do
+      assign(conn, :current_user, user)
+    else
+      {guest_id, conn} = ensure_guest_id(conn)
+      assign(conn, :current_user, %Guest{id: guest_id})
+    end
+  end
+
+  defp ensure_guest_id(conn) do
+    if guest_id = get_session(conn, :guest_id) do
+      {guest_id, conn}
+    else
+      guest_id = Ecto.UUID.generate()
+      {guest_id, put_session(conn, :guest_id, guest_id)}
+    end
   end
 
   defp ensure_user_token(conn) do
@@ -151,28 +167,32 @@ defmodule LivedjWeb.UserAuth do
   def on_mount(:ensure_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
-    if socket.assigns.current_user do
-      {:cont, socket}
-    else
-      socket =
-        socket
-        |> Phoenix.LiveView.put_flash(
-          :error,
-          "You must log in to access this page."
-        )
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
+    case socket.assigns.current_user do
+      %User{} ->
+        {:cont, socket}
 
-      {:halt, socket}
+      _guest ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(
+            :error,
+            "You must log in to access this page."
+          )
+          |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
+
+        {:halt, socket}
     end
   end
 
   def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
-    if socket.assigns.current_user do
-      {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
-    else
-      {:cont, socket}
+    case socket.assigns.current_user do
+      %User{} ->
+        {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
+
+      _guest ->
+        {:cont, socket}
     end
   end
 
@@ -180,6 +200,8 @@ defmodule LivedjWeb.UserAuth do
     Phoenix.Component.assign_new(socket, :current_user, fn ->
       if user_token = session["user_token"] do
         Accounts.get_user_by_session_token(user_token)
+      else
+        %Guest{id: session["guest_id"] || Ecto.UUID.generate()}
       end
     end)
   end
@@ -188,12 +210,12 @@ defmodule LivedjWeb.UserAuth do
   Used for routes that require the user to not be authenticated.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_user] do
-      conn
-      |> redirect(to: signed_in_path(conn))
-      |> halt()
-    else
-      conn
+    case conn.assigns[:current_user] do
+      %User{} ->
+        conn |> redirect(to: signed_in_path(conn)) |> halt()
+
+      _guest ->
+        conn
     end
   end
 
@@ -204,14 +226,16 @@ defmodule LivedjWeb.UserAuth do
   they use the application at all, here would be a good place.
   """
   def require_authenticated_user(conn, _opts) do
-    if conn.assigns[:current_user] do
-      conn
-    else
-      conn
-      |> put_flash(:error, "You must log in to access this page.")
-      |> maybe_store_return_to()
-      |> redirect(to: ~p"/users/log_in")
-      |> halt()
+    case conn.assigns[:current_user] do
+      %User{} ->
+        conn
+
+      _guest ->
+        conn
+        |> put_flash(:error, "You must log in to access this page.")
+        |> maybe_store_return_to()
+        |> redirect(to: ~p"/users/log_in")
+        |> halt()
     end
   end
 

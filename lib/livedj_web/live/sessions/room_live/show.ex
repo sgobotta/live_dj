@@ -16,10 +16,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         %Room{id: room_id} = room = Sessions.get_room!(params["id"])
         {:ok, :joined} = Sessions.join_player(room_id)
 
-        if socket.assigns.current_user do
-          {:ok, _ref} =
-            Presence.track_user(room_id, socket.assigns.current_user)
-        end
+        {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
 
         {:ok,
          assign(socket,

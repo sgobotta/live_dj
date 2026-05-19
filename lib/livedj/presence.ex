@@ -6,19 +6,29 @@ defmodule Livedj.Presence do
     otp_app: :livedj,
     pubsub_server: Livedj.PubSub
 
-  alias Livedj.Accounts.User
+  alias Livedj.Accounts.{Guest, User}
   alias Livedj.Sessions.Channels
 
   @doc """
   Registers the calling process as present in the given room.
   """
-  @spec track_user(binary(), User.t()) :: {:ok, binary()} | {:error, term()}
+  @spec track_user(binary(), User.t() | Guest.t()) ::
+          {:ok, binary()} | {:error, term()}
   def track_user(room_id, %User{} = user) do
     track(
       self(),
       Channels.presence_topic(room_id),
       user.id,
       %{email: user.email, avatar_url: nil}
+    )
+  end
+
+  def track_user(room_id, %Guest{} = guest) do
+    track(
+      self(),
+      Channels.presence_topic(room_id),
+      guest.id,
+      %{email: nil, avatar_url: nil}
     )
   end
 
