@@ -83,8 +83,12 @@ export default {
       }
 
       const onStateChange = (hookContext) => async event => {
-        const startTimeTrackerElem = document.getElementById(hookContext.startTimeTrackerId)
-        const endTimeTrackerElem = document.getElementById(hookContext.endTimeTrackerId)
+        const startTimeTrackerElem = document.getElementById(
+          hookContext.startTimeTrackerId
+        )
+        const endTimeTrackerElem = document.getElementById(
+          hookContext.endTimeTrackerId
+        )
         const timeSliderElem = document.getElementById(hookContext.timeSliderId)
         /* eslint-disable no-case-declarations */
         switch (event.data) {
