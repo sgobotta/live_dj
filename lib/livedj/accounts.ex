@@ -204,6 +204,22 @@ defmodule Livedj.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user username.
+  """
+  def change_user_username(user, attrs \\ %{}) do
+    User.username_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the user username.
+  """
+  def update_user_username(%User{} = user, attrs) do
+    user
+    |> User.username_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Updates the user password.
 
   ## Examples

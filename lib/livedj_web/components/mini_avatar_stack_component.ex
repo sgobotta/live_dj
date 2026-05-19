@@ -104,13 +104,19 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
 
   defp demo_avatar_users(count) when count > 0 do
     Enum.map(1..count, fn index ->
-      %{email: "user#{index}@example.com", avatar_url: nil}
+      %{username: "user#{index}", avatar_url: nil}
     end)
   end
 
   defp avatar_url(%{avatar_url: url}) when is_binary(url), do: url
   defp avatar_url(%{"avatar_url" => url}) when is_binary(url), do: url
   defp avatar_url(_user), do: ""
+
+  defp avatar_label(%{username: username}) when is_binary(username),
+    do: username
+
+  defp avatar_label(%{"username" => username}) when is_binary(username),
+    do: username
 
   defp avatar_label(%{email: email}) when is_binary(email), do: email
   defp avatar_label(%{"email" => email}) when is_binary(email), do: email

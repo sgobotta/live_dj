@@ -3,8 +3,8 @@ defmodule Livedj.Accounts.Guest do
   Represents an unauthenticated visitor with a stable session identity.
   """
 
-  @enforce_keys [:id]
-  defstruct [:id]
+  @enforce_keys [:id, :username]
+  defstruct [:id, :username]
 
-  @type t :: %__MODULE__{id: binary()}
+  @type t :: %__MODULE__{id: binary(), username: binary()}
 end
