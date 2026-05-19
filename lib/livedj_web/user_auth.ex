@@ -98,10 +98,11 @@ defmodule LivedjWeb.UserAuth do
       assign(conn, :current_user, user)
     else
       {guest_id, conn} = ensure_guest_id(conn)
+      {guest_username, conn} = ensure_guest_username(conn)
 
       assign(conn, :current_user, %Guest{
         id: guest_id,
-        username: guest_username(guest_id)
+        username: guest_username
       })
     end
   end
@@ -115,8 +116,13 @@ defmodule LivedjWeb.UserAuth do
     end
   end
 
-  defp guest_username(guest_id) do
-    "guest_" <> (guest_id |> String.split("-") |> List.first())
+  defp ensure_guest_username(conn) do
+    if username = get_session(conn, :guest_username) do
+      {username, conn}
+    else
+      username = Guest.random_username()
+      {username, put_session(conn, :guest_username, username)}
+    end
   end
 
   defp ensure_user_token(conn) do
@@ -210,7 +216,8 @@ defmodule LivedjWeb.UserAuth do
         Accounts.get_user_by_session_token(user_token)
       else
         guest_id = session["guest_id"] || Ecto.UUID.generate()
-        %Guest{id: guest_id, username: guest_username(guest_id)}
+        guest_username = session["guest_username"] || Guest.random_username()
+        %Guest{id: guest_id, username: guest_username}
       end
     end)
   end

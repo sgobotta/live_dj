@@ -78,6 +78,78 @@ defmodule LivedjWeb.CustomComponents do
     """
   end
 
+  @avatar_colors [
+    "bg-zinc-500",
+    "bg-green-600",
+    "bg-blue-600",
+    "bg-amber-600",
+    "bg-rose-600",
+    "bg-violet-600"
+  ]
+
+  @doc """
+  Renders a circular avatar for the current user with a hover tooltip showing
+  the username. Displays the user's avatar image if present, otherwise shows
+  colored initials derived from the username.
+  """
+  attr :user, :any, required: true
+
+  def user_avatar(assigns) do
+    label = user_avatar_label(assigns.user)
+
+    assigns =
+      assigns
+      |> assign(:label, label)
+      |> assign(:initials, String.slice(label, 0, 1))
+      |> assign(:color, avatar_color(label))
+      |> assign(:avatar_url, user_avatar_url(assigns.user))
+
+    ~H"""
+    <div class="relative group cursor-default select-none">
+      <%= if @avatar_url != "" do %>
+        <img
+          class="h-7 w-7 rounded-full object-cover"
+          src={@avatar_url}
+          alt={@label}
+        />
+      <% else %>
+        <span class={[
+          "flex h-7 w-7 items-center justify-center rounded-full",
+          "text-xs font-semibold uppercase text-zinc-100 dark:text-zinc-900",
+          @color
+        ]}>
+          <%= @initials %>
+        </span>
+      <% end %>
+      <div class="
+        absolute right-0 top-full mt-1.5 z-50
+        hidden group-hover:block
+        whitespace-nowrap rounded-md px-2 py-1
+        bg-zinc-800 dark:bg-zinc-200
+        text-xs text-zinc-100 dark:text-zinc-900
+        shadow-md
+      ">
+        <%= @label %>
+      </div>
+    </div>
+    """
+  end
+
+  defp user_avatar_label(%{username: u}) when is_binary(u) and u != "", do: u
+
+  defp user_avatar_label(%{"username" => u}) when is_binary(u) and u != "",
+    do: u
+
+  defp user_avatar_label(_label), do: "?"
+
+  defp user_avatar_url(%{avatar_url: url}) when is_binary(url), do: url
+  defp user_avatar_url(_avatar_url), do: ""
+
+  defp avatar_color(label) do
+    index = :erlang.phash2(label, length(@avatar_colors))
+    Enum.at(@avatar_colors, index)
+  end
+
   attr :id, :string, required: true
   attr :modules, :list, required: true
 
