@@ -152,7 +152,7 @@
             >
               <li
                 :for={{item, index} <- Enum.with_index(@search_result)}
-                id={"#{item.external_id}-item"}
+                id={"search-result-#{item.external_id}"}
                 data-id={item.external_id}
                 class="
                   group my-4

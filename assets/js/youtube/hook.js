@@ -82,18 +82,10 @@ export default {
         this.pushEventTo(this.el, 'on_player_loaded')
       }
 
-      const startTimeTrackerElem = document.getElementById(startTimeTrackerId)
-      const endTimeTrackerElem = document.getElementById(endTimeTrackerId)
-      const timeSliderElem = document.getElementById(timeSliderId)
-
-      const onStateChange = (hookContext,
-        {
-          startTimeTrackerElem,
-          endTimeTrackerElem,
-          timeSliderElem
-        }
-      ) => async event => {
-        console.log(startTimeTrackerElem, 'start time tracker elem')
+      const onStateChange = (hookContext) => async event => {
+        const startTimeTrackerElem = document.getElementById(hookContext.startTimeTrackerId)
+        const endTimeTrackerElem = document.getElementById(hookContext.endTimeTrackerId)
+        const timeSliderElem = document.getElementById(hookContext.timeSliderId)
         /* eslint-disable no-case-declarations */
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:
@@ -150,13 +142,7 @@ export default {
       const playerContainer = document.getElementById(this.playerContainerId)
       await initPlayer(playerContainer, {
         onReady: onPlayerReady,
-        onStateChange: onStateChange(
-          this, {
-            endTimeTrackerElem,
-            startTimeTrackerElem,
-            timeSliderElem
-          }
-        )
+        onStateChange: onStateChange(this)
       })
     })
 
