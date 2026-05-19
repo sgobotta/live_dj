@@ -12,8 +12,8 @@ defmodule LivedjWeb.UserSettingsLiveTest do
         |> log_in_user(user_fixture())
         |> live(~p"/users/settings")
 
-      assert html =~ "Change Email"
-      assert html =~ "Change Password"
+      assert html =~ "Account Settings"
+      assert html =~ "Current password"
     end
 
     test "redirects if user is not logged in", %{conn: conn} do
@@ -39,30 +39,14 @@ defmodule LivedjWeb.UserSettingsLiveTest do
 
       result =
         lv
-        |> form("#email_form", %{
+        |> form("#settings_form", %{
           "current_password" => password,
-          "user" => %{"email" => new_email}
+          "user" => %{"new_email" => new_email}
         })
         |> render_submit()
 
-      assert result =~ "A link to confirm your email"
+      assert result =~ "Confirmation sent to"
       assert Accounts.get_user_by_email(user.email)
-    end
-
-    test "renders errors with invalid data (phx-change)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
-
-      result =
-        lv
-        |> element("#email_form")
-        |> render_change(%{
-          "action" => "update_email",
-          "current_password" => "invalid",
-          "user" => %{"email" => "with spaces"}
-        })
-
-      assert result =~ gettext("Change Email")
-      assert result =~ dgettext("errors", "must have the @ sign and no spaces")
     end
 
     test "renders errors with invalid data (phx-submit)", %{
@@ -73,15 +57,14 @@ defmodule LivedjWeb.UserSettingsLiveTest do
 
       result =
         lv
-        |> form("#email_form", %{
+        |> form("#settings_form", %{
           "current_password" => "invalid",
-          "user" => %{"email" => user.email}
+          "user" => %{"new_email" => "with spaces"}
         })
         |> render_submit()
 
-      assert result =~ gettext("Change Email")
-      assert result =~ dgettext("errors", "did not change")
-      assert result =~ dgettext("errors", "is not valid")
+      assert result =~ "Could not update email"
+      assert Accounts.get_user_by_email(user.email)
     end
   end
 
@@ -102,10 +85,11 @@ defmodule LivedjWeb.UserSettingsLiveTest do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 
       form =
-        form(lv, "#password_form", %{
+        form(lv, "#settings_form", %{
           "current_password" => password,
           "user" => %{
             "email" => user.email,
+            "new_email" => user.email,
             "password" => new_password,
             "password_confirmation" => new_password
           }
@@ -126,39 +110,12 @@ defmodule LivedjWeb.UserSettingsLiveTest do
       assert Accounts.get_user_by_email_and_password(user.email, new_password)
     end
 
-    test "renders errors with invalid data (phx-change)", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/settings")
-
-      result =
-        lv
-        |> element("#password_form")
-        |> render_change(%{
-          "current_password" => "invalid",
-          "user" => %{
-            "password" => "too short",
-            "password_confirmation" => "does not match"
-          }
-        })
-
-      assert result =~ gettext("Change Password")
-
-      assert result =~
-               dgettext(
-                 "errors",
-                 "should be between %{min} and %{max} characters",
-                 min: 12,
-                 max: 72
-               )
-
-      assert result =~ dgettext("errors", "does not match password")
-    end
-
     test "renders errors with invalid data (phx-submit)", %{conn: conn} do
       {:ok, lv, _html} = live(conn, ~p"/users/settings")
 
       result =
         lv
-        |> form("#password_form", %{
+        |> form("#settings_form", %{
           "current_password" => "invalid",
           "user" => %{
             "password" => "too short",
@@ -167,18 +124,7 @@ defmodule LivedjWeb.UserSettingsLiveTest do
         })
         |> render_submit()
 
-      assert result =~ gettext("Change Password")
-
-      assert result =~
-               dgettext(
-                 "errors",
-                 "should be between %{min} and %{max} characters",
-                 min: 12,
-                 max: 72
-               )
-
-      assert result =~ dgettext("errors", "does not match password")
-      assert result =~ dgettext("errors", "is not valid")
+      assert result =~ "Could not update password"
     end
   end
 

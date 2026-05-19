@@ -10,6 +10,7 @@ defmodule Livedj.Accounts.User do
   @foreign_key_type :binary_id
   schema "users" do
     field :email, :string
+    field :username, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -45,6 +46,40 @@ defmodule Livedj.Accounts.User do
     |> cast(attrs, [:email, :password])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> put_username_from_email()
+  end
+
+  @doc """
+  A user changeset for changing the username.
+  """
+  def username_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:username])
+    |> validate_required([:username],
+      message: dgettext("errors", "can't be blank")
+    )
+    |> validate_length(:username,
+      min: 3,
+      max: 30,
+      message:
+        dngettext(
+          "errors",
+          "should be between 3 and %{max} characters",
+          "should be between 3 and %{max} characters",
+          30
+        )
+    )
+    |> validate_format(:username, ~r/^[a-zA-Z0-9_]+$/,
+      message:
+        dgettext("errors", "only letters, numbers and underscores allowed")
+    )
+  end
+
+  defp put_username_from_email(changeset) do
+    case get_change(changeset, :email) do
+      nil -> changeset
+      email -> put_change(changeset, :username, hd(String.split(email, "@")))
+    end
   end
 
   defp validate_email(changeset, opts) do

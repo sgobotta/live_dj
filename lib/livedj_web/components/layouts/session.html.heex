@@ -7,14 +7,15 @@
           <.livedj_logo theme={@theme} />
         </a>
       </div>
-      <div class="">
+      <div class="flex items-center gap-2">
         <.toggle_theme_button theme={@theme} />
+        <.user_avatar user={@current_user} />
       </div>
     </div>
     <%!-- <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6">
-          <.text><%= @current_user.email %></.text>
+          <.text><%= @current_user.username %></.text>
         </li>
         <li>
           <.link

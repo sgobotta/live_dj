@@ -3,6 +3,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   alias Livedj.Sessions.Room
   use LivedjWeb, {:live_view, layout: {LivedjWeb.Layouts, :session}}
 
+  alias Livedj.Presence
   alias Livedj.Sessions
   alias Livedj.Sessions.Exceptions.SessionRoomError
 
@@ -14,6 +15,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       true ->
         %Room{id: room_id} = room = Sessions.get_room!(params["id"])
         {:ok, :joined} = Sessions.join_player(room_id)
+
+        {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
 
         {:ok,
          assign(socket,

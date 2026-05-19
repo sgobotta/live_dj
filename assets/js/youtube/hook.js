@@ -82,18 +82,14 @@ export default {
         this.pushEventTo(this.el, 'on_player_loaded')
       }
 
-      const startTimeTrackerElem = document.getElementById(startTimeTrackerId)
-      const endTimeTrackerElem = document.getElementById(endTimeTrackerId)
-      const timeSliderElem = document.getElementById(timeSliderId)
-
-      const onStateChange = (hookContext,
-        {
-          startTimeTrackerElem,
-          endTimeTrackerElem,
-          timeSliderElem
-        }
-      ) => async event => {
-        console.log(startTimeTrackerElem, 'start time tracker elem')
+      const onStateChange = (hookContext) => async event => {
+        const startTimeTrackerElem = document.getElementById(
+          hookContext.startTimeTrackerId
+        )
+        const endTimeTrackerElem = document.getElementById(
+          hookContext.endTimeTrackerId
+        )
+        const timeSliderElem = document.getElementById(hookContext.timeSliderId)
         /* eslint-disable no-case-declarations */
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:
@@ -106,6 +102,7 @@ export default {
             break
           case YT.PlayerState.PLAYING:
             console.debug("[Player State :: PLAYING")
+            hookContext.shouldAutoplay = false
 
             await this.pushEventTo(this.el, 'on_player_playing')
             const trackTimeInterval = setInterval(() => {
@@ -137,6 +134,10 @@ export default {
             break
           case YT.PlayerState.BUFFERING:
             console.debug("[Player State :: BUFFERING")
+            if (hookContext.shouldAutoplay) {
+              hookContext.shouldAutoplay = false
+              hookContext.player.playVideo()
+            }
             break
           case YT.PlayerState.CUED:
             console.debug("[Player State :: CUED")
@@ -150,13 +151,7 @@ export default {
       const playerContainer = document.getElementById(this.playerContainerId)
       await initPlayer(playerContainer, {
         onReady: onPlayerReady,
-        onStateChange: onStateChange(
-          this, {
-            endTimeTrackerElem,
-            startTimeTrackerElem,
-            timeSliderElem
-          }
-        )
+        onStateChange: onStateChange(this)
       })
     })
 
@@ -253,28 +248,33 @@ export default {
      */
     this.handleEvent('load_video', async (player) => {
       console.debug('[Player :: load_video]', player)
-      await this.player.loadVideoById(
-        player.media_id,
-        player.current_time,
-        "large"
-      )
-      console.log("player", player)
-
+      console.debug('[Player :: load_video state]', player.state)
       switch (player.state) {
         case "playing":
-          await this.player.playVideo()
+          // loadVideoById auto-plays; set flag so BUFFERING handler
+          // can retry play in case the initial auto-play is blocked
+          this.shouldAutoplay = true
+          this.player.loadVideoById(
+            player.media_id, player.current_time, "large"
+          )
           break
 
         case "paused":
-          await this.player.pauseVideo()
+          // cueVideoById loads without playing, avoiding any race with
+          // pauseVideo
+          this.shouldAutoplay = false
+          this.player.cueVideoById(
+            player.media_id, player.current_time, "large"
+          )
           break
 
         case "idle":
-          await this.player.stopVideo()
+          this.shouldAutoplay = false
+          this.player.stopVideo()
           break
 
         default:
-          console.debug(`Unkown player state=${player.state}`)
+          console.debug(`Unknown player state=${player.state}`)
           break
       }
 

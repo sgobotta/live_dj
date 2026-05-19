@@ -78,6 +78,7 @@ defmodule Livedj.MixProject do
       # Youtube deps
       {:tubex, git: "https://github.com/sgobotta/tubex.git", tag: "0.0.11"},
       # Other
+      {:faker, "~> 0.18"},
       {:html_entities, "~> 0.5.2"},
       {:phoenix_inline_svg, "~> 1.4"},
       {:poison, "~> 3.1"},

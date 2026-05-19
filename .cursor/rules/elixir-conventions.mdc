@@ -1,0 +1,98 @@
+---
+description: 
+alwaysApply: true
+---
+
+---
+description: Elixir and Phoenix LiveView coding conventions for this project, derived from .formatter.exs and .credo.exs
+globs: ["**/*.ex", "**/*.exs", "**/*.heex"]
+alwaysApply: true
+---
+
+# Elixir Conventions
+
+## Formatting
+
+- **Line length**: 80 characters maximum. Hard limit — no exceptions.
+- **Indentation**: 2 spaces. Never tabs.
+- **Trailing whitespace**: never leave trailing spaces or blank lines at end of file.
+- **Blank lines**: no redundant consecutive blank lines inside a module or function.
+- **Spaces**: always place spaces around operators and after commas.
+- **Parentheses in conditions**: always use parentheses in `if`/`unless` conditions.
+- **Zero-arity functions**: always include `()` in def — `def foo()`, not `def foo`.
+- **Semicolons**: never use semicolons to separate statements on one line.
+
+## Naming
+
+- **Modules**: `PascalCase` — `MyApp.MyModule`.
+- **Functions and variables**: `snake_case`.
+- **Module attributes**: `snake_case` with `@` prefix.
+- **Predicate functions**: prefix with `is_` only for guard-safe predicates (macros); prefer a plain `?` suffix form (`valid?/1`) for regular boolean functions — Credo enforces `PredicateFunctionNames`.
+- **Exception modules**: suffix with `Error` or `Exception` consistently across the project — Credo enforces `ExceptionNames`.
+- **Unused variables**: prefix with `_` (e.g., `_socket`). Credo enforces `UnusedVariableNames`.
+
+## Aliases
+
+- **Alias order**: keep aliases alphabetically sorted within their block.
+- **Alias depth**: alias any module nested deeper than 2 levels when called more than once — `AliasUsage` check is configured with `if_nested_deeper_than: 2, if_called_more_often_than: 0`.
+- **Unnecessary expansion**: do not expand aliases that are already the leaf name (e.g., avoid `alias Foo.Bar, as: Bar`).
+
+## Module Structure
+
+- Every public module **must have a `@moduledoc`**. An empty `@moduledoc false` is only acceptable for internal/private modules. Credo exit_status is 1, so this fails CI.
+- Keep `alias`, `import`, `require`, `use` declarations at the top of the module, before any function definitions.
+
+## Control Flow
+
+- **`unless`**: never use `unless` with an `else` clause — rewrite as `if/else`.
+- **Negated conditions**: avoid double negation (`not not x`). Avoid negated conditions with an `else` branch — flip the condition instead.
+- **`cond`**: must have at least two non-`true` clauses; single-clause `cond` should be an `if`.
+- **`with`**: keep `with` clauses meaningful. Credo checks for degenerate `with` blocks.
+- **Nesting**: keep nesting shallow. Credo's `Nesting` check is active — extract nested logic into named functions.
+- **`try`/`rescue`**: prefer implicit try — do not wrap the entire function body in `try do ... end`, let Elixir handle it implicitly.
+
+## Functions
+
+- **Arity**: keep function arity low. Credo's `FunctionArity` check is active (default max is 8 — prefer fewer).
+- **Complexity**: avoid high cyclomatic complexity. Extract branches into private helpers.
+- **Match in conditions**: do not use `=` match expressions inside `if`/`unless` conditions.
+- **Pattern matching in parameters**: use consistent parameter pattern matching style — Credo enforces `ParameterPatternMatching`.
+
+## Pipes
+
+- Use pipes (`|>`) for multi-step transformations. A single-function pipe is a code smell — assign directly instead.
+- Start pipe chains from a plain value, not a function call (e.g., `value |> transform()`, not `get_value() |> transform()` when chaining only once).
+
+## Numbers
+
+- Use underscores as thousand separators for large integer literals: `1_000_000`.
+
+## Strings
+
+- Prefer sigils (`~s`, `~S`) for strings that contain many escape sequences or interpolations that would otherwise be noisy with quotes.
+
+## Warnings to avoid
+
+- Do not leave `IEx.pry` or `IO.inspect` calls in committed code.
+- Do not read `Mix.env()` inside module attributes — use application config instead.
+- Always use the return value of `Enum`, `File`, `Keyword`, `List`, `Path`, `Regex`, `String`, and `Tuple` operations — Credo flags unused results.
+- Do not call `raise` inside a `rescue` block — handle or re-raise with `reraise`.
+- Avoid boolean operations on the same values (`x and x`, `x or x`).
+- Do not pass tainted user input to `System.cmd` or similar exec calls.
+
+## Phoenix & LiveView
+
+- Formatter plugins: `Phoenix.LiveView.HTMLFormatter` is active — always format `.heex` templates through it. HEEx attribute order and indentation must comply.
+- Migrations live under `priv/*/migrations` and are formatted as regular Elixir files.
+- Keep LiveView modules in `lib/livedj_web/live/**` and components in `lib/livedj_web/components/`.
+- Ecto and Phoenix DSLs (`schema`, `changeset`, `router`, `live`, etc.) follow their own macro conventions — do not add unnecessary aliases for deeply nested Ecto/Phoenix modules already imported via `use`.
+
+## What Credo does NOT enforce in this project (opt-out)
+
+These checks are explicitly disabled — do not apply them:
+- `Mix.env()` warning is disabled (`MixEnv: false`).
+- `DuplicatedCode` — not enforced.
+- `MultiAlias` — multi-alias on one line (`alias Foo.{A, B}`) is allowed.
+- `Specs` (`@spec`) — not required (though encouraged for public APIs).
+- `SinglePipe` — a single-element pipe is tolerated.
+- `PipeChainStart` — pipe chain start style is not enforced.

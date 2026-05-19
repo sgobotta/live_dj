@@ -5,7 +5,7 @@
 
   <div class="w-full overflow-x-scroll" id="salsa">
     <.room_grid
-      :let={%{id: _room_id, room: room, player: player}}
+      :let={%{id: _room_id, room: room, player: player, users: users}}
       id="room-grid"
       modules={@rooms_players}
       module_click={
@@ -23,22 +23,26 @@
           h-12 w-40 px-2 font-semibold
           text-zinc-900 dark:text-zinc-100
         ">
-          <p>
+          <p class="font-normal text-xs truncate h-5">
             <%= room.name %>
           </p>
-          <p class="font-normal text-xs">
-            <%= room.name %>
-          </p>
+          <.mini_avatar_stack users={users} />
         </div>
       </div>
     </.room_grid>
   </div>
 
-  <div class="my-2 w-full">
-    <.link patch={~p"/sessions/rooms/new"} tabindex="-1">
-      <.button class="w-full"><%= gettext("New Room") %></.button>
-    </.link>
-  </div>
+  <.link patch={~p"/sessions/rooms/new"} tabindex="-1">
+    <.button class="
+      fixed bottom-6 right-6
+      flex items-center gap-2
+      rounded-full shadow-lg
+      px-5 py-3
+    ">
+      <.icon name="hero-plus" class="h-5 w-5" />
+      <%= gettext("New Room") %>
+    </.button>
+  </.link>
 
   <.modal
     :if={@live_action in [:new]}
