@@ -16,6 +16,8 @@ defmodule Livedj.Application do
       Livedj.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: Livedj.PubSub},
+      # Start Presence
+      Livedj.Presence,
       # Start Finch
       {Finch, name: Livedj.Finch},
       # Start the Endpoint (http/https)

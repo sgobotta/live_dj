@@ -12,6 +12,7 @@ defmodule Livedj.Sessions.Channels do
   #
   @player_topic "player"
   @playlist_topic "playlist"
+  @presence_topic "room_presence"
 
   # ----------------------------------------------------------------------------
   # Player event aliases
@@ -68,6 +69,22 @@ defmodule Livedj.Sessions.Channels do
   def playlist_topic(room_id), do: playlist_topic() <> ":" <> room_id
 
   # ----------------------------------------------------------------------------
+  # Presence topics
+  #
+
+  @doc """
+  Returns the presence topic
+  """
+  @spec presence_topic() :: binary()
+  def presence_topic, do: @presence_topic
+
+  @doc """
+  Returns the presence topic for a room
+  """
+  @spec presence_topic(binary()) :: binary()
+  def presence_topic(room_id), do: presence_topic() <> ":" <> room_id
+
+  # ----------------------------------------------------------------------------
   # Player subscriptions
   #
 
@@ -86,6 +103,16 @@ defmodule Livedj.Sessions.Channels do
   """
   @spec subscribe_player_topic(binary()) :: :ok | {:error, any()}
   def subscribe_player_topic(room_id), do: subscribe(player_topic(room_id))
+
+  # ----------------------------------------------------------------------------
+  # Presence subscriptions
+  #
+
+  @doc """
+  Subscribes to the presence topic for a room
+  """
+  @spec subscribe_presence_topic(binary()) :: :ok | {:error, any()}
+  def subscribe_presence_topic(room_id), do: subscribe(presence_topic(room_id))
 
   # ----------------------------------------------------------------------------
   # Player events

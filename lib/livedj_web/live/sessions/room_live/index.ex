@@ -2,8 +2,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   @moduledoc false
   use LivedjWeb, :live_view
 
+  alias Livedj.Presence
   alias Livedj.Sessions
-  alias Livedj.Sessions.Room
+  alias Livedj.Sessions.{Channels, Room}
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,11 +14,17 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
 
         for %Room{id: room_id} <- rooms do
           {:ok, :joined} = Sessions.join_player(room_id)
+          :ok = Channels.subscribe_presence_topic(room_id)
         end
 
         rooms_players =
           Enum.map(rooms, fn %Room{id: room_id} = room ->
-            %{id: room_id, room: room, player: nil, users: []}
+            %{
+              id: room_id,
+              room: room,
+              player: nil,
+              users: Presence.list_users(room_id)
+            }
           end)
 
         {:ok, assign(socket, :rooms_players, rooms_players)}
@@ -39,6 +46,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
         socket
       ) do
     {:ok, :joined} = Sessions.join_player(room_id)
+    :ok = Channels.subscribe_presence_topic(room_id)
 
     {:noreply,
      assign(
@@ -47,6 +55,16 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
        socket.assigns.rooms_players ++
          [%{id: room_id, room: room, player: nil, users: []}]
      )}
+  end
+
+  def handle_info(
+        %Phoenix.Socket.Broadcast{
+          event: "presence_diff",
+          topic: "room_presence:" <> room_id
+        },
+        socket
+      ) do
+    {:noreply, assign_users_by_room_id(socket, room_id)}
   end
 
   # ----------------------------------------------------------------------------
@@ -100,6 +118,21 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
         %{id: ^room_id, room: %Room{id: ^room_id}, player: _maybe_player} =
             room_player ->
           Map.put(room_player, :player, player)
+
+        room_player ->
+          room_player
+      end)
+
+    assign(socket, :rooms_players, rooms_players)
+  end
+
+  defp assign_users_by_room_id(socket, room_id) do
+    users = Presence.list_users(room_id)
+
+    rooms_players =
+      Enum.map(socket.assigns.rooms_players, fn
+        %{id: ^room_id} = room_player ->
+          Map.put(room_player, :users, users)
 
         room_player ->
           room_player
