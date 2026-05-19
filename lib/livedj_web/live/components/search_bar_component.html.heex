@@ -29,7 +29,8 @@
         id="searchbox_container"
         class="
           mx-auto overflow-hidden rounded-md
-          bg-none shadow-xl ring-zinc-900/7.5
+          bg-zinc-200 dark:bg-zinc-900
+          shadow-xl ring-zinc-900/7.5
           sm:max-w-xl
           opacity-100 scale-100
         "
@@ -75,16 +76,15 @@
                 class="
                   w-full !m-0
                   flex-auto rounded-md appearance-none bg-transparent pl-10 pr-28
-                  !bg-zinc-400 !dark:bg-zinc-600
-                  !text-zinc-700 !dark:text-zinc-300
+                  !bg-zinc-300 dark:!bg-zinc-800
+                  !text-zinc-800 dark:!text-zinc-200
+                  placeholder:text-zinc-500 dark:placeholder:text-zinc-400
                   outline-none focus:outline-none
-                  !border-zinc-400 focus:border-zinc-400
-                  dark:!border-zinc-600 focus:dark:!border-zinc-600
+                  !border-zinc-300 focus:!border-zinc-400
+                  dark:!border-zinc-700 dark:focus:!border-zinc-600
                   focus:ring-0 focus:shadow-none
                   focus:tracking-widest
                   transition-all duration-500
-                  placeholder:text-zinc-900 focus:placeholder:opacity-70
-                  dark:placeholder:text-zinc-100 focus:dark:placeholder:opacity-70
                   focus:w-full focus:flex-none
                   text-xs md:text-sm
                   [&::-webkit-search-cancel-button]:hidden
@@ -143,7 +143,7 @@
                 overflow-y-scroll
                 rounded-b-lg
                 border-t-0 border-zinc-200 text-sm leading-6
-                px-2 max-h-[80vh]
+                px-2 max-h-[24rem]
                 bg-none
                 #{if @search_result != [], do: "!py-2 !my-1"}
               "}
@@ -225,12 +225,7 @@
                     phx-target={@myself}
                     tabindex="0"
                   >
-                    <%= PhoenixInlineSvg.Helpers.svg_image(
-                      LivedjWeb.Endpoint,
-                      "queue-add",
-                      "icons/misc",
-                      class: ""
-                    ) %>
+                    <.icon name="hero-plus" class="h-5 w-5" />
                   </div>
                 </div>
               </li>

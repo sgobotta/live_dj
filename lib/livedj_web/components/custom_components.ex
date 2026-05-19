@@ -31,13 +31,13 @@ defmodule LivedjWeb.CustomComponents do
           <CoreComponents.icon
             id="toggle-theme-icon"
             name="hero-sun-solid"
-            class="text-black dark:text-white h-5 w-5"
+            class="text-black dark:text-white h-5 w-5 hover:dark:text-yellow-500 duration-500"
           />
         <% else %>
           <CoreComponents.icon
             id="toggle-theme-icon"
             name="hero-moon-solid"
-            class="text-black dark:text-white h-5 w-5"
+            class="text-black dark:text-white h-5 w-5 hover:text-yellow-500 duration-500"
           />
         <% end %>
       </a>
