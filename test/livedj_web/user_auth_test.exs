@@ -149,7 +149,7 @@ defmodule LivedjWeb.UserAuthTest do
       _session_token = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_user(conn, [])
       refute get_session(conn, :user_token)
-      refute conn.assigns.current_user
+      refute match?(%Livedj.Accounts.User{}, conn.assigns.current_user)
     end
   end
 
@@ -167,7 +167,7 @@ defmodule LivedjWeb.UserAuthTest do
       assert updated_socket.assigns.current_user.id == user.id
     end
 
-    test "assigns nil to current_user assign if there isn't a valid user_token",
+    test "assigns a guest to current_user assign if there isn't a valid user_token",
          %{conn: conn} do
       user_token = "invalid_token"
       session = conn |> put_session(:user_token, user_token) |> get_session()
@@ -175,18 +175,25 @@ defmodule LivedjWeb.UserAuthTest do
       {:cont, updated_socket} =
         UserAuth.on_mount(:mount_current_user, %{}, session, %LiveView.Socket{})
 
-      assert updated_socket.assigns.current_user == nil
+      refute match?(
+               %Livedj.Accounts.User{},
+               updated_socket.assigns.current_user
+             )
     end
 
-    test "assigns nil to current_user assign if there isn't a user_token", %{
-      conn: conn
-    } do
+    test "assigns a guest to current_user assign if there isn't a user_token",
+         %{
+           conn: conn
+         } do
       session = conn |> get_session()
 
       {:cont, updated_socket} =
         UserAuth.on_mount(:mount_current_user, %{}, session, %LiveView.Socket{})
 
-      assert updated_socket.assigns.current_user == nil
+      refute match?(
+               %Livedj.Accounts.User{},
+               updated_socket.assigns.current_user
+             )
     end
   end
 
@@ -223,7 +230,10 @@ defmodule LivedjWeb.UserAuthTest do
       {:halt, updated_socket} =
         UserAuth.on_mount(:ensure_authenticated, %{}, session, socket)
 
-      assert updated_socket.assigns.current_user == nil
+      refute match?(
+               %Livedj.Accounts.User{},
+               updated_socket.assigns.current_user
+             )
     end
 
     test "redirects to login page if there isn't a user_token", %{conn: conn} do
@@ -237,7 +247,10 @@ defmodule LivedjWeb.UserAuthTest do
       {:halt, updated_socket} =
         UserAuth.on_mount(:ensure_authenticated, %{}, session, socket)
 
-      assert updated_socket.assigns.current_user == nil
+      refute match?(
+               %Livedj.Accounts.User{},
+               updated_socket.assigns.current_user
+             )
     end
   end
 
