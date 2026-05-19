@@ -254,13 +254,18 @@ export default {
           // loadVideoById auto-plays; set flag so BUFFERING handler
           // can retry play in case the initial auto-play is blocked
           this.shouldAutoplay = true
-          this.player.loadVideoById(player.media_id, player.current_time, "large")
+          this.player.loadVideoById(
+            player.media_id, player.current_time, "large"
+          )
           break
 
         case "paused":
-          // cueVideoById loads without playing, avoiding any race with pauseVideo
+          // cueVideoById loads without playing, avoiding any race with
+          // pauseVideo
           this.shouldAutoplay = false
-          this.player.cueVideoById(player.media_id, player.current_time, "large")
+          this.player.cueVideoById(
+            player.media_id, player.current_time, "large"
+          )
           break
 
         case "idle":
