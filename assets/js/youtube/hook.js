@@ -3,7 +3,15 @@ import { secondsToTime } from '../lib/date-utils'
 
 function scrollToElement(elementId) {
   const element = document.getElementById(elementId)
-  if (element) element.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  if (!element) return
+
+  const scrollContainer = document.getElementById('lists')
+  if (scrollContainer) {
+    const itemTop = element.offsetTop - scrollContainer.offsetTop
+    scrollContainer.scrollTo({ top: itemTop, behavior: 'smooth' })
+  } else {
+    element.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  }
 }
 
 const updateTimeDisplay = (timeTrackerElem, time) => {
