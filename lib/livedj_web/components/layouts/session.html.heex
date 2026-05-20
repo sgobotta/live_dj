@@ -55,12 +55,14 @@
     </ul> --%>
   </header>
 
-  <main class="sm:py-10 lg:px-8">
+  <main class="flex-1 overflow-y-auto sm:py-10 lg:px-8 bg-zinc-200 dark:bg-zinc-800">
     <div class="mx-1 sm:mx-auto max-w-xl">
       <.flash_group flash={@flash} />
       <%= @inner_content %>
     </div>
   </main>
+
+  <div class="shrink-0 h-24" />
 
   <footer class="absolute bottom-0 w-full">
     <%= live_render(
