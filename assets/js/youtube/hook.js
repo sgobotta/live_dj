@@ -8,9 +8,9 @@ function scrollToElement(elementId) {
   const scrollContainer = document.getElementById('lists')
   if (scrollContainer) {
     const itemTop = element.offsetTop - scrollContainer.offsetTop
-    scrollContainer.scrollTo({ top: itemTop, behavior: 'smooth' })
+    scrollContainer.scrollTo({ behavior: 'smooth', top: itemTop })
   } else {
-    element.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
 }
 
