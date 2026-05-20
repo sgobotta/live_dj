@@ -75,7 +75,7 @@
         "require-yield": 2,
         "use-isnan": 2,
         "valid-typeof": 2,
-        "sort-imports": 2,
+        "sort-imports": ["error", { "ignoreDeclarationSort": true }],
         "sort-keys": 2,
         "no-duplicate-imports": 2,
         "no-var": 2,

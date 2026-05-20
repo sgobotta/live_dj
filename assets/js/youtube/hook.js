@@ -1,6 +1,6 @@
-import { secondsToTime } from '../lib/date-utils'
-import { startNoise, stopNoise } from '../animation/noise'
 import initPlayer from './player'
+import { startNoise, stopNoise } from '../animation/noise'
+import { secondsToTime } from '../lib/date-utils'
 
 function scrollToElement(elementId) {
   const element = document.getElementById(elementId)

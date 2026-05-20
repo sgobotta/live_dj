@@ -33,6 +33,7 @@ check.lint: SHELL:=/bin/bash
 check.lint:
 	@source ${LOCAL_ENV_FILE} && mix check.format
 	@source ${LOCAL_ENV_FILE} && mix check.credo
+	@cd assets && npx eslint js
 
 #🧹 clean.uploads: @ Removes all files from the uploads dir
 clean.uploads: SHELL:=/bin/bash
@@ -111,6 +112,7 @@ lint: MIX_ENV=dev
 lint:
 	@mix format
 	@mix check.credo
+	@cd assets && npx eslint js --fix
 
 #💣 reset: @ Cleans dependencies then re-installs and compiles them for all envs
 reset: SHELL:=/bin/bash
