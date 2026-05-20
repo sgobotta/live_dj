@@ -8,7 +8,7 @@ function scrollToElement(elementId) {
 
   const scrollContainer = document.getElementById('lists')
   if (scrollContainer) {
-    const itemTop = element.offsetTop - scrollContainer.offsetTop
+    const itemTop = element.offsetTop - scrollContainer.offsetTop - 8
     scrollContainer.scrollTo({ behavior: 'smooth', top: itemTop })
   } else {
     element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
