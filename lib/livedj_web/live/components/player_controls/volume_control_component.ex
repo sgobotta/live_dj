@@ -8,7 +8,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
     ~H"""
     <div class="
       inline-flex
-      md:w-28 w-5
+      md:w-28 w-6
       fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
       dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
     ">
