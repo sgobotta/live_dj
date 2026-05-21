@@ -560,7 +560,7 @@ defmodule LivedjWeb.CoreComponents do
       @class
     ]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-100">
+        <h1 class="text-lg font-normal leading-8 text-zinc-800 dark:text-zinc-100">
           <%= render_slot(@inner_block) %>
         </h1>
         <p

@@ -184,7 +184,7 @@ defmodule LivedjWeb.CustomComponents do
       id={@id}
       class="
         grid grid-rows-1 grid-flow-col auto-cols-max
-        my-4 py-4 w-max gap-4 px-1
+        py-4 w-max gap-4 px-1
       "
     >
       <div
