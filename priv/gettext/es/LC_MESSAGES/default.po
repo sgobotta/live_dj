@@ -282,7 +282,7 @@ msgstr "Salir"
 
 #: lib/livedj_web/live/sessions/room_live/index.html.heex:3
 #, elixir-autogen, elixir-format
-msgid "Playing now..."
+msgid "Salas públicas"
 msgstr "Sonando ahora..."
 
 #: lib/livedj_web/components/layouts/root.html.heex:48
