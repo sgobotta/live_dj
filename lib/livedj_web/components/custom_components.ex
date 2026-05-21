@@ -49,7 +49,7 @@ defmodule LivedjWeb.CustomComponents do
   Renders the livedj logo
   """
   attr :theme, :string, required: true
-  attr :class, :string, default: "w-28 h-18"
+  attr :class, :string, default: "w-24 h-10"
 
   def livedj_logo(assigns) do
     ~H"""
@@ -71,7 +71,7 @@ defmodule LivedjWeb.CustomComponents do
     <p class="
       bg-brand/5 dark:bg-brand/100
       text-brand dark:text-white
-      rounded-full px-2 font-medium leading-6
+      rounded-full px-2 font-medium leading-6 text-xs
     ">
       v<%= @version %>
     </p>

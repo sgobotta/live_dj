@@ -1,14 +1,15 @@
 <div class="flex flex-col h-screen">
   <header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
     <div class="grid grid-cols-3 items-center border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm">
-      <div />
+      <div class="flex items-center justify-start">
+        <.toggle_theme_button theme={@theme} />
+      </div>
       <div class="flex justify-center">
         <a href="/" data-confirm={gettext("Exit session?")}>
           <.livedj_logo theme={@theme} />
         </a>
       </div>
       <div class="flex items-center justify-end gap-4">
-        <.toggle_theme_button theme={@theme} />
         <.user_avatar user={@current_user} />
       </div>
     </div>
