@@ -638,6 +638,23 @@ defmodule Livedj.Sessions do
       reraise SessionRoomError, [reason: :room_not_found], __STACKTRACE__
   end
 
+  @doc "Returns a randomly generated funny room name."
+  def generate_room_name do
+    patterns = [
+      fn -> "#{Faker.Color.En.name()} #{Faker.Team.En.creature()}s" end,
+      fn ->
+        "The #{Faker.Team.En.creature()}s from #{Faker.StarWars.En.planet()}"
+      end,
+      fn -> "#{Faker.Pokemon.name()}'s #{Faker.Team.En.creature()}s" end,
+      fn -> "#{Faker.Color.En.name()} #{Faker.Pokemon.name()} Lounge" end,
+      fn ->
+        "#{Faker.StarWars.En.planet()} #{Faker.Team.En.creature()}s Club"
+      end
+    ]
+
+    Enum.random(patterns).()
+  end
+
   @doc """
   Creates a room.
 
