@@ -10,6 +10,15 @@
         </a>
       </div>
       <div class="flex items-center justify-end gap-4">
+        <!-- <%= if assigns[:room] do %>
+          <button
+            phx-click="open_share_modal"
+            title={gettext("Share room")}
+            class="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors duration-150"
+          >
+            <.icon name="hero-clipboard-document" class="h-5 w-5" />
+          </button>
+        <% end %> -->
         <.user_avatar user={@current_user} />
       </div>
     </div>

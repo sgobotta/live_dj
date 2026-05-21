@@ -11,30 +11,30 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   @impl true
   def mount(params, _session, socket) do
-    case connected?(socket) do
-      true ->
-        %Room{id: room_id} = room = Sessions.get_room!(params["id"])
-        {:ok, :joined} = Sessions.join_player(room_id)
+    %Room{id: room_id} = room = Sessions.get_room!(params["id"])
 
-        {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
+    socket =
+      assign(socket,
+        list_lv_id: playlist_liveview_id(),
+        player_container_id: player_container_id(),
+        spinner_id: spinner_id(),
+        backdrop_id: backdrop_id(),
+        start_time_tracker_id: "player-controls-start-time-tracker",
+        end_time_tracker_id: "player-controls-end-time-tracker",
+        time_slider_id: "player-controls-time-slider",
+        form: to_form(%{}),
+        player: nil,
+        room: room,
+        room_url: nil,
+        content_ready: connected?(socket)
+      )
 
-        {:ok,
-         assign(socket,
-           list_lv_id: playlist_liveview_id(),
-           player_container_id: player_container_id(),
-           spinner_id: spinner_id(),
-           backdrop_id: backdrop_id(),
-           start_time_tracker_id: "player-controls-start-time-tracker",
-           end_time_tracker_id: "player-controls-end-time-tracker",
-           time_slider_id: "player-controls-time-slider",
-           form: to_form(%{}),
-           player: nil,
-           room: room
-         )}
-
-      false ->
-        {:ok, socket}
+    if connected?(socket) do
+      {:ok, :joined} = Sessions.join_player(room_id)
+      {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
     end
+
+    {:ok, socket}
   rescue
     error in SessionRoomError ->
       case error do
@@ -54,25 +54,31 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   @impl true
   def handle_params(%{"id" => _id} = params, _url, socket) do
-    case connected?(socket) do
-      true ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)}
-
-      false ->
-        {:noreply, socket}
-    end
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   defp apply_action(socket, :show, _params) do
     socket
     |> assign(:page_title, "#{socket.assigns.room.name}")
+    |> assign(:room_url, nil)
+  end
+
+  defp apply_action(socket, :welcome, _params) do
+    room_url = url(~p"/sessions/rooms/#{socket.assigns.room}")
+
+    socket
+    |> assign(:page_title, "#{socket.assigns.room.name}")
+    |> assign(:room_url, room_url)
   end
 
   # ----------------------------------------------------------------------------
   # Client side event handling
   #
+
+  def handle_event("open_share_modal", _params, socket) do
+    {:noreply,
+     push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/welcome")}
+  end
 
   def handle_event("on_player_play", _params, socket) do
     # On click event callback

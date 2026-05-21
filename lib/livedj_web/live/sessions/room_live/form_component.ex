@@ -94,7 +94,7 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Room created successfully"))
-         |> push_navigate(to: ~p"/sessions/rooms/#{room}")}
+         |> push_navigate(to: ~p"/sessions/rooms/#{room}/welcome")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
