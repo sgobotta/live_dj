@@ -89,6 +89,18 @@ export default {
         player.g.classList.add("rounded-lg")
 
         this.player = player
+
+        const persistedLevel = parseInt(
+          localStorage.getItem("_volume_level") ?? "100", 10
+        )
+        const persistedMuted = localStorage.getItem("_volume_muted") === "true"
+        player.setVolume(persistedLevel)
+        if (persistedMuted) {
+          player.mute()
+        } else {
+          player.unMute()
+        }
+
         this.pushEventTo(this.el, 'on_player_loaded')
       }
 
@@ -307,6 +319,8 @@ export default {
       console.debug('[Player :: change_volume', volumeLevel)
       this.player.unMute()
       this.player.setVolume(volumeLevel)
+      localStorage.setItem("_volume_level", volumeLevel)
+      localStorage.setItem("_volume_muted", "false")
 
       await this.handleCallbackEvent(callbackEvent)
     })
@@ -319,6 +333,7 @@ export default {
     this.handleEvent('mute', async ({callback_event: callbackEvent = null}) => {
       console.debug('[Player :: mute')
       this.player.mute()
+      localStorage.setItem("_volume_muted", "true")
 
       await this.handleCallbackEvent(callbackEvent)
     })
@@ -333,6 +348,7 @@ export default {
     }) => {
       console.debug('[Player :: unmute')
       this.player.unMute()
+      localStorage.setItem("_volume_muted", "false")
 
       await this.handleCallbackEvent(callbackEvent)
     })

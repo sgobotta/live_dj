@@ -13,6 +13,13 @@ defmodule LivedjWeb.PlayerControlsLive do
         %Room{id: room_id} = room = Sessions.get_room!(params["id"])
         {:ok, :joined} = Sessions.join_player(room_id)
 
+        connect_params = get_connect_params(socket)
+
+        volume_level =
+          String.to_integer(connect_params["_volume_level"] || "100")
+
+        volume_muted = connect_params["_volume_muted"] == "true"
+
         {:ok,
          assign(socket,
            player_controls_id: "player-controls-#{Ecto.UUID.generate()}",
@@ -24,7 +31,9 @@ defmodule LivedjWeb.PlayerControlsLive do
            add_video_control_id: "add-video-control-#{room_id}",
            layout: false,
            player: nil,
-           room: room
+           room: room,
+           volume_level: volume_level,
+           volume_muted: volume_muted
          )}
 
       false ->
