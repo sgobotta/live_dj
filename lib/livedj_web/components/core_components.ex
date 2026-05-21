@@ -73,7 +73,7 @@ defmodule LivedjWeb.CoreComponents do
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
               class="
                 shadow-zinc-700/10 dark:shadow-300/10 ring-zinc-700/10 dark:ring-zinc-300/10
-                relative hidden rounded-2xl bg-zinc-200 border-[1px] border-zinc-400 dark:bg-zinc-900 p-14 shadow-lg ring-1 transition
+                relative hidden rounded-2xl bg-zinc-200 border-[1px] border-zinc-400 dark:bg-zinc-900 p-5 shadow-lg ring-1 transition
               "
             >
               <div class="absolute top-6 right-5">

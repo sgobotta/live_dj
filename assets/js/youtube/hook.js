@@ -1,9 +1,18 @@
 import initPlayer from './player'
+import { startNoise, stopNoise } from '../animation/noise'
 import { secondsToTime } from '../lib/date-utils'
 
 function scrollToElement(elementId) {
   const element = document.getElementById(elementId)
-  if (element) element.scrollIntoView()
+  if (!element) return
+
+  const scrollContainer = document.getElementById('lists')
+  if (scrollContainer) {
+    const itemTop = element.offsetTop - scrollContainer.offsetTop - 8
+    scrollContainer.scrollTo({ behavior: 'smooth', top: itemTop })
+  } else {
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }
 }
 
 const updateTimeDisplay = (timeTrackerElem, time) => {
@@ -71,8 +80,9 @@ export default {
         `spinner_container_id=${this.spinnerId}`
       )
 
-      document.getElementById(this.spinnerId).classList.remove("hidden")
-      document.getElementById(this.spinnerId).classList.add("animate-ping")
+      const canvas = document.getElementById(this.spinnerId)
+      canvas.classList.remove("hidden")
+      startNoise(canvas)
 
       const onPlayerReady = player => {
         console.debug('[Player :: Ready]', player)
@@ -165,9 +175,9 @@ export default {
 
       this.player.g.classList.remove('hidden')
 
-      const spinner = document.getElementById(this.spinnerId)
-      spinner.classList.add('hidden')
-      spinner.classList.remove('animate-pulse')
+      const canvas = document.getElementById(this.spinnerId)
+      stopNoise(canvas)
+      canvas.classList.add('hidden')
 
       const backdrop = document.getElementById(this.backdropId)
       backdrop.classList.add('opacity-0')
@@ -215,6 +225,10 @@ export default {
       await this.player.playVideo()
       await this.pushEventTo(this.el, callbackEvent)
 
+      const canvas = document.getElementById(this.spinnerId)
+      stopNoise(canvas)
+      canvas.classList.add('hidden')
+
       const backdrop = document.getElementById(this.backdropId)
       backdrop.classList.add('opacity-0')
       backdrop.classList.remove('opacity-50')
@@ -232,9 +246,9 @@ export default {
       await this.player.pauseVideo()
       await this.pushEventTo(this.el, callbackEvent)
 
-      const spinner = document.getElementById(this.spinnerId)
-      spinner.classList.add("animate-ping")
-      spinner.classList.remove("hidden")
+      const canvas = document.getElementById(this.spinnerId)
+      canvas.classList.remove("hidden")
+      startNoise(canvas)
 
       const backdrop = document.getElementById(this.backdropId)
       backdrop.classList.remove("opacity-0")
