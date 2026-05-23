@@ -122,7 +122,7 @@ defmodule LivedjWeb.UserResetPasswordLiveTest do
 
       {:ok, conn} =
         lv
-        |> element(~s|main a:fl-contains("Log in")|)
+        |> element("main a", "Log in")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
@@ -138,7 +138,7 @@ defmodule LivedjWeb.UserResetPasswordLiveTest do
 
       {:ok, conn} =
         lv
-        |> element(~s|main a:fl-contains("Register")|)
+        |> element("main a", "Register")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/register")
 

@@ -193,9 +193,9 @@ defmodule LivedjWeb.CoreComponents do
     assigns = assign(assigns, :id, Ecto.UUID.generate())
 
     ~H"""
-    <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
-    <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
-    <.flash kind={:warn} title={gettext("Warn!")} flash={@flash} />
+    <.flash id="flash-info" kind={:info} title={gettext("Success!")} flash={@flash} />
+    <.flash id="flash-error" kind={:error} title={gettext("Error!")} flash={@flash} />
+    <.flash id="flash-warn" kind={:warn} title={gettext("Warn!")} flash={@flash} />
     <.flash
       id={"client-error-#{@id}"}
       kind={:error}

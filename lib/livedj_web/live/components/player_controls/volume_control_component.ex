@@ -18,7 +18,6 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
         phx-window-keydown="on_volume_click"
         class={volume_button_class(@muted?)}
         aria-pressed={@muted?}
-        href="#"
         phx-click="on_volume_click"
         phx-target={@myself}
       >
