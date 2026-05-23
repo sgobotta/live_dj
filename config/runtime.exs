@@ -44,7 +44,7 @@ if config_env() == :prod do
   case System.get_env("STAGE") do
     stage when stage in ["local", "dev", "staging", "prod"] ->
       :ok =
-        Logger.warn(
+        Logger.warning(
           "Ignoring variable DATABASE_URL as Postgrex connection protocol, proceding with default tcp connection."
         )
 

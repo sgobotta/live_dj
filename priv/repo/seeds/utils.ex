@@ -41,7 +41,7 @@ defmodule Livedj.Seeds.Utils do
   end
 
   defp log_key_violations(resource, code, constraint, detail, _error) when code in [:unique_violation, :foreign_key_violation] do
-    :ok = Logger.warn("❌ The #{resource} resource already exists, skipping creation. constraint=#{inspect(constraint)} detail=#{inspect(detail)}")
+    :ok = Logger.warning("❌ The #{resource} resource already exists, skipping creation. constraint=#{inspect(constraint)} detail=#{inspect(detail)}")
   end
 
   defp log_key_violations(resource, code, constraint, detail, error) do
