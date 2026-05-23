@@ -27,12 +27,7 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
           field={@form[:name]}
           type="text"
           label={gettext("Name")}
-          class="focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
-        />
-        <.input
-          field={@form[:slug]}
-          type="text"
-          label={gettext("Slug")}
+          placeholder={@placeholder_name}
           class="focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
         />
         <:actions>
@@ -52,6 +47,7 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(:placeholder_name, Sessions.generate_room_name())
      |> assign_form(changeset)}
   end
 
@@ -66,6 +62,12 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
   end
 
   def handle_event("save", %{"room" => room_params}, socket) do
+    room_params =
+      case String.trim(room_params["name"] || "") do
+        "" -> Map.put(room_params, "name", socket.assigns.placeholder_name)
+        _name -> room_params
+      end
+
     save_room(socket, socket.assigns.action, room_params)
   end
 
@@ -92,7 +94,7 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Room created successfully"))
-         |> push_patch(to: socket.assigns.patch)}
+         |> push_navigate(to: ~p"/sessions/rooms/#{room}/welcome")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

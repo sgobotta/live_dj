@@ -82,7 +82,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#FD4F00"
+        brand: "violet"
       },
       fontFamily: {
         'sans': ['Montserrat-Thin', 'Helvetica', 'Arial', 'sans-serif']

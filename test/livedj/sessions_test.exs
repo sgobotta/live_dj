@@ -27,7 +27,7 @@ defmodule Livedj.SessionsTest do
 
       assert {:ok, %Room{} = room} = Sessions.create_room(valid_attrs)
       assert room.name == "some name"
-      assert room.slug == "some slug"
+      assert {:ok, _} = Ecto.UUID.cast(room.slug)
     end
 
     test "create_room/1 with invalid data returns error changeset" do
@@ -40,7 +40,7 @@ defmodule Livedj.SessionsTest do
 
       assert {:ok, %Room{} = room} = Sessions.update_room(room, update_attrs)
       assert room.name == "some updated name"
-      assert room.slug == "some updated slug"
+      assert {:ok, _} = Ecto.UUID.cast(room.slug)
     end
 
     test "update_room/2 with invalid data returns error changeset" do

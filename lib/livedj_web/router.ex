@@ -32,6 +32,7 @@ defmodule LivedjWeb.Router do
         live "/rooms", RoomLive.Index, :index
         live "/rooms/new", RoomLive.Index, :new
         live "/rooms/:id", RoomLive.Show, :show
+        live "/rooms/:id/welcome", RoomLive.Show, :welcome
       end
     end
 

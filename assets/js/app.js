@@ -47,11 +47,15 @@ if (
     document.querySelector("meta[name='csrf-token']")
     .getAttribute("content")
   const _theme = localStorage.getItem("theme")
+  const _volume_level = localStorage.getItem("_volume_level") ?? "100"
+  const _volume_muted = localStorage.getItem("_volume_muted") ?? "false"
   const liveSocket = new LiveSocket("/live", Socket, {
     hooks: Hooks,
     params: {
       _csrf_token: csrfToken,
-      _theme
+      _theme,
+      _volume_level,
+      _volume_muted
     }
   })
   

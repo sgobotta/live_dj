@@ -1,20 +1,17 @@
 <header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm">
-    <div class="flex items-center gap-4">
+  <div class="
+    grid grid-cols-3 items-center
+    border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm
+  ">
+    <div class="flex items-center justify-start">
+      <.toggle_theme_button theme={@theme} />
+    </div>
+    <div class="flex items-center justify-center gap-4">
       <a href="/">
         <.livedj_logo theme={@theme} />
       </a>
-      <div class="cursor-default">
-        <.link
-          target="_blank"
-          href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
-        >
-          <.version_pill version={Application.spec(:livedj, :vsn)} />
-        </.link>
-      </div>
     </div>
-    <div class="flex items-center gap-4">
-      <.toggle_theme_button theme={@theme} />
+    <div class="flex items-center justify-end">
       <.user_avatar user={assigns[:current_user]} />
     </div>
   </div>
@@ -23,5 +20,13 @@
   <div class="mx-auto max-w-2xl z-50">
     <.flash_group flash={@flash} />
     <%= @inner_content %>
+  </div>
+  <div class="cursor-default absolute bottom-4 left-4">
+    <.link
+      target="_blank"
+      href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
+    >
+      <.version_pill version={Application.spec(:livedj, :vsn)} />
+    </.link>
   </div>
 </main>

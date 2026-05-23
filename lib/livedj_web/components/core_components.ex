@@ -65,7 +65,7 @@ defmodule LivedjWeb.CoreComponents do
         aria-modal="true"
       >
         <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
+          <div class="w-full max-w-lg p-4 sm:p-6 lg:py-8">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
@@ -560,7 +560,7 @@ defmodule LivedjWeb.CoreComponents do
       @class
     ]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-100">
+        <h1 class="text-lg font-normal leading-8 text-zinc-800 dark:text-zinc-100">
           <%= render_slot(@inner_block) %>
         </h1>
         <p
@@ -792,7 +792,6 @@ defmodule LivedjWeb.CoreComponents do
          "opacity-100"}
     )
     |> show("##{id}-container")
-    |> JS.add_class("overflow-hidden", to: "body")
     |> JS.focus_first(to: "##{id}-content")
   end
 
@@ -806,7 +805,6 @@ defmodule LivedjWeb.CoreComponents do
     )
     |> hide("##{id}-container")
     |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
-    |> JS.remove_class("overflow-hidden", to: "body")
     |> JS.pop_focus()
   end
 
