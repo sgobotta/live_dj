@@ -44,14 +44,14 @@
 <div class="px-4 py-10 sm:px-6 sm:py-28 lg:px-8 xl:px-28 xl:py-32">
   <div class="mx-auto max-w-xl lg:mx-0">
     <span class="dark:hidden">
-      <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "live-dj-iso-black",
+      {PhoenixInlineSvg.Helpers.svg_image(@conn, "live-dj-iso-black",
         class: "w-40 h-40"
-      ) %>
+      )}
     </span>
     <span class="hidden dark:inline">
-      <%= PhoenixInlineSvg.Helpers.svg_image(@conn, "live-dj-iso-white",
+      {PhoenixInlineSvg.Helpers.svg_image(@conn, "live-dj-iso-white",
         class: "w-40 h-40"
-      ) %>
+      )}
     </span>
     <h1 class="text-brand mt-10 flex items-center text-sm font-semibold leading-6">
       LiveDj
@@ -65,12 +65,12 @@
       </small>
     </h1>
     <p class="text-[2rem] mt-4 font-semibold leading-10 tracking-tighter text-zinc-900 dark:text-zinc-100">
-      <%= gettext("Shared youtube sessions") %>
+      {gettext("Shared youtube sessions")}
     </p>
     <p class="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400">
-      <%= gettext(
+      {gettext(
         "Join or create a room with your friends, add videos and watch to youtube content in real time."
-      ) %>
+      )}
     </p>
     <div class="flex">
       <div class="w-full sm:w-auto">
@@ -82,13 +82,13 @@
             <span class="absolute inset-0 rounded-2xl bg-zinc-50 dark:bg-zinc-800 transition group-hover:bg-zinc-100 dark:group-hover:bg-zinc-700 sm:group-hover:scale-105">
             </span>
             <span class="relative flex items-center gap-4 sm:flex-col">
-              <%= PhoenixInlineSvg.Helpers.svg_image(
+              {PhoenixInlineSvg.Helpers.svg_image(
                 @conn,
                 "compact-discs",
                 "icons",
                 class: "w-6 h-6 fill-zinc-900 dark:fill-zinc-100"
-              ) %>
-              <%= gettext("Rooms") %>
+              )}
+              {gettext("Rooms")}
             </span>
           </a>
           <a
@@ -110,7 +110,7 @@
                   fill="currentColor"
                 />
               </svg>
-              <%= gettext("Source Code") %>
+              {gettext("Source Code")}
             </span>
           </a>
         </div>

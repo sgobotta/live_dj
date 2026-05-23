@@ -50,7 +50,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
             "text-zinc-100 dark:text-zinc-900",
             avatar_color_class(user)
           ]}>
-            <%= avatar_initials(user) %>
+            {avatar_initials(user)}
           </span>
         <% end %>
       </div>
@@ -65,7 +65,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
         "
         style={"z-index: #{length(@shown_users) + 1}"}
       >
-        +<%= @overflow %>
+        +{@overflow}
       </div>
     </div>
     """

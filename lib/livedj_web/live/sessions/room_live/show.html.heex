@@ -1,10 +1,11 @@
 <%= if @content_ready do %>
   <div class="border-t-[1px] border-zinc-200 dark:border-zinc-800 py-2 my-2 mx-1">
-    <%= live_render(
+    {live_render(
       @socket,
       LivedjWeb.Sessions.RoomLive.List,
       id: @list_lv_id,
+      session: %{"id" => @room.id},
       sticky: true
-    ) %>
+    )}
   </div>
 <% end %>

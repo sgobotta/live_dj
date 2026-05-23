@@ -84,7 +84,9 @@ defmodule Livedj.Accounts.User do
 
   defp validate_email(changeset, opts) do
     changeset
-    |> validate_required([:email], message: dgettext("errors", "can't be blank"))
+    |> validate_required([:email],
+      message: dgettext("errors", "can't be blank")
+    )
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/,
       message: dgettext("errors", "must have the @ sign and no spaces")
     )

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title suffix=" · Liveapps">
-      <%= assigns[:page_title] || "Livedj" %>
+      {assigns[:page_title] || "Livedj"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script
@@ -20,14 +20,14 @@
     <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if match?(%Livedj.Accounts.User{}, @current_user) do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100">
-          <%= @current_user.username %>
+          {@current_user.username}
         </li>
         <li>
           <.link
             href={~p"/users/settings"}
             class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
-            <%= gettext("Settings") %>
+            {gettext("Settings")}
           </.link>
         </li>
         <li>
@@ -36,7 +36,7 @@
             method="delete"
             class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
-            <%= gettext("Log out") %>
+            {gettext("Log out")}
           </.link>
         </li>
       <% else %>
@@ -45,7 +45,7 @@
             href={~p"/users/register"}
             class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
-            <%= gettext("Register") %>
+            {gettext("Register")}
           </.link>
         </li>
         <li>
@@ -53,11 +53,11 @@
             href={~p"/users/log_in"}
             class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
           >
-            <%= gettext("Log in") %>
+            {gettext("Log in")}
           </.link>
         </li>
       <% end %>
     </ul>
-    <%= @inner_content %>
+    {@inner_content}
   </body>
 </html>

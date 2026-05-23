@@ -7,10 +7,10 @@ defmodule LivedjWeb.PlayerControlsLive do
   @on_play_click "on_play_click"
   @on_pause_click "on_pause_click"
 
-  def mount(params, _session, socket) do
+  def mount(:not_mounted_at_router, %{"id" => room_id}, socket) do
     case connected?(socket) do
       true ->
-        %Room{id: room_id} = room = Sessions.get_room!(params["id"])
+        %Room{id: ^room_id} = room = Sessions.get_room!(room_id)
         {:ok, :joined} = Sessions.join_player(room_id)
 
         connect_params = get_connect_params(socket)

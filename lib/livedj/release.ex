@@ -75,7 +75,7 @@ defmodule Livedj.Release do
 
       {:error, error} ->
         :ok =
-          Logger.warn(
+          Logger.warning(
             "Error while loading application error=#{inspect(error, pretty: true)}"
           )
     end
