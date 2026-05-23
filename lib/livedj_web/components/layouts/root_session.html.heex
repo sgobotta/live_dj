@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title suffix=" · Phoenix Framework">
-      <%= assigns[:page_title] || "Livedj" %>
+      {assigns[:page_title] || "Livedj"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script
@@ -17,6 +17,6 @@
     </script>
   </head>
   <body class="antialiased overflow-hidden bg-zinc-100 dark:bg-zinc-900">
-    <%= @inner_content %>
+    {@inner_content}
   </body>
 </html>

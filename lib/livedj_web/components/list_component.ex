@@ -90,7 +90,7 @@ defmodule LivedjWeb.ListComponent do
                     do: "bg-green-500 text-zinc-100",
                     else: "bg-zinc-900 dark:bg-zinc-100"}
                 "}>
-                  <%= index + 1 %>
+                  {index + 1}
                 </p>
               </div>
               <div class="
@@ -99,7 +99,7 @@ defmodule LivedjWeb.ListComponent do
                 p-1 px-1 h-8 w-5/6
                 text-ellipsis overflow-hidden
               ">
-                <%= item.title %>
+                {item.title}
               </div>
               <%= if current_media?(@current_media, item.external_id) do %>
                 <button

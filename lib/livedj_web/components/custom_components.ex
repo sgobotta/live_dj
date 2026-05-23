@@ -53,11 +53,11 @@ defmodule LivedjWeb.CustomComponents do
 
   def livedj_logo(assigns) do
     ~H"""
-    <%= PhoenixInlineSvg.Helpers.svg_image(
+    {PhoenixInlineSvg.Helpers.svg_image(
       LivedjWeb.Endpoint,
       if(@theme === "dark", do: "logo-white", else: "logo-black"),
       class: @class
-    ) %>
+    )}
     """
   end
 
@@ -73,7 +73,7 @@ defmodule LivedjWeb.CustomComponents do
       text-brand dark:text-white
       rounded-full px-2 font-medium leading-6 text-xs
     ">
-      v<%= @version %>
+      v{@version}
     </p>
     """
   end
@@ -118,7 +118,7 @@ defmodule LivedjWeb.CustomComponents do
           "text-xs font-semibold uppercase text-zinc-100 dark:text-zinc-900",
           @color
         ]}>
-          <%= @initials %>
+          {@initials}
         </span>
       <% end %>
       <div class="
@@ -129,7 +129,7 @@ defmodule LivedjWeb.CustomComponents do
         text-xs text-zinc-100 dark:text-zinc-900
         shadow-md
       ">
-        <%= @label %>
+        {@label}
       </div>
     </div>
     """
@@ -205,7 +205,7 @@ defmodule LivedjWeb.CustomComponents do
           tabindex="0"
         >
           <div class="relative leading-6 text-zinc-900 hover:text-zinc-700">
-            <%= render_slot(@inner_block, module) %>
+            {render_slot(@inner_block, module)}
           </div>
         </.link>
       </div>

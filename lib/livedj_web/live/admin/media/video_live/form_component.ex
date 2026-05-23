@@ -8,9 +8,9 @@ defmodule LivedjWeb.Admin.Media.VideoLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        {@title}
         <:subtitle>
-          <%= gettext("Use this form to manage video records in your database.") %>
+          {gettext("Use this form to manage video records in your database.")}
         </:subtitle>
       </.header>
 
@@ -41,7 +41,7 @@ defmodule LivedjWeb.Admin.Media.VideoLive.FormComponent do
         />
         <:actions>
           <.button phx-disable-with={gettext("Saving...")}>
-            <%= gettext("Save Video") %>
+            {gettext("Save Video")}
           </.button>
         </:actions>
       </.simple_form>

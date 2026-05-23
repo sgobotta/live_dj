@@ -8,7 +8,7 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
     ~H"""
     <div>
       <.link phx-click="on_click" phx-target={@myself} tabindex="0">
-        <%= PhoenixInlineSvg.Helpers.svg_image(
+        {PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,
           "fullscreen",
           "icons/misc",
@@ -18,7 +18,7 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
               dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
               scale-100 hover:scale-[1.1] focus:scale-100 active:scale-100
             "
-        ) %>
+        )}
       </.link>
     </div>
     """

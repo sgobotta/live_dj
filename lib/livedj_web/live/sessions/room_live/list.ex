@@ -8,7 +8,7 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   @on_play_click "on_play_click"
 
   @impl true
-  def mount(%{"id" => room_id}, _session, socket) do
+  def mount(:not_mounted_at_router, %{"id" => room_id}, socket) do
     case connected?(socket) do
       true ->
         %Room{id: ^room_id} = room = Sessions.get_room!(room_id)

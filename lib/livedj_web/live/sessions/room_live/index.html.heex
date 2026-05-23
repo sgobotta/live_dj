@@ -1,6 +1,6 @@
 <%= if connected?(@socket) do %>
   <.header class="text-zinc-900 dark:text-zinc-100">
-    <%= gettext("Public rooms") %>
+    {gettext("Public rooms")}
   </.header>
 
   <div class="w-full overflow-x-scroll" id="salsa">
@@ -24,7 +24,7 @@
           text-zinc-900 dark:text-zinc-100
         ">
           <p class="font-normal text-xs truncate h-5">
-            <%= room.name %>
+            {room.name}
           </p>
           <.mini_avatar_stack users={users} />
         </div>
@@ -40,7 +40,7 @@
       px-5 py-3
     ">
       <.icon name="hero-plus" class="h-5 w-5" />
-      <%= gettext("New Room") %>
+      {gettext("New Room")}
     </.button>
   </.link>
 

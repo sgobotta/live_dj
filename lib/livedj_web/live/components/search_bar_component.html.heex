@@ -1,6 +1,6 @@
 <div is={@id}>
   <div phx-click={open_modal()}>
-    <%= render_slot(@button) %>
+    {render_slot(@button)}
   </div>
   <div
     id="searchbar-dialog"
@@ -14,7 +14,7 @@
     phx-window-keydown={hide_modal()}
     phx-key="escape"
   >
-    <p class="sr-only"><%= gettext("Press Escape to close") %></p>
+    <p class="sr-only">{gettext("Press Escape to close")}</p>
     <div class="
       fixed inset-0
       backdrop-blur-lg opacity-100
@@ -196,7 +196,7 @@
                       text-zinc-200 dark:text-zinc-700
                       bg-zinc-800 dark:bg-zinc-300
                     ">
-                      <%= index + 1 %>
+                      {index + 1}
                     </p>
                   </div>
                   <div class="
@@ -205,7 +205,7 @@
                     p-1 px-1 h-8 w-5/6
                     text-ellipsis overflow-hidden
                   ">
-                    <%= item.title %>
+                    {item.title}
                   </div>
                   <div
                     class="

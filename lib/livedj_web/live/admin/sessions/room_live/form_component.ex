@@ -10,9 +10,9 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
+        {@title}
         <:subtitle>
-          <%= gettext("Use this form to manage room records in your database.") %>
+          {gettext("Use this form to manage room records in your database.")}
         </:subtitle>
       </.header>
 
@@ -27,7 +27,7 @@ defmodule LivedjWeb.Admin.Sessions.RoomLive.FormComponent do
         <.input field={@form[:slug]} type="text" label={gettext("Slug")} />
         <:actions>
           <.button phx-disable-with={gettext("Saving...")}>
-            <%= gettext("Save Room") %>
+            {gettext("Save Room")}
           </.button>
         </:actions>
       </.simple_form>

@@ -21,12 +21,12 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
         phx-click="on_volume_click"
         phx-target={@myself}
       >
-        <%= PhoenixInlineSvg.Helpers.svg_image(
+        {PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,
           get_volume_icon(@muted?, @level),
           "icons/volume",
           class: "h-6 w-6 p-1"
-        ) %>
+        )}
       </.button>
       <div class="ml-2 self-center hidden md:block">
         <.form
