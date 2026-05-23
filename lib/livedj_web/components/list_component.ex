@@ -16,11 +16,11 @@ defmodule LivedjWeb.ListComponent do
             class={"
               first:mt-0 last:mb-0
               #{if current_media?(@current_media, item.external_id),
-                do: "text-green-500 dark:text-green-500 bg-zinc-300 dark:bg-zinc-600 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-500",
+                do: "text-green-500 dark:text-green-500 bg-zinc-200 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-500",
                 else: "text-zinc-900 dark:text-zinc-100 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800"
               }
               #{if @state == :locked, do: "border-dashed", else: ""}
-              my-1 rounded-xl border-zinc-300 dark:border-zinc-700 border-[0px]
+              my-1 rounded-lg border-zinc-300 dark:border-zinc-700 border-[0px]
               hover:cursor-grab
               drag-item:focus-within:ring-2 drag-item:focus-within:ring-offset-0
               drag-ghost:bg-zinc-200 drag-ghost:dark:bg-zinc-800 drag-ghost:border-0 drag-ghost:ring-0 drag-ghost:cursor-grabbing
