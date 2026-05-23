@@ -112,11 +112,15 @@
   </ul> --%>
   </header>
 
-  <main class="flex-1 overflow-y-auto sm:py-10 lg:px-8 bg-zinc-200 dark:bg-zinc-800">
-    <div class="mx-1 sm:mx-auto max-w-xl">
+  <main class="flex-1 flex flex-col overflow-hidden lg:px-8 bg-zinc-200 dark:bg-zinc-800">
+    <div class="mx-1 sm:mx-auto sm:w-full max-w-xl sm:pt-10">
       <.flash_group flash={@flash} />
       <div id="player-slot" class="h-72 my-2 w-full shrink-0"></div>
-      {@inner_content}
+    </div>
+    <div class="flex-1 overflow-y-auto">
+      <div class="mx-1 sm:mx-auto max-w-xl">
+        {@inner_content}
+      </div>
     </div>
   </main>
 
