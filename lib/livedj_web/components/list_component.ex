@@ -6,8 +6,8 @@ defmodule LivedjWeb.ListComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="bg-transparent py-1 rounded-lg pr-1">
-      <div class="space-y-5 mx-auto max-w-7xl space-y-4 select-none pl-1">
+    <div class="bg-transparent px-1 py-1 rounded-lg">
+      <div class="space-y-5 mx-auto max-w-7xl select-none">
         <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
           <div
             :for={{item, index} <- Enum.with_index(@list)}
@@ -20,7 +20,7 @@ defmodule LivedjWeb.ListComponent do
                 else: "text-zinc-900 dark:text-zinc-100 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800"
               }
               #{if @state == :locked, do: "border-dashed", else: ""}
-              my-2 rounded-xl border-zinc-300 dark:border-zinc-700 border-[0px]
+              my-1 rounded-xl border-zinc-300 dark:border-zinc-700 border-[0px]
               hover:cursor-grab
               drag-item:focus-within:ring-2 drag-item:focus-within:ring-offset-0
               drag-ghost:bg-zinc-200 drag-ghost:dark:bg-zinc-800 drag-ghost:border-0 drag-ghost:ring-0 drag-ghost:cursor-grabbing
