@@ -792,7 +792,6 @@ defmodule LivedjWeb.CoreComponents do
          "opacity-100"}
     )
     |> show("##{id}-container")
-    |> JS.add_class("overflow-hidden", to: "body")
     |> JS.focus_first(to: "##{id}-content")
   end
 
@@ -806,7 +805,6 @@ defmodule LivedjWeb.CoreComponents do
     )
     |> hide("##{id}-container")
     |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
-    |> JS.remove_class("overflow-hidden", to: "body")
     |> JS.pop_focus()
   end
 

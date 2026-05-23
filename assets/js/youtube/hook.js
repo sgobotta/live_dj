@@ -54,6 +54,8 @@ export default {
     }
   },
   mounted() {
+    this.pushEventTo(this.el, 'on_player_container_mount')
+
     /**
      * on_container_mounted
      *
