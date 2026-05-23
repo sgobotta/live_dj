@@ -18,27 +18,5 @@
   </head>
   <body class="antialiased overflow-hidden bg-zinc-100 dark:bg-zinc-900">
     {@inner_content}
-    <div
-      id="video-player-hook"
-      phx-hook="Youtube"
-      phx-update="ignore"
-      class="mx-1 w-[98%] h-72 relative flex my-2"
-    >
-      <div class="w-full">
-        <div
-          id="player-container"
-          class="w-full h-72 rounded-lg transition duration-1000 hidden mr-1"
-        />
-      </div>
-      <div
-        id="player-backdrop"
-        class="absolute w-full h-full bg-black rounded-lg"
-      >
-        <canvas
-          id="player-spinner"
-          class="hidden absolute inset-0 w-full h-full rounded-lg"
-        />
-      </div>
-    </div>
   </body>
 </html>

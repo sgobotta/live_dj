@@ -22,15 +22,25 @@ defmodule LivedjWeb.Router do
 
     get "/", PageController, :home
 
-    live_session :sessions,
+    live_session :sessions_index,
+      on_mount: [
+        {LivedjWeb.UserAuth, :mount_current_user},
+        {LivedjWeb.Theme, :fetch_theme}
+      ],
+      root_layout: {LivedjWeb.Layouts, :root_session_index} do
+      scope "/sessions", Sessions do
+        live "/rooms", RoomLive.Index, :index
+        live "/rooms/new", RoomLive.Index, :new
+      end
+    end
+
+    live_session :sessions_show,
       on_mount: [
         {LivedjWeb.UserAuth, :mount_current_user},
         {LivedjWeb.Theme, :fetch_theme}
       ],
       root_layout: {LivedjWeb.Layouts, :root_session} do
       scope "/sessions", Sessions do
-        live "/rooms", RoomLive.Index, :index
-        live "/rooms/new", RoomLive.Index, :new
         live "/rooms/:id", RoomLive.Show, :show
         live "/rooms/:id/welcome", RoomLive.Show, :welcome
       end

@@ -57,7 +57,7 @@
         </a>
       </div>
       <div class="flex items-center justify-end gap-4">
-        <!-- <%= if assigns[:room] do %>
+        <%= if assigns[:room] do %>
           <button
             phx-click="open_share_modal"
             title={gettext("Share room")}
@@ -65,78 +65,57 @@
           >
             <.icon name="hero-clipboard-document" class="h-5 w-5" />
           </button>
-        <% end %> -->
+        <% end %>
         <.user_avatar user={@current_user} />
       </div>
     </div>
     <%!-- <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-      <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6">
-          <.text><%= @current_user.username %></.text>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/settings"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-          >
-            <.text><%= gettext("Settings") %></.text>
-          </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_out"}
-            method="delete"
-            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-          >
-            <.text><%= gettext("Log out") %></.text>
-          </.link>
-        </li>
-      <% else %>
-        <li>
-          <.link
-            href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-          >
-            <.text><%= gettext("Register") %></.text>
-          </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
-          >
-            <.text><%= gettext("Log in") %></.text>
-          </.link>
-        </li>
-      <% end %>
-    </ul> --%>
+    <%= if @current_user do %>
+      <li class="text-[0.8125rem] leading-6">
+        <.text><%= @current_user.username %></.text>
+      </li>
+      <li>
+        <.link
+          href={~p"/users/settings"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+        >
+          <.text><%= gettext("Settings") %></.text>
+        </.link>
+      </li>
+      <li>
+        <.link
+          href={~p"/users/log_out"}
+          method="delete"
+          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+        >
+          <.text><%= gettext("Log out") %></.text>
+        </.link>
+      </li>
+    <% else %>
+      <li>
+        <.link
+          href={~p"/users/register"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+        >
+          <.text><%= gettext("Register") %></.text>
+        </.link>
+      </li>
+      <li>
+        <.link
+          href={~p"/users/log_in"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+        >
+          <.text><%= gettext("Log in") %></.text>
+        </.link>
+      </li>
+    <% end %>
+  </ul> --%>
   </header>
 
   <main class="flex-1 overflow-y-auto sm:py-10 lg:px-8 bg-zinc-200 dark:bg-zinc-800">
     <div class="mx-1 sm:mx-auto max-w-xl">
       <.flash_group flash={@flash} />
-      <div
-        id="video-player-hook"
-        phx-hook="Youtube"
-        phx-update="ignore"
-        class="mx-1 w-[98%] h-72 relative flex my-2"
-      >
-        {live_render(@socket, LivedjWeb.PlayerLiveView,
-          id: "player-lv-container",
-          session: %{"player_id" => @player_container_id},
-          container: {:div, class: "w-full"},
-          sticky: true
-        )}
-        <div
-          id="player-backdrop"
-          class="absolute w-full h-full bg-black rounded-lg"
-        >
-          <canvas
-            id="player-spinner"
-            class="hidden absolute inset-0 w-full h-full rounded-lg"
-          />
-        </div>
-      </div>
+      <div id="player-slot" class="h-72 my-2 w-full shrink-0"></div>
       {@inner_content}
     </div>
   </main>

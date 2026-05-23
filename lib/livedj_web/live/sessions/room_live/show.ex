@@ -29,10 +29,22 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         content_ready: connected?(socket)
       )
 
-    if connected?(socket) do
-      {:ok, :joined} = Sessions.join_player(room_id)
-      {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
-    end
+    socket =
+      if connected?(socket) do
+        {:ok, :joined} = Sessions.join_player(room_id)
+        {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
+
+        push_event(socket, "on_container_mounted", %{
+          backdrop_id: socket.assigns.backdrop_id,
+          player_container_id: socket.assigns.player_container_id,
+          spinner_id: socket.assigns.spinner_id,
+          start_time_tracker_id: socket.assigns.start_time_tracker_id,
+          end_time_tracker_id: socket.assigns.end_time_tracker_id,
+          time_slider_id: socket.assigns.time_slider_id
+        })
+      else
+        socket
+      end
 
     {:ok, socket}
   rescue
@@ -104,24 +116,6 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("on_player_ended", _params, socket) do
     :ok = Sessions.report_track_ended(socket.assigns.room.id)
-    {:noreply, socket}
-  end
-
-  def handle_event("on_player_container_mount", _params, socket) do
-    socket =
-      if connected?(socket) and is_nil(socket.assigns.player) do
-        push_event(socket, "on_container_mounted", %{
-          backdrop_id: socket.assigns.backdrop_id,
-          player_container_id: socket.assigns.player_container_id,
-          spinner_id: socket.assigns.spinner_id,
-          start_time_tracker_id: socket.assigns.start_time_tracker_id,
-          end_time_tracker_id: socket.assigns.end_time_tracker_id,
-          time_slider_id: socket.assigns.time_slider_id
-        })
-      else
-        socket
-      end
-
     {:noreply, socket}
   end
 

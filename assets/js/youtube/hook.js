@@ -47,6 +47,9 @@ const udpateTimeDisplays = (
 
 export default {
   backdrop_id: null,
+  destroyed() {
+    window.removeEventListener('resize', this._onResize)
+  },
   endTimeTrackerId: null,
   handleCallbackEvent: async (callbackEvent, args = {}) => {
     if (callbackEvent) {
@@ -54,12 +57,16 @@ export default {
     }
   },
   mounted() {
-    this.pushEventTo(this.el, 'on_player_container_mount')
+    this.positionPlayer()
+    this._onResize = () => this.positionPlayer()
+    window.addEventListener('resize', this._onResize)
 
     /**
      * on_container_mounted
      *
-     * Received when the player DOM has been mounted.
+     * Pushed by RoomLive.Show on mount. Initializes the player on first load;
+     * on live navigation (hook already mounted), notifies server the player is
+     * ready so it can proceed with show_player + load_video.
      */
     this.handleEvent('on_container_mounted', async ({
       backdrop_id: backdropId,
@@ -81,6 +88,13 @@ export default {
         `player_container_id=${this.playerContainerId}`,
         `spinner_container_id=${this.spinnerId}`
       )
+
+      if (this.player) {
+        /* eslint-disable max-len */
+        console.debug('[Player :: on_container_mounted] player already initialized, signalling server')
+        await this.pushEventTo(this.el, 'on_player_loaded')
+        return
+      }
 
       const canvas = document.getElementById(this.spinnerId)
       canvas.classList.remove("hidden")
@@ -380,6 +394,20 @@ export default {
   },
   player: null,
   playerContainerId: null,
+  positionPlayer() {
+    const slot = document.getElementById('player-slot')
+    if (!slot) return
+    const rect = slot.getBoundingClientRect()
+    Object.assign(this.el.style, {
+      height: `${rect.height}px`,
+      left: `${rect.left}px`,
+      margin: '0',
+      position: 'fixed',
+      top: `${rect.top}px`,
+      width: `${rect.width}px`,
+      zIndex: '10'
+    })
+  },
   spinnerId: null,
   startTimeTrackerId: null,
   timeSliderId: null
