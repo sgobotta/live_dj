@@ -64,18 +64,18 @@ docker.logs:
 	@docker logs $(CONTAINER_NAME) -f
 
 #🐳 docker.release: @ Re-create a docker image and run it
-docker.release: CONTAINER_PORT:=5000
-docker.release: INTERNAL_PORT:=5001
+docker.release: CONTAINER_PORT:=5001
+docker.release: INTERNAL_PORT:=5002
 docker.release: docker.stop docker.delete docker.build docker.run
 
 #🐳 docker.rerun: @ Stops and deletes old container to re-run a fresh new container
-docker.rerun: CONTAINER_PORT:=5000
-docker.rerun: INTERNAL_PORT:=5001
+docker.rerun: CONTAINER_PORT:=5001
+docker.rerun: INTERNAL_PORT:=5002
 docker.rerun: docker.stop docker.delete docker.run
 
 #🐳 docker.run: @ Run the docker container
-docker.run: CONTAINER_PORT:=5000
-docker.run: INTERNAL_PORT:=5001
+docker.run: CONTAINER_PORT:=5001
+docker.run: INTERNAL_PORT:=5002
 docker.run: CONTAINER_NAME:=$(CONTAINER_NAME)
 docker.run: IMAGE_NAME:=$(IMAGE_NAME)
 docker.run:

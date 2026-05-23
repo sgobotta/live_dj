@@ -19,7 +19,7 @@ env:
   # Permissions env
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # General env
-  ELIXIR_VERSION: 1.14
+  ELIXIR_VERSION: 1.15
   OTP_VERSION: 25.2
   # Captcha
   RECAPTCHA_PUBLIC_KEY: ${{ secrets.RECAPTCHA_PUBLIC_KEY }}
