@@ -22,13 +22,26 @@
       </div>
       <div class="flex items-center justify-end gap-4">
         <%= if assigns[:room] do %>
-          <button
-            phx-click="open_share_modal"
-            title={gettext("Share room")}
-            class="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors duration-150"
-          >
-            <.icon name="hero-clipboard-document" class="h-5 w-5" />
-          </button>
+          <div class="relative group">
+            <button
+              id="share-btn"
+              phx-click="open_share_modal"
+              class="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors duration-150"
+            >
+              <.icon name="hero-share" class="h-5 w-5" />
+            </button>
+            <div class="
+              absolute top-full left-1/2 -translate-x-1/2 mt-2
+              hidden group-hover:block
+              whitespace-nowrap rounded-md px-2 py-1
+              bg-zinc-800 dark:bg-zinc-200
+              text-xs text-zinc-100 dark:text-zinc-900
+              shadow-md pointer-events-none
+              z-30
+            ">
+              {gettext("Share")} (S)
+            </div>
+          </div>
         <% end %>
         <.user_avatar user={@current_user} />
       </div>

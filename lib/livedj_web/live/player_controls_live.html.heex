@@ -72,32 +72,56 @@
               )}
             </a>
             <%= if @player && @player.state in [:playing] do %>
-              <a
-                id="pause-btn"
-                href="#"
-                phx-click={on_pause_click_event()}
-                class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
-                tabindex="0"
-              >
-                <.icon
-                  name="hero-pause-circle-solid"
-                  class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
-                />
-              </a>
+              <div class="relative group">
+                <a
+                  id="pause-btn"
+                  href="#"
+                  phx-click={on_pause_click_event()}
+                  class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
+                  tabindex="0"
+                >
+                  <.icon
+                    name="hero-pause-circle-solid"
+                    class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
+                  />
+                </a>
+                <div class="
+                  absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                  hidden group-hover:block
+                  whitespace-nowrap rounded-md px-2 py-1
+                  bg-zinc-800 dark:bg-zinc-200
+                  text-xs text-zinc-100 dark:text-zinc-900
+                  shadow-md pointer-events-none
+                ">
+                  {gettext("Pause")} (␣)
+                </div>
+              </div>
             <% end %>
             <%= if @player && @player.state in [:idle, :paused] do %>
-              <a
-                id="play-btn"
-                href="#"
-                phx-click={on_play_click_event()}
-                class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
-                tabindex="0"
-              >
-                <.icon
-                  name="hero-play-circle-solid"
-                  class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
-                />
-              </a>
+              <div class="relative group">
+                <a
+                  id="play-btn"
+                  href="#"
+                  phx-click={on_play_click_event()}
+                  class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
+                  tabindex="0"
+                >
+                  <.icon
+                    name="hero-play-circle-solid"
+                    class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
+                  />
+                </a>
+                <div class="
+                  absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                  hidden group-hover:block
+                  whitespace-nowrap rounded-md px-2 py-1
+                  bg-zinc-800 dark:bg-zinc-200
+                  text-xs text-zinc-100 dark:text-zinc-900
+                  shadow-md pointer-events-none
+                ">
+                  {gettext("Play")} (␣)
+                </div>
+              </div>
             <% end %>
             <a
               href="#"
@@ -125,27 +149,40 @@
           flex justify-end gap-3 items-center
         ">
           <%!-- Search videos --%>
-          <.link
-            patch={~p"/sessions/rooms/#{@room}/browse"}
-            class="
-              rounded-md
-              cursor-pointer w-6 h-6 p-0 flex flex-wrap justify-center content-center
-              align-middle bg-zinc-300 dark:bg-zinc-700
-              transition-all duration-300
-              shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
-              hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
-              active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
-              dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
-              dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
-              dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
-              hover:bg-zinc-300 dark:hover:bg-zinc-700
-              active:bg-zinc-200 dark:active:bg-zinc-800 group
-              text-zinc-900 dark:text-zinc-100
-              active:text-green-500 dark:active:text-green-500
-            "
-          >
-            <.icon name="hero-plus" class="w-4 h-4" />
-          </.link>
+          <div class="relative group/add">
+            <.link
+              id="add-btn"
+              patch={~p"/sessions/rooms/#{@room}/browse"}
+              class="
+                rounded-md
+                cursor-pointer w-6 h-6 p-0 flex flex-wrap justify-center content-center
+                align-middle bg-zinc-300 dark:bg-zinc-700
+                transition-all duration-300
+                shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+                hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
+                active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+                dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+                dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
+                dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+                hover:bg-zinc-300 dark:hover:bg-zinc-700
+                active:bg-zinc-200 dark:active:bg-zinc-800 group
+                text-zinc-900 dark:text-zinc-100
+                active:text-green-500 dark:active:text-green-500
+              "
+            >
+              <.icon name="hero-plus" class="w-4 h-4" />
+            </.link>
+            <div class="
+              absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+              hidden group-hover/add:block
+              whitespace-nowrap rounded-md px-2 py-1
+              bg-zinc-800 dark:bg-zinc-200
+              text-xs text-zinc-100 dark:text-zinc-900
+              shadow-md pointer-events-none
+            ">
+              {gettext("Add")} (A)
+            </div>
+          </div>
           <%!-- Volume --%>
           <.live_component
             id={@volume_control_id}

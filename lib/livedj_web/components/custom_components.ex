@@ -7,6 +7,8 @@ defmodule LivedjWeb.CustomComponents do
   alias LivedjWeb.CoreComponents
   alias Phoenix.LiveView.JS
 
+  import LivedjWeb.Gettext
+
   @doc """
   Renders a button to toggle the application theme
   """
@@ -19,28 +21,43 @@ defmodule LivedjWeb.CustomComponents do
       phx-hook="Theme"
       id="theme-hook"
     >
-      <a
-        class="hover:text-zinc-700 cursor-pointer h-5 w-5 leading-3"
-        href="#"
-        phx-key=";"
-        phx-window-keydown={JS.dispatch("toggle-theme")}
-        phx-click={JS.dispatch("toggle-theme")}
-        tabindex="0"
-      >
-        <%= if @theme === "dark" do %>
-          <CoreComponents.icon
-            id="toggle-theme-icon"
-            name="hero-sun-solid"
-            class="text-black dark:text-white h-5 w-5 hover:dark:text-yellow-500 duration-500"
-          />
-        <% else %>
-          <CoreComponents.icon
-            id="toggle-theme-icon"
-            name="hero-moon-solid"
-            class="text-black dark:text-white h-5 w-5 hover:text-yellow-500 duration-500"
-          />
-        <% end %>
-      </a>
+      <div class="relative group">
+        <a
+          class="hover:text-zinc-700 cursor-pointer h-5 w-5 leading-3"
+          href="#"
+          phx-key=";"
+          phx-window-keydown={JS.dispatch("toggle-theme")}
+          phx-click={JS.dispatch("toggle-theme")}
+          tabindex="0"
+        >
+          <%= if @theme === "dark" do %>
+            <CoreComponents.icon
+              id="toggle-theme-icon"
+              name="hero-sun-solid"
+              class="text-black dark:text-white h-5 w-5 hover:dark:text-yellow-500 duration-500"
+            />
+          <% else %>
+            <CoreComponents.icon
+              id="toggle-theme-icon"
+              name="hero-moon-solid"
+              class="text-black dark:text-white h-5 w-5 hover:text-yellow-500 duration-500"
+            />
+          <% end %>
+        </a>
+        <div class="
+          absolute top-full left-1/2 -translate-x-[35%] mt-2
+          hidden group-hover:block
+          whitespace-nowrap rounded-md px-2 py-1
+          bg-zinc-800 dark:bg-zinc-200
+          text-xs text-zinc-100 dark:text-zinc-900
+          shadow-md pointer-events-none
+          z-30
+        ">
+          {if @theme === "dark",
+            do: "#{gettext("Light")} (T)",
+            else: "#{gettext("Dark")} (T)"}
+        </div>
+      </div>
     </div>
     """
   end
