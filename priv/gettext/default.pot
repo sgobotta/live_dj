@@ -85,7 +85,7 @@ msgstr ""
 
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:39
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:34
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
@@ -177,7 +177,7 @@ msgstr ""
 
 #: lib/livedj_web/live/admin/sessions/room_live/index.ex:33
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:2
-#: lib/livedj_web/live/sessions/room_live/index.ex:86
+#: lib/livedj_web/live/sessions/room_live/index.ex:105
 #, elixir-autogen, elixir-format
 msgid "Listing Rooms"
 msgstr ""
@@ -192,8 +192,8 @@ msgstr ""
 
 #: lib/livedj_web/live/admin/sessions/room_live/index.ex:27
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:5
-#: lib/livedj_web/live/sessions/room_live/index.ex:92
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:39
+#: lib/livedj_web/live/sessions/room_live/index.ex:111
+#: lib/livedj_web/live/sessions/room_live/index.html.heex:43
 #, elixir-autogen, elixir-format
 msgid "New Room"
 msgstr ""
@@ -204,19 +204,19 @@ msgid "Room"
 msgstr ""
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:84
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:94
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:96
 #, elixir-autogen, elixir-format
 msgid "Room created successfully"
 msgstr ""
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:69
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:79
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:81
 #, elixir-autogen, elixir-format
 msgid "Room updated successfully"
 msgstr ""
 
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:30
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:40
+#: lib/livedj_web/live/sessions/room_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Save Room"
 msgstr ""
@@ -235,7 +235,6 @@ msgstr ""
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:27
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:18
 #: lib/livedj_web/live/admin/sessions/room_live/show.html.heex:18
-#: lib/livedj_web/live/sessions/room_live/form_component.ex:35
 #, elixir-autogen, elixir-format
 msgid "Slug"
 msgstr ""
@@ -250,12 +249,12 @@ msgstr ""
 msgid "Use this form to manage room records in your database."
 msgstr ""
 
-#: lib/livedj_web/components/list_component.ex:117
+#: lib/livedj_web/components/list_component.ex:132
 #, elixir-autogen, elixir-format
 msgid "Remove '%{title}'?"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:81
+#: lib/livedj_web/controllers/page_html/home.html.heex:91
 #, elixir-autogen, elixir-format
 msgid "Rooms"
 msgstr ""
@@ -282,7 +281,7 @@ msgstr ""
 
 #: lib/livedj_web/live/sessions/room_live/index.html.heex:3
 #, elixir-autogen, elixir-format
-msgid "Public rooms
+msgid "Public rooms"
 msgstr ""
 
 #: lib/livedj_web/components/layouts/root.html.heex:48
@@ -295,32 +294,112 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:99
+#: lib/livedj_web/controllers/page_html/home.html.heex:113
 #, elixir-autogen, elixir-format
 msgid "Source Code"
 msgstr ""
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:99
+#: lib/livedj_web/live/components/search_bar_component.html.heex:59
 #, elixir-autogen, elixir-format
 msgid "Insert a youtube url or search for a video"
 msgstr ""
 
-#: lib/livedj_web/components/layouts/session.html.heex:6
+#: lib/livedj_web/components/layouts/session.html.heex:19
 #, elixir-autogen, elixir-format
 msgid "Exit session?"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:58
+#: lib/livedj_web/controllers/page_html/home.html.heex:68
 #, elixir-autogen, elixir-format
 msgid "Shared youtube sessions"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:61
+#: lib/livedj_web/controllers/page_html/home.html.heex:71
 #, elixir-autogen, elixir-format
 msgid "Join or create a room with your friends, add videos and watch to youtube content in real time."
 msgstr ""
 
-#: lib/livedj_web/live/components/search_bar_component.ex:92
+#: lib/livedj_web/live/components/search_bar_component.ex:209
 #, elixir-autogen, elixir-format
 msgid "%{title} queued to the playlist"
+msgstr ""
+
+#: lib/livedj_web/live/player_controls_live.html.heex:183
+#, elixir-autogen, elixir-format
+msgid "Add"
+msgstr ""
+
+#: lib/livedj_web/live/components/search_bar_component.html.heex:198
+#, elixir-autogen, elixir-format
+msgid "Add to playlist"
+msgstr ""
+
+#: lib/livedj_web/live/components/search_bar_component.html.heex:78
+#, elixir-autogen, elixir-format
+msgid "Close search"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:45
+#, elixir-autogen, elixir-format
+msgid "Copy"
+msgstr ""
+
+#: lib/livedj_web/components/custom_components.ex:58
+#, elixir-autogen, elixir-format
+msgid "Dark"
+msgstr ""
+
+#: lib/livedj_web/components/custom_components.ex:57
+#, elixir-autogen, elixir-format
+msgid "Light"
+msgstr ""
+
+#: lib/livedj_web/live/components/player_controls/volume_control_component.ex:41
+#, elixir-autogen, elixir-format
+msgid "Mute"
+msgstr ""
+
+#: lib/livedj_web/live/player_controls_live.html.heex:96
+#, elixir-autogen, elixir-format
+msgid "Pause"
+msgstr ""
+
+#: lib/livedj_web/live/player_controls_live.html.heex:122
+#, elixir-autogen, elixir-format
+msgid "Play"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:19
+#, elixir-autogen, elixir-format
+msgid "Room ready to share!"
+msgstr ""
+
+#: lib/livedj_web/live/components/search_bar_component.html.heex:87
+#, elixir-autogen, elixir-format
+msgid "Search"
+msgstr ""
+
+#: lib/livedj_web/components/layouts/session.html.heex:42
+#, elixir-autogen, elixir-format
+msgid "Share"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:21
+#, elixir-autogen, elixir-format
+msgid "Share the link below with your friends so they can join"
+msgstr ""
+
+#: lib/livedj_web/components/list_component.ex:108
+#, elixir-autogen, elixir-format
+msgid "The currently playing track can't be removed"
+msgstr ""
+
+#: lib/livedj_web/live/components/player_controls/volume_control_component.ex:40
+#, elixir-autogen, elixir-format
+msgid "Unmute"
+msgstr ""
+
+#: lib/livedj_web/components/mini_avatar_stack_component.ex:123
+#, elixir-autogen, elixir-format
+msgid "User"
 msgstr ""
