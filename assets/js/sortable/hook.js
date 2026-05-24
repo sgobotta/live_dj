@@ -87,6 +87,7 @@ export default {
         let params
 
         if (droppedOnTrash) {
+          item.style.display = 'none'
           params = {status: "remove", track_id: item.dataset.id}
         } else if ([
           (newIndex !== oldIndex),

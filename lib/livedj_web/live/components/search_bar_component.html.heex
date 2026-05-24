@@ -184,10 +184,13 @@
               :if={item.external_id not in @playlist_external_ids}
               type="button"
               class="
+                rounded-full p-1
                 flex items-center justify-center
-                transition duration-300 opacity-0 group-hover:opacity-100
-                w-8 h-8 rounded-lg
-                bg-transparent
+                transition duration-300
+                w-8 h-8 
+                bg-zinc-400/40 dark:bg-zinc-700
+                hover:bg-zinc-200 hover:dark:bg-zinc-800
+                group-hover:bg-zinc-200 group-hover:dark:bg-zinc-800
                 cursor-pointer
                 outline-black
                 text-zinc-700 dark:text-zinc-300

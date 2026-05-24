@@ -175,6 +175,16 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
+  def handle_info({:track_moved, _room_id, _payload}, socket),
+    do: {:noreply, socket}
+
+  def handle_info(:dragging_locked, socket), do: {:noreply, socket}
+
+  def handle_info(:dragging_unlocked, socket), do: {:noreply, socket}
+
+  def handle_info({:dragging_cancelled, _room_id}, socket),
+    do: {:noreply, socket}
+
   # ----------------------------------------------------------------------------
   # Server side Player event handling
   #
