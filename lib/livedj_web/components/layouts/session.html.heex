@@ -30,17 +30,9 @@
             >
               <.icon name="hero-share" class="h-5 w-5" />
             </button>
-            <div class="
-              absolute top-full left-1/2 -translate-x-1/2 mt-2
-              hidden group-hover:block
-              whitespace-nowrap rounded-md px-2 py-1
-              bg-zinc-800 dark:bg-zinc-200
-              text-xs text-zinc-100 dark:text-zinc-900
-              shadow-md pointer-events-none
-              z-30
-            ">
+            <.tooltip position={:below} class="left-1/2 -translate-x-1/2 z-30">
               {gettext("Share")} (S)
-            </div>
+            </.tooltip>
           </div>
         <% end %>
         <.user_avatar user={@current_user} />

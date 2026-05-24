@@ -13,6 +13,7 @@
         <div class="col-span-3 row-span-2 self-center pl-1">
           <div class="flex items-center h-full">
             <div class="
+              relative group
               basis-28 sm:basis-28 md:basis-28 lg:basis-24 xl:basis-24 2xl:basis-24
               h-14 w-14 ring-0 ring-white m-0 pl-2">
               <%= if @player.media_thumbnail_url != "" do %>
@@ -22,6 +23,12 @@
                 />
               <% else %>
                 <div class="h-14 w-14 rounded-md ring-0 ring-white bg-gray-200 dark:bg-gray-800 animate-pulse" />
+              <% end %>
+              <%= if media_loaded?(@player.media_id) do %>
+                <.tooltip class="left-2 max-w-[200px] md:hidden">
+                  <p class="font-semibold truncate">{@player.title}</p>
+                  <p class="truncate opacity-75">{@player.channel}</p>
+                </.tooltip>
               <% end %>
             </div>
             <div class="
@@ -85,16 +92,7 @@
                     class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
                   />
                 </a>
-                <div class="
-                  absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-                  hidden group-hover:block
-                  whitespace-nowrap rounded-md px-2 py-1
-                  bg-zinc-800 dark:bg-zinc-200
-                  text-xs text-zinc-100 dark:text-zinc-900
-                  shadow-md pointer-events-none
-                ">
-                  {gettext("Pause")} (␣)
-                </div>
+                <.tooltip>{gettext("Pause")} (␣)</.tooltip>
               </div>
             <% end %>
             <%= if @player && @player.state in [:idle, :paused] do %>
@@ -111,16 +109,7 @@
                     class="h-10 w-10 text-zinc-700 active:scale-[1.1] focus:scale-[1.1] dark:text-zinc-50"
                   />
                 </a>
-                <div class="
-                  absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-                  hidden group-hover:block
-                  whitespace-nowrap rounded-md px-2 py-1
-                  bg-zinc-800 dark:bg-zinc-200
-                  text-xs text-zinc-100 dark:text-zinc-900
-                  shadow-md pointer-events-none
-                ">
-                  {gettext("Play")} (␣)
-                </div>
+                <.tooltip>{gettext("Play")} (␣)</.tooltip>
               </div>
             <% end %>
             <a
@@ -149,7 +138,7 @@
           flex justify-end gap-3 items-center
         ">
           <%!-- Search videos --%>
-          <div class="relative group/add">
+          <div class="relative group">
             <.link
               id="add-btn"
               patch={~p"/sessions/rooms/#{@room}/browse"}
@@ -165,23 +154,14 @@
                 dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
                 dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
                 hover:bg-zinc-300 dark:hover:bg-zinc-700
-                active:bg-zinc-200 dark:active:bg-zinc-800 group
+                active:bg-zinc-200 dark:active:bg-zinc-800
                 text-zinc-900 dark:text-zinc-100
                 active:text-green-500 dark:active:text-green-500
               "
             >
               <.icon name="hero-plus" class="w-4 h-4" />
             </.link>
-            <div class="
-              absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-              hidden group-hover/add:block
-              whitespace-nowrap rounded-md px-2 py-1
-              bg-zinc-800 dark:bg-zinc-200
-              text-xs text-zinc-100 dark:text-zinc-900
-              shadow-md pointer-events-none
-            ">
-              {gettext("Add")} (A)
-            </div>
+            <.tooltip>{gettext("Add")} (A)</.tooltip>
           </div>
           <%!-- Volume --%>
           <.live_component
