@@ -105,40 +105,6 @@ defmodule LivedjWeb.ListComponent do
               ">
                 {item.title}
               </div>
-              <%= if current_media?(@current_media, item.external_id) do %>
-                <button
-                  type="button"
-                  disabled
-                  aria-disabled="true"
-                  title={gettext("The currently playing track can't be removed")}
-                  class="
-                    cursor-not-allowed opacity-40
-                    w-6 h-6 rounded-md mr-1 flex-none
-                    text-zinc-900 dark:text-zinc-100
-                  "
-                  tabindex="-1"
-                >
-                  <.icon name="hero-x-mark" class="" />
-                </button>
-              <% else %>
-                <button
-                  type="button"
-                  class="
-                    cursor-pointer
-                    transition-all duration-300
-                    w-6 h-6 rounded-md mr-1 flex-none hover:bg-gray-300 hover:dark:bg-gray-700
-                    text-zinc-900 dark:text-zinc-100 hover:text-red-500 hover:dark:text-red-500
-                    focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50
-                  "
-                  phx-click="remove_track"
-                  phx-value-track_id={item.external_id}
-                  tabindex="0"
-                  href="#"
-                  data-confirm={gettext("Remove '%{title}'?", title: item.title)}
-                >
-                  <.icon name="hero-x-mark" class="" />
-                </button>
-              <% end %>
             </div>
           </div>
         </div>
