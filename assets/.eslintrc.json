@@ -5,7 +5,8 @@
         "process": true,
         "require": true,
         "YT": true,
-        "Promise": true
+        "Promise": true,
+        "Set": true
     },
     "parserOptions": {
         "ecmaVersion": 12,
