@@ -8,7 +8,12 @@ defmodule LivedjWeb.ListComponent do
     ~H"""
     <div class="bg-transparent px-1 py-1 rounded-lg">
       <div class="space-y-5 mx-auto max-w-7xl select-none">
-        <div id={"#{@id}-items"} phx-hook="Sortable" data-list_id={@id}>
+        <div
+          id={"#{@id}-items"}
+          phx-hook="Sortable"
+          data-list_id={@id}
+          data-current-media-id={@current_media || ""}
+        >
           <div
             :for={{item, index} <- Enum.with_index(@list)}
             id={"#{item.external_id}-item"}

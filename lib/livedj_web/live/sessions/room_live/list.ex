@@ -270,10 +270,29 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
 
             {:noreply, socket}
 
+          %{"status" => "remove", "track_id" => track_id} ->
+            :ok = Sessions.unlock_playlist_drag(room_id, from)
+            remove_dragged_track(socket, room_id, track_id)
+
           %{"status" => "noop"} ->
             :ok = Sessions.unlock_playlist_drag(room_id, from)
             {:noreply, socket}
         end
     end
+  end
+
+  defp remove_dragged_track(socket, _room_id, track_id)
+       when socket.assigns.current_media == track_id do
+    {:noreply,
+     put_flash(
+       socket,
+       :warn,
+       dgettext("errors", "The currently playing track can't be removed")
+     )}
+  end
+
+  defp remove_dragged_track(socket, room_id, track_id) do
+    :ok = Sessions.remove_media(room_id, track_id)
+    {:noreply, socket}
   end
 end
