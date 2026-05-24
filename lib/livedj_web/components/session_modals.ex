@@ -46,14 +46,6 @@ defmodule LivedjWeb.SessionModals do
           </button>
         </div>
       </div>
-
-      <div class="mt-6 flex justify-end">
-        <.link patch={~p"/sessions/rooms/#{@room}"}>
-          <.button>
-            {gettext("Enter room")}
-          </.button>
-        </.link>
-      </div>
     </.modal>
     """
   end

@@ -2,6 +2,9 @@ import { bindings } from './bindings'
 
 const actions = {
   'toggle-mute': () => document.getElementById('volume-mute-btn')?.click(),
+  'toggle-play-pause': () =>
+    (document.getElementById('pause-btn')
+      ?? document.getElementById('play-btn'))?.click(),
   'toggle-theme': () => window.dispatchEvent(new Event('toggle-theme'))
 }
 
@@ -21,7 +24,10 @@ export default {
       if (e.metaKey || e.ctrlKey || e.altKey) return
 
       const action = bindings[e.key.toLowerCase()]
-      if (action && actions[action]) actions[action](this)
+      if (action && actions[action]) {
+        e.preventDefault()
+        actions[action](this)
+      }
     }
     window.addEventListener('keydown', this._handler)
   }

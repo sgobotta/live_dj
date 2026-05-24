@@ -73,6 +73,7 @@
             </a>
             <%= if @player && @player.state in [:playing] do %>
               <a
+                id="pause-btn"
                 href="#"
                 phx-click={on_pause_click_event()}
                 class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
@@ -86,6 +87,7 @@
             <% end %>
             <%= if @player && @player.state in [:idle, :paused] do %>
               <a
+                id="play-btn"
                 href="#"
                 phx-click={on_play_click_event()}
                 class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
