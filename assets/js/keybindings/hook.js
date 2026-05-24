@@ -1,6 +1,7 @@
 import { bindings } from './bindings'
 
 const actions = {
+  'toggle-mute': () => document.getElementById('volume-mute-btn')?.click(),
   'toggle-theme': () => window.dispatchEvent(new Event('toggle-theme'))
 }
 
