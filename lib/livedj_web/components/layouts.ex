@@ -3,5 +3,7 @@ defmodule LivedjWeb.Layouts do
 
   use LivedjWeb, :html
 
+  import LivedjWeb.SessionModals
+
   embed_templates "layouts/*"
 end

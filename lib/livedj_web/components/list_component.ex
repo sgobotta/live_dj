@@ -16,8 +16,8 @@ defmodule LivedjWeb.ListComponent do
             class={"
               first:mt-0 last:mb-0
               #{if current_media?(@current_media, item.external_id),
-                do: "text-green-500 dark:text-green-500 bg-zinc-200 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-500",
-                else: "text-zinc-900 dark:text-zinc-100 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                do: "text-green-500 dark:text-green-500 bg-zinc-300 dark:bg-zinc-700",
+                else: "text-zinc-900 dark:text-zinc-100 bg-zinc-100 hover:bg-zinc-300 dark:bg-zinc-900 dark:hover:bg-zinc-700"
               }
               #{if @state == :locked, do: "border-dashed", else: ""}
               my-1 rounded-lg border-zinc-300 dark:border-zinc-700 border-[0px]
@@ -27,7 +27,7 @@ defmodule LivedjWeb.ListComponent do
             "}
           >
             <div class="
-              relative flex items-center h-10 px-1 h-10
+              relative flex items-center h-10 px-1
               drag-ghost:opacity-0 gap-y-2 gap-x-2
               group
             ">
@@ -73,7 +73,6 @@ defmodule LivedjWeb.ListComponent do
                       hover:scale-110 focus:scale-110 active:scale-[0.95]
                       active:text-green-300 dark:active:text-green-700
                       focus:text-green-500 dark:focus:text-green-500
-                      active:text-green-300 dark:active:text-green-700
                       group-focus:text-green-500 dark:group-focus:text-green-500
                     ">
                     <.icon name="hero-play-circle-solid" class="h-8 w-8" />

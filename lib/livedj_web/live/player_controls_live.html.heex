@@ -73,6 +73,7 @@
             </a>
             <%= if @player && @player.state in [:playing] do %>
               <a
+                id="pause-btn"
                 href="#"
                 phx-click={on_pause_click_event()}
                 class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
@@ -86,6 +87,7 @@
             <% end %>
             <%= if @player && @player.state in [:idle, :paused] do %>
               <a
+                id="play-btn"
                 href="#"
                 phx-click={on_play_click_event()}
                 class="cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105"
@@ -123,11 +125,27 @@
           flex justify-end gap-3 items-center
         ">
           <%!-- Search videos --%>
-          <.live_component
-            id={@add_video_control_id}
-            module={LivedjWeb.Components.AddVideoComponent}
-            room={@room}
-          />
+          <.link
+            patch={~p"/sessions/rooms/#{@room}/browse"}
+            class="
+              rounded-md
+              cursor-pointer w-6 h-6 p-0 flex flex-wrap justify-center content-center
+              align-middle bg-zinc-300 dark:bg-zinc-700
+              transition-all duration-300
+              shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+              hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]
+              active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+              dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+              dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
+              dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+              hover:bg-zinc-300 dark:hover:bg-zinc-700
+              active:bg-zinc-200 dark:active:bg-zinc-800 group
+              text-zinc-900 dark:text-zinc-100
+              active:text-green-500 dark:active:text-green-500
+            "
+          >
+            <.icon name="hero-plus" class="w-4 h-4" />
+          </.link>
           <%!-- Volume --%>
           <.live_component
             id={@volume_control_id}

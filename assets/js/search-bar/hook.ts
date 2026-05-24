@@ -21,7 +21,7 @@ export default {
       event.preventDefault()
 
       const tabElements = document.querySelectorAll(
-        '#search-input, #searchbox__results_list a',
+        '#search-input, #searchbox__results_list button',
       ) as NodeListOf<HTMLElement>
       const focusIndex = Array.from(tabElements).indexOf(focusElemnt)
       const tabElementsCount = tabElements.length - 1

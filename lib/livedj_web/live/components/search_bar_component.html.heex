@@ -1,238 +1,210 @@
-<div is={@id}>
-  <div phx-click={open_modal()}>
-    {render_slot(@button)}
-  </div>
+<div id="searchbox_container" phx-hook="SearchBar">
   <div
-    id="searchbar-dialog"
-    class="
-      hidden
-      fixed inset-0 z-50
-    "
-    role="dialog"
-    aria-modal="true"
-    aria-label={gettext("Search videos")}
-    phx-window-keydown={hide_modal()}
-    phx-key="escape"
+    role="combobox"
+    aria-haspopup="listbox"
+    aria-expanded={@search_result != []}
   >
-    <p class="sr-only">{gettext("Press Escape to close")}</p>
-    <div class="
-      fixed inset-0
-      backdrop-blur-lg opacity-100
-      bg-zinc-900/60 dark:bg-zinc-600/60
-    ">
-    </div>
-    <div class="
-      fixed inset-0 overflow-y-auto
-      px-4 py-4 sm:py-20 sm:px-6 md:py-32 lg:px-8 lg:py-[15vh]
-    ">
-      <div
-        id="searchbox_container"
-        class="
-          mx-auto overflow-hidden rounded-md
-          bg-zinc-200 dark:bg-zinc-900
-          shadow-xl ring-zinc-900/7.5
-          sm:max-w-xl
-          opacity-100 scale-100
-        "
-        phx-hook="SearchBar"
-      >
-        <div
-          role="combobox"
-          aria-haspopup="listbox"
-          phx-click-away={hide_modal()}
-          aria-expanded={false}
+    <.form
+      :let={f}
+      for={@form}
+      action=""
+      novalidate=""
+      role="search"
+      phx-change="change"
+      phx-submit="submit"
+      phx-target={@myself}
+      class=""
+    >
+      <div class="group relative flex">
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          aria-hidden="true"
+          class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-zinc-600"
         >
-          <.form
-            :let={f}
-            for={@form}
-            action=""
-            novalidate=""
-            role="search"
-            phx-change="change"
-            phx-submit="submit"
-            phx-target={@myself}
-            class=""
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12.01 12a4.25 4.25 0 1 0-6.02-6 4.25 4.25 0 0 0 6.02 6Zm0 0 3.24 3.25"
           >
-            <div class="group relative flex">
-              <svg
-                viewBox="0 0 20 20"
-                fill="none"
-                aria-hidden="true"
-                class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-zinc-600"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12.01 12a4.25 4.25 0 1 0-6.02-6 4.25 4.25 0 0 0 6.02 6Zm0 0 3.24 3.25"
-                >
-                </path>
-              </svg>
+          </path>
+        </svg>
 
-              <.input
-                container_class="w-full"
-                id="search-input"
-                field={f[:query]}
-                type="search"
-                class="
-                  w-full !m-0
-                  flex-auto rounded-md appearance-none bg-transparent pl-10 pr-28
-                  !bg-zinc-300 dark:!bg-zinc-800
-                  !text-zinc-800 dark:!text-zinc-200
-                  placeholder:text-zinc-500 dark:placeholder:text-zinc-400
-                  outline-none focus:outline-none
-                  !border-zinc-300 focus:!border-zinc-400
-                  dark:!border-zinc-700 dark:focus:!border-zinc-600
-                  focus:ring-0 focus:shadow-none
-                  focus:tracking-widest
-                  transition-all duration-500
-                  focus:w-full focus:flex-none
-                  text-xs md:text-sm
-                  [&::-webkit-search-cancel-button]:hidden
-                  [&::-webkit-search-decoration]:hidden
-                  [&::-webkit-search-results-button]:hidden
-                  [&::-webkit-search-results-decoration]:hidden
-                  shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
-                "
-                style={
-                  false &&
-                    "border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none"
-                }
-                placeholder={
-                  gettext("Insert a youtube url or search for a video")
-                }
-                aria-autocomplete="both"
-                aria-controls="searchbox__results_list"
-                autocomplete="off"
-                autocapitalize="off"
-                enterkeyhint="search"
-                spellcheck="false"
-                tabindex="0"
-                phx-keydown={hide_modal()}
-                phx-key="escape"
-                phx-keyup="change"
-                phx-target={@myself}
-              />
+        <.input
+          container_class="w-full"
+          id="search-input"
+          field={f[:query]}
+          type="search"
+          class="
+            w-full !m-0
+            flex-auto rounded-md appearance-none bg-transparent pl-10 pr-28
+            !bg-zinc-300 dark:!bg-zinc-800
+            !text-zinc-800 dark:!text-zinc-200
+            placeholder:text-zinc-500 dark:placeholder:text-zinc-400
+            outline-none focus:outline-none
+            !border-zinc-300 focus:!border-zinc-400
+            dark:!border-zinc-700 dark:focus:!border-zinc-600
+            focus:ring-0
+            focus:tracking-widest
+            transition-all duration-500
+            focus:w-full focus:flex-none
+            text-xs md:text-sm
+            [&::-webkit-search-cancel-button]:hidden
+            [&::-webkit-search-decoration]:hidden
+            [&::-webkit-search-results-button]:hidden
+            [&::-webkit-search-results-decoration]:hidden
+            focus:shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+            focus:dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(99,99,99,0.5)]
+          "
+          placeholder={gettext("Insert a youtube url or search for a video")}
+          aria-autocomplete="both"
+          aria-controls="searchbox__results_list"
+          autocomplete="off"
+          autocapitalize="off"
+          enterkeyhint="search"
+          spellcheck="false"
+          tabindex="0"
+          autofocus
+          phx-keydown={JS.patch(@close_patch)}
+          phx-key="escape"
+          phx-keyup="change"
+          phx-target={@myself}
+        />
 
-              <div class="absolute right-3 top-[4px] flex items-center gap-2">
-                <button
-                  type="button"
-                  phx-click={hide_modal()}
-                  aria-label={gettext("Close search")}
-                  class={search_kbd_class()}
-                >
-                  esc
-                </button>
-                <button
-                  type="submit"
-                  disabled={!search_submit_enabled?(@form)}
-                  aria-disabled={!search_submit_enabled?(@form)}
-                  aria-label={gettext("Search")}
-                  class={
-                    search_kbd_class() <>
-                      " disabled:opacity-30 disabled:hover:opacity-30 disabled:active:opacity-30 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none disabled:active:shadow-none dark:disabled:shadow-none dark:disabled:hover:shadow-none dark:disabled:active:shadow-none"
-                  }
-                >
-                  (↵)
-                </button>
-              </div>
-            </div>
-
-            <ul
-              class={"
-                divide-y pr-3
-                overflow-y-scroll
-                rounded-b-lg
-                border-t-0 border-zinc-200 text-sm leading-6
-                px-2 max-h-[24rem]
-                bg-none
-                #{if @search_result != [], do: "!py-2 !my-1"}
-              "}
-              id="searchbox__results_list"
-              role="listbox"
-            >
-              <li
-                :for={{item, index} <- Enum.with_index(@search_result)}
-                id={"search-result-#{item.external_id}"}
-                data-id={item.external_id}
-                class="
-                  group my-4
-                  cursor-default
-                  rounded-md hover:rounded-lg
-                  first:mt-0 last:mb-0
-                  transition-all duration-300
-                  text-zinc-700 dark:text-zinc-300
-                  bg-zinc-300 dark:bg-zinc-800
-                  hover:bg-zinc-200 dark:hover:bg-zinc-700
-                  border-zinc-200 dark:border-zinc-700 border-[0px]
-                  hover:tracking-widest focus:tracking-widest
-                  shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
-                  dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.4)]
-                  hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
-                  dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
-                  active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
-                  dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
-                  active:scale-[0.99] grayscale-[70%] hover:grayscale-0
-                "
-              >
-                <div class="
-                  relative flex items-center h-14 mx-1
-                  gap-y-2 gap-x-2
-                ">
-                  <div class="relative h-12 w-12">
-                    <img
-                      class="
-                        inline-block h-12 w-12 rounded-lg 
-                        transition duration-200 group-hover:scale-[1.05]
-                      "
-                      src={item.thumbnail_url}
-                      alt={item.title}
-                    />
-                  </div>
-                  <div class="absolute top-10 -left-1 h-4 w-4 rounded-lg">
-                    <p class="
-                      rounded-lg h-4 w-4
-                      flex justify-center items-center
-                      text-center text-[0.5rem]
-                      text-zinc-200 dark:text-zinc-700
-                      bg-zinc-800 dark:bg-zinc-300
-                    ">
-                      {index + 1}
-                    </p>
-                  </div>
-                  <div class="
-                    block
-                    text-xs leading-6 font-semibold
-                    p-1 px-1 h-8 w-5/6
-                    text-ellipsis overflow-hidden
-                  ">
-                    {item.title}
-                  </div>
-                  <div
-                    class="
-                      flex items-center justify-center
-                      transition duration-300 opacity-0 group-hover:opacity-100
-                      w-12 h-12 rounded-lg
-                      bg-transparent
-                      cursor-pointer
-                      text-zinc-700 dark:text-zinc-300
-                      hover:text-green-500 dark:hover:text-green-500 hover:scale-110
-                      focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100
-                      active:scale-[0.95] active:text-green-300 dark:active:text-green-700
-                    "
-                    href="#"
-                    phx-value-media_id={item.external_id}
-                    phx-click="add_to_playlist"
-                    phx-target={@myself}
-                    tabindex="0"
-                  >
-                    <.icon name="hero-plus" class="h-5 w-5" />
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </.form>
+        <div class="absolute right-3 top-[9px] flex items-center gap-2">
+          <button
+            type="button"
+            phx-click={JS.patch(@close_patch)}
+            aria-label={gettext("Close search")}
+            class={search_kbd_class()}
+          >
+            esc
+          </button>
+          <button
+            type="submit"
+            disabled={!search_submit_enabled?(@form)}
+            aria-disabled={!search_submit_enabled?(@form)}
+            aria-label={gettext("Search")}
+            class={
+              search_kbd_class() <>
+                " disabled:opacity-30 disabled:hover:opacity-30 disabled:active:opacity-30 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none disabled:active:shadow-none dark:disabled:shadow-none dark:disabled:hover:shadow-none dark:disabled:active:shadow-none"
+            }
+          >
+            (↵)
+          </button>
         </div>
       </div>
-    </div>
+
+      <ul
+        class={"
+          divide-y pr-3
+          overflow-y-scroll
+          rounded-b-lg
+          border-t-0 border-zinc-200 text-sm leading-6
+          max-h-[16rem]
+          bg-none
+          #{if @search_result != [], do: "!py-2 !my-1"}
+        "}
+        id="searchbox__results_list"
+        role="listbox"
+      >
+        <li
+          :for={{item, index} <- Enum.with_index(@search_result)}
+          id={"search-result-#{item.external_id}"}
+          data-id={item.external_id}
+          class={"
+            group my-2
+            cursor-default
+            rounded-md hover:rounded-lg
+            first:mt-0 last:mb-0
+            transition-all duration-300
+            text-zinc-700 dark:text-zinc-300
+            #{if item.external_id in @playlist_external_ids,
+              do: "bg-zinc-50 dark:bg-zinc-700 opacity-50",
+              else: "
+              bg-zinc-300 dark:bg-zinc-800
+              hover:bg-zinc-200 dark:hover:bg-zinc-700
+              hover:tracking-widest focus:tracking-widest
+              active:scale-[0.99] grayscale-[70%] hover:grayscale-0
+              shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+              hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
+              active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+              dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.3)]
+              dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+              dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+              "
+            }
+            border-zinc-200 dark:border-zinc-700 border-[0px]
+          "}
+        >
+          <div class="
+            relative flex items-center h-10 mx-1
+            gap-y-2 gap-x-2
+          ">
+            <div class="relative h-8 w-8">
+              <img
+                class="
+                  inline-block h-8 w-8 rounded-lg
+                  transition duration-200 group-hover:scale-[1.05]
+                "
+                src={item.thumbnail_url}
+                alt={item.title}
+              />
+            </div>
+            <div class="absolute top-6 -left-1 h-4 w-4 rounded-lg">
+              <p class="
+                rounded-lg h-4 w-4
+                flex justify-center items-center
+                text-center text-[0.5rem]
+                text-zinc-200 dark:text-zinc-700
+                bg-zinc-800 dark:bg-zinc-300
+              ">
+                {index + 1}
+              </p>
+            </div>
+            <div class="
+              block
+              text-xs leading-6 font-semibold
+              p-1 px-1 h-8 w-5/6
+              text-ellipsis overflow-hidden
+            ">
+              {item.title}
+            </div>
+            <div
+              :if={item.external_id in @playlist_external_ids}
+              class="
+                flex items-center justify-center
+                w-8 h-8 rounded-lg
+                text-green-500 dark:text-green-500
+              "
+            >
+              <.icon name="hero-check" class="h-5 w-5" />
+            </div>
+            <button
+              :if={item.external_id not in @playlist_external_ids}
+              type="button"
+              class="
+                flex items-center justify-center
+                transition duration-300 opacity-0 group-hover:opacity-100
+                w-8 h-8 rounded-lg
+                bg-transparent
+                cursor-pointer
+                outline-black
+                text-zinc-700 dark:text-zinc-300
+                hover:text-green-500 dark:hover:text-green-500 hover:scale-110
+                focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100
+                active:scale-[0.95] active:text-green-300 dark:active:text-green-700
+              "
+              aria-label={gettext("Add to playlist")}
+              phx-value-media_id={item.external_id}
+              phx-click="add_to_playlist"
+              phx-target={@myself}
+            >
+              <.icon name="hero-plus" class="h-5 w-5" />
+            </button>
+          </div>
+        </li>
+      </ul>
+    </.form>
   </div>
 </div>

@@ -13,9 +13,8 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
       dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
     ">
       <.button
+        id="volume-mute-btn"
         tabindex="0"
-        phx-key="m"
-        phx-window-keydown="on_volume_click"
         class={volume_button_class(@muted?)}
         aria-pressed={@muted?}
         phx-click="on_volume_click"

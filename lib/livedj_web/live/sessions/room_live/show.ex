@@ -29,10 +29,22 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         content_ready: connected?(socket)
       )
 
-    if connected?(socket) do
-      {:ok, :joined} = Sessions.join_player(room_id)
-      {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
-    end
+    socket =
+      if connected?(socket) do
+        {:ok, :joined} = Sessions.join_player(room_id)
+        {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
+
+        push_event(socket, "on_container_mounted", %{
+          backdrop_id: socket.assigns.backdrop_id,
+          player_container_id: socket.assigns.player_container_id,
+          spinner_id: socket.assigns.spinner_id,
+          start_time_tracker_id: socket.assigns.start_time_tracker_id,
+          end_time_tracker_id: socket.assigns.end_time_tracker_id,
+          time_slider_id: socket.assigns.time_slider_id
+        })
+      else
+        socket
+      end
 
     {:ok, socket}
   rescue
@@ -71,6 +83,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:room_url, room_url)
   end
 
+  defp apply_action(socket, :browse, _params) do
+    socket
+    |> assign(:page_title, "#{socket.assigns.room.name}")
+  end
+
   # ----------------------------------------------------------------------------
   # Client side event handling
   #
@@ -107,24 +124,6 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
-  def handle_event("on_player_container_mount", _params, socket) do
-    socket =
-      if connected?(socket) and is_nil(socket.assigns.player) do
-        push_event(socket, "on_container_mounted", %{
-          backdrop_id: socket.assigns.backdrop_id,
-          player_container_id: socket.assigns.player_container_id,
-          spinner_id: socket.assigns.spinner_id,
-          start_time_tracker_id: socket.assigns.start_time_tracker_id,
-          end_time_tracker_id: socket.assigns.end_time_tracker_id,
-          time_slider_id: socket.assigns.time_slider_id
-        })
-      else
-        socket
-      end
-
-    {:noreply, socket}
-  end
-
   def handle_event("on_player_loaded", _params, socket) do
     socket =
       if connected?(socket) and is_nil(socket.assigns.player) do
@@ -155,6 +154,24 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:playlist_joined, room_id, _payload},
         %{assigns: %{room: %Room{id: room_id}}} = socket
       ) do
+    {:noreply, socket}
+  end
+
+  def handle_info({:track_added, _room_id, media}, socket) do
+    send_update(LivedjWeb.Components.SearchBarComponent,
+      id: "browse-search-bar",
+      track_added: media
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:track_removed, _room_id, external_id}, socket) do
+    send_update(LivedjWeb.Components.SearchBarComponent,
+      id: "browse-search-bar",
+      track_removed: external_id
+    )
+
     {:noreply, socket}
   end
 
