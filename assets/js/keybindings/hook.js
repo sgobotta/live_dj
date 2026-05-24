@@ -15,7 +15,6 @@ export default {
     window.removeEventListener('keydown', this._handler)
   },
   mounted() {
-    console.info('Keybindings hook mounted, active:', this.el.dataset.active)
     this._handler = (e) => {
       if (this.el.dataset.active !== 'true') return
       if (IGNORED_TAGS.has(e.target.tagName) || e.target.isContentEditable) {

@@ -5,7 +5,6 @@ export default {
     window.addEventListener(
       "toggle-theme",
       e => {
-        console.log(e, "Something here?")
         e.preventDefault()
         const currentTheme = localStorage.getItem("theme")
         const theme = currentTheme === 'dark' ? 'light' : 'dark'

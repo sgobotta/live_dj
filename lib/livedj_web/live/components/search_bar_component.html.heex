@@ -2,7 +2,7 @@
   <div
     role="combobox"
     aria-haspopup="listbox"
-    aria-expanded={false}
+    aria-expanded={@search_result != []}
   >
     <.form
       :let={f}
@@ -180,8 +180,9 @@
             >
               <.icon name="hero-check" class="h-5 w-5" />
             </div>
-            <div
+            <button
               :if={item.external_id not in @playlist_external_ids}
+              type="button"
               class="
                 flex items-center justify-center
                 transition duration-300 opacity-0 group-hover:opacity-100
@@ -194,14 +195,13 @@
                 focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100
                 active:scale-[0.95] active:text-green-300 dark:active:text-green-700
               "
-              href="#"
+              aria-label={gettext("Add to playlist")}
               phx-value-media_id={item.external_id}
               phx-click="add_to_playlist"
               phx-target={@myself}
-              tabindex="0"
             >
               <.icon name="hero-plus" class="h-5 w-5" />
-            </div>
+            </button>
           </div>
         </li>
       </ul>

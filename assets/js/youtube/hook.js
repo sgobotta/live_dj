@@ -82,16 +82,8 @@ export default {
       this.startTimeTrackerId = startTimeTrackerId
       this.endTimeTrackerId = endTimeTrackerId
       this.timeSliderId = timeSliderId
-      console.debug(
-        '[Player :: on_container_mounted]',
-        `backdrop_container_id=${this.backdropId}`,
-        `player_container_id=${this.playerContainerId}`,
-        `spinner_container_id=${this.spinnerId}`
-      )
 
       if (this.player) {
-        /* eslint-disable max-len */
-        console.debug('[Player :: on_container_mounted] player already initialized, signalling server')
         await this.pushEventTo(this.el, 'on_player_loaded')
         return
       }
