@@ -157,6 +157,24 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
+  def handle_info({:track_added, _room_id, media}, socket) do
+    send_update(LivedjWeb.Components.SearchBarComponent,
+      id: "browse-search-bar",
+      track_added: media
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:track_removed, _room_id, external_id}, socket) do
+    send_update(LivedjWeb.Components.SearchBarComponent,
+      id: "browse-search-bar",
+      track_removed: external_id
+    )
+
+    {:noreply, socket}
+  end
+
   # ----------------------------------------------------------------------------
   # Server side Player event handling
   #

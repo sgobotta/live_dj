@@ -5,6 +5,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
 
   alias Livedj.Media.Video
   alias Livedj.Sessions
+  alias Livedj.Sessions.Channels
 
   @fake_results (if Mix.env() == :dev do
                    [
@@ -101,12 +102,30 @@ defmodule LivedjWeb.Components.SearchBarComponent do
                  end)
 
   @impl true
+  def update(%{track_added: %Video{external_id: external_id}}, socket) do
+    {:ok, update(socket, :playlist_external_ids, &MapSet.put(&1, external_id))}
+  end
+
+  def update(%{track_removed: external_id}, socket) do
+    {:ok,
+     update(socket, :playlist_external_ids, &MapSet.delete(&1, external_id))}
+  end
+
   def update(assigns, socket) do
     {:ok,
      socket
      |> assign(assigns)
      |> assign_new(:form, &empty_search_form/0)
-     |> assign_new(:search_result, fn -> @fake_results end)}
+     |> assign_new(:search_result, fn -> @fake_results end)
+     |> assign_new(:playlist_external_ids, fn %{room: room} ->
+       case Sessions.get_playlist(room.id) do
+         {:ok, list} -> MapSet.new(list, & &1.external_id)
+         {:error, _error} -> MapSet.new()
+       end
+     end)
+     |> assign_new(:playlist_subscribed, fn %{room: room} ->
+       Channels.subscribe_playlist_topic(room.id)
+     end)}
   end
 
   @impl true
@@ -184,6 +203,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
       {:ok, {:added, media}} ->
         {:noreply,
          socket
+         |> update(:playlist_external_ids, &MapSet.put(&1, media_id))
          |> put_flash(
            :info,
            gettext("%{title} queued to the playlist", title: media.title)

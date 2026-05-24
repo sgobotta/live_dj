@@ -112,25 +112,30 @@
           :for={{item, index} <- Enum.with_index(@search_result)}
           id={"search-result-#{item.external_id}"}
           data-id={item.external_id}
-          class="
+          class={"
             group my-2
             cursor-default
             rounded-md hover:rounded-lg
             first:mt-0 last:mb-0
             transition-all duration-300
             text-zinc-700 dark:text-zinc-300
-            bg-zinc-300 dark:bg-zinc-800
-            hover:bg-zinc-200 dark:hover:bg-zinc-700
+            #{if item.external_id in @playlist_external_ids,
+              do: "bg-zinc-50 dark:bg-zinc-700 opacity-50",
+              else: "
+              bg-zinc-300 dark:bg-zinc-800
+              hover:bg-zinc-200 dark:hover:bg-zinc-700
+              hover:tracking-widest focus:tracking-widest
+              active:scale-[0.99] grayscale-[70%] hover:grayscale-0
+              shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
+              hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
+              active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
+              dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.3)]
+              dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+              dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+              "
+            }
             border-zinc-200 dark:border-zinc-700 border-[0px]
-            hover:tracking-widest focus:tracking-widest
-            shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
-            hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
-            active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
-            dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.1)]
-            dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
-            dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
-            active:scale-[0.99] grayscale-[70%] hover:grayscale-0
-          "
+          "}
         >
           <div class="
             relative flex items-center h-10 mx-1
@@ -166,6 +171,17 @@
               {item.title}
             </div>
             <div
+              :if={item.external_id in @playlist_external_ids}
+              class="
+                flex items-center justify-center
+                w-8 h-8 rounded-lg
+                text-green-500 dark:text-green-500
+              "
+            >
+              <.icon name="hero-check" class="h-5 w-5" />
+            </div>
+            <div
+              :if={item.external_id not in @playlist_external_ids}
               class="
                 flex items-center justify-center
                 transition duration-300 opacity-0 group-hover:opacity-100
