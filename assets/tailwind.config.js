@@ -77,7 +77,9 @@ module.exports = {
   safelist: [
     {
       pattern: /(dark)/
-    }
+    },
+    'shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]',
+    'dark:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]'
   ],
   theme: {
     extend: {
