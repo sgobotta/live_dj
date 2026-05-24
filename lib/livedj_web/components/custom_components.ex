@@ -10,6 +10,36 @@ defmodule LivedjWeb.CustomComponents do
   import LivedjWeb.Gettext
 
   @doc """
+  Renders a hover tooltip anchored to a parent `relative group` container.
+
+  Position controls vertical placement (above or below the element).
+  Use the `class` attr for horizontal offset and any other per-callsite overrides
+  (e.g. `left-1/2 -translate-x-[85%]`, `z-30`, `md:hidden`).
+  """
+  attr :position, :atom, default: :above, doc: ":above | :below"
+  attr :class, :string, default: "left-1/2 -translate-x-1/2"
+  slot :inner_block, required: true
+
+  def tooltip(assigns) do
+    ~H"""
+    <div class={[
+      "absolute hidden group-hover:block",
+      "whitespace-nowrap rounded-md px-2 py-1",
+      "bg-zinc-800 dark:bg-zinc-200",
+      "text-xs text-zinc-100 dark:text-zinc-900",
+      "shadow-md pointer-events-none",
+      tooltip_position_class(@position),
+      @class
+    ]}>
+      {render_slot(@inner_block)}
+    </div>
+    """
+  end
+
+  defp tooltip_position_class(:above), do: "bottom-full mb-2"
+  defp tooltip_position_class(:below), do: "top-full mt-2"
+
+  @doc """
   Renders a button to toggle the application theme
   """
   attr :theme, :string, required: true
@@ -44,19 +74,11 @@ defmodule LivedjWeb.CustomComponents do
             />
           <% end %>
         </a>
-        <div class="
-          absolute top-full left-1/2 -translate-x-[35%] mt-2
-          hidden group-hover:block
-          whitespace-nowrap rounded-md px-2 py-1
-          bg-zinc-800 dark:bg-zinc-200
-          text-xs text-zinc-100 dark:text-zinc-900
-          shadow-md pointer-events-none
-          z-30
-        ">
+        <.tooltip position={:below} class="left-1/2 -translate-x-[35%] z-30">
           {if @theme === "dark",
             do: "#{gettext("Light")} (T)",
             else: "#{gettext("Dark")} (T)"}
-        </div>
+        </.tooltip>
       </div>
     </div>
     """

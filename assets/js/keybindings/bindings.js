@@ -3,6 +3,7 @@
 export const bindings = {
   ' ': 'toggle-play-pause',
   a: 'navigate-add',
+  f: 'toggle-fullscreen',
   m: 'toggle-mute',
   s: 'open-share',
   t: 'toggle-theme'

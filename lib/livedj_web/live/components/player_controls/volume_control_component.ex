@@ -28,18 +28,11 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
             class: "h-6 w-6 p-1"
           )}
         </.button>
-        <div class="
-          absolute bottom-full left-1/2 -translate-x-1/2 mb-2
-          hidden group-hover:block
-          whitespace-nowrap rounded-md px-2 py-1
-          bg-zinc-800 dark:bg-zinc-200
-          text-xs text-zinc-100 dark:text-zinc-900
-          shadow-md pointer-events-none
-        ">
+        <.tooltip>
           {if @muted?,
             do: "#{gettext("Unmute")} (M)",
             else: "#{gettext("Mute")} (M)"}
-        </div>
+        </.tooltip>
       </div>
       <div class="ml-2 self-center hidden md:block">
         <.form

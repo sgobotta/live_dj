@@ -6,8 +6,13 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
-      <.link phx-click="on_click" phx-target={@myself} tabindex="0">
+    <div class="relative group">
+      <.link
+        id="fullscreen-btn"
+        phx-click="on_click"
+        phx-target={@myself}
+        tabindex="0"
+      >
         {PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,
           "fullscreen",
@@ -20,6 +25,9 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
             "
         )}
       </.link>
+      <.tooltip class="left-1/2 -translate-x-[85%]">
+        {gettext("Fullscreen")} (F)
+      </.tooltip>
     </div>
     """
   end
