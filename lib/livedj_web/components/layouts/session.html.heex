@@ -45,6 +45,20 @@
   </div>
 </.modal>
 
+<.modal
+  :if={assigns[:live_action] == :browse}
+  id="browse-modal"
+  show
+  on_cancel={JS.patch(~p"/sessions/rooms/#{assigns[:room]}")}
+>
+  <.live_component
+    id="browse-search-bar"
+    module={LivedjWeb.Components.SearchBarComponent}
+    room={assigns[:room]}
+    close_patch={~p"/sessions/rooms/#{assigns[:room]}"}
+  />
+</.modal>
+
 <div class="flex flex-col h-screen">
   <header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
     <div class="grid grid-cols-3 items-center  py-3 text-sm">
@@ -112,10 +126,10 @@
   </ul> --%>
   </header>
 
-  <main class="flex-1 flex flex-col overflow-hidden lg:px-8 bg-zinc-200 dark:bg-zinc-800">
+  <main class="flex-1 flex flex-col overflow-hidden lg:px-8 bg-zinc-200 dark:bg-zinc-800 pt-2 gap-1">
     <div class="mx-1 sm:mx-auto sm:w-full max-w-xl sm:pt-10">
       <.flash_group flash={@flash} />
-      <div id="player-slot" class="h-72 my-2 w-full shrink-0"></div>
+      <div id="player-slot" class="h-72 w-full shrink-0"></div>
     </div>
     <div class="flex-1 overflow-y-auto">
       <div class="mx-1 sm:mx-auto max-w-xl">

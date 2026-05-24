@@ -83,6 +83,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:room_url, room_url)
   end
 
+  defp apply_action(socket, :browse, _params) do
+    socket
+    |> assign(:page_title, "#{socket.assigns.room.name}")
+  end
+
   # ----------------------------------------------------------------------------
   # Client side event handling
   #

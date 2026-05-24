@@ -43,6 +43,7 @@ defmodule LivedjWeb.Router do
       scope "/sessions", Sessions do
         live "/rooms/:id", RoomLive.Show, :show
         live "/rooms/:id/welcome", RoomLive.Show, :welcome
+        live "/rooms/:id/browse", RoomLive.Show, :browse
       end
     end
 
