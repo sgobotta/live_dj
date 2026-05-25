@@ -18,6 +18,7 @@ msgstr ""
 
 #: lib/livedj_web/components/core_components.ex:88
 #: lib/livedj_web/components/core_components.ex:172
+#: lib/livedj_web/components/session_modals.ex:95
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
@@ -249,11 +250,6 @@ msgstr ""
 msgid "Use this form to manage room records in your database."
 msgstr ""
 
-#: lib/livedj_web/components/list_component.ex:132
-#, elixir-autogen, elixir-format
-msgid "Remove '%{title}'?"
-msgstr ""
-
 #: lib/livedj_web/controllers/page_html/home.html.heex:91
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Rooms"
@@ -304,7 +300,7 @@ msgstr ""
 msgid "Insert a youtube url or search for a video"
 msgstr ""
 
-#: lib/livedj_web/components/layouts/session.html.heex:19
+#: lib/livedj_web/components/layouts/session.html.heex:24
 #, elixir-autogen, elixir-format
 msgid "Exit session?"
 msgstr ""
@@ -324,12 +320,12 @@ msgstr ""
 msgid "%{title} queued to the playlist"
 msgstr ""
 
-#: lib/livedj_web/live/player_controls_live.html.heex:183
+#: lib/livedj_web/live/player_controls_live.html.heex:165
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr ""
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:198
+#: lib/livedj_web/live/components/search_bar_component.html.heex:201
 #, elixir-autogen, elixir-format
 msgid "Add to playlist"
 msgstr ""
@@ -344,27 +340,27 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: lib/livedj_web/components/custom_components.ex:58
+#: lib/livedj_web/components/custom_components.ex:80
 #, elixir-autogen, elixir-format
 msgid "Dark"
 msgstr ""
 
-#: lib/livedj_web/components/custom_components.ex:57
+#: lib/livedj_web/components/custom_components.ex:79
 #, elixir-autogen, elixir-format
 msgid "Light"
 msgstr ""
 
-#: lib/livedj_web/live/components/player_controls/volume_control_component.ex:41
+#: lib/livedj_web/live/components/player_controls/volume_control_component.ex:34
 #, elixir-autogen, elixir-format
 msgid "Mute"
 msgstr ""
 
-#: lib/livedj_web/live/player_controls_live.html.heex:96
+#: lib/livedj_web/live/player_controls_live.html.heex:95
 #, elixir-autogen, elixir-format
 msgid "Pause"
 msgstr ""
 
-#: lib/livedj_web/live/player_controls_live.html.heex:122
+#: lib/livedj_web/live/player_controls_live.html.heex:112
 #, elixir-autogen, elixir-format
 msgid "Play"
 msgstr ""
@@ -379,7 +375,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: lib/livedj_web/components/layouts/session.html.heex:42
+#: lib/livedj_web/components/layouts/session.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr ""
@@ -389,12 +385,7 @@ msgstr ""
 msgid "Share the link below with your friends so they can join"
 msgstr ""
 
-#: lib/livedj_web/components/list_component.ex:108
-#, elixir-autogen, elixir-format
-msgid "The currently playing track can't be removed"
-msgstr ""
-
-#: lib/livedj_web/live/components/player_controls/volume_control_component.ex:40
+#: lib/livedj_web/live/components/player_controls/volume_control_component.ex:33
 #, elixir-autogen, elixir-format
 msgid "Unmute"
 msgstr ""
@@ -402,4 +393,59 @@ msgstr ""
 #: lib/livedj_web/components/mini_avatar_stack_component.ex:123
 #, elixir-autogen, elixir-format
 msgid "User"
+msgstr ""
+
+#: lib/livedj_web/live/components/player_controls/fullscreen_control_component.ex:29
+#, elixir-autogen, elixir-format
+msgid "Fullscreen"
+msgstr ""
+
+#: lib/livedj_web/components/layouts/session.html.heex:39
+#, elixir-autogen, elixir-format
+msgid "Help"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:129
+#, elixir-autogen, elixir-format
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:140
+#, elixir-autogen, elixir-format
+msgid "Mute / Unmute player"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:141
+#, elixir-autogen, elixir-format
+msgid "Play / Pause"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:131
+#, elixir-autogen, elixir-format
+msgid "Press any key below while in the session"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:139
+#, elixir-autogen, elixir-format
+msgid "Search and add tracks"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:138
+#, elixir-autogen, elixir-format
+msgid "Share room URL"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:143
+#, elixir-autogen, elixir-format
+msgid "Show this help"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:142
+#, elixir-autogen, elixir-format
+msgid "Toggle fullscreen"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:137
+#, elixir-autogen, elixir-format
+msgid "Toggle theme"
 msgstr ""

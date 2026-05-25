@@ -214,6 +214,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: lib/livedj_web/live/sessions/room_live/list.ex:81
+#: lib/livedj_web/live/sessions/room_live/list.ex:290
 #, elixir-autogen, elixir-format
 msgid "The currently playing track can't be removed"
 msgstr ""
