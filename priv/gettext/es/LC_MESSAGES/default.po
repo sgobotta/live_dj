@@ -18,7 +18,6 @@ msgstr "Acciones"
 
 #: lib/livedj_web/components/core_components.ex:88
 #: lib/livedj_web/components/core_components.ex:172
-#: lib/livedj_web/components/session_modals.ex:95
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr "cerrar"
@@ -325,15 +324,10 @@ msgstr "Se agregó %{title} a la lista"
 msgid "Add"
 msgstr "Agregar"
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:201
+#: lib/livedj_web/live/components/search_bar_component.html.heex:194
 #, elixir-autogen, elixir-format
 msgid "Add to playlist"
 msgstr "Agregar a lista de reproducción"
-
-#: lib/livedj_web/live/components/search_bar_component.html.heex:78
-#, elixir-autogen, elixir-format
-msgid "Close search"
-msgstr "Cerrar búsqueda"
 
 #: lib/livedj_web/components/session_modals.ex:45
 #, elixir-autogen, elixir-format
@@ -370,7 +364,7 @@ msgstr "Reproducir"
 msgid "Room ready to share!"
 msgstr "Compartir sala!"
 
-#: lib/livedj_web/live/components/search_bar_component.html.heex:87
+#: lib/livedj_web/live/components/search_bar_component.html.heex:79
 #, elixir-autogen, elixir-format
 msgid "Search"
 msgstr "Buscar"
@@ -405,47 +399,57 @@ msgstr "Pantalla completa"
 msgid "Help"
 msgstr "Ayuda"
 
-#: lib/livedj_web/components/session_modals.ex:129
+#: lib/livedj_web/components/session_modals.ex:116
 #, elixir-autogen, elixir-format
 msgid "Keyboard Shortcuts"
 msgstr "Atajos"
 
-#: lib/livedj_web/components/session_modals.ex:140
+#: lib/livedj_web/components/session_modals.ex:127
 #, elixir-autogen, elixir-format
 msgid "Mute / Unmute player"
 msgstr "Silenciar / Activar sonido"
 
-#: lib/livedj_web/components/session_modals.ex:141
+#: lib/livedj_web/components/session_modals.ex:128
 #, elixir-autogen, elixir-format
 msgid "Play / Pause"
 msgstr "Reproducir / Pausar"
 
-#: lib/livedj_web/components/session_modals.ex:131
+#: lib/livedj_web/components/session_modals.ex:118
 #, elixir-autogen, elixir-format
 msgid "Press any key below while in the session"
 msgstr "Pulse cualquiera de las teclas siguientes"
 
-#: lib/livedj_web/components/session_modals.ex:139
+#: lib/livedj_web/components/session_modals.ex:125
 #, elixir-autogen, elixir-format
 msgid "Search and add tracks"
 msgstr "Buscar y añadir pistas"
 
-#: lib/livedj_web/components/session_modals.ex:138
+#: lib/livedj_web/components/session_modals.ex:124
 #, elixir-autogen, elixir-format
 msgid "Share room URL"
 msgstr "Compartir enlace a sala"
 
-#: lib/livedj_web/components/session_modals.ex:143
+#: lib/livedj_web/components/session_modals.ex:130
 #, elixir-autogen, elixir-format
 msgid "Show this help"
 msgstr "Mostrar este mensaje"
 
-#: lib/livedj_web/components/session_modals.ex:142
+#: lib/livedj_web/components/session_modals.ex:129
 #, elixir-autogen, elixir-format
 msgid "Toggle fullscreen"
 msgstr "Pantalla completa"
 
-#: lib/livedj_web/components/session_modals.ex:137
+#: lib/livedj_web/components/session_modals.ex:126
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr "Cambiar tema"
+
+#: lib/livedj_web/components/session_modals.ex:130
+#, elixir-autogen, elixir-format
+msgid "H or ?"
+msgstr "H o ?"
+
+#: lib/livedj_web/components/session_modals.ex:128
+#, elixir-autogen, elixir-format
+msgid "Space"
+msgstr "Espacio"

@@ -125,9 +125,9 @@ defmodule LivedjWeb.SessionModals do
           <.help_row key="A" label={gettext("Search and add tracks")} />
           <.help_row key="T" label={gettext("Toggle theme")} />
           <.help_row key="M" label={gettext("Mute / Unmute player")} />
-          <.help_row key="Space" label={gettext("Play / Pause")} />
+          <.help_row key={gettext("Space")} label={gettext("Play / Pause")} />
           <.help_row key="F" label={gettext("Toggle fullscreen")} />
-          <.help_row key="H or ?" label={gettext("Show this help")} />
+          <.help_row key={gettext("H or ?")} label={gettext("Show this help")} />
         </dl>
       </div>
     </.modal>
