@@ -2,6 +2,7 @@ import { bindings } from './bindings'
 
 const actions = {
   'navigate-add': () => document.getElementById('add-btn')?.click(),
+  'open-help': () => document.getElementById('help-btn')?.click(),
   'open-share': () => document.getElementById('share-btn')?.click(),
   'toggle-fullscreen': () => document.getElementById('fullscreen-btn')?.click(),
   'toggle-mute': () => document.getElementById('volume-mute-btn')?.click(),

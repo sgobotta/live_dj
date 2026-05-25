@@ -88,6 +88,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:page_title, "#{socket.assigns.room.name}")
   end
 
+  defp apply_action(socket, :help, _params) do
+    socket
+    |> assign(:page_title, "#{socket.assigns.room.name}")
+  end
+
   # ----------------------------------------------------------------------------
   # Client side event handling
   #
@@ -95,6 +100,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   def handle_event("open_share_modal", _params, socket) do
     {:noreply,
      push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/welcome")}
+  end
+
+  def handle_event("open_help_modal", _params, socket) do
+    {:noreply,
+     push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/help")}
   end
 
   def handle_event("on_player_play", _params, socket) do

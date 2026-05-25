@@ -114,6 +114,60 @@ defmodule LivedjWeb.SessionModals do
     """
   end
 
+  attr :room, :map, required: true
+  attr :show, :boolean, required: true
+
+  def help_modal(assigns) do
+    ~H"""
+    <.modal
+      :if={@show}
+      id="help-modal"
+      show
+      on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
+    >
+      <.header>
+        {gettext("Keyboard Shortcuts")}
+        <:subtitle>
+          {gettext("Press any key below while in the session")}
+        </:subtitle>
+      </.header>
+
+      <div class="mt-6">
+        <dl class="divide-y divide-zinc-400 dark:divide-zinc-700">
+          <.help_row key="S" label={gettext("Share room URL")} />
+          <.help_row key="A" label={gettext("Search and add tracks")} />
+          <.help_row key="T" label={gettext("Toggle theme")} />
+          <.help_row key="M" label={gettext("Mute / Unmute player")} />
+          <.help_row key="Space" label={gettext("Play / Pause")} />
+          <.help_row key="F" label={gettext("Toggle fullscreen")} />
+          <.help_row key="H or ?" label={gettext("Show this help")} />
+        </dl>
+      </div>
+    </.modal>
+    """
+  end
+
+  attr :key, :string, required: true
+  attr :label, :string, required: true
+
+  defp help_row(assigns) do
+    ~H"""
+    <div class="flex items-center justify-between py-3">
+      <dt class="text-sm text-zinc-600 dark:text-zinc-400">{@label}</dt>
+      <dd>
+        <kbd class="
+          inline-flex items-center rounded border border-zinc-400 dark:border-zinc-600
+          px-2 py-0.5 text-xs font-mono font-semibold
+          bg-zinc-100 dark:bg-zinc-800
+          text-zinc-700 dark:text-zinc-300
+        ">
+          {@key}
+        </kbd>
+      </dd>
+    </div>
+    """
+  end
+
   defp show_browse_sheet(js \\ %JS{}, id) do
     js
     |> JS.show(to: "##{id}")
