@@ -27,7 +27,7 @@
       </div>
       <div class="flex items-center justify-end gap-4">
         <%= if assigns[:room] do %>
-          <div class="relative group">
+          <div class="relative group [@media(hover:none)]:hidden">
             <button
               id="help-btn"
               phx-click="open_help_modal"
