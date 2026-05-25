@@ -87,20 +87,7 @@ defmodule LivedjWeb.SessionModals do
             <div class="h-1 w-10 rounded-full bg-zinc-400 dark:bg-zinc-600" />
           </div>
           <%!-- Close button (desktop only) --%>
-          <div class="absolute top-4 right-4 hidden sm:block">
-            <button
-              phx-click={JS.exec("data-cancel", to: "#browse-modal")}
-              type="button"
-              class="-m-3 rounded-md opacity-100 hover:opacity-40 focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50"
-              aria-label={gettext("close")}
-            >
-              <.icon
-                name="hero-x-mark-solid"
-                class="h-5 w-5 text-zinc-900 dark:text-zinc-100 p-3"
-              />
-            </button>
-          </div>
-          <div id="browse-modal-content" class="p-4 pt-2 pb-8 sm:pb-4">
+          <div id="browse-modal-content" class="p-4 pt-4 pb-8 sm:pb-4">
             <.live_component
               id="browse-search-bar"
               module={LivedjWeb.Components.SearchBarComponent}

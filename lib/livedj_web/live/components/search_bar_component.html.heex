@@ -15,7 +15,7 @@
       phx-target={@myself}
       class=""
     >
-      <div class="group relative flex">
+      <div class="peer group relative flex">
         <svg
           viewBox="0 0 20 20"
           fill="none"
@@ -73,14 +73,6 @@
 
         <div class="absolute right-3 top-[9px] flex items-center gap-2">
           <button
-            type="button"
-            phx-click={JS.patch(@close_patch)}
-            aria-label={gettext("Close search")}
-            class={search_kbd_class()}
-          >
-            esc
-          </button>
-          <button
             type="submit"
             disabled={!search_submit_enabled?(@form)}
             aria-disabled={!search_submit_enabled?(@form)}
@@ -101,7 +93,8 @@
           overflow-y-scroll
           rounded-b-lg
           border-t-0 border-zinc-200 text-sm leading-6
-          max-h-[16rem]
+          max-h-[32rem] md:max-h-[16rem] peer-focus-within:max-h-[16rem]
+          transition-[max-height] duration-300
           bg-none
           #{if @search_result != [], do: "!py-2 !my-1"}
         "}

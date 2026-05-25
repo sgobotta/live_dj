@@ -7,7 +7,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   alias Livedj.Sessions
   alias Livedj.Sessions.Channels
 
-  @fake_results (if Mix.env() == :dev do
+  @fake_results (if Mix.env() == :prod do
                    [
                      # ~5 second videos for player edge-case testing
                      %Video{
