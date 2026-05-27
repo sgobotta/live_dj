@@ -1,6 +1,11 @@
 import initPlayer from './player'
-import { startNoise, stopNoise } from '../animation/noise'
+import { PALETTES, startNoise, stopNoise } from '../animation/noise'
 import { secondsToTime } from '../lib/date-utils'
+
+function currentPalette() {
+  const idx = parseInt(localStorage.getItem('_noise_filter') ?? '0', 10)
+  return PALETTES[(idx >= 0 && idx < PALETTES.length) ? idx : 0]
+}
 
 function scrollToElement(elementId) {
   const element = document.getElementById(elementId)
@@ -90,7 +95,7 @@ export default {
 
       const canvas = document.getElementById(this.spinnerId)
       canvas.classList.remove("hidden")
-      startNoise(canvas)
+      startNoise(canvas, currentPalette())
 
       const onPlayerReady = player => {
         console.debug('[Player :: Ready]', player)
@@ -268,7 +273,7 @@ export default {
 
       const canvas = document.getElementById(this.spinnerId)
       canvas.classList.remove("hidden")
-      startNoise(canvas)
+      startNoise(canvas, currentPalette())
 
       const backdrop = document.getElementById(this.backdropId)
       backdrop.classList.remove("opacity-0")
