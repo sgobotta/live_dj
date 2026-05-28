@@ -1,12 +1,27 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
+
+@source "../../lib";
+@source "../js";
+
+@plugin "@tailwindcss/forms";
+@plugin "./heroicons-plugin.js";
+
+@variant dark (&:where(.dark, .dark *));
+@variant phx-no-feedback (&:where(.phx-no-feedback, .phx-no-feedback *));
+@variant phx-click-loading (&:where(.phx-click-loading, .phx-click-loading *));
+@variant phx-submit-loading (&:where(.phx-submit-loading, .phx-submit-loading *));
+@variant phx-change-loading (&:where(.phx-change-loading, .phx-change-loading *));
+@variant drag-item (&:where(.drag-item, .drag-item *));
+@variant drag-ghost (&:where(.drag-ghost, .drag-ghost *));
+
+@theme {
+  --color-brand: violet;
+  --font-family-sans: "Montserrat-Thin", Helvetica, Arial, sans-serif;
+}
 
 @import "./fonts.css";
 @import "./widgets/scrollbar.css";
 @import "./widgets/slider.css";
-
-/* This file is for your main application CSS */
 
 .animate-text-overflow {
   animation: move 25s linear infinite;

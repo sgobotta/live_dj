@@ -13,8 +13,8 @@
   }
 
   input[type="range"] {
-    @apply text-zinc-600 rounded-full !important;
-    
+    @apply !text-zinc-600 !rounded-full;
+
     --thumb-height: 0.675em;
     --track-height: 0.125em;
     --track-color: theme('colors.zinc.500');
@@ -23,16 +23,16 @@
     --clip-edges: 0.125em;
   }
   input[type="range"]:hover {
-    @apply text-green-500 !important;
+    @apply !text-green-500;
   }
 
   .dark input[type="range"] {
-    @apply text-zinc-100 !important;
+    @apply !text-zinc-100;
     --track-color: theme('colors.zinc.700');
   }
-  
+
   .dark input[type="range"]:hover {
-    @apply text-green-500 !important;
+    @apply !text-green-500;
     --track-color: theme('colors.zinc.700');
   }
 
