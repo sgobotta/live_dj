@@ -165,11 +165,11 @@ defmodule LivedjWeb.Components.SearchBarComponent do
 
   def search_kbd_class do
     """
-    stroke-zinc-300 w-10 m-0 h-6 sm:h-7 rounded-md
+    stroke-tone-300 w-10 m-0 h-6 sm:h-7 rounded-md
     flex justify-center items-center border-[1px]
-    border-zinc-500 dark:border-zinc-600 opacity-50
+    border-tone-500 dark:border-tone-600 opacity-50
     hover:opacity-80 active:opacity-100
-    bg-zinc-500 dark:bg-zinc-700 text-zinc-300 dark:text-zinc-200
+    bg-tone-500 dark:bg-tone-700 text-tone-300 dark:text-tone-200
     text-xs md:text-sm font-medium cursor-pointer
     shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
     hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(24,24,27,0.9)]

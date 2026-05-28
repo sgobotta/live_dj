@@ -31,7 +31,7 @@
             <button
               id="help-btn"
               phx-click="open_help_modal"
-              class="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors duration-150"
+              class="text-tone-700 dark:text-tone-300 hover:text-tone-900 dark:hover:text-tone-50 transition-colors duration-150"
             >
               <.icon name="hero-question-mark-circle" class="h-5 w-5" />
             </button>
@@ -43,7 +43,7 @@
             <button
               id="share-btn"
               phx-click="open_share_modal"
-              class="text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors duration-150"
+              class="text-tone-700 dark:text-tone-300 hover:text-tone-900 dark:hover:text-tone-50 transition-colors duration-150"
             >
               <.icon name="hero-share" class="h-5 w-5" />
             </button>
@@ -63,7 +63,7 @@
       <li>
         <.link
           href={~p"/users/settings"}
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          class="text-[0.8125rem] leading-6 text-tone-900 dark:text-tone-100 font-semibold hover:text-tone-700 dark:hover:text-tone-300"
         >
           <.text><%= gettext("Settings") %></.text>
         </.link>
@@ -72,7 +72,7 @@
         <.link
           href={~p"/users/log_out"}
           method="delete"
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          class="text-[0.8125rem] leading-6 text-tone-900 dark:text-tone-100 font-semibold hover:text-tone-700 dark:hover:text-tone-300"
         >
           <.text><%= gettext("Log out") %></.text>
         </.link>
@@ -81,7 +81,7 @@
       <li>
         <.link
           href={~p"/users/register"}
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          class="text-[0.8125rem] leading-6 text-tone-900 dark:text-tone-100 font-semibold hover:text-tone-700 dark:hover:text-tone-300"
         >
           <.text><%= gettext("Register") %></.text>
         </.link>
@@ -89,7 +89,7 @@
       <li>
         <.link
           href={~p"/users/log_in"}
-          class="text-[0.8125rem] leading-6 text-zinc-900 dark:text-zinc-100 font-semibold hover:text-zinc-700 dark:hover:text-zinc-300"
+          class="text-[0.8125rem] leading-6 text-tone-900 dark:text-tone-100 font-semibold hover:text-tone-700 dark:hover:text-tone-300"
         >
           <.text><%= gettext("Log in") %></.text>
         </.link>
@@ -98,7 +98,7 @@
   </ul> --%>
   </header>
 
-  <main class="flex-1 flex flex-col overflow-hidden lg:px-8 bg-zinc-200 dark:bg-zinc-800 pt-2 gap-1">
+  <main class="flex-1 flex flex-col overflow-hidden lg:px-8 bg-tone-200 dark:bg-tone-800 pt-2 gap-1">
     <div class="mx-1 sm:mx-auto sm:w-full max-w-xl sm:pt-10">
       <.flash_group flash={@flash} />
       <div id="player-slot" class="h-72 w-full shrink-0"></div>

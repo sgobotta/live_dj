@@ -28,7 +28,7 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
           type="text"
           label={gettext("Name")}
           placeholder={@placeholder_name}
-          class="focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
+          class="focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
         />
         <:actions>
           <.button phx-disable-with={gettext("Saving...")}>

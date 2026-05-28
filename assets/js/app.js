@@ -39,6 +39,19 @@ if (
   localStorage.setItem("theme", "light")
 }
 
+const savedTone = localStorage.getItem("color-tone")
+if (savedTone) document.documentElement.dataset.tone = savedTone
+
+window.setColorTone = function(tone) {
+  if (tone && tone !== "zinc") {
+    document.documentElement.dataset.tone = tone
+    localStorage.setItem("color-tone", tone)
+  } else {
+    delete document.documentElement.dataset.tone
+    localStorage.removeItem("color-tone")
+  }
+};
+
 // eslint-disable-next-line no-unexpected-multiline
 (async () => {
   await YoutubeAPI()

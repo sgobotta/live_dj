@@ -17,6 +17,102 @@
 @theme {
   --color-brand: violet;
   --font-family-sans: "Montserrat-Thin", Helvetica, Arial, sans-serif;
+  --color-tone-50: var(--tone-50);
+  --color-tone-100: var(--tone-100);
+  --color-tone-200: var(--tone-200);
+  --color-tone-300: var(--tone-300);
+  --color-tone-400: var(--tone-400);
+  --color-tone-500: var(--tone-500);
+  --color-tone-600: var(--tone-600);
+  --color-tone-700: var(--tone-700);
+  --color-tone-800: var(--tone-800);
+  --color-tone-900: var(--tone-900);
+  --color-tone-950: var(--tone-950);
+}
+
+/* Default tone: zinc. Override by setting data-tone on <html>. */
+:root {
+  --tone-50: var(--color-zinc-50);
+  --tone-100: var(--color-zinc-100);
+  --tone-200: var(--color-zinc-200);
+  --tone-300: var(--color-zinc-300);
+  --tone-400: var(--color-zinc-400);
+  --tone-500: var(--color-zinc-500);
+  --tone-600: var(--color-zinc-600);
+  --tone-700: var(--color-zinc-700);
+  --tone-800: var(--color-zinc-800);
+  --tone-900: var(--color-zinc-900);
+  --tone-950: var(--color-zinc-950);
+}
+
+[data-tone="slate"] {
+  --tone-50: var(--color-slate-50);
+  --tone-100: var(--color-slate-100);
+  --tone-200: var(--color-slate-200);
+  --tone-300: var(--color-slate-300);
+  --tone-400: var(--color-slate-400);
+  --tone-500: var(--color-slate-500);
+  --tone-600: var(--color-slate-600);
+  --tone-700: var(--color-slate-700);
+  --tone-800: var(--color-slate-800);
+  --tone-900: var(--color-slate-900);
+  --tone-950: var(--color-slate-950);
+}
+
+[data-tone="gray"] {
+  --tone-50: var(--color-gray-50);
+  --tone-100: var(--color-gray-100);
+  --tone-200: var(--color-gray-200);
+  --tone-300: var(--color-gray-300);
+  --tone-400: var(--color-gray-400);
+  --tone-500: var(--color-gray-500);
+  --tone-600: var(--color-gray-600);
+  --tone-700: var(--color-gray-700);
+  --tone-800: var(--color-gray-800);
+  --tone-900: var(--color-gray-900);
+  --tone-950: var(--color-gray-950);
+}
+
+[data-tone="stone"] {
+  --tone-50: var(--color-stone-50);
+  --tone-100: var(--color-stone-100);
+  --tone-200: var(--color-stone-200);
+  --tone-300: var(--color-stone-300);
+  --tone-400: var(--color-stone-400);
+  --tone-500: var(--color-stone-500);
+  --tone-600: var(--color-stone-600);
+  --tone-700: var(--color-stone-700);
+  --tone-800: var(--color-stone-800);
+  --tone-900: var(--color-stone-900);
+  --tone-950: var(--color-stone-950);
+}
+
+[data-tone="neutral"] {
+  --tone-50: var(--color-neutral-50);
+  --tone-100: var(--color-neutral-100);
+  --tone-200: var(--color-neutral-200);
+  --tone-300: var(--color-neutral-300);
+  --tone-400: var(--color-neutral-400);
+  --tone-500: var(--color-neutral-500);
+  --tone-600: var(--color-neutral-600);
+  --tone-700: var(--color-neutral-700);
+  --tone-800: var(--color-neutral-800);
+  --tone-900: var(--color-neutral-900);
+  --tone-950: var(--color-neutral-950);
+}
+
+[data-tone="rose"] {
+  --tone-50: var(--color-rose-50);
+  --tone-100: var(--color-rose-100);
+  --tone-200: var(--color-rose-200);
+  --tone-300: var(--color-rose-300);
+  --tone-400: var(--color-rose-400);
+  --tone-500: var(--color-rose-500);
+  --tone-600: var(--color-rose-600);
+  --tone-700: var(--color-rose-700);
+  --tone-800: var(--color-rose-800);
+  --tone-900: var(--color-rose-900);
+  --tone-950: var(--color-rose-950);
 }
 
 @import "./fonts.css";

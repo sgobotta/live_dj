@@ -13,11 +13,11 @@
   }
 
   input[type="range"] {
-    @apply !text-zinc-600 !rounded-full;
+    @apply !text-tone-600 !rounded-full;
 
     --thumb-height: 0.675em;
     --track-height: 0.125em;
-    --track-color: theme('colors.zinc.500');
+    --track-color: var(--color-tone-500);
     --brightness-hover: 110%;
     --brightness-down: 90%;
     --clip-edges: 0.125em;
@@ -27,13 +27,13 @@
   }
 
   .dark input[type="range"] {
-    @apply !text-zinc-100;
-    --track-color: theme('colors.zinc.700');
+    @apply !text-tone-100;
+    --track-color: var(--color-tone-700);
   }
 
   .dark input[type="range"]:hover {
     @apply !text-green-500;
-    --track-color: theme('colors.zinc.700');
+    --track-color: var(--color-tone-700);
   }
 
   /* === range commons === */
@@ -66,7 +66,7 @@
   }
 
   input[type="range"]::-webkit-slider-thumb {
-    @apply rounded-full bg-zinc-600;
+    @apply rounded-full bg-tone-600;
     --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
     --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
     --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
@@ -94,7 +94,7 @@
   }
 
   .dark input[type="range"]::-webkit-slider-thumb {
-    @apply bg-zinc-200;
+    @apply bg-tone-200;
   }
 
   .dark input[type="range"]:hover::-webkit-slider-thumb {
@@ -105,13 +105,13 @@
 
   input[type="range"]::-webkit-slider-runnable-track {
     @apply rounded-full;
-    background: linear-gradient(theme('colors.zinc.400') 0 0) scroll no-repeat center /
+    background: linear-gradient(var(--color-tone-400) 0 0) scroll no-repeat center /
       100% calc(var(--track-height) + 2px);
   }
  
   .dark input[type="range"]::-webkit-slider-runnable-track {
     @apply rounded-full;
-    background: linear-gradient(theme('colors.zinc.700') 0 0) scroll no-repeat center /
+    background: linear-gradient(var(--color-tone-700) 0 0) scroll no-repeat center /
       100% calc(var(--track-height) + 2px);
   }
 

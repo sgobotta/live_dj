@@ -9,8 +9,8 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
     <div class="
       inline-flex
       md:w-28 w-6
-      fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
-      dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
+      fill-tone-700 hover:fill-tone-900 focus:fill-tone-700 active:fill-tone-700
+      dark:fill-tone-300 dark:hover:fill-tone-50 dark:focus:fill-tone-300 dark:active:fill-tone-300
     ">
       <div class="relative group">
         <.button
@@ -45,7 +45,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
         >
           <.input
             field={f[:volume]}
-            class="seek-bar w-full !m-0 shadow-none !bg-transparent focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50"
+            class="seek-bar w-full !m-0 shadow-none !bg-transparent focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
             id="volume-slider"
             value={if @muted?, do: 0, else: @level}
             type="range"
@@ -100,7 +100,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
 
   defp volume_button_class(muted?) do
     [
-      "focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:dark:ring-zinc-50",
+      "focus-visible:ring-2 focus-visible:ring-tone-900 focus-visible:dark:ring-tone-50",
       "rounded-md",
       "cursor-pointer w-6 h-6 !p-0 flex flex-wrap justify-center content-center",
       "align-middle transition-all duration-300 group",
@@ -108,8 +108,8 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
       "active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]",
       "dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]",
       "dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]",
-      "hover:bg-zinc-300 dark:hover:bg-zinc-700",
-      "active:bg-zinc-200 dark:active:bg-zinc-800",
+      "hover:bg-tone-300 dark:hover:bg-tone-700",
+      "active:bg-tone-200 dark:active:bg-tone-800",
       "active:text-green-500 dark:active:text-green-500",
       muted_state_class(muted?)
     ]
@@ -119,7 +119,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
   defp muted_state_class(true) do
     """
     fill-red-500
-    bg-zinc-200 dark:bg-zinc-800
+    bg-tone-200 dark:bg-tone-800
     text-green-500 dark:text-green-500
     shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
     dark:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
@@ -128,9 +128,9 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
 
   defp muted_state_class(_muted?) do
     """
-    fill-zinc-900 dark:fill-zinc-50
-    bg-zinc-300 dark:bg-zinc-700
-    text-zinc-900 dark:text-zinc-100
+    fill-tone-900 dark:fill-tone-50
+    bg-tone-300 dark:bg-tone-700
+    text-tone-900 dark:text-tone-100
     shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
     dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
     """

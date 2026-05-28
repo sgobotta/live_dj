@@ -25,8 +25,8 @@ defmodule LivedjWeb.CustomComponents do
     <div class={[
       "absolute hidden group-hover:block",
       "whitespace-nowrap rounded-md px-2 py-1",
-      "bg-zinc-800 dark:bg-zinc-200",
-      "text-xs text-zinc-100 dark:text-zinc-900",
+      "bg-tone-800 dark:bg-tone-200",
+      "text-xs text-tone-100 dark:text-tone-900",
       "shadow-md pointer-events-none",
       tooltip_position_class(@position),
       @class
@@ -47,13 +47,13 @@ defmodule LivedjWeb.CustomComponents do
   def toggle_theme_button(assigns) do
     ~H"""
     <div
-      class="flex items-center gap-4 font-semibold leading-6 text-zinc-900"
+      class="flex items-center gap-4 font-semibold leading-6 text-tone-900"
       phx-hook="Theme"
       id="theme-hook"
     >
       <div class="relative group">
         <a
-          class="hover:text-zinc-700 cursor-pointer h-5 w-5 leading-3"
+          class="hover:text-tone-700 cursor-pointer h-5 w-5 leading-3"
           href="#"
           phx-key=";"
           phx-window-keydown={JS.dispatch("toggle-theme")}
@@ -118,7 +118,7 @@ defmodule LivedjWeb.CustomComponents do
   end
 
   @avatar_colors [
-    "bg-zinc-500",
+    "bg-tone-500",
     "bg-green-600",
     "bg-blue-600",
     "bg-amber-600",
@@ -154,7 +154,7 @@ defmodule LivedjWeb.CustomComponents do
       <% else %>
         <span class={[
           "flex h-7 w-7 items-center justify-center rounded-full",
-          "text-xs font-semibold uppercase text-zinc-100 dark:text-zinc-900",
+          "text-xs font-semibold uppercase text-tone-100 dark:text-tone-900",
           @color
         ]}>
           {@initials}
@@ -164,8 +164,8 @@ defmodule LivedjWeb.CustomComponents do
         absolute right-0 top-full mt-1.5 z-50
         hidden group-hover:block
         whitespace-nowrap rounded-md px-2 py-1
-        bg-zinc-800 dark:bg-zinc-200
-        text-xs text-zinc-100 dark:text-zinc-900
+        bg-tone-800 dark:bg-tone-200
+        text-xs text-tone-100 dark:text-tone-900
         shadow-md
       ">
         {@label}
@@ -233,8 +233,8 @@ defmodule LivedjWeb.CustomComponents do
           group
           h-52 w-40 rounded-lg
           transition duration-300
-          bg-zinc-50 hover:brightness-90 border-[1px] border-zinc-200 dark:border-0
-          dark:bg-zinc-800 dark:hover:bg-zinc-800 dark:hover:brightness-110
+          bg-tone-50 hover:brightness-90 border-[1px] border-tone-200 dark:border-0
+          dark:bg-tone-800 dark:hover:bg-tone-800 dark:hover:brightness-110
         "
       >
         <.link
@@ -243,7 +243,7 @@ defmodule LivedjWeb.CustomComponents do
           class={["relative p-0", @module_click && "hover:cursor-pointer"]}
           tabindex="0"
         >
-          <div class="relative leading-6 text-zinc-900 hover:text-zinc-700">
+          <div class="relative leading-6 text-tone-900 hover:text-tone-700">
             {render_slot(@inner_block, module)}
           </div>
         </.link>

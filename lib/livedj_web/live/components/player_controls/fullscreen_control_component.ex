@@ -19,8 +19,8 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
           "icons/misc",
           class: "
               h-5 w-5 stroke-2 cursor-pointer
-              fill-zinc-700 hover:fill-zinc-900 focus:fill-zinc-700 active:fill-zinc-700
-              dark:fill-zinc-300 dark:hover:fill-zinc-50 dark:focus:fill-zinc-300 dark:active:fill-zinc-300
+              fill-tone-700 hover:fill-tone-900 focus:fill-tone-700 active:fill-tone-700
+              dark:fill-tone-300 dark:hover:fill-tone-50 dark:focus:fill-tone-300 dark:active:fill-tone-300
               scale-100 hover:scale-[1.1] focus:scale-100 active:scale-100
             "
         )}

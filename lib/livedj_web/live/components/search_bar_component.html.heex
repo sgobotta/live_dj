@@ -20,7 +20,7 @@
           viewBox="0 0 20 20"
           fill="none"
           aria-hidden="true"
-          class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-zinc-600"
+          class="pointer-events-none absolute left-3 top-0 h-full w-5 stroke-tone-600"
         >
           <path
             stroke-linecap="round"
@@ -38,12 +38,12 @@
           class="
             w-full !m-0
             flex-auto rounded-md appearance-none bg-transparent pl-10 pr-28
-            !bg-zinc-300 dark:!bg-zinc-800
-            !text-zinc-800 dark:!text-zinc-200
-            placeholder:text-zinc-500 dark:placeholder:text-zinc-400
+            !bg-tone-300 dark:!bg-tone-800
+            !text-tone-800 dark:!text-tone-200
+            placeholder:text-tone-500 dark:placeholder:text-tone-400
             outline-none focus:outline-none
-            !border-zinc-300 focus:!border-zinc-400
-            dark:!border-zinc-700 dark:focus:!border-zinc-600
+            !border-tone-300 focus:!border-tone-400
+            dark:!border-tone-700 dark:focus:!border-tone-600
             focus:ring-0
             focus:tracking-widest
             transition-all duration-500
@@ -92,7 +92,7 @@
           divide-y pr-3
           overflow-y-scroll
           rounded-b-lg
-          border-t-0 border-zinc-200 text-sm leading-6
+          border-t-0 border-tone-200 text-sm leading-6
           max-h-[32rem] md:max-h-[16rem] peer-focus-within:max-h-[16rem]
           transition-[max-height] duration-300
           bg-none
@@ -111,12 +111,12 @@
             rounded-md hover:rounded-lg
             first:mt-0 last:mb-0
             transition-all duration-300
-            text-zinc-700 dark:text-zinc-300
+            text-tone-700 dark:text-tone-300
             #{if item.external_id in @playlist_external_ids,
-              do: "bg-zinc-50 dark:bg-zinc-700 opacity-50",
+              do: "bg-tone-50 dark:bg-tone-700 opacity-50",
               else: "
-              bg-zinc-300 dark:bg-zinc-800
-              hover:bg-zinc-200 dark:hover:bg-zinc-700
+              bg-tone-300 dark:bg-tone-800
+              hover:bg-tone-200 dark:hover:bg-tone-700
               hover:tracking-widest focus:tracking-widest
               active:scale-[0.99] grayscale-[70%] hover:grayscale-0
               shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
@@ -127,7 +127,7 @@
               dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
               "
             }
-            border-zinc-200 dark:border-zinc-700 border-[0px]
+            border-tone-200 dark:border-tone-700 border-[0px]
           "}
         >
           <div class="
@@ -149,8 +149,8 @@
                 rounded-lg h-4 w-4
                 flex justify-center items-center
                 text-center text-[0.5rem]
-                text-zinc-200 dark:text-zinc-700
-                bg-zinc-800 dark:bg-zinc-300
+                text-tone-200 dark:text-tone-700
+                bg-tone-800 dark:bg-tone-300
               ">
                 {index + 1}
               </p>
@@ -181,12 +181,12 @@
                 flex items-center justify-center
                 transition duration-300
                 w-8 h-8 
-                bg-zinc-400/40 dark:bg-zinc-700
-                hover:bg-zinc-200 hover:dark:bg-zinc-800
-                group-hover:bg-zinc-200 group-hover:dark:bg-zinc-800
+                bg-tone-400/40 dark:bg-tone-700
+                hover:bg-tone-200 hover:dark:bg-tone-800
+                group-hover:bg-tone-200 group-hover:dark:bg-tone-800
                 cursor-pointer
                 outline-black
-                text-zinc-700 dark:text-zinc-300
+                text-tone-700 dark:text-tone-300
                 hover:text-green-500 dark:hover:text-green-500 hover:scale-110
                 focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100
                 active:scale-[0.95] active:text-green-300 dark:active:text-green-700
