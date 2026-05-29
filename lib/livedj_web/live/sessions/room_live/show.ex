@@ -155,6 +155,49 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, socket}
   end
 
+  @out_of_sync_threshold_seconds 5
+
+  def handle_event(
+        "seek_committed",
+        %{"committed_time" => committed_time},
+        socket
+      ) do
+    room_id = socket.assigns.room.id
+
+    case Sessions.get_player(room_id) do
+      {:ok, %Sessions.Player{state: state, current_time: room_time}}
+      when state in [:playing, :paused] ->
+        delta = abs(trunc(room_time) - trunc(committed_time))
+
+        if delta > @out_of_sync_threshold_seconds do
+          direction =
+            if committed_time > room_time, do: "ahead", else: "behind"
+
+          {:noreply,
+           push_event(socket, "player_out_of_sync", %{
+             delta: delta,
+             direction: direction
+           })}
+        else
+          {:noreply, socket}
+        end
+
+      _other ->
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("on_player_resync", _params, socket) do
+    case Sessions.get_player(socket.assigns.room.id) do
+      {:ok, %Sessions.Player{current_time: room_time}} ->
+        {:noreply,
+         push_event(socket, "set_current_time", %{current_time: room_time})}
+
+      _error ->
+        {:noreply, socket}
+    end
+  end
+
   # ----------------------------------------------------------------------------
   # Server side Playlist event handling
   #

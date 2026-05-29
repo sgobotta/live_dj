@@ -51,9 +51,15 @@ const udpateTimeDisplays = (
 }
 
 export default {
+  _isPeeking: false,
   backdrop_id: null,
   destroyed() {
     window.removeEventListener('resize', this._onResize)
+    document.removeEventListener('mousedown', this._onSliderMousedown)
+    document.removeEventListener('touchstart', this._onSliderTouchstart)
+    document.removeEventListener('input', this._onSliderInput)
+    document.removeEventListener('change', this._onSliderCommit)
+    document.removeEventListener('mouseup', this._onDocMouseup)
   },
   endTimeTrackerId: null,
   handleCallbackEvent: async (callbackEvent, args = {}) => {
@@ -65,6 +71,38 @@ export default {
     this.positionPlayer()
     this._onResize = () => this.positionPlayer()
     window.addEventListener('resize', this._onResize)
+
+    this._onSliderMousedown = (e) => {
+      if (e.target.id === this.timeSliderId) this._isPeeking = true
+    }
+    this._onSliderTouchstart = (e) => {
+      if (e.target.id === this.timeSliderId) this._isPeeking = true
+    }
+    this._onSliderInput = (e) => {
+      if (e.target.id !== this.timeSliderId || !this.player) return
+      const peekTime = parseFloat(e.target.value)
+      this.player.seekTo(peekTime, false)
+      const startElem = document.getElementById(this.startTimeTrackerId)
+      if (startElem) updateTimeDisplay(startElem, peekTime)
+    }
+    this._onSliderCommit = async (e) => {
+      if (e.target.id !== this.timeSliderId) return
+      this._isPeeking = false
+      if (!this.player) return
+      const committedTime = parseFloat(e.target.value)
+      this.player.seekTo(committedTime, true)
+      await this.pushEventTo(this.el, 'seek_committed', {
+        committed_time: committedTime
+      })
+    }
+    this._onDocMouseup = () => { this._isPeeking = false }
+
+    document.addEventListener('mousedown', this._onSliderMousedown)
+    document.addEventListener('touchstart', this._onSliderTouchstart,
+      { passive: true })
+    document.addEventListener('input', this._onSliderInput)
+    document.addEventListener('change', this._onSliderCommit)
+    document.addEventListener('mouseup', this._onDocMouseup)
 
     /**
      * on_container_mounted
@@ -141,12 +179,14 @@ export default {
 
             await this.pushEventTo(this.el, 'on_player_playing')
             const trackTimeInterval = setInterval(() => {
-              udpateTimeDisplays(
-                startTimeTrackerElem,
-                endTimeTrackerElem,
-                timeSliderElem,
-                event.target
-              )
+              if (!hookContext._isPeeking) {
+                udpateTimeDisplays(
+                  startTimeTrackerElem,
+                  endTimeTrackerElem,
+                  timeSliderElem,
+                  event.target
+                )
+              }
             }, 1000)
             hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
             
