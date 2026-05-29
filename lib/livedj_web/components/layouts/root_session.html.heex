@@ -40,6 +40,34 @@
           class="hidden absolute inset-0 w-full h-full rounded-lg"
         />
       </div>
+      <%!-- Out-of-sync notification banner --%>
+      <div
+        id="out-of-sync-banner"
+        class="absolute bottom-2 left-0 right-0 mx-2 hidden z-20"
+      >
+        <div class="
+          flex items-center justify-between gap-2
+          bg-amber-900/90 text-amber-100
+          rounded-lg px-3 py-2 text-sm shadow-lg
+        ">
+          <span id="out-of-sync-message"></span>
+          <div class="flex items-center gap-2 shrink-0">
+            <button
+              id="resync-btn"
+              class="font-semibold underline underline-offset-2 hover:text-white"
+            >
+              Resync
+            </button>
+            <button
+              id="out-of-sync-dismiss"
+              class="text-lg leading-none opacity-70 hover:opacity-100"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
