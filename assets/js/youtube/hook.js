@@ -68,6 +68,10 @@ export default {
     document.removeEventListener('input', this._onSliderInput)
     document.removeEventListener('change', this._onSliderCommit)
     document.removeEventListener('mouseup', this._onDocMouseup)
+    document.getElementById('resync-btn')
+      ?.removeEventListener('click', this._onResyncClick)
+    document.getElementById('out-of-sync-dismiss')
+      ?.removeEventListener('click', this._onDismissClick)
   },
   endTimeTrackerId: null,
   handleCallbackEvent: async (callbackEvent, args = {}) => {
@@ -79,6 +83,18 @@ export default {
     this.positionPlayer()
     this._onResize = () => this.positionPlayer()
     window.addEventListener('resize', this._onResize)
+
+    this._onResyncClick = async () => {
+      await this.pushEventTo(this.el, 'on_player_resync')
+    }
+    this._onDismissClick = () => {
+      this._hideOutOfSyncBanner()
+    }
+
+    document.getElementById('resync-btn')
+      ?.addEventListener('click', this._onResyncClick)
+    document.getElementById('out-of-sync-dismiss')
+      ?.addEventListener('click', this._onDismissClick)
 
     this._onSliderMousedown = (e) => {
       if (e.target.id === this.timeSliderId) this._isPeeking = true
