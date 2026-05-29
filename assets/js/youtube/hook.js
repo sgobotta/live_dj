@@ -51,7 +51,15 @@ const udpateTimeDisplays = (
 }
 
 export default {
+  _hideOutOfSyncBanner() {
+    const banner = document.getElementById('out-of-sync-banner')
+    if (banner) banner.classList.add('hidden')
+  },
   _isPeeking: false,
+  _showOutOfSyncBanner() {
+    const banner = document.getElementById('out-of-sync-banner')
+    if (banner) banner.classList.remove('hidden')
+  },
   backdrop_id: null,
   destroyed() {
     window.removeEventListener('resize', this._onResize)
@@ -276,6 +284,7 @@ export default {
     }) => {
       console.debug('[Player :: set_current_time]')
       this.player.seekTo(currentTime, true)
+      this._hideOutOfSyncBanner()
     })
 
     /**
@@ -326,6 +335,7 @@ export default {
      * Received when the player should load a video
      */
     this.handleEvent('load_video', async (player) => {
+      this._hideOutOfSyncBanner()
       console.debug('[Player :: load_video]', player)
       console.debug('[Player :: load_video state]', player.state)
       switch (player.state) {
@@ -427,6 +437,21 @@ export default {
       if (requestFullScreen) {
         requestFullScreen.bind(videoIframe)();
       }
+    })
+
+    /**
+     * player_out_of_sync
+     *
+     * Received when the user's committed seek differs from the room's
+     * position by more than the server threshold.
+     */
+    this.handleEvent('player_out_of_sync', ({ delta, direction }) => {
+      const dir = direction === 'ahead' ? 'ahead of' : 'behind'
+      const message = document.getElementById('out-of-sync-message')
+      if (message) {
+        message.textContent = `You're ${delta}s ${dir} the room.`
+      }
+      this._showOutOfSyncBanner()
     })
   },
   player: null,
