@@ -47,20 +47,20 @@
       >
         <div class="
           flex items-center justify-between gap-2
-          bg-amber-900/90 text-amber-100
+          bg-red-300/90 text-red-100
           rounded-lg px-3 py-2 text-sm shadow-lg
         ">
           <span id="out-of-sync-message"></span>
           <div class="flex items-center gap-2 shrink-0">
             <button
               id="resync-btn"
-              class="font-semibold underline underline-offset-2 hover:text-white"
+              class="font-semibold underline underline-offset-2 hover:text-white cursor-pointer"
             >
-              Resync
+              {gettext("Resync")}
             </button>
             <button
               id="out-of-sync-dismiss"
-              class="text-lg leading-none opacity-70 hover:opacity-100"
+              class="text-lg leading-none opacity-70 hover:opacity-100 cursor-pointer"
               aria-label="Dismiss"
             >
               ×

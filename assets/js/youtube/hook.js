@@ -461,11 +461,10 @@ export default {
      * Received when the user's committed seek differs from the room's
      * position by more than the server threshold.
      */
-    this.handleEvent('player_out_of_sync', ({ delta, direction }) => {
-      const dir = direction === 'ahead' ? 'ahead of' : 'behind'
+    this.handleEvent('player_out_of_sync', ({ message: _message }) => {
       const message = document.getElementById('out-of-sync-message')
       if (message) {
-        message.textContent = `You're ${delta}s ${dir} the room.`
+        message.textContent = _message
       }
       this._showOutOfSyncBanner()
     })

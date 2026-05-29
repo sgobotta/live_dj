@@ -170,14 +170,15 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         delta = abs(trunc(room_time) - trunc(committed_time))
 
         if delta > @out_of_sync_threshold_seconds do
-          direction =
-            if committed_time > room_time, do: "ahead", else: "behind"
+          message =
+            if committed_time > room_time do
+              gettext("You're %{delta}s ahead of the room.", delta: delta)
+            else
+              gettext("You're %{delta}s behind the room.", delta: delta)
+            end
 
           {:noreply,
-           push_event(socket, "player_out_of_sync", %{
-             delta: delta,
-             direction: direction
-           })}
+           push_event(socket, "player_out_of_sync", %{message: message})}
         else
           {:noreply, socket}
         end

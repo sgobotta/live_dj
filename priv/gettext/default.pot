@@ -453,3 +453,18 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "Space"
 msgstr ""
+
+#: lib/livedj_web/components/layouts/root_session.html.heex:59
+#, elixir-autogen, elixir-format
+msgid "Resync"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:175
+#, elixir-autogen, elixir-format
+msgid "You're %{delta}s ahead of the room."
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:177
+#, elixir-autogen, elixir-format
+msgid "You're %{delta}s behind the room."
+msgstr ""
