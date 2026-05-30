@@ -1,5 +1,5 @@
 defmodule Livedj.Sessions.Chat.MessageTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Livedj.Sessions.Chat.Message
 
