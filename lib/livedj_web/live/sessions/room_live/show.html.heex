@@ -52,7 +52,7 @@
           <% end %>
         </div>
 
-        <div class="border-t border-dashed border-tone-300 dark:border-tone-600 px-2 py-1">
+        <div class="border-t border-dashed border-tone-300 dark:border-tone-600 px-1 py-1 mt-1">
           <.form
             for={@chat_form}
             phx-submit="send_chat_message"
@@ -70,6 +70,8 @@
                 flex-1 bg-transparent text-sm text-tone-900 dark:text-tone-100
                 placeholder:text-tone-400 dark:placeholder:text-tone-500
                 focus:outline-none
+                ring-0 focus:border-b-1 focus:border-tone-400 focus:dark:border-tone-500
+                transition-border duration-100
               "
             />
             <button
