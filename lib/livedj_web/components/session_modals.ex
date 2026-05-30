@@ -126,7 +126,7 @@ defmodule LivedjWeb.SessionModals do
           <.help_row key="S" label={gettext("Share room URL")} />
           <.help_row key="A" label={gettext("Search and add tracks")} />
           <.help_row key="C" label={gettext("Toggle chat")} />
-          <.help_row key="Y" label={gettext("Focus chat input")} />
+          <.help_row key="Y" label={gettext("Focus chat")} />
           <.help_row key="T" label={gettext("Toggle theme")} />
           <.help_row key="M" label={gettext("Mute / Unmute player")} />
           <.help_row key={gettext("Space")} label={gettext("Play / Pause")} />
