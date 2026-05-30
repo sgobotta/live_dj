@@ -67,7 +67,9 @@ runs:
       shell: bash
       run: |
         mix_hash="${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}"
+        config_hash="${{ hashFiles(format('{0}{1}', github.workspace, '/config/config.exs')) }}"
         echo "::set-output name=mix_hash::$mix_hash"
+        echo "::set-output name=config_hash::$config_hash"
 
     # Restores PLT cache -------------------------------------------------------
     - name: Cache files
@@ -77,7 +79,7 @@ runs:
         path: |
           deps
           _build
-        key: ${{ runner.os }}-test-mix-${{ steps.set_vars.outputs.mix_hash }}
+        key: ${{ runner.os }}-test-mix-${{ steps.set_vars.outputs.mix_hash }}-${{ steps.set_vars.outputs.config_hash }}
         restore-keys: |
           ${{ runner.os }}-test-mix-
 
@@ -106,6 +108,7 @@ runs:
       shell: bash
       run: |
         mix assets.install
+        mix tailwind.install
         mix assets.deploy
 
     # Run tests ----------------------------------------------------------------
