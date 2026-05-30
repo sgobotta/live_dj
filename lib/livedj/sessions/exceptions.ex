@@ -10,6 +10,11 @@ defmodule Livedj.Sessions.Exceptions do
     use Livedj.Exception
   end
 
+  defmodule ChatServerError do
+    @moduledoc false
+    use Livedj.Exception
+  end
+
   defmodule SessionRoomError do
     @moduledoc false
     use Livedj.Exception
