@@ -45,19 +45,17 @@ defmodule Livedj.Sessions.Chat.Commands.DispatcherTest do
   end
 
   describe "dispatch/4 — unknown command" do
-    test "sends a :system message with error text", %{
+    test "returns a local :system message instead of broadcasting", %{
       room_id: room_id,
       user_id: user_id
     } do
       :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room_id}")
 
-      :ok = Dispatcher.dispatch(room_id, user_id, "Alice", "/bogus")
+      assert {:local,
+              %Message{type: :system, content: "Unknown command: /bogus"}} =
+               Dispatcher.dispatch(room_id, user_id, "Alice", "/bogus")
 
-      assert_receive {:message_sent, ^room_id,
-                      %Message{
-                        type: :system,
-                        content: "Unknown command: /bogus"
-                      }}
+      refute_receive {:message_sent, _, _}
     end
   end
 end

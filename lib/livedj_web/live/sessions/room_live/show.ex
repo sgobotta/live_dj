@@ -116,13 +116,19 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       user_id = to_string(user.id)
       display_name = user.username || to_string(user.id)
 
-      :ok =
-        ChatDispatcher.dispatch(
-          socket.assigns.room.id,
-          user_id,
-          display_name,
-          content
-        )
+      socket =
+        case ChatDispatcher.dispatch(
+               socket.assigns.room.id,
+               user_id,
+               display_name,
+               content
+             ) do
+          :ok ->
+            socket
+
+          {:local, message} ->
+            update(socket, :messages, &Enum.take([message | &1], 200))
+        end
 
       {:noreply, assign(socket, :chat_form, to_form(%{"content" => ""}))}
     end

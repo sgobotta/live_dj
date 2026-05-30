@@ -2,16 +2,16 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
   @moduledoc """
   Routes parsed chat commands to the appropriate server.
 
-  All paths go through `Parser.parse/1` first. Plain text and reactions go to
-  `Sessions.chat_send_message/5`. Room-control commands (`/skip`, `/queue`)
-  go to the relevant Sessions functions. `/name` updates the ChatServer's
-  cached display names. `/msg` delivers to a remote room's ChatServer.
+  Returns `:ok` when the message was broadcast to all peers, or
+  `{:local, message}` when the feedback is only for the sender (e.g. errors).
   """
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.{Chat.Commands.Parser, ChatSupervisor}
+  alias Livedj.Sessions.{Chat.Commands.Parser, Chat.Message, ChatSupervisor}
 
-  @spec dispatch(binary(), binary(), binary(), binary()) :: :ok
+  @type result :: :ok | {:local, Message.t()}
+
+  @spec dispatch(binary(), binary(), binary(), binary()) :: result()
   def dispatch(room_id, user_id, display_name, raw_input) do
     case Parser.parse(raw_input) do
       {:ok, {:text, content}} ->
@@ -55,13 +55,14 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
             )
 
           {:error, {_severity, reason}} ->
-            Sessions.chat_send_message(
-              room_id,
-              user_id,
-              display_name,
-              :system,
-              "Could not queue: #{reason}"
-            )
+            {:local,
+             Message.new(
+               room_id,
+               user_id,
+               display_name,
+               :system,
+               "Could not queue: #{reason}"
+             )}
         end
 
       {:ok, {:name, new_name}} ->
@@ -70,13 +71,14 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
       {:ok, {:msg, target_room_id, content}} ->
         case ChatSupervisor.get_child(target_room_id) do
           nil ->
-            Sessions.chat_send_message(
-              room_id,
-              user_id,
-              display_name,
-              :system,
-              "Room not found: #{target_room_id}"
-            )
+            {:local,
+             Message.new(
+               room_id,
+               user_id,
+               display_name,
+               :system,
+               "Room not found: #{target_room_id}"
+             )}
 
           _child ->
             Sessions.chat_send_message(
@@ -89,13 +91,14 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
         end
 
       {:error, {:unknown_command, cmd}} ->
-        Sessions.chat_send_message(
-          room_id,
-          user_id,
-          display_name,
-          :system,
-          "Unknown command: /#{cmd}"
-        )
+        {:local,
+         Message.new(
+           room_id,
+           user_id,
+           display_name,
+           :system,
+           "Unknown command: /#{cmd}"
+         )}
     end
   end
 end
