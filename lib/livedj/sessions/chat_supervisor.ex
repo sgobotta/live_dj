@@ -45,7 +45,8 @@ defmodule Livedj.Sessions.ChatSupervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  @spec start_child(module(), keyword()) :: {:ok, pid()}
+  @spec start_child(module(), keyword()) ::
+          {:ok, pid()} | {:error, {:already_started, pid()}}
   def start_child(supervisor \\ __MODULE__, args) do
     id = Keyword.fetch!(args, :id)
 
