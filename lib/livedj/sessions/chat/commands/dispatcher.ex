@@ -33,62 +33,16 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
         )
 
       {:ok, {:skip, _}} ->
-        Sessions.next_track(room_id)
-
-        Sessions.chat_send_message(
-          room_id,
-          user_id,
-          display_name,
-          :command_result,
-          "Skipped to next track."
-        )
+        do_skip(room_id, user_id, display_name)
 
       {:ok, {:queue, url}} ->
-        case Sessions.add_media(room_id, Media.video_id_from_url(url)) do
-          {:ok, {:added, media}} ->
-            Sessions.chat_send_message(
-              room_id,
-              user_id,
-              display_name,
-              :command_result,
-              "Queued: #{media.title}"
-            )
-
-          {:error, {_severity, reason}} ->
-            {:local,
-             Message.new(
-               room_id,
-               user_id,
-               display_name,
-               :system,
-               "Could not queue: #{reason}"
-             )}
-        end
+        do_queue(room_id, user_id, display_name, url)
 
       {:ok, {:name, new_name}} ->
         Sessions.chat_update_display_name(room_id, user_id, new_name)
 
       {:ok, {:msg, target_room_id, content}} ->
-        case ChatSupervisor.get_child(target_room_id) do
-          nil ->
-            {:local,
-             Message.new(
-               room_id,
-               user_id,
-               display_name,
-               :system,
-               "Room not found: #{target_room_id}"
-             )}
-
-          _child ->
-            Sessions.chat_send_message(
-              target_room_id,
-              user_id,
-              display_name,
-              :text,
-              content
-            )
-        end
+        do_msg(room_id, user_id, display_name, target_room_id, content)
 
       {:error, {:unknown_command, cmd}} ->
         {:local,
@@ -99,6 +53,65 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
            :system,
            "Unknown command: /#{cmd}"
          )}
+    end
+  end
+
+  defp do_skip(room_id, user_id, display_name) do
+    Sessions.next_track(room_id)
+
+    Sessions.chat_send_message(
+      room_id,
+      user_id,
+      display_name,
+      :command_result,
+      "Skipped to next track."
+    )
+  end
+
+  defp do_queue(room_id, user_id, display_name, url) do
+    case Sessions.add_media(room_id, Media.video_id_from_url(url)) do
+      {:ok, {:added, media}} ->
+        {:local,
+         Message.new(
+           room_id,
+           user_id,
+           display_name,
+           :command_result,
+           "Queued: #{media.title}"
+         )}
+
+      {:error, {_severity, reason}} ->
+        {:local,
+         Message.new(
+           room_id,
+           user_id,
+           display_name,
+           :system,
+           "Could not queue: #{reason}"
+         )}
+    end
+  end
+
+  defp do_msg(room_id, user_id, display_name, target_room_id, content) do
+    case ChatSupervisor.get_child(target_room_id) do
+      nil ->
+        {:local,
+         Message.new(
+           room_id,
+           user_id,
+           display_name,
+           :system,
+           "Room not found: #{target_room_id}"
+         )}
+
+      _child ->
+        Sessions.chat_send_message(
+          target_room_id,
+          user_id,
+          display_name,
+          :text,
+          content
+        )
     end
   end
 end
