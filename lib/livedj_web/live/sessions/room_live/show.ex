@@ -124,7 +124,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
           content
         )
 
-      {:noreply, assign(socket, :chat_form, to_form(%{}))}
+      {:noreply, assign(socket, :chat_form, to_form(%{"content" => ""}))}
     end
   end
 

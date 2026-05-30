@@ -61,7 +61,7 @@
             <input
               type="text"
               name="content"
-              value=""
+              value={@chat_form.params["content"] || ""}
               placeholder={gettext("Type a message...")}
               autocomplete="off"
               class="
