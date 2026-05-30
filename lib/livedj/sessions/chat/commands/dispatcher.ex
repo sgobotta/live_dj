@@ -6,7 +6,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
   `{:local, message}` when the feedback is only for the sender (e.g. errors).
   """
 
-  alias Livedj.Sessions
+  alias Livedj.{Media, Sessions}
   alias Livedj.Sessions.{Chat.Commands.Parser, Chat.Message, ChatSupervisor}
 
   @type result :: :ok | {:local, Message.t()}
@@ -44,7 +44,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
         )
 
       {:ok, {:queue, url}} ->
-        case Sessions.add_media(room_id, url) do
+        case Sessions.add_media(room_id, Media.video_id_from_url(url)) do
           {:ok, {:added, media}} ->
             Sessions.chat_send_message(
               room_id,

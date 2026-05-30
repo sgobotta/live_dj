@@ -3,6 +3,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
 
   use LivedjWeb, :live_component
 
+  alias Livedj.Media
   alias Livedj.Media.Video
   alias Livedj.Sessions
   alias Livedj.Sessions.Channels
@@ -143,12 +144,12 @@ defmodule LivedjWeb.Components.SearchBarComponent do
 
   def handle_event("submit", %{"search" => %{"query" => search_query}}, socket) do
     if query_present?(search_query) do
-      case validate_url(search_query) do
-        {:ok, media_id} ->
-          add_media(socket, media_id)
+      media_id = Media.video_id_from_url(search_query)
 
-        {:error, :invalid_url} ->
-          search_media(socket, search_query)
+      if media_id != search_query do
+        add_media(socket, media_id)
+      else
+        search_media(socket, search_query)
       end
     else
       {:noreply, socket}
@@ -187,16 +188,6 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   defp empty_search_form, do: search_form("")
 
   defp search_form(query), do: to_form(%{"query" => query}, as: :search)
-
-  defp validate_url(url) do
-    case URI.parse(url) do
-      %URI{query: query} when not is_nil(query) ->
-        {:ok, String.replace(query, "v=", "")}
-
-      _uri ->
-        {:error, :invalid_url}
-    end
-  end
 
   defp add_media(socket, media_id) do
     case Sessions.add_media(socket.assigns.room.id, media_id) do

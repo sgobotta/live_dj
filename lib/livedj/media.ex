@@ -199,4 +199,22 @@ defmodule Livedj.Media do
   def change_video(%Video{} = video, attrs \\ %{}) do
     Video.changeset(video, attrs)
   end
+
+  @doc """
+  Extracts a YouTube video ID from a URL or returns the input unchanged if it
+  is already a bare ID.
+  """
+  @spec video_id_from_url(binary()) :: binary()
+  def video_id_from_url(input) do
+    case URI.parse(input) do
+      %URI{query: query} when not is_nil(query) ->
+        case URI.decode_query(query) do
+          %{"v" => video_id} -> video_id
+          _ -> input
+        end
+
+      _uri ->
+        input
+    end
+  end
 end

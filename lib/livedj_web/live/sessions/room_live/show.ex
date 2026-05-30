@@ -104,6 +104,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   # Client side event handling
   #
 
+  def handle_event("update_chat_input", %{"content" => content}, socket) do
+    {:noreply, assign(socket, :chat_form, to_form(%{"content" => content}))}
+  end
+
   def handle_event("toggle_chat", _params, socket) do
     {:noreply, update(socket, :chat_visible, &(!&1))}
   end

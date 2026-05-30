@@ -56,6 +56,7 @@
           <.form
             for={@chat_form}
             phx-submit="send_chat_message"
+            phx-change="update_chat_input"
             class="flex items-center gap-2"
           >
             <input
