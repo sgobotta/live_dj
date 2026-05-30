@@ -67,18 +67,27 @@
               placeholder={gettext("Type a message...")}
               autocomplete="off"
               phx-hook="Chat"
-              class="
-                border-t-0 border-x-0 border-0
-                flex-1 bg-transparent text-sm text-tone-900 dark:text-tone-100
-                placeholder:text-tone-400 dark:placeholder:text-tone-500
-                focus:outline-none
-                ring-0 focus:border-b-1 focus:border-tone-400 focus:dark:border-tone-500
-                transition-border duration-100
-              "
+              class={[
+                "border-t-0 border-x-0 border-0 border-b",
+                "flex-1 bg-transparent text-sm text-tone-900 dark:text-tone-100",
+                "placeholder:text-tone-400 dark:placeholder:text-tone-500",
+                "focus:outline-none ring-0",
+                "transition-colors duration-100",
+                if(String.trim(@chat_form.params["content"] || "") == "",
+                  do: "border-tone-300 dark:border-tone-600",
+                  else: "border-tone-600 dark:border-tone-400"
+                )
+              ]}
             />
             <button
               type="submit"
-              class="text-xs text-tone-500 dark:text-tone-400 hover:text-tone-900 dark:hover:text-tone-100 transition-colors"
+              disabled={String.trim(@chat_form.params["content"] || "") == ""}
+              class="
+                transition-colors
+                disabled:opacity-30 disabled:cursor-not-allowed
+                text-tone-500 dark:text-tone-400
+                hover:enabled:text-tone-900 dark:hover:enabled:text-tone-100
+              "
             >
               <.icon name="hero-paper-airplane" class="h-5 w-5" />
             </button>
