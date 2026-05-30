@@ -1,4 +1,5 @@
 import AddButton from './player-controls/add-button-hook'
+import Chat from './chat/hook'
 import Clipboard from './clipboard/hook'
 import Keybindings from './keybindings/hook'
 import PlayerBackdrop from './player-backdrop/hook'
@@ -9,6 +10,7 @@ import Youtube from './youtube/hook'
 
 export default {
   AddButton,
+  Chat,
   Clipboard,
   Keybindings,
   PlayerBackdrop,

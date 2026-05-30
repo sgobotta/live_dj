@@ -60,11 +60,13 @@
             class="flex items-center gap-2"
           >
             <input
+              id="chat-input"
               type="text"
               name="content"
               value={@chat_form.params["content"] || ""}
               placeholder={gettext("Type a message...")}
               autocomplete="off"
+              phx-hook="Chat"
               class="
                 border-t-0 border-x-0 border-0
                 flex-1 bg-transparent text-sm text-tone-900 dark:text-tone-100
