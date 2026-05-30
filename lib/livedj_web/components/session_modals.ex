@@ -112,6 +112,8 @@ defmodule LivedjWeb.SessionModals do
       show
       on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
     >
+      <div phx-window-keydown="open_help_modal" phx-key="h" class="hidden" />
+      <div phx-window-keydown="open_help_modal" phx-key="?" class="hidden" />
       <.header>
         {gettext("Keyboard Shortcuts")}
         <:subtitle>
@@ -123,6 +125,7 @@ defmodule LivedjWeb.SessionModals do
         <dl class="divide-y divide-zinc-400 dark:divide-zinc-700">
           <.help_row key="S" label={gettext("Share room URL")} />
           <.help_row key="A" label={gettext("Search and add tracks")} />
+          <.help_row key="C" label={gettext("Toggle chat")} />
           <.help_row key="T" label={gettext("Toggle theme")} />
           <.help_row key="M" label={gettext("Mute / Unmute player")} />
           <.help_row key={gettext("Space")} label={gettext("Play / Pause")} />

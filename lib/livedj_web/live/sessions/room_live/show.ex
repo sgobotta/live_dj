@@ -144,8 +144,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_event("open_help_modal", _params, socket) do
-    {:noreply,
-     push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/help")}
+    if socket.assigns.live_action == :help do
+      {:noreply,
+       push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}")}
+    else
+      {:noreply,
+       push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/help")}
+    end
   end
 
   def handle_event("on_player_play", _params, socket) do
