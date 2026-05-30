@@ -6,7 +6,7 @@
 />
 
 <%= if @content_ready do %>
-  <div class="border-t-[1px] border-tone-200 dark:border-tone-800 mb-4">
+  <div class="border-t-0 mb-4">
     {live_render(
       @socket,
       LivedjWeb.Sessions.RoomLive.List,
@@ -14,5 +14,71 @@
       session: %{"id" => @room.id},
       sticky: true
     )}
+  </div>
+  <div>
+    <%= if @chat_visible do %>
+      <div
+        id="chat-container"
+        class="flex flex-col h-52 bg-transparent rounded-md overflow-hidden"
+      >
+        <div
+          id="chat-messages"
+          class="flex-1 overflow-y-auto flex flex-col-reverse gap-1 px-2 py-1"
+        >
+          <%= for msg <- @messages do %>
+            <div class={[
+              "text-sm",
+              msg.type == :system &&
+                "text-tone-400 dark:text-tone-500 italic text-center",
+              msg.type == :command_result &&
+                "text-tone-400 dark:text-tone-500 italic text-center",
+              msg.type == :reaction &&
+                "text-tone-700 dark:text-tone-300 italic",
+              msg.type == :text && "text-tone-900 dark:text-tone-100"
+            ]}>
+              <%= case msg.type do %>
+                <% :text -> %>
+                  <span class="font-semibold text-tone-600 dark:text-tone-400">
+                    {msg.display_name}
+                  </span>
+                  {" "}{msg.content}
+                <% :reaction -> %>
+                  *
+                  <span class="font-semibold">{msg.display_name}</span> {msg.content}
+                <% _ -> %>
+                  {msg.content}
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="border-t border-tone-300 dark:border-tone-600 px-2 py-1">
+          <.form
+            for={@chat_form}
+            phx-submit="send_chat_message"
+            class="flex items-center gap-2"
+          >
+            <input
+              type="text"
+              name="content"
+              value=""
+              placeholder={gettext("Type a message...")}
+              autocomplete="off"
+              class="
+                flex-1 bg-transparent text-sm text-tone-900 dark:text-tone-100
+                placeholder:text-tone-400 dark:placeholder:text-tone-500
+                focus:outline-none
+              "
+            />
+            <button
+              type="submit"
+              class="text-xs text-tone-500 dark:text-tone-400 hover:text-tone-900 dark:hover:text-tone-100 transition-colors"
+            >
+              {gettext("Send")}
+            </button>
+          </.form>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% end %>
