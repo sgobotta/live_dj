@@ -150,7 +150,7 @@ msgstr "debe contener entre %{min} y %{max} caracteres"
 msgid "Attempting to reconnect"
 msgstr "Intentanto reconectar"
 
-#: lib/livedj/sessions.ex:97
+#: lib/livedj/sessions.ex:100
 #, elixir-autogen, elixir-format
 msgid "Could not fetch the video from youtube"
 msgstr "No se pudo recuperar el video de youtube"
@@ -160,8 +160,8 @@ msgstr "No se pudo recuperar el video de youtube"
 msgid "Hang in there while we get back on track"
 msgstr "Esperá mientras volvemos a estar en línea"
 
-#: lib/livedj/sessions.ex:81
-#: lib/livedj/sessions.ex:109
+#: lib/livedj/sessions.ex:84
+#: lib/livedj/sessions.ex:112
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr "El video ya está agregado en la lista"
@@ -173,13 +173,13 @@ msgstr "No podemos conectarnos a internet"
 
 #: lib/livedj_web/components/core_components.ex:214
 #: lib/livedj_web/live/sessions/room_live/list.ex:44
-#: lib/livedj_web/live/sessions/room_live/show.ex:63
+#: lib/livedj_web/live/sessions/room_live/show.ex:70
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Algo salió mal!"
 
 #: lib/livedj_web/live/sessions/room_live/list.ex:37
-#: lib/livedj_web/live/sessions/room_live/show.ex:56
+#: lib/livedj_web/live/sessions/room_live/show.ex:63
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
 msgstr "La sala no existe"
@@ -189,7 +189,7 @@ msgstr "La sala no existe"
 msgid "video with this id already exists"
 msgstr "ya existe un video con ese id"
 
-#: lib/livedj/sessions.ex:90
+#: lib/livedj/sessions.ex:93
 #, elixir-autogen, elixir-format
 msgid "Could not save video. Please try again later."
 msgstr "No se pudo guardar la pista. Por favor intentá luego."

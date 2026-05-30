@@ -5,9 +5,10 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
   Returns `:ok` when the message was broadcast to all peers, or
   `{:local, message}` when the feedback is only for the sender (e.g. errors).
   """
-
   alias Livedj.{Media, Sessions}
   alias Livedj.Sessions.{Chat.Commands.Parser, Chat.Message, ChatSupervisor}
+
+  import LivedjWeb.Gettext
 
   @type result :: :ok | {:local, Message.t()}
 
@@ -64,7 +65,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
       user_id,
       display_name,
       :command_result,
-      "Skipped to next track."
+      gettext("Skipped to next track.")
     )
   end
 
@@ -77,7 +78,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
            user_id,
            display_name,
            :command_result,
-           "Queued: #{media.title}"
+           gettext("Queued: %{title}", title: media.title)
          )}
 
       {:error, {_severity, reason}} ->
@@ -87,7 +88,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
            user_id,
            display_name,
            :system,
-           "Could not queue: #{reason}"
+           gettext("Could not queue: %{reason}", reason: reason)
          )}
     end
   end
@@ -101,7 +102,9 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
            user_id,
            display_name,
            :system,
-           "Room not found: #{target_room_id}"
+           gettext("Room not found: %{target_room_id}",
+             target_room_id: target_room_id
+           )
          )}
 
       _child ->

@@ -314,7 +314,7 @@ msgstr ""
 msgid "Join or create a room with your friends, add videos and watch to youtube content in real time."
 msgstr ""
 
-#: lib/livedj_web/live/components/search_bar_component.ex:209
+#: lib/livedj_web/live/components/search_bar_component.ex:200
 #, elixir-autogen, elixir-format
 msgid "%{title} queued to the playlist"
 msgstr ""
@@ -369,7 +369,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: lib/livedj_web/components/layouts/session.html.heex:51
+#: lib/livedj_web/components/layouts/session.html.heex:63
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr ""
@@ -399,57 +399,57 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:116
+#: lib/livedj_web/components/session_modals.ex:118
 #, elixir-autogen, elixir-format
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:127
+#: lib/livedj_web/components/session_modals.ex:131
 #, elixir-autogen, elixir-format
 msgid "Mute / Unmute player"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:128
+#: lib/livedj_web/components/session_modals.ex:132
 #, elixir-autogen, elixir-format
 msgid "Play / Pause"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:118
+#: lib/livedj_web/components/session_modals.ex:120
 #, elixir-autogen, elixir-format
 msgid "Press any key below while in the session"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:125
+#: lib/livedj_web/components/session_modals.ex:127
 #, elixir-autogen, elixir-format
 msgid "Search and add tracks"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:124
+#: lib/livedj_web/components/session_modals.ex:126
 #, elixir-autogen, elixir-format
 msgid "Share room URL"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:130
+#: lib/livedj_web/components/session_modals.ex:134
 #, elixir-autogen, elixir-format
 msgid "Show this help"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:129
+#: lib/livedj_web/components/session_modals.ex:133
 #, elixir-autogen, elixir-format
 msgid "Toggle fullscreen"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:126
+#: lib/livedj_web/components/session_modals.ex:130
 #, elixir-autogen, elixir-format
 msgid "Toggle theme"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:130
+#: lib/livedj_web/components/session_modals.ex:134
 #, elixir-autogen, elixir-format
 msgid "H or ?"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:128
+#: lib/livedj_web/components/session_modals.ex:132
 #, elixir-autogen, elixir-format
 msgid "Space"
 msgstr ""
@@ -459,12 +459,52 @@ msgstr ""
 msgid "Resync"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:175
+#: lib/livedj_web/live/sessions/room_live/show.ex:230
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s ahead of the room."
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:177
+#: lib/livedj_web/live/sessions/room_live/show.ex:232
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s behind the room."
+msgstr ""
+
+#: lib/livedj_web/components/layouts/session.html.heex:51
+#, elixir-autogen, elixir-format
+msgid "Chat"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:129
+#, elixir-autogen, elixir-format
+msgid "Focus chat"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:128
+#, elixir-autogen, elixir-format
+msgid "Toggle chat"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:67
+#, elixir-autogen, elixir-format
+msgid "Type a message..."
+msgstr ""
+
+#: lib/livedj/sessions/chat/commands/dispatcher.ex:91
+#, elixir-autogen, elixir-format
+msgid "Could not queue: %{reason}"
+msgstr ""
+
+#: lib/livedj/sessions/chat/commands/dispatcher.ex:81
+#, elixir-autogen, elixir-format
+msgid "Queued: %{title}"
+msgstr ""
+
+#: lib/livedj/sessions/chat/commands/dispatcher.ex:105
+#, elixir-autogen, elixir-format
+msgid "Room not found: %{target_room_id}"
+msgstr ""
+
+#: lib/livedj/sessions/chat/commands/dispatcher.ex:68
+#, elixir-autogen, elixir-format
+msgid "Skipped to next track."
 msgstr ""
