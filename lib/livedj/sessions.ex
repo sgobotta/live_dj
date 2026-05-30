@@ -11,6 +11,9 @@ defmodule Livedj.Sessions do
 
   alias Livedj.Sessions.{
     Channels,
+    Chat,
+    ChatServer,
+    ChatSupervisor,
     PlaybackClock,
     PlaybackPosition,
     Player,
@@ -251,6 +254,56 @@ defmodule Livedj.Sessions do
 
   defp get_playlist_child_pid!(room_id),
     do: PlaylistSupervisor.get_child_pid!(room_id)
+
+  # ----------------------------------------------------------------------------
+  # Chat server management
+  #
+
+  @doc """
+  Subscribes to the chat topic and returns the current message list for a room.
+  """
+  @spec join_chat(binary()) :: {:ok, [Chat.Message.t()]}
+  def join_chat(room_id) do
+    :ok = Channels.subscribe_chat_topic(room_id)
+
+    pid =
+      case ChatSupervisor.get_child(room_id) do
+        nil ->
+          {:ok, pid} = ChatSupervisor.start_child(id: room_id)
+          pid
+
+        {pid, _state} when is_pid(pid) ->
+          pid
+      end
+
+    messages = ChatServer.get_messages(pid)
+    {:ok, messages}
+  end
+
+  @doc """
+  Sends a chat message for a user in a room.
+  """
+  @spec chat_send_message(
+          binary(),
+          binary(),
+          binary(),
+          Chat.Message.message_type(),
+          binary()
+        ) ::
+          :ok
+  def chat_send_message(room_id, user_id, display_name, type, content) do
+    ChatSupervisor.get_child_pid!(room_id)
+    |> ChatServer.send_message(user_id, display_name, type, content)
+  end
+
+  @doc """
+  Updates the display name for all past messages of a user in a room.
+  """
+  @spec chat_update_display_name(binary(), binary(), binary()) :: :ok
+  def chat_update_display_name(room_id, user_id, new_name) do
+    ChatSupervisor.get_child_pid!(room_id)
+    |> ChatServer.update_display_name(user_id, new_name)
+  end
 
   # ----------------------------------------------------------------------------
   # Player server management

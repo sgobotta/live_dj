@@ -13,6 +13,7 @@ defmodule Livedj.Sessions.Channels do
   @player_topic "player"
   @playlist_topic "playlist"
   @presence_topic "room_presence"
+  @chat_topic "chat"
 
   # ----------------------------------------------------------------------------
   # Player event aliases
@@ -35,6 +36,13 @@ defmodule Livedj.Sessions.Channels do
   @track_added :track_added
   @track_removed :track_removed
   @track_moved :track_moved
+
+  # ----------------------------------------------------------------------------
+  # Chat event aliases
+  #
+
+  @message_sent :message_sent
+  @messages_updated :messages_updated
 
   # ----------------------------------------------------------------------------
   # Player topics
@@ -113,6 +121,67 @@ defmodule Livedj.Sessions.Channels do
   """
   @spec subscribe_presence_topic(binary()) :: :ok | {:error, any()}
   def subscribe_presence_topic(room_id), do: subscribe(presence_topic(room_id))
+
+  # ----------------------------------------------------------------------------
+  # Chat topics
+  #
+
+  @doc """
+  Returns the chat topic for a room.
+  """
+  @spec chat_topic(binary()) :: binary()
+  def chat_topic(room_id), do: @chat_topic <> ":" <> room_id
+
+  # ----------------------------------------------------------------------------
+  # Chat subscriptions
+  #
+
+  @doc """
+  Subscribes to the chat topic for a room.
+  """
+  @spec subscribe_chat_topic(binary()) :: :ok | {:error, any()}
+  def subscribe_chat_topic(room_id), do: subscribe(chat_topic(room_id))
+
+  # ----------------------------------------------------------------------------
+  # Chat events
+  #
+
+  @doc """
+  Returns the event name for message sent events.
+  """
+  @spec message_sent_event() :: :message_sent
+  def message_sent_event, do: @message_sent
+
+  @doc """
+  Returns the event name for messages updated events.
+  """
+  @spec messages_updated_event() :: :messages_updated
+  def messages_updated_event, do: @messages_updated
+
+  # ----------------------------------------------------------------------------
+  # Chat broadcasting
+  #
+
+  @doc """
+  Broadcasts a message_sent message to the chat topic.
+  """
+  @spec broadcast_message_sent!(binary(), Livedj.Sessions.Chat.Message.t()) ::
+          :ok
+  def broadcast_message_sent!(room_id, message),
+    do:
+      broadcast!(chat_topic(room_id), {message_sent_event(), room_id, message})
+
+  @doc """
+  Broadcasts a messages_updated message to the chat topic.
+  """
+  @spec broadcast_messages_updated!(binary(), [Livedj.Sessions.Chat.Message.t()]) ::
+          :ok
+  def broadcast_messages_updated!(room_id, messages),
+    do:
+      broadcast!(
+        chat_topic(room_id),
+        {messages_updated_event(), room_id, messages}
+      )
 
   # ----------------------------------------------------------------------------
   # Player events
