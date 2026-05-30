@@ -210,7 +210,7 @@ defmodule Livedj.Media do
       %URI{query: query} when not is_nil(query) ->
         case URI.decode_query(query) do
           %{"v" => video_id} -> video_id
-          _ -> input
+          _query -> input
         end
 
       _uri ->

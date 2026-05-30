@@ -174,8 +174,10 @@ defmodule Livedj.Sessions.Channels do
   @doc """
   Broadcasts a messages_updated message to the chat topic.
   """
-  @spec broadcast_messages_updated!(binary(), [Livedj.Sessions.Chat.Message.t()]) ::
-          :ok
+  @spec broadcast_messages_updated!(
+          binary(),
+          [Livedj.Sessions.Chat.Message.t()]
+        ) :: :ok
   def broadcast_messages_updated!(room_id, messages),
     do:
       broadcast!(

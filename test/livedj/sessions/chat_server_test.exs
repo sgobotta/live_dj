@@ -2,7 +2,7 @@ defmodule Livedj.Sessions.ChatServerTest do
   use Livedj.DataCase
   use ExUnit.Case
 
-  alias Livedj.Sessions.{ChatServer, Chat.Message}
+  alias Livedj.Sessions.{Chat.Message, ChatServer}
 
   @subject ChatServer
 

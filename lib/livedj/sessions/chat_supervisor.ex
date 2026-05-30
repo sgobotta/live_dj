@@ -7,8 +7,8 @@ defmodule Livedj.Sessions.ChatSupervisor do
   require Logger
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.Exceptions.ChatServerError
   alias Livedj.Sessions.ChatServer
+  alias Livedj.Sessions.Exceptions.ChatServerError
 
   @server_module ChatServer
   @registry_module Registry.Chat

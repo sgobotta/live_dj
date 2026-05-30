@@ -3,8 +3,8 @@ defmodule Livedj.Sessions.Chat.Commands.DispatcherTest do
   use ExUnit.Case
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.Chat.Message
   alias Livedj.Sessions.Chat.Commands.Dispatcher
+  alias Livedj.Sessions.Chat.Message
 
   import Livedj.SessionsFixtures
 
