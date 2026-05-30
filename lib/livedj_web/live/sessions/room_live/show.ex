@@ -112,6 +112,15 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, update(socket, :chat_visible, &(!&1))}
   end
 
+  def handle_event("open_and_focus_chat", _params, socket) do
+    socket =
+      if socket.assigns.chat_visible,
+        do: socket,
+        else: assign(socket, :chat_visible, true)
+
+    {:noreply, push_event(socket, "focus_chat_input", %{})}
+  end
+
   def handle_event("send_chat_message", %{"content" => content}, socket) do
     if String.trim(content) == "" do
       {:noreply, socket}

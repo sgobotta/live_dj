@@ -1,6 +1,7 @@
 import { bindings } from './bindings'
 
 const actions = {
+  'focus-chat': (hook) => hook.pushEvent('open_and_focus_chat', {}),
   'navigate-add': () => document.getElementById('add-btn')?.click(),
   'open-help': () => document.getElementById('help-btn')?.click(),
   'open-share': () => document.getElementById('share-btn')?.click(),
@@ -20,6 +21,10 @@ export default {
     window.removeEventListener('keydown', this._handler)
   },
   mounted() {
+    this.handleEvent('focus_chat_input', () => {
+      document.getElementById('chat-input')?.focus()
+    })
+
     this._handler = (e) => {
       if (this.el.dataset.active !== 'true') return
       if (IGNORED_TAGS.has(e.target.tagName) || e.target.isContentEditable) {

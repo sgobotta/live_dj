@@ -9,5 +9,6 @@ export const bindings = {
   m: 'toggle-mute',
   s: 'open-share',
   t: 'toggle-theme',
-  c: 'toggle-chat'
+  c: 'toggle-chat',
+  y: 'focus-chat'
 }
