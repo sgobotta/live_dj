@@ -5,6 +5,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   alias Livedj.Presence
   alias Livedj.Sessions
+  alias Livedj.Sessions.Chat.Commands.Dispatcher, as: ChatDispatcher
   alias Livedj.Sessions.Exceptions.SessionRoomError
 
   import Phoenix.Component
@@ -23,18 +24,24 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         end_time_tracker_id: "player-controls-end-time-tracker",
         time_slider_id: "player-controls-time-slider",
         form: to_form(%{}),
+        chat_form: to_form(%{}),
         player: nil,
         room: room,
         room_url: nil,
+        chat_visible: true,
+        messages: [],
         content_ready: connected?(socket)
       )
 
     socket =
       if connected?(socket) do
         {:ok, :joined} = Sessions.join_player(room_id)
+        {:ok, messages} = Sessions.join_chat(room_id)
         {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
 
-        push_event(socket, "on_container_mounted", %{
+        socket
+        |> assign(:messages, messages)
+        |> push_event("on_container_mounted", %{
           backdrop_id: socket.assigns.backdrop_id,
           player_container_id: socket.assigns.player_container_id,
           spinner_id: socket.assigns.spinner_id,
@@ -96,6 +103,26 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   # ----------------------------------------------------------------------------
   # Client side event handling
   #
+
+  def handle_event("toggle_chat", _params, socket) do
+    {:noreply, update(socket, :chat_visible, &(!&1))}
+  end
+
+  def handle_event("send_chat_message", %{"content" => content}, socket) do
+    user = socket.assigns.current_user
+    user_id = to_string(user.id)
+    display_name = user.username || to_string(user.id)
+
+    :ok =
+      ChatDispatcher.dispatch(
+        socket.assigns.room.id,
+        user_id,
+        display_name,
+        content
+      )
+
+    {:noreply, assign(socket, :chat_form, to_form(%{}))}
+  end
 
   def handle_event("open_share_modal", _params, socket) do
     {:noreply,
@@ -285,6 +312,18 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_info({:track_ended, _room_id}, socket), do: {:noreply, socket}
+
+  # ----------------------------------------------------------------------------
+  # Server side Chat event handling
+  #
+
+  def handle_info({:message_sent, _room_id, message}, socket) do
+    {:noreply, update(socket, :messages, &[message | &1])}
+  end
+
+  def handle_info({:messages_updated, _room_id, messages}, socket) do
+    {:noreply, assign(socket, :messages, messages)}
+  end
 
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
