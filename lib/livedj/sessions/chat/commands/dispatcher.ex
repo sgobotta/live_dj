@@ -9,7 +9,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
   """
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.Chat.Commands.Parser
+  alias Livedj.Sessions.{Chat.Commands.Parser, ChatSupervisor}
 
   @spec dispatch(binary(), binary(), binary(), binary()) :: :ok
   def dispatch(room_id, user_id, display_name, raw_input) do
@@ -68,13 +68,25 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
         Sessions.chat_update_display_name(room_id, user_id, new_name)
 
       {:ok, {:msg, target_room_id, content}} ->
-        Sessions.chat_send_message(
-          target_room_id,
-          user_id,
-          display_name,
-          :text,
-          content
-        )
+        case ChatSupervisor.get_child(target_room_id) do
+          nil ->
+            Sessions.chat_send_message(
+              room_id,
+              user_id,
+              display_name,
+              :system,
+              "Room not found: #{target_room_id}"
+            )
+
+          _child ->
+            Sessions.chat_send_message(
+              target_room_id,
+              user_id,
+              display_name,
+              :text,
+              content
+            )
+        end
 
       {:error, {:unknown_command, cmd}} ->
         Sessions.chat_send_message(

@@ -269,8 +269,10 @@ defmodule Livedj.Sessions do
     pid =
       case ChatSupervisor.get_child(room_id) do
         nil ->
-          {:ok, pid} = ChatSupervisor.start_child(id: room_id)
-          pid
+          case ChatSupervisor.start_child(id: room_id) do
+            {:ok, pid} -> pid
+            {:error, {:already_started, pid}} -> pid
+          end
 
         {pid, _state} when is_pid(pid) ->
           pid

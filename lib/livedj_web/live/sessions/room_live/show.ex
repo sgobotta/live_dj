@@ -109,19 +109,23 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_event("send_chat_message", %{"content" => content}, socket) do
-    user = socket.assigns.current_user
-    user_id = to_string(user.id)
-    display_name = user.username || to_string(user.id)
+    if String.trim(content) == "" do
+      {:noreply, socket}
+    else
+      user = socket.assigns.current_user
+      user_id = to_string(user.id)
+      display_name = user.username || to_string(user.id)
 
-    :ok =
-      ChatDispatcher.dispatch(
-        socket.assigns.room.id,
-        user_id,
-        display_name,
-        content
-      )
+      :ok =
+        ChatDispatcher.dispatch(
+          socket.assigns.room.id,
+          user_id,
+          display_name,
+          content
+        )
 
-    {:noreply, assign(socket, :chat_form, to_form(%{}))}
+      {:noreply, assign(socket, :chat_form, to_form(%{}))}
+    end
   end
 
   def handle_event("open_share_modal", _params, socket) do
@@ -318,7 +322,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   #
 
   def handle_info({:message_sent, _room_id, message}, socket) do
-    {:noreply, update(socket, :messages, &[message | &1])}
+    {:noreply, update(socket, :messages, &Enum.take([message | &1], 200))}
   end
 
   def handle_info({:messages_updated, _room_id, messages}, socket) do
