@@ -5,6 +5,13 @@
   class="hidden"
 />
 
+<div
+  id="display-name"
+  phx-hook="DisplayName"
+  data-room-id={@room.id}
+  class="hidden"
+/>
+
 <%= if @content_ready do %>
   <div class="border-t-0 mb-4">
     {live_render(

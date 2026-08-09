@@ -130,9 +130,13 @@ defmodule LivedjWeb.CustomComponents do
   colored initials derived from the username.
   """
   attr :user, :any, required: true
+  attr :name, :string, default: nil
 
   def user_avatar(assigns) do
-    label = user_avatar_label(assigns.user)
+    label =
+      if is_binary(assigns.name) and assigns.name != "",
+        do: assigns.name,
+        else: user_avatar_label(assigns.user)
 
     assigns =
       assigns

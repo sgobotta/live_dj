@@ -1,6 +1,7 @@
 import AddButton from './player-controls/add-button-hook'
 import Chat from './chat/hook'
 import Clipboard from './clipboard/hook'
+import DisplayName from './display-name/hook'
 import Keybindings from './keybindings/hook'
 import PlayerBackdrop from './player-backdrop/hook'
 import SearchBar from './search-bar/hook'
@@ -12,6 +13,7 @@ export default {
   AddButton,
   Chat,
   Clipboard,
+  DisplayName,
   Keybindings,
   PlayerBackdrop,
   SearchBar,

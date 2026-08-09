@@ -66,7 +66,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   def chat_command_suggestions(_content), do: []
 
   @impl true
-  def mount(params, _session, socket) do
+  def mount(params, session, socket) do
     %Room{id: room_id} = room = Sessions.get_room!(params["id"])
 
     socket =
@@ -85,7 +85,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         room_url: nil,
         chat_visible: true,
         messages: [],
-        display_name: initial_display_name(socket.assigns.current_user),
+        display_name: initial_display_name(socket, room, session),
         content_ready: connected?(socket)
       )
 
@@ -204,7 +204,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
             update(socket, :messages, &Enum.take([message | &1], 200))
 
           {:display_name_changed, new_name} ->
-            assign(socket, :display_name, new_name)
+            socket
+            |> assign(:display_name, new_name)
+            |> push_event("store_display_name", %{name: new_name})
         end
 
       {:noreply, assign(socket, :chat_form, to_form(%{"content" => ""}))}
@@ -421,7 +423,27 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)
 
-  defp initial_display_name(user), do: user.username || to_string(user.id)
+  # Prefer the name the client persisted for this room (delivered from a cookie
+  # via the session, so it is available during the disconnected HTTP render and
+  # avoids a flash of the default name), falling back to the account username.
+  defp initial_display_name(socket, room, session) do
+    stored_display_name(session, room) || account_display_name(socket)
+  end
+
+  defp stored_display_name(session, room) do
+    with %{"display_names" => %{} = names} <- session,
+         name when is_binary(name) and name != "" <-
+           Map.get(names, to_string(room.id)) do
+      name
+    else
+      _ -> nil
+    end
+  end
+
+  defp account_display_name(socket) do
+    user = socket.assigns.current_user
+    user.username || to_string(user.id)
+  end
 
   defp playlist_liveview_id, do: "playlist-lv-#{Ecto.UUID.generate()}"
 end

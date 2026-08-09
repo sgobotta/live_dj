@@ -6,11 +6,27 @@ defmodule LivedjWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
+    plug :put_display_names
     plug :fetch_live_flash
     plug :put_root_layout, html: {LivedjWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+  end
+
+  # Copies the per-room chat display-name cookies into the session so LiveViews
+  # can render the chosen name during the initial (disconnected) HTTP render.
+  @display_name_cookie_prefix "livedj_display_name_"
+
+  defp put_display_names(conn, _opts) do
+    conn = Plug.Conn.fetch_cookies(conn)
+
+    names =
+      for {@display_name_cookie_prefix <> room_id, value} <- conn.cookies,
+          into: %{},
+          do: {room_id, URI.decode(value)}
+
+    Plug.Conn.put_session(conn, "display_names", names)
   end
 
   pipeline :api do
