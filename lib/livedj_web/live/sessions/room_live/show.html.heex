@@ -39,7 +39,7 @@
               <%= case msg.type do %>
                 <% :text -> %>
                   <span class="font-semibold text-tone-600 dark:text-tone-400">
-                    {msg.display_name}
+                    {msg.display_name}:
                   </span>
                   {" "}{msg.content}
                 <% :reaction -> %>
