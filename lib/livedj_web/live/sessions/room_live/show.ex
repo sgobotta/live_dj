@@ -85,6 +85,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         room_url: nil,
         chat_visible: true,
         messages: [],
+        display_name: initial_display_name(socket.assigns.current_user),
         content_ready: connected?(socket)
       )
 
@@ -187,15 +188,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     if String.trim(content) == "" do
       {:noreply, socket}
     else
-      user = socket.assigns.current_user
-      user_id = to_string(user.id)
-      display_name = user.username || to_string(user.id)
+      user_id = to_string(socket.assigns.current_user.id)
 
       socket =
         case ChatDispatcher.dispatch(
                socket.assigns.room.id,
                user_id,
-               display_name,
+               socket.assigns.display_name,
                content
              ) do
           :ok ->
@@ -203,6 +202,9 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
           {:local, message} ->
             update(socket, :messages, &Enum.take([message | &1], 200))
+
+          {:display_name_changed, new_name} ->
+            assign(socket, :display_name, new_name)
         end
 
       {:noreply, assign(socket, :chat_form, to_form(%{"content" => ""}))}
@@ -418,6 +420,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)
+
+  defp initial_display_name(user), do: user.username || to_string(user.id)
 
   defp playlist_liveview_id, do: "playlist-lv-#{Ecto.UUID.generate()}"
 end
