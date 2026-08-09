@@ -52,7 +52,54 @@
           <% end %>
         </div>
 
-        <div class="border-t border-dashed border-tone-300 dark:border-tone-600 px-1 py-1 mt-1">
+        <div
+          id="chat-input-bar"
+          class="relative border-t border-dashed border-tone-300 dark:border-tone-600 px-1 py-1 mt-1"
+        >
+          <% suggestions =
+            chat_command_suggestions(@chat_form.params["content"]) %>
+          <%= if suggestions != [] do %>
+            <div class="absolute bottom-full left-0 right-0 mb-1 px-1">
+              <ul
+                id="chat-command-list"
+                role="listbox"
+                class="
+                  overflow-hidden rounded-md border border-tone-300 dark:border-tone-600
+                  bg-tone-100 dark:bg-tone-800 shadow-lg
+                  divide-y divide-tone-200 dark:divide-tone-700
+                "
+              >
+                <%= for command <- suggestions do %>
+                  <li>
+                    <button
+                      type="button"
+                      role="option"
+                      phx-click="select_chat_command"
+                      phx-value-name={command.name}
+                      class="
+                        w-full flex items-baseline gap-2 px-2 py-1 text-left
+                        transition-colors focus:outline-none
+                        hover:bg-tone-200 dark:hover:bg-tone-700
+                        aria-selected:bg-tone-200 dark:aria-selected:bg-tone-700
+                      "
+                    >
+                      <span class="font-mono text-sm font-semibold text-tone-900 dark:text-tone-100">
+                        /{command.name}
+                      </span>
+                      <%= if command.args != "" do %>
+                        <span class="font-mono text-xs text-tone-500 dark:text-tone-400">
+                          {command.args}
+                        </span>
+                      <% end %>
+                      <span class="ml-auto text-xs text-tone-500 dark:text-tone-400 truncate">
+                        {command.description}
+                      </span>
+                    </button>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
           <.form
             for={@chat_form}
             phx-submit="send_chat_message"

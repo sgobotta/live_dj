@@ -10,6 +10,61 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   import Phoenix.Component
 
+  # ----------------------------------------------------------------------------
+  # Chat command metadata
+  #
+
+  @doc """
+  Returns the list of slash commands available in the chat, with the argument
+  hint and description shown in the command preview.
+  """
+  @spec chat_commands() :: [
+          %{name: binary(), args: binary(), description: binary()}
+        ]
+  def chat_commands do
+    [
+      %{
+        name: "me",
+        args: "<action>",
+        description: gettext("Send an action message")
+      },
+      %{name: "skip", args: "", description: gettext("Skip to the next track")},
+      %{
+        name: "queue",
+        args: "<url>",
+        description: gettext("Add a track to the queue")
+      },
+      %{
+        name: "name",
+        args: "<new name>",
+        description: gettext("Change your display name")
+      },
+      %{
+        name: "msg",
+        args: "<room> <message>",
+        description: gettext("Send a message to another room")
+      }
+    ]
+  end
+
+  @doc """
+  Given the current chat input, returns the commands to preview.
+
+  Only matches while the user is still typing the command name (a leading `/`
+  with no space yet). Returns `[]` when the preview should be hidden.
+  """
+  @spec chat_command_suggestions(binary() | nil) :: [map()]
+  def chat_command_suggestions("/" <> rest) do
+    if String.contains?(rest, " ") do
+      []
+    else
+      prefix = String.downcase(rest)
+      Enum.filter(chat_commands(), &String.starts_with?(&1.name, prefix))
+    end
+  end
+
+  def chat_command_suggestions(_content), do: []
+
   @impl true
   def mount(params, _session, socket) do
     %Room{id: room_id} = room = Sessions.get_room!(params["id"])
@@ -106,6 +161,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("update_chat_input", %{"content" => content}, socket) do
     {:noreply, assign(socket, :chat_form, to_form(%{"content" => content}))}
+  end
+
+  def handle_event("select_chat_command", %{"name" => name}, socket) do
+    {:noreply,
+     socket
+     |> assign(:chat_form, to_form(%{"content" => "/#{name} "}))
+     |> push_event("focus_chat_input", %{})}
   end
 
   def handle_event("toggle_chat", _params, socket) do
