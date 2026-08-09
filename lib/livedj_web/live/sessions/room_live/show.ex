@@ -436,7 +436,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            Map.get(names, to_string(room.id)) do
       name
     else
-      _ -> nil
+      _no_stored_name -> nil
     end
   end
 
