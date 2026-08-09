@@ -10,8 +10,63 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   import Phoenix.Component
 
+  # ----------------------------------------------------------------------------
+  # Chat command metadata
+  #
+
+  @doc """
+  Returns the list of slash commands available in the chat, with the argument
+  hint and description shown in the command preview.
+  """
+  @spec chat_commands() :: [
+          %{name: binary(), args: binary(), description: binary()}
+        ]
+  def chat_commands do
+    [
+      %{
+        name: "me",
+        args: "<action>",
+        description: gettext("Send an action message")
+      },
+      %{name: "skip", args: "", description: gettext("Skip to the next track")},
+      %{
+        name: "queue",
+        args: "<url>",
+        description: gettext("Add a track to the queue")
+      },
+      %{
+        name: "name",
+        args: "<new name>",
+        description: gettext("Change your display name")
+      },
+      %{
+        name: "msg",
+        args: "<room> <message>",
+        description: gettext("Send a message to another room")
+      }
+    ]
+  end
+
+  @doc """
+  Given the current chat input, returns the commands to preview.
+
+  Only matches while the user is still typing the command name (a leading `/`
+  with no space yet). Returns `[]` when the preview should be hidden.
+  """
+  @spec chat_command_suggestions(binary() | nil) :: [map()]
+  def chat_command_suggestions("/" <> rest) do
+    if String.contains?(rest, " ") do
+      []
+    else
+      prefix = String.downcase(rest)
+      Enum.filter(chat_commands(), &String.starts_with?(&1.name, prefix))
+    end
+  end
+
+  def chat_command_suggestions(_content), do: []
+
   @impl true
-  def mount(params, _session, socket) do
+  def mount(params, session, socket) do
     %Room{id: room_id} = room = Sessions.get_room!(params["id"])
 
     socket =
@@ -30,6 +85,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         room_url: nil,
         chat_visible: true,
         messages: [],
+        display_name: initial_display_name(socket, room, session),
         content_ready: connected?(socket)
       )
 
@@ -108,6 +164,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, assign(socket, :chat_form, to_form(%{"content" => content}))}
   end
 
+  def handle_event("select_chat_command", %{"name" => name}, socket) do
+    {:noreply,
+     socket
+     |> assign(:chat_form, to_form(%{"content" => "/#{name} "}))
+     |> push_event("focus_chat_input", %{})}
+  end
+
   def handle_event("toggle_chat", _params, socket) do
     {:noreply, update(socket, :chat_visible, &(!&1))}
   end
@@ -125,15 +188,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     if String.trim(content) == "" do
       {:noreply, socket}
     else
-      user = socket.assigns.current_user
-      user_id = to_string(user.id)
-      display_name = user.username || to_string(user.id)
+      user_id = to_string(socket.assigns.current_user.id)
 
       socket =
         case ChatDispatcher.dispatch(
                socket.assigns.room.id,
                user_id,
-               display_name,
+               socket.assigns.display_name,
                content
              ) do
           :ok ->
@@ -141,6 +202,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
           {:local, message} ->
             update(socket, :messages, &Enum.take([message | &1], 200))
+
+          {:display_name_changed, new_name} ->
+            socket
+            |> assign(:display_name, new_name)
+            |> push_event("store_display_name", %{name: new_name})
         end
 
       {:noreply, assign(socket, :chat_form, to_form(%{"content" => ""}))}
@@ -356,6 +422,28 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)
+
+  # Prefer the name the client persisted for this room (delivered from a cookie
+  # via the session, so it is available during the disconnected HTTP render and
+  # avoids a flash of the default name), falling back to the account username.
+  defp initial_display_name(socket, room, session) do
+    stored_display_name(session, room) || account_display_name(socket)
+  end
+
+  defp stored_display_name(session, room) do
+    with %{"display_names" => %{} = names} <- session,
+         name when is_binary(name) and name != "" <-
+           Map.get(names, to_string(room.id)) do
+      name
+    else
+      _no_stored_name -> nil
+    end
+  end
+
+  defp account_display_name(socket) do
+    user = socket.assigns.current_user
+    user.username || to_string(user.id)
+  end
 
   defp playlist_liveview_id, do: "playlist-lv-#{Ecto.UUID.generate()}"
 end

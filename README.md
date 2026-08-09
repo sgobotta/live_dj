@@ -54,9 +54,9 @@ The livedj app needs the elixir language to be installed. You can install it man
 
 + Ubuntu/Debian SO
 + [asdf `latest`](https://asdf-vm.com/guide/getting-started.html#_2-download-asdf)
-+ [Elixir `1.14.3`](https://elixir-lang.org/install.html)
++ [Elixir `1.15.8`](https://elixir-lang.org/install.html)
 + [Erlang `25.2.1`](https://erlang.org/doc/installation_guide/users_guide.html)
-+ [Node `16.13.1`](https://nodejs.org/es/)
++ [Node `24.19.0`](https://nodejs.org/es/)
 + [Docker `24.0.2`](https://docs.docker.com/desktop/install/ubuntu/) (optional): used to run dockerized images of the backend
 
 Elixir, Erlang and Node can also be installed using [`asdf`](https://asdf-vm.com/#/core-manage-asdf?id=install). [Personal installation notes](https://gist.github.com/sgobotta/514a3e452f7bc37c558fc93a2768ccd2).

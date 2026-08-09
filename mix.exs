@@ -20,7 +20,7 @@ defmodule Livedj.MixProject do
       ],
       # Docs
       name: "Livedj",
-      source_url: "https://github.com/sgobotta/livedj",
+      source_url: "https://github.com/sgobotta/live_dj",
       docs: [
         main: "Livedj",
         extras: ["README.md"]

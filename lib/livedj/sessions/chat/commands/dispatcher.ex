@@ -10,7 +10,8 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
 
   import LivedjWeb.Gettext
 
-  @type result :: :ok | {:local, Message.t()}
+  @type result ::
+          :ok | {:local, Message.t()} | {:display_name_changed, binary()}
 
   @spec dispatch(binary(), binary(), binary(), binary()) :: result()
   def dispatch(room_id, user_id, display_name, raw_input) do
@@ -40,7 +41,7 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
         do_queue(room_id, user_id, display_name, url)
 
       {:ok, {:name, new_name}} ->
-        Sessions.chat_update_display_name(room_id, user_id, new_name)
+        do_update_name(room_id, user_id, display_name, new_name)
 
       {:ok, {:msg, target_room_id, content}} ->
         do_msg(room_id, user_id, display_name, target_room_id, content)
@@ -54,6 +55,24 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
            :system,
            "Unknown command: /#{cmd}"
          )}
+    end
+  end
+
+  defp do_update_name(room_id, user_id, display_name, new_name) do
+    case String.trim(new_name) do
+      "" ->
+        {:local,
+         Message.new(
+           room_id,
+           user_id,
+           display_name,
+           :system,
+           gettext("Usage: /name <new name>")
+         )}
+
+      trimmed_name ->
+        :ok = Sessions.chat_update_display_name(room_id, user_id, trimmed_name)
+        {:display_name_changed, trimmed_name}
     end
   end
 

@@ -19,8 +19,8 @@ ARG UPLOADS_PATH
 
 FROM ${BUILDER_IMAGE} as builder
 
-ENV ASDF_VERSION v0.9.0
-ENV NODE_VERSION 16.13.1
+ENV ASDF_VERSION v0.14.1
+ENV NODE_VERSION 24.19.0
 
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git curl && \
