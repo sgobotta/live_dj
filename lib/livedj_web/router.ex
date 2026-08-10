@@ -65,6 +65,7 @@ defmodule LivedjWeb.Router do
         live "/rooms/:id/welcome", RoomLive.Show, :welcome
         live "/rooms/:id/browse", RoomLive.Show, :browse
         live "/rooms/:id/help", RoomLive.Show, :help
+        live "/rooms/:id/settings", RoomLive.Show, :settings
       end
     end
 

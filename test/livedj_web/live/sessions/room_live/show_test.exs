@@ -66,4 +66,32 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       assert {:ok, _view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
     end
   end
+
+  describe "edit password modal" do
+    test "sets a password from the settings modal", %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}/settings")
+
+      view
+      |> form("#room-password-form", %{password: "secret1"})
+      |> render_submit()
+
+      assert Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
+    end
+
+    test "removes an existing password", %{conn: conn} do
+      room = room_fixture(%{password: "secret1"})
+      fingerprint = Livedj.Sessions.authorization_fingerprint(room)
+
+      conn =
+        conn
+        |> Plug.Test.init_test_session(%{})
+        |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
+
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}/settings")
+
+      view |> element("#remove-room-password") |> render_click()
+
+      refute Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
+    end
+  end
 end

@@ -159,6 +159,62 @@ defmodule LivedjWeb.SessionModals do
     """
   end
 
+  attr :room, :map, required: true
+  attr :show, :boolean, required: true
+
+  def password_modal(assigns) do
+    assigns =
+      assign(assigns, :protected, not is_nil(assigns.room.password_hash))
+
+    ~H"""
+    <.modal
+      :if={@show}
+      id="room-password-modal"
+      show
+      on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
+    >
+      <.header>
+        {gettext("Room password")}
+        <:subtitle>
+          <%= if @protected do %>
+            {gettext("This room is protected. Update or remove its password.")}
+          <% else %>
+            {gettext("Add a password to protect this room.")}
+          <% end %>
+        </:subtitle>
+      </.header>
+
+      <.form
+        for={%{}}
+        id="room-password-form"
+        phx-submit="save_room_password"
+        class="mt-6 flex flex-col gap-4"
+      >
+        <input
+          type="password"
+          name="password"
+          placeholder={gettext("New password")}
+          class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+        />
+        <div class="flex items-center justify-between gap-2">
+          <button
+            :if={@protected}
+            type="button"
+            id="remove-room-password"
+            phx-click="remove_room_password"
+            class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline"
+          >
+            {gettext("Remove password")}
+          </button>
+          <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+            {gettext("Save")}
+          </.button>
+        </div>
+      </.form>
+    </.modal>
+    """
+  end
+
   defp show_browse_sheet(js \\ %JS{}, id) do
     js
     |> JS.show(to: "##{id}")

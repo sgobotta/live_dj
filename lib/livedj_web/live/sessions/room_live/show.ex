@@ -156,6 +156,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:page_title, "#{socket.assigns.room.name}")
   end
 
+  defp apply_action(socket, :settings, _params) do
+    assign(socket, :page_title, "#{socket.assigns.room.name}")
+  end
+
   # ----------------------------------------------------------------------------
   # Client side event handling
   #
@@ -226,6 +230,19 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       {:noreply,
        push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/help")}
     end
+  end
+
+  def handle_event("open_settings_modal", _params, socket) do
+    {:noreply,
+     push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/settings")}
+  end
+
+  def handle_event("save_room_password", %{"password" => password}, socket) do
+    save_password(socket, %{"password" => password})
+  end
+
+  def handle_event("remove_room_password", _params, socket) do
+    save_password(socket, %{"password" => ""})
   end
 
   def handle_event("on_player_play", _params, socket) do
@@ -317,6 +334,25 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
       _error ->
         {:noreply, socket}
+    end
+  end
+
+  defp save_password(socket, attrs) do
+    case Sessions.update_room_password(socket.assigns.room, attrs) do
+      {:ok, room} ->
+        {:noreply,
+         socket
+         |> assign(:room, room)
+         |> put_flash(:info, gettext("Room password updated"))
+         |> push_patch(to: ~p"/sessions/rooms/#{room}")}
+
+      {:error, %Ecto.Changeset{}} ->
+        {:noreply,
+         put_flash(
+           socket,
+           :error,
+           gettext("Password must be at least 4 characters")
+         )}
     end
   end
 
