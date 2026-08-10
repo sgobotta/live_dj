@@ -173,13 +173,13 @@ msgstr "No podemos conectarnos a internet"
 
 #: lib/livedj_web/components/core_components.ex:214
 #: lib/livedj_web/live/sessions/room_live/list.ex:44
-#: lib/livedj_web/live/sessions/room_live/show.ex:70
+#: lib/livedj_web/live/sessions/room_live/show.ex:126
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr "Algo salió mal!"
 
 #: lib/livedj_web/live/sessions/room_live/list.ex:37
-#: lib/livedj_web/live/sessions/room_live/show.ex:63
+#: lib/livedj_web/live/sessions/room_live/show.ex:119
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
 msgstr "La sala no existe"
