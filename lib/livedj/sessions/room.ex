@@ -3,6 +3,8 @@ defmodule Livedj.Sessions.Room do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{}
+
   @password_min 4
   @password_max 72
 
