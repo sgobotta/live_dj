@@ -37,4 +37,27 @@ defmodule Livedj.Sessions.RoomTest do
       assert %{password: [_]} = errors_on(changeset)
     end
   end
+
+  describe "password_changeset/2" do
+    test "sets a hashed password" do
+      changeset = Room.password_changeset(%Room{}, %{"password" => "hunter2"})
+
+      assert changeset.valid?
+      hash = Ecto.Changeset.get_change(changeset, :password_hash)
+      assert Bcrypt.verify_pass("hunter2", hash)
+    end
+
+    test "clears the password when blank" do
+      room = %Room{password_hash: "existing-hash"}
+      changeset = Room.password_changeset(room, %{"password" => ""})
+
+      assert changeset.valid?
+      assert Ecto.Changeset.get_change(changeset, :password_hash) == nil
+    end
+
+    test "rejects a too-short password" do
+      changeset = Room.password_changeset(%Room{}, %{"password" => "ab"})
+      refute changeset.valid?
+    end
+  end
 end
