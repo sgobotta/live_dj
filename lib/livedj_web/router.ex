@@ -38,6 +38,9 @@ defmodule LivedjWeb.Router do
 
     get "/", PageController, :home
 
+    get "/sessions/rooms/:room_id/unlock", RoomUnlockController, :new
+    post "/sessions/rooms/:room_id/unlock", RoomUnlockController, :create
+
     live_session :sessions_index,
       on_mount: [
         {LivedjWeb.UserAuth, :mount_current_user},
