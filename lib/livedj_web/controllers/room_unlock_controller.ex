@@ -2,6 +2,7 @@ defmodule LivedjWeb.RoomUnlockController do
   use LivedjWeb, :controller
 
   alias Livedj.Sessions
+  alias LivedjWeb.RoomAuth
 
   def new(conn, %{"room_id" => id}) do
     room = Sessions.get_room!(id)
@@ -38,6 +39,34 @@ defmodule LivedjWeb.RoomUnlockController do
         page_title: room.name,
         layout: false
       )
+    end
+  end
+
+  def grant(conn, %{"room_id" => id, "token" => token}) do
+    room = Sessions.get_room!(id)
+
+    case RoomAuth.verify_grant(token) do
+      {:ok, ^id} ->
+        conn
+        |> maybe_authorize(room)
+        |> redirect(to: ~p"/sessions/rooms/#{room}/welcome")
+
+      _invalid ->
+        redirect(conn, to: ~p"/sessions/rooms/#{room}/unlock")
+    end
+  end
+
+  defp maybe_authorize(conn, room) do
+    if Sessions.room_protected?(room) do
+      authorized = get_session(conn, "authorized_rooms") || %{}
+
+      put_session(
+        conn,
+        "authorized_rooms",
+        Map.put(authorized, room.id, Sessions.authorization_fingerprint(room))
+      )
+    else
+      conn
     end
   end
 end

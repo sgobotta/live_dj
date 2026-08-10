@@ -44,4 +44,45 @@ defmodule LivedjWeb.RoomUnlockControllerTest do
       refute get_session(conn, "authorized_rooms")
     end
   end
+
+  describe "GET /sessions/rooms/:room_id/unlock/grant" do
+    test "authorizes the creator with a valid token and redirects to welcome",
+         %{
+           conn: conn
+         } do
+      room = room_fixture(%{password: "secret1"})
+      token = LivedjWeb.RoomAuth.sign_grant(room.id)
+
+      conn =
+        get(conn, ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: token]}")
+
+      assert redirected_to(conn) == ~p"/sessions/rooms/#{room}/welcome"
+
+      assert get_session(conn, "authorized_rooms") ==
+               %{room.id => Livedj.Sessions.authorization_fingerprint(room)}
+    end
+
+    test "redirects to unlock when the token is invalid", %{conn: conn} do
+      room = room_fixture(%{password: "secret1"})
+
+      conn =
+        get(conn, ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: "bogus"]}")
+
+      assert redirected_to(conn) == ~p"/sessions/rooms/#{room}/unlock"
+      refute get_session(conn, "authorized_rooms")
+    end
+
+    test "a public room grant just redirects to welcome without authorizing", %{
+      conn: conn
+    } do
+      room = room_fixture()
+      token = LivedjWeb.RoomAuth.sign_grant(room.id)
+
+      conn =
+        get(conn, ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: token]}")
+
+      assert redirected_to(conn) == ~p"/sessions/rooms/#{room}/welcome"
+      refute get_session(conn, "authorized_rooms")
+    end
+  end
 end

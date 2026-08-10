@@ -40,6 +40,7 @@ defmodule LivedjWeb.Router do
 
     get "/sessions/rooms/:room_id/unlock", RoomUnlockController, :new
     post "/sessions/rooms/:room_id/unlock", RoomUnlockController, :create
+    get "/sessions/rooms/:room_id/unlock/grant", RoomUnlockController, :grant
 
     live_session :sessions_index,
       on_mount: [

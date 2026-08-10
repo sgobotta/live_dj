@@ -39,4 +39,17 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexTest do
     # exactly one badge (only the protected room)
     assert length(String.split(html, "class=\"room-lock-badge")) == 2
   end
+
+  test "creating a protected room navigates through the unlock grant", %{
+    conn: conn
+  } do
+    {:ok, view, _html} = live(conn, ~p"/sessions/rooms/new")
+
+    render_submit(
+      form(view, "#room-form", room: %{name: "Locked", password: "secret1"})
+    )
+
+    assert {to, _flash} = assert_redirect(view)
+    assert to =~ "/unlock/grant?"
+  end
 end

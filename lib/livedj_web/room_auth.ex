@@ -11,6 +11,21 @@ defmodule LivedjWeb.RoomAuth do
   alias Livedj.Sessions.Exceptions.SessionRoomError
   alias Livedj.Sessions.Room
 
+  @grant_salt "room authorization grant"
+  @grant_max_age 60
+
+  @doc "Signs a short-lived token proving the bearer may be authorized for the room."
+  def sign_grant(room_id) do
+    Phoenix.Token.sign(LivedjWeb.Endpoint, @grant_salt, room_id)
+  end
+
+  @doc "Verifies a grant token, returning {:ok, room_id} or an error tuple."
+  def verify_grant(token) do
+    Phoenix.Token.verify(LivedjWeb.Endpoint, @grant_salt, token,
+      max_age: @grant_max_age
+    )
+  end
+
   def on_mount(:ensure_room_access, %{"id" => id}, session, socket) do
     room = Sessions.get_room!(id)
 
