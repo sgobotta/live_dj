@@ -774,4 +774,48 @@ defmodule Livedj.Sessions do
   def change_room(%Room{} = room, attrs \\ %{}) do
     Room.changeset(room, attrs)
   end
+
+  @doc "Returns true when the room has a password set."
+  @spec room_protected?(Room.t()) :: boolean()
+  def room_protected?(%Room{password_hash: hash}), do: not is_nil(hash)
+
+  @doc """
+  Verifies a plaintext password against a room's hash. Runs a dummy verify for
+  unprotected rooms to avoid timing leaks, and always returns false for them.
+  """
+  @spec verify_room_password(Room.t(), binary()) :: boolean()
+  def verify_room_password(%Room{password_hash: nil}, _password) do
+    Bcrypt.no_user_verify()
+    false
+  end
+
+  def verify_room_password(%Room{password_hash: hash}, password)
+      when is_binary(password) do
+    Bcrypt.verify_pass(password, hash)
+  end
+
+  def verify_room_password(%Room{}, _password), do: false
+
+  @doc """
+  Returns a short, stable fingerprint of the room's password hash, used to key
+  session authorization so that changing the password re-locks other sessions.
+  Returns nil for public rooms.
+  """
+  @spec authorization_fingerprint(Room.t()) :: binary() | nil
+  def authorization_fingerprint(%Room{password_hash: nil}), do: nil
+
+  def authorization_fingerprint(%Room{password_hash: hash}) do
+    :crypto.hash(:sha256, hash)
+    |> Base.encode16(case: :lower)
+    |> binary_part(0, 16)
+  end
+
+  @doc "Sets, changes, or clears a room's password."
+  @spec update_room_password(Room.t(), map()) ::
+          {:ok, Room.t()} | {:error, Ecto.Changeset.t()}
+  def update_room_password(%Room{} = room, attrs) do
+    room
+    |> Room.password_changeset(attrs)
+    |> Repo.update()
+  end
 end

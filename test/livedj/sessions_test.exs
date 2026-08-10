@@ -63,4 +63,52 @@ defmodule Livedj.SessionsTest do
       assert %Ecto.Changeset{} = Sessions.change_room(room)
     end
   end
+
+  describe "room password protection" do
+    import Livedj.SessionsFixtures
+
+    test "room_protected?/1 reflects presence of a password" do
+      assert Sessions.room_protected?(room_fixture(%{password: "secret1"}))
+      refute Sessions.room_protected?(room_fixture())
+    end
+
+    test "verify_room_password/2 accepts the correct password" do
+      room = room_fixture(%{password: "secret1"})
+      assert Sessions.verify_room_password(room, "secret1")
+    end
+
+    test "verify_room_password/2 rejects an incorrect password" do
+      room = room_fixture(%{password: "secret1"})
+      refute Sessions.verify_room_password(room, "wrong")
+    end
+
+    test "verify_room_password/2 returns false for a public room" do
+      refute Sessions.verify_room_password(room_fixture(), "anything")
+    end
+
+    test "authorization_fingerprint/1 is nil for public rooms, stable for protected" do
+      assert Sessions.authorization_fingerprint(room_fixture()) == nil
+
+      room = room_fixture(%{password: "secret1"})
+      fp = Sessions.authorization_fingerprint(room)
+      assert is_binary(fp)
+      assert Sessions.authorization_fingerprint(room) == fp
+    end
+
+    test "update_room_password/2 sets then clears protection" do
+      room = room_fixture()
+
+      {:ok, protected} =
+        Sessions.update_room_password(room, %{"password" => "secret1"})
+
+      assert Sessions.room_protected?(protected)
+      fp = Sessions.authorization_fingerprint(protected)
+
+      {:ok, cleared} =
+        Sessions.update_room_password(protected, %{"password" => ""})
+
+      refute Sessions.room_protected?(cleared)
+      refute Sessions.authorization_fingerprint(cleared) == fp
+    end
+  end
 end
