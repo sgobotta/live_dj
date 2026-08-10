@@ -53,7 +53,8 @@ defmodule LivedjWeb.Router do
     live_session :sessions_show,
       on_mount: [
         {LivedjWeb.UserAuth, :mount_current_user},
-        {LivedjWeb.Theme, :fetch_theme}
+        {LivedjWeb.Theme, :fetch_theme},
+        {LivedjWeb.RoomAuth, :ensure_room_access}
       ],
       root_layout: {LivedjWeb.Layouts, :root_session} do
       scope "/sessions", Sessions do
