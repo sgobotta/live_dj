@@ -12,7 +12,19 @@
         fn %{room: room} -> JS.navigate(~p"/sessions/rooms/#{room}") end
       }
     >
-      <div class="flex flex-col">
+      <div class="relative flex flex-col">
+        <div
+          :if={Livedj.Sessions.room_protected?(room)}
+          id={"room-lock-badge-#{room.id}"}
+          class="room-lock-badge absolute top-1 right-1 z-10 rounded-full bg-tone-900/70 dark:bg-tone-50/70 p-1"
+          title={gettext("Password protected")}
+          aria-label={gettext("Password protected")}
+        >
+          <.icon
+            name="hero-lock-closed"
+            class="h-3.5 w-3.5 text-tone-50 dark:text-tone-900"
+          />
+        </div>
         <.live_component
           id={"player-preview-#{room.id}"}
           player={player}

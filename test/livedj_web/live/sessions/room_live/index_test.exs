@@ -28,4 +28,15 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexTest do
     room = Enum.find(Livedj.Sessions.list_rooms(), &(&1.name == "Open Room"))
     refute Livedj.Sessions.room_protected?(room)
   end
+
+  test "shows a lock badge only on protected rooms", %{conn: conn} do
+    _public = room_fixture(%{name: "Public Room"})
+    _locked = room_fixture(%{name: "Locked Room", password: "secret1"})
+
+    {:ok, _view, html} = live(conn, ~p"/sessions/rooms")
+
+    assert html =~ "room-lock-badge"
+    # exactly one badge (only the protected room)
+    assert length(String.split(html, "class=\"room-lock-badge")) == 2
+  end
 end
