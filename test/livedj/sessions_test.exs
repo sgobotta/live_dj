@@ -86,6 +86,12 @@ defmodule Livedj.SessionsTest do
       refute Sessions.verify_room_password(room_fixture(), "anything")
     end
 
+    test "verify_room_password/2 returns false for blank input on a protected room" do
+      room = room_fixture(%{password: "secret1"})
+      refute Sessions.verify_room_password(room, "")
+      refute Sessions.verify_room_password(room, nil)
+    end
+
     test "authorization_fingerprint/1 is nil for public rooms, stable for protected" do
       assert Sessions.authorization_fingerprint(room_fixture()) == nil
 
@@ -93,6 +99,19 @@ defmodule Livedj.SessionsTest do
       fp = Sessions.authorization_fingerprint(room)
       assert is_binary(fp)
       assert Sessions.authorization_fingerprint(room) == fp
+    end
+
+    test "authorization_fingerprint/1 changes when the password changes" do
+      room = room_fixture(%{password: "secret1"})
+      fp1 = Sessions.authorization_fingerprint(room)
+
+      {:ok, updated} =
+        Sessions.update_room_password(room, %{"password" => "secret2"})
+
+      fp2 = Sessions.authorization_fingerprint(updated)
+
+      assert is_binary(fp1) and is_binary(fp2)
+      refute fp1 == fp2
     end
 
     test "update_room_password/2 sets then clears protection" do
