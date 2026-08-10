@@ -598,9 +598,9 @@ msgid "Send an action message"
 msgstr ""
 
 #: lib/livedj_web/live/sessions/room_live/show.ex:31
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Skip to the next track"
-msgstr "Pasó a la siguiente pista"
+msgstr ""
 
 #: lib/livedj_web/controllers/room_unlock_html/new.html.heex:12
 #, elixir-autogen, elixir-format
