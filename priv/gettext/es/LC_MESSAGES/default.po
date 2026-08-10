@@ -518,12 +518,12 @@ msgstr "Añade una contraseña para proteger esta sala."
 #: lib/livedj_web/live/sessions/room_live/show.ex:35
 #, elixir-autogen, elixir-format
 msgid "Add a track to the queue"
-msgstr ""
+msgstr "Añade una pista a la cola"
 
 #: lib/livedj_web/live/sessions/room_live/show.ex:40
 #, elixir-autogen, elixir-format
 msgid "Change your display name"
-msgstr ""
+msgstr "Modifica tu nombre de usuario"
 
 #: lib/livedj_web/controllers/room_unlock_html/new.html.heex:35
 #, elixir-autogen, elixir-format
@@ -595,12 +595,12 @@ msgstr ""
 #: lib/livedj_web/live/sessions/room_live/show.ex:29
 #, elixir-autogen, elixir-format
 msgid "Send an action message"
-msgstr ""
+msgstr "Envia un mensaje"
 
 #: lib/livedj_web/live/sessions/room_live/show.ex:31
 #, elixir-autogen, elixir-format
 msgid "Skip to the next track"
-msgstr ""
+msgstr "Saltear a la siguiente pista"
 
 #: lib/livedj_web/controllers/room_unlock_html/new.html.heex:12
 #, elixir-autogen, elixir-format
@@ -615,4 +615,4 @@ msgstr "Esta sala está protegida. Actualiza o elimina su contraseña."
 #: lib/livedj/sessions/chat/commands/dispatcher.ex:70
 #, elixir-autogen, elixir-format
 msgid "Usage: /name <new name>"
-msgstr ""
+msgstr "Uso: /name <nuevo nombre>"
