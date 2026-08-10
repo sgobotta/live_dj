@@ -1107,3 +1107,77 @@ git commit -m "Add Spanish translations for room password protection"
 - **Double room fetch:** `RoomAuth` fetches the room and `RoomLive.Show.mount/3` fetches it again. This is acceptable and keeps responsibilities separated; do not try to thread the room through.
 - **Fingerprint rotation:** changing/removing a password changes (or nils) the fingerprint, so other sessions re-prompt on their next visit. This is intended.
 - **`empty_values: []`** on `password_changeset` is deliberate — it lets a blank submission clear the password rather than being coerced to "no change".
+
+---
+
+## Follow-up work (deferred fixes)
+
+These are intentionally out of the initial scope and to be done in a later
+change. The first two were requested after the feature shipped.
+
+### F1. Refresh in-room visitors' authorization when the password changes
+
+**Current behavior:** changing the password rotates the fingerprint, which
+*re-locks* every other session — anyone currently in the room is challenged
+again on their next reload.
+
+**Desired behavior:** visitors who are already in the room when the password
+changes should keep access across a reload (only people who were *not* present
+get locked out).
+
+**Why it's non-trivial:** authorization lives in each browser's signed session
+**cookie**, which the server can only set over plain HTTP — a LiveView cannot
+rewrite another client's cookie over the WebSocket. So refreshing present
+visitors requires a round-trip, similar to the creator grant-token handoff
+(Task 10).
+
+**Sketch of an approach:**
+- When `update_room_password/2` succeeds, broadcast a `:password_changed` event
+  on the room's existing PubSub topic (see `Livedj.Sessions.Channels`).
+- Each connected `RoomLive.Show` that receives it mints/receives a short-lived
+  signed grant token (reuse `RoomAuth.sign_grant/1`) and `push_event`s the client
+  to hit `GET /sessions/rooms/:id/unlock/grant?token=...` in the background (e.g.
+  a hidden fetch/redirect via a JS hook), which re-writes `authorized_rooms` with
+  the new fingerprint.
+- Only present visitors get the refresh; absent sessions still carry the stale
+  fingerprint and are correctly challenged on their next visit.
+- Consider the interaction with F2: if only owners can change the password, the
+  owner's own session must also be refreshed (the acting session is the one that
+  triggered the change over LiveView).
+- Tests: a present visitor keeps access after a password change + reload; an
+  absent session is re-challenged; the acting user keeps access.
+
+### F2. Restrict password changes to room owners
+
+**Current behavior:** anyone in the room can open the `:settings` modal and
+set/change/remove the password (matches the app's open-collaboration model).
+
+**Desired behavior:** only the room's owner may change the password.
+
+**Why it's a larger change:** the app currently has **no room-ownership concept**
+— rooms have no user association. This requires:
+- A migration adding `rooms.creator_id` (binary_id, FK to `users`), backfilled as
+  nullable for existing rooms.
+- Setting `creator_id` from `current_user` in `create_room` / the creation flow.
+- An owner check (e.g. `Sessions.room_owner?(room, user)`) gating: the settings
+  header button + modal visibility, the `save_room_password`/`remove_room_password`
+  event handlers (defense-in-depth, not just UI), and any future password-admin
+  paths.
+- A product decision for legacy rooms with `creator_id == nil` (e.g. treat as
+  unowned → nobody can change, or fall back to the current open behavior).
+- Tests: owner can change; non-owner cannot (UI hidden *and* the event rejected);
+  legacy nil-owner behavior.
+
+### F3. Non-blocking review minors (carried from the final review)
+
+- The "Password must be at least 4 characters" flash (`show.ex`) ignores the
+  72-byte max and duplicates `@password_min`; derive the message from the
+  changeset error instead.
+- `RoomUnlockController` `get_room!/1` raises on missing/malformed room ids →
+  500 rather than 404 (pre-existing app-wide pattern; consider a `Plug.Exception`
+  impl or a rescue).
+- `update_room_password/2` clears the password if called without a `"password"`
+  key — harmless from the UI, but a footgun for future callers; consider
+  requiring the key.
+- Several unrelated chat/help `es` msgids remain untranslated (fall back to
+  English).
