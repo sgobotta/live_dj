@@ -1185,6 +1185,56 @@ set/change/remove the password (matches the app's open-collaboration model).
 - Update tests that exercise the max boundary (`room_test.exs`,
   `sessions_test.exs`) and any UI `maxlength` hint if present on the inputs.
 
+### F5. Position the lock badge on the album cover's bottom-right corner
+
+**Current behavior:** the lock badge is rendered in
+`room_live/index.html.heex` as a sibling of the player preview, absolutely
+positioned against the outer `.relative flex flex-col` card wrapper
+(`absolute top-1 right-1`). It's a reasonable starting point but sits on the
+card, not on the cover art.
+
+**Desired behavior:** overlay the badge on the **bottom-right corner of the
+album cover**, inside the `song-cover-container` (see
+`lib/livedj_web/components/player_preview.ex:10`).
+
+**Notes:**
+- `song-cover-container` (`h-40 w-40 py-2 px-2`) holds the cover `<img>` /
+  fallback at `h-full w-full`. To anchor a badge to the cover's corner, give the
+  container `relative` and position the badge `absolute bottom-2 right-2`
+  (accounting for the container's `py-2 px-2` padding so it lands on the cover,
+  not the padding gutter).
+- Data flow: `room_protected?/1` is derived from `room`, which
+  `PlayerPreview` does **not** currently receive — it only gets `player`,
+  `rooms_players`, `id`. Either (a) pass `room` (or a `protected?` boolean) into
+  the `live_component` and move the badge markup into `player_preview.ex`, or
+  (b) keep the badge in `index.html.heex` but wrap the preview in a `relative`
+  element sized to the cover so `absolute bottom-*/right-*` targets the cover.
+  Option (a) is cleaner since the badge conceptually belongs to the cover.
+- Keep the existing badge styling (rounded pill, translucent bg, `z-10`,
+  `title`/`aria-label`) and the `hero-lock-closed` icon.
+
+### F6. Reflect lock state in the room header icon
+
+**Current behavior:** the room header's settings button
+(`session.html.heex`, `#settings-btn`) always renders `hero-lock-closed`,
+regardless of whether the room actually has a password.
+
+**Desired behavior:** show `hero-lock-closed` when the room is protected and
+`hero-lock-open` when it is not, so the header reflects the room's real state.
+
+**Notes:**
+- `assigns[:room]` is already available in the session layout (used elsewhere in
+  the file), so drive the icon with
+  `Livedj.Sessions.room_protected?(@room)` — e.g.
+  `name={if Livedj.Sessions.room_protected?(@room), do: "hero-lock-closed", else: "hero-lock-open"}`.
+- Confirm `hero-lock-open` is available in the project's heroicons set before
+  relying on it.
+- The icon must update reactively when the password is set/removed via the
+  settings modal — verify `@room` in the layout is re-read after
+  `save_room_password`/`remove_room_password` (i.e. the socket's `:room` assign
+  is refreshed), otherwise the header will show a stale icon until reload.
+- Consider whether the tooltip text ("Room password") should also vary by state.
+
 ### F3. Non-blocking review minors (carried from the final review)
 
 - The "Password must be at least 4 characters" flash (`show.ex`) ignores the
