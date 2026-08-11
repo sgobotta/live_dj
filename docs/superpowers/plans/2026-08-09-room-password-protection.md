@@ -1168,6 +1168,23 @@ set/change/remove the password (matches the app's open-collaboration model).
 - Tests: owner can change; non-owner cannot (UI hidden *and* the event rejected);
   legacy nil-owner behavior.
 
+### F4. Lower the password maximum to 32 characters
+
+**Current behavior:** `Room` validates the password at `@password_min 4` /
+`@password_max 72`, with `count: :bytes` (72 is bcrypt's input limit).
+
+**Desired behavior:** cap the password at 32 characters.
+
+**Notes:**
+- Change `@password_max` to `32` in `lib/livedj/sessions/room.ex`. Decide whether
+  the limit should count bytes (`count: :bytes`, current) or characters
+  (`count: :codepoints`) — "32 characters" implies codepoints, so the
+  `validate_length/3` `count:` option likely needs to change too.
+- Update the `password_changeset/2` path as well (both go through
+  `put_password_hash/1`, so a single constant change covers both).
+- Update tests that exercise the max boundary (`room_test.exs`,
+  `sessions_test.exs`) and any UI `maxlength` hint if present on the inputs.
+
 ### F3. Non-blocking review minors (carried from the final review)
 
 - The "Password must be at least 4 characters" flash (`show.ex`) ignores the
