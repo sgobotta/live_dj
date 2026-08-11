@@ -8,7 +8,7 @@
 export default {
   mounted() {
     this.handleEvent("refresh_room_grant", ({ url }) => {
-      fetch(url, { method: "GET", credentials: "same-origin" }).catch(() => {})
+      fetch(url, { credentials: "same-origin", method: "GET" }).catch(() => {})
     })
   }
 }
