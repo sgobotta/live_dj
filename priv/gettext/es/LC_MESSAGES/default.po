@@ -460,12 +460,12 @@ msgstr "Espacio"
 msgid "Resync"
 msgstr "Sincronizar"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:313
+#: lib/livedj_web/live/sessions/room_live/show.ex:315
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s ahead of the room."
 msgstr "Estás %{delta}s por delante de la sala."
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:315
+#: lib/livedj_web/live/sessions/room_live/show.ex:317
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s behind the room."
 msgstr "Estás %{delta}s por detrás de la sala."
@@ -485,7 +485,7 @@ msgstr "Enviar mensaje"
 msgid "Toggle chat"
 msgstr "Mostrar/ocultar chat"
 
-#: lib/livedj_web/live/sessions/room_live/show.html.heex:121
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:123
 #, elixir-autogen, elixir-format
 msgid "Type a message..."
 msgstr "Escribe un mensaje..."
@@ -515,12 +515,12 @@ msgstr "Pasó a la siguiente pista"
 msgid "Add a password to protect this room."
 msgstr "Añade una contraseña para proteger esta sala."
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:35
+#: lib/livedj_web/live/sessions/room_live/show.ex:36
 #, elixir-autogen, elixir-format
 msgid "Add a track to the queue"
 msgstr "Añade una pista a la cola"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:40
+#: lib/livedj_web/live/sessions/room_live/show.ex:41
 #, elixir-autogen, elixir-format
 msgid "Change your display name"
 msgstr "Modifica tu nombre de usuario"
@@ -572,7 +572,7 @@ msgstr "Eliminar contraseña"
 msgid "Room password"
 msgstr "Contraseña de la sala"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:346
+#: lib/livedj_web/live/sessions/room_live/show.ex:348
 #, elixir-autogen, elixir-format
 msgid "Room password updated"
 msgstr "Contraseña de la sala actualizada"
@@ -582,17 +582,17 @@ msgstr "Contraseña de la sala actualizada"
 msgid "Save"
 msgstr "Guardar"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:45
+#: lib/livedj_web/live/sessions/room_live/show.ex:46
 #, elixir-autogen, elixir-format
 msgid "Send a message to another room"
 msgstr "Envía un mensaje a otra sala"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:29
+#: lib/livedj_web/live/sessions/room_live/show.ex:30
 #, elixir-autogen, elixir-format
 msgid "Send an action message"
 msgstr "Envía un mensaje"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:31
+#: lib/livedj_web/live/sessions/room_live/show.ex:32
 #, elixir-autogen, elixir-format
 msgid "Skip to the next track"
 msgstr "Saltear a la siguiente pista"
@@ -612,7 +612,7 @@ msgstr "Esta sala está protegida. Actualiza o elimina su contraseña."
 msgid "Usage: /name <new name>"
 msgstr "Uso: /name <nuevo nombre>"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:362
+#: lib/livedj_web/live/sessions/room_live/show.ex:364
 #, elixir-autogen, elixir-format
 msgid "Invalid password"
 msgstr "Contraseña inválida"

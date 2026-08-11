@@ -460,12 +460,12 @@ msgstr ""
 msgid "Resync"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:313
+#: lib/livedj_web/live/sessions/room_live/show.ex:315
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s ahead of the room."
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:315
+#: lib/livedj_web/live/sessions/room_live/show.ex:317
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s behind the room."
 msgstr ""
@@ -485,7 +485,7 @@ msgstr ""
 msgid "Toggle chat"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.html.heex:121
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:123
 #, elixir-autogen, elixir-format
 msgid "Type a message..."
 msgstr ""
@@ -515,12 +515,12 @@ msgstr ""
 msgid "Add a password to protect this room."
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:35
+#: lib/livedj_web/live/sessions/room_live/show.ex:36
 #, elixir-autogen, elixir-format
 msgid "Add a track to the queue"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:40
+#: lib/livedj_web/live/sessions/room_live/show.ex:41
 #, elixir-autogen, elixir-format
 msgid "Change your display name"
 msgstr ""
@@ -572,7 +572,7 @@ msgstr ""
 msgid "Room password"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:346
+#: lib/livedj_web/live/sessions/room_live/show.ex:348
 #, elixir-autogen, elixir-format
 msgid "Room password updated"
 msgstr ""
@@ -582,17 +582,17 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:45
+#: lib/livedj_web/live/sessions/room_live/show.ex:46
 #, elixir-autogen, elixir-format
 msgid "Send a message to another room"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:29
+#: lib/livedj_web/live/sessions/room_live/show.ex:30
 #, elixir-autogen, elixir-format
 msgid "Send an action message"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:31
+#: lib/livedj_web/live/sessions/room_live/show.ex:32
 #, elixir-autogen, elixir-format
 msgid "Skip to the next track"
 msgstr ""
@@ -612,7 +612,7 @@ msgstr ""
 msgid "Usage: /name <new name>"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:362
+#: lib/livedj_web/live/sessions/room_live/show.ex:364
 #, elixir-autogen, elixir-format
 msgid "Invalid password"
 msgstr ""
