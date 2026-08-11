@@ -40,6 +40,19 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexTest do
     assert length(String.split(html, "class=\"room-lock-badge")) == 2
   end
 
+  test "renders the lock badge inside the album cover container", %{conn: conn} do
+    _locked = room_fixture(%{name: "Locked Room", password: "secret1"})
+
+    {:ok, _view, html} = live(conn, ~p"/sessions/rooms")
+
+    badges =
+      html
+      |> Floki.parse_document!()
+      |> Floki.find(".song-cover-container .room-lock-badge")
+
+    assert length(badges) == 1
+  end
+
   test "creating a protected room navigates through the unlock grant", %{
     conn: conn
   } do

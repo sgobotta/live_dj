@@ -74,7 +74,14 @@
               phx-click="open_settings_modal"
               class="text-tone-700 dark:text-tone-300 hover:text-tone-900 dark:hover:text-tone-50 transition-colors duration-150 cursor-pointer"
             >
-              <.icon name="hero-lock-closed" class="h-5 w-5" />
+              <.icon
+                name={
+                  if Livedj.Sessions.room_protected?(@room),
+                    do: "hero-lock-closed",
+                    else: "hero-lock-open"
+                }
+                class="h-5 w-5"
+              />
             </button>
             <.tooltip position={:below} class="left-1/2 -translate-x-1/2 z-30">
               {gettext("Room password")}

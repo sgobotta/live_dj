@@ -94,4 +94,26 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       refute Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
     end
   end
+
+  describe "header lock icon" do
+    test "shows an open lock for a public room", %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+
+      assert view |> element("#settings-btn") |> render() =~ "hero-lock-open"
+    end
+
+    test "shows a closed lock for a protected room", %{conn: conn} do
+      room = room_fixture(%{password: "secret1"})
+      fingerprint = Livedj.Sessions.authorization_fingerprint(room)
+
+      conn =
+        conn
+        |> Plug.Test.init_test_session(%{})
+        |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
+
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+
+      assert view |> element("#settings-btn") |> render() =~ "hero-lock-closed"
+    end
+  end
 end

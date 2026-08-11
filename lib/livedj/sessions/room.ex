@@ -6,7 +6,7 @@ defmodule Livedj.Sessions.Room do
   @type t :: %__MODULE__{}
 
   @password_min 4
-  @password_max 72
+  @password_max 32
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -66,7 +66,7 @@ defmodule Livedj.Sessions.Room do
       validate_length(changeset, :password,
         min: @password_min,
         max: @password_max,
-        count: :bytes
+        count: :codepoints
       )
 
     if changeset.valid? do

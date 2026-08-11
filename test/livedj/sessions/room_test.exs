@@ -36,6 +36,27 @@ defmodule Livedj.Sessions.RoomTest do
       refute changeset.valid?
       assert %{password: [_]} = errors_on(changeset)
     end
+
+    test "accepts a 32-character password" do
+      changeset =
+        Room.changeset(%Room{}, %{
+          "name" => "n",
+          "password" => String.duplicate("a", 32)
+        })
+
+      assert changeset.valid?
+    end
+
+    test "rejects a password longer than 32 characters" do
+      changeset =
+        Room.changeset(%Room{}, %{
+          "name" => "n",
+          "password" => String.duplicate("a", 33)
+        })
+
+      refute changeset.valid?
+      assert %{password: [_]} = errors_on(changeset)
+    end
   end
 
   describe "password_changeset/2" do
