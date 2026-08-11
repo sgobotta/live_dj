@@ -14,6 +14,7 @@ defmodule Livedj.Sessions.Channels do
   @playlist_topic "playlist"
   @presence_topic "room_presence"
   @chat_topic "chat"
+  @room_topic "room"
 
   # ----------------------------------------------------------------------------
   # Player event aliases
@@ -43,6 +44,12 @@ defmodule Livedj.Sessions.Channels do
 
   @message_sent :message_sent
   @messages_updated :messages_updated
+
+  # ----------------------------------------------------------------------------
+  # Room event aliases
+  #
+
+  @password_changed :password_changed
 
   # ----------------------------------------------------------------------------
   # Player topics
@@ -184,6 +191,47 @@ defmodule Livedj.Sessions.Channels do
         chat_topic(room_id),
         {messages_updated_event(), room_id, messages}
       )
+
+  # ----------------------------------------------------------------------------
+  # Room topics
+  #
+
+  @doc """
+  Returns the room topic for a room.
+  """
+  @spec room_topic(binary()) :: binary()
+  def room_topic(room_id), do: @room_topic <> ":" <> room_id
+
+  # ----------------------------------------------------------------------------
+  # Room subscriptions
+  #
+
+  @doc """
+  Subscribes to the room topic for a room.
+  """
+  @spec subscribe_room_topic(binary()) :: :ok | {:error, any()}
+  def subscribe_room_topic(room_id), do: subscribe(room_topic(room_id))
+
+  # ----------------------------------------------------------------------------
+  # Room events
+  #
+
+  @doc """
+  Returns the event name for room password change events.
+  """
+  @spec password_changed_event() :: :password_changed
+  def password_changed_event, do: @password_changed
+
+  # ----------------------------------------------------------------------------
+  # Room broadcasting
+  #
+
+  @doc """
+  Broadcasts a password_changed message to the room topic.
+  """
+  @spec broadcast_room_password_changed!(binary()) :: :ok
+  def broadcast_room_password_changed!(room_id),
+    do: broadcast!(room_topic(room_id), {password_changed_event(), room_id})
 
   # ----------------------------------------------------------------------------
   # Player events

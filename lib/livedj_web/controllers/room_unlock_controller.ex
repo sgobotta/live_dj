@@ -44,17 +44,26 @@ defmodule LivedjWeb.RoomUnlockController do
     end
   end
 
-  def grant(conn, %{"room_id" => id, "token" => token}) do
+  def grant(conn, %{"room_id" => id, "token" => token} = params) do
     room = fetch_room(id)
+    silent? = params["silent"] == "true"
 
     case RoomAuth.verify_grant(token) do
       {:ok, ^id} ->
-        conn
-        |> maybe_authorize(room)
-        |> redirect(to: ~p"/sessions/rooms/#{room}/welcome")
+        conn = maybe_authorize(conn, room)
+
+        if silent? do
+          send_resp(conn, :no_content, "")
+        else
+          redirect(conn, to: ~p"/sessions/rooms/#{room}/welcome")
+        end
 
       _invalid ->
-        redirect(conn, to: ~p"/sessions/rooms/#{room}/unlock")
+        if silent? do
+          send_resp(conn, :forbidden, "")
+        else
+          redirect(conn, to: ~p"/sessions/rooms/#{room}/unlock")
+        end
     end
   end
 

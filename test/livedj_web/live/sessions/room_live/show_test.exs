@@ -111,6 +111,45 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     end
   end
 
+  describe "refreshing in-room visitors on a password change" do
+    setup %{conn: conn} do
+      room = room_fixture(%{password: "secret1"})
+      fingerprint = Livedj.Sessions.authorization_fingerprint(room)
+
+      conn =
+        conn
+        |> Plug.Test.init_test_session(%{})
+        |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
+
+      %{conn: conn, room: room}
+    end
+
+    test "pushes a grant refresh when the password changes", %{
+      conn: conn,
+      room: room
+    } do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+
+      {:ok, _room} =
+        Livedj.Sessions.update_room_password(room, %{"password" => "secret2"})
+
+      assert_push_event(view, "refresh_room_grant", %{url: url})
+      assert url =~ "/sessions/rooms/#{room.id}/unlock/grant"
+    end
+
+    test "does not push a grant refresh when the password is removed", %{
+      conn: conn,
+      room: room
+    } do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+
+      {:ok, _room} =
+        Livedj.Sessions.update_room_password(room, %{"password" => ""})
+
+      refute_push_event(view, "refresh_room_grant", %{})
+    end
+  end
+
   describe "header lock icon" do
     test "shows an open lock for a public room", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")

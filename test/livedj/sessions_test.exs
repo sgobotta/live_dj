@@ -3,6 +3,7 @@ defmodule Livedj.SessionsTest do
   use Livedj.DataCase
 
   alias Livedj.Sessions
+  alias Livedj.Sessions.Channels
   alias Livedj.Sessions.Exceptions.SessionRoomError
 
   describe "rooms" do
@@ -128,6 +129,17 @@ defmodule Livedj.SessionsTest do
 
       refute Sessions.room_protected?(cleared)
       refute Sessions.authorization_fingerprint(cleared) == fp
+    end
+
+    test "update_room_password/2 broadcasts a password change to the room topic" do
+      room = room_fixture()
+      :ok = Channels.subscribe_room_topic(room.id)
+
+      {:ok, _room} =
+        Sessions.update_room_password(room, %{"password" => "secret1"})
+
+      assert_receive {:password_changed, room_id}
+      assert room_id == room.id
     end
 
     test "update_room_password/2 raises when the password key is absent" do

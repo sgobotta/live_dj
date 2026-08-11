@@ -1112,10 +1112,17 @@ git commit -m "Add Spanish translations for room password protection"
 
 ## Follow-up work (deferred fixes)
 
-These are intentionally out of the initial scope and to be done in a later
-change. The first two were requested after the feature shipped.
+These were intentionally out of the initial scope.
 
-### F1. Refresh in-room visitors' authorization when the password changes
+**Status (implemented 2026-08-11):** F1, F3, F4, F5, F6 are done (TDD, all
+committed on this branch). **F2 was skipped** — restricting password changes to
+owners was declined because the app has no login requirement, so a room's
+creator is often an anonymous guest with only a per-browser session id; a
+`creator_id` FK to `users` would be null for guest- and legacy-created rooms,
+leaving no workable owner to lock changes to. Revisit only if room creation
+becomes login-gated.
+
+### F1. Refresh in-room visitors' authorization when the password changes ✅ DONE
 
 **Current behavior:** changing the password rotates the fingerprint, which
 *re-locks* every other session — anyone currently in the room is challenged
@@ -1147,7 +1154,7 @@ visitors requires a round-trip, similar to the creator grant-token handoff
 - Tests: a present visitor keeps access after a password change + reload; an
   absent session is re-challenged; the acting user keeps access.
 
-### F2. Restrict password changes to room owners
+### F2. Restrict password changes to room owners ❌ SKIPPED (see status note above)
 
 **Current behavior:** anyone in the room can open the `:settings` modal and
 set/change/remove the password (matches the app's open-collaboration model).
@@ -1168,7 +1175,7 @@ set/change/remove the password (matches the app's open-collaboration model).
 - Tests: owner can change; non-owner cannot (UI hidden *and* the event rejected);
   legacy nil-owner behavior.
 
-### F4. Lower the password maximum to 32 characters
+### F4. Lower the password maximum to 32 characters ✅ DONE
 
 **Current behavior:** `Room` validates the password at `@password_min 4` /
 `@password_max 72`, with `count: :bytes` (72 is bcrypt's input limit).
@@ -1185,7 +1192,7 @@ set/change/remove the password (matches the app's open-collaboration model).
 - Update tests that exercise the max boundary (`room_test.exs`,
   `sessions_test.exs`) and any UI `maxlength` hint if present on the inputs.
 
-### F5. Position the lock badge on the album cover's bottom-right corner
+### F5. Position the lock badge on the album cover's bottom-right corner ✅ DONE
 
 **Current behavior:** the lock badge is rendered in
 `room_live/index.html.heex` as a sibling of the player preview, absolutely
@@ -1213,7 +1220,7 @@ album cover**, inside the `song-cover-container` (see
 - Keep the existing badge styling (rounded pill, translucent bg, `z-10`,
   `title`/`aria-label`) and the `hero-lock-closed` icon.
 
-### F6. Reflect lock state in the room header icon
+### F6. Reflect lock state in the room header icon ✅ DONE
 
 **Current behavior:** the room header's settings button
 (`session.html.heex`, `#settings-btn`) always renders `hero-lock-closed`,
@@ -1235,7 +1242,13 @@ regardless of whether the room actually has a password.
   is refreshed), otherwise the header will show a stale icon until reload.
 - Consider whether the tooltip text ("Room password") should also vary by state.
 
-### F3. Non-blocking review minors (carried from the final review)
+### F3. Non-blocking review minors (carried from the final review) ✅ DONE
+
+Note: the flagged untranslated chat/help `es` strings were already resolved in
+earlier commits; the remaining empty `es` entries are pre-existing admin field
+labels (Etag/Slug — technical terms left as-is). The new "Invalid password"
+string was translated.
+
 
 - The "Password must be at least 4 characters" flash (`show.ex`) ignores the
   72-byte max and duplicates `@password_min`; derive the message from the

@@ -7,6 +7,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   alias Livedj.Sessions
   alias Livedj.Sessions.Chat.Commands.Dispatcher, as: ChatDispatcher
   alias Livedj.Sessions.Exceptions.SessionRoomError
+  alias LivedjWeb.RoomAuth
 
   import Phoenix.Component
 
@@ -94,6 +95,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:ok, :joined} = Sessions.join_player(room_id)
         {:ok, messages} = Sessions.join_chat(room_id)
         {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
+        :ok = Sessions.subscribe_room(room_id)
 
         socket
         |> assign(:messages, messages)
@@ -461,6 +463,31 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_info({:messages_updated, _room_id, messages}, socket) do
     {:noreply, assign(socket, :messages, messages)}
+  end
+
+  # A password change re-keys the room's authorization fingerprint, which would
+  # re-lock everyone currently in the room on their next reload. Refresh the
+  # in-memory room (so the header/badge update live) and, for a still-protected
+  # room, hand the client a fresh short-lived grant so it can silently rewrite
+  # its authorization cookie with the new fingerprint and keep access.
+  def handle_info(
+        {:password_changed, room_id},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    room = Sessions.get_room!(room_id)
+    socket = assign(socket, :room, room)
+
+    socket =
+      if Sessions.room_protected?(room) do
+        push_event(socket, "refresh_room_grant", %{
+          url:
+            ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: RoomAuth.sign_grant(room.id), silent: true]}"
+        })
+      else
+        socket
+      end
+
+    {:noreply, socket}
   end
 
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::

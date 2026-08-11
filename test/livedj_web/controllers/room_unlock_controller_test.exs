@@ -76,6 +76,37 @@ defmodule LivedjWeb.RoomUnlockControllerTest do
                %{room.id => Livedj.Sessions.authorization_fingerprint(room)}
     end
 
+    test "silent grant authorizes and returns 204 without redirecting", %{
+      conn: conn
+    } do
+      room = room_fixture(%{password: "secret1"})
+      token = LivedjWeb.RoomAuth.sign_grant(room.id)
+
+      conn =
+        get(
+          conn,
+          ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: token, silent: true]}"
+        )
+
+      assert conn.status == 204
+
+      assert get_session(conn, "authorized_rooms") ==
+               %{room.id => Livedj.Sessions.authorization_fingerprint(room)}
+    end
+
+    test "silent grant returns 403 when the token is invalid", %{conn: conn} do
+      room = room_fixture(%{password: "secret1"})
+
+      conn =
+        get(
+          conn,
+          ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: "bogus", silent: true]}"
+        )
+
+      assert conn.status == 403
+      refute get_session(conn, "authorized_rooms")
+    end
+
     test "redirects to unlock when the token is invalid", %{conn: conn} do
       room = room_fixture(%{password: "secret1"})
 

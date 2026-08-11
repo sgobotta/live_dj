@@ -810,6 +810,13 @@ defmodule Livedj.Sessions do
     |> binary_part(0, 16)
   end
 
+  @doc """
+  Subscribes the caller to a room's topic, used for room-wide events such as
+  password changes.
+  """
+  @spec subscribe_room(binary()) :: :ok | {:error, any()}
+  def subscribe_room(room_id), do: Channels.subscribe_room_topic(room_id)
+
   @doc "Sets, changes, or clears a room's password."
   @spec update_room_password(Room.t(), map()) ::
           {:ok, Room.t()} | {:error, Ecto.Changeset.t()}
@@ -820,8 +827,13 @@ defmodule Livedj.Sessions do
               "got: #{inspect(attrs)}"
     end
 
-    room
-    |> Room.password_changeset(attrs)
-    |> Repo.update()
+    case room |> Room.password_changeset(attrs) |> Repo.update() do
+      {:ok, updated_room} = result ->
+        :ok = Channels.broadcast_room_password_changed!(updated_room.id)
+        result
+
+      error ->
+        error
+    end
   end
 end
