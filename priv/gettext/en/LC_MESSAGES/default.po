@@ -194,7 +194,7 @@ msgstr ""
 #: lib/livedj_web/live/admin/sessions/room_live/index.ex:27
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:5
 #: lib/livedj_web/live/sessions/room_live/index.ex:111
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:55
+#: lib/livedj_web/live/sessions/room_live/index.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "New Room"
 msgstr ""
@@ -530,7 +530,7 @@ msgstr ""
 msgid "Enter room"
 msgstr ""
 
-#: lib/livedj_web/controllers/room_unlock_controller.ex:38
+#: lib/livedj_web/controllers/room_unlock_controller.ex:40
 #, elixir-autogen, elixir-format
 msgid "Incorrect password. Please try again."
 msgstr ""
@@ -555,13 +555,8 @@ msgstr ""
 msgid "Password (optional)"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:354
-#, elixir-autogen, elixir-format
-msgid "Password must be at least 4 characters"
-msgstr ""
-
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:20
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:21
+#: lib/livedj_web/components/player_preview.ex:15
+#: lib/livedj_web/components/player_preview.ex:16
 #, elixir-autogen, elixir-format
 msgid "Password protected"
 msgstr ""
@@ -571,7 +566,7 @@ msgstr ""
 msgid "Remove password"
 msgstr ""
 
-#: lib/livedj_web/components/layouts/session.html.heex:80
+#: lib/livedj_web/components/layouts/session.html.heex:87
 #: lib/livedj_web/components/session_modals.ex:177
 #, elixir-autogen, elixir-format
 msgid "Room password"
@@ -615,4 +610,9 @@ msgstr ""
 #: lib/livedj/sessions/chat/commands/dispatcher.ex:70
 #, elixir-autogen, elixir-format
 msgid "Usage: /name <new name>"
+msgstr ""
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:362
+#, elixir-autogen, elixir-format
+msgid "Invalid password"
 msgstr ""

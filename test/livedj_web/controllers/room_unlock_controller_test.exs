@@ -45,6 +45,20 @@ defmodule LivedjWeb.RoomUnlockControllerTest do
     end
   end
 
+  describe "invalid room ids" do
+    test "returns 404 for a nonexistent (valid) room id", %{conn: conn} do
+      assert_error_sent 404, fn ->
+        get(conn, ~p"/sessions/rooms/#{Ecto.UUID.generate()}/unlock")
+      end
+    end
+
+    test "returns 404 for a malformed room id", %{conn: conn} do
+      assert_error_sent 404, fn ->
+        get(conn, "/sessions/rooms/not-a-uuid/unlock")
+      end
+    end
+  end
+
   describe "GET /sessions/rooms/:room_id/unlock/grant" do
     test "authorizes the creator with a valid token and redirects to welcome",
          %{

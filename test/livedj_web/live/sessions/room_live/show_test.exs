@@ -78,6 +78,22 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       assert Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
     end
 
+    test "shows the changeset error when the password is too long", %{
+      conn: conn,
+      room: room
+    } do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}/settings")
+
+      html =
+        view
+        |> form("#room-password-form", %{password: String.duplicate("a", 33)})
+        |> render_submit()
+
+      # message reflects the max constraint, not the hardcoded min
+      assert html =~ "como máximo 32"
+      refute html =~ "al menos 4 caracteres"
+    end
+
     test "removes an existing password", %{conn: conn} do
       room = room_fixture(%{password: "secret1"})
       fingerprint = Livedj.Sessions.authorization_fingerprint(room)

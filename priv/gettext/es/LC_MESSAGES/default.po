@@ -194,7 +194,7 @@ msgstr "Nombre"
 #: lib/livedj_web/live/admin/sessions/room_live/index.ex:27
 #: lib/livedj_web/live/admin/sessions/room_live/index.html.heex:5
 #: lib/livedj_web/live/sessions/room_live/index.ex:111
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:55
+#: lib/livedj_web/live/sessions/room_live/index.html.heex:44
 #, elixir-autogen, elixir-format
 msgid "New Room"
 msgstr "Nueva Sala"
@@ -530,7 +530,7 @@ msgstr "Modifica tu nombre de usuario"
 msgid "Enter room"
 msgstr "Entrar a la sala"
 
-#: lib/livedj_web/controllers/room_unlock_controller.ex:38
+#: lib/livedj_web/controllers/room_unlock_controller.ex:40
 #, elixir-autogen, elixir-format
 msgid "Incorrect password. Please try again."
 msgstr "Contraseña incorrecta. Inténtalo de nuevo."
@@ -555,13 +555,8 @@ msgstr "Contraseña"
 msgid "Password (optional)"
 msgstr "Contraseña (opcional)"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:354
-#, elixir-autogen, elixir-format
-msgid "Password must be at least 4 characters"
-msgstr "La contraseña debe tener al menos 4 caracteres"
-
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:20
-#: lib/livedj_web/live/sessions/room_live/index.html.heex:21
+#: lib/livedj_web/components/player_preview.ex:15
+#: lib/livedj_web/components/player_preview.ex:16
 #, elixir-autogen, elixir-format
 msgid "Password protected"
 msgstr "Protegida por contraseña"
@@ -571,7 +566,7 @@ msgstr "Protegida por contraseña"
 msgid "Remove password"
 msgstr "Eliminar contraseña"
 
-#: lib/livedj_web/components/layouts/session.html.heex:80
+#: lib/livedj_web/components/layouts/session.html.heex:87
 #: lib/livedj_web/components/session_modals.ex:177
 #, elixir-autogen, elixir-format
 msgid "Room password"
@@ -616,3 +611,8 @@ msgstr "Esta sala está protegida. Actualiza o elimina su contraseña."
 #, elixir-autogen, elixir-format
 msgid "Usage: /name <new name>"
 msgstr "Uso: /name <nuevo nombre>"
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:362
+#, elixir-autogen, elixir-format
+msgid "Invalid password"
+msgstr "Contraseña inválida"

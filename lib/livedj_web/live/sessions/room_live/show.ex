@@ -346,13 +346,21 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
          |> put_flash(:info, gettext("Room password updated"))
          |> push_patch(to: ~p"/sessions/rooms/#{room}")}
 
-      {:error, %Ecto.Changeset{}} ->
-        {:noreply,
-         put_flash(
-           socket,
-           :error,
-           gettext("Password must be at least 4 characters")
-         )}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, password_error_message(changeset))}
+    end
+  end
+
+  defp password_error_message(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn error ->
+      LivedjWeb.CoreComponents.translate_error(error)
+    end)
+    |> Map.get(:password, [])
+    |> Enum.join(", ")
+    |> case do
+      "" -> gettext("Invalid password")
+      message -> message
     end
   end
 

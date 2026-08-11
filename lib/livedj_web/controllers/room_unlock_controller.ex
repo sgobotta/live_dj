@@ -2,10 +2,12 @@ defmodule LivedjWeb.RoomUnlockController do
   use LivedjWeb, :controller
 
   alias Livedj.Sessions
+  alias Livedj.Sessions.Exceptions.SessionRoomError
+  alias Livedj.Sessions.Room
   alias LivedjWeb.RoomAuth
 
   def new(conn, %{"room_id" => id}) do
-    room = Sessions.get_room!(id)
+    room = fetch_room(id)
 
     if Sessions.room_protected?(room) do
       render(conn, :new,
@@ -20,7 +22,7 @@ defmodule LivedjWeb.RoomUnlockController do
   end
 
   def create(conn, %{"room_id" => id, "password" => password}) do
-    room = Sessions.get_room!(id)
+    room = fetch_room(id)
 
     if Sessions.verify_room_password(room, password) do
       authorized = get_session(conn, "authorized_rooms") || %{}
@@ -43,7 +45,7 @@ defmodule LivedjWeb.RoomUnlockController do
   end
 
   def grant(conn, %{"room_id" => id, "token" => token}) do
-    room = Sessions.get_room!(id)
+    room = fetch_room(id)
 
     case RoomAuth.verify_grant(token) do
       {:ok, ^id} ->
@@ -54,6 +56,17 @@ defmodule LivedjWeb.RoomUnlockController do
       _invalid ->
         redirect(conn, to: ~p"/sessions/rooms/#{room}/unlock")
     end
+  end
+
+  # Turns a missing or malformed room id into a 404 instead of a 500. Both the
+  # app's SessionRoomError (raised by get_room! for a nonexistent id) and Ecto's
+  # CastError (raised for a malformed binary id) become an Ecto.NoResultsError,
+  # which phoenix_ecto renders as 404.
+  defp fetch_room(id) do
+    Sessions.get_room!(id)
+  rescue
+    _e in [SessionRoomError, Ecto.Query.CastError] ->
+      reraise Ecto.NoResultsError, [queryable: Room], __STACKTRACE__
   end
 
   defp maybe_authorize(conn, room) do

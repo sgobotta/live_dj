@@ -814,6 +814,12 @@ defmodule Livedj.Sessions do
   @spec update_room_password(Room.t(), map()) ::
           {:ok, Room.t()} | {:error, Ecto.Changeset.t()}
   def update_room_password(%Room{} = room, attrs) do
+    unless Map.has_key?(attrs, "password") or Map.has_key?(attrs, :password) do
+      raise ArgumentError,
+            "update_room_password/2 requires a :password (or \"password\") key; " <>
+              "got: #{inspect(attrs)}"
+    end
+
     room
     |> Room.password_changeset(attrs)
     |> Repo.update()

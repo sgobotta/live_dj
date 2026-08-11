@@ -129,5 +129,16 @@ defmodule Livedj.SessionsTest do
       refute Sessions.room_protected?(cleared)
       refute Sessions.authorization_fingerprint(cleared) == fp
     end
+
+    test "update_room_password/2 raises when the password key is absent" do
+      protected = room_fixture(%{password: "secret1"})
+
+      assert_raise ArgumentError, fn ->
+        Sessions.update_room_password(protected, %{})
+      end
+
+      # the password must be left untouched, not silently cleared
+      assert Sessions.room_protected?(Sessions.get_room!(protected.id))
+    end
   end
 end
