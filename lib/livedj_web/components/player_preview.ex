@@ -7,7 +7,7 @@ defmodule LivedjWeb.PlayerPreview do
 
   def render(assigns) do
     ~H"""
-    <div class="h-40 w-40 py-2 px-2">
+    <div class="song-cover-container h-40 w-40 py-2 px-2">
       <%= if player?(@player) && @player.media_thumbnail_url != "" do %>
         <img
           class="h-full w-full rounded-md ring-0 ring-white"
