@@ -530,7 +530,7 @@ msgstr "Modifica tu nombre de usuario"
 msgid "Enter room"
 msgstr "Entrar a la sala"
 
-#: lib/livedj_web/controllers/room_unlock_controller.ex:37
+#: lib/livedj_web/controllers/room_unlock_controller.ex:38
 #, elixir-autogen, elixir-format
 msgid "Incorrect password. Please try again."
 msgstr "Contraseña incorrecta. Inténtalo de nuevo."
@@ -590,12 +590,12 @@ msgstr "Guardar"
 #: lib/livedj_web/live/sessions/room_live/show.ex:45
 #, elixir-autogen, elixir-format
 msgid "Send a message to another room"
-msgstr ""
+msgstr "Envía un mensaje a otra sala"
 
 #: lib/livedj_web/live/sessions/room_live/show.ex:29
 #, elixir-autogen, elixir-format
 msgid "Send an action message"
-msgstr "Envia un mensaje"
+msgstr "Envía un mensaje"
 
 #: lib/livedj_web/live/sessions/room_live/show.ex:31
 #, elixir-autogen, elixir-format

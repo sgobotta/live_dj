@@ -530,7 +530,7 @@ msgstr ""
 msgid "Enter room"
 msgstr ""
 
-#: lib/livedj_web/controllers/room_unlock_controller.ex:37
+#: lib/livedj_web/controllers/room_unlock_controller.ex:38
 #, elixir-autogen, elixir-format
 msgid "Incorrect password. Please try again."
 msgstr ""
