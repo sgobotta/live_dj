@@ -224,28 +224,34 @@ defmodule LivedjWeb.CustomComponents do
     <div
       id={@id}
       class="
-        grid grid-rows-1 grid-flow-col auto-cols-max
-        py-4 w-max gap-4 px-1
+        grid gap-4 py-4
+        grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
       "
     >
       <div
         :for={module <- @modules}
         id={@module_id && @module_id.(module)}
         class="
-          group
-          h-52 w-40 rounded-lg
+          group rounded-xl
+          bg-tone-50 dark:bg-tone-800
+          border border-tone-200 dark:border-transparent
+          shadow-sm hover:shadow-lg
           transition duration-300
-          bg-tone-50 hover:brightness-90 border-[1px] border-tone-200 dark:border-0
-          dark:bg-tone-800 dark:hover:bg-tone-800 dark:hover:brightness-110
+          hover:-translate-y-1 hover:brightness-[0.98] dark:hover:brightness-110
         "
       >
         <.link
           phx-click={@module_click && @module_click.(module)}
           href="#"
-          class={["relative p-0", @module_click && "hover:cursor-pointer"]}
+          class={[
+            "block rounded-xl p-2 focus:outline-none",
+            "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
+            "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
+            @module_click && "hover:cursor-pointer"
+          ]}
           tabindex="0"
         >
-          <div class="relative leading-6 text-tone-900 hover:text-tone-700">
+          <div class="relative leading-6 text-tone-900 dark:text-tone-100">
             {render_slot(@inner_block, module)}
           </div>
         </.link>

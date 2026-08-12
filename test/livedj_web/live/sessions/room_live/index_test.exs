@@ -53,6 +53,28 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexTest do
     assert length(badges) == 1
   end
 
+  test "renders an empty state when there are no rooms", %{conn: conn} do
+    {:ok, _view, html} = live(conn, ~p"/sessions/rooms")
+
+    assert html =~ "No rooms yet"
+    # No featured hero and no grid when there are no rooms.
+    refute html =~ ~s(id="room-grid")
+  end
+
+  test "features one room and lists the rest in a grid", %{conn: conn} do
+    _first = room_fixture(%{name: "First Room"})
+    _second = room_fixture(%{name: "Second Room"})
+
+    {:ok, _view, html} = live(conn, ~p"/sessions/rooms")
+
+    # One room is featured (hero), the rest render in the grid.
+    assert html =~ "Featured"
+    assert html =~ ~s(id="room-grid")
+    assert html =~ "First Room"
+    assert html =~ "Second Room"
+    refute html =~ "No rooms yet"
+  end
+
   test "creating a protected room navigates through the unlock grant", %{
     conn: conn
   } do

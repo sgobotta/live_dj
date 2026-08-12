@@ -3,37 +3,141 @@
     {gettext("Public rooms")}
   </.header>
 
-  <div class="w-full overflow-x-scroll" id="salsa">
+  <%= if @featured do %>
+    <.link
+      id={"featured-#{@featured.room.id}"}
+      navigate={~p"/sessions/rooms/#{@featured.room}"}
+      class="
+        group relative mt-4 block overflow-hidden rounded-2xl
+        border border-tone-200 dark:border-transparent
+        shadow-sm transition duration-300 hover:shadow-xl focus:outline-none
+        focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
+        focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
+      "
+    >
+      <div class="absolute inset-0 -z-10">
+        <img
+          :if={cover_url(@featured)}
+          src={cover_url(@featured)}
+          class="h-full w-full scale-110 object-cover opacity-40 blur-2xl dark:opacity-30"
+        />
+        <div class="absolute inset-0 bg-tone-50/85 dark:bg-tone-900/85"></div>
+      </div>
+
+      <div class="relative flex flex-col gap-6 p-6 md:flex-row md:items-center">
+        <div class="mx-auto w-full max-w-56 shrink-0 md:mx-0">
+          <.live_component
+            id={"featured-cover-#{@featured.room.id}"}
+            player={@featured.player}
+            room={@featured.room}
+            module={LivedjWeb.PlayerPreview}
+            size={:lg}
+            rooms_players={@rooms_players}
+          />
+        </div>
+
+        <div class="flex min-w-0 flex-col justify-center gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-brand">
+              {gettext("Featured")}
+            </span>
+            <span
+              :if={playing?(@featured)}
+              class="flex items-center gap-1 text-xs font-medium text-tone-600 dark:text-tone-300"
+            >
+              <span class="h-2 w-2 animate-pulse rounded-full bg-brand"></span>
+              {gettext("Live")}
+            </span>
+          </div>
+
+          <h2 class="truncate text-2xl font-bold text-tone-900 dark:text-tone-100">
+            {@featured.room.name}
+          </h2>
+
+          <div class="min-w-0">
+            <%= if now_playing_title(@featured) do %>
+              <p class="truncate text-sm font-medium text-tone-800 dark:text-tone-200">
+                {now_playing_title(@featured)}
+              </p>
+              <p
+                :if={now_playing_artist(@featured)}
+                class="truncate text-xs text-tone-500"
+              >
+                {now_playing_artist(@featured)}
+              </p>
+            <% else %>
+              <p class="text-sm text-tone-500">
+                {gettext("Nothing playing right now")}
+              </p>
+            <% end %>
+          </div>
+
+          <.mini_avatar_stack users={@featured.users} class="mt-1" />
+        </div>
+      </div>
+    </.link>
+  <% end %>
+
+  <%= if @rest != [] do %>
+    <h3 class="mt-8 text-sm font-semibold uppercase tracking-wide text-tone-500">
+      {gettext("More rooms")}
+    </h3>
+
     <.room_grid
       :let={%{id: _room_id, room: room, player: player, users: users}}
       id="room-grid"
-      modules={@rooms_players}
+      modules={@rest}
       module_click={
         fn %{room: room} -> JS.navigate(~p"/sessions/rooms/#{room}") end
       }
     >
-      <div class="relative flex flex-col">
+      <div class="flex flex-col gap-2">
         <.live_component
           id={"player-preview-#{room.id}"}
           player={player}
           room={room}
           module={LivedjWeb.PlayerPreview}
+          size={:md}
           rooms_players={@rooms_players}
         />
-        <div class="
-          h-12 w-40 px-2 font-semibold
-          text-tone-900 dark:text-tone-100
-        ">
-          <p class="font-normal text-xs truncate h-5">
+        <div class="min-w-0 px-1">
+          <p class="truncate text-sm font-medium text-tone-900 dark:text-tone-100">
             {room.name}
           </p>
-          <.mini_avatar_stack users={users} />
+          <%= if title = now_playing_title(%{player: player}) do %>
+            <p class="truncate text-xs text-tone-500">{title}</p>
+          <% else %>
+            <p class="truncate text-xs text-tone-400 dark:text-tone-500">
+              {gettext("Idle")}
+            </p>
+          <% end %>
+          <.mini_avatar_stack users={users} class="mt-1.5" />
         </div>
       </div>
     </.room_grid>
-  </div>
+  <% end %>
 
-  <.link patch={~p"/sessions/rooms/new"} tabindex="-1">
+  <%= if is_nil(@featured) do %>
+    <div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
+      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-tone-100 dark:bg-tone-800">
+        <.icon name="hero-musical-note" class="h-8 w-8 text-tone-400" />
+      </div>
+      <h2 class="text-lg font-semibold text-tone-900 dark:text-tone-100">
+        {gettext("No rooms yet")}
+      </h2>
+      <p class="max-w-sm text-sm text-tone-500">
+        {gettext("Be the first to start a room and get the music going.")}
+      </p>
+      <.link patch={~p"/sessions/rooms/new"}>
+        <.button class="flex items-center gap-2 rounded-full px-5 py-3">
+          <.icon name="hero-plus" class="h-5 w-5" />
+          {gettext("New Room")}
+        </.button>
+      </.link>
+    </div>
+  <% end %>
+
+  <.link :if={@featured} patch={~p"/sessions/rooms/new"} tabindex="-1">
     <.button class="
       fixed bottom-6 right-6
       flex items-center gap-2
