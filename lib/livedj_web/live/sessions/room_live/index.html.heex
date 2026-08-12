@@ -128,25 +128,56 @@
       <p class="max-w-sm text-sm text-tone-500">
         {gettext("Be the first to start a room and get the music going.")}
       </p>
-      <.link patch={~p"/sessions/rooms/new"}>
-        <.button class="flex items-center gap-2 rounded-full px-5 py-3">
-          <.icon name="hero-plus" class="h-5 w-5" />
-          {gettext("New Room")}
-        </.button>
+      <.link
+        patch={~p"/sessions/rooms/new"}
+        class="
+          group inline-flex items-center gap-2
+          rounded-full px-5 py-3
+          bg-gradient-to-br from-violet-500 to-violet-700
+          text-sm font-semibold text-white
+          shadow-lg shadow-violet-500/40
+          transition duration-300
+          hover:scale-105 hover:shadow-xl hover:shadow-violet-500/50
+          active:scale-95
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400
+          focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100
+          dark:focus-visible:ring-offset-tone-900
+        "
+      >
+        <.icon
+          name="hero-plus"
+          class="h-5 w-5 transition-transform duration-300 group-hover:rotate-90"
+        />
+        {gettext("New Room")}
       </.link>
     </div>
   <% end %>
 
-  <.link :if={@featured} patch={~p"/sessions/rooms/new"} tabindex="-1">
-    <.button class="
-      fixed bottom-6 right-6
-      flex items-center gap-2
-      rounded-full shadow-lg
-      px-5 py-3
-    ">
-      <.icon name="hero-plus" class="h-5 w-5" />
-      {gettext("New Room")}
-    </.button>
+  <.link
+    :if={@featured}
+    patch={~p"/sessions/rooms/new"}
+    aria-label={gettext("New Room")}
+    title={gettext("New Room")}
+    class="
+      group fixed bottom-6 right-6 z-40
+      inline-flex items-center gap-2
+      rounded-full p-4 sm:px-5 sm:py-3
+      bg-gradient-to-br from-violet-500 to-violet-700
+      text-sm font-semibold text-white
+      shadow-lg shadow-violet-500/40
+      transition duration-300
+      hover:scale-105 hover:shadow-xl hover:shadow-violet-500/50
+      active:scale-95
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400
+      focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100
+      dark:focus-visible:ring-offset-tone-900
+    "
+  >
+    <.icon
+      name="hero-plus"
+      class="h-5 w-5 transition-transform duration-300 group-hover:rotate-90"
+    />
+    <span class="hidden sm:inline">{gettext("New Room")}</span>
   </.link>
 
   <.modal
