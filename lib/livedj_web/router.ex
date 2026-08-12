@@ -38,6 +38,10 @@ defmodule LivedjWeb.Router do
 
     get "/", PageController, :home
 
+    get "/sessions/rooms/:room_id/unlock", RoomUnlockController, :new
+    post "/sessions/rooms/:room_id/unlock", RoomUnlockController, :create
+    get "/sessions/rooms/:room_id/unlock/grant", RoomUnlockController, :grant
+
     live_session :sessions_index,
       on_mount: [
         {LivedjWeb.UserAuth, :mount_current_user},
@@ -53,7 +57,8 @@ defmodule LivedjWeb.Router do
     live_session :sessions_show,
       on_mount: [
         {LivedjWeb.UserAuth, :mount_current_user},
-        {LivedjWeb.Theme, :fetch_theme}
+        {LivedjWeb.Theme, :fetch_theme},
+        {LivedjWeb.RoomAuth, :ensure_room_access}
       ],
       root_layout: {LivedjWeb.Layouts, :root_session} do
       scope "/sessions", Sessions do
@@ -61,6 +66,7 @@ defmodule LivedjWeb.Router do
         live "/rooms/:id/welcome", RoomLive.Show, :welcome
         live "/rooms/:id/browse", RoomLive.Show, :browse
         live "/rooms/:id/help", RoomLive.Show, :help
+        live "/rooms/:id/settings", RoomLive.Show, :settings
       end
     end
 

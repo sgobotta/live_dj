@@ -1,0 +1,38 @@
+<div class="min-h-dvh flex items-center justify-center bg-tone-200 dark:bg-tone-800 px-4">
+  <div class="w-full max-w-sm rounded-2xl bg-tone-50 dark:bg-tone-900 border border-tone-300 dark:border-tone-700 shadow-lg p-6">
+    <div class="flex flex-col items-center gap-2 mb-6">
+      <.icon
+        name="hero-lock-closed"
+        class="h-8 w-8 text-tone-700 dark:text-tone-300"
+      />
+      <h1 class="text-lg font-semibold text-tone-900 dark:text-tone-100 text-center">
+        {@room.name}
+      </h1>
+      <p class="text-sm text-tone-600 dark:text-tone-400 text-center">
+        {gettext("This room is password protected")}
+      </p>
+    </div>
+
+    <%= if @error do %>
+      <p class="mb-3 text-sm text-red-600 dark:text-red-400 text-center">
+        {@error}
+      </p>
+    <% end %>
+
+    <.form
+      :let={_f}
+      for={%{}}
+      action={~p"/sessions/rooms/#{@room}/unlock"}
+      method="post"
+    >
+      <input
+        type="password"
+        name="password"
+        autofocus
+        placeholder={gettext("Password")}
+        class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+      />
+      <.button class="mt-4 w-full">{gettext("Enter room")}</.button>
+    </.form>
+  </div>
+</div>

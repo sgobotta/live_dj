@@ -30,6 +30,13 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
           placeholder={@placeholder_name}
           class="focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
         />
+        <.input
+          field={@form[:password]}
+          type="password"
+          label={gettext("Password (optional)")}
+          placeholder={gettext("Leave blank for a public room")}
+          class="focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+        />
         <:actions>
           <.button phx-disable-with={gettext("Saving...")}>
             {gettext("Save Room")}
@@ -94,10 +101,19 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, gettext("Room created successfully"))
-         |> push_navigate(to: ~p"/sessions/rooms/#{room}/welcome")}
+         |> push_navigate(to: creation_redirect(room))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
+    end
+  end
+
+  defp creation_redirect(room) do
+    if Livedj.Sessions.room_protected?(room) do
+      token = LivedjWeb.RoomAuth.sign_grant(room.id)
+      ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: token]}"
+    else
+      ~p"/sessions/rooms/#{room}/welcome"
     end
   end
 

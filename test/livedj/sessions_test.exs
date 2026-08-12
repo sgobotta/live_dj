@@ -3,6 +3,7 @@ defmodule Livedj.SessionsTest do
   use Livedj.DataCase
 
   alias Livedj.Sessions
+  alias Livedj.Sessions.Channels
   alias Livedj.Sessions.Exceptions.SessionRoomError
 
   describe "rooms" do
@@ -61,6 +62,95 @@ defmodule Livedj.SessionsTest do
     test "change_room/1 returns a room changeset" do
       room = room_fixture()
       assert %Ecto.Changeset{} = Sessions.change_room(room)
+    end
+  end
+
+  describe "room password protection" do
+    import Livedj.SessionsFixtures
+
+    test "room_protected?/1 reflects presence of a password" do
+      assert Sessions.room_protected?(room_fixture(%{password: "secret1"}))
+      refute Sessions.room_protected?(room_fixture())
+    end
+
+    test "verify_room_password/2 accepts the correct password" do
+      room = room_fixture(%{password: "secret1"})
+      assert Sessions.verify_room_password(room, "secret1")
+    end
+
+    test "verify_room_password/2 rejects an incorrect password" do
+      room = room_fixture(%{password: "secret1"})
+      refute Sessions.verify_room_password(room, "wrong")
+    end
+
+    test "verify_room_password/2 returns false for a public room" do
+      refute Sessions.verify_room_password(room_fixture(), "anything")
+    end
+
+    test "verify_room_password/2 returns false for blank input on a protected room" do
+      room = room_fixture(%{password: "secret1"})
+      refute Sessions.verify_room_password(room, "")
+      refute Sessions.verify_room_password(room, nil)
+    end
+
+    test "authorization_fingerprint/1 is nil for public rooms, stable for protected" do
+      assert Sessions.authorization_fingerprint(room_fixture()) == nil
+
+      room = room_fixture(%{password: "secret1"})
+      fp = Sessions.authorization_fingerprint(room)
+      assert is_binary(fp)
+      assert Sessions.authorization_fingerprint(room) == fp
+    end
+
+    test "authorization_fingerprint/1 changes when the password changes" do
+      room = room_fixture(%{password: "secret1"})
+      fp1 = Sessions.authorization_fingerprint(room)
+
+      {:ok, updated} =
+        Sessions.update_room_password(room, %{"password" => "secret2"})
+
+      fp2 = Sessions.authorization_fingerprint(updated)
+
+      assert is_binary(fp1) and is_binary(fp2)
+      refute fp1 == fp2
+    end
+
+    test "update_room_password/2 sets then clears protection" do
+      room = room_fixture()
+
+      {:ok, protected} =
+        Sessions.update_room_password(room, %{"password" => "secret1"})
+
+      assert Sessions.room_protected?(protected)
+      fp = Sessions.authorization_fingerprint(protected)
+
+      {:ok, cleared} =
+        Sessions.update_room_password(protected, %{"password" => ""})
+
+      refute Sessions.room_protected?(cleared)
+      refute Sessions.authorization_fingerprint(cleared) == fp
+    end
+
+    test "update_room_password/2 broadcasts a password change to the room topic" do
+      room = room_fixture()
+      :ok = Channels.subscribe_room_topic(room.id)
+
+      {:ok, _room} =
+        Sessions.update_room_password(room, %{"password" => "secret1"})
+
+      assert_receive {:password_changed, room_id}
+      assert room_id == room.id
+    end
+
+    test "update_room_password/2 raises when the password key is absent" do
+      protected = room_fixture(%{password: "secret1"})
+
+      assert_raise ArgumentError, fn ->
+        Sessions.update_room_password(protected, %{})
+      end
+
+      # the password must be left untouched, not silently cleared
+      assert Sessions.room_protected?(Sessions.get_room!(protected.id))
     end
   end
 end

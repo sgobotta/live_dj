@@ -7,6 +7,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   alias Livedj.Sessions
   alias Livedj.Sessions.Chat.Commands.Dispatcher, as: ChatDispatcher
   alias Livedj.Sessions.Exceptions.SessionRoomError
+  alias LivedjWeb.RoomAuth
 
   import Phoenix.Component
 
@@ -94,6 +95,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:ok, :joined} = Sessions.join_player(room_id)
         {:ok, messages} = Sessions.join_chat(room_id)
         {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
+        :ok = Sessions.subscribe_room(room_id)
 
         socket
         |> assign(:messages, messages)
@@ -154,6 +156,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   defp apply_action(socket, :help, _params) do
     socket
     |> assign(:page_title, "#{socket.assigns.room.name}")
+  end
+
+  defp apply_action(socket, :settings, _params) do
+    assign(socket, :page_title, "#{socket.assigns.room.name}")
   end
 
   # ----------------------------------------------------------------------------
@@ -226,6 +232,19 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       {:noreply,
        push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/help")}
     end
+  end
+
+  def handle_event("open_settings_modal", _params, socket) do
+    {:noreply,
+     push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/settings")}
+  end
+
+  def handle_event("save_room_password", %{"password" => password}, socket) do
+    save_password(socket, %{"password" => password})
+  end
+
+  def handle_event("remove_room_password", _params, socket) do
+    save_password(socket, %{"password" => ""})
   end
 
   def handle_event("on_player_play", _params, socket) do
@@ -317,6 +336,33 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
       _error ->
         {:noreply, socket}
+    end
+  end
+
+  defp save_password(socket, attrs) do
+    case Sessions.update_room_password(socket.assigns.room, attrs) do
+      {:ok, room} ->
+        {:noreply,
+         socket
+         |> assign(:room, room)
+         |> put_flash(:info, gettext("Room password updated"))
+         |> push_patch(to: ~p"/sessions/rooms/#{room}")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, password_error_message(changeset))}
+    end
+  end
+
+  defp password_error_message(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn error ->
+      LivedjWeb.CoreComponents.translate_error(error)
+    end)
+    |> Map.get(:password, [])
+    |> Enum.join(", ")
+    |> case do
+      "" -> gettext("Invalid password")
+      message -> message
     end
   end
 
@@ -417,6 +463,31 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_info({:messages_updated, _room_id, messages}, socket) do
     {:noreply, assign(socket, :messages, messages)}
+  end
+
+  # A password change re-keys the room's authorization fingerprint, which would
+  # re-lock everyone currently in the room on their next reload. Refresh the
+  # in-memory room (so the header/badge update live) and, for a still-protected
+  # room, hand the client a fresh short-lived grant so it can silently rewrite
+  # its authorization cookie with the new fingerprint and keep access.
+  def handle_info(
+        {:password_changed, room_id},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    room = Sessions.get_room!(room_id)
+    socket = assign(socket, :room, room)
+
+    socket =
+      if Sessions.room_protected?(room) do
+        push_event(socket, "refresh_room_grant", %{
+          url:
+            ~p"/sessions/rooms/#{room}/unlock/grant?#{[token: RoomAuth.sign_grant(room.id), silent: true]}"
+        })
+      else
+        socket
+      end
+
+    {:noreply, socket}
   end
 
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::

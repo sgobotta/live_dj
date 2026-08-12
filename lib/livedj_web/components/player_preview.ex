@@ -7,7 +7,19 @@ defmodule LivedjWeb.PlayerPreview do
 
   def render(assigns) do
     ~H"""
-    <div class="h-40 w-40 py-2 px-2">
+    <div class="song-cover-container relative h-40 w-40 py-2 px-2">
+      <div
+        :if={Livedj.Sessions.room_protected?(@room)}
+        id={"room-lock-badge-#{@room.id}"}
+        class="room-lock-badge absolute bottom-3 right-3 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-tone-900/70 dark:bg-tone-50/70"
+        title={gettext("Password protected")}
+        aria-label={gettext("Password protected")}
+      >
+        <.icon
+          name="hero-lock-closed"
+          class="h-3.5 w-3.5 text-tone-50 dark:text-tone-900"
+        />
+      </div>
       <%= if player?(@player) && @player.media_thumbnail_url != "" do %>
         <img
           class="h-full w-full rounded-md ring-0 ring-white"
