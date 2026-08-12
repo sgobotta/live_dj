@@ -1,4 +1,12 @@
 <%= if connected?(@socket) do %>
+  <div
+    id="keybindings"
+    phx-hook="Keybindings"
+    data-active={if @live_action == :index, do: "true", else: "false"}
+    data-bindings="toggle-theme"
+    class="hidden"
+  />
+
   <.header class="text-tone-900 dark:text-tone-100">
     {gettext("Public rooms")}
   </.header>
