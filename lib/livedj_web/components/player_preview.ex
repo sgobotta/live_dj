@@ -11,7 +11,7 @@ defmodule LivedjWeb.PlayerPreview do
       <div
         :if={Livedj.Sessions.room_protected?(@room)}
         id={"room-lock-badge-#{@room.id}"}
-        class="room-lock-badge absolute bottom-3 right-3 z-10 rounded-full bg-tone-900/70 dark:bg-tone-50/70 p-1"
+        class="room-lock-badge absolute bottom-3 right-3 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-tone-900/70 dark:bg-tone-50/70"
         title={gettext("Password protected")}
         aria-label={gettext("Password protected")}
       >
