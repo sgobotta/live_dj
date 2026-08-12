@@ -25,6 +25,12 @@ export default {
       document.getElementById('chat-input')?.focus()
     })
 
+    // Optional allow-list: `data-bindings="toggle-theme"` enables only those
+    // actions. Absent means every binding is active (full show-page set).
+    const allowed = this.el.dataset.bindings
+      ? new Set(this.el.dataset.bindings.split(/[\s,]+/).filter(Boolean))
+      : null
+
     this._handler = (e) => {
       if (this.el.dataset.active !== 'true') return
       if (IGNORED_TAGS.has(e.target.tagName) || e.target.isContentEditable) {
@@ -33,7 +39,7 @@ export default {
       if (e.metaKey || e.ctrlKey || e.altKey) return
 
       const action = bindings[e.key.toLowerCase()]
-      if (action && actions[action]) {
+      if (action && actions[action] && (!allowed || allowed.has(action))) {
         e.preventDefault()
         actions[action](this)
       }

@@ -27,11 +27,33 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
             }
           end)
 
-        {:ok, assign(socket, :rooms_players, rooms_players)}
+        {:ok, assign_rooms_players(socket, rooms_players)}
 
       false ->
         {:ok, socket}
     end
+  end
+
+  @doc """
+  Splits the room/player entries into the featured (hero) room and the rest.
+
+  The featured room is the one with the most present users; ties (including the
+  case where every room is empty) are broken by the newest room, so the hero is
+  always deterministic and never an awkward empty room when livelier ones exist.
+  """
+  @spec featured_and_rest([map()]) :: {map() | nil, [map()]}
+  def featured_and_rest([]), do: {nil, []}
+
+  def featured_and_rest(rooms_players) do
+    featured = Enum.max_by(rooms_players, &featured_sort_key/1)
+    rest = Enum.reject(rooms_players, &(&1.id == featured.id))
+    {featured, rest}
+  end
+
+  defp featured_sort_key(%{users: users, room: %Room{inserted_at: inserted_at}}) do
+    # ISO8601 sorts lexicographically in chronological order, so a plain tuple
+    # comparison yields "most users, then newest".
+    {length(users), NaiveDateTime.to_iso8601(inserted_at)}
   end
 
   @impl true
@@ -49,9 +71,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
     :ok = Channels.subscribe_presence_topic(room_id)
 
     {:noreply,
-     assign(
+     assign_rooms_players(
        socket,
-       :rooms_players,
        socket.assigns.rooms_players ++
          [%{id: room_id, room: room, player: nil, users: []}]
      )}
@@ -123,7 +144,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
           room_player
       end)
 
-    assign(socket, :rooms_players, rooms_players)
+    assign_rooms_players(socket, rooms_players)
   end
 
   defp assign_users_by_room_id(socket, room_id) do
@@ -138,6 +159,43 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
           room_player
       end)
 
-    assign(socket, :rooms_players, rooms_players)
+    assign_rooms_players(socket, rooms_players)
+  end
+
+  @doc false
+  # Now-playing helpers used by the index/hero templates. Only a *playing*
+  # player surfaces track text; idle/paused rooms show a muted idle label.
+  def playing?(%{player: %Sessions.Player{state: :playing}}), do: true
+  def playing?(_entry), do: false
+
+  def now_playing_title(%{
+        player: %Sessions.Player{state: :playing, title: title}
+      })
+      when is_binary(title) and title != "",
+      do: title
+
+  def now_playing_title(_entry), do: nil
+
+  def now_playing_artist(%{
+        player: %Sessions.Player{state: :playing, channel: channel}
+      })
+      when is_binary(channel) and channel != "",
+      do: channel
+
+  def now_playing_artist(_entry), do: nil
+
+  def cover_url(%{player: %Sessions.Player{media_thumbnail_url: url}})
+      when is_binary(url) and url != "",
+      do: url
+
+  def cover_url(_entry), do: nil
+
+  defp assign_rooms_players(socket, rooms_players) do
+    {featured, rest} = featured_and_rest(rooms_players)
+
+    socket
+    |> assign(:rooms_players, rooms_players)
+    |> assign(:featured, featured)
+    |> assign(:rest, rest)
   end
 end
