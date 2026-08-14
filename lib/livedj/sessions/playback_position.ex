@@ -20,20 +20,31 @@ defmodule Livedj.Sessions.PlaybackPosition do
 
   @doc """
   Returns true when a playing track has reached its stored duration.
+
+  Elapsed time is measured with millisecond precision instead of going
+  through `sync/1`'s second-truncated `current_time`, so the result
+  isn't biased up to a second late on top of `epsilon`.
   """
-  @spec track_ended?(Player.t(), non_neg_integer()) :: boolean()
-  def track_ended?(player, epsilon \\ 1) do
-    player = sync(player)
+  @spec track_ended?(Player.t(), number()) :: boolean()
+  def track_ended?(player, epsilon \\ 0.25)
 
-    case player do
-      %Player{state: :playing, duration: duration, current_time: position}
-      when is_integer(duration) and duration > 0 ->
-        position >= duration - epsilon
+  def track_ended?(
+        %Player{
+          state: :playing,
+          duration: duration,
+          played_at: %DateTime{} = played_at,
+          current_time: current_time
+        },
+        epsilon
+      )
+      when is_integer(duration) and duration > 0 do
+    elapsed_ms = DateTime.diff(DateTime.utc_now(), played_at, :millisecond)
+    position = to_integer(current_time) + elapsed_ms / 1000
 
-      _else ->
-        false
-    end
+    position >= duration - epsilon
   end
+
+  def track_ended?(_player, _epsilon), do: false
 
   @spec to_integer(non_neg_integer() | binary() | any()) :: non_neg_integer()
   defp to_integer(value) when is_integer(value) and value >= 0, do: value

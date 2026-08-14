@@ -56,5 +56,25 @@ defmodule Livedj.Sessions.PlaybackPositionTest do
 
       refute PlaybackPosition.track_ended?(player)
     end
+
+    test "uses millisecond precision instead of a whole-second bias" do
+      # duration 90, default epsilon 0.25 -> triggers at position >= 89.75
+      just_before = DateTime.utc_now() |> DateTime.add(-89_500, :millisecond)
+      just_after = DateTime.utc_now() |> DateTime.add(-89_800, :millisecond)
+
+      refute PlaybackPosition.track_ended?(%Player{
+               state: :playing,
+               current_time: 0,
+               played_at: just_before,
+               duration: 90
+             })
+
+      assert PlaybackPosition.track_ended?(%Player{
+               state: :playing,
+               current_time: 0,
+               played_at: just_after,
+               duration: 90
+             })
+    end
   end
 end
