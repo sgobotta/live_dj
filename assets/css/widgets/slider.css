@@ -71,14 +71,16 @@
     --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
     --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
     --clip-further: calc(100% + 1px);
-    --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
-      100vmax currentColor;
-
-    width: var(--thumb-width, var(--thumb-height));
-    box-shadow: var(--box-fill);
-
-    filter: brightness(100%);
-    clip-path: polygon(
+    /* The +2px nudges the shadow's right edge past its theoretical
+       seam at the thumb's own left edge, so it overlaps the thumb's
+       opaque background instead of exactly abutting it — the overlap
+       is invisible (background always paints over box-shadow), but
+       without it, sub-pixel rounding on the huge vmax spread can
+       leave a hairline gap where the track shows through. */
+    --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height)) + 2px)
+      0 0 100vmax currentColor;
+    /* Bump: thumb reads as a taller circular handle (default look). */
+    --thumb-clip-bump: polygon(
       100% -1px,
       var(--clip-edges) -1px,
       0 var(--clip-top),
@@ -88,19 +90,43 @@
       var(--clip-edges) 100%,
       var(--clip-further) var(--clip-further)
     );
-  }
+    /* Flat: same thin band as the box-shadow fill, no bump — used to
+       hide the thumb without leaving a gap in the seek bar (see the
+       scoped rules below). */
+    --thumb-clip-flat: polygon(
+      100% var(--clip-top),
+      -100vmax var(--clip-top),
+      -100vmax var(--clip-bottom),
+      100% var(--clip-bottom)
+    );
 
-  input[type="range"]:hover::-webkit-slider-thumb {
+    width: var(--thumb-width, var(--thumb-height));
+    box-shadow: var(--box-fill);
+
+    filter: brightness(100%);
+    clip-path: var(--thumb-clip-bump);
   }
 
   .dark input[type="range"]::-webkit-slider-thumb {
     @apply bg-tone-200;
   }
 
-  .dark input[type="range"]:hover::-webkit-slider-thumb {
+  /* Seek/time bar only: thumb hidden until hovered/focused/dragged.
+     WebKit has no separate fill pseudo-element — the fill IS the
+     thumb's box-shadow (see --box-fill above) — so hiding the thumb
+     by color/opacity alone would leave a gap where its own local box
+     sits. Instead, keep its background filled at all times and clip
+     it flush with the box-shadow's thin band by default (no bump),
+     so it visually disappears into the fill; hover/focus/drag swaps
+     back to the taller clip-path so it reads as a circular handle. */
+  #player-controls-time-slider::-webkit-slider-thumb {
+    clip-path: var(--thumb-clip-flat);
   }
 
-  input[type="range"]:active::-webkit-slider-thumb {
+  #player-controls-time-slider:hover::-webkit-slider-thumb,
+  #player-controls-time-slider:focus-visible::-webkit-slider-thumb,
+  #player-controls-time-slider:active::-webkit-slider-thumb {
+    clip-path: var(--thumb-clip-bump);
   }
 
   input[type="range"]::-webkit-slider-runnable-track {
@@ -148,6 +174,19 @@
 
   input[type="range"]:active::-moz-range-thumb {
     cursor: grabbing;
+  }
+
+  /* Seek/time bar only: thumb hidden until hovered/focused/dragged.
+     ::-moz-range-progress is a separate pseudo-element from the thumb
+     on Firefox, so the track fill stays painted regardless. */
+  #player-controls-time-slider::-moz-range-thumb {
+    background: transparent;
+  }
+
+  #player-controls-time-slider:hover::-moz-range-thumb,
+  #player-controls-time-slider:focus-visible::-moz-range-thumb,
+  #player-controls-time-slider:active::-moz-range-thumb {
+    background: currentColor;
   }
 
   input[type="range"]::-moz-range-track {
