@@ -7,7 +7,15 @@ defmodule LivedjWeb.PlayerControlsLive do
   @on_play_click "on_play_click"
   @on_pause_click "on_pause_click"
 
-  def mount(:not_mounted_at_router, %{"id" => room_id}, socket) do
+  def mount(
+        :not_mounted_at_router,
+        %{
+          "id" => room_id,
+          "user_id" => user_id,
+          "display_name" => display_name
+        },
+        socket
+      ) do
     case connected?(socket) do
       true ->
         %Room{id: ^room_id} = room = Sessions.get_room!(room_id)
@@ -31,6 +39,8 @@ defmodule LivedjWeb.PlayerControlsLive do
            layout: false,
            player: nil,
            room: room,
+           user_id: user_id,
+           display_name: display_name,
            volume_level: volume_level,
            volume_muted: volume_muted
          )}
@@ -41,7 +51,9 @@ defmodule LivedjWeb.PlayerControlsLive do
            player: nil,
            start_time_tracker_id: nil,
            end_time_tracker_id: nil,
-           time_slider_id: nil
+           time_slider_id: nil,
+           user_id: user_id,
+           display_name: display_name
          )}
     end
   end
@@ -66,12 +78,14 @@ defmodule LivedjWeb.PlayerControlsLive do
 
   @impl true
   def handle_event("previous", _params, socket) do
-    Sessions.previous_track(socket.assigns.room.id)
+    %{room: room, user_id: user_id, display_name: display_name} = socket.assigns
+    Sessions.previous_track(room.id, user_id, display_name)
     {:noreply, socket}
   end
 
   def handle_event("next", _params, socket) do
-    Sessions.next_track(socket.assigns.room.id)
+    %{room: room, user_id: user_id, display_name: display_name} = socket.assigns
+    Sessions.next_track(room.id, user_id, display_name)
     {:noreply, socket}
   end
 

@@ -161,7 +161,7 @@ msgid "Hang in there while we get back on track"
 msgstr "Esperá mientras volvemos a estar en línea"
 
 #: lib/livedj/sessions.ex:84
-#: lib/livedj/sessions.ex:112
+#: lib/livedj/sessions.ex:134
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr "El video ya está agregado en la lista"

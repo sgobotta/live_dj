@@ -99,7 +99,9 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   defp search_form(query), do: to_form(%{"query" => query}, as: :search)
 
   defp add_media(socket, media_id) do
-    case Sessions.add_media(socket.assigns.room.id, media_id) do
+    %{room: room, user_id: user_id, display_name: display_name} = socket.assigns
+
+    case Sessions.add_media(room.id, media_id, user_id, display_name) do
       {:ok, {:added, media}} ->
         {:noreply,
          socket

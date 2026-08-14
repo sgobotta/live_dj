@@ -66,6 +66,22 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def chat_command_suggestions(_content), do: []
 
+  @doc """
+  Renders an `:announcement` message's actor name.
+
+  Kept as its own tightly-scoped template (rather than inlined in
+  show.html.heex) so `mix format` reflowing the call site can never insert
+  whitespace inside the underline — that whitespace would render underlined
+  too.
+  """
+  attr :name, :string, required: true
+
+  def announcement_name(assigns) do
+    ~H"""
+    <span class="font-semibold underline">{@name}</span>
+    """
+  end
+
   @impl true
   def mount(params, session, socket) do
     %Room{id: room_id} = room = Sessions.get_room!(params["id"])

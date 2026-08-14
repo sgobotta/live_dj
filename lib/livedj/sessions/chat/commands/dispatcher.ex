@@ -77,28 +77,18 @@ defmodule Livedj.Sessions.Chat.Commands.Dispatcher do
   end
 
   defp do_skip(room_id, user_id, display_name) do
-    Sessions.next_track(room_id)
-
-    Sessions.chat_send_message(
-      room_id,
-      user_id,
-      display_name,
-      :command_result,
-      gettext("Skipped to next track.")
-    )
+    Sessions.next_track(room_id, user_id, display_name)
   end
 
   defp do_queue(room_id, user_id, display_name, url) do
-    case Sessions.add_media(room_id, Media.video_id_from_url(url)) do
-      {:ok, {:added, media}} ->
-        {:local,
-         Message.new(
+    case Sessions.add_media(
            room_id,
+           Media.video_id_from_url(url),
            user_id,
-           display_name,
-           :command_result,
-           gettext("Queued: %{title}", title: media.title)
-         )}
+           display_name
+         ) do
+      {:ok, {:added, _media}} ->
+        :ok
 
       {:error, {_severity, reason}} ->
         {:local,

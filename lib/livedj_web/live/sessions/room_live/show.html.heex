@@ -43,6 +43,8 @@
                 "text-tone-400 dark:text-tone-500 italic text-center",
               msg.type == :reaction &&
                 "text-tone-700 dark:text-tone-300 italic",
+              msg.type == :announcement &&
+                "text-tone-400 dark:text-tone-500 italic",
               msg.type == :text && "text-tone-900 dark:text-tone-100"
             ]}>
               <%= case msg.type do %>
@@ -54,6 +56,8 @@
                 <% :reaction -> %>
                   *
                   <span class="font-semibold">{msg.display_name}</span> {msg.content}
+                <% :announcement -> %>
+                  <.announcement_name name={msg.display_name} /> {msg.content}
                 <% _ -> %>
                   {msg.content}
               <% end %>
