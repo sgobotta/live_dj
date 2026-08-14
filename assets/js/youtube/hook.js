@@ -390,6 +390,19 @@ export default {
       this._hideOutOfSyncBanner()
       console.debug('[Player :: load_video]', player)
       console.debug('[Player :: load_video state]', player.state)
+
+      // The server advances the track slightly ahead of the outgoing
+      // video's real end (see PlaybackClock's epsilon), so the local
+      // slider may not have visually reached its max yet. Snap it to
+      // complete and stop tracking the outgoing video before swapping,
+      // so the transition always reads as "this track finished" and no
+      // stale tracking loop keeps running against the new video.
+      stopTimeTracking(this)
+      const outgoingSliderElem = document.getElementById(this.timeSliderId)
+      if (outgoingSliderElem && outgoingSliderElem.max) {
+        outgoingSliderElem.value = outgoingSliderElem.max
+      }
+
       switch (player.state) {
         case "playing":
           // loadVideoById auto-plays; set flag so BUFFERING handler
