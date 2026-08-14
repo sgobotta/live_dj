@@ -150,6 +150,41 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     end
   end
 
+  describe "chat :announcement messages" do
+    test "renders the actor name with no stray whitespace inside the underline",
+         %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+      :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room.id}")
+
+      :ok =
+        Livedj.Sessions.chat_send_message(
+          room.id,
+          Ecto.UUID.generate(),
+          "Alice",
+          :announcement,
+          "queued Some Song"
+        )
+
+      assert_receive {:message_sent, _room_id, _message}
+
+      html = render(view)
+
+      assert html =~
+               ~s(<span class="font-semibold underline">Alice</span> queued Some Song)
+    end
+
+    test "using /name does not crash the LiveView", %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+
+      view
+      |> form("#chat-input-bar form", %{content: "/name Bob"})
+      |> render_submit()
+
+      assert Process.alive?(view.pid)
+      assert render(view) =~ "Bob"
+    end
+  end
+
   describe "header lock icon" do
     test "shows an open lock for a public room", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")

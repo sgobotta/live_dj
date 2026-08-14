@@ -101,6 +101,29 @@ defmodule Livedj.Sessions do
     end
   end
 
+  @doc """
+  Adds a media element to the playlist and announces it in the room's chat
+  as `user_id`/`display_name`.
+  """
+  @spec add_media(Ecto.UUID.t(), String.t(), binary(), binary()) ::
+          {:ok, {:added, Media.Video.t()}}
+          | {:error, {:error | :warn, String.t()}}
+  def add_media(room_id, media_identifier, user_id, display_name) do
+    with {:ok, {:added, media}} = result <-
+           add_media(room_id, media_identifier) do
+      :ok =
+        chat_send_message(
+          room_id,
+          user_id,
+          display_name,
+          :announcement,
+          gettext("queued %{title}", title: media.title)
+        )
+
+      result
+    end
+  end
+
   @spec on_add(Ecto.UUID.t(), any()) :: :ok | {:error, :element_exists}
   defp on_add(room_id, media) do
     case Playlist.add(room_id, media.external_id) do
@@ -442,39 +465,104 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
-  Given a room id, loads the previous track and broadcasts an update.
+  Given a room id, loads the previous track, broadcasts an update, and
+  announces the change in the room's chat as a system message.
   """
   @spec previous_track(Ecto.UUID.t()) :: :ok
   def previous_track(room_id) do
-    with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
-         {:ok, previous_media_id} <- Playlist.get_previous(room_id, media_id),
-         {:ok, media} <- Media.get_by_external_id(previous_media_id) do
-      {:ok, player} =
-        load_player_media(room_id, media, seek_to: 0, autoplay: true)
+    case advance_track(:previous, room_id) do
+      {:ok, player} -> announce_now_playing(room_id, player)
+      :error -> :ok
+    end
+  end
 
-      :ok = broadcast_player_load_media!(room_id, player)
-    else
-      _error ->
+  @doc """
+  Given a room id, loads the previous track, broadcasts an update, and
+  announces the change in the room's chat as `user_id`/`display_name`.
+  """
+  @spec previous_track(Ecto.UUID.t(), binary(), binary()) :: :ok
+  def previous_track(room_id, user_id, display_name) do
+    case advance_track(:previous, room_id) do
+      {:ok, player} ->
+        announce_track_changed(room_id, user_id, display_name, player)
+
+      :error ->
         :ok
     end
   end
 
   @doc """
-  Given a room id, loads the next track and broadcasts an update.
+  Given a room id, loads the next track, broadcasts an update, and
+  announces the change in the room's chat as a system message.
   """
   @spec next_track(Ecto.UUID.t()) :: :ok
   def next_track(room_id) do
+    case advance_track(:next, room_id) do
+      {:ok, player} -> announce_now_playing(room_id, player)
+      :error -> :ok
+    end
+  end
+
+  @doc """
+  Given a room id, loads the next track, broadcasts an update, and
+  announces the change in the room's chat as `user_id`/`display_name`.
+  """
+  @spec next_track(Ecto.UUID.t(), binary(), binary()) :: :ok
+  def next_track(room_id, user_id, display_name) do
+    case advance_track(:next, room_id) do
+      {:ok, player} ->
+        announce_track_changed(room_id, user_id, display_name, player)
+
+      :error ->
+        :ok
+    end
+  end
+
+  @spec advance_track(:previous | :next, Ecto.UUID.t()) ::
+          {:ok, Player.t()} | :error
+  defp advance_track(direction, room_id) do
     with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
-         {:ok, next_media_id} <- Playlist.get_next(room_id, media_id),
-         {:ok, media} <- Media.get_by_external_id(next_media_id) do
+         {:ok, sibling_media_id} <-
+           get_sibling_media_id(direction, room_id, media_id),
+         {:ok, media} <- Media.get_by_external_id(sibling_media_id) do
       {:ok, player} =
         load_player_media(room_id, media, seek_to: 0, autoplay: true)
 
       :ok = broadcast_player_load_media!(room_id, player)
+      {:ok, player}
     else
-      _error ->
-        :ok
+      _error -> :error
     end
+  end
+
+  defp get_sibling_media_id(:previous, room_id, media_id),
+    do: Playlist.get_previous(room_id, media_id)
+
+  defp get_sibling_media_id(:next, room_id, media_id),
+    do: Playlist.get_next(room_id, media_id)
+
+  @spec announce_track_changed(binary(), binary(), binary(), Player.t()) :: :ok
+  defp announce_track_changed(room_id, user_id, display_name, %Player{
+         title: title
+       }) do
+    chat_send_message(
+      room_id,
+      user_id,
+      display_name,
+      :announcement,
+      gettext("changed the song to %{title}", title: title)
+    )
+  end
+
+  @spec announce_now_playing(binary(), Player.t()) :: :ok
+  defp announce_now_playing(room_id, %Player{title: title}) do
+    chat_send_message(
+      room_id,
+      "system",
+      "System",
+      :system,
+      gettext("Now playing: %{title}", title: title)
+    )
   end
 
   @doc """

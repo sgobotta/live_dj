@@ -1,7 +1,8 @@
 defmodule Livedj.Sessions.Chat.Message do
   @moduledoc false
 
-  @type message_type :: :text | :system | :reaction | :command_result
+  @type message_type ::
+          :text | :system | :reaction | :command_result | :announcement
 
   @type t :: %__MODULE__{
           id: binary(),

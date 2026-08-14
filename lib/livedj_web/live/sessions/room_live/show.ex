@@ -66,6 +66,22 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def chat_command_suggestions(_content), do: []
 
+  @doc """
+  Renders an `:announcement` message's actor name.
+
+  Kept as its own tightly-scoped template (rather than inlined in
+  show.html.heex) so `mix format` reflowing the call site can never insert
+  whitespace inside the underline — that whitespace would render underlined
+  too.
+  """
+  attr :name, :string, required: true
+
+  def announcement_name(assigns) do
+    ~H"""
+    <span class="font-semibold underline">{@name}</span>
+    """
+  end
+
   @impl true
   def mount(params, session, socket) do
     %Room{id: room_id} = room = Sessions.get_room!(params["id"])
@@ -463,6 +479,16 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_info({:messages_updated, _room_id, messages}, socket) do
     {:noreply, assign(socket, :messages, messages)}
+  end
+
+  # Already applied locally (see the `{:display_name_changed, new_name}` case
+  # in handle_event("send_chat_message", ...)); the message list refresh from
+  # `:messages_updated` is what keeps rendered messages in sync.
+  def handle_info(
+        {:display_name_changed, _room_id, _user_id, _new_name},
+        socket
+      ) do
+    {:noreply, socket}
   end
 
   # A password change re-keys the room's authorization fingerprint, which would

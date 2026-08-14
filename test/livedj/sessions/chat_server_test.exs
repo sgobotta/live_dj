@@ -71,6 +71,15 @@ defmodule Livedj.Sessions.ChatServerTest do
       assert Enum.all?(bob_messages, &(&1.display_name == "Bob"))
     end
 
+    test "update_display_name/3 also broadcasts a display_name_changed event",
+         %{pid: pid, room_id: room_id} do
+      :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room_id}")
+
+      :ok = @subject.update_display_name(pid, "u1", "Alicia")
+
+      assert_receive {:display_name_changed, ^room_id, "u1", "Alicia"}
+    end
+
     test "messages are capped at 200", %{pid: pid, room_id: room_id} do
       :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room_id}")
 

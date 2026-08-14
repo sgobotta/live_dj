@@ -4,103 +4,12 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   use LivedjWeb, :live_component
 
   alias Livedj.Media
+  alias Livedj.Media.FakeVideos
   alias Livedj.Media.Video
   alias Livedj.Sessions
   alias Livedj.Sessions.Channels
 
-  @fake_results (if Mix.env() == :prod do
-                   [
-                     # ~5 second videos for player edge-case testing
-                     %Video{
-                       external_id: "QC8iQqtG0hg",
-                       title: "5 Second Video: Watch the Milky Way Rise",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/QC8iQqtG0hg/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     %Video{
-                       external_id: "m9coOXt5nuw",
-                       title: "5 Second Video Ad (sample 2)",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/m9coOXt5nuw/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # 70s rock
-                     %Video{
-                       external_id: "fJ9rUzIMcZQ",
-                       title: "Queen - Bohemian Rhapsody",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/fJ9rUzIMcZQ/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # 70s prog rock
-                     %Video{
-                       external_id: "_FrOQC-zEog",
-                       title: "Pink Floyd - Comfortably Numb",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/_FrOQC-zEog/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # 70s rock
-                     %Video{
-                       external_id: "HQmmM_qwG4k",
-                       title: "Led Zeppelin - Whole Lotta Love",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/HQmmM_qwG4k/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # 80s rock
-                     %Video{
-                       external_id: "1w7OgIMMRc4",
-                       title: "Guns N' Roses - Sweet Child O' Mine",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/1w7OgIMMRc4/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # 80s rock
-                     %Video{
-                       external_id: "wTP2RUD_cL0",
-                       title: "Dire Straits - Money for Nothing",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/wTP2RUD_cL0/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # prog rock
-                     %Video{
-                       external_id: "auLBLk4ibAk",
-                       title: "Rush - Tom Sawyer",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/auLBLk4ibAk/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # vulfpeck
-                     %Video{
-                       external_id: "le0BLAEO93g",
-                       title: "Vulfpeck - Dean Town",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/le0BLAEO93g/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # vulfpeck / cory wong
-                     %Video{
-                       external_id: "F7nCDrf90V8",
-                       title: "VULFPECK /// Disco Ulysses (Instrumental)",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/F7nCDrf90V8/hqdefault.jpg",
-                       etag: "fake"
-                     },
-                     # cory wong
-                     %Video{
-                       external_id: "HuRaGMyCb2Q",
-                       title: "Cory Wong // \"Smooth Move\" (feat. Tom Misch)",
-                       thumbnail_url:
-                         "https://i.ytimg.com/vi/HuRaGMyCb2Q/hqdefault.jpg",
-                       etag: "fake"
-                     }
-                   ]
-                 else
-                   []
-                 end)
+  @fake_results if Mix.env() == :dev, do: FakeVideos.results(), else: []
 
   @impl true
   def update(%{track_added: %Video{external_id: external_id}}, socket) do
@@ -190,7 +99,9 @@ defmodule LivedjWeb.Components.SearchBarComponent do
   defp search_form(query), do: to_form(%{"query" => query}, as: :search)
 
   defp add_media(socket, media_id) do
-    case Sessions.add_media(socket.assigns.room.id, media_id) do
+    %{room: room, user_id: user_id, display_name: display_name} = socket.assigns
+
+    case Sessions.add_media(room.id, media_id, user_id, display_name) do
       {:ok, {:added, media}} ->
         {:noreply,
          socket

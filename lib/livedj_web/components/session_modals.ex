@@ -52,6 +52,8 @@ defmodule LivedjWeb.SessionModals do
 
   attr :room, :map, required: true
   attr :show, :boolean, required: true
+  attr :user_id, :string, required: true
+  attr :display_name, :string, required: true
 
   def browse_modal(assigns) do
     ~H"""
@@ -92,6 +94,8 @@ defmodule LivedjWeb.SessionModals do
               id="browse-search-bar"
               module={LivedjWeb.Components.SearchBarComponent}
               room={@room}
+              user_id={@user_id}
+              display_name={@display_name}
               close_patch={~p"/sessions/rooms/#{@room}"}
             />
           </div>

@@ -4,7 +4,7 @@ defmodule Livedj.MediaFixtures do
   entities via the `Livedj.Media` context.
   """
 
-  def unique_external_id, do: "some external_id_#{System.unique_integer()}"
+  def unique_external_id, do: "some_external_id_#{System.unique_integer()}"
 
   @doc """
   Generate a video.
