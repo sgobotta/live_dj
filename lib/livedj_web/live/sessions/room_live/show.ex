@@ -481,6 +481,16 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     {:noreply, assign(socket, :messages, messages)}
   end
 
+  # Already applied locally (see the `{:display_name_changed, new_name}` case
+  # in handle_event("send_chat_message", ...)); the message list refresh from
+  # `:messages_updated` is what keeps rendered messages in sync.
+  def handle_info(
+        {:display_name_changed, _room_id, _user_id, _new_name},
+        socket
+      ) do
+    {:noreply, socket}
+  end
+
   # A password change re-keys the room's authorization fingerprint, which would
   # re-lock everyone currently in the room on their next reload. Refresh the
   # in-memory room (so the header/badge update live) and, for a still-protected

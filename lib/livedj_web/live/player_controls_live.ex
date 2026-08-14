@@ -2,7 +2,7 @@ defmodule LivedjWeb.PlayerControlsLive do
   use LivedjWeb, {:live_view, layout: {LivedjWeb.Layouts, :flash}}
 
   alias Livedj.Sessions
-  alias Livedj.Sessions.{Player, Room}
+  alias Livedj.Sessions.{Channels, Player, Room}
 
   @on_play_click "on_play_click"
   @on_pause_click "on_pause_click"
@@ -20,6 +20,7 @@ defmodule LivedjWeb.PlayerControlsLive do
       true ->
         %Room{id: ^room_id} = room = Sessions.get_room!(room_id)
         {:ok, :joined} = Sessions.join_player(room_id)
+        :ok = Channels.subscribe_chat_topic(room_id)
 
         connect_params = get_connect_params(socket)
 
@@ -127,6 +128,30 @@ defmodule LivedjWeb.PlayerControlsLive do
   end
 
   def handle_info({:track_ended, _room_id}, socket), do: {:noreply, socket}
+
+  # ----------------------------------------------------------------------------
+  # Chat event handling
+  #
+
+  def handle_info(
+        {:display_name_changed, _room_id, user_id, new_name},
+        %{assigns: %{user_id: user_id}} = socket
+      ) do
+    {:noreply, assign(socket, :display_name, new_name)}
+  end
+
+  def handle_info(
+        {:display_name_changed, _room_id, _user_id, _new_name},
+        socket
+      ) do
+    {:noreply, socket}
+  end
+
+  def handle_info({:message_sent, _room_id, _message}, socket),
+    do: {:noreply, socket}
+
+  def handle_info({:messages_updated, _room_id, _messages}, socket),
+    do: {:noreply, socket}
 
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()

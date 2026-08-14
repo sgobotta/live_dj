@@ -44,6 +44,7 @@ defmodule Livedj.Sessions.Channels do
 
   @message_sent :message_sent
   @messages_updated :messages_updated
+  @display_name_changed :display_name_changed
 
   # ----------------------------------------------------------------------------
   # Room event aliases
@@ -165,6 +166,12 @@ defmodule Livedj.Sessions.Channels do
   @spec messages_updated_event() :: :messages_updated
   def messages_updated_event, do: @messages_updated
 
+  @doc """
+  Returns the event name for display name changed events.
+  """
+  @spec display_name_changed_event() :: :display_name_changed
+  def display_name_changed_event, do: @display_name_changed
+
   # ----------------------------------------------------------------------------
   # Chat broadcasting
   #
@@ -190,6 +197,17 @@ defmodule Livedj.Sessions.Channels do
       broadcast!(
         chat_topic(room_id),
         {messages_updated_event(), room_id, messages}
+      )
+
+  @doc """
+  Broadcasts a display_name_changed message to the chat topic.
+  """
+  @spec broadcast_display_name_changed!(binary(), binary(), binary()) :: :ok
+  def broadcast_display_name_changed!(room_id, user_id, display_name),
+    do:
+      broadcast!(
+        chat_topic(room_id),
+        {display_name_changed_event(), room_id, user_id, display_name}
       )
 
   # ----------------------------------------------------------------------------

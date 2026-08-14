@@ -172,6 +172,17 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       assert html =~
                ~s(<span class="font-semibold underline">Alice</span> queued Some Song)
     end
+
+    test "using /name does not crash the LiveView", %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+
+      view
+      |> form("#chat-input-bar form", %{content: "/name Bob"})
+      |> render_submit()
+
+      assert Process.alive?(view.pid)
+      assert render(view) =~ "Bob"
+    end
   end
 
   describe "header lock icon" do

@@ -103,6 +103,7 @@ defmodule Livedj.Sessions.ChatServer do
       end)
 
     :ok = Channels.broadcast_messages_updated!(state.id, messages)
+    :ok = Channels.broadcast_display_name_changed!(state.id, user_id, new_name)
     {:noreply, %{state | messages: messages}}
   end
 
