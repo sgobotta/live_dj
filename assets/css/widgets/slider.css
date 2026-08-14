@@ -92,12 +92,20 @@
     );
     /* Flat: same thin band as the box-shadow fill, no bump — the
        thumb is hidden until hovered/focused/dragged (see below)
-       without leaving a gap in the track. */
+       without leaving a gap in the track. Same vertex count/order/x
+       as --thumb-clip-bump (only y differs) so the transition between
+       them interpolates cleanly instead of warping — polygon()
+       animates per-vertex-by-index, and a point-count mismatch makes
+       browsers snap or render a malformed in-between shape. */
     --thumb-clip-flat: polygon(
       100% var(--clip-top),
+      var(--clip-edges) var(--clip-top),
+      0 var(--clip-top),
       -100vmax var(--clip-top),
       -100vmax var(--clip-bottom),
-      100% var(--clip-bottom)
+      0 var(--clip-bottom),
+      var(--clip-edges) var(--clip-bottom),
+      var(--clip-further) var(--clip-bottom)
     );
 
     width: var(--thumb-width, var(--thumb-height));
@@ -105,6 +113,13 @@
 
     filter: brightness(100%);
     clip-path: var(--thumb-clip-flat);
+    /* clip-path is excluded from the shared "transition: all" above —
+       cross-browser polygon interpolation between differently-shaped
+       clip-paths is unreliable even with matched vertex counts, so
+       the flat/bump swap snaps instantly instead of risking a warped
+       in-between frame. */
+    transition-property: background-color, box-shadow, filter, width,
+      height;
   }
 
   .dark input[type="range"]::-webkit-slider-thumb {

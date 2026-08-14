@@ -201,7 +201,7 @@ export default {
 
       const onPlayerReady = player => {
         console.debug('[Player :: Ready]', player)
-        player.g.classList.add("rounded-lg")
+        player.getIframe().classList.add("rounded-lg")
 
         this.player = player
 
@@ -298,7 +298,7 @@ export default {
     this.handleEvent('show_player', ({ callback_event: callbackEvent}) => {
       console.debug('[Player :: show_player]')
 
-      this.player.g.classList.remove('hidden')
+      this.player.getIframe().classList.remove('hidden')
 
       const canvas = document.getElementById(this.spinnerId)
       stopNoise(canvas)
