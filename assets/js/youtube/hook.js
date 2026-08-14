@@ -1,6 +1,7 @@
 import initPlayer from './player'
 import { PALETTES, startNoise, stopNoise } from '../animation/noise'
 import { secondsToTime } from '../lib/date-utils'
+import { syncRangeSliderVisual } from '../lib/range-slider'
 
 function currentPalette() {
   const idx = parseInt(localStorage.getItem('_noise_filter') ?? '0', 10)
@@ -35,6 +36,7 @@ const updateVideoSlider = (
   timeSliderElem.min = 0
   timeSliderElem.max = playerTotalTime
   timeSliderElem.value = playerCurrentTime
+  syncRangeSliderVisual(timeSliderElem)
 }
 
 const udpateTimeDisplays = (
@@ -146,6 +148,7 @@ export default {
       if (e.target.id !== this.timeSliderId || !this.player) return
       const peekTime = parseFloat(e.target.value)
       this.player.seekTo(peekTime, false)
+      syncRangeSliderVisual(e.target)
       const startElem = document.getElementById(this.startTimeTrackerId)
       if (startElem) updateTimeDisplay(startElem, peekTime)
     }
@@ -155,6 +158,7 @@ export default {
       if (!this.player) return
       const committedTime = parseFloat(e.target.value)
       this.player.seekTo(committedTime, true)
+      syncRangeSliderVisual(e.target)
       await this.pushEventTo(this.el, 'seek_committed', {
         committed_time: committedTime
       })
@@ -401,6 +405,7 @@ export default {
       const outgoingSliderElem = document.getElementById(this.timeSliderId)
       if (outgoingSliderElem && outgoingSliderElem.max) {
         outgoingSliderElem.value = outgoingSliderElem.max
+        syncRangeSliderVisual(outgoingSliderElem)
       }
 
       switch (player.state) {

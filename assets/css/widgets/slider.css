@@ -1,233 +1,133 @@
 @layer components {
-  /* Container class */
-  .seek-bar {
-    @apply w-full bg-transparent block appearance-none m-0 cursor-default border-0 outline-0;
+  /*
+   * Custom range slider: a real <input type="range"> handles interaction
+   * (drag, click-to-seek, keyboard, touch, a11y) but is rendered fully
+   * transparent; a plain div track/fill/thumb underneath does all the
+   * visible rendering. This avoids the vendor-prefixed pseudo-elements
+   * (::-webkit-slider-thumb, ::-moz-range-thumb/-progress) that forced
+   * divergent, browser-specific hacks under the old native-styling
+   * approach — see git history on this file for what that looked like.
+   *
+   * Markup (see player_controls_live.html.heex / volume_control_component.ex):
+   *   <div class="custom-slider">
+   *     <input class="custom-slider-input" type="range" ... />
+   *     <div class="custom-slider-track">
+   *       <div class="custom-slider-fill"></div>
+   *       <div class="custom-slider-thumb"></div>
+   *     </div>
+   *   </div>
+   *
+   * The input may end up nested deeper than a direct child (e.g. the
+   * shared <.input> component wraps it in its own div) — the reveal
+   * rules below use :has() rather than a sibling combinator so nesting
+   * depth and DOM order don't matter. Fill/thumb position are driven by
+   * JS (assets/js/lib/range-slider.js) reading the input's value/min/max.
+   */
+  .custom-slider {
+    @apply relative w-full flex items-center cursor-pointer;
+    /* .custom-slider-input is position:absolute, so — unlike the old
+       native <input>, which had a non-zero intrinsic default width —
+       nothing here contributes real content size to a shrink-to-fit
+       ancestor (a flex item with no explicit width/grow). min-width:0
+       plus flex-1 on ancestors (see volume_control_component.ex) keeps
+       this from collapsing to 0 in that situation. */
+    min-width: 0;
+    height: 1.5rem;
+    color: var(--color-tone-600);
   }
-  .seek-bar:focus {
-    @apply outline-none
-  }
-
-  /* === range theme and appearance === */
-  input[type="range"] {
-    @apply appearance-none w-full text-base;
-  }
-
-  input[type="range"] {
-    @apply !text-tone-600 !rounded-full;
-
-    --thumb-height: 0.675em;
-    --track-height: 0.125em;
-    --track-color: var(--color-tone-500);
-    --brightness-hover: 110%;
-    --brightness-down: 90%;
-    --clip-edges: 0.125em;
-  }
-  input[type="range"]:hover {
-    @apply !text-green-500;
-  }
-
-  .dark input[type="range"] {
-    @apply !text-tone-100;
-    --track-color: var(--color-tone-700);
-  }
-
-  .dark input[type="range"]:hover {
-    @apply !text-green-500;
-    --track-color: var(--color-tone-700);
-  }
-
-  /* === range commons === */
-  input[type="range"] {
-    @apply relative bg-transparent overflow-hidden outline-none
+  .dark .custom-slider {
+    color: var(--color-tone-100);
   }
 
-  input[type="range"]:active {
-    /* cursor: grabbing; */
+  .custom-slider-input {
+    @apply absolute inset-0 w-full h-full m-0 appearance-none bg-transparent
+      outline-none cursor-pointer;
+    z-index: 2;
+    opacity: 0;
   }
-
-  input[type="range"]:disabled {
-    filter: grayscale(1);
-    opacity: 0.3;
+  .custom-slider-input:disabled {
     cursor: not-allowed;
   }
 
-  /* === WebKit specific styles === */
-  input[type="range"],
-  input[type="range"]::-webkit-slider-runnable-track,
-  input[type="range"]::-webkit-slider-thumb {
+  /* Neutralize native rendering — only used for interaction. The native
+     thumb must keep a small, realistic size (not 100%): the browser
+     computes click-to-seek position from the track's travel distance,
+     which is (track width - thumb width) — sizing the thumb to match
+     the full track collapses that to 0, so every click/drag resolved
+     to the same value regardless of where it landed. */
+  .custom-slider-input::-webkit-slider-runnable-track,
+  .custom-slider-input::-webkit-slider-thumb {
     -webkit-appearance: none;
-    transition: all ease 100ms;
-    height: var(--thumb-height);
+    background: transparent;
+  }
+  .custom-slider-input::-webkit-slider-thumb {
+    width: 0.675em;
+    height: 0.675em;
+  }
+  .custom-slider-input::-moz-range-track,
+  .custom-slider-input::-moz-range-thumb,
+  .custom-slider-input::-moz-range-progress {
+    appearance: none;
+    background: transparent;
+    border: 0;
+  }
+  .custom-slider-input::-moz-range-thumb {
+    width: 0.675em;
+    height: 0.675em;
   }
 
-  input[type="range"]::-webkit-slider-runnable-track,
-  input[type="range"]::-webkit-slider-thumb {
-    position: relative;
+  .custom-slider-track {
+    @apply relative w-full rounded-full pointer-events-none;
+    z-index: 1;
+    height: calc(0.125em + 2px);
+    background: var(--color-tone-400);
+  }
+  .dark .custom-slider-track {
+    background: var(--color-tone-700);
   }
 
-  input[type="range"]::-webkit-slider-thumb {
-    @apply rounded-full bg-tone-600;
-    --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
-    --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
-    --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
-    --clip-further: calc(100% + 1px);
-    /* The +2px nudges the shadow's right edge past its theoretical
-       seam at the thumb's own left edge, so it overlaps the thumb's
-       opaque background instead of exactly abutting it — the overlap
-       is invisible (background always paints over box-shadow), but
-       without it, sub-pixel rounding on the huge vmax spread can
-       leave a hairline gap where the track shows through. */
-    --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height)) + 2px)
-      0 0 100vmax currentColor;
-    /* Bump: thumb reads as a taller circular handle (default look). */
-    --thumb-clip-bump: polygon(
-      100% -1px,
-      var(--clip-edges) -1px,
-      0 var(--clip-top),
-      -100vmax var(--clip-top),
-      -100vmax var(--clip-bottom),
-      0 var(--clip-bottom),
-      var(--clip-edges) 100%,
-      var(--clip-further) var(--clip-further)
-    );
-    /* Flat: same thin band as the box-shadow fill, no bump — the
-       thumb is hidden until hovered/focused/dragged (see below)
-       without leaving a gap in the track. Same vertex count/order/x
-       as --thumb-clip-bump (only y differs) so the transition between
-       them interpolates cleanly instead of warping — polygon()
-       animates per-vertex-by-index, and a point-count mismatch makes
-       browsers snap or render a malformed in-between shape. */
-    --thumb-clip-flat: polygon(
-      100% var(--clip-top),
-      var(--clip-edges) var(--clip-top),
-      0 var(--clip-top),
-      -100vmax var(--clip-top),
-      -100vmax var(--clip-bottom),
-      0 var(--clip-bottom),
-      var(--clip-edges) var(--clip-bottom),
-      var(--clip-further) var(--clip-bottom)
-    );
-
-    width: var(--thumb-width, var(--thumb-height));
-    box-shadow: var(--box-fill);
-
-    filter: brightness(100%);
-    clip-path: var(--thumb-clip-flat);
-    /* clip-path is excluded from the shared "transition: all" above —
-       cross-browser polygon interpolation between differently-shaped
-       clip-paths is unreliable even with matched vertex counts, so
-       the flat/bump swap snaps instantly instead of risking a warped
-       in-between frame. */
-    transition-property: background-color, box-shadow, filter, width,
-      height;
+  .custom-slider-fill {
+    @apply absolute top-0 bottom-0 left-0 rounded-full;
+    width: 0%;
+    background: currentColor;
   }
 
-  .dark input[type="range"]::-webkit-slider-thumb {
+  .custom-slider-thumb {
+    @apply absolute rounded-full bg-tone-600;
+    top: 50%;
+    left: 0%;
+    width: 0.675em;
+    height: 0.675em;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity ease 100ms;
+  }
+  .dark .custom-slider-thumb {
     @apply bg-tone-200;
   }
 
-  /* Thumb hidden until hovered/focused/dragged. WebKit has no
-     separate fill pseudo-element — the fill IS the thumb's box-shadow
-     (see --box-fill above) — so hiding the thumb by color/opacity
-     alone would leave a gap where its own local box sits. Instead,
-     keep its background filled at all times and only swap the
-     clip-path to reveal the taller "bump" shape on interaction. */
-  input[type="range"]:hover::-webkit-slider-thumb,
-  input[type="range"]:focus-visible::-webkit-slider-thumb,
-  input[type="range"]:active::-webkit-slider-thumb {
-    clip-path: var(--thumb-clip-bump);
+  /* Hover reveal + accent color, mouse only (the whole hit area, not just
+     the thin track, so the thumb doesn't require pixel-precise aim). */
+  .custom-slider:hover .custom-slider-track {
+    color: var(--color-green-500);
+  }
+  .custom-slider:hover .custom-slider-thumb {
+    opacity: 1;
   }
 
-  input[type="range"]::-webkit-slider-runnable-track {
-    @apply rounded-full;
-    background: linear-gradient(var(--color-tone-400) 0 0) scroll no-repeat center /
-      100% calc(var(--track-height) + 2px);
+  /* Same reveal + accent for keyboard focus and active dragging, which
+     land on the input itself rather than the wrapper. */
+  .custom-slider:has(.custom-slider-input:focus-visible) .custom-slider-track,
+  .custom-slider:has(.custom-slider-input:active) .custom-slider-track {
+    color: var(--color-green-500);
   }
- 
-  .dark input[type="range"]::-webkit-slider-runnable-track {
-    @apply rounded-full;
-    background: linear-gradient(var(--color-tone-700) 0 0) scroll no-repeat center /
-      100% calc(var(--track-height) + 2px);
-  }
-
-  input[type="range"]:hover::-webkit-slider-runnable-track {
+  .custom-slider:has(.custom-slider-input:focus-visible) .custom-slider-thumb,
+  .custom-slider:has(.custom-slider-input:active) .custom-slider-thumb {
+    opacity: 1;
   }
 
-  input[type="range"]:disabled::-webkit-slider-thumb {
-    cursor: not-allowed;
+  .custom-slider:has(.custom-slider-input:disabled) .custom-slider-track {
+    filter: grayscale(1);
+    opacity: 0.3;
   }
-
-  /* === Firefox specific styles === */
-  input[type="range"],
-  input[type="range"]::-moz-range-track,
-  input[type="range"]::-moz-range-thumb {
-    appearance: none;
-    transition: all ease 100ms;
-    height: var(--thumb-height);
-  }
-
-  input[type="range"]::-moz-range-track,
-  input[type="range"]::-moz-range-thumb,
-  input[type="range"]::-moz-range-progress {
-    background: #fff0;
-  }
-
-  /* Left transparent (see the shared #fff0 rule above) so the thumb
-     is hidden by default; ::-moz-range-progress is a separate pseudo-
-     element on Firefox, so the track fill stays painted regardless. */
-  input[type="range"]::-moz-range-thumb {
-    @apply rounded-full;
-    border: 0;
-    width: var(--thumb-width, var(--thumb-height));
-    /* border-radius: var(--thumb-width, var(--thumb-height)); */
-    cursor: grab;
-  }
-
-  input[type="range"]:hover::-moz-range-thumb,
-  input[type="range"]:focus-visible::-moz-range-thumb,
-  input[type="range"]:active::-moz-range-thumb {
-    background: currentColor;
-  }
-
-  input[type="range"]:active::-moz-range-thumb {
-    cursor: grabbing;
-  }
-
-  input[type="range"]::-moz-range-track {
-    width: 100%;
-    background: var(--track-color);
-  }
-
-  input[type="range"]::-moz-range-progress {
-    appearance: none;
-    background: currentColor;
-    transition-delay: 30ms;
-  }
-
-  input[type="range"]::-moz-range-track,
-  input[type="range"]::-moz-range-progress {
-    @apply rounded-full;
-    height: calc(var(--track-height) + 1px);
-    /* border-radius: var(--track-height); */
-  }
-
-  input[type="range"]::-moz-range-thumb,
-  input[type="range"]::-moz-range-progress {
-    filter: brightness(100%);
-  }
-
-  input[type="range"]:hover::-moz-range-thumb,
-  input[type="range"]:hover::-moz-range-progress {
-    filter: brightness(var(--brightness-hover));
-  }
-
-  input[type="range"]:active::-moz-range-thumb,
-  input[type="range"]:active::-moz-range-progress {
-    filter: brightness(var(--brightness-down));
-  }
-
-  input[type="range"]:disabled::-moz-range-thumb {
-    cursor: not-allowed;
-  }
-
 }

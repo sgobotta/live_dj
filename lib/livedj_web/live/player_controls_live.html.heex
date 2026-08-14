@@ -193,16 +193,22 @@
               </span>
             </div>
             <form class="w-full p-4">
-              <input
-                tabindex="0"
-                class="seek-bar w-full"
-                id={@time_slider_id}
-                value="0"
-                type="range"
-                min="0"
-                max="100"
-                step="any"
-              />
+              <div class="custom-slider">
+                <input
+                  tabindex="0"
+                  class="custom-slider-input"
+                  id={@time_slider_id}
+                  value="0"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="any"
+                />
+                <div class="custom-slider-track">
+                  <div class="custom-slider-fill"></div>
+                  <div class="custom-slider-thumb"></div>
+                </div>
+              </div>
             </form>
             <div class="inline-flex items-center justify-center pr-2 w-10">
               <span id={@end_time_tracker_id}>
