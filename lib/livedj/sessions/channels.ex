@@ -5,7 +5,11 @@ defmodule Livedj.Sessions.Channels do
 
   require Logger
 
-  @type message :: atom() | {atom(), any()} | {atom(), binary(), any()}
+  @type message ::
+          atom()
+          | {atom(), any()}
+          | {atom(), binary(), any()}
+          | {atom(), binary(), any(), any()}
 
   # ----------------------------------------------------------------------------
   # Topics

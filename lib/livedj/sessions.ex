@@ -109,7 +109,8 @@ defmodule Livedj.Sessions do
           {:ok, {:added, Media.Video.t()}}
           | {:error, {:error | :warn, String.t()}}
   def add_media(room_id, media_identifier, user_id, display_name) do
-    with {:ok, {:added, media}} = result <- add_media(room_id, media_identifier) do
+    with {:ok, {:added, media}} = result <-
+           add_media(room_id, media_identifier) do
       :ok =
         chat_send_message(
           room_id,
@@ -477,10 +478,12 @@ defmodule Livedj.Sessions do
   """
   @spec previous_track(Ecto.UUID.t(), binary(), binary()) :: :ok
   def previous_track(room_id, user_id, display_name) do
-    with {:ok, player} <- advance_track(:previous, room_id) do
-      announce_track_changed(room_id, user_id, display_name, player)
-    else
-      _error -> :ok
+    case advance_track(:previous, room_id) do
+      {:ok, player} ->
+        announce_track_changed(room_id, user_id, display_name, player)
+
+      :error ->
+        :ok
     end
   end
 
@@ -498,10 +501,12 @@ defmodule Livedj.Sessions do
   """
   @spec next_track(Ecto.UUID.t(), binary(), binary()) :: :ok
   def next_track(room_id, user_id, display_name) do
-    with {:ok, player} <- advance_track(:next, room_id) do
-      announce_track_changed(room_id, user_id, display_name, player)
-    else
-      _error -> :ok
+    case advance_track(:next, room_id) do
+      {:ok, player} ->
+        announce_track_changed(room_id, user_id, display_name, player)
+
+      :error ->
+        :ok
     end
   end
 
