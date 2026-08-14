@@ -465,11 +465,15 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
-  Given a room id, loads the previous track and broadcasts an update.
+  Given a room id, loads the previous track, broadcasts an update, and
+  announces the change in the room's chat as a system message.
   """
   @spec previous_track(Ecto.UUID.t()) :: :ok
   def previous_track(room_id) do
-    with {:ok, _player} <- advance_track(:previous, room_id), do: :ok
+    case advance_track(:previous, room_id) do
+      {:ok, player} -> announce_now_playing(room_id, player)
+      :error -> :ok
+    end
   end
 
   @doc """
@@ -488,11 +492,15 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
-  Given a room id, loads the next track and broadcasts an update.
+  Given a room id, loads the next track, broadcasts an update, and
+  announces the change in the room's chat as a system message.
   """
   @spec next_track(Ecto.UUID.t()) :: :ok
   def next_track(room_id) do
-    with {:ok, _player} <- advance_track(:next, room_id), do: :ok
+    case advance_track(:next, room_id) do
+      {:ok, player} -> announce_now_playing(room_id, player)
+      :error -> :ok
+    end
   end
 
   @doc """
@@ -543,6 +551,17 @@ defmodule Livedj.Sessions do
       display_name,
       :announcement,
       gettext("changed the song to %{title}", title: title)
+    )
+  end
+
+  @spec announce_now_playing(binary(), Player.t()) :: :ok
+  defp announce_now_playing(room_id, %Player{title: title}) do
+    chat_send_message(
+      room_id,
+      "system",
+      "System",
+      :system,
+      gettext("Now playing: %{title}", title: title)
     )
   end
 

@@ -168,7 +168,7 @@ msgid "Hang in there while we get back on track"
 msgstr ""
 
 #: lib/livedj/sessions.ex:84
-#: lib/livedj/sessions.ex:134
+#: lib/livedj/sessions.ex:135
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr ""
@@ -180,13 +180,13 @@ msgstr ""
 
 #: lib/livedj_web/components/core_components.ex:214
 #: lib/livedj_web/live/sessions/room_live/list.ex:44
-#: lib/livedj_web/live/sessions/room_live/show.ex:128
+#: lib/livedj_web/live/sessions/room_live/show.ex:144
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
 #: lib/livedj_web/live/sessions/room_live/list.ex:37
-#: lib/livedj_web/live/sessions/room_live/show.ex:121
+#: lib/livedj_web/live/sessions/room_live/show.ex:137
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
 msgstr ""

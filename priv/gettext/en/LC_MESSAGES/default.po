@@ -463,12 +463,12 @@ msgstr ""
 msgid "Resync"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:315
+#: lib/livedj_web/live/sessions/room_live/show.ex:331
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s ahead of the room."
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:317
+#: lib/livedj_web/live/sessions/room_live/show.ex:333
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s behind the room."
 msgstr ""
@@ -488,7 +488,7 @@ msgstr ""
 msgid "Toggle chat"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.html.heex:128
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:127
 #, elixir-autogen, elixir-format
 msgid "Type a message..."
 msgstr ""
@@ -565,7 +565,7 @@ msgstr ""
 msgid "Room password"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:348
+#: lib/livedj_web/live/sessions/room_live/show.ex:364
 #, elixir-autogen, elixir-format
 msgid "Room password updated"
 msgstr ""
@@ -605,7 +605,7 @@ msgstr ""
 msgid "Usage: /name <new name>"
 msgstr ""
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:364
+#: lib/livedj_web/live/sessions/room_live/show.ex:380
 #, elixir-autogen, elixir-format
 msgid "Invalid password"
 msgstr ""
@@ -645,12 +645,17 @@ msgstr ""
 msgid "Nothing playing right now"
 msgstr ""
 
-#: lib/livedj/sessions.ex:540
+#: lib/livedj/sessions.ex:553
 #, elixir-autogen, elixir-format, fuzzy
 msgid "changed the song to %{title}"
 msgstr ""
 
-#: lib/livedj/sessions.ex:119
+#: lib/livedj/sessions.ex:120
 #, elixir-autogen, elixir-format
 msgid "queued %{title}"
+msgstr ""
+
+#: lib/livedj/sessions.ex:564
+#, elixir-autogen, elixir-format
+msgid "Now playing: %{title}"
 msgstr ""
