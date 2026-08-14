@@ -50,6 +50,45 @@ const udpateTimeDisplays = (
   updateVideoSlider(timeSliderElem, currentTime, totalTime)
 }
 
+// Labels only need whole-second precision; re-rendering them every frame
+// is wasted work, so they're throttled while the slider itself is updated
+// on every frame for a smooth glide instead of a once-a-second jump.
+const TIME_LABEL_UPDATE_INTERVAL_MS = 1000
+
+const startTimeTracking = (
+  hookContext,
+  startTimeTrackerElem,
+  endTimeTrackerElem,
+  timeSliderElem,
+  player
+) => {
+  let lastLabelUpdate = 0
+
+  const tick = (timestamp) => {
+    if (!hookContext._isPeeking) {
+      const currentTime = player.getCurrentTime()
+      const totalTime = player.getDuration()
+      updateVideoSlider(timeSliderElem, currentTime, totalTime)
+
+      if (timestamp - lastLabelUpdate >= TIME_LABEL_UPDATE_INTERVAL_MS) {
+        lastLabelUpdate = timestamp
+        updateTimeDisplay(startTimeTrackerElem, currentTime)
+        updateTimeDisplay(endTimeTrackerElem, totalTime)
+      }
+    }
+    hookContext._trackTimeRAF = requestAnimationFrame(tick)
+  }
+
+  hookContext._trackTimeRAF = requestAnimationFrame(tick)
+}
+
+const stopTimeTracking = (hookContext) => {
+  if (hookContext._trackTimeRAF) {
+    cancelAnimationFrame(hookContext._trackTimeRAF)
+    hookContext._trackTimeRAF = null
+  }
+}
+
 export default {
   _hideOutOfSyncBanner() {
     const banner = document.getElementById('out-of-sync-banner')
@@ -62,6 +101,7 @@ export default {
   },
   backdrop_id: null,
   destroyed() {
+    stopTimeTracking(this)
     window.removeEventListener('resize', this._onResize)
     document.removeEventListener('mousedown', this._onSliderMousedown)
     document.removeEventListener('touchstart', this._onSliderTouchstart)
@@ -194,7 +234,7 @@ export default {
             break
           case YT.PlayerState.ENDED:
             console.debug("[Player State :: ENDED")
-            clearInterval(hookContext.el.dataset.trackTimeInterval)
+            stopTimeTracking(hookContext)
             await this.pushEventTo(this.el, 'on_player_ended')
             break
           case YT.PlayerState.PLAYING:
@@ -202,18 +242,14 @@ export default {
             hookContext.shouldAutoplay = false
 
             await this.pushEventTo(this.el, 'on_player_playing')
-            const trackTimeInterval = setInterval(() => {
-              if (!hookContext._isPeeking) {
-                udpateTimeDisplays(
-                  startTimeTrackerElem,
-                  endTimeTrackerElem,
-                  timeSliderElem,
-                  event.target
-                )
-              }
-            }, 1000)
-            hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
-            
+            startTimeTracking(
+              hookContext,
+              startTimeTrackerElem,
+              endTimeTrackerElem,
+              timeSliderElem,
+              event.target
+            )
+
             const backdrop = document.getElementById(this.backdropId)
             backdrop.classList.add('opacity-0')
             backdrop.classList.remove('opacity-50')
@@ -223,7 +259,7 @@ export default {
             console.debug("[Player State :: PAUSED")
 
             await this.pushEventTo(this.el, 'on_player_paused')
-            clearInterval(hookContext.el.dataset.trackTimeInterval)
+            stopTimeTracking(hookContext)
             udpateTimeDisplays(
               startTimeTrackerElem,
               endTimeTrackerElem,
