@@ -59,6 +59,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
             />
             <div class="custom-slider-track">
               <div class="custom-slider-fill"></div>
+              <div class="custom-slider-hover-fill"></div>
               <div class="custom-slider-thumb"></div>
             </div>
           </div>

@@ -1,7 +1,10 @@
 import initPlayer from './player'
 import { PALETTES, startNoise, stopNoise } from '../animation/noise'
 import { secondsToTime } from '../lib/date-utils'
-import { syncRangeSliderVisual } from '../lib/range-slider'
+import {
+  attachRangeSliderHoverPreview,
+  syncRangeSliderVisual
+} from '../lib/range-slider'
 
 function currentPalette() {
   const idx = parseInt(localStorage.getItem('_noise_filter') ?? '0', 10)
@@ -231,6 +234,18 @@ export default {
           hookContext.endTimeTrackerId
         )
         const timeSliderElem = document.getElementById(hookContext.timeSliderId)
+
+        // The seek bar's DOM is rendered by a separate LiveView
+        // (player_controls_live), so it isn't guaranteed to exist yet
+        // when on_container_mounted fires from this hook's own mount.
+        // Every player state change resolves it fresh, so attach here
+        // instead — by the first state change the whole page has
+        // settled. #seek-bar-container is phx-update="ignore", so this
+        // element persists across live navigations; attach only once.
+        if (!hookContext._hoverPreviewAttached && timeSliderElem) {
+          attachRangeSliderHoverPreview(timeSliderElem)
+          hookContext._hoverPreviewAttached = true
+        }
         /* eslint-disable no-case-declarations */
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:

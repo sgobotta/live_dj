@@ -13,6 +13,7 @@
    *     <input class="custom-slider-input" type="range" ... />
    *     <div class="custom-slider-track">
    *       <div class="custom-slider-fill"></div>
+   *       <div class="custom-slider-hover-fill"></div>
    *       <div class="custom-slider-thumb"></div>
    *     </div>
    *   </div>
@@ -90,6 +91,21 @@
     @apply absolute top-0 bottom-0 left-0 rounded-full;
     width: 0%;
     background: currentColor;
+  }
+
+  /* Scrub preview: from the current value to wherever the pointer is
+     hovering, only when hovering ahead of the current value. Fixed
+     color (not currentColor) so it doesn't follow .custom-slider-fill
+     into green on hover — the played portion (left of the current
+     value) gets the green accent; this preview segment (right of it)
+     always stays tone-400. Position driven by JS
+     (attachRangeSliderHoverPreview in assets/js/lib/range-slider.js),
+     which tracks pointer X. */
+  .custom-slider-hover-fill {
+    @apply absolute top-0 bottom-0 left-0 rounded-full;
+    width: 0%;
+    background: var(--color-tone-400);
+    opacity: 1;
   }
 
   .custom-slider-thumb {

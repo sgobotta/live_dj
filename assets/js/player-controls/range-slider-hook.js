@@ -1,4 +1,7 @@
-import { syncRangeSliderVisual } from '../lib/range-slider'
+import {
+  attachRangeSliderHoverPreview,
+  syncRangeSliderVisual
+} from '../lib/range-slider'
 
 // Keeps a .custom-slider's fill/thumb in sync with its native range input.
 // Unlike the seek bar (driven entirely client-side by the Youtube hook),
@@ -11,6 +14,7 @@ export default {
   },
   mounted() {
     syncRangeSliderVisual(this.el)
+    attachRangeSliderHoverPreview(this.el)
     this._onInput = () => syncRangeSliderVisual(this.el)
     this.el.addEventListener('input', this._onInput)
   },
