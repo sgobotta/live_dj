@@ -9,6 +9,7 @@ import RoomGrantRefresh from './room-grant-refresh/hook'
 import SearchBar from './search-bar/hook'
 import Sortable from './sortable/hook'
 import Theme from './theme/hook'
+import TrackNotifications from './track-notifications/hook'
 import Youtube from './youtube/hook'
 
 export default {
@@ -23,5 +24,6 @@ export default {
   SearchBar,
   Sortable,
   Theme,
+  TrackNotifications,
   Youtube
 }
