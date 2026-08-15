@@ -16,9 +16,14 @@
   show={assigns[:live_action] == :help}
 />
 
-<.password_modal
+<.settings_modal
   room={assigns[:room]}
-  show={assigns[:live_action] == :settings}
+  show={assigns[:live_action] in [:settings_general, :settings_security]}
+  tab={
+    if assigns[:live_action] == :settings_security,
+      do: :security,
+      else: :general
+  }
 />
 
 <div class="flex flex-col h-dvh">
@@ -76,17 +81,10 @@
               phx-click="open_settings_modal"
               class="text-tone-700 dark:text-tone-300 hover:text-tone-900 dark:hover:text-tone-50 transition-colors duration-150 cursor-pointer"
             >
-              <.icon
-                name={
-                  if Livedj.Sessions.room_protected?(@room),
-                    do: "hero-lock-closed",
-                    else: "hero-lock-open"
-                }
-                class="h-5 w-5"
-              />
+              <.icon name="hero-cog-6-tooth" class="h-5 w-5" />
             </button>
             <.tooltip position={:below} class="left-1/2 -translate-x-1/2 z-30">
-              {gettext("Room password")}
+              {gettext("Settings")} (;)
             </.tooltip>
           </div>
         <% end %>

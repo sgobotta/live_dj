@@ -3,6 +3,7 @@
 export const bindings = {
   ' ': 'toggle-play-pause',
   '?': 'open-help',
+  ';': 'open-settings',
   a: 'navigate-add',
   c: 'toggle-chat',
   f: 'toggle-fullscreen',

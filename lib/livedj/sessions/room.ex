@@ -43,6 +43,15 @@ defmodule Livedj.Sessions.Room do
     |> clear_or_hash_password()
   end
 
+  @doc """
+  Changeset dedicated to editing the room name from the room settings page.
+  """
+  def name_changeset(room, attrs) do
+    room
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
+  end
+
   defp maybe_hash_password(changeset) do
     case get_change(changeset, :password) do
       nil -> changeset

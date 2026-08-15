@@ -174,7 +174,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     |> assign(:page_title, "#{socket.assigns.room.name}")
   end
 
-  defp apply_action(socket, :settings, _params) do
+  defp apply_action(socket, :settings_general, _params) do
+    assign(socket, :page_title, "#{socket.assigns.room.name}")
+  end
+
+  defp apply_action(socket, :settings_security, _params) do
     assign(socket, :page_title, "#{socket.assigns.room.name}")
   end
 
@@ -252,7 +256,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   def handle_event("open_settings_modal", _params, socket) do
     {:noreply,
-     push_patch(socket, to: ~p"/sessions/rooms/#{socket.assigns.room}/settings")}
+     push_patch(socket,
+       to: ~p"/sessions/rooms/#{socket.assigns.room}/settings/general"
+     )}
+  end
+
+  def handle_event("save_room_name", %{"name" => name}, socket) do
+    save_name(socket, %{"name" => name})
   end
 
   def handle_event("save_room_password", %{"password" => password}, socket) do
@@ -352,6 +362,33 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
       _error ->
         {:noreply, socket}
+    end
+  end
+
+  defp save_name(socket, attrs) do
+    case Sessions.update_room_name(socket.assigns.room, attrs) do
+      {:ok, room} ->
+        {:noreply,
+         socket
+         |> assign(:room, room)
+         |> put_flash(:info, gettext("Room name updated"))
+         |> push_patch(to: ~p"/sessions/rooms/#{room}")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, name_error_message(changeset))}
+    end
+  end
+
+  defp name_error_message(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn error ->
+      LivedjWeb.CoreComponents.translate_error(error)
+    end)
+    |> Map.get(:name, [])
+    |> Enum.join(", ")
+    |> case do
+      "" -> gettext("Invalid room name")
+      message -> message
     end
   end
 
@@ -514,6 +551,18 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       end
 
     {:noreply, socket}
+  end
+
+  def handle_info(
+        {:room_name_changed, room_id},
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    room = Sessions.get_room!(room_id)
+
+    {:noreply,
+     socket
+     |> assign(:room, room)
+     |> assign(:page_title, "#{room.name}")}
   end
 
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
