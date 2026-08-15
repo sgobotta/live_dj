@@ -23,5 +23,5 @@ defmodule LivedjWeb.Gettext do
   use Gettext,
     otp_app: :livedj,
     default_locale: "es",
-    allowed_locales: ["en", "es"]
+    allowed_locales: ["en", "es", "es_AR"]
 end

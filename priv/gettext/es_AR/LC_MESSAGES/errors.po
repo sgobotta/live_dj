@@ -1,0 +1,218 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es_AR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/livedj/accounts/user.ex:59
+#: lib/livedj/accounts/user.ex:88
+#: lib/livedj/accounts/user.ex:109
+#, elixir-autogen
+msgid "can't be blank"
+msgstr "no puede estar en blanco"
+
+#: lib/livedj/accounts/user.ex:156
+#: lib/livedj/accounts/user.ex:159
+#, elixir-autogen
+msgid "has already been taken"
+msgstr "este valor ya existe"
+
+msgid "is invalid"
+msgstr "no es válido"
+
+msgid "must be accepted"
+msgstr "debe ser aceptado"
+
+msgid "has invalid format"
+msgstr "el formato no es válido"
+
+msgid "has an invalid entry"
+msgstr "entrada no válida"
+
+msgid "is reserved"
+msgstr "reservado"
+
+msgid "does not match confirmation"
+msgstr "no coincide la confirmación"
+
+msgid "is still associated with this entry"
+msgstr "está asociado con la entrada"
+
+msgid "are still associated with this entry"
+msgstr "están asociados con la entrada"
+
+msgid "should have %{count} item(s)"
+msgid_plural "should have %{count} item(s)"
+msgstr[0] "debe tener %{count} item"
+msgstr[1] "debe tener %{count} items"
+
+msgid "should be %{count} character(s)"
+msgid_plural "should be %{count} character(s)"
+msgstr[0] "debe tener %{count} caracter"
+msgstr[1] "debe tener %{count} caracteres"
+
+msgid "should be %{count} byte(s)"
+msgid_plural "should be %{count} byte(s)"
+msgstr[0] "debe tener %{count} byte"
+msgstr[1] "debe tener %{count} bytes"
+
+msgid "should have at least %{count} item(s)"
+msgid_plural "should have at least %{count} item(s)"
+msgstr[0] "debe tener al menos %{count} item"
+msgstr[1] "debe tener al menos %{count} items"
+
+msgid "should be at least %{count} character(s)"
+msgid_plural "should be at least %{count} character(s)"
+msgstr[0] "debe tener al menos %{count} caracter"
+msgstr[1] "debe tener al menos %{count} caracteres"
+
+msgid "should be at least %{count} byte(s)"
+msgid_plural "should be at least %{count} byte(s)"
+msgstr[0] "debe tener al menos %{count} byte"
+msgstr[1] "debe tener al menos %{count} bytes"
+
+msgid "should have at most %{count} item(s)"
+msgid_plural "should have at most %{count} item(s)"
+msgstr[0] "debe tener como máximo %{count} item"
+msgstr[1] "debe tener como máximo %{count} items"
+
+msgid "should be at most %{count} character(s)"
+msgid_plural "should be at most %{count} character(s)"
+msgstr[0] "debe tener como máximo %{count} caracter"
+msgstr[1] "debe tener como máximo %{count} caracteres"
+
+msgid "should be at most %{count} byte(s)"
+msgid_plural "should be at most %{count} byte(s)"
+msgstr[0] "debe tener como máximo %{count} byte"
+msgstr[1] "debe tener como máximo %{count} bytes"
+
+msgid "must be less than %{number}"
+msgstr "debe ser menor a %{number}"
+
+msgid "must be greater than %{number}"
+msgstr "debe ser mayor que %{number}"
+
+msgid "must be less than or equal to %{number}"
+msgstr "debe ser menor o igual a %{number}"
+
+msgid "must be greater than or equal to %{number}"
+msgstr "debe ser mayor o igual a %{number}"
+
+msgid "must be equal to %{number}"
+msgstr "debe ser igual a %{number}"
+
+#: lib/livedj/accounts/user.ex:96
+#, elixir-autogen, elixir-format, fuzzy
+msgid "should have at most %{count} caracters(s)"
+msgid_plural "should have at most %{count} caracters(s)"
+msgstr[0] "debe tener como máximo %{count} caracter"
+msgstr[1] "debe tener como máximo %{count} caracteres"
+
+#: lib/livedj/accounts/user.ex:180
+#, elixir-autogen, elixir-format
+msgid "did not change"
+msgstr "no cambió"
+
+#: lib/livedj/accounts/user.ex:200
+#, elixir-autogen, elixir-format
+msgid "does not match password"
+msgstr "la contraseña no coincide"
+
+#: lib/livedj/accounts/user.ex:242
+#, elixir-autogen, elixir-format, fuzzy
+msgid "is not valid"
+msgstr "no es válido"
+
+#: lib/livedj/accounts/user.ex:91
+#, elixir-autogen, elixir-format
+msgid "must have the @ sign and no spaces"
+msgstr "debe contener @ y no debe contener espacios"
+
+#: lib/livedj/accounts/user.ex:141
+#, elixir-autogen, elixir-format, fuzzy
+msgid "should be at most %{count} byte(s)"
+msgstr "debe tener como máximo %{count} byte"
+
+#: lib/livedj/accounts/user.ex:115
+#, elixir-autogen, elixir-format
+msgid "should be between %{min} and %{max} characters"
+msgstr "debe contener entre %{min} y %{max} caracteres"
+
+#: lib/livedj_web/components/core_components.ex:212
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "Intentanto reconectar"
+
+#: lib/livedj/sessions.ex:100
+#, elixir-autogen, elixir-format
+msgid "Could not fetch the video from youtube"
+msgstr "No se pudo encontrar el video de youtube"
+
+#: lib/livedj_web/components/core_components.ex:224
+#, elixir-autogen, elixir-format
+msgid "Hang in there while we get back on track"
+msgstr "Esperá mientras volvemos a estar en línea"
+
+#: lib/livedj/sessions.ex:84
+#: lib/livedj/sessions.ex:135
+#, elixir-autogen, elixir-format
+msgid "The video is already added to the playlist"
+msgstr "El video ya está agregado en la lista"
+
+#: lib/livedj_web/components/core_components.ex:207
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "No podemos conectarnos a internet"
+
+#: lib/livedj_web/components/core_components.ex:219
+#: lib/livedj_web/live/sessions/room_live/list.ex:55
+#: lib/livedj_web/live/sessions/room_live/show.ex:144
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "Algo salió mal!"
+
+#: lib/livedj_web/live/sessions/room_live/list.ex:48
+#: lib/livedj_web/live/sessions/room_live/show.ex:137
+#, elixir-autogen, elixir-format
+msgid "The room doesn't exist"
+msgstr "La sala no existe"
+
+#: lib/livedj/media/video.ex:41
+#, elixir-autogen, elixir-format
+msgid "video with this id already exists"
+msgstr "ya existe un video con ese id"
+
+#: lib/livedj/sessions.ex:93
+#, elixir-autogen, elixir-format
+msgid "Could not save video. Please try again later."
+msgstr "No se pudo guardar el video. Por favor intentá luego."
+
+#: lib/livedj_web/live/sessions/room_live/list.ex:80
+#, elixir-autogen, elixir-format
+msgid "The selected track could not be played"
+msgstr "El video seleccionado no se puede reproducir"
+
+#: lib/livedj/accounts/user.ex:65
+#, elixir-autogen, elixir-format, fuzzy
+msgid "should be between 3 and %{max} characters"
+msgid_plural "should be between 3 and %{max} characters"
+msgstr[0] "debe contener entre %{min} y %{max} caracteres"
+msgstr[1] "debe contener entre %{min} y %{max} caracteres"
+
+#: lib/livedj_web/live/sessions/room_live/list.ex:95
+#: lib/livedj_web/live/sessions/room_live/list.ex:304
+#, elixir-autogen, elixir-format
+msgid "The currently playing track can't be removed"
+msgstr "El video actual no se puede quitar"
+
+#: lib/livedj/accounts/user.ex:74
+#, elixir-autogen, elixir-format
+msgid "only letters, numbers and underscores allowed"
+msgstr "solo letras, números y guiones bajos permitidos"
