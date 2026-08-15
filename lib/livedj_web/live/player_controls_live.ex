@@ -116,7 +116,14 @@ defmodule LivedjWeb.PlayerControlsLive do
         {:player_load_media, _room_id, %Sessions.Player{} = player},
         socket
       ) do
-    {:noreply, assign_player(socket, player)}
+    {:noreply,
+     socket
+     |> assign_player(player)
+     |> push_event("track_changed", %{
+       title: player.title,
+       channel: player.channel,
+       thumbnail: player.media_thumbnail_url
+     })}
   end
 
   def handle_info({:player_play, _room_id, %Player{} = player}, socket) do
