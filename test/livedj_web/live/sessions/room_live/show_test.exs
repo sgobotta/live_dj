@@ -77,6 +77,10 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       |> render_submit()
 
       assert Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
+
+      # the modal stays open on the Security tab instead of closing
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/security")
+      assert render(view) =~ "room-password-form"
     end
 
     test "shows the changeset error when the password is too long", %{
@@ -124,6 +128,10 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       |> render_submit()
 
       assert Livedj.Sessions.get_room!(room.id).name == "New Room Name"
+
+      # the modal stays open on the General tab instead of closing
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/general")
+      assert render(view) =~ "room-name-form"
     end
 
     test "shows the changeset error for a blank name", %{

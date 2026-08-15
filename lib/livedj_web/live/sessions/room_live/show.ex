@@ -372,7 +372,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
          socket
          |> assign(:room, room)
          |> put_flash(:info, gettext("Room name updated"))
-         |> push_patch(to: ~p"/sessions/rooms/#{room}")}
+         |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/general")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, put_flash(socket, :error, name_error_message(changeset))}
@@ -399,7 +399,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
          socket
          |> assign(:room, room)
          |> put_flash(:info, gettext("Room password updated"))
-         |> push_patch(to: ~p"/sessions/rooms/#{room}")}
+         |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/security")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, put_flash(socket, :error, password_error_message(changeset))}
