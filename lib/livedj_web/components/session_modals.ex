@@ -184,13 +184,13 @@ defmodule LivedjWeb.SessionModals do
       </.header>
 
       <div class="mt-4 flex gap-1 border-b border-tone-300 dark:border-tone-600">
-        <.settings_tab
+        <.modal_tab
           patch={~p"/sessions/rooms/#{@room}/settings/general"}
           active={@tab == :general}
         >
           <.icon name="hero-cog-6-tooth" class="h-4 w-4" /> {gettext("General")}
-        </.settings_tab>
-        <.settings_tab
+        </.modal_tab>
+        <.modal_tab
           patch={~p"/sessions/rooms/#{@room}/settings/security"}
           active={@tab == :security}
         >
@@ -198,7 +198,7 @@ defmodule LivedjWeb.SessionModals do
             name={if @protected, do: "hero-lock-closed", else: "hero-lock-open"}
             class="h-4 w-4"
           /> {gettext("Security")}
-        </.settings_tab>
+        </.modal_tab>
       </div>
 
       <div :if={@tab == :general} class="mt-6">
@@ -262,11 +262,14 @@ defmodule LivedjWeb.SessionModals do
     """
   end
 
+  # Scoped to settings_modal for now. If a second tabbed modal shows up,
+  # extract this into a generic tabbed_modal/modal_tab pair instead of
+  # copying it.
   attr :patch, :string, required: true
   attr :active, :boolean, required: true
   slot :inner_block, required: true
 
-  defp settings_tab(assigns) do
+  defp modal_tab(assigns) do
     ~H"""
     <.link
       patch={@patch}
