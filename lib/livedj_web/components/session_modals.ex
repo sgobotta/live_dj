@@ -203,7 +203,7 @@ defmodule LivedjWeb.SessionModals do
         </.modal_tab>
       </div>
 
-      <div :if={@tab == :general} class="mt-6 min-h-56">
+      <div :if={@tab == :general} class="mt-6 min-h-96">
         <.form
           for={%{}}
           id="general-settings-form"
@@ -269,7 +269,7 @@ defmodule LivedjWeb.SessionModals do
         </div>
       </div>
 
-      <div :if={@tab == :security} class="mt-6 min-h-56">
+      <div :if={@tab == :security} class="mt-6 min-h-96">
         <p class="text-sm text-zinc-600 dark:text-zinc-400">
           <%= if @protected do %>
             {gettext("This room is protected. Update or remove its password.")}
