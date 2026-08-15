@@ -203,70 +203,59 @@ defmodule LivedjWeb.SessionModals do
         </.modal_tab>
       </div>
 
-      <div :if={@tab == :general} class="mt-6 min-h-56 flex flex-col gap-6">
-        <div class="flex items-center gap-4">
-          <.user_avatar
-            user={@current_user}
-            name={@display_name}
-            class="h-14 w-14 text-lg"
-            tooltip={false}
-          />
-          <.form
-            for={%{}}
-            id="display-name-form"
-            phx-submit="save_display_name"
-            class="flex-1 flex flex-col gap-2"
-          >
-            <label
-              for="display-name-input"
-              class="block text-sm font-semibold text-tone-700 dark:text-tone-300"
-            >
-              {gettext("Your name")}
-            </label>
-            <div class="flex gap-2">
+      <div :if={@tab == :general} class="mt-6 min-h-56">
+        <.form
+          for={%{}}
+          id="general-settings-form"
+          phx-submit="save_general"
+          class="flex flex-col gap-6"
+        >
+          <div class="flex items-center gap-4">
+            <.user_avatar
+              user={@current_user}
+              name={@display_name}
+              class="h-14 w-14 text-lg"
+              tooltip={false}
+            />
+            <div class="flex-1 flex flex-col gap-2">
+              <label
+                for="display-name-input"
+                class="block text-sm font-semibold text-tone-700 dark:text-tone-300"
+              >
+                {gettext("Your name")}
+              </label>
               <input
                 type="text"
                 id="display-name-input"
                 name="display_name"
                 value={@display_name}
                 placeholder={gettext("Your name")}
-                class="flex-1 rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
-              />
-              <.button phx-disable-with={gettext("Saving...")}>
-                {gettext("Save")}
-              </.button>
-            </div>
-          </.form>
-        </div>
-
-        <div class="border-t border-tone-300 dark:border-tone-600 pt-6">
-          <.form
-            for={%{}}
-            id="room-name-form"
-            phx-submit="save_room_name"
-            class="flex flex-col gap-4"
-          >
-            <div>
-              <label
-                for="room-name-input"
-                class="block text-sm font-semibold text-tone-700 dark:text-tone-300 mb-2"
-              >
-                {gettext("Room name")}
-              </label>
-              <input
-                type="text"
-                id="room-name-input"
-                name="name"
-                value={@room.name}
-                placeholder={gettext("Room name")}
                 class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
               />
             </div>
-            <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
-              {gettext("Save")}
-            </.button>
-          </.form>
-        </div>
+          </div>
+
+          <div class="border-t border-tone-300 dark:border-tone-600 pt-6">
+            <label
+              for="room-name-input"
+              class="block text-sm font-semibold text-tone-700 dark:text-tone-300 mb-2"
+            >
+              {gettext("Room name")}
+            </label>
+            <input
+              type="text"
+              id="room-name-input"
+              name="name"
+              value={@room.name}
+              placeholder={gettext("Room name")}
+              class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
+            />
+          </div>
+
+          <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+            {gettext("Save")}
+          </.button>
+        </.form>
       </div>
 
       <div :if={@tab == :security} class="mt-6 min-h-56">
