@@ -55,15 +55,23 @@
      computes click-to-seek position from the track's travel distance,
      which is (track width - thumb width) — sizing the thumb to match
      the full track collapses that to 0, so every click/drag resolved
-     to the same value regardless of where it landed. */
+     to the same value regardless of where it landed.
+
+     Thumb/track sizes below use rem, not em: this file is shared by
+     sliders sitting in different local font-size contexts (the seek
+     bar's ancestor sets text-[0.725rem]; the volume slider inherits
+     the page default), and em is relative to that local, ambient
+     font-size — the same em value rendered at different actual pixel
+     sizes per slider. rem is always relative to the root, so it's
+     consistent regardless of which component the slider lives in. */
   .custom-slider-input::-webkit-slider-runnable-track,
   .custom-slider-input::-webkit-slider-thumb {
     -webkit-appearance: none;
     background: transparent;
   }
   .custom-slider-input::-webkit-slider-thumb {
-    width: 0.675em;
-    height: 0.675em;
+    width: 0.725rem;
+    height: 0.725rem;
   }
   .custom-slider-input::-moz-range-track,
   .custom-slider-input::-moz-range-thumb,
@@ -73,14 +81,14 @@
     border: 0;
   }
   .custom-slider-input::-moz-range-thumb {
-    width: 0.675em;
-    height: 0.675em;
+    width: 0.725rem;
+    height: 0.725rem;
   }
 
   .custom-slider-track {
     @apply relative w-full rounded-full pointer-events-none;
     z-index: 1;
-    height: calc(0.125em + 2px);
+    height: calc(0.0906rem + 3px);
     background: var(--color-tone-400);
   }
   .dark .custom-slider-track {
@@ -98,22 +106,27 @@
      color (not currentColor) so it doesn't follow .custom-slider-fill
      into green on hover — the played portion (left of the current
      value) gets the green accent; this preview segment (right of it)
-     always stays tone-400. Position driven by JS
+     always stays a neutral tone. Position driven by JS
      (attachRangeSliderHoverPreview in assets/js/lib/range-slider.js),
-     which tracks pointer X. */
+     which tracks pointer X. Light mode uses tone-600 rather than
+     tone-400 — tone-400 reads too close to the light background to
+     stay visible. */
   .custom-slider-hover-fill {
     @apply absolute top-0 bottom-0 left-0 rounded-full;
     width: 0%;
-    background: var(--color-tone-400);
+    background: var(--color-tone-600);
     opacity: 1;
+  }
+  .dark .custom-slider-hover-fill {
+    background: var(--color-tone-400);
   }
 
   .custom-slider-thumb {
     @apply absolute rounded-full bg-tone-600;
     top: 50%;
     left: 0%;
-    width: 0.675em;
-    height: 0.675em;
+    width: 0.725rem;
+    height: 0.725rem;
     transform: translate(-50%, -50%);
     opacity: 0;
     transition: opacity ease 100ms;

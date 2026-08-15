@@ -34,7 +34,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
             else: "#{gettext("Mute")} (M)"}
         </.tooltip>
       </div>
-      <div class="ml-2 flex-1 min-w-0 self-center hidden md:block">
+      <div class="ml-3 flex-1 min-w-0 self-center hidden md:block">
         <.form
           :let={f}
           for={@player}
