@@ -51,19 +51,31 @@
                 "text-tone-400 dark:text-tone-500 italic",
               msg.type == :text && "text-tone-900 dark:text-tone-100"
             ]}>
-              <%= case msg.type do %>
-                <% :text -> %>
-                  <span class="font-semibold text-tone-600 dark:text-tone-400">
-                    {msg.display_name}:
-                  </span>
-                  {" "}{msg.content}
-                <% :reaction -> %>
-                  *
-                  <span class="font-semibold">{msg.display_name}</span> {msg.content}
-                <% :announcement -> %>
-                  <.announcement_name name={msg.display_name} /> {msg.content}
-                <% _ -> %>
-                  {msg.content}
+              <%= if msg.type in [:text, :reaction, :announcement] do %>
+                <div class="flex items-start gap-1.5">
+                  <.user_avatar
+                    user={%{}}
+                    name={msg.display_name}
+                    class="h-5 w-5 text-[0.5rem] mt-0.5 shrink-0"
+                    tooltip={false}
+                  />
+                  <p class="min-w-0">
+                    <%= case msg.type do %>
+                      <% :text -> %>
+                        <span class="font-semibold text-tone-600 dark:text-tone-400">
+                          {msg.display_name}:
+                        </span>
+                        {" "}{msg.content}
+                      <% :reaction -> %>
+                        *
+                        <span class="font-semibold">{msg.display_name}</span> {msg.content}
+                      <% :announcement -> %>
+                        <.announcement_name name={msg.display_name} /> {msg.content}
+                    <% end %>
+                  </p>
+                </div>
+              <% else %>
+                {msg.content}
               <% end %>
             </div>
           <% end %>
