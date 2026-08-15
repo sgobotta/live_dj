@@ -91,7 +91,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   def announcement_content_parts(content, title) do
     case String.split(content, title, parts: 2) do
       [prefix, suffix] -> {prefix, title, suffix}
-      _ -> {content, nil, ""}
+      _no_match -> {content, nil, ""}
     end
   end
 

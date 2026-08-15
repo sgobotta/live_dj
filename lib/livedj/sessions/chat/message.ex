@@ -30,8 +30,14 @@ defmodule Livedj.Sessions.Chat.Message do
     :inserted_at
   ]
 
-  @spec new(binary(), binary(), binary(), message_type(), binary(), keyword()) ::
-          t()
+  @spec new(
+          binary(),
+          binary(),
+          binary(),
+          message_type(),
+          binary(),
+          keyword()
+        ) :: t()
   def new(room_id, user_id, display_name, type, content, opts \\ []) do
     %__MODULE__{
       id: Ecto.UUID.generate(),
