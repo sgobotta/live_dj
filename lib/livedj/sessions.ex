@@ -571,13 +571,20 @@ defmodule Livedj.Sessions do
   end
 
   @spec announce_now_playing(binary(), Player.t()) :: :ok
-  defp announce_now_playing(room_id, %Player{title: title}) do
+  defp announce_now_playing(room_id, %Player{
+         title: title,
+         channel: channel,
+         media_thumbnail_url: media_thumbnail_url
+       }) do
     chat_send_message(
       room_id,
       "system",
       "System",
       :system,
-      gettext("Now playing: %{title}", title: title)
+      gettext("Now playing: %{title}", title: title),
+      media_title: title,
+      media_channel: channel,
+      media_thumbnail_url: media_thumbnail_url
     )
   end
 

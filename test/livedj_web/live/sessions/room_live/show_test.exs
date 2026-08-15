@@ -270,6 +270,33 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       assert html =~ "https://example.com/thumb.jpg"
     end
 
+    test "a :system \"Now playing\" message also underlines the media title with a tooltip",
+         %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+      :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room.id}")
+
+      :ok =
+        Livedj.Sessions.chat_send_message(
+          room.id,
+          "system",
+          "System",
+          :system,
+          "Now playing: Some Song",
+          media_title: "Some Song",
+          media_channel: "Some Channel",
+          media_thumbnail_url: "https://example.com/thumb.jpg"
+        )
+
+      assert_receive {:message_sent, _room_id, _message}
+
+      html = render(view)
+
+      assert html =~ ~s(class="underline decoration-dotted cursor-help")
+      assert html =~ "Some Song"
+      assert html =~ "Some Channel"
+      assert html =~ "https://example.com/thumb.jpg"
+    end
+
     test "using /name does not crash the LiveView", %{conn: conn, room: room} do
       {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
 

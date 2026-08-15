@@ -51,63 +51,56 @@
                 "text-tone-400 dark:text-tone-500 italic",
               msg.type == :text && "text-tone-900 dark:text-tone-100"
             ]}>
-              <%= if msg.type in [:text, :reaction, :announcement] do %>
-                <div class="flex items-start gap-1.5">
-                  <.user_avatar
-                    user={%{}}
-                    name={msg.display_name}
-                    class="h-5 w-5 text-[0.5rem] mt-0.5 shrink-0"
-                    tooltip={false}
-                  />
-                  <p class="min-w-0 relative top-px">
-                    <%= case msg.type do %>
-                      <% :text -> %>
-                        <span class="font-semibold text-tone-600 dark:text-tone-400">
-                          {msg.display_name}:
-                        </span>
-                        {" "}{msg.content}
-                      <% :reaction -> %>
-                        *
-                        <span class="font-semibold">{msg.display_name}</span> {msg.content}
-                      <% :announcement -> %>
-                        <% {prefix, title, suffix} =
-                          announcement_content_parts(
-                            msg.content,
-                            msg.media_title
-                          ) %>
-                        <.announcement_name name={msg.display_name} />
-                        {prefix}
-                        <span :if={title} class="relative group inline-block">
-                          <span class="underline decoration-dotted cursor-help">
-                            {title}
+              <%= cond do %>
+                <% msg.type in [:text, :reaction, :announcement] -> %>
+                  <div class="flex items-start gap-1.5">
+                    <.user_avatar
+                      user={%{}}
+                      name={msg.display_name}
+                      class="h-5 w-5 text-[0.5rem] mt-0.5 shrink-0"
+                      tooltip={false}
+                    />
+                    <p class="min-w-0 relative top-px">
+                      <%= case msg.type do %>
+                        <% :text -> %>
+                          <span class="font-semibold text-tone-600 dark:text-tone-400">
+                            {msg.display_name}:
                           </span>
-                          <.tooltip class="left-1/2 -translate-x-1/2 z-30 not-italic max-w-[220px]">
-                            <span class="flex items-center gap-2">
-                              <%= if msg.media_thumbnail_url not in [nil, ""] do %>
-                                <img
-                                  src={msg.media_thumbnail_url}
-                                  class="h-10 w-10 rounded-md object-cover shrink-0"
-                                />
-                              <% else %>
-                                <span class="h-10 w-10 rounded-md bg-tone-300 dark:bg-tone-700 shrink-0 inline-block" />
-                              <% end %>
-                              <span class="min-w-0 flex flex-col">
-                                <span class="font-semibold truncate">
-                                  {title}
-                                </span>
-                                <span class="truncate opacity-75">
-                                  {msg.media_channel}
-                                </span>
-                              </span>
-                            </span>
-                          </.tooltip>
-                        </span>
-                        {suffix}
-                    <% end %>
-                  </p>
-                </div>
-              <% else %>
-                {msg.content}
+                          {" "}{msg.content}
+                        <% :reaction -> %>
+                          *
+                          <span class="font-semibold">{msg.display_name}</span> {msg.content}
+                        <% :announcement -> %>
+                          <% {prefix, title, suffix} =
+                            announcement_content_parts(
+                              msg.content,
+                              msg.media_title
+                            ) %>
+                          <.announcement_name name={msg.display_name} />
+                          {prefix}
+                          <.media_title_tooltip
+                            :if={title}
+                            title={title}
+                            channel={msg.media_channel}
+                            thumbnail_url={msg.media_thumbnail_url}
+                          />
+                          {suffix}
+                      <% end %>
+                    </p>
+                  </div>
+                <% msg.type == :system -> %>
+                  <% {prefix, title, suffix} =
+                    announcement_content_parts(msg.content, msg.media_title) %>
+                  {prefix}
+                  <.media_title_tooltip
+                    :if={title}
+                    title={title}
+                    channel={msg.media_channel}
+                    thumbnail_url={msg.media_thumbnail_url}
+                  />
+                  {suffix}
+                <% true -> %>
+                  {msg.content}
               <% end %>
             </div>
           <% end %>

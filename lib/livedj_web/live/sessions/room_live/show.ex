@@ -78,11 +78,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   @doc """
-  Splits an `:announcement` message's content around its embedded media
-  title, so the title can be rendered as its own hoverable span. Falls back
-  to rendering the whole content with no title span when there's no title
-  to key off of (older in-memory messages from before this field existed)
-  or the title can't be found verbatim in the content.
+  Splits a chat message's content around its embedded media title, so the
+  title can be rendered as its own hoverable span. Falls back to rendering
+  the whole content with no title span when there's no title to key off of
+  (older in-memory messages from before this field existed) or the title
+  can't be found verbatim in the content.
   """
   @spec announcement_content_parts(binary(), binary() | nil) ::
           {binary(), binary() | nil, binary()}
@@ -93,6 +93,39 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
       [prefix, suffix] -> {prefix, title, suffix}
       _no_match -> {content, nil, ""}
     end
+  end
+
+  @doc """
+  Renders a media title as an underlined, hoverable span with a tooltip
+  showing the track's thumbnail, title, and channel — the same info shown
+  on the left side of the player controls.
+  """
+  attr :title, :string, required: true
+  attr :channel, :string, default: nil
+  attr :thumbnail_url, :string, default: nil
+
+  def media_title_tooltip(assigns) do
+    ~H"""
+    <span class="relative group inline-block">
+      <span class="underline decoration-dotted cursor-help">{@title}</span>
+      <.tooltip class="left-1/2 -translate-x-1/2 z-30 not-italic max-w-[220px]">
+        <span class="flex items-center gap-2">
+          <%= if @thumbnail_url not in [nil, ""] do %>
+            <img
+              src={@thumbnail_url}
+              class="h-10 w-10 rounded-md object-cover shrink-0"
+            />
+          <% else %>
+            <span class="h-10 w-10 rounded-md bg-tone-300 dark:bg-tone-700 shrink-0 inline-block" />
+          <% end %>
+          <span class="min-w-0 flex flex-col">
+            <span class="font-semibold truncate">{@title}</span>
+            <span class="truncate opacity-75">{@channel}</span>
+          </span>
+        </span>
+      </.tooltip>
+    </span>
+    """
   end
 
   @impl true
