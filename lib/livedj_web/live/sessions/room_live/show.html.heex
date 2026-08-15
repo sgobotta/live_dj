@@ -36,7 +36,7 @@
       >
         <div
           id="chat-messages"
-          class="flex-1 overflow-y-auto flex flex-col-reverse gap-1 pl-1 py-1"
+          class="flex-1 overflow-y-auto flex flex-col-reverse gap-1 pl-1 py-1 focus-frame"
         >
           <%= for msg <- @messages do %>
             <div class={[
@@ -189,8 +189,7 @@
                 enabled:cursor-pointer
                 text-tone-500 dark:text-tone-400
                 hover:enabled:text-tone-900 dark:hover:enabled:text-tone-100
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
-                focus-visible:ring-offset-tone-200 dark:focus-visible:ring-offset-tone-800
+                focus:outline-none focus-ignite
               "
             >
               <.icon name="hero-paper-airplane" class="h-5 w-5" />

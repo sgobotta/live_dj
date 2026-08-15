@@ -47,8 +47,7 @@ defmodule LivedjWeb.SessionModals do
               text-zinc-50 dark:text-zinc-900
               hover:bg-zinc-700 dark:hover:bg-zinc-300
               transition-colors duration-150
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
-              focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
+              focus:outline-none focus-ignite
             "
           >
             {gettext("Copy")}
@@ -316,7 +315,7 @@ defmodule LivedjWeb.SessionModals do
               type="button"
               id="remove-room-password"
               phx-click="remove_room_password"
-              class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900 rounded"
+              class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-ignite rounded"
             >
               {gettext("Remove password")}
             </button>
@@ -344,8 +343,7 @@ defmodule LivedjWeb.SessionModals do
       data-active={to_string(@active)}
       class={[
         "flex items-center gap-1.5 px-3 py-2 text-sm font-semibold transition-colors",
-        "rounded-t focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
-        "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
+        "rounded-t focus:outline-none focus-ignite",
         @active && "text-tone-900 dark:text-tone-100",
         !@active &&
           "text-tone-500 dark:text-tone-400 hover:text-tone-700 dark:hover:text-tone-300"

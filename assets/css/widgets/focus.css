@@ -1,0 +1,115 @@
+/*
+ * Keyboard-focus treatment ("Ignition"): the element's own offset shadow
+ * snaps in immediately on Tab, like a latch, then a soft glow blooms in
+ * a beat later from behind it. Replaces the old floating ring-offset
+ * indicator so focus reads as part of the control instead of a shape
+ * drawn around it. Mouse/touch activation never triggers this (:focus-visible).
+ */
+
+.focus-ignite {
+  position: relative;
+  isolation: isolate;
+}
+
+.focus-ignite::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, var(--color-brand) 45%, transparent),
+    transparent 68%
+  );
+  filter: blur(3px);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 220ms ease 80ms;
+}
+
+.focus-ignite:focus-visible {
+  outline: none;
+  box-shadow: 3px 3px 0 0 var(--color-brand);
+  border-color: var(--color-brand);
+  transition: box-shadow 60ms ease, border-color 60ms ease;
+}
+
+.focus-ignite:focus-visible::before {
+  opacity: 0.6;
+}
+
+.focus-ignite-inset:focus-visible {
+  box-shadow: inset 0 0 0 1.5px var(--color-brand), 2px 2px 0 0 var(--color-brand);
+}
+
+:where(.dark, .dark *) .focus-ignite::before {
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, var(--color-brand-dark) 45%, transparent),
+    transparent 68%
+  );
+}
+
+:where(.dark, .dark *) .focus-ignite:focus-visible {
+  box-shadow: 3px 3px 0 0 var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}
+
+:where(.dark, .dark *) .focus-ignite-inset:focus-visible {
+  box-shadow: inset 0 0 0 1.5px var(--color-brand-dark), 2px 2px 0 0 var(--color-brand-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-ignite::before {
+    transition: opacity 120ms ease;
+  }
+}
+
+/*
+ * Depth-on-focus: plain text inputs carry no shadow at rest — just their
+ * flat background and border — so a form full of them stays quiet. The
+ * focused field alone gains a soft inset shadow, shape only, no accent
+ * color, so scanning a form by Tab reads as one field growing "deeper"
+ * rather than a wall of identically-carved boxes.
+ */
+.focus-depth {
+  transition: box-shadow 200ms ease;
+}
+
+.focus-depth:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 30px 1px rgba(161, 161, 170, 0.7);
+}
+
+:where(.dark, .dark *) .focus-depth:focus-visible {
+  box-shadow: inset 0 0 30px 1px rgba(24, 24, 27, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-depth {
+    transition: none;
+  }
+}
+
+/*
+ * Scrollable panels (e.g. the chat log) are implicitly keyboard-focusable
+ * in Chromium once their content overflows, even with no tabindex — so
+ * without a rule here they fall back to the browser's default blue
+ * outline. A full inset ring read as too heavy for a passive panel, so
+ * instead: just tint the scrollbar thumb itself — the thing that's
+ * actually now driven by the keyboard.
+ */
+.focus-frame:focus-visible {
+  outline: none;
+}
+
+.focus-frame:focus-visible::-webkit-scrollbar-thumb {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+}
+
+:where(.dark, .dark *) .focus-frame:focus-visible::-webkit-scrollbar-thumb {
+  background: var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}

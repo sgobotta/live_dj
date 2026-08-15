@@ -15,7 +15,8 @@
 @variant drag-ghost (&:where(.drag-ghost, .drag-ghost *));
 
 @theme {
-  --color-brand: violet;
+  --color-brand: #a12d6e;
+  --color-brand-dark: #ef8fc0;
   --font-family-sans: "Montserrat-Thin", Helvetica, Arial, sans-serif;
   --color-tone-50: var(--tone-50);
   --color-tone-100: var(--tone-100);
@@ -118,6 +119,7 @@
 @import "./fonts.css";
 @import "./widgets/scrollbar.css";
 @import "./widgets/slider.css";
+@import "./widgets/focus.css";
 
 .animate-text-overflow {
   animation: move 25s linear infinite;

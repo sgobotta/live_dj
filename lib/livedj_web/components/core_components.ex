@@ -86,9 +86,7 @@ defmodule LivedjWeb.CoreComponents do
                   class="
                     -m-3 rounded-md cursor-pointer
                     flex-none opacity-100 hover:opacity-40
-                    focus:outline-none
-                    focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
-                    focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
+                    focus:outline-none focus-ignite
                   "
                   aria-label={gettext("close")}
                 >
@@ -342,8 +340,7 @@ defmodule LivedjWeb.CoreComponents do
         "bg-zinc-300 hover:bg-zinc-400 text-zinc-800 active:text-zinc-800/80",
         "dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-100 dark:active:text-zinc-100/80",
         "text-sm font-semibold leading-6",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
-        "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
+        "focus:outline-none focus-ignite",
         @class
       ]}
       {@rest}
@@ -441,7 +438,7 @@ defmodule LivedjWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
+          class="rounded border-zinc-300 text-zinc-900 focus:outline-none focus:ring-0 focus-ignite focus-ignite-inset"
           {@rest}
         />
         {@label}
@@ -458,7 +455,7 @@ defmodule LivedjWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:outline-none focus:ring-0 focus-ignite focus-ignite-inset sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -479,8 +476,7 @@ defmodule LivedjWeb.CoreComponents do
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:outline-none focus:ring-0 sm:text-sm sm:leading-6",
-          "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
-          "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
+          "focus-ignite focus-ignite-inset",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -506,14 +502,12 @@ defmodule LivedjWeb.CoreComponents do
         class={
           [
             "py-3 mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-0 sm:text-sm sm:leading-6",
-            "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
-            "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
+            @type != "range" && "focus-depth",
             "bg-zinc-200 dark:bg-zinc-700",
-            "shadow-[inset_0_0_30px_1px_rgba(161,161,170,0.7)] dark:shadow-[inset_0_0_30px_1px_rgba(24,24,27,0.7)]",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-            "phx-no-feedback:dark:border-zinc-700 phx-no-feedback:dark:focus:border-zinc-600",
+            "phx-no-feedback:dark:border-zinc-600 phx-no-feedback:dark:focus:border-zinc-500",
             @errors == [] &&
-              "border-zinc-300 focus:border-zinc-400 dark:border-zinc-700 dark:focus:border-zinc-700",
+              "border-zinc-300 focus:border-zinc-400 dark:border-zinc-600 dark:focus:border-zinc-500",
             @errors != [] && "border-rose-400 focus:border-rose-400"
           ] ++ [@class]
         }
