@@ -11,7 +11,10 @@ defmodule Livedj.Sessions.PlaybackClock do
   require Logger
 
   @registry_module Registry.PlaybackClock
-  @tick_interval :timer.seconds(1)
+  # Short enough that, combined with PlaybackPosition's epsilon, the
+  # server advances the track close to its real end instead of up to a
+  # second or two early.
+  @tick_interval 250
   @tick_msg :tick
 
   @type state :: %{

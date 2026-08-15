@@ -1,6 +1,10 @@
 import initPlayer from './player'
 import { PALETTES, startNoise, stopNoise } from '../animation/noise'
 import { secondsToTime } from '../lib/date-utils'
+import {
+  attachRangeSliderHoverPreview,
+  syncRangeSliderVisual
+} from '../lib/range-slider'
 
 function currentPalette() {
   const idx = parseInt(localStorage.getItem('_noise_filter') ?? '0', 10)
@@ -35,6 +39,7 @@ const updateVideoSlider = (
   timeSliderElem.min = 0
   timeSliderElem.max = playerTotalTime
   timeSliderElem.value = playerCurrentTime
+  syncRangeSliderVisual(timeSliderElem)
 }
 
 const udpateTimeDisplays = (
@@ -50,6 +55,45 @@ const udpateTimeDisplays = (
   updateVideoSlider(timeSliderElem, currentTime, totalTime)
 }
 
+// Labels only need whole-second precision; re-rendering them every frame
+// is wasted work, so they're throttled while the slider itself is updated
+// on every frame for a smooth glide instead of a once-a-second jump.
+const TIME_LABEL_UPDATE_INTERVAL_MS = 1000
+
+const startTimeTracking = (
+  hookContext,
+  startTimeTrackerElem,
+  endTimeTrackerElem,
+  timeSliderElem,
+  player
+) => {
+  let lastLabelUpdate = 0
+
+  const tick = (timestamp) => {
+    if (!hookContext._isPeeking) {
+      const currentTime = player.getCurrentTime()
+      const totalTime = player.getDuration()
+      updateVideoSlider(timeSliderElem, currentTime, totalTime)
+
+      if (timestamp - lastLabelUpdate >= TIME_LABEL_UPDATE_INTERVAL_MS) {
+        lastLabelUpdate = timestamp
+        updateTimeDisplay(startTimeTrackerElem, currentTime)
+        updateTimeDisplay(endTimeTrackerElem, totalTime)
+      }
+    }
+    hookContext._trackTimeRAF = requestAnimationFrame(tick)
+  }
+
+  hookContext._trackTimeRAF = requestAnimationFrame(tick)
+}
+
+const stopTimeTracking = (hookContext) => {
+  if (hookContext._trackTimeRAF) {
+    cancelAnimationFrame(hookContext._trackTimeRAF)
+    hookContext._trackTimeRAF = null
+  }
+}
+
 export default {
   _hideOutOfSyncBanner() {
     const banner = document.getElementById('out-of-sync-banner')
@@ -62,6 +106,7 @@ export default {
   },
   backdrop_id: null,
   destroyed() {
+    stopTimeTracking(this)
     window.removeEventListener('resize', this._onResize)
     document.removeEventListener('mousedown', this._onSliderMousedown)
     document.removeEventListener('touchstart', this._onSliderTouchstart)
@@ -106,6 +151,7 @@ export default {
       if (e.target.id !== this.timeSliderId || !this.player) return
       const peekTime = parseFloat(e.target.value)
       this.player.seekTo(peekTime, false)
+      syncRangeSliderVisual(e.target)
       const startElem = document.getElementById(this.startTimeTrackerId)
       if (startElem) updateTimeDisplay(startElem, peekTime)
     }
@@ -115,6 +161,7 @@ export default {
       if (!this.player) return
       const committedTime = parseFloat(e.target.value)
       this.player.seekTo(committedTime, true)
+      syncRangeSliderVisual(e.target)
       await this.pushEventTo(this.el, 'seek_committed', {
         committed_time: committedTime
       })
@@ -161,7 +208,7 @@ export default {
 
       const onPlayerReady = player => {
         console.debug('[Player :: Ready]', player)
-        player.g.classList.add("rounded-lg")
+        player.getIframe().classList.add("rounded-lg")
 
         this.player = player
 
@@ -187,6 +234,18 @@ export default {
           hookContext.endTimeTrackerId
         )
         const timeSliderElem = document.getElementById(hookContext.timeSliderId)
+
+        // The seek bar's DOM is rendered by a separate LiveView
+        // (player_controls_live), so it isn't guaranteed to exist yet
+        // when on_container_mounted fires from this hook's own mount.
+        // Every player state change resolves it fresh, so attach here
+        // instead — by the first state change the whole page has
+        // settled. #seek-bar-container is phx-update="ignore", so this
+        // element persists across live navigations; attach only once.
+        if (!hookContext._hoverPreviewAttached && timeSliderElem) {
+          attachRangeSliderHoverPreview(timeSliderElem)
+          hookContext._hoverPreviewAttached = true
+        }
         /* eslint-disable no-case-declarations */
         switch (event.data) {
           case YT.PlayerState.UNSTARTED:
@@ -194,7 +253,7 @@ export default {
             break
           case YT.PlayerState.ENDED:
             console.debug("[Player State :: ENDED")
-            clearInterval(hookContext.el.dataset.trackTimeInterval)
+            stopTimeTracking(hookContext)
             await this.pushEventTo(this.el, 'on_player_ended')
             break
           case YT.PlayerState.PLAYING:
@@ -202,18 +261,14 @@ export default {
             hookContext.shouldAutoplay = false
 
             await this.pushEventTo(this.el, 'on_player_playing')
-            const trackTimeInterval = setInterval(() => {
-              if (!hookContext._isPeeking) {
-                udpateTimeDisplays(
-                  startTimeTrackerElem,
-                  endTimeTrackerElem,
-                  timeSliderElem,
-                  event.target
-                )
-              }
-            }, 1000)
-            hookContext.el.dataset['trackTimeInterval'] = trackTimeInterval
-            
+            startTimeTracking(
+              hookContext,
+              startTimeTrackerElem,
+              endTimeTrackerElem,
+              timeSliderElem,
+              event.target
+            )
+
             const backdrop = document.getElementById(this.backdropId)
             backdrop.classList.add('opacity-0')
             backdrop.classList.remove('opacity-50')
@@ -223,7 +278,7 @@ export default {
             console.debug("[Player State :: PAUSED")
 
             await this.pushEventTo(this.el, 'on_player_paused')
-            clearInterval(hookContext.el.dataset.trackTimeInterval)
+            stopTimeTracking(hookContext)
             udpateTimeDisplays(
               startTimeTrackerElem,
               endTimeTrackerElem,
@@ -262,7 +317,7 @@ export default {
     this.handleEvent('show_player', ({ callback_event: callbackEvent}) => {
       console.debug('[Player :: show_player]')
 
-      this.player.g.classList.remove('hidden')
+      this.player.getIframe().classList.remove('hidden')
 
       const canvas = document.getElementById(this.spinnerId)
       stopNoise(canvas)
@@ -354,6 +409,20 @@ export default {
       this._hideOutOfSyncBanner()
       console.debug('[Player :: load_video]', player)
       console.debug('[Player :: load_video state]', player.state)
+
+      // The server advances the track slightly ahead of the outgoing
+      // video's real end (see PlaybackClock's epsilon), so the local
+      // slider may not have visually reached its max yet. Snap it to
+      // complete and stop tracking the outgoing video before swapping,
+      // so the transition always reads as "this track finished" and no
+      // stale tracking loop keeps running against the new video.
+      stopTimeTracking(this)
+      const outgoingSliderElem = document.getElementById(this.timeSliderId)
+      if (outgoingSliderElem && outgoingSliderElem.max) {
+        outgoingSliderElem.value = outgoingSliderElem.max
+        syncRangeSliderVisual(outgoingSliderElem)
+      }
+
       switch (player.state) {
         case "playing":
           // loadVideoById auto-plays; set flag so BUFFERING handler

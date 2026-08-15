@@ -34,27 +34,35 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
             else: "#{gettext("Mute")} (M)"}
         </.tooltip>
       </div>
-      <div class="ml-2 self-center hidden md:block">
+      <div class="ml-3 flex-1 min-w-0 self-center hidden md:block">
         <.form
           :let={f}
           for={@player}
           id="volume-controls-slider"
-          class=""
+          class="w-full"
           phx-target={@myself}
           phx-change="on_volume_change"
         >
-          <.input
-            field={f[:volume]}
-            class="seek-bar w-full !m-0 shadow-none !bg-transparent focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
-            id="volume-slider"
-            value={if @muted?, do: 0, else: @level}
-            type="range"
-            min="0"
-            max="100"
-            step="5"
-            phx-debounce={500}
-            phx-value-key="volume"
-          />
+          <div class="custom-slider">
+            <.input
+              field={f[:volume]}
+              class="custom-slider-input"
+              id="volume-slider"
+              phx-hook="RangeSlider"
+              value={if @muted?, do: 0, else: @level}
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              phx-debounce={500}
+              phx-value-key="volume"
+            />
+            <div class="custom-slider-track">
+              <div class="custom-slider-fill"></div>
+              <div class="custom-slider-hover-fill"></div>
+              <div class="custom-slider-thumb"></div>
+            </div>
+          </div>
         </.form>
       </div>
     </div>

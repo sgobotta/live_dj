@@ -4,6 +4,7 @@ import Clipboard from './clipboard/hook'
 import DisplayName from './display-name/hook'
 import Keybindings from './keybindings/hook'
 import PlayerBackdrop from './player-backdrop/hook'
+import RangeSlider from './player-controls/range-slider-hook'
 import RoomGrantRefresh from './room-grant-refresh/hook'
 import SearchBar from './search-bar/hook'
 import Sortable from './sortable/hook'
@@ -17,6 +18,7 @@ export default {
   DisplayName,
   Keybindings,
   PlayerBackdrop,
+  RangeSlider,
   RoomGrantRefresh,
   SearchBar,
   Sortable,
