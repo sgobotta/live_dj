@@ -97,35 +97,16 @@
  * in Chromium once their content overflows, even with no tabindex — so
  * without a rule here they fall back to the browser's default blue
  * outline. A full inset ring read as too heavy for a passive panel, so
- * instead: a thin dotted accent rail on the leading edge (a cue, not a
- * box) plus tinting the scrollbar thumb itself — the thing that's
- * actually now driven by the keyboard. A pseudo-element rather than
- * box-shadow/border, since box-shadow can't render a dash pattern and a
- * real border would shift layout by its width when it appears.
+ * instead: just tint the scrollbar thumb itself — the thing that's
+ * actually now driven by the keyboard.
  */
-.focus-frame {
-  position: relative;
-}
-
 .focus-frame:focus-visible {
   outline: none;
-}
-
-.focus-frame:focus-visible::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  border-left: 2px dotted var(--color-brand);
-  pointer-events: none;
 }
 
 .focus-frame:focus-visible::-webkit-scrollbar-thumb {
   background: var(--color-brand);
   border-color: var(--color-brand);
-}
-
-:where(.dark, .dark *) .focus-frame:focus-visible::before {
-  border-left-color: var(--color-brand-dark);
 }
 
 :where(.dark, .dark *) .focus-frame:focus-visible::-webkit-scrollbar-thumb {
