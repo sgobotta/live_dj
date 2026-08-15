@@ -37,10 +37,14 @@ defmodule Livedj.Sessions.ChatServer do
           binary(),
           binary(),
           Message.message_type(),
-          binary()
+          binary(),
+          keyword()
         ) :: :ok
-  def send_message(pid, user_id, display_name, type, content) do
-    GenServer.cast(pid, {@send_msg, user_id, display_name, type, content})
+  def send_message(pid, user_id, display_name, type, content, opts \\ []) do
+    GenServer.cast(
+      pid,
+      {@send_msg, user_id, display_name, type, content, opts}
+    )
   end
 
   @spec update_display_name(pid(), binary(), binary()) :: :ok
@@ -88,8 +92,13 @@ defmodule Livedj.Sessions.ChatServer do
   end
 
   @impl GenServer
-  def handle_cast({@send_msg, user_id, display_name, type, content}, state) do
-    message = Message.new(state.id, user_id, display_name, type, content)
+  def handle_cast(
+        {@send_msg, user_id, display_name, type, content, opts},
+        state
+      ) do
+    message =
+      Message.new(state.id, user_id, display_name, type, content, opts)
+
     messages = trim([message | state.messages], state.cap)
     :ok = Channels.broadcast_message_sent!(state.id, message)
     {:noreply, %{state | messages: messages}}

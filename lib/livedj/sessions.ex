@@ -117,7 +117,10 @@ defmodule Livedj.Sessions do
           user_id,
           display_name,
           :announcement,
-          gettext("queued %{title}", title: media.title)
+          gettext("queued %{title}", title: media.title),
+          media_title: media.title,
+          media_channel: media.channel,
+          media_thumbnail_url: media.thumbnail_url
         )
 
       result
@@ -313,12 +316,20 @@ defmodule Livedj.Sessions do
           binary(),
           binary(),
           Chat.Message.message_type(),
-          binary()
+          binary(),
+          keyword()
         ) ::
           :ok
-  def chat_send_message(room_id, user_id, display_name, type, content) do
+  def chat_send_message(
+        room_id,
+        user_id,
+        display_name,
+        type,
+        content,
+        opts \\ []
+      ) do
     ChatSupervisor.get_child_pid!(room_id)
-    |> ChatServer.send_message(user_id, display_name, type, content)
+    |> ChatServer.send_message(user_id, display_name, type, content, opts)
   end
 
   @doc """
@@ -543,14 +554,19 @@ defmodule Livedj.Sessions do
 
   @spec announce_track_changed(binary(), binary(), binary(), Player.t()) :: :ok
   defp announce_track_changed(room_id, user_id, display_name, %Player{
-         title: title
+         title: title,
+         channel: channel,
+         media_thumbnail_url: media_thumbnail_url
        }) do
     chat_send_message(
       room_id,
       user_id,
       display_name,
       :announcement,
-      gettext("changed the song to %{title}", title: title)
+      gettext("changed the song to %{title}", title: title),
+      media_title: title,
+      media_channel: channel,
+      media_thumbnail_url: media_thumbnail_url
     )
   end
 

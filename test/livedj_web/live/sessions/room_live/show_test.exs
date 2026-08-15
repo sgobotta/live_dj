@@ -219,8 +219,10 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
   end
 
   describe "chat :announcement messages" do
-    test "renders the actor name with no stray whitespace inside the underline",
-         %{conn: conn, room: room} do
+    test "renders the actor name with no underline", %{
+      conn: conn,
+      room: room
+    } do
       {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
       :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room.id}")
 
@@ -237,8 +239,35 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
 
       html = render(view)
 
-      assert html =~
-               ~s(<span class="font-semibold underline">Alice</span> queued Some Song)
+      assert html =~ ~s(<span class="font-semibold">Alice</span>)
+      assert html =~ "queued Some Song"
+    end
+
+    test "underlines the media title and shows a hover tooltip with its channel",
+         %{conn: conn, room: room} do
+      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+      :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room.id}")
+
+      :ok =
+        Livedj.Sessions.chat_send_message(
+          room.id,
+          Ecto.UUID.generate(),
+          "Alice",
+          :announcement,
+          "queued Some Song",
+          media_title: "Some Song",
+          media_channel: "Some Channel",
+          media_thumbnail_url: "https://example.com/thumb.jpg"
+        )
+
+      assert_receive {:message_sent, _room_id, _message}
+
+      html = render(view)
+
+      assert html =~ ~s(class="underline decoration-dotted cursor-help")
+      assert html =~ "Some Song"
+      assert html =~ "Some Channel"
+      assert html =~ "https://example.com/thumb.jpg"
     end
 
     test "using /name does not crash the LiveView", %{conn: conn, room: room} do

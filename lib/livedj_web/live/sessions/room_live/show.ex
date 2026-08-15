@@ -68,18 +68,31 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
   @doc """
   Renders an `:announcement` message's actor name.
-
-  Kept as its own tightly-scoped template (rather than inlined in
-  show.html.heex) so `mix format` reflowing the call site can never insert
-  whitespace inside the underline — that whitespace would render underlined
-  too.
   """
   attr :name, :string, required: true
 
   def announcement_name(assigns) do
     ~H"""
-    <span class="font-semibold underline">{@name}</span>
+    <span class="font-semibold">{@name}</span>
     """
+  end
+
+  @doc """
+  Splits an `:announcement` message's content around its embedded media
+  title, so the title can be rendered as its own hoverable span. Falls back
+  to rendering the whole content with no title span when there's no title
+  to key off of (older in-memory messages from before this field existed)
+  or the title can't be found verbatim in the content.
+  """
+  @spec announcement_content_parts(binary(), binary() | nil) ::
+          {binary(), binary() | nil, binary()}
+  def announcement_content_parts(content, nil), do: {content, nil, ""}
+
+  def announcement_content_parts(content, title) do
+    case String.split(content, title, parts: 2) do
+      [prefix, suffix] -> {prefix, title, suffix}
+      _ -> {content, nil, ""}
+    end
   end
 
   @impl true
