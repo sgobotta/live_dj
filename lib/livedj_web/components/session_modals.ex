@@ -188,7 +188,7 @@ defmodule LivedjWeb.SessionModals do
       <div
         id="settings-modal-tabs"
         phx-hook="TabIndicator"
-        class="relative flex gap-1"
+        class="relative inline-flex gap-1"
       >
         <.modal_tab
           patch={~p"/sessions/rooms/#{@room}/settings/general"}
