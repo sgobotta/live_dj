@@ -5,6 +5,7 @@ import DisplayName from './display-name/hook'
 import Keybindings from './keybindings/hook'
 import NotificationsToggle from './notifications-toggle/hook'
 import PlayerBackdrop from './player-backdrop/hook'
+import PlaylistKeyboardNav from './playlist/hook'
 import RangeSlider from './player-controls/range-slider-hook'
 import RoomGrantRefresh from './room-grant-refresh/hook'
 import SearchBar from './search-bar/hook'
@@ -22,6 +23,7 @@ export default {
   Keybindings,
   NotificationsToggle,
   PlayerBackdrop,
+  PlaylistKeyboardNav,
   RangeSlider,
   RoomGrantRefresh,
   SearchBar,
