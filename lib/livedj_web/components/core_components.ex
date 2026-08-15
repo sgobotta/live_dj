@@ -502,7 +502,7 @@ defmodule LivedjWeb.CoreComponents do
         class={
           [
             "py-3 mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-0 sm:text-sm sm:leading-6",
-            "focus-ignite focus-ignite-inset",
+            @type != "range" && "focus-ignite focus-ignite-inset",
             "bg-zinc-200 dark:bg-zinc-700",
             "shadow-[inset_0_0_30px_1px_rgba(161,161,170,0.7)] dark:shadow-[inset_0_0_30px_1px_rgba(24,24,27,0.7)]",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
