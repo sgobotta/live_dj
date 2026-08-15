@@ -928,4 +928,24 @@ defmodule Livedj.Sessions do
         error
     end
   end
+
+  @doc "Renames a room from the room settings page."
+  @spec update_room_name(Room.t(), map()) ::
+          {:ok, Room.t()} | {:error, Ecto.Changeset.t()}
+  def update_room_name(%Room{} = room, attrs) do
+    unless Map.has_key?(attrs, "name") or Map.has_key?(attrs, :name) do
+      raise ArgumentError,
+            "update_room_name/2 requires a :name (or \"name\") key; " <>
+              "got: #{inspect(attrs)}"
+    end
+
+    case room |> Room.name_changeset(attrs) |> Repo.update() do
+      {:ok, updated_room} = result ->
+        :ok = Channels.broadcast_room_name_changed!(updated_room.id)
+        result
+
+      error ->
+        error
+    end
+  end
 end

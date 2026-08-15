@@ -41,6 +41,8 @@ defmodule LivedjWeb.CoreComponents do
   attr :id, :string, required: true
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
+  attr :content_class, :string, default: "p-5"
+  attr :close_button_class, :string, default: "top-6 right-5"
   slot :inner_block, required: true
 
   def modal(assigns) do
@@ -71,12 +73,13 @@ defmodule LivedjWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="
-                shadow-zinc-700/10 dark:shadow-300/10 ring-zinc-700/10 dark:ring-zinc-300/10
-                relative hidden rounded-2xl bg-zinc-200 border-[1px] border-zinc-500 dark:border-zinc-500 dark:bg-zinc-900 p-5 shadow-lg ring-1 transition
-              "
+              class={[
+                "shadow-zinc-700/10 dark:shadow-300/10 ring-zinc-700/10 dark:ring-zinc-300/10",
+                "relative hidden rounded-2xl bg-zinc-200 border-[1px] border-zinc-500 dark:border-zinc-500 dark:bg-zinc-900 shadow-lg ring-1 transition",
+                @content_class
+              ]}
             >
-              <div class="absolute top-6 right-5">
+              <div class={["absolute", @close_button_class]}>
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"

@@ -55,6 +55,7 @@ defmodule Livedj.Sessions.Channels do
   #
 
   @password_changed :password_changed
+  @room_name_changed :room_name_changed
 
   # ----------------------------------------------------------------------------
   # Player topics
@@ -244,6 +245,12 @@ defmodule Livedj.Sessions.Channels do
   @spec password_changed_event() :: :password_changed
   def password_changed_event, do: @password_changed
 
+  @doc """
+  Returns the event name for room name change events.
+  """
+  @spec room_name_changed_event() :: :room_name_changed
+  def room_name_changed_event, do: @room_name_changed
+
   # ----------------------------------------------------------------------------
   # Room broadcasting
   #
@@ -254,6 +261,13 @@ defmodule Livedj.Sessions.Channels do
   @spec broadcast_room_password_changed!(binary()) :: :ok
   def broadcast_room_password_changed!(room_id),
     do: broadcast!(room_topic(room_id), {password_changed_event(), room_id})
+
+  @doc """
+  Broadcasts a room_name_changed message to the room topic.
+  """
+  @spec broadcast_room_name_changed!(binary()) :: :ok
+  def broadcast_room_name_changed!(room_id),
+    do: broadcast!(room_topic(room_id), {room_name_changed_event(), room_id})
 
   # ----------------------------------------------------------------------------
   # Player events

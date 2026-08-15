@@ -69,20 +69,26 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
 
   describe "edit password modal" do
     test "sets a password from the settings modal", %{conn: conn, room: room} do
-      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}/settings")
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
 
       view
       |> form("#room-password-form", %{password: "secret1"})
       |> render_submit()
 
       assert Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
+
+      # the modal stays open on the Security tab instead of closing
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/security")
+      assert render(view) =~ "room-password-form"
     end
 
     test "shows the changeset error when the password is too long", %{
       conn: conn,
       room: room
     } do
-      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}/settings")
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
 
       html =
         view
@@ -103,11 +109,45 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
         |> Plug.Test.init_test_session(%{})
         |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
 
-      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}/settings")
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
 
       view |> element("#remove-room-password") |> render_click()
 
       refute Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
+    end
+  end
+
+  describe "edit general modal" do
+    test "renames the room from the settings modal", %{conn: conn, room: room} do
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+
+      view
+      |> form("#room-name-form", %{name: "New Room Name"})
+      |> render_submit()
+
+      assert Livedj.Sessions.get_room!(room.id).name == "New Room Name"
+
+      # the modal stays open on the General tab instead of closing
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/general")
+      assert render(view) =~ "room-name-form"
+    end
+
+    test "shows the changeset error for a blank name", %{
+      conn: conn,
+      room: room
+    } do
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+
+      html =
+        view
+        |> form("#room-name-form", %{name: ""})
+        |> render_submit()
+
+      assert html =~ "no puede estar en blanco"
+      assert Livedj.Sessions.get_room!(room.id).name == room.name
     end
   end
 
@@ -185,11 +225,26 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     end
   end
 
-  describe "header lock icon" do
-    test "shows an open lock for a public room", %{conn: conn, room: room} do
+  describe "header settings icon" do
+    test "opens the settings modal on the General tab", %{
+      conn: conn,
+      room: room
+    } do
       {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
 
-      assert view |> element("#settings-btn") |> render() =~ "hero-lock-open"
+      view |> element("#settings-btn") |> render_click()
+
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/general")
+      assert render(view) =~ "room-name-form"
+    end
+  end
+
+  describe "security tab icon" do
+    test "shows an open lock for a public room", %{conn: conn, room: room} do
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
+
+      assert render(view) =~ "hero-lock-open"
     end
 
     test "shows a closed lock for a protected room", %{conn: conn} do
@@ -201,9 +256,10 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
         |> Plug.Test.init_test_session(%{})
         |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
 
-      {:ok, view, _html} = live(conn, ~p"/sessions/rooms/#{room}")
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
 
-      assert view |> element("#settings-btn") |> render() =~ "hero-lock-closed"
+      assert render(view) =~ "hero-lock-closed"
     end
   end
 end

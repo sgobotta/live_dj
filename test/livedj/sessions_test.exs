@@ -154,6 +154,47 @@ defmodule Livedj.SessionsTest do
     end
   end
 
+  describe "room name" do
+    import Livedj.SessionsFixtures
+
+    test "update_room_name/2 renames the room" do
+      room = room_fixture()
+
+      {:ok, renamed} = Sessions.update_room_name(room, %{"name" => "New Name"})
+
+      assert renamed.name == "New Name"
+    end
+
+    test "update_room_name/2 broadcasts a name change to the room topic" do
+      room = room_fixture()
+      :ok = Channels.subscribe_room_topic(room.id)
+
+      {:ok, _room} = Sessions.update_room_name(room, %{"name" => "New Name"})
+
+      assert_receive {:room_name_changed, room_id}
+      assert room_id == room.id
+    end
+
+    test "update_room_name/2 returns an error changeset for a blank name" do
+      room = room_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Sessions.update_room_name(room, %{"name" => ""})
+
+      assert Sessions.get_room!(room.id).name == room.name
+    end
+
+    test "update_room_name/2 raises when the name key is absent" do
+      room = room_fixture()
+
+      assert_raise ArgumentError, fn ->
+        Sessions.update_room_name(room, %{})
+      end
+
+      assert Sessions.get_room!(room.id).name == room.name
+    end
+  end
+
   describe "play_track/4" do
     import Livedj.SessionsFixtures
 

@@ -83,7 +83,8 @@ msgstr "Fecha de publicación"
 msgid "Save Video"
 msgstr "Guardar video"
 
-#: lib/livedj_web/components/session_modals.ex:213
+#: lib/livedj_web/components/session_modals.ex:214
+#: lib/livedj_web/components/session_modals.ex:251
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
 #: lib/livedj_web/live/sessions/room_live/form_component.ex:41
@@ -289,6 +290,7 @@ msgid "Register"
 msgstr "Registrarse"
 
 #: lib/livedj_web/components/layouts/root.html.heex:30
+#: lib/livedj_web/components/layouts/session.html.heex:87
 #, elixir-autogen, elixir-format
 msgid "Settings"
 msgstr "Configuración"
@@ -303,7 +305,7 @@ msgstr "Código fuente"
 msgid "Insert a youtube url or search for a video"
 msgstr "Ingresa una url de youtube o realiza una búsqueda"
 
-#: lib/livedj_web/components/layouts/session.html.heex:31
+#: lib/livedj_web/components/layouts/session.html.heex:36
 #, elixir-autogen, elixir-format
 msgid "Exit session?"
 msgstr "Salir?"
@@ -373,7 +375,7 @@ msgstr "Compartir sala!"
 msgid "Search"
 msgstr "Buscar"
 
-#: lib/livedj_web/components/layouts/session.html.heex:70
+#: lib/livedj_web/components/layouts/session.html.heex:75
 #, elixir-autogen, elixir-format
 msgid "Share"
 msgstr "Compartir"
@@ -398,7 +400,7 @@ msgstr "Usuario"
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: lib/livedj_web/components/layouts/session.html.heex:46
+#: lib/livedj_web/components/layouts/session.html.heex:51
 #, elixir-autogen, elixir-format
 msgid "Help"
 msgstr "Ayuda"
@@ -433,7 +435,7 @@ msgstr "Buscar y añadir pistas"
 msgid "Share room URL"
 msgstr "Compartir enlace a sala"
 
-#: lib/livedj_web/components/session_modals.ex:138
+#: lib/livedj_web/components/session_modals.ex:139
 #, elixir-autogen, elixir-format
 msgid "Show this help"
 msgstr "Mostrar este mensaje"
@@ -448,7 +450,7 @@ msgstr "Pantalla completa"
 msgid "Toggle theme"
 msgstr "Cambiar tema"
 
-#: lib/livedj_web/components/session_modals.ex:138
+#: lib/livedj_web/components/session_modals.ex:139
 #, elixir-autogen, elixir-format
 msgid "H or ?"
 msgstr "H o ?"
@@ -463,17 +465,17 @@ msgstr "Espacio"
 msgid "Resync"
 msgstr "Sincronizar"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:331
+#: lib/livedj_web/live/sessions/room_live/show.ex:341
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s ahead of the room."
 msgstr "Estás %{delta}s por delante de la sala."
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:333
+#: lib/livedj_web/live/sessions/room_live/show.ex:343
 #, elixir-autogen, elixir-format
 msgid "You're %{delta}s behind the room."
 msgstr "Estás %{delta}s por detrás de la sala."
 
-#: lib/livedj_web/components/layouts/session.html.heex:58
+#: lib/livedj_web/components/layouts/session.html.heex:63
 #, elixir-autogen, elixir-format
 msgid "Chat"
 msgstr "Chat"
@@ -488,7 +490,7 @@ msgstr "Enviar mensaje"
 msgid "Toggle chat"
 msgstr "Mostrar/ocultar chat"
 
-#: lib/livedj_web/live/sessions/room_live/show.html.heex:127
+#: lib/livedj_web/live/sessions/room_live/show.html.heex:131
 #, elixir-autogen, elixir-format
 msgid "Type a message..."
 msgstr "Escribe un mensaje..."
@@ -503,7 +505,7 @@ msgstr "No se pudo encolar: %{reason}"
 msgid "Room not found: %{target_room_id}"
 msgstr "Sala no encontrada: %{target_room_id}"
 
-#: lib/livedj_web/components/session_modals.ex:186
+#: lib/livedj_web/components/session_modals.ex:225
 #, elixir-autogen, elixir-format
 msgid "Add a password to protect this room."
 msgstr "Añade una contraseña para proteger esta sala."
@@ -533,7 +535,7 @@ msgstr "Contraseña incorrecta. Inténtalo de nuevo."
 msgid "Leave blank for a public room"
 msgstr "Déjalo en blanco para una sala pública"
 
-#: lib/livedj_web/components/session_modals.ex:200
+#: lib/livedj_web/components/session_modals.ex:238
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "Nueva contraseña"
@@ -554,23 +556,18 @@ msgstr "Contraseña (opcional)"
 msgid "Password protected"
 msgstr "Protegida por contraseña"
 
-#: lib/livedj_web/components/session_modals.ex:211
+#: lib/livedj_web/components/session_modals.ex:249
 #, elixir-autogen, elixir-format
 msgid "Remove password"
 msgstr "Eliminar contraseña"
 
-#: lib/livedj_web/components/layouts/session.html.heex:89
-#: lib/livedj_web/components/session_modals.ex:181
-#, elixir-autogen, elixir-format
-msgid "Room password"
-msgstr "Contraseña de la sala"
-
-#: lib/livedj_web/live/sessions/room_live/show.ex:364
+#: lib/livedj_web/live/sessions/room_live/show.ex:401
 #, elixir-autogen, elixir-format
 msgid "Room password updated"
 msgstr "Contraseña de la sala actualizada"
 
-#: lib/livedj_web/components/session_modals.ex:214
+#: lib/livedj_web/components/session_modals.ex:215
+#: lib/livedj_web/components/session_modals.ex:252
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Guardar"
@@ -595,7 +592,7 @@ msgstr "Saltear a la siguiente pista"
 msgid "This room is password protected"
 msgstr "Esta sala está protegida por contraseña"
 
-#: lib/livedj_web/components/session_modals.ex:184
+#: lib/livedj_web/components/session_modals.ex:223
 #, elixir-autogen, elixir-format
 msgid "This room is protected. Update or remove its password."
 msgstr "Esta sala está protegida. Actualiza o elimina su contraseña."
@@ -605,7 +602,7 @@ msgstr "Esta sala está protegida. Actualiza o elimina su contraseña."
 msgid "Usage: /name <new name>"
 msgstr "Uso: /name <nuevo nombre>"
 
-#: lib/livedj_web/live/sessions/room_live/show.ex:380
+#: lib/livedj_web/live/sessions/room_live/show.ex:417
 #, elixir-autogen, elixir-format
 msgid "Invalid password"
 msgstr "Contraseña inválida"
@@ -659,3 +656,33 @@ msgstr "agregó %{title} a la lista"
 #, elixir-autogen, elixir-format
 msgid "Now playing: %{title}"
 msgstr "Sonando ahora: %{title}"
+
+#: lib/livedj_web/components/session_modals.ex:187
+#, elixir-autogen, elixir-format
+msgid "General"
+msgstr "General"
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:390
+#, elixir-autogen, elixir-format
+msgid "Invalid room name"
+msgstr "Nombre de sala inválido"
+
+#: lib/livedj_web/components/session_modals.ex:138
+#, elixir-autogen, elixir-format
+msgid "Open settings"
+msgstr "Abrir configuración"
+
+#: lib/livedj_web/components/session_modals.ex:211
+#, elixir-autogen, elixir-format
+msgid "Room name"
+msgstr "Nombre de la sala"
+
+#: lib/livedj_web/live/sessions/room_live/show.ex:374
+#, elixir-autogen, elixir-format
+msgid "Room name updated"
+msgstr "Nombre de la sala actualizado"
+
+#: lib/livedj_web/components/session_modals.ex:196
+#, elixir-autogen, elixir-format
+msgid "Security"
+msgstr "Seguridad"

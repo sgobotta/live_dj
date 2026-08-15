@@ -2,6 +2,7 @@
 // Add new bindings here; implement their actions in hook.js
 export const bindings = {
   ' ': 'toggle-play-pause',
+  ';': 'open-settings',
   '?': 'open-help',
   a: 'navigate-add',
   c: 'toggle-chat',

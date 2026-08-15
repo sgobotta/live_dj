@@ -135,6 +135,7 @@ defmodule LivedjWeb.SessionModals do
           <.help_row key="M" label={gettext("Mute / Unmute player")} />
           <.help_row key={gettext("Space")} label={gettext("Play / Pause")} />
           <.help_row key="F" label={gettext("Toggle fullscreen")} />
+          <.help_row key=";" label={gettext("Open settings")} />
           <.help_row key={gettext("H or ?")} label={gettext("Show this help")} />
         </dl>
       </div>
@@ -165,57 +166,121 @@ defmodule LivedjWeb.SessionModals do
 
   attr :room, :map, required: true
   attr :show, :boolean, required: true
+  attr :tab, :atom, required: true, values: [:general, :security]
 
-  def password_modal(assigns) do
+  def settings_modal(assigns) do
     assigns =
       assign(assigns, :protected, not is_nil(assigns.room.password_hash))
 
     ~H"""
     <.modal
       :if={@show}
-      id="room-password-modal"
+      id="room-settings-modal"
       show
       on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
+      content_class="px-5 pb-5 pt-3"
+      close_button_class="top-3 right-5"
     >
-      <.header>
-        {gettext("Room password")}
-        <:subtitle>
+      <div class="flex gap-1 border-b border-tone-300 dark:border-tone-600">
+        <.modal_tab
+          patch={~p"/sessions/rooms/#{@room}/settings/general"}
+          active={@tab == :general}
+        >
+          <.icon name="hero-cog-6-tooth" class="h-4 w-4" /> {gettext("General")}
+        </.modal_tab>
+        <.modal_tab
+          patch={~p"/sessions/rooms/#{@room}/settings/security"}
+          active={@tab == :security}
+        >
+          <.icon
+            name={if @protected, do: "hero-lock-closed", else: "hero-lock-open"}
+            class="h-4 w-4"
+          /> {gettext("Security")}
+        </.modal_tab>
+      </div>
+
+      <div :if={@tab == :general} class="mt-6 min-h-56">
+        <.form
+          for={%{}}
+          id="room-name-form"
+          phx-submit="save_room_name"
+          class="flex flex-col gap-4"
+        >
+          <input
+            type="text"
+            name="name"
+            value={@room.name}
+            placeholder={gettext("Room name")}
+            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+          />
+          <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+            {gettext("Save")}
+          </.button>
+        </.form>
+      </div>
+
+      <div :if={@tab == :security} class="mt-6 min-h-56">
+        <p class="text-sm text-zinc-600 dark:text-zinc-400">
           <%= if @protected do %>
             {gettext("This room is protected. Update or remove its password.")}
           <% else %>
             {gettext("Add a password to protect this room.")}
           <% end %>
-        </:subtitle>
-      </.header>
+        </p>
 
-      <.form
-        for={%{}}
-        id="room-password-form"
-        phx-submit="save_room_password"
-        class="mt-6 flex flex-col gap-4"
-      >
-        <input
-          type="password"
-          name="password"
-          placeholder={gettext("New password")}
-          class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
-        />
-        <div class="flex items-center justify-between gap-2">
-          <button
-            :if={@protected}
-            type="button"
-            id="remove-room-password"
-            phx-click="remove_room_password"
-            class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline"
-          >
-            {gettext("Remove password")}
-          </button>
-          <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
-            {gettext("Save")}
-          </.button>
-        </div>
-      </.form>
+        <.form
+          for={%{}}
+          id="room-password-form"
+          phx-submit="save_room_password"
+          class="mt-4 flex flex-col gap-4"
+        >
+          <input
+            type="password"
+            name="password"
+            placeholder={gettext("New password")}
+            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+          />
+          <div class="flex items-center justify-between gap-2">
+            <button
+              :if={@protected}
+              type="button"
+              id="remove-room-password"
+              phx-click="remove_room_password"
+              class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline"
+            >
+              {gettext("Remove password")}
+            </button>
+            <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+              {gettext("Save")}
+            </.button>
+          </div>
+        </.form>
+      </div>
     </.modal>
+    """
+  end
+
+  # Scoped to settings_modal for now. If a second tabbed modal shows up,
+  # extract this into a generic tabbed_modal/modal_tab pair instead of
+  # copying it.
+  attr :patch, :string, required: true
+  attr :active, :boolean, required: true
+  slot :inner_block, required: true
+
+  defp modal_tab(assigns) do
+    ~H"""
+    <.link
+      patch={@patch}
+      class={[
+        "flex items-center gap-1.5 px-3 py-2 -mb-px border-b-2 text-sm font-semibold transition-colors",
+        @active &&
+          "border-tone-900 dark:border-tone-100 text-tone-900 dark:text-tone-100",
+        !@active &&
+          "border-transparent text-tone-500 dark:text-tone-400 hover:text-tone-700 dark:hover:text-tone-300"
+      ]}
+    >
+      {render_slot(@inner_block)}
+    </.link>
     """
   end
 
