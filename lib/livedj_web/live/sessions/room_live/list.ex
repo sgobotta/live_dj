@@ -8,7 +8,15 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   @on_play_click "on_play_click"
 
   @impl true
-  def mount(:not_mounted_at_router, %{"id" => room_id}, socket) do
+  def mount(
+        :not_mounted_at_router,
+        %{
+          "id" => room_id,
+          "user_id" => user_id,
+          "display_name" => display_name
+        },
+        socket
+      ) do
     case connected?(socket) do
       true ->
         %Room{id: ^room_id} = room = Sessions.get_room!(room_id)
@@ -22,11 +30,14 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
            layout: false,
            room: room,
            media_list: [],
-           current_media: nil
+           current_media: nil,
+           user_id: user_id,
+           display_name: display_name
          ), layout: {LivedjWeb.Layouts, :flash}}
 
       false ->
-        {:ok, socket, layout: false}
+        {:ok, assign(socket, user_id: user_id, display_name: display_name),
+         layout: false}
     end
   rescue
     error in SessionRoomError ->
@@ -54,7 +65,10 @@ defmodule LivedjWeb.Sessions.RoomLive.List do
   end
 
   def handle_event(@on_play_click, %{"media_id" => media_id}, socket) do
-    case Sessions.play_track(socket.assigns.room.id, media_id) do
+    %{room: room, user_id: user_id, display_name: display_name} =
+      socket.assigns
+
+    case Sessions.play_track(room.id, media_id, user_id, display_name) do
       :ok ->
         {:noreply, socket}
 

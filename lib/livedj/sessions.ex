@@ -566,14 +566,18 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
-  Given a room id and a media id loads the given track and broadcasts an update.
+  Given a room id and a media id loads the given track, broadcasts an
+  update, and announces the change in the room's chat as
+  `user_id`/`display_name`.
   """
-  @spec play_track(Ecto.UUID.t(), String.t()) :: :ok | :error
-  def play_track(room_id, selected_media_id) do
+  @spec play_track(Ecto.UUID.t(), String.t(), binary(), binary()) ::
+          :ok | :error
+  def play_track(room_id, selected_media_id, user_id, display_name) do
     with {:ok, media} <- Media.get_by_external_id(selected_media_id),
          {:ok, player} <-
            load_player_media(room_id, media, seek_to: 0, autoplay: true) do
       :ok = broadcast_player_load_media!(room_id, player)
+      announce_track_changed(room_id, user_id, display_name, player)
     else
       _error ->
         :error

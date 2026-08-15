@@ -153,4 +153,21 @@ defmodule Livedj.SessionsTest do
       assert Sessions.room_protected?(Sessions.get_room!(protected.id))
     end
   end
+
+  describe "play_track/4" do
+    import Livedj.SessionsFixtures
+
+    test "returns :error and sends no chat message for an unknown track" do
+      %{id: room_id} = room_fixture()
+      {:ok, _messages} = Sessions.join_chat(room_id)
+      user_id = Ecto.UUID.generate()
+
+      :ok = Phoenix.PubSub.subscribe(Livedj.PubSub, "chat:#{room_id}")
+
+      assert :error =
+               Sessions.play_track(room_id, "unknown_id", user_id, "Alice")
+
+      refute_receive {:message_sent, _room_id, _message}
+    end
+  end
 end

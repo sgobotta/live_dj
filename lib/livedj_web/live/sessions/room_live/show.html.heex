@@ -20,7 +20,11 @@
       @socket,
       LivedjWeb.Sessions.RoomLive.List,
       id: @list_lv_id,
-      session: %{"id" => @room.id},
+      session: %{
+        "id" => @room.id,
+        "user_id" => to_string(@current_user.id),
+        "display_name" => @display_name
+      },
       sticky: true
     )}
   </div>
@@ -145,6 +149,7 @@
               class="
                 transition-colors
                 disabled:opacity-30 disabled:cursor-not-allowed
+                enabled:cursor-pointer
                 text-tone-500 dark:text-tone-400
                 hover:enabled:text-tone-900 dark:hover:enabled:text-tone-100
               "
