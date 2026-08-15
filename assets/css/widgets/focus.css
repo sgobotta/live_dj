@@ -96,15 +96,26 @@
  * Scrollable panels (e.g. the chat log) are implicitly keyboard-focusable
  * in Chromium once their content overflows, even with no tabindex — so
  * without a rule here they fall back to the browser's default blue
- * outline. A plain inset accent ring, no shadow/glow: enough to show
- * "this is what arrow keys will scroll" without the button-like weight
- * of .focus-ignite.
+ * outline. A full inset ring read as too heavy for a passive panel, so
+ * instead: a thin accent rail on the leading edge (a cue, not a box) plus
+ * tinting the scrollbar thumb itself — the thing that's actually now
+ * driven by the keyboard.
  */
 .focus-frame:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 2px var(--color-brand);
+  box-shadow: inset 2px 0 0 0 var(--color-brand);
+}
+
+.focus-frame:focus-visible::-webkit-scrollbar-thumb {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
 }
 
 :where(.dark, .dark *) .focus-frame:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--color-brand-dark);
+  box-shadow: inset 2px 0 0 0 var(--color-brand-dark);
+}
+
+:where(.dark, .dark *) .focus-frame:focus-visible::-webkit-scrollbar-thumb {
+  background: var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
 }
