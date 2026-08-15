@@ -24,6 +24,8 @@
       do: :security,
       else: :general
   }
+  current_user={@current_user}
+  display_name={assigns[:display_name]}
 />
 
 <div class="flex flex-col h-dvh">
@@ -92,7 +94,6 @@
             </.tooltip>
           </div>
         <% end %>
-        <.user_avatar user={@current_user} name={assigns[:display_name]} />
       </div>
     </div>
     <%!-- <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">

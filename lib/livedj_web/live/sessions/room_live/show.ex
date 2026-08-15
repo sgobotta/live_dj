@@ -261,8 +261,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
      )}
   end
 
-  def handle_event("save_room_name", %{"name" => name}, socket) do
-    save_name(socket, %{"name" => name})
+  def handle_event(
+        "save_general",
+        %{"name" => room_name, "display_name" => name},
+        socket
+      ) do
+    save_general(socket, room_name, name)
   end
 
   def handle_event("save_room_password", %{"password" => password}, socket) do
@@ -365,17 +369,35 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     end
   end
 
-  defp save_name(socket, attrs) do
-    case Sessions.update_room_name(socket.assigns.room, attrs) do
-      {:ok, room} ->
+  defp save_general(socket, room_name, display_name) do
+    case String.trim(display_name) do
+      "" ->
         {:noreply,
-         socket
-         |> assign(:room, room)
-         |> put_flash(:info, gettext("Room name updated"))
-         |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/general")}
+         put_flash(socket, :error, gettext("Display name can't be blank"))}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, put_flash(socket, :error, name_error_message(changeset))}
+      trimmed_display_name ->
+        case Sessions.update_room_name(socket.assigns.room, %{
+               "name" => room_name
+             }) do
+          {:ok, room} ->
+            :ok =
+              Sessions.chat_update_display_name(
+                room.id,
+                to_string(socket.assigns.current_user.id),
+                trimmed_display_name
+              )
+
+            {:noreply,
+             socket
+             |> assign(:room, room)
+             |> assign(:display_name, trimmed_display_name)
+             |> push_event("store_display_name", %{name: trimmed_display_name})
+             |> put_flash(:info, gettext("Settings updated"))
+             |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/general")}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, put_flash(socket, :error, name_error_message(changeset))}
+        end
     end
   end
 
