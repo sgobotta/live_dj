@@ -12,6 +12,7 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
         phx-click="on_click"
         phx-target={@myself}
         tabindex="0"
+        class="inline-flex items-center justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
       >
         {PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,

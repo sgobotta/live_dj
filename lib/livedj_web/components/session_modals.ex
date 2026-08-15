@@ -40,6 +40,8 @@ defmodule LivedjWeb.SessionModals do
               text-zinc-50 dark:text-zinc-900
               hover:bg-zinc-700 dark:hover:bg-zinc-300
               transition-colors duration-150
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
+              focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
             "
           >
             {gettext("Copy")}

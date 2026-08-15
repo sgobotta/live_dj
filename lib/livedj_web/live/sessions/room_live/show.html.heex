@@ -147,11 +147,13 @@
               type="submit"
               disabled={String.trim(@chat_form.params["content"] || "") == ""}
               class="
-                transition-colors
+                transition-colors rounded
                 disabled:opacity-30 disabled:cursor-not-allowed
                 enabled:cursor-pointer
                 text-tone-500 dark:text-tone-400
                 hover:enabled:text-tone-900 dark:hover:enabled:text-tone-100
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
+                focus-visible:ring-offset-tone-200 dark:focus-visible:ring-offset-tone-800
               "
             >
               <.icon name="hero-paper-airplane" class="h-5 w-5" />

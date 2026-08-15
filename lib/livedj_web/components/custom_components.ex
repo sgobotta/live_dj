@@ -53,7 +53,7 @@ defmodule LivedjWeb.CustomComponents do
     >
       <div class="relative group">
         <a
-          class="hover:text-tone-700 cursor-pointer h-5 w-5 leading-3"
+          class="hover:text-tone-700 cursor-pointer h-5 w-5 leading-3 inline-flex items-center justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
           href="#"
           phx-click={JS.dispatch("toggle-theme")}
           tabindex="0"

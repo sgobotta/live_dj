@@ -33,7 +33,11 @@
         <.toggle_theme_button theme={@theme} />
       </div>
       <div class="flex justify-center">
-        <a href="/sessions/rooms" data-confirm={gettext("Exit session?")}>
+        <a
+          href="/sessions/rooms"
+          data-confirm={gettext("Exit session?")}
+          class="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
+        >
           <.livedj_logo theme={@theme} />
         </a>
       </div>
