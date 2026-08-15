@@ -1,4 +1,6 @@
 <%= if connected?(@socket) do %>
+  <div id="track-notifications" phx-hook="TrackNotifications" class="hidden" />
+
   <%= if @player do %>
     <div
       id={@player_controls_id}
