@@ -131,6 +131,8 @@ defmodule LivedjWeb.CustomComponents do
   """
   attr :user, :any, required: true
   attr :name, :string, default: nil
+  attr :class, :string, default: "h-7 w-7 text-xs"
+  attr :tooltip, :boolean, default: true
 
   def user_avatar(assigns) do
     label =
@@ -149,27 +151,31 @@ defmodule LivedjWeb.CustomComponents do
     <div class="relative group cursor-default select-none">
       <%= if @avatar_url != "" do %>
         <img
-          class="h-7 w-7 rounded-full object-cover"
+          class={["rounded-full object-cover", @class]}
           src={@avatar_url}
           alt={@label}
         />
       <% else %>
         <span class={[
-          "flex h-7 w-7 items-center justify-center rounded-full",
-          "text-xs font-semibold uppercase text-tone-100 dark:text-tone-900",
+          "flex items-center justify-center rounded-full",
+          "font-semibold uppercase text-tone-100 dark:text-tone-900",
+          @class,
           @color
         ]}>
           {@initials}
         </span>
       <% end %>
-      <div class="
+      <div
+        :if={@tooltip}
+        class="
         absolute right-0 top-full mt-1.5 z-50
         hidden group-hover:block
         whitespace-nowrap rounded-md px-2 py-1
         bg-tone-800 dark:bg-tone-200
         text-xs text-tone-100 dark:text-tone-900
         shadow-md
-      ">
+      "
+      >
         {@label}
       </div>
     </div>

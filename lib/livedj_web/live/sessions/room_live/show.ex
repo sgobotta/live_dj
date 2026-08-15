@@ -265,6 +265,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     save_name(socket, %{"name" => name})
   end
 
+  def handle_event("save_display_name", %{"display_name" => name}, socket) do
+    save_display_name(socket, name)
+  end
+
   def handle_event("save_room_password", %{"password" => password}, socket) do
     save_password(socket, %{"password" => password})
   end
@@ -362,6 +366,31 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
       _error ->
         {:noreply, socket}
+    end
+  end
+
+  defp save_display_name(socket, name) do
+    case String.trim(name) do
+      "" ->
+        {:noreply,
+         put_flash(socket, :error, gettext("Display name can't be blank"))}
+
+      trimmed_name ->
+        :ok =
+          Sessions.chat_update_display_name(
+            socket.assigns.room.id,
+            to_string(socket.assigns.current_user.id),
+            trimmed_name
+          )
+
+        {:noreply,
+         socket
+         |> assign(:display_name, trimmed_name)
+         |> push_event("store_display_name", %{name: trimmed_name})
+         |> put_flash(:info, gettext("Display name updated"))
+         |> push_patch(
+           to: ~p"/sessions/rooms/#{socket.assigns.room}/settings/general"
+         )}
     end
   end
 

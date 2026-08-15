@@ -19,7 +19,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       conn =
         conn
         |> put_req_cookie("livedj_display_name_#{room.id}", "CustomName")
-        |> get(~p"/sessions/rooms/#{room}")
+        |> get(~p"/sessions/rooms/#{room}/settings/general")
 
       # The chosen name must already be present in the very first HTML the
       # server returns, so there is no default-name flash before connect.
@@ -30,7 +30,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       conn =
         conn
         |> put_req_cookie("livedj_display_name_some-other-room", "OtherRoom")
-        |> get(~p"/sessions/rooms/#{room}")
+        |> get(~p"/sessions/rooms/#{room}/settings/general")
 
       refute html_response(conn, 200) =~ "OtherRoom"
     end
@@ -221,6 +221,9 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       |> render_submit()
 
       assert Process.alive?(view.pid)
+
+      view |> element("#settings-btn") |> render_click()
+
       assert render(view) =~ "Bob"
     end
   end

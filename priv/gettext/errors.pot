@@ -152,7 +152,7 @@ msgstr ""
 msgid "should be between %{min} and %{max} characters"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:207
+#: lib/livedj_web/components/core_components.ex:212
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Could not fetch the video from youtube"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:219
+#: lib/livedj_web/components/core_components.ex:224
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
@@ -173,12 +173,12 @@ msgstr ""
 msgid "The video is already added to the playlist"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:202
+#: lib/livedj_web/components/core_components.ex:207
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:214
+#: lib/livedj_web/components/core_components.ex:219
 #: lib/livedj_web/live/sessions/room_live/list.ex:55
 #: lib/livedj_web/live/sessions/room_live/show.ex:144
 #, elixir-autogen, elixir-format
