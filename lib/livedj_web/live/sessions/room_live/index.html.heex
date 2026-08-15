@@ -189,6 +189,7 @@
     id="room-modal"
     show
     on_cancel={JS.patch(~p"/sessions/rooms")}
+    close_button_class="top-3 right-6"
   >
     <.live_component
       module={LivedjWeb.Sessions.RoomLive.FormComponent}

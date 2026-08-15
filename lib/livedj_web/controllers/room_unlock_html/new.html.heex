@@ -25,12 +25,12 @@
       action={~p"/sessions/rooms/#{@room}/unlock"}
       method="post"
     >
-      <input
+      <.input
         type="password"
         name="password"
+        value=""
         autofocus
         placeholder={gettext("Password")}
-        class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
       />
       <.button class="mt-4 w-full">{gettext("Enter room")}</.button>
     </.form>
