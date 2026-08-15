@@ -108,7 +108,6 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
 
   defp volume_button_class(muted?) do
     [
-      "focus-visible:ring-2 focus-visible:ring-tone-900 focus-visible:dark:ring-tone-50",
       "rounded-md",
       "cursor-pointer w-6 h-6 !p-0 flex flex-wrap justify-center content-center",
       "align-middle transition-all duration-300 group",

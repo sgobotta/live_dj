@@ -40,6 +40,8 @@ defmodule LivedjWeb.SessionModals do
               text-zinc-50 dark:text-zinc-900
               hover:bg-zinc-700 dark:hover:bg-zinc-300
               transition-colors duration-150
+              focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
+              focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
             "
           >
             {gettext("Copy")}
@@ -211,7 +213,7 @@ defmodule LivedjWeb.SessionModals do
             name="name"
             value={@room.name}
             placeholder={gettext("Room name")}
-            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
           />
           <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
             {gettext("Save")}
@@ -238,7 +240,7 @@ defmodule LivedjWeb.SessionModals do
             type="password"
             name="password"
             placeholder={gettext("New password")}
-            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
+            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
           />
           <div class="flex items-center justify-between gap-2">
             <button
@@ -246,7 +248,7 @@ defmodule LivedjWeb.SessionModals do
               type="button"
               id="remove-room-password"
               phx-click="remove_room_password"
-              class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline"
+              class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900 rounded"
             >
               {gettext("Remove password")}
             </button>
@@ -273,6 +275,8 @@ defmodule LivedjWeb.SessionModals do
       patch={@patch}
       class={[
         "flex items-center gap-1.5 px-3 py-2 -mb-px border-b-2 text-sm font-semibold transition-colors",
+        "rounded-t focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
+        "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
         @active &&
           "border-tone-900 dark:border-tone-100 text-tone-900 dark:text-tone-100",
         !@active &&

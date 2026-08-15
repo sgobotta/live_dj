@@ -86,7 +86,9 @@ defmodule LivedjWeb.CoreComponents do
                   class="
                     -m-3 mr-2 rounded-md
                     flex-none opacity-100 hover:opacity-40
-                    focus:ring-2 focus:ring-zinc-900 focus:dark:ring-zinc-50
+                    focus:outline-none
+                    focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
+                    focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
                   "
                   aria-label={gettext("close")}
                 >
@@ -340,6 +342,8 @@ defmodule LivedjWeb.CoreComponents do
         "bg-zinc-300 hover:bg-zinc-400 text-zinc-800 active:text-zinc-800/80",
         "dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-100 dark:active:text-zinc-100/80",
         "text-sm font-semibold leading-6",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
+        "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
         @class
       ]}
       {@rest}
@@ -437,7 +441,7 @@ defmodule LivedjWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-300 text-zinc-900 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
           {@rest}
         />
         {@label}
@@ -454,7 +458,7 @@ defmodule LivedjWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
@@ -474,7 +478,9 @@ defmodule LivedjWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:outline-none focus:ring-0 sm:text-sm sm:leading-6",
+          "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
+          "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400"
@@ -499,7 +505,9 @@ defmodule LivedjWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={
           [
-            "py-3 mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:ring-0 sm:text-sm sm:leading-6",
+            "py-3 mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-0 sm:text-sm sm:leading-6",
+            "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
+            "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
             "bg-zinc-200 dark:bg-zinc-700",
             "shadow-[inset_0_0_30px_1px_rgba(161,161,170,0.7)] dark:shadow-[inset_0_0_30px_1px_rgba(24,24,27,0.7)]",
             "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
