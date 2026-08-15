@@ -65,3 +65,29 @@
     transition: opacity 120ms ease;
   }
 }
+
+/*
+ * Depth-on-focus: plain text inputs carry no shadow at rest — just their
+ * flat background and border — so a form full of them stays quiet. The
+ * focused field alone gains a soft inset shadow, shape only, no accent
+ * color, so scanning a form by Tab reads as one field growing "deeper"
+ * rather than a wall of identically-carved boxes.
+ */
+.focus-depth {
+  transition: box-shadow 200ms ease;
+}
+
+.focus-depth:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 30px 1px rgba(161, 161, 170, 0.7);
+}
+
+:where(.dark, .dark *) .focus-depth:focus-visible {
+  box-shadow: inset 0 0 30px 1px rgba(24, 24, 27, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-depth {
+    transition: none;
+  }
+}
