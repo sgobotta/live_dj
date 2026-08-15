@@ -83,8 +83,8 @@ msgstr ""
 msgid "Save Video"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:218
-#: lib/livedj_web/components/session_modals.ex:255
+#: lib/livedj_web/components/session_modals.ex:214
+#: lib/livedj_web/components/session_modals.ex:251
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
 #: lib/livedj_web/live/sessions/room_live/form_component.ex:41
@@ -505,7 +505,7 @@ msgstr ""
 msgid "Room not found: %{target_room_id}"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:229
+#: lib/livedj_web/components/session_modals.ex:225
 #, elixir-autogen, elixir-format
 msgid "Add a password to protect this room."
 msgstr ""
@@ -535,7 +535,7 @@ msgstr ""
 msgid "Leave blank for a public room"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:242
+#: lib/livedj_web/components/session_modals.ex:238
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr ""
@@ -556,7 +556,7 @@ msgstr ""
 msgid "Password protected"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:253
+#: lib/livedj_web/components/session_modals.ex:249
 #, elixir-autogen, elixir-format
 msgid "Remove password"
 msgstr ""
@@ -566,8 +566,8 @@ msgstr ""
 msgid "Room password updated"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:219
-#: lib/livedj_web/components/session_modals.ex:256
+#: lib/livedj_web/components/session_modals.ex:215
+#: lib/livedj_web/components/session_modals.ex:252
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr ""
@@ -592,7 +592,7 @@ msgstr ""
 msgid "This room is password protected"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:227
+#: lib/livedj_web/components/session_modals.ex:223
 #, elixir-autogen, elixir-format
 msgid "This room is protected. Update or remove its password."
 msgstr ""
@@ -657,7 +657,7 @@ msgstr ""
 msgid "Now playing: %{title}"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:191
+#: lib/livedj_web/components/session_modals.ex:187
 #, elixir-autogen, elixir-format
 msgid "General"
 msgstr ""
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Open settings"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:215
+#: lib/livedj_web/components/session_modals.ex:211
 #, elixir-autogen, elixir-format
 msgid "Room name"
 msgstr ""
@@ -682,12 +682,7 @@ msgstr ""
 msgid "Room name updated"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:183
-#, elixir-autogen, elixir-format
-msgid "Room settings"
-msgstr ""
-
-#: lib/livedj_web/components/session_modals.ex:200
+#: lib/livedj_web/components/session_modals.ex:196
 #, elixir-autogen, elixir-format
 msgid "Security"
 msgstr ""

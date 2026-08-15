@@ -178,12 +178,10 @@ defmodule LivedjWeb.SessionModals do
       id="room-settings-modal"
       show
       on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
+      content_class="px-5 pb-5 pt-3"
+      close_button_class="top-3 right-5"
     >
-      <.header>
-        {gettext("Room settings")}
-      </.header>
-
-      <div class="mt-4 flex gap-1 border-b border-tone-300 dark:border-tone-600">
+      <div class="flex gap-1 border-b border-tone-300 dark:border-tone-600">
         <.modal_tab
           patch={~p"/sessions/rooms/#{@room}/settings/general"}
           active={@tab == :general}
@@ -201,7 +199,7 @@ defmodule LivedjWeb.SessionModals do
         </.modal_tab>
       </div>
 
-      <div :if={@tab == :general} class="mt-6">
+      <div :if={@tab == :general} class="mt-6 min-h-56">
         <.form
           for={%{}}
           id="room-name-form"
@@ -221,7 +219,7 @@ defmodule LivedjWeb.SessionModals do
         </.form>
       </div>
 
-      <div :if={@tab == :security} class="mt-6">
+      <div :if={@tab == :security} class="mt-6 min-h-56">
         <p class="text-sm text-zinc-600 dark:text-zinc-400">
           <%= if @protected do %>
             {gettext("This room is protected. Update or remove its password.")}
