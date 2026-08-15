@@ -18,6 +18,8 @@ defmodule LivedjWeb.ListComponent do
             :for={{item, index} <- Enum.with_index(@list)}
             id={"#{item.external_id}-item"}
             data-id={item.external_id}
+            role="option"
+            aria-selected={current_media?(@current_media, item.external_id)}
             class={"
               first:mt-0 last:mb-0
               #{if current_media?(@current_media, item.external_id),
@@ -38,9 +40,10 @@ defmodule LivedjWeb.ListComponent do
             ">
               <%= if current_media?(@current_media, item.external_id) do %>
                 <.link
-                  class="relative focus:rounded-full hover:cursor-grab"
+                  class="relative focus:rounded-full hover:cursor-grab focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
                   href="#"
                   tabindex="-1"
+                  data-nav-item
                 >
                   <img
                     class="
@@ -55,7 +58,8 @@ defmodule LivedjWeb.ListComponent do
                 <.link
                   class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-ignite"
                   href="#"
-                  tabindex="0"
+                  tabindex="-1"
+                  data-nav-item
                   phx-click={on_play_click_event()}
                   phx-value-media_id={item.external_id}
                 >

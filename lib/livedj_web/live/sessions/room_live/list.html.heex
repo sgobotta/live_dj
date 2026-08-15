@@ -1,8 +1,14 @@
 <div
   id="lists"
+  phx-hook="PlaylistKeyboardNav"
+  tabindex="0"
+  role="listbox"
+  aria-label={gettext("Playlist")}
   class="
     grid sm:grid-cols-1 overflow-y-auto h-52 md:h-44
     bg-transparent rounded-md
+    focus:outline-none focus-visible:outline-2 focus-visible:outline-dotted
+    focus-visible:outline-brand/50 focus-visible:outline-offset-2
   "
 >
   <.live_component
