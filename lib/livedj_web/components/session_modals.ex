@@ -203,7 +203,16 @@ defmodule LivedjWeb.SessionModals do
         </.modal_tab>
       </div>
 
-      <div :if={@tab == :general} class="mt-6 min-h-96">
+      <div
+        :if={@tab == :general}
+        class="mt-6 min-h-96"
+        phx-mounted={
+          JS.transition(
+            {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+             "opacity-100 translate-y-0"}
+          )
+        }
+      >
         <.form
           for={%{}}
           id="general-settings-form"
@@ -269,7 +278,16 @@ defmodule LivedjWeb.SessionModals do
         </div>
       </div>
 
-      <div :if={@tab == :security} class="mt-6 min-h-96">
+      <div
+        :if={@tab == :security}
+        class="mt-6 min-h-96"
+        phx-mounted={
+          JS.transition(
+            {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+             "opacity-100 translate-y-0"}
+          )
+        }
+      >
         <p class="text-sm text-zinc-600 dark:text-zinc-400">
           <%= if @protected do %>
             {gettext("This room is protected. Update or remove its password.")}
