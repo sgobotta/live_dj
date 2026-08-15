@@ -183,9 +183,13 @@ defmodule LivedjWeb.SessionModals do
       show
       on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
       content_class="px-5 pb-5 pt-3"
-      close_button_class="top-3 right-5"
+      close_button_class="top-3 right-8"
     >
-      <div class="flex gap-1 border-b border-tone-300 dark:border-tone-600">
+      <div
+        id="settings-modal-tabs"
+        phx-hook="TabIndicator"
+        class="relative inline-flex gap-1"
+      >
         <.modal_tab
           patch={~p"/sessions/rooms/#{@room}/settings/general"}
           active={@tab == :general}
@@ -201,9 +205,22 @@ defmodule LivedjWeb.SessionModals do
             class="h-4 w-4"
           /> {gettext("Security")}
         </.modal_tab>
+        <span
+          class="absolute bottom-0 h-0.5 bg-tone-900 dark:bg-tone-100 transition-all duration-200 ease-out"
+          style="left: 0; width: 0;"
+        />
       </div>
 
-      <div :if={@tab == :general} class="mt-6 min-h-96">
+      <div
+        :if={@tab == :general}
+        class="mt-6 min-h-96"
+        phx-mounted={
+          JS.transition(
+            {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+             "opacity-100 translate-y-0"}
+          )
+        }
+      >
         <.form
           for={%{}}
           id="general-settings-form"
@@ -269,7 +286,16 @@ defmodule LivedjWeb.SessionModals do
         </div>
       </div>
 
-      <div :if={@tab == :security} class="mt-6 min-h-96">
+      <div
+        :if={@tab == :security}
+        class="mt-6 min-h-96"
+        phx-mounted={
+          JS.transition(
+            {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+             "opacity-100 translate-y-0"}
+          )
+        }
+      >
         <p class="text-sm text-zinc-600 dark:text-zinc-400">
           <%= if @protected do %>
             {gettext("This room is protected. Update or remove its password.")}
@@ -321,14 +347,14 @@ defmodule LivedjWeb.SessionModals do
     ~H"""
     <.link
       patch={@patch}
+      data-active={to_string(@active)}
       class={[
-        "flex items-center gap-1.5 px-3 py-2 -mb-px border-b-2 text-sm font-semibold transition-colors",
+        "flex items-center gap-1.5 px-3 py-2 text-sm font-semibold transition-colors",
         "rounded-t focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
         "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
-        @active &&
-          "border-tone-900 dark:border-tone-100 text-tone-900 dark:text-tone-100",
+        @active && "text-tone-900 dark:text-tone-100",
         !@active &&
-          "border-transparent text-tone-500 dark:text-tone-400 hover:text-tone-700 dark:hover:text-tone-300"
+          "text-tone-500 dark:text-tone-400 hover:text-tone-700 dark:hover:text-tone-300"
       ]}
     >
       {render_slot(@inner_block)}

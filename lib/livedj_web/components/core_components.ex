@@ -84,7 +84,7 @@ defmodule LivedjWeb.CoreComponents do
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
                   class="
-                    -m-3 mr-2 rounded-md
+                    -m-3 rounded-md cursor-pointer
                     flex-none opacity-100 hover:opacity-40
                     focus:outline-none
                     focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2

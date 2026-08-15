@@ -28,8 +28,12 @@
               <% end %>
               <%= if media_loaded?(@player.media_id) do %>
                 <.tooltip class="left-2 max-w-[200px] md:hidden">
-                  <p class="font-semibold truncate">{@player.title}</p>
-                  <p class="truncate opacity-75">{@player.channel}</p>
+                  <span class="block font-semibold truncate">
+                    {@player.title}
+                  </span>
+                  <span class="block truncate opacity-75">
+                    {@player.channel}
+                  </span>
                 </.tooltip>
               <% end %>
             </div>
