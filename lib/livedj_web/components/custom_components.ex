@@ -24,7 +24,7 @@ defmodule LivedjWeb.CustomComponents do
     ~H"""
     <span class={[
       "absolute hidden group-hover:block",
-      "whitespace-nowrap rounded-md px-2 py-1",
+      "whitespace-nowrap rounded-md px-1 py-1",
       "bg-tone-800 dark:bg-tone-200",
       "text-xs text-tone-100 dark:text-tone-900",
       "shadow-md pointer-events-none",
