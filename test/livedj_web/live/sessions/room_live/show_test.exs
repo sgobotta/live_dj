@@ -19,7 +19,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       conn =
         conn
         |> put_req_cookie("livedj_display_name_#{room.id}", "CustomName")
-        |> get(~p"/sessions/rooms/#{room}")
+        |> get(~p"/sessions/rooms/#{room}/settings/general")
 
       # The chosen name must already be present in the very first HTML the
       # server returns, so there is no default-name flash before connect.
@@ -30,7 +30,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       conn =
         conn
         |> put_req_cookie("livedj_display_name_some-other-room", "OtherRoom")
-        |> get(~p"/sessions/rooms/#{room}")
+        |> get(~p"/sessions/rooms/#{room}/settings/general")
 
       refute html_response(conn, 200) =~ "OtherRoom"
     end
@@ -124,17 +124,17 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
         live(conn, ~p"/sessions/rooms/#{room}/settings/general")
 
       view
-      |> form("#room-name-form", %{name: "New Room Name"})
+      |> form("#general-settings-form", %{name: "New Room Name"})
       |> render_submit()
 
       assert Livedj.Sessions.get_room!(room.id).name == "New Room Name"
 
       # the modal stays open on the General tab instead of closing
       assert_patch(view, ~p"/sessions/rooms/#{room}/settings/general")
-      assert render(view) =~ "room-name-form"
+      assert render(view) =~ "general-settings-form"
     end
 
-    test "shows the changeset error for a blank name", %{
+    test "shows the changeset error for a blank room name", %{
       conn: conn,
       room: room
     } do
@@ -143,10 +143,38 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
 
       html =
         view
-        |> form("#room-name-form", %{name: ""})
+        |> form("#general-settings-form", %{name: ""})
         |> render_submit()
 
       assert html =~ "no puede estar en blanco"
+      assert Livedj.Sessions.get_room!(room.id).name == room.name
+    end
+
+    test "updates the display name from the same form", %{
+      conn: conn,
+      room: room
+    } do
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+
+      view
+      |> form("#general-settings-form", %{display_name: "New Display Name"})
+      |> render_submit()
+
+      assert render(view) =~ "New Display Name"
+    end
+
+    test "shows an error for a blank display name and leaves the room name untouched",
+         %{conn: conn, room: room} do
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+
+      html =
+        view
+        |> form("#general-settings-form", %{display_name: ""})
+        |> render_submit()
+
+      assert html =~ "El nombre no puede estar vacío"
       assert Livedj.Sessions.get_room!(room.id).name == room.name
     end
   end
@@ -221,6 +249,9 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       |> render_submit()
 
       assert Process.alive?(view.pid)
+
+      view |> element("#settings-btn") |> render_click()
+
       assert render(view) =~ "Bob"
     end
   end
@@ -235,7 +266,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       view |> element("#settings-btn") |> render_click()
 
       assert_patch(view, ~p"/sessions/rooms/#{room}/settings/general")
-      assert render(view) =~ "room-name-form"
+      assert render(view) =~ "general-settings-form"
     end
   end
 
