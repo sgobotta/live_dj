@@ -14,14 +14,14 @@
 .focus-ignite::before {
   content: "";
   position: absolute;
-  inset: -8px;
+  inset: -6px;
   border-radius: inherit;
   background: radial-gradient(
     circle at 72% 72%,
-    color-mix(in srgb, var(--color-brand) 60%, transparent),
+    color-mix(in srgb, var(--color-brand) 45%, transparent),
     transparent 68%
   );
-  filter: blur(3.5px);
+  filter: blur(3px);
   opacity: 0;
   z-index: -1;
   pointer-events: none;
@@ -36,7 +36,7 @@
 }
 
 .focus-ignite:focus-visible::before {
-  opacity: 0.9;
+  opacity: 0.6;
 }
 
 .focus-ignite-inset:focus-visible {
@@ -46,7 +46,7 @@
 :where(.dark, .dark *) .focus-ignite::before {
   background: radial-gradient(
     circle at 72% 72%,
-    color-mix(in srgb, var(--color-brand-dark) 60%, transparent),
+    color-mix(in srgb, var(--color-brand-dark) 45%, transparent),
     transparent 68%
   );
 }
