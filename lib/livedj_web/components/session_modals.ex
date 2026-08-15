@@ -183,7 +183,7 @@ defmodule LivedjWeb.SessionModals do
       show
       on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
       content_class="px-5 pb-5 pt-3"
-      close_button_class="top-3 right-5"
+      close_button_class="top-3 right-8"
     >
       <div
         id="settings-modal-tabs"
