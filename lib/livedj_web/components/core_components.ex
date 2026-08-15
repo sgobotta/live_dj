@@ -42,7 +42,7 @@ defmodule LivedjWeb.CoreComponents do
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   attr :content_class, :string, default: "p-5"
-  attr :close_button_class, :string, default: "top-6 right-5"
+  attr :close_button_class, :string, default: "top-6 right-6"
   slot :inner_block, required: true
 
   def modal(assigns) do

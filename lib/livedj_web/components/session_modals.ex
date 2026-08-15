@@ -26,10 +26,17 @@ defmodule LivedjWeb.SessionModals do
         <p class="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 text-center">
           {@room.name}
         </p>
-        <div class="flex items-center gap-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-4 py-3">
-          <span class="flex-1 truncate text-sm text-zinc-700 dark:text-zinc-300 font-mono select-all">
-            {@room_url}
-          </span>
+        <div class="flex items-center gap-2">
+          <.input
+            container_class="flex-1"
+            type="text"
+            id="room-url-input"
+            name="room_url"
+            value={@room_url}
+            readonly
+            aria-label={gettext("Room URL")}
+            class="mt-0! truncate font-mono text-sm"
+          />
           <button
             phx-hook="Clipboard"
             id="copy-room-url"
@@ -154,10 +161,10 @@ defmodule LivedjWeb.SessionModals do
       <dt class="text-sm text-zinc-600 dark:text-zinc-400">{@label}</dt>
       <dd>
         <kbd class="
-          inline-flex items-center rounded border border-zinc-400 dark:border-zinc-600
+          inline-flex items-center rounded border border-brand/30 dark:border-brand/40
           px-2 py-0.5 text-xs font-mono font-semibold
-          bg-zinc-100 dark:bg-zinc-800
-          text-zinc-700 dark:text-zinc-300
+          bg-brand/5 dark:bg-brand/20
+          text-brand dark:text-brand
         ">
           {@key}
         </kbd>
@@ -234,38 +241,25 @@ defmodule LivedjWeb.SessionModals do
               class="h-14 w-14 text-lg"
               tooltip={false}
             />
-            <div class="flex-1 flex flex-col gap-2">
-              <label
-                for="display-name-input"
-                class="block text-sm font-semibold text-tone-700 dark:text-tone-300"
-              >
-                {gettext("Your name")}
-              </label>
-              <input
-                type="text"
-                id="display-name-input"
-                name="display_name"
-                value={@display_name}
-                placeholder={gettext("Your name")}
-                class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
-              />
-            </div>
+            <.input
+              container_class="flex-1 flex flex-col gap-2"
+              type="text"
+              id="display-name-input"
+              name="display_name"
+              value={@display_name}
+              label={gettext("Your name")}
+              placeholder={gettext("Your name")}
+            />
           </div>
 
           <div class="border-t border-tone-300 dark:border-tone-600 pt-6">
-            <label
-              for="room-name-input"
-              class="block text-sm font-semibold text-tone-700 dark:text-tone-300 mb-2"
-            >
-              {gettext("Room name")}
-            </label>
-            <input
+            <.input
               type="text"
               id="room-name-input"
               name="name"
               value={@room.name}
+              label={gettext("Room name")}
               placeholder={gettext("Room name")}
-              class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
             />
           </div>
 
@@ -310,11 +304,11 @@ defmodule LivedjWeb.SessionModals do
           phx-submit="save_room_password"
           class="mt-4 flex flex-col gap-4"
         >
-          <input
+          <.input
             type="password"
             name="password"
+            value=""
             placeholder={gettext("New password")}
-            class="w-full rounded-lg border border-tone-300 dark:border-tone-600 bg-transparent px-3 py-2 text-tone-900 dark:text-tone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
           />
           <div class="flex items-center justify-between gap-2">
             <button

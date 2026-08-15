@@ -28,14 +28,12 @@ defmodule LivedjWeb.Sessions.RoomLive.FormComponent do
           type="text"
           label={gettext("Name")}
           placeholder={@placeholder_name}
-          class="focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
         />
         <.input
           field={@form[:password]}
           type="password"
           label={gettext("Password (optional)")}
           placeholder={gettext("Leave blank for a public room")}
-          class="focus:ring-2 focus:ring-tone-900 focus:dark:ring-tone-50"
         />
         <:actions>
           <.button phx-disable-with={gettext("Saving...")}>
