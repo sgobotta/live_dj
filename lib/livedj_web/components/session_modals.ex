@@ -185,7 +185,7 @@ defmodule LivedjWeb.SessionModals do
       content_class="px-5 pb-5 pt-3"
       close_button_class="top-3 right-5"
     >
-      <div class="flex gap-1 border-b border-tone-300 dark:border-tone-600">
+      <div class="flex gap-1">
         <.modal_tab
           patch={~p"/sessions/rooms/#{@room}/settings/general"}
           active={@tab == :general}
@@ -322,7 +322,7 @@ defmodule LivedjWeb.SessionModals do
     <.link
       patch={@patch}
       class={[
-        "flex items-center gap-1.5 px-3 py-2 -mb-px border-b-2 text-sm font-semibold transition-colors",
+        "flex items-center gap-1.5 px-3 py-2 border-b-2 text-sm font-semibold transition-colors",
         "rounded-t focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
         "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
         @active &&
