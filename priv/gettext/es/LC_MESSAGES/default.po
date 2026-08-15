@@ -84,7 +84,7 @@ msgid "Save Video"
 msgstr "Guardar video"
 
 #: lib/livedj_web/components/session_modals.ex:255
-#: lib/livedj_web/components/session_modals.ex:292
+#: lib/livedj_web/components/session_modals.ex:303
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
 #: lib/livedj_web/live/sessions/room_live/form_component.ex:41
@@ -325,7 +325,7 @@ msgstr "Unete o crea una sala con amigos, agrega videos y comparte contenido de 
 msgid "%{title} queued to the playlist"
 msgstr "Se agregó %{title} a la lista"
 
-#: lib/livedj_web/live/player_controls_live.html.heex:183
+#: lib/livedj_web/live/player_controls_live.html.heex:185
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr "Agregar"
@@ -355,12 +355,12 @@ msgstr "Claro"
 msgid "Mute"
 msgstr "Silenciar"
 
-#: lib/livedj_web/live/player_controls_live.html.heex:103
+#: lib/livedj_web/live/player_controls_live.html.heex:105
 #, elixir-autogen, elixir-format
 msgid "Pause"
 msgstr "Pausar"
 
-#: lib/livedj_web/live/player_controls_live.html.heex:124
+#: lib/livedj_web/live/player_controls_live.html.heex:126
 #, elixir-autogen, elixir-format
 msgid "Play"
 msgstr "Reproducir"
@@ -505,7 +505,7 @@ msgstr "No se pudo encolar: %{reason}"
 msgid "Room not found: %{target_room_id}"
 msgstr "Sala no encontrada: %{target_room_id}"
 
-#: lib/livedj_web/components/session_modals.ex:266
+#: lib/livedj_web/components/session_modals.ex:277
 #, elixir-autogen, elixir-format
 msgid "Add a password to protect this room."
 msgstr "Añade una contraseña para proteger esta sala."
@@ -535,7 +535,7 @@ msgstr "Contraseña incorrecta. Inténtalo de nuevo."
 msgid "Leave blank for a public room"
 msgstr "Déjalo en blanco para una sala pública"
 
-#: lib/livedj_web/components/session_modals.ex:279
+#: lib/livedj_web/components/session_modals.ex:290
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr "Nueva contraseña"
@@ -556,7 +556,7 @@ msgstr "Contraseña (opcional)"
 msgid "Password protected"
 msgstr "Protegida por contraseña"
 
-#: lib/livedj_web/components/session_modals.ex:290
+#: lib/livedj_web/components/session_modals.ex:301
 #, elixir-autogen, elixir-format
 msgid "Remove password"
 msgstr "Eliminar contraseña"
@@ -567,7 +567,7 @@ msgid "Room password updated"
 msgstr "Contraseña de la sala actualizada"
 
 #: lib/livedj_web/components/session_modals.ex:256
-#: lib/livedj_web/components/session_modals.ex:293
+#: lib/livedj_web/components/session_modals.ex:304
 #, elixir-autogen, elixir-format
 msgid "Save"
 msgstr "Guardar"
@@ -592,7 +592,7 @@ msgstr "Saltear a la siguiente pista"
 msgid "This room is password protected"
 msgstr "Esta sala está protegida por contraseña"
 
-#: lib/livedj_web/components/session_modals.ex:264
+#: lib/livedj_web/components/session_modals.ex:275
 #, elixir-autogen, elixir-format
 msgid "This room is protected. Update or remove its password."
 msgstr "Esta sala está protegida. Actualiza o elimina su contraseña."
@@ -698,3 +698,13 @@ msgstr "Tu nombre"
 #, elixir-autogen, elixir-format
 msgid "Settings updated"
 msgstr "Configuración actualizada"
+
+#: lib/livedj_web/components/session_modals.ex:266
+#, elixir-autogen, elixir-format
+msgid "Show a browser notification when the playing track changes"
+msgstr "Muestra una notificación del navegador cuando cambia la canción"
+
+#: lib/livedj_web/components/session_modals.ex:264
+#, elixir-autogen, elixir-format
+msgid "Track notifications"
+msgstr "Notificaciones de canciones"

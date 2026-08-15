@@ -197,6 +197,60 @@ defmodule LivedjWeb.CustomComponents do
     Enum.at(@avatar_colors, index)
   end
 
+  @doc """
+  Renders a labeled on/off switch for a boolean preference.
+
+  Purely presentational: the initial visual state always renders off. A
+  `phx-hook`'d client-side owner is expected to correct the visual state on
+  mount (from wherever the preference is actually persisted) and to own all
+  further state changes, since this component is not wired to any
+  `phx-click` or server assign.
+  """
+  attr :id, :string, required: true
+  attr :label, :string, required: true
+  attr :description, :string, default: nil
+  attr :hook, :string, required: true, doc: "the phx-hook that owns this switch"
+
+  def toggle_switch(assigns) do
+    ~H"""
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold text-tone-700 dark:text-tone-300">
+          {@label}
+        </p>
+        <p
+          :if={@description}
+          class="text-xs text-tone-500 dark:text-tone-400 mt-0.5"
+        >
+          {@description}
+        </p>
+      </div>
+      <button
+        id={@id}
+        type="button"
+        role="switch"
+        aria-checked="false"
+        phx-hook={@hook}
+        phx-update="ignore"
+        class="
+          relative inline-flex h-6 w-11 shrink-0 items-center rounded-full
+          bg-tone-300 dark:bg-tone-600 transition-colors duration-300 ease-in-out
+          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
+          focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
+        "
+      >
+        <span
+          aria-hidden="true"
+          class="
+            pointer-events-none inline-block h-4 w-4 translate-x-1 rounded-full
+            bg-white shadow-md transition-transform duration-300 ease-in-out
+          "
+        />
+      </button>
+    </div>
+    """
+  end
+
   attr :id, :string, required: true
   attr :modules, :list, required: true
 

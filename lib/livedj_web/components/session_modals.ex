@@ -256,6 +256,17 @@ defmodule LivedjWeb.SessionModals do
             {gettext("Save")}
           </.button>
         </.form>
+
+        <div class="border-t border-tone-300 dark:border-tone-600 pt-6 mt-6">
+          <.toggle_switch
+            id="track-notifications-toggle"
+            hook="NotificationsToggle"
+            label={gettext("Track notifications")}
+            description={
+              gettext("Show a browser notification when the playing track changes")
+            }
+          />
+        </div>
       </div>
 
       <div :if={@tab == :security} class="mt-6 min-h-56">

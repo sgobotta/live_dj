@@ -84,7 +84,7 @@ msgid "Save Video"
 msgstr ""
 
 #: lib/livedj_web/components/session_modals.ex:255
-#: lib/livedj_web/components/session_modals.ex:292
+#: lib/livedj_web/components/session_modals.ex:303
 #: lib/livedj_web/live/admin/media/video_live/form_component.ex:43
 #: lib/livedj_web/live/admin/sessions/room_live/form_component.ex:29
 #: lib/livedj_web/live/sessions/room_live/form_component.ex:41
@@ -325,7 +325,7 @@ msgstr ""
 msgid "%{title} queued to the playlist"
 msgstr ""
 
-#: lib/livedj_web/live/player_controls_live.html.heex:183
+#: lib/livedj_web/live/player_controls_live.html.heex:185
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr ""
@@ -355,12 +355,12 @@ msgstr ""
 msgid "Mute"
 msgstr ""
 
-#: lib/livedj_web/live/player_controls_live.html.heex:103
+#: lib/livedj_web/live/player_controls_live.html.heex:105
 #, elixir-autogen, elixir-format
 msgid "Pause"
 msgstr ""
 
-#: lib/livedj_web/live/player_controls_live.html.heex:124
+#: lib/livedj_web/live/player_controls_live.html.heex:126
 #, elixir-autogen, elixir-format
 msgid "Play"
 msgstr ""
@@ -505,7 +505,7 @@ msgstr ""
 msgid "Room not found: %{target_room_id}"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:266
+#: lib/livedj_web/components/session_modals.ex:277
 #, elixir-autogen, elixir-format
 msgid "Add a password to protect this room."
 msgstr ""
@@ -535,7 +535,7 @@ msgstr ""
 msgid "Leave blank for a public room"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:279
+#: lib/livedj_web/components/session_modals.ex:290
 #, elixir-autogen, elixir-format
 msgid "New password"
 msgstr ""
@@ -556,7 +556,7 @@ msgstr ""
 msgid "Password protected"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:290
+#: lib/livedj_web/components/session_modals.ex:301
 #, elixir-autogen, elixir-format
 msgid "Remove password"
 msgstr ""
@@ -567,7 +567,7 @@ msgid "Room password updated"
 msgstr ""
 
 #: lib/livedj_web/components/session_modals.ex:256
-#: lib/livedj_web/components/session_modals.ex:293
+#: lib/livedj_web/components/session_modals.ex:304
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Save"
 msgstr ""
@@ -592,7 +592,7 @@ msgstr ""
 msgid "This room is password protected"
 msgstr ""
 
-#: lib/livedj_web/components/session_modals.ex:264
+#: lib/livedj_web/components/session_modals.ex:275
 #, elixir-autogen, elixir-format
 msgid "This room is protected. Update or remove its password."
 msgstr ""
@@ -697,4 +697,14 @@ msgstr ""
 #: lib/livedj_web/live/sessions/room_live/show.ex:395
 #, elixir-autogen, elixir-format
 msgid "Settings updated"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:266
+#, elixir-autogen, elixir-format
+msgid "Show a browser notification when the playing track changes"
+msgstr ""
+
+#: lib/livedj_web/components/session_modals.ex:264
+#, elixir-autogen, elixir-format
+msgid "Track notifications"
 msgstr ""
