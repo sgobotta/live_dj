@@ -82,22 +82,24 @@
                             {title}
                           </span>
                           <.tooltip class="left-1/2 -translate-x-1/2 z-30 not-italic max-w-[220px]">
-                            <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-2">
                               <%= if msg.media_thumbnail_url not in [nil, ""] do %>
                                 <img
                                   src={msg.media_thumbnail_url}
                                   class="h-10 w-10 rounded-md object-cover shrink-0"
                                 />
                               <% else %>
-                                <div class="h-10 w-10 rounded-md bg-tone-300 dark:bg-tone-700 shrink-0" />
+                                <span class="h-10 w-10 rounded-md bg-tone-300 dark:bg-tone-700 shrink-0 inline-block" />
                               <% end %>
-                              <div class="min-w-0">
-                                <p class="font-semibold truncate">{title}</p>
-                                <p class="truncate opacity-75">
+                              <span class="min-w-0 flex flex-col">
+                                <span class="font-semibold truncate">
+                                  {title}
+                                </span>
+                                <span class="truncate opacity-75">
                                   {msg.media_channel}
-                                </p>
-                              </div>
-                            </div>
+                                </span>
+                              </span>
+                            </span>
                           </.tooltip>
                         </span>
                         {suffix}
