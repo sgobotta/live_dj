@@ -1,0 +1,67 @@
+/*
+ * Keyboard-focus treatment ("Ignition"): the element's own offset shadow
+ * snaps in immediately on Tab, like a latch, then a soft glow blooms in
+ * a beat later from behind it. Replaces the old floating ring-offset
+ * indicator so focus reads as part of the control instead of a shape
+ * drawn around it. Mouse/touch activation never triggers this (:focus-visible).
+ */
+
+.focus-ignite {
+  position: relative;
+  isolation: isolate;
+}
+
+.focus-ignite::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, var(--color-brand) 60%, transparent),
+    transparent 68%
+  );
+  filter: blur(3.5px);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 220ms ease 80ms;
+}
+
+.focus-ignite:focus-visible {
+  outline: none;
+  box-shadow: 3px 3px 0 0 var(--color-brand);
+  border-color: var(--color-brand);
+  transition: box-shadow 60ms ease, border-color 60ms ease;
+}
+
+.focus-ignite:focus-visible::before {
+  opacity: 0.9;
+}
+
+.focus-ignite-inset:focus-visible {
+  box-shadow: inset 0 0 0 1.5px var(--color-brand), 2px 2px 0 0 var(--color-brand);
+}
+
+:where(.dark, .dark *) .focus-ignite::before {
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, var(--color-brand-dark) 60%, transparent),
+    transparent 68%
+  );
+}
+
+:where(.dark, .dark *) .focus-ignite:focus-visible {
+  box-shadow: 3px 3px 0 0 var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}
+
+:where(.dark, .dark *) .focus-ignite-inset:focus-visible {
+  box-shadow: inset 0 0 0 1.5px var(--color-brand-dark), 2px 2px 0 0 var(--color-brand-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-ignite::before {
+    transition: opacity 120ms ease;
+  }
+}

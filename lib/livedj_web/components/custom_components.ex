@@ -53,7 +53,7 @@ defmodule LivedjWeb.CustomComponents do
     >
       <div class="relative group">
         <a
-          class="hover:text-tone-700 cursor-pointer h-5 w-5 leading-3 inline-flex items-center justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
+          class="hover:text-tone-700 cursor-pointer h-5 w-5 leading-3 inline-flex items-center justify-center rounded focus:outline-none focus-ignite"
           href="#"
           phx-click={JS.dispatch("toggle-theme")}
           tabindex="0"
@@ -235,8 +235,7 @@ defmodule LivedjWeb.CustomComponents do
         class="
           relative inline-flex h-6 w-11 shrink-0 items-center rounded-full
           bg-tone-300 dark:bg-tone-600 transition-colors duration-300 ease-in-out
-          focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2
-          focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900
+          focus:outline-none focus-ignite
         "
       >
         <span
@@ -304,9 +303,7 @@ defmodule LivedjWeb.CustomComponents do
           phx-click={@module_click && @module_click.(module)}
           href="#"
           class={[
-            "block rounded-xl p-2 focus:outline-none",
-            "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
-            "focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900",
+            "block rounded-xl p-2 focus:outline-none focus-ignite",
             @module_click && "hover:cursor-pointer"
           ]}
           tabindex="0"

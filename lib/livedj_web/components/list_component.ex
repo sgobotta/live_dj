@@ -53,7 +53,7 @@ defmodule LivedjWeb.ListComponent do
                 </.link>
               <% else %>
                 <.link
-                  class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
+                  class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-ignite"
                   href="#"
                   tabindex="0"
                   phx-click={on_play_click_event()}
