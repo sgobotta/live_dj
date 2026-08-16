@@ -108,62 +108,51 @@
           role="option"
           aria-selected={item.external_id in @playlist_external_ids}
           class={"
-            group my-2
+            group my-1
             cursor-default
-            rounded-md hover:rounded-lg
+            rounded-lg
             first:mt-0 last:mb-0
-            transition-[background-color,box-shadow,border-radius,letter-spacing,transform,filter,opacity] duration-300
-            text-tone-700 dark:text-tone-300
+            transition-[background-color] duration-300
             focus:outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-brand/60 focus-visible:outline-offset-1
             has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand/60 has-[:focus-visible]:outline-offset-1
+            border-tone-300 dark:border-tone-700 border-[0px]
             #{if item.external_id in @playlist_external_ids,
-              do: "bg-tone-50 dark:bg-tone-700 opacity-50",
+              do: "text-tone-700 dark:text-tone-300 bg-tone-50 dark:bg-tone-700 opacity-50",
               else: "
-              bg-tone-300 dark:bg-tone-800
-              hover:bg-tone-200 dark:hover:bg-tone-700
-              has-[:focus-visible]:bg-tone-200 dark:has-[:focus-visible]:bg-tone-700
-              hover:tracking-widest has-[:focus-visible]:tracking-widest
-              active:scale-[0.99] grayscale-[70%] hover:grayscale-0 has-[:focus-visible]:grayscale-0
-              shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
-              hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
-              has-[:focus-visible]:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
-              active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
-              dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.3)]
-              dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
-              dark:has-[:focus-visible]:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
-              dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+              text-tone-900 dark:text-tone-100
+              bg-tone-100 hover:bg-tone-300 dark:bg-tone-900 dark:hover:bg-tone-700
+              has-[:focus-visible]:bg-tone-300 dark:has-[:focus-visible]:bg-tone-700
               "
             }
-            border-tone-200 dark:border-tone-700 border-[0px]
           "}
         >
           <div class="
-            relative flex items-center h-10 mx-1
+            relative flex items-center h-10 px-1
             gap-y-2 gap-x-2
           ">
             <div class="relative h-8 w-8">
               <img
                 class="
                   inline-block h-8 w-8 rounded-lg
-                  transition duration-200 group-hover:scale-[1.05]
+                  ring-[1px] ring-tone-300 dark:ring-tone-700
                 "
                 src={item.thumbnail_url}
                 alt={item.title}
               />
             </div>
-            <div class="absolute top-6 -left-1 h-4 w-4 rounded-lg">
+            <div class="absolute top-6 -left-1 h-4 w-4 rounded-full">
               <p class="
-                rounded-lg h-4 w-4
+                rounded-full h-4 w-4
                 flex justify-center items-center
                 text-center text-[0.5rem]
-                text-tone-200 dark:text-tone-700
-                bg-tone-800 dark:bg-tone-300
+                text-tone-100 dark:text-tone-900
+                bg-tone-900 dark:bg-tone-100
               ">
                 {index + 1}
               </p>
             </div>
             <div class="
-              block
+              flex-auto block
               text-xs leading-6 font-semibold
               p-1 px-1 h-8 w-5/6
               text-ellipsis overflow-hidden

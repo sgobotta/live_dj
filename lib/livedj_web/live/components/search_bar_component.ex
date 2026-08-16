@@ -87,6 +87,7 @@ defmodule LivedjWeb.Components.SearchBarComponent do
     dark:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
     dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.6)]
     dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
+    focus:outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-brand/60 focus-visible:outline-offset-1
     """
   end
 
