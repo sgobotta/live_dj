@@ -117,6 +117,8 @@ export default {
       ?.removeEventListener('click', this._onResyncClick)
     document.getElementById('out-of-sync-dismiss')
       ?.removeEventListener('click', this._onDismissClick)
+    document.getElementById('player-empty-hint')
+      ?.removeEventListener('click', this._onEmptyHintClick)
   },
   endTimeTrackerId: null,
   handleCallbackEvent: async (callbackEvent, args = {}) => {
@@ -128,6 +130,12 @@ export default {
     this.positionPlayer()
     this._onResize = () => this.positionPlayer()
     window.addEventListener('resize', this._onResize)
+
+    this._onEmptyHintClick = () => {
+      document.getElementById('add-btn')?.click()
+    }
+    document.getElementById('player-empty-hint')
+      ?.addEventListener('click', this._onEmptyHintClick)
 
     this._onResyncClick = async () => {
       await this.pushEventTo(this.el, 'on_player_resync')
@@ -410,6 +418,22 @@ export default {
       console.debug('[Player :: load_video]', player)
       console.debug('[Player :: load_video state]', player.state)
 
+      // TODO: this only shows/hides the hint on explicit load_video
+      // events. If the last track ends and the queue is now empty,
+      // nothing currently re-pushes load_video with an empty media_id,
+      // so the hint won't reappear automatically - needs a
+      // player_emptied-style event wired from the server's track_ended
+      // handling.
+      const hasMedia = !!player.media_id
+      const emptyHint = document.getElementById('player-empty-hint')
+      if (emptyHint) {
+        emptyHint.classList.toggle('hidden', hasMedia)
+      }
+      const hintContainer = document.getElementById('player-hint-container')
+      if (hintContainer) {
+        hintContainer.classList.toggle('bg-black', !hasMedia)
+      }
+
       // The server advances the track slightly ahead of the outgoing
       // video's real end (see PlaybackClock's epsilon), so the local
       // slider may not have visually reached its max yet. Snap it to
@@ -423,6 +447,10 @@ export default {
         syncRangeSliderVisual(outgoingSliderElem)
       }
 
+      // TODO: this.player can still be null here if load_video arrives
+      // before the YouTube iframe API has finished initializing (e.g. a
+      // track is added/loaded moments after the room mounts), throwing
+      // on this.player.loadVideoById/cueVideoById/stopVideo below.
       switch (player.state) {
         case "playing":
           // loadVideoById auto-plays; set flag so BUFFERING handler

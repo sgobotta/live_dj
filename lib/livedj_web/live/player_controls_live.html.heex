@@ -2,6 +2,7 @@
   <div id="track-notifications" phx-hook="TrackNotifications" class="hidden" />
 
   <%= if @player do %>
+    <% disabled? = not media_loaded?(@player.media_id) %>
     <div
       id={@player_controls_id}
       class="
@@ -69,11 +70,13 @@
           <div class="flex items-center gap-4 h-10">
             <a
               href="#"
-              phx-click="previous"
-              class="
-                cursor-pointer h-8 w-8 rounded-full flex justify-center items-center
-                focus:outline-none focus-ignite
-"
+              phx-click={unless disabled?, do: "previous"}
+              aria-disabled={disabled?}
+              class={[
+                "cursor-pointer h-8 w-8 rounded-full flex justify-center items-center",
+                "focus:outline-none focus-ignite",
+                disabled? && "opacity-40 pointer-events-none cursor-not-allowed"
+              ]}
               tabindex="0"
             >
               {PhoenixInlineSvg.Helpers.svg_image(
@@ -87,45 +90,50 @@
                 "
               )}
             </a>
-            <%= if @player && @player.state in [:playing, :idle, :paused] do %>
-              <div class="relative group">
-                <a
-                  id="play-pause-btn"
-                  href="#"
-                  phx-click={
+            <div class="relative group">
+              <a
+                id="play-pause-btn"
+                href="#"
+                phx-click={
+                  unless disabled? do
                     if @player.state == :playing,
                       do: on_pause_click_event(),
                       else: on_play_click_event()
+                  end
+                }
+                aria-disabled={disabled?}
+                class={[
+                  "cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105",
+                  "focus:outline-none focus-ignite",
+                  disabled? &&
+                    "opacity-40 pointer-events-none cursor-not-allowed"
+                ]}
+                tabindex="0"
+              >
+                <.icon
+                  name={
+                    if @player.state == :playing,
+                      do: "hero-pause-circle-solid",
+                      else: "hero-play-circle-solid"
                   }
-                  class="
-                    cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105
-                    focus:outline-none focus-ignite
-"
-                  tabindex="0"
-                >
-                  <.icon
-                    name={
-                      if @player.state == :playing,
-                        do: "hero-pause-circle-solid",
-                        else: "hero-play-circle-solid"
-                    }
-                    class="h-10 w-10 text-tone-700 active:scale-[1.1] focus:scale-[1.1] dark:text-tone-50"
-                  />
-                </a>
-                <.tooltip>
-                  {if @player.state == :playing,
-                    do: gettext("Pause"),
-                    else: gettext("Play")} (␣)
-                </.tooltip>
-              </div>
-            <% end %>
+                  class="h-10 w-10 text-tone-700 active:scale-[1.1] focus:scale-[1.1] dark:text-tone-50"
+                />
+              </a>
+              <.tooltip :if={!disabled?}>
+                {if @player.state == :playing,
+                  do: gettext("Pause"),
+                  else: gettext("Play")} (␣)
+              </.tooltip>
+            </div>
             <a
               href="#"
-              phx-click="next"
-              class="
-                cursor-pointer h-8 w-8 rounded-full flex justify-center items-center
-                focus:outline-none focus-ignite
-"
+              phx-click={unless disabled?, do: "next"}
+              aria-disabled={disabled?}
+              class={[
+                "cursor-pointer h-8 w-8 rounded-full flex justify-center items-center",
+                "focus:outline-none focus-ignite",
+                disabled? && "opacity-40 pointer-events-none cursor-not-allowed"
+              ]}
               tabindex="0"
             >
               {PhoenixInlineSvg.Helpers.svg_image(
@@ -181,6 +189,7 @@
             module={LivedjWeb.Components.PlayerControls.VolumeControlComponent}
             level={@volume_level}
             muted?={@volume_muted}
+            disabled?={disabled?}
           />
           <%!-- Fullscreen --%>
           <.live_component
@@ -188,6 +197,7 @@
             module={
               LivedjWeb.Components.PlayerControls.FullscreenControlComponent
             }
+            disabled?={disabled?}
           />
         </div>
 

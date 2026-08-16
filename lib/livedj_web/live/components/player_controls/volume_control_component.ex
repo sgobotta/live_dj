@@ -16,9 +16,10 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
         <.button
           id="volume-mute-btn"
           tabindex="0"
-          class={volume_button_class(@muted?)}
+          class={volume_button_class(@muted?, @disabled?)}
           aria-pressed={@muted?}
-          phx-click="on_volume_click"
+          aria-disabled={@disabled?}
+          phx-click={unless @disabled?, do: "on_volume_click"}
           phx-target={@myself}
         >
           {PhoenixInlineSvg.Helpers.svg_image(
@@ -28,13 +29,16 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
             class: "h-6 w-6 p-1"
           )}
         </.button>
-        <.tooltip>
+        <.tooltip :if={!@disabled?}>
           {if @muted?,
             do: "#{gettext("Unmute")} (M)",
             else: "#{gettext("Mute")} (M)"}
         </.tooltip>
       </div>
-      <div class="ml-3 flex-1 min-w-0 self-center hidden md:block">
+      <div class={[
+        "ml-3 flex-1 min-w-0 self-center hidden md:block",
+        @disabled? && "opacity-40 pointer-events-none"
+      ]}>
         <.form
           :let={f}
           for={@player}
@@ -106,7 +110,7 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
      |> push_event("change_volume", %{volume_level: volume})}
   end
 
-  defp volume_button_class(muted?) do
+  defp volume_button_class(muted?, disabled?) do
     [
       "rounded-md",
       "cursor-pointer w-6 h-6 !p-0 flex flex-wrap justify-center content-center",
@@ -118,7 +122,11 @@ defmodule LivedjWeb.Components.PlayerControls.VolumeControlComponent do
       "hover:bg-tone-300 dark:hover:bg-tone-700",
       "active:bg-tone-200 dark:active:bg-tone-800",
       "active:text-green-500 dark:active:text-green-500",
-      muted_state_class(muted?)
+      muted_state_class(muted?),
+      if(disabled?,
+        do: "opacity-40 pointer-events-none cursor-not-allowed",
+        else: ""
+      )
     ]
     |> Enum.join(" ")
   end

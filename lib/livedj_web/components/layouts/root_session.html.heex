@@ -40,6 +40,37 @@
           class="hidden absolute inset-0 w-full h-full rounded-lg"
         />
       </div>
+      <%!--
+        Sibling of #player-backdrop (not nested inside it) so it never
+        inherits the backdrop's own opacity-0/opacity-50 toggling from
+        play/pause state - it needs to stay fully legible on its own.
+
+        The positioning (absolute inset-0) lives on this plain, non-focusable
+        wrapper rather than on the button itself: .focus-ignite forces
+        `position: relative` on its host (it's unlayered CSS, so it beats
+        Tailwind's layered `.absolute` utility outright), which would fight
+        the button for its own positioning and collapse it into normal flex
+        flow, shrinking the video box next to it.
+      --%>
+      <div
+        id="player-hint-container"
+        class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 pointer-events-none bg-black rounded-lg"
+      >
+        <button
+          id="player-empty-hint"
+          type="button"
+          class="
+            flex flex-col items-center gap-2
+            text-tone-100/80 hover:text-tone-100 cursor-pointer pointer-events-auto
+            rounded-lg focus:outline-none focus-ignite
+          "
+        >
+          <.icon name="hero-plus-circle" class="h-8 w-8" />
+          <span class="text-sm font-medium">
+            {gettext("Click + to add your first video")}
+          </span>
+        </button>
+      </div>
       <%!-- Out-of-sync notification banner --%>
       <div
         id="out-of-sync-banner"

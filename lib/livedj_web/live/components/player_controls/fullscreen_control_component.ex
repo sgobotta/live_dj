@@ -9,10 +9,14 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
     <div class="relative group">
       <.link
         id="fullscreen-btn"
-        phx-click="on_click"
+        phx-click={unless @disabled?, do: "on_click"}
         phx-target={@myself}
         tabindex="0"
-        class="inline-flex items-center justify-center rounded focus:outline-none focus-ignite"
+        aria-disabled={@disabled?}
+        class={[
+          "inline-flex items-center justify-center rounded focus:outline-none focus-ignite",
+          @disabled? && "opacity-40 pointer-events-none cursor-not-allowed"
+        ]}
       >
         {PhoenixInlineSvg.Helpers.svg_image(
           LivedjWeb.Endpoint,
@@ -26,7 +30,7 @@ defmodule LivedjWeb.Components.PlayerControls.FullscreenControlComponent do
             "
         )}
       </.link>
-      <.tooltip class="left-1/2 -translate-x-[85%]">
+      <.tooltip :if={!@disabled?} class="left-1/2 -translate-x-[85%]">
         {gettext("Fullscreen")} (F)
       </.tooltip>
     </div>

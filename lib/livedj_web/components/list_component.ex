@@ -14,6 +14,12 @@ defmodule LivedjWeb.ListComponent do
           data-list_id={@id}
           data-current-media-id={@current_media || ""}
         >
+          <p
+            :if={@list == []}
+            class="text-center text-xs text-zinc-500 dark:text-zinc-400 py-3"
+          >
+            {gettext("Your playlist is empty")}
+          </p>
           <div
             :for={{item, index} <- Enum.with_index(@list)}
             id={"#{item.external_id}-item"}
