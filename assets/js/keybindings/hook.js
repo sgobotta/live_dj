@@ -10,8 +10,7 @@ const actions = {
   'toggle-fullscreen': () => document.getElementById('fullscreen-btn')?.click(),
   'toggle-mute': () => document.getElementById('volume-mute-btn')?.click(),
   'toggle-play-pause': () =>
-    (document.getElementById('pause-btn')
-      ?? document.getElementById('play-btn'))?.click(),
+    document.getElementById('play-pause-btn')?.click(),
   'toggle-theme': () => window.dispatchEvent(new Event('toggle-theme'))
 }
 

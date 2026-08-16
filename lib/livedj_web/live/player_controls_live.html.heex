@@ -87,12 +87,16 @@
                 "
               )}
             </a>
-            <%= if @player && @player.state in [:playing] do %>
+            <%= if @player && @player.state in [:playing, :idle, :paused] do %>
               <div class="relative group">
                 <a
-                  id="pause-btn"
+                  id="play-pause-btn"
                   href="#"
-                  phx-click={on_pause_click_event()}
+                  phx-click={
+                    if @player.state == :playing,
+                      do: on_pause_click_event(),
+                      else: on_play_click_event()
+                  }
                   class="
                     cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105
                     focus:outline-none focus-ignite
@@ -100,31 +104,19 @@
                   tabindex="0"
                 >
                   <.icon
-                    name="hero-pause-circle-solid"
+                    name={
+                      if @player.state == :playing,
+                        do: "hero-pause-circle-solid",
+                        else: "hero-play-circle-solid"
+                    }
                     class="h-10 w-10 text-tone-700 active:scale-[1.1] focus:scale-[1.1] dark:text-tone-50"
                   />
                 </a>
-                <.tooltip>{gettext("Pause")} (␣)</.tooltip>
-              </div>
-            <% end %>
-            <%= if @player && @player.state in [:idle, :paused] do %>
-              <div class="relative group">
-                <a
-                  id="play-btn"
-                  href="#"
-                  phx-click={on_play_click_event()}
-                  class="
-                    cursor-pointer rounded-full h-10 w-10 flex justify-center items-center hover:scale-105
-                    focus:outline-none focus-ignite
-"
-                  tabindex="0"
-                >
-                  <.icon
-                    name="hero-play-circle-solid"
-                    class="h-10 w-10 text-tone-700 active:scale-[1.1] focus:scale-[1.1] dark:text-tone-50"
-                  />
-                </a>
-                <.tooltip>{gettext("Play")} (␣)</.tooltip>
+                <.tooltip>
+                  {if @player.state == :playing,
+                    do: gettext("Pause"),
+                    else: gettext("Play")} (␣)
+                </.tooltip>
               </div>
             <% end %>
             <a
