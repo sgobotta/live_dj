@@ -105,13 +105,17 @@
           :for={{item, index} <- Enum.with_index(@search_result)}
           id={"search-result-#{item.external_id}"}
           data-id={item.external_id}
+          role="option"
+          aria-selected={item.external_id in @playlist_external_ids}
           class={"
             group my-2
             cursor-default
             rounded-md hover:rounded-lg
             first:mt-0 last:mb-0
-            transition-all duration-300
+            transition-[background-color,box-shadow,border-radius,letter-spacing,transform,filter,opacity] duration-300
             text-tone-700 dark:text-tone-300
+            focus:outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-brand/60 focus-visible:outline-offset-1
+            has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand/60 has-[:focus-visible]:outline-offset-1
             #{if item.external_id in @playlist_external_ids,
               do: "bg-tone-50 dark:bg-tone-700 opacity-50",
               else: "
@@ -185,7 +189,7 @@
                 hover:bg-tone-200 hover:dark:bg-tone-800
                 group-hover:bg-tone-200 group-hover:dark:bg-tone-800
                 cursor-pointer
-                outline-black
+                focus:outline-none
                 text-tone-700 dark:text-tone-300
                 hover:text-green-500 dark:hover:text-green-500 hover:scale-110
                 focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100

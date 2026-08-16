@@ -84,11 +84,15 @@ export default {
       const tabElementsCount = tabElements.length - 1
 
       if (event.key === 'ArrowUp') {
-        tabElements[focusIndex > 0 ? focusIndex - 1 : tabElementsCount].focus()
+        const target = tabElements[focusIndex > 0 ? focusIndex - 1 : tabElementsCount]
+        target.focus()
+        target.scrollIntoView({ block: 'center' })
       }
 
       if (event.key === 'ArrowDown') {
-        tabElements[focusIndex < tabElementsCount ? focusIndex + 1 : 0].focus()
+        const target = tabElements[focusIndex < tabElementsCount ? focusIndex + 1 : 0]
+        target.focus()
+        target.scrollIntoView({ block: 'center' })
       }
     })
   },
