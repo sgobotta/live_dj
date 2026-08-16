@@ -2,7 +2,11 @@
 // stop (see the tabindex="0" on #lists); every track link inside sits at
 // tabindex="-1" so Tab skips straight over them. ArrowDown/ArrowUp move
 // real DOM focus from track to track instead, letting Enter (native link
-// activation) play whichever one is focused.
+// activation) play whichever one is focused. Each move scrolls the newly
+// focused track to the vertical center of the list when there's enough
+// room; scrollIntoView clamps at the list's own start/end instead of
+// forcing centering there, so top/bottom tracks just land as centered
+// as the available scroll room allows.
 //
 // Playing a track (Enter, or a click) flips it to "current", which swaps
 // its markup from the play-button branch to the now-playing branch in
@@ -65,7 +69,7 @@ export default {
         : Math.max(0, Math.min(items.length - 1, currentIndex + delta))
 
       items[nextIndex].focus()
-      items[nextIndex].scrollIntoView({block: 'nearest'})
+      items[nextIndex].scrollIntoView({block: 'center'})
     })
   },
 
