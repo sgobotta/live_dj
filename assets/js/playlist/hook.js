@@ -3,8 +3,23 @@
 // tabindex="-1" so Tab skips straight over them. ArrowDown/ArrowUp move
 // real DOM focus from track to track instead, letting Enter (native link
 // activation) play whichever one is focused.
+//
+// Playing a track (Enter, or a click) flips it to "current", which swaps
+// its markup from the play-button branch to the now-playing branch in
+// list_component.ex — a different element ends up carrying tabindex/
+// data-nav-item, so the node that had focus is removed from the DOM and
+// the browser drops focus to <body>. Track which track (by data-id) last
+// had focus and, if an update leaves focus stranded on <body>, reclaim it
+// on that track's new nav target so arrow-key navigation can continue.
 export default {
   mounted() {
+    this.focusedId = null
+
+    this.el.addEventListener('focusin', (e) => {
+      const item = e.target.closest('[data-id]')
+      if (item) this.focusedId = item.dataset.id
+    })
+
     this.el.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
 
@@ -22,5 +37,18 @@ export default {
       items[nextIndex].focus()
       items[nextIndex].scrollIntoView({block: 'nearest'})
     })
+  },
+
+  updated() {
+    if (this.focusedId === null) return
+    if (document.activeElement !== document.body) return
+
+    const item = this.el.querySelector(
+      `[data-id="${CSS.escape(this.focusedId)}"]`
+    )
+    const target = item?.matches('[data-nav-item]')
+      ? item
+      : item?.querySelector('[data-nav-item]')
+    target?.focus()
   }
 }
