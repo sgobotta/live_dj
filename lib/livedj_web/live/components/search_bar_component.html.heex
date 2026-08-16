@@ -113,8 +113,8 @@
             rounded-lg
             first:mt-0 last:mb-0
             transition-[background-color] duration-300
-            focus:outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-brand/60 focus-visible:outline-offset-1
-            has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand/60 has-[:focus-visible]:outline-offset-1
+            focus:outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:outline-brand/60 focus-visible:outline-offset-1
+            has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-brand/60 has-[:focus-visible]:outline-offset-1
             border-tone-300 dark:border-tone-700 border-[0px]
             #{if item.external_id in @playlist_external_ids,
               do: "text-tone-700 dark:text-tone-300 bg-tone-50 dark:bg-tone-700 opacity-50",
@@ -173,18 +173,18 @@
               :if={item.external_id not in @playlist_external_ids}
               type="button"
               class="
-                rounded-full p-1
+                group/add rounded-full
                 flex items-center justify-center
                 transition duration-300
-                w-8 h-8 
+                w-8 h-8
                 bg-tone-400/40 dark:bg-tone-700
                 hover:bg-tone-200 hover:dark:bg-tone-800
                 group-hover:bg-tone-200 group-hover:dark:bg-tone-800
                 cursor-pointer
                 focus:outline-none
                 text-tone-700 dark:text-tone-300
-                hover:text-green-500 dark:hover:text-green-500 hover:scale-110
-                focus:text-green-500 dark:focus:text-green-500 focus:scale-110 focus:opacity-100
+                hover:text-green-500 dark:hover:text-green-500
+                focus:text-green-500 dark:focus:text-green-500 focus:opacity-100
                 active:scale-[0.95] active:text-green-300 dark:active:text-green-700
               "
               aria-label={gettext("Add to playlist")}
@@ -192,7 +192,15 @@
               phx-click="add_to_playlist"
               phx-target={@myself}
             >
-              <.icon name="hero-plus" class="h-5 w-5" />
+              <.icon
+                name="hero-plus-circle-solid"
+                class="
+                  h-5 w-5
+                  transition-[height,width] duration-300
+                  group-hover/add:h-8 group-hover/add:w-8
+                  group-focus/add:h-8 group-focus/add:w-8
+                "
+              />
             </button>
           </div>
         </li>
