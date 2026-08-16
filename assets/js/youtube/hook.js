@@ -431,12 +431,10 @@ export default {
       console.debug('[Player :: load_video]', player)
       console.debug('[Player :: load_video state]', player.state)
 
-      // TODO: this only shows/hides the hint on explicit load_video
-      // events. If the last track ends and the queue is now empty,
-      // nothing currently re-pushes load_video with an empty media_id,
-      // so the hint won't reappear automatically - needs a
-      // player_emptied-style event wired from the server's track_ended
-      // handling.
+      // When the last track ends (or is skipped past) with nothing queued
+      // after it, the server clears the player and re-pushes load_video
+      // with an empty media_id/idle state, so this toggle also covers that
+      // case - not just explicit adds.
       const hasMedia = !!player.media_id
       const emptyHint = document.getElementById('player-empty-hint')
       if (emptyHint) {

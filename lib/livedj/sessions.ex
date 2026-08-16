@@ -510,6 +510,7 @@ defmodule Livedj.Sessions do
   def next_track(room_id) do
     case advance_track(:next, room_id) do
       {:ok, player} -> announce_now_playing(room_id, player)
+      :queue_exhausted -> :ok
       :error -> :ok
     end
   end
@@ -524,13 +525,16 @@ defmodule Livedj.Sessions do
       {:ok, player} ->
         announce_track_changed(room_id, user_id, display_name, player)
 
+      :queue_exhausted ->
+        :ok
+
       :error ->
         :ok
     end
   end
 
   @spec advance_track(:previous | :next, Ecto.UUID.t()) ::
-          {:ok, Player.t()} | :error
+          {:ok, Player.t()} | :queue_exhausted | :error
   defp advance_track(direction, room_id) do
     with {:ok, %Player{media_id: media_id}} <- get_player(room_id),
          {:ok, sibling_media_id} <-
@@ -542,7 +546,27 @@ defmodule Livedj.Sessions do
       :ok = broadcast_player_load_media!(room_id, player)
       {:ok, player}
     else
-      _error -> :error
+      {:error, :next_media_not_found} when direction == :next ->
+        clear_player_media(room_id)
+
+      _error ->
+        :error
+    end
+  end
+
+  # The current track was the last one in the playlist, so there is nothing
+  # to advance to - clear the player and notify clients the same way a
+  # manual removal of the last track does, so the empty-room hint reappears.
+  @spec clear_player_media(Ecto.UUID.t()) :: :queue_exhausted | :error
+  defp clear_player_media(room_id) do
+    case Player.clear_media(room_id) do
+      {:ok, %Player{} = player} ->
+        notify_playback_clock_track_loaded(room_id)
+        :ok = broadcast_player_load_media!(room_id, player)
+        :queue_exhausted
+
+      _error ->
+        :error
     end
   end
 

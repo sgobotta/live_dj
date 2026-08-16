@@ -211,4 +211,50 @@ defmodule Livedj.SessionsTest do
       refute_receive {:message_sent, _room_id, _message}
     end
   end
+
+  describe "next_track/1" do
+    import Livedj.MediaFixtures
+    import Livedj.SessionsFixtures
+
+    alias Livedj.Sessions.Player
+    alias Livedj.Sessions.Playlist
+
+    test "clears the player and re-broadcasts load_media when the playlist has no next track" do
+      %{id: room_id} = room_fixture()
+      video = video_fixture()
+
+      :ok = Playlist.add(room_id, video.external_id)
+
+      {:ok, %Player{media_id: media_id}} =
+        Player.load_media(room_id, video,
+          seek_to: 0,
+          autoplay: true,
+          duration: 180
+        )
+
+      assert media_id == video.external_id
+
+      :ok = Channels.subscribe_player_topic(room_id)
+
+      assert :ok = Sessions.next_track(room_id)
+
+      assert_receive {:player_load_media, ^room_id,
+                      %Player{
+                        media_id: "",
+                        state: :idle,
+                        media_thumbnail_url: "",
+                        title: "",
+                        channel: ""
+                      }}
+
+      assert {:ok,
+              %Player{
+                media_id: "",
+                state: :idle,
+                media_thumbnail_url: "",
+                title: "",
+                channel: ""
+              }} = Sessions.get_player(room_id)
+    end
+  end
 end

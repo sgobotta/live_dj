@@ -126,7 +126,15 @@ defmodule Livedj.Sessions.Player do
   @spec clear_media(Ecto.UUID.t()) ::
           {:ok, t()} | {:error, :player_clear_media_error | :player_not_found}
   def clear_media(room_id) do
-    case set(room_id, %{media_id: nil, duration: ""}) do
+    case set(room_id, %{
+           media_id: nil,
+           media_thumbnail_url: "",
+           title: "",
+           channel: "",
+           duration: "",
+           state: @idle_state,
+           played_at: ""
+         }) do
       {:ok, _changes} ->
         get(room_id)
 
