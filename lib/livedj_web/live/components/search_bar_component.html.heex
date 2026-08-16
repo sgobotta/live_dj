@@ -102,7 +102,7 @@
         role="listbox"
       >
         <li
-          :for={{item, index} <- Enum.with_index(@search_result)}
+          :for={item <- @search_result}
           id={"search-result-#{item.external_id}"}
           data-id={item.external_id}
           role="option"
@@ -139,17 +139,6 @@
                 src={item.thumbnail_url}
                 alt={item.title}
               />
-            </div>
-            <div class="absolute top-6 -left-1 h-4 w-4 rounded-full">
-              <p class="
-                rounded-full h-4 w-4
-                flex justify-center items-center
-                text-center text-[0.5rem]
-                text-tone-100 dark:text-tone-900
-                bg-tone-900 dark:bg-tone-100
-              ">
-                {index + 1}
-              </p>
             </div>
             <div class="
               flex-auto block
