@@ -67,6 +67,28 @@
 }
 
 /*
+ * Opt-in modifier: extends the ignite glow above to mouse hover too,
+ * for controls (room cards) where hover is already a first-class way
+ * to browse and should read the same as landing there by keyboard.
+ * Pair with .focus-ignite; leaves plain .focus-ignite usages elsewhere
+ * (inputs, buttons) untouched, still keyboard-only.
+ */
+.focus-ignite-hover:hover {
+  box-shadow: 3px 3px 0 0 var(--color-brand);
+  border-color: var(--color-brand);
+  transition: box-shadow 60ms ease, border-color 60ms ease;
+}
+
+.focus-ignite-hover:hover::before {
+  opacity: 0.6;
+}
+
+:where(.dark, .dark *) .focus-ignite-hover:hover {
+  box-shadow: 3px 3px 0 0 var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}
+
+/*
  * Depth-on-focus: plain text inputs carry no shadow at rest — just their
  * flat background and border — so a form full of them stays quiet. The
  * focused field alone gains a soft inset shadow, shape only, no accent

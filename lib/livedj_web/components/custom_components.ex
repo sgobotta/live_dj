@@ -305,7 +305,7 @@ defmodule LivedjWeb.CustomComponents do
           phx-click={@module_click && @module_click.(module)}
           href="#"
           class={[
-            "block rounded-xl p-2 focus:outline-none focus-ignite",
+            "block rounded-xl p-2 focus:outline-none focus-ignite focus-ignite-hover",
             @module_click && "hover:cursor-pointer"
           ]}
           tabindex="0"
