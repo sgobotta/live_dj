@@ -121,13 +121,16 @@
               else: "
               bg-tone-300 dark:bg-tone-800
               hover:bg-tone-200 dark:hover:bg-tone-700
-              hover:tracking-widest focus:tracking-widest
-              active:scale-[0.99] grayscale-[70%] hover:grayscale-0
+              has-[:focus-visible]:bg-tone-200 dark:has-[:focus-visible]:bg-tone-700
+              hover:tracking-widest has-[:focus-visible]:tracking-widest
+              active:scale-[0.99] grayscale-[70%] hover:grayscale-0 has-[:focus-visible]:grayscale-0
               shadow-[2.0px_2.0px_1px_0.5px_rgba(24,24,27,0.5)]
               hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
+              has-[:focus-visible]:shadow-[1.5px_1.5px_1px_0.5px_rgba(82,82,91,0.9)]
               active:shadow-[0.5px_0.5px_1px_0.5px_rgba(24,24,27,0.2)]
               dark:shadow-[2.0px_2.0px_1px_0.5px_rgba(250,250,255,0.3)]
               dark:hover:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
+              dark:has-[:focus-visible]:shadow-[1.5px_1.5px_1px_0.5px_rgba(250,250,255,0.4)]
               dark:active:shadow-[0.5px_0.5px_1px_0.5px_rgba(250,250,255,0.2)]
               "
             }
