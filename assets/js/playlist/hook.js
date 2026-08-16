@@ -20,7 +20,10 @@
 // Tab-ing away and back (or Shift+Tab-ing in) lands browser focus on the
 // container rather than on any track. Redirect that back to whichever
 // track was last focused, so leaving and returning to the playlist picks
-// up where the user left off instead of resetting to the top.
+// up where the user left off instead of resetting to the top. The very
+// first Tab into the list has no "last focused" track yet — default to
+// the currently playing one there, so that first visit behaves like any
+// later one instead of leaving focus on the bare, unstyled container.
 //
 // That same container is also the nearest tabindex="0" ancestor of every
 // track (tabindex="-1"), so Shift+Tab *out* of a focused track would
@@ -74,15 +77,16 @@ export default {
   },
 
   refocusLastItem() {
-    if (this.focusedId === null) return
+    const item = this.focusedId === null
+      ? this.el.querySelector('[role="option"][data-nav-item]')
+      : this.el.querySelector(`[data-id="${CSS.escape(this.focusedId)}"]`)
 
-    const item = this.el.querySelector(
-      `[data-id="${CSS.escape(this.focusedId)}"]`
-    )
     const target = item?.matches('[data-nav-item]')
       ? item
       : item?.querySelector('[data-nav-item]')
+
     target?.focus()
+    target?.scrollIntoView({block: 'center'})
   },
 
   updated() {
