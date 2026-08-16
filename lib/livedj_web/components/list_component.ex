@@ -33,6 +33,7 @@ defmodule LivedjWeb.ListComponent do
               #{if @state == :locked, do: "border-dashed", else: ""}
               my-1 rounded-lg border-zinc-300 dark:border-zinc-700 border-[0px]
               hover:cursor-grab
+              scroll-my-2
               focus:outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:outline-brand/60 focus-visible:outline-offset-1
               has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-brand/60 has-[:focus-visible]:outline-offset-1
               drag-item:focus-within:ring-2 drag-item:focus-within:ring-offset-0
@@ -57,7 +58,7 @@ defmodule LivedjWeb.ListComponent do
                 </.link>
               <% else %>
                 <.link
-                  class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-ignite"
+                  class="relative inline-flex items-center justify-center rounded-full group scroll-my-2 focus:outline-none focus-ignite"
                   href="#"
                   tabindex="-1"
                   data-nav-item
