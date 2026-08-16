@@ -18,8 +18,12 @@ defmodule LivedjWeb.ListComponent do
             :for={{item, index} <- Enum.with_index(@list)}
             id={"#{item.external_id}-item"}
             data-id={item.external_id}
+            data-nav-item={
+              if current_media?(@current_media, item.external_id), do: true
+            }
             role="option"
             aria-selected={current_media?(@current_media, item.external_id)}
+            tabindex={if current_media?(@current_media, item.external_id), do: "-1"}
             class={"
               first:mt-0 last:mb-0
               #{if current_media?(@current_media, item.external_id),
@@ -29,6 +33,9 @@ defmodule LivedjWeb.ListComponent do
               #{if @state == :locked, do: "border-dashed", else: ""}
               my-1 rounded-lg border-zinc-300 dark:border-zinc-700 border-[0px]
               hover:cursor-grab
+              scroll-my-2
+              focus:outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:outline-brand/60 focus-visible:outline-offset-1
+              has-[:focus-visible]:outline-solid has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-brand/60 has-[:focus-visible]:outline-offset-1
               drag-item:focus-within:ring-2 drag-item:focus-within:ring-offset-0
               drag-ghost:bg-zinc-200 drag-ghost:dark:bg-zinc-800 drag-ghost:border-0 drag-ghost:ring-0 drag-ghost:cursor-grabbing
             "}
@@ -39,12 +46,7 @@ defmodule LivedjWeb.ListComponent do
               group
             ">
               <%= if current_media?(@current_media, item.external_id) do %>
-                <.link
-                  class="relative focus:rounded-full hover:cursor-grab focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-tone-100 dark:focus-visible:ring-offset-tone-900"
-                  href="#"
-                  tabindex="-1"
-                  data-nav-item
-                >
+                <.link class="relative hover:cursor-grab" href="#" tabindex="-1">
                   <img
                     class="
                       inline-block h-8 w-8 rounded-lg
@@ -56,7 +58,7 @@ defmodule LivedjWeb.ListComponent do
                 </.link>
               <% else %>
                 <.link
-                  class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-ignite"
+                  class="relative inline-flex items-center justify-center rounded-full group scroll-my-2 focus:outline-none focus-ignite"
                   href="#"
                   tabindex="-1"
                   data-nav-item
