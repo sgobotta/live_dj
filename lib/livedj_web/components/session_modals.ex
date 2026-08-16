@@ -87,8 +87,8 @@ defmodule LivedjWeb.SessionModals do
           class="
             relative w-full sm:max-w-lg
             rounded-t-2xl sm:rounded-2xl
-            bg-zinc-200 dark:bg-zinc-900
-            border border-zinc-500 dark:border-zinc-500
+            bg-tone-200 dark:bg-tone-950
+            border border-tone-500 dark:border-tone-600
             shadow-lg
           "
         >
