@@ -95,6 +95,7 @@ const stopTimeTracking = (hookContext) => {
 }
 
 export default {
+  _autoplayMuted: false,
   _hideOutOfSyncBanner() {
     const banner = document.getElementById('out-of-sync-banner')
     if (banner) banner.classList.add('hidden')
@@ -267,6 +268,18 @@ export default {
           case YT.PlayerState.PLAYING:
             console.debug("[Player State :: PLAYING")
             hookContext.shouldAutoplay = false
+
+            // Playback actually started, so the forced mute from the
+            // autoplay workaround (see load_video's "playing" case) has
+            // done its job - restore the user's real mute preference.
+            if (hookContext._autoplayMuted) {
+              hookContext._autoplayMuted = false
+              const persistedMuted =
+                localStorage.getItem('_volume_muted') === 'true'
+              if (!persistedMuted) {
+                hookContext.player.unMute()
+              }
+            }
 
             await this.pushEventTo(this.el, 'on_player_playing')
             startTimeTracking(
@@ -454,8 +467,15 @@ export default {
       switch (player.state) {
         case "playing":
           // loadVideoById auto-plays; set flag so BUFFERING handler
-          // can retry play in case the initial auto-play is blocked
+          // can retry play in case the initial auto-play is blocked.
+          // This path fires with no local user gesture behind it (e.g.
+          // a page refresh landing on an already-"playing" room), which
+          // browsers block for unmuted autoplay - mute first so it's
+          // allowed, then restore the real mute preference once the
+          // PLAYING state confirms playback actually started.
           this.shouldAutoplay = true
+          this.player.mute()
+          this._autoplayMuted = true
           this.player.loadVideoById(
             player.media_id, player.current_time, "large"
           )
