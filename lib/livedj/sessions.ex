@@ -734,9 +734,15 @@ defmodule Livedj.Sessions do
   @spec create_videos([Media.Video.t()]) :: :ok
   defp create_videos(medias) do
     Enum.each(medias, fn media ->
-      # TODO: handle constraints to the external_id to update those entities,
-      # and cache the result.
-      Media.create_video(media)
+      case Media.upsert_video(media) do
+        {:ok, _video} ->
+          :ok
+
+        {:error, changeset} ->
+          Logger.error(
+            "#{__MODULE__}.create_videos/1 :: There was an error upserting a video err=#{inspect(changeset.errors)}"
+          )
+      end
     end)
   end
 

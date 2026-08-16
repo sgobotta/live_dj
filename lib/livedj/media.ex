@@ -154,6 +154,32 @@ defmodule Livedj.Media do
   defp after_video_save(error), do: error
 
   @doc """
+  Creates a video, or refreshes the existing entity's metadata when one
+  already exists for the given `external_id`, then (re)caches the result.
+
+  ## Examples
+
+      iex> upsert_video(%{field: value})
+      {:ok, %Video{}}
+
+      iex> upsert_video(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  @spec upsert_video(map()) :: {:ok, Video.t()} | {:error, Ecto.Changeset.t()}
+  def upsert_video(attrs \\ %{}) do
+    %Video{}
+    |> Video.changeset(attrs)
+    |> Repo.insert(
+      on_conflict:
+        {:replace, [:channel, :title, :thumbnail_url, :etag, :published_at]},
+      conflict_target: :external_id,
+      returning: true
+    )
+    |> after_video_save()
+  end
+
+  @doc """
   Updates a video.
 
   ## Examples

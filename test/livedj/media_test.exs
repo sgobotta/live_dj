@@ -50,6 +50,40 @@ defmodule Livedj.MediaTest do
       assert {:error, %Ecto.Changeset{}} = Media.create_video(@invalid_attrs)
     end
 
+    test "upsert_video/1 with a new external_id creates a video" do
+      attrs = %{
+        channel: "some channel",
+        etag: "some etag",
+        external_id: "some external_id",
+        published_at: ~N[2023-09-02 23:08:00],
+        thumbnail_url: "some thumbnail_url",
+        title: "some title"
+      }
+
+      assert {:ok, %Video{} = video} = Media.upsert_video(attrs)
+      assert video.external_id == "some external_id"
+      assert video.title == "some title"
+    end
+
+    test "upsert_video/1 with an existing external_id updates the video" do
+      video = video_fixture()
+
+      update_attrs = %{
+        channel: "updated channel",
+        etag: "updated etag",
+        external_id: video.external_id,
+        published_at: ~N[2023-09-03 23:08:00],
+        thumbnail_url: "updated thumbnail_url",
+        title: "updated title"
+      }
+
+      assert {:ok, %Video{} = updated_video} = Media.upsert_video(update_attrs)
+      assert updated_video.id == video.id
+      assert updated_video.title == "updated title"
+      assert updated_video.channel == "updated channel"
+      assert Media.list_videos() |> length() == 1
+    end
+
     test "update_video/2 with valid data updates the video" do
       video = video_fixture()
 
