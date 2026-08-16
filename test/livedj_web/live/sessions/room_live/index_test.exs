@@ -56,7 +56,8 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexTest do
   test "renders an empty state when there are no rooms", %{conn: conn} do
     {:ok, _view, html} = live(conn, ~p"/sessions/rooms")
 
-    assert html =~ "No rooms yet"
+    # "No rooms yet" renders as "No hay salas" under the default "es" locale.
+    assert html =~ "No hay salas"
     # No featured hero and no grid when there are no rooms.
     refute html =~ ~s(id="room-grid")
   end
