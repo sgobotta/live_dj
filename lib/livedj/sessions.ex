@@ -260,6 +260,18 @@ defmodule Livedj.Sessions do
   end
 
   @doc """
+  Given a room id, returns whether the playlist has any tracks queued,
+  without paying `get_playlist/1`'s cost of resolving each entry's media.
+  """
+  @spec playlist_has_media?(Ecto.UUID.t()) :: boolean()
+  def playlist_has_media?(room_id) do
+    case Playlist.get(room_id) do
+      {:ok, list} -> list != []
+      {:error, _error} -> false
+    end
+  end
+
+  @doc """
   Sends a locking request to the playlist server.
   """
   @spec lock_playlist_drag(binary()) :: PlaylistServer.lock_response()

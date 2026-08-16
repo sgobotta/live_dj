@@ -150,7 +150,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         messages: [],
         display_name: initial_display_name(socket, room, session),
         content_ready: connected?(socket),
-        media_loaded?: media_loaded?(room_id)
+        media_loaded?: media_loaded?(room_id),
+        playlist_has_media?: Sessions.playlist_has_media?(room_id)
       )
 
     socket =
@@ -354,13 +355,14 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   def handle_event("on_player_loaded", _params, socket) do
     socket =
       if connected?(socket) and is_nil(socket.assigns.player) do
-        {:ok, %Sessions.Player{} = player} =
-          Sessions.get_player(socket.assigns.room.id)
+        room_id = socket.assigns.room.id
+
+        {:ok, %Sessions.Player{} = player} = Sessions.get_player(room_id)
 
         socket
         |> assign_player(player)
         |> push_event("show_player", %{callback_event: "on_player_visible"})
-        |> push_event("load_video", player)
+        |> push_event("load_video", load_video_payload(player, room_id))
       else
         socket
       end
@@ -564,13 +566,13 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   def handle_info(
-        {:player_load_media, _room_id, %Sessions.Player{} = player},
+        {:player_load_media, room_id, %Sessions.Player{} = player},
         socket
       ) do
     {:noreply,
      socket
      |> assign_player(player)
-     |> push_event("load_video", player)}
+     |> push_event("load_video", load_video_payload(player, room_id))}
   end
 
   def handle_info({:track_ended, _room_id}, socket), do: {:noreply, socket}
@@ -637,6 +639,17 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)
+
+  # Bundles whether the playlist still has tracks queued alongside the
+  # player fields, so the client can tell "truly empty room" apart from
+  # "queue ran out" and pick the right empty-hint copy without a round trip.
+  @spec load_video_payload(Sessions.Player.t(), binary()) :: map()
+  defp load_video_payload(%Sessions.Player{} = player, room_id) do
+    player
+    |> Map.from_struct()
+    |> Map.take([:state, :media_id, :current_time])
+    |> Map.put(:playlist_has_media, Sessions.playlist_has_media?(room_id))
+  end
 
   # Read directly from the player store (rather than waiting on the client's
   # own on_player_loaded/load_video round trip) so the disconnected render

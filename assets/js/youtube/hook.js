@@ -440,6 +440,12 @@ export default {
       if (emptyHint) {
         emptyHint.classList.toggle('hidden', hasMedia)
       }
+      const emptyHintText = document.getElementById('player-empty-hint-text')
+      if (emptyHintText) {
+        emptyHintText.textContent = player.playlist_has_media
+          ? emptyHintText.dataset.anotherVideoText
+          : emptyHintText.dataset.firstVideoText
+      }
       const hintContainer = document.getElementById('player-hint-container')
       if (hintContainer) {
         hintContainer.classList.toggle('bg-black', !hasMedia)

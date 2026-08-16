@@ -77,8 +77,17 @@
           ]}
         >
           <.icon name="hero-plus-circle" class="h-8 w-8" />
-          <span class="text-sm font-medium">
-            {gettext("Click + to add your first video")}
+          <span
+            id="player-empty-hint-text"
+            class="text-sm font-medium"
+            data-first-video-text={gettext("Click + to add your first video")}
+            data-another-video-text={gettext("Click + to add a video")}
+          >
+            <%= if assigns[:playlist_has_media?] do %>
+              {gettext("Click + to add a video")}
+            <% else %>
+              {gettext("Click + to add your first video")}
+            <% end %>
           </span>
         </button>
       </div>

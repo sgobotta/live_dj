@@ -212,6 +212,28 @@ defmodule Livedj.SessionsTest do
     end
   end
 
+  describe "playlist_has_media?/1" do
+    import Livedj.MediaFixtures
+    import Livedj.SessionsFixtures
+
+    alias Livedj.Sessions.Playlist
+
+    test "returns false for a room with an empty playlist" do
+      %{id: room_id} = room_fixture()
+
+      refute Sessions.playlist_has_media?(room_id)
+    end
+
+    test "returns true once a track has been queued" do
+      %{id: room_id} = room_fixture()
+      %{external_id: external_id} = video_fixture()
+
+      :ok = Playlist.add(room_id, external_id)
+
+      assert Sessions.playlist_has_media?(room_id)
+    end
+  end
+
   describe "next_track/1" do
     import Livedj.MediaFixtures
     import Livedj.SessionsFixtures
