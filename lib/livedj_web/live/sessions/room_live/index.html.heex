@@ -160,9 +160,10 @@
     aria-label={gettext("New Room")}
     title={gettext("New Room")}
     class="
+      group
       fixed bottom-6 right-6 z-40
-      inline-flex items-center gap-2
-      rounded-full p-4 sm:px-5 sm:py-3
+      inline-flex items-center
+      rounded-full p-4
       bg-violet-600/10 hover:bg-violet-600/20
       dark:bg-violet-400/15 dark:hover:bg-violet-400/25
       backdrop-blur-sm
@@ -174,8 +175,15 @@
       focus:outline-none focus-ignite
 "
   >
-    <.icon name="hero-plus" class="h-5 w-5" />
-    <span class="hidden sm:inline">{gettext("New Room")}</span>
+    <.icon name="hero-plus" class="h-5 w-5 shrink-0" />
+    <span class="
+      max-w-0 ml-0 overflow-hidden whitespace-nowrap opacity-0
+      group-hover:max-w-48 group-hover:ml-2 group-hover:opacity-100
+      group-focus-visible:max-w-48 group-focus-visible:ml-2 group-focus-visible:opacity-100
+      transition-all duration-300 ease-out
+    ">
+      {gettext("New Room")}
+    </span>
   </.link>
 
   <.modal
