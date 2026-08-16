@@ -288,8 +288,10 @@ defmodule LivedjWeb.CustomComponents do
       "
     >
       <div
-        :for={module <- @modules}
+        :for={{module, rank} <- Enum.with_index(@modules)}
         id={@module_id && @module_id.(module)}
+        phx-hook="RoomRankFlash"
+        data-rank={rank}
         class="
           group rounded-xl
           bg-tone-50 dark:bg-tone-800

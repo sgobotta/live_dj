@@ -130,3 +130,25 @@
     50%   { transform: translate(-20%, 0); }
     100% { transform: translate(0, 0); }
 }
+
+.room-rank-flash {
+  animation: room-rank-flash 900ms ease-out;
+}
+
+@keyframes room-rank-flash {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-brand) 60%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-brand) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-brand) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-rank-flash {
+    animation: none;
+  }
+}
