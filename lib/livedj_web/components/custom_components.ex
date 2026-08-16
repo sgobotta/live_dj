@@ -290,7 +290,7 @@ defmodule LivedjWeb.CustomComponents do
       <div
         :for={{module, rank} <- Enum.with_index(@modules)}
         id={@module_id && @module_id.(module)}
-        phx-hook="RoomRankFlash"
+        phx-hook="RoomGridReorder"
         data-rank={rank}
         class="
           group rounded-xl

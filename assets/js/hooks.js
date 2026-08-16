@@ -8,7 +8,7 @@ import PlayerBackdrop from './player-backdrop/hook'
 import PlaylistKeyboardNav from './playlist/hook'
 import RangeSlider from './player-controls/range-slider-hook'
 import RoomGrantRefresh from './room-grant-refresh/hook'
-import RoomRankFlash from './room-rank-flash/hook'
+import RoomGridReorder from './room-grid-reorder/hook'
 import SearchBar from './search-bar/hook'
 import Sortable from './sortable/hook'
 import TabIndicator from './tab-indicator/hook'
@@ -27,7 +27,7 @@ export default {
   PlaylistKeyboardNav,
   RangeSlider,
   RoomGrantRefresh,
-  RoomRankFlash,
+  RoomGridReorder,
   SearchBar,
   Sortable,
   TabIndicator,
