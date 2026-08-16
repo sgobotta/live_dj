@@ -15,22 +15,18 @@
 // changed (as opposed to a card that only shifted because a sibling moved
 // past it), which gets a brief highlight flash on top of the slide.
 export default {
-  mounted() {
-    this.rank = this.el.dataset.rank
-  },
-
   beforeUpdate() {
     this.rect = this.el.getBoundingClientRect()
   },
 
-  updated() {
-    this.slide()
+  flash() {
+    this.el.classList.remove('room-rank-flash')
+    void this.el.offsetWidth
+    this.el.classList.add('room-rank-flash')
+  },
 
-    const rank = this.el.dataset.rank
-    if (rank !== this.rank) {
-      this.flash()
-    }
-    this.rank = rank
+  mounted() {
+    this.rank = this.el.dataset.rank
   },
 
   slide() {
@@ -49,9 +45,13 @@ export default {
     )
   },
 
-  flash() {
-    this.el.classList.remove('room-rank-flash')
-    void this.el.offsetWidth
-    this.el.classList.add('room-rank-flash')
+  updated() {
+    this.slide()
+
+    const rank = this.el.dataset.rank
+    if (rank !== this.rank) {
+      this.flash()
+    }
+    this.rank = rank
   }
 }
