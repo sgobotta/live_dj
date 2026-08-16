@@ -56,7 +56,7 @@ defmodule LivedjWeb.ListComponent do
                 </.link>
               <% else %>
                 <.link
-                  class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-ignite"
+                  class="relative inline-flex items-center justify-center rounded-full group focus:outline-none focus-visible:outline-solid focus-visible:outline-1 focus-visible:outline-brand/60 focus-visible:outline-offset-1"
                   href="#"
                   tabindex="-1"
                   data-nav-item
