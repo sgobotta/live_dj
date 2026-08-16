@@ -151,7 +151,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         display_name: initial_display_name(socket, room, session),
         content_ready: connected?(socket),
         media_loaded?: media_loaded?(room_id),
-        playlist_has_media?: Sessions.playlist_has_media?(room_id)
+        playlist_has_media?: Sessions.playlist_has_media?(room_id),
+        users: []
       )
 
     socket =
@@ -160,9 +161,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         {:ok, messages} = Sessions.join_chat(room_id)
         {:ok, _ref} = Presence.track_user(room_id, socket.assigns.current_user)
         :ok = Sessions.subscribe_room(room_id)
+        :ok = Sessions.Channels.subscribe_presence_topic(room_id)
 
         socket
         |> assign(:messages, messages)
+        |> assign(:users, Presence.list_users(room_id))
         |> push_event("on_container_mounted", %{
           backdrop_id: socket.assigns.backdrop_id,
           player_container_id: socket.assigns.player_container_id,
@@ -491,10 +494,24 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   # ----------------------------------------------------------------------------
-  # Server side Playlist event handling
+  # Presence event handling
   #
 
   @impl true
+  def handle_info(
+        %Phoenix.Socket.Broadcast{
+          event: "presence_diff",
+          topic: "room_presence:" <> room_id
+        },
+        %{assigns: %{room: %Room{id: room_id}}} = socket
+      ) do
+    {:noreply, assign(socket, :users, Presence.list_users(room_id))}
+  end
+
+  # ----------------------------------------------------------------------------
+  # Server side Playlist event handling
+  #
+
   def handle_info(
         {:playlist_joined, room_id, _payload},
         %{assigns: %{room: %Room{id: room_id}}} = socket
