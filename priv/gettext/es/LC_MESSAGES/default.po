@@ -630,17 +630,17 @@ msgstr ""
 #: lib/livedj_web/live/sessions/room_live/index.html.heex:91
 #, elixir-autogen, elixir-format
 msgid "More rooms"
-msgstr ""
+msgstr "Más salas"
 
 #: lib/livedj_web/live/sessions/room_live/index.html.heex:134
 #, elixir-autogen, elixir-format
 msgid "No rooms yet"
-msgstr ""
+msgstr "No hay salas"
 
 #: lib/livedj_web/live/sessions/room_live/index.html.heex:78
 #, elixir-autogen, elixir-format
 msgid "Nothing playing right now"
-msgstr ""
+msgstr "No hay nada para reproducir"
 
 #: lib/livedj/sessions.ex:553
 #, elixir-autogen, elixir-format
