@@ -19,11 +19,15 @@
 // up where the user left off instead of resetting to the top.
 //
 // That same container is also the nearest tabindex="0" ancestor of every
-// track (tabindex="-1"), so Shift+Tab *out* of a focused track passes
-// through #lists too, as the natural previous stop in sequential focus
-// order. Only redirect when focus arrived from outside #lists (via
-// relatedTarget) — otherwise a Shift+Tab meant to leave the playlist
-// backward would get bounced straight back onto the track it came from.
+// track (tabindex="-1"), so Shift+Tab *out* of a focused track would
+// normally pass through #lists too, as the natural previous stop in
+// sequential focus order — landing on the bare container instead of
+// whatever precedes the playlist is pointless, since the container isn't
+// itself a thing worth focusing. Skip it outright: briefly drop #lists
+// out of the tab order on Shift+Tab so the browser's own handling lands
+// focus on the real previous element. (The relatedTarget guard on
+// focusin below stays as a fallback for the same case, in browsers/paths
+// where that trick doesn't apply.)
 export default {
   mounted() {
     this.focusedId = null
@@ -41,6 +45,12 @@ export default {
     })
 
     this.el.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab' && e.shiftKey && document.activeElement !== this.el) {
+        this.el.setAttribute('tabindex', '-1')
+        setTimeout(() => this.el.setAttribute('tabindex', '0'), 0)
+        return
+      }
+
       if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
 
       const items = Array.from(this.el.querySelectorAll('[data-nav-item]'))
