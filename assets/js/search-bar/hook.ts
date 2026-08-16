@@ -3,6 +3,7 @@
 export default {
   mounted() {
     const searchBarContainer = (this as any).el as HTMLDivElement
+    this.focusedId = null
 
     const form = searchBarContainer.querySelector('form')
     const searchInput = searchBarContainer.querySelector<HTMLInputElement>('#search-input')
@@ -10,6 +11,11 @@ export default {
     const panel = document.getElementById('browse-modal-panel')
 
     form?.addEventListener('submit', () => searchInput?.blur())
+
+    resultsList?.addEventListener('focusin', (e) => {
+      const item = (e.target as HTMLElement).closest<HTMLElement>('[data-id]')
+      if (item) this.focusedId = item.dataset.id
+    })
 
     // Block adjustments until the sheet slide-in animation (300ms) has settled.
     // visualViewport resize events that fire during the animation are no-ops.
@@ -95,5 +101,41 @@ export default {
         target.scrollIntoView({ block: 'center' })
       }
     })
+  },
+
+  // Adding a track swaps its "+" button for a checkmark, so the button that
+  // had focus is removed from the DOM and focus drops to <body>. Reclaim it
+  // on the nearest still-addable item: prefer the next one down, fall back
+  // to the nearest one above, and if every result has already been added,
+  // send focus back to the search input so the user can keep typing.
+  updated() {
+    if (document.activeElement !== document.body) return
+
+    const searchBarContainer = (this as any).el as HTMLDivElement
+    const searchInput = searchBarContainer.querySelector<HTMLInputElement>('#search-input')
+    const resultsList = searchBarContainer.querySelector<HTMLUListElement>('#searchbox__results_list')
+    const items = resultsList
+      ? Array.from(resultsList.querySelectorAll<HTMLElement>('[data-id]'))
+      : []
+    const currentIndex = items.findIndex((item) => item.dataset.id === this.focusedId)
+
+    const nextButton = (from: number, step: number) => {
+      for (let i = from; i >= 0 && i < items.length; i += step) {
+        const button = items[i].querySelector('button')
+        if (button) return button
+      }
+      return null
+    }
+
+    const target = currentIndex === -1
+      ? null
+      : nextButton(currentIndex + 1, 1) || nextButton(currentIndex - 1, -1)
+
+    if (target) {
+      target.focus()
+      target.scrollIntoView({ block: 'center' })
+    } else {
+      searchInput?.focus()
+    }
   },
 }
