@@ -76,6 +76,64 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexTest do
     refute html =~ "No rooms yet"
   end
 
+  test "reorders 'more rooms' by live user count in real time", %{conn: conn} do
+    featured = room_fixture(%{name: "Featured Room"})
+    _quiet = room_fixture(%{name: "Quiet Room"})
+    busy = room_fixture(%{name: "Busy Room"})
+
+    # Keep "Featured Room" the hero throughout the test by giving it more
+    # concurrent users than "Busy Room" will ever have, so only the "More
+    # rooms" grid order is under test.
+    start_tracked_user(featured.id)
+    start_tracked_user(featured.id)
+    Process.sleep(50)
+
+    {:ok, view, html} = live(conn, ~p"/sessions/rooms")
+
+    assert grid_room_order(html) == ["Quiet Room", "Busy Room"]
+
+    tracker = start_tracked_user(busy.id)
+
+    # Wait for the tracker to register, then let the LiveView flush the
+    # `presence_diff` broadcast it's already subscribed to.
+    Process.sleep(50)
+    html = render(view)
+
+    assert grid_room_order(html) == ["Busy Room", "Quiet Room"]
+
+    Process.exit(tracker, :kill)
+    Process.sleep(50)
+    html = render(view)
+
+    assert grid_room_order(html) == ["Quiet Room", "Busy Room"]
+  end
+
+  # Presence tracking has to happen from a process that stays alive for as
+  # long as the user is "present". Fixture creation needs the test's Ecto
+  # sandbox connection, so the user is built here and only tracking happens
+  # in the (deliberately unlinked, so we can kill it mid-test) spawned
+  # process.
+  defp start_tracked_user(room_id) do
+    user = Livedj.AccountsFixtures.user_fixture()
+
+    pid =
+      spawn(fn ->
+        Livedj.Presence.track_user(room_id, user)
+        Process.sleep(:infinity)
+      end)
+
+    on_exit(fn -> Process.exit(pid, :kill) end)
+
+    pid
+  end
+
+  defp grid_room_order(html) do
+    html
+    |> Floki.parse_document!()
+    |> Floki.find("#room-grid p.font-medium")
+    |> Enum.map(&String.trim(Floki.text(&1)))
+  end
+
   test "creating a protected room navigates through the unlock grant", %{
     conn: conn
   } do

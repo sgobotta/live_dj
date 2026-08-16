@@ -50,6 +50,17 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
     {featured, rest}
   end
 
+  @doc """
+  Sorts room entries by number of present users, descending.
+
+  Uses a stable sort, so rooms with an equal user count keep their existing
+  relative order instead of jittering on every presence update.
+  """
+  @spec sort_by_users([map()]) :: [map()]
+  def sort_by_users(rooms_players) do
+    Enum.sort_by(rooms_players, &length(&1.users), :desc)
+  end
+
   defp featured_sort_key(%{users: users, room: %Room{inserted_at: inserted_at}}) do
     # ISO8601 sorts lexicographically in chronological order, so a plain tuple
     # comparison yields "most users, then newest".
@@ -196,6 +207,6 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
     socket
     |> assign(:rooms_players, rooms_players)
     |> assign(:featured, featured)
-    |> assign(:rest, rest)
+    |> assign(:rest, sort_by_users(rest))
   end
 end

@@ -59,4 +59,29 @@ defmodule LivedjWeb.Sessions.RoomLive.IndexFeaturedTest do
       assert {^a, []} = Index.featured_and_rest([a])
     end
   end
+
+  describe "sort_by_users/1" do
+    test "sorts rooms by present user count, descending" do
+      a = entry("a", 1, at("2026-01-01T00:00:00"))
+      b = entry("b", 5, at("2026-01-02T00:00:00"))
+      c = entry("c", 2, at("2026-01-03T00:00:00"))
+
+      assert Index.sort_by_users([a, b, c]) |> Enum.map(& &1.id) ==
+               ["b", "c", "a"]
+    end
+
+    test "breaks ties by keeping original relative order (stable sort)" do
+      a = entry("a", 1, at("2026-01-01T00:00:00"))
+      b = entry("b", 3, at("2026-01-02T00:00:00"))
+      c = entry("c", 1, at("2026-01-03T00:00:00"))
+      d = entry("d", 3, at("2026-01-04T00:00:00"))
+
+      assert Index.sort_by_users([a, b, c, d]) |> Enum.map(& &1.id) ==
+               ["b", "d", "a", "c"]
+    end
+
+    test "returns an empty list for an empty list" do
+      assert Index.sort_by_users([]) == []
+    end
+  end
 end
