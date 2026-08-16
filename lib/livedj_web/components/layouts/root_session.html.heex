@@ -51,19 +51,30 @@
         Tailwind's layered `.absolute` utility outright), which would fight
         the button for its own positioning and collapse it into normal flex
         flow, shrinking the video box next to it.
+
+        Initial visibility is decided here from @media_loaded? (computed at
+        mount from the real player state), not left to default-visible +
+        JS: this div is phx-update="ignore", so whatever renders first is
+        what sticks until youtube/hook.js's load_video handler catches up -
+        defaulting to visible would flash the hint over an already-loaded
+        room on every page load.
       --%>
       <div
         id="player-hint-container"
-        class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 pointer-events-none bg-black rounded-lg"
+        class={[
+          "absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 pointer-events-none rounded-lg",
+          !assigns[:media_loaded?] && "bg-black"
+        ]}
       >
         <button
           id="player-empty-hint"
           type="button"
-          class="
-            flex flex-col items-center gap-2
-            text-tone-100/80 hover:text-tone-100 cursor-pointer pointer-events-auto
-            rounded-lg focus:outline-none focus-ignite
-          "
+          class={[
+            "flex flex-col items-center gap-2",
+            "text-tone-100/80 hover:text-tone-100 cursor-pointer pointer-events-auto",
+            "rounded-lg focus:outline-none focus-ignite",
+            assigns[:media_loaded?] && "hidden"
+          ]}
         >
           <.icon name="hero-plus-circle" class="h-8 w-8" />
           <span class="text-sm font-medium">

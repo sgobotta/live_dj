@@ -149,7 +149,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         chat_visible: true,
         messages: [],
         display_name: initial_display_name(socket, room, session),
-        content_ready: connected?(socket)
+        content_ready: connected?(socket),
+        media_loaded?: media_loaded?(room_id)
       )
 
     socket =
@@ -636,6 +637,20 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   @spec assign_player(Phoenix.LiveView.Socket.t(), Sessions.Player.t()) ::
           Phoenix.LiveView.Socket.t()
   defp assign_player(socket, player), do: assign(socket, :player, player)
+
+  # Read directly from the player store (rather than waiting on the client's
+  # own on_player_loaded/load_video round trip) so the disconnected render
+  # already reflects the real state. #video-player-hook is phx-update="ignore",
+  # so whatever this mount renders is what sticks - fetching it lazily on the
+  # client would flash the "add your first video" hint over an already-loaded
+  # room until the JS catches up.
+  @spec media_loaded?(binary()) :: boolean()
+  defp media_loaded?(room_id) do
+    case Sessions.get_player(room_id) do
+      {:ok, %Sessions.Player{media_id: media_id}} -> media_id != ""
+      {:error, _error} -> false
+    end
+  end
 
   # Prefer the name the client persisted for this room (delivered from a cookie
   # via the session, so it is available during the disconnected HTTP render and
