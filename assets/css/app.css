@@ -117,9 +117,9 @@
 }
 
 @import "./fonts.css";
-@import "./widgets/scrollbar.css";
-@import "./widgets/slider.css";
-@import "./widgets/focus.css";
+@import "./widgets/scrollbar.css" layer(components);
+@import "./widgets/slider.css" layer(components);
+@import "./widgets/focus.css" layer(components);
 
 .animate-text-overflow {
   animation: move 25s linear infinite;
