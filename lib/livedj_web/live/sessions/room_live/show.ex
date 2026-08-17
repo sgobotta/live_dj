@@ -152,7 +152,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
         content_ready: connected?(socket),
         media_loaded?: media_loaded?(room_id),
         playlist_has_media?: Sessions.playlist_has_media?(room_id),
-        users: []
+        # Presence.list_users/1 is a plain read of already-tracked users, not
+        # tied to this socket being connected, so the disconnected render can
+        # show whoever's already in the room instead of the avatar stack
+        # popping in a beat after the rest of the header (which, unlike the
+        # rooms index, isn't itself gated behind connected?(@socket)).
+        users: Presence.list_users(room_id)
       )
 
     socket =
