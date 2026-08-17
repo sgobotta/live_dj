@@ -16,6 +16,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   """
   attr :users, :list, required: true
   attr :max_visible, :integer, default: @max_visible
+  attr :size, :atom, values: [:sm, :md], default: :sm
   attr :class, :string, default: nil
 
   def mini_avatar_stack(assigns) do
@@ -26,27 +27,34 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
       assigns
       |> assign(:shown_users, shown_users)
       |> assign(:overflow, overflow)
+      |> assign(:dims, avatar_size_dims(assigns.size))
 
     ~H"""
-    <div :if={length(@users) > 0} class={["flex items-center h-5", @class]}>
+    <div
+      :if={length(@users) > 0}
+      class={["flex items-center", @dims.stack_height, @class]}
+    >
       <div
         :for={{user, index} <- Enum.with_index(@shown_users)}
         class={[
-          "relative shrink-0 h-5 w-5 rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
-          index > 0 && "-ml-1.5"
+          "relative shrink-0 rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
+          @dims.avatar,
+          index > 0 && @dims.overlap
         ]}
         style={"z-index: #{index + 1}"}
       >
         <%= if avatar_url(user) != "" do %>
           <img
-            class="h-5 w-5 rounded-full object-cover"
+            class={["rounded-full object-cover", @dims.avatar]}
             src={avatar_url(user)}
             alt={avatar_label(user)}
           />
         <% else %>
           <span class={[
-            "flex h-5 w-5 items-center justify-center rounded-full",
-            "text-[0.5rem] font-semibold uppercase",
+            "flex items-center justify-center rounded-full",
+            @dims.avatar,
+            @dims.text,
+            "font-semibold uppercase",
             "text-zinc-100 dark:text-zinc-900",
             avatar_color_class(user)
           ]}>
@@ -56,19 +64,34 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
       </div>
       <div
         :if={@overflow > 0}
-        class="
-          relative shrink-0 -ml-1.5 flex h-5 w-5 items-center justify-center
-          rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800
-          bg-zinc-300 dark:bg-zinc-600
-          text-[0.5rem] font-semibold
-          text-zinc-800 dark:text-zinc-100
-        "
+        class={[
+          "relative shrink-0 flex items-center justify-center",
+          @dims.avatar,
+          @dims.overlap,
+          @dims.text,
+          "rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
+          "bg-zinc-300 dark:bg-zinc-600",
+          "font-semibold text-zinc-800 dark:text-zinc-100"
+        ]}
         style={"z-index: #{length(@shown_users) + 1}"}
       >
         +{@overflow}
       </div>
     </div>
     """
+  end
+
+  defp avatar_size_dims(:sm) do
+    %{
+      stack_height: "h-5",
+      avatar: "h-5 w-5",
+      overlap: "-ml-1.5",
+      text: "text-[0.5rem]"
+    }
+  end
+
+  defp avatar_size_dims(:md) do
+    %{stack_height: "h-7", avatar: "h-7 w-7", overlap: "-ml-2", text: "text-xs"}
   end
 
   @doc """
