@@ -4,6 +4,8 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   """
   use Phoenix.Component
 
+  alias LivedjWeb.CustomComponents
+
   import LivedjWeb.Gettext
 
   @max_visible 10
@@ -14,6 +16,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   Shows up to 8 slots. When there are more than 8 users, the last slot is a
   `+N` badge where N is the number of users not shown as individual avatars.
   """
+  attr :id, :string, required: true
   attr :users, :list, required: true
   attr :max_visible, :integer, default: @max_visible
   attr :size, :atom, values: [:sm, :md], default: :sm
@@ -43,24 +46,12 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
         ]}
         style={"z-index: #{index + 1}"}
       >
-        <%= if avatar_url(user) != "" do %>
-          <img
-            class={["rounded-full object-cover", @dims.avatar]}
-            src={avatar_url(user)}
-            alt={avatar_label(user)}
-          />
-        <% else %>
-          <span class={[
-            "flex items-center justify-center rounded-full",
-            @dims.avatar,
-            @dims.text,
-            "font-semibold uppercase",
-            "text-zinc-100 dark:text-zinc-900",
-            avatar_color_class(user)
-          ]}>
-            {avatar_initials(user)}
-          </span>
-        <% end %>
+        <CustomComponents.avatar
+          id={"#{@id}-avatar-#{index}"}
+          label={avatar_label(user)}
+          avatar_url={avatar_url(user)}
+          class={"h-full w-full #{@dims.text}"}
+        />
       </div>
       <div
         :if={@overflow > 0}
@@ -101,7 +92,10 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
     ~H"""
     <div class="flex flex-col gap-1 px-2 mb-2">
       <%= for count <- [0, 1, 2, 3, 7, 8, 16] do %>
-        <.mini_avatar_stack users={demo_avatar_users(count)} />
+        <.mini_avatar_stack
+          id={"mini-avatar-stack-demo-#{count}"}
+          users={demo_avatar_users(count)}
+        />
       <% end %>
     </div>
     """
@@ -144,25 +138,4 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   defp avatar_label(%{email: email}) when is_binary(email), do: email
   defp avatar_label(%{"email" => email}) when is_binary(email), do: email
   defp avatar_label(_user), do: gettext("User")
-
-  defp avatar_initials(user) do
-    user
-    |> avatar_label()
-    |> String.slice(0, 1)
-  end
-
-  @avatar_colors [
-    "bg-zinc-500",
-    "bg-green-600",
-    "bg-blue-600",
-    "bg-amber-600",
-    "bg-rose-600",
-    "bg-violet-600"
-  ]
-
-  defp avatar_color_class(user) do
-    label = avatar_label(user)
-    index = :erlang.phash2(label, length(@avatar_colors))
-    Enum.at(@avatar_colors, index)
-  end
 end

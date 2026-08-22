@@ -93,7 +93,11 @@
               {gettext("Settings")} (;)
             </.tooltip>
           </div>
-          <.mini_avatar_stack users={assigns[:users] || []} size={:md} />
+          <.mini_avatar_stack
+            id="session-header-avatars"
+            users={assigns[:users] || []}
+            size={:md}
+          />
         <% end %>
       </div>
     </div>
