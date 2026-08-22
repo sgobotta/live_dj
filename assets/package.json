@@ -5,5 +5,8 @@
   },
   "devDependencies": {
     "eslint": "^8.46.0"
+  },
+  "dependencies": {
+    "@multiavatar/multiavatar": "^1.0.7"
   }
 }
