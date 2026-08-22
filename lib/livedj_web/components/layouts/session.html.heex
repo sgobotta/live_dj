@@ -97,6 +97,8 @@
             id="session-header-avatars"
             users={assigns[:users] || []}
             size={:md}
+            max_visible={3}
+            current_user_id={@current_user.id}
           />
         <% end %>
       </div>
