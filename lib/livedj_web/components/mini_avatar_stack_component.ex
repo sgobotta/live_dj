@@ -44,7 +44,14 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
     ~H"""
     <div
       :if={length(@users) > 0}
-      class={["relative group flex items-center", @dims.stack_height, @class]}
+      id={@id}
+      tabindex={@current_user_id && "0"}
+      class={[
+        "relative group flex items-center",
+        @current_user_id && "focus:outline-none focus-ignite rounded-full",
+        @dims.stack_height,
+        @class
+      ]}
     >
       <div
         :for={{user, index} <- Enum.with_index(@shown_users)}
@@ -83,6 +90,8 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
           invisible absolute right-0 top-full z-50 pt-2 opacity-0
           transition-opacity duration-150
           group-hover:visible group-hover:opacity-100
+          group-focus-visible:visible group-focus-visible:opacity-100
+          group-active:visible group-active:opacity-100
         "
       >
         <div class="
