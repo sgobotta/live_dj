@@ -29,6 +29,18 @@ defmodule Livedj.Accounts.Guest do
   def random_username do
     adjective = Enum.random(@adjectives).()
     noun = Enum.random(@nouns).()
-    "#{adjective} #{noun}"
+    camelize("#{adjective} #{noun}")
+  end
+
+  defp camelize(string) do
+    case String.split(string, ~r/\s+/, trim: true) do
+      [] ->
+        ""
+
+      [first | rest] ->
+        Enum.join([
+          String.downcase(first) | Enum.map(rest, &String.capitalize/1)
+        ])
+    end
   end
 end
