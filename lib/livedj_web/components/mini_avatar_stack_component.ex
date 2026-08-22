@@ -101,7 +101,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
               class="h-6 w-6 text-[0.6rem] shrink-0"
             />
             <span class={[
-              "truncate text-sm text-tone-900 dark:text-tone-100",
+              "truncate text-sm text-tone-900 dark:text-tone-100 cursor-pointer",
               current_user?(user, @current_user_id) && "font-semibold"
             ]}>
               {avatar_label(user)}
