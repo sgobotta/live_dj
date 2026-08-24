@@ -357,16 +357,16 @@ defmodule LivedjWeb.CustomComponents do
         </span>
       </span>
       <span class={[
-        "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-300 ease-in-out",
-        @checked && "bg-brand",
-        !@checked && "bg-tone-300 dark:bg-tone-600"
+        "relative inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-300 ease-in-out",
+        @checked && "border-brand bg-brand",
+        !@checked && "border-tone-300 dark:border-tone-600 bg-transparent"
       ]}>
         <span
           aria-hidden="true"
           class={[
-            "pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out",
-            @checked && "translate-x-6",
-            !@checked && "translate-x-1"
+            "pointer-events-none inline-block h-2.5 w-2.5 rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out",
+            @checked && "scale-100",
+            !@checked && "scale-0"
           ]}
         />
       </span>
