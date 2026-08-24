@@ -169,9 +169,13 @@ defmodule LivedjWeb.CustomComponents do
   end
 
   @doc """
-  Renders a circular avatar for the current user with a hover tooltip showing
-  the username. Displays the user's avatar image if present, otherwise
-  generates a Multiavatar avatar derived from the username.
+  Renders a circular avatar for the current user with a tooltip showing the
+  username. Displays the user's avatar image if present, otherwise generates
+  a Multiavatar avatar derived from the username.
+
+  The tooltip shows on hover for mouse users; since touch devices have no
+  hover state, tapping the avatar toggles it instead (and tapping elsewhere
+  dismisses it).
   """
   attr :id, :string, required: true
   attr :user, :any, required: true
@@ -191,7 +195,15 @@ defmodule LivedjWeb.CustomComponents do
       |> assign(:avatar_url, user_avatar_url(assigns.user))
 
     ~H"""
-    <div class="relative group cursor-default select-none">
+    <div
+      class="relative group cursor-default select-none"
+      phx-click={
+        @tooltip && JS.toggle_class("tooltip-visible", to: "##{@id}-tooltip")
+      }
+      phx-click-away={
+        @tooltip && JS.remove_class("tooltip-visible", to: "##{@id}-tooltip")
+      }
+    >
       <.avatar
         id={@id}
         label={@label}
@@ -200,9 +212,12 @@ defmodule LivedjWeb.CustomComponents do
       />
       <div
         :if={@tooltip}
+        id={"#{@id}-tooltip"}
         class="
         absolute right-0 top-full mt-1.5 z-50
-        hidden group-hover:block
+        opacity-0 pointer-events-none
+        group-hover:opacity-100 group-hover:pointer-events-auto
+        [&.tooltip-visible]:opacity-100 [&.tooltip-visible]:pointer-events-auto
         whitespace-nowrap rounded-md px-2 py-1
         bg-tone-800 dark:bg-tone-200
         text-xs text-tone-100 dark:text-tone-900
