@@ -3,6 +3,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   alias Livedj.Sessions.Room
   use LivedjWeb, {:live_view, layout: {LivedjWeb.Layouts, :session}}
 
+  alias Livedj.Accounts
   alias Livedj.Presence
   alias Livedj.Sessions
   alias Livedj.Sessions.Chat.Commands.Dispatcher, as: ChatDispatcher
@@ -234,7 +235,11 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     assign(socket, :page_title, "#{socket.assigns.room.name}")
   end
 
-  defp apply_action(socket, :settings_security, _params) do
+  defp apply_action(socket, :settings_room, _params) do
+    assign(socket, :page_title, "#{socket.assigns.room.name}")
+  end
+
+  defp apply_action(socket, :settings_appearance, _params) do
     assign(socket, :page_title, "#{socket.assigns.room.name}")
   end
 
@@ -317,12 +322,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
      )}
   end
 
-  def handle_event(
-        "save_general",
-        %{"name" => room_name, "display_name" => name},
-        socket
-      ) do
-    save_general(socket, room_name, name)
+  def handle_event("save_username", %{"username" => username}, socket) do
+    save_username(socket, username)
+  end
+
+  def handle_event("save_room", %{"name" => room_name}, socket) do
+    save_room(socket, room_name)
   end
 
   def handle_event("save_room_password", %{"password" => password}, socket) do
@@ -426,35 +431,57 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
     end
   end
 
-  defp save_general(socket, room_name, display_name) do
-    case String.trim(display_name) do
-      "" ->
+  defp save_username(socket, username) do
+    case Accounts.update_user_username(socket.assigns.current_user, %{
+           "username" => username
+         }) do
+      {:ok, updated_user} ->
+        :ok =
+          Sessions.chat_update_display_name(
+            socket.assigns.room.id,
+            to_string(updated_user.id),
+            updated_user.username
+          )
+
         {:noreply,
-         put_flash(socket, :error, gettext("Display name can't be blank"))}
+         socket
+         |> assign(:current_user, updated_user)
+         |> assign(:display_name, updated_user.username)
+         |> push_event("store_display_name", %{name: updated_user.username})
+         |> put_flash(:info, gettext("Settings updated"))
+         |> push_patch(
+           to: ~p"/sessions/rooms/#{socket.assigns.room}/settings/general"
+         )}
 
-      trimmed_display_name ->
-        case Sessions.update_room_name(socket.assigns.room, %{
-               "name" => room_name
-             }) do
-          {:ok, room} ->
-            :ok =
-              Sessions.chat_update_display_name(
-                room.id,
-                to_string(socket.assigns.current_user.id),
-                trimmed_display_name
-              )
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, username_error_message(changeset))}
+    end
+  end
 
-            {:noreply,
-             socket
-             |> assign(:room, room)
-             |> assign(:display_name, trimmed_display_name)
-             |> push_event("store_display_name", %{name: trimmed_display_name})
-             |> put_flash(:info, gettext("Settings updated"))
-             |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/general")}
+  defp save_room(socket, room_name) do
+    case Sessions.update_room_name(socket.assigns.room, %{"name" => room_name}) do
+      {:ok, room} ->
+        {:noreply,
+         socket
+         |> assign(:room, room)
+         |> put_flash(:info, gettext("Settings updated"))
+         |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/room")}
 
-          {:error, %Ecto.Changeset{} = changeset} ->
-            {:noreply, put_flash(socket, :error, name_error_message(changeset))}
-        end
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, name_error_message(changeset))}
+    end
+  end
+
+  defp username_error_message(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn error ->
+      LivedjWeb.CoreComponents.translate_error(error)
+    end)
+    |> Map.get(:username, [])
+    |> Enum.join(", ")
+    |> case do
+      "" -> gettext("Invalid username")
+      message -> message
     end
   end
 
@@ -478,7 +505,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
          socket
          |> assign(:room, room)
          |> put_flash(:info, gettext("Room password updated"))
-         |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/security")}
+         |> push_patch(to: ~p"/sessions/rooms/#{room}/settings/room")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, put_flash(socket, :error, password_error_message(changeset))}

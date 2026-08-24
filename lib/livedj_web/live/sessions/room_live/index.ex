@@ -2,6 +2,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   @moduledoc false
   use LivedjWeb, :live_view
 
+  alias Livedj.Accounts
   alias Livedj.Presence
   alias Livedj.Sessions
   alias Livedj.Sessions.{Channels, Room}
@@ -70,6 +71,36 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  @impl true
+  def handle_event("save_username", %{"username" => username}, socket) do
+    case Accounts.update_user_username(socket.assigns.current_user, %{
+           "username" => username
+         }) do
+      {:ok, updated_user} ->
+        {:noreply,
+         socket
+         |> assign(:current_user, updated_user)
+         |> put_flash(:info, gettext("Settings updated"))
+         |> push_patch(to: ~p"/sessions/rooms/settings/general")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, put_flash(socket, :error, username_error_message(changeset))}
+    end
+  end
+
+  defp username_error_message(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn error ->
+      LivedjWeb.CoreComponents.translate_error(error)
+    end)
+    |> Map.get(:username, [])
+    |> Enum.join(", ")
+    |> case do
+      "" -> gettext("Invalid username")
+      message -> message
+    end
   end
 
   @impl true
@@ -142,6 +173,18 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
     socket
     |> assign(:page_title, gettext("New Room"))
     |> assign(:room, %Room{})
+  end
+
+  defp apply_action(socket, :settings_general, _params) do
+    socket
+    |> assign(:page_title, gettext("Settings"))
+    |> assign(:room, nil)
+  end
+
+  defp apply_action(socket, :settings_appearance, _params) do
+    socket
+    |> assign(:page_title, gettext("Settings"))
+    |> assign(:room, nil)
   end
 
   defp assign_player_by_room_id(socket, room_id, player) do

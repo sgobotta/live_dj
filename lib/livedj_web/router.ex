@@ -51,6 +51,9 @@ defmodule LivedjWeb.Router do
       scope "/sessions", Sessions do
         live "/rooms", RoomLive.Index, :index
         live "/rooms/new", RoomLive.Index, :new
+        live "/rooms/settings", RoomLive.Index, :settings_general
+        live "/rooms/settings/general", RoomLive.Index, :settings_general
+        live "/rooms/settings/appearance", RoomLive.Index, :settings_appearance
       end
     end
 
@@ -68,7 +71,11 @@ defmodule LivedjWeb.Router do
         live "/rooms/:id/help", RoomLive.Show, :help
         live "/rooms/:id/settings", RoomLive.Show, :settings_general
         live "/rooms/:id/settings/general", RoomLive.Show, :settings_general
-        live "/rooms/:id/settings/security", RoomLive.Show, :settings_security
+        live "/rooms/:id/settings/room", RoomLive.Show, :settings_room
+
+        live "/rooms/:id/settings/appearance",
+             RoomLive.Show,
+             :settings_appearance
       end
     end
 

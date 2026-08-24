@@ -172,22 +172,37 @@ defmodule LivedjWeb.SessionModals do
     """
   end
 
-  attr :room, :map, required: true
+  attr :room, :map, default: nil
   attr :show, :boolean, required: true
-  attr :tab, :atom, required: true, values: [:general, :security]
+  attr :tab, :atom, required: true, values: [:general, :room, :appearance]
+  attr :theme, :string, required: true
   attr :current_user, :any, required: true
-  attr :display_name, :string, required: true
 
   def settings_modal(assigns) do
     assigns =
-      assign(assigns, :protected, not is_nil(assigns.room.password_hash))
+      assigns
+      |> assign(
+        :protected,
+        assigns.room && not is_nil(assigns.room.password_hash)
+      )
+      |> assign(
+        :base_path,
+        if(assigns.room,
+          do: ~p"/sessions/rooms/#{assigns.room}/settings",
+          else: ~p"/sessions/rooms/settings"
+        )
+      )
 
     ~H"""
     <.modal
       :if={@show}
       id="room-settings-modal"
       show
-      on_cancel={JS.patch(~p"/sessions/rooms/#{@room}")}
+      on_cancel={
+        JS.patch(
+          if @room, do: ~p"/sessions/rooms/#{@room}", else: ~p"/sessions/rooms"
+        )
+      }
       content_class="px-5 pb-5 pt-3"
       close_button_class="top-3 right-8"
     >
@@ -196,20 +211,18 @@ defmodule LivedjWeb.SessionModals do
         phx-hook="TabIndicator"
         class="relative inline-flex gap-1"
       >
-        <.modal_tab
-          patch={~p"/sessions/rooms/#{@room}/settings/general"}
-          active={@tab == :general}
-        >
-          <.icon name="hero-cog-6-tooth" class="h-4 w-4" /> {gettext("General")}
+        <.modal_tab patch={@base_path <> "/general"} active={@tab == :general}>
+          <.icon name="hero-user-circle" class="h-4 w-4" /> {gettext("General")}
         </.modal_tab>
         <.modal_tab
-          patch={~p"/sessions/rooms/#{@room}/settings/security"}
-          active={@tab == :security}
+          :if={@room}
+          patch={@base_path <> "/room"}
+          active={@tab == :room}
         >
-          <.icon
-            name={if @protected, do: "hero-lock-closed", else: "hero-lock-open"}
-            class="h-4 w-4"
-          /> {gettext("Security")}
+          <.icon name="hero-cog-6-tooth" class="h-4 w-4" /> {gettext("Room")}
+        </.modal_tab>
+        <.modal_tab patch={@base_path <> "/appearance"} active={@tab == :appearance}>
+          <.icon name="hero-swatch" class="h-4 w-4" /> {gettext("Appearance")}
         </.modal_tab>
         <span
           class="absolute bottom-0 h-0.5 bg-tone-900 dark:bg-tone-100 transition-all duration-200 ease-out"
@@ -230,38 +243,57 @@ defmodule LivedjWeb.SessionModals do
           <.form
             for={%{}}
             id="general-settings-form"
-            phx-submit="save_general"
+            phx-submit="save_username"
             class="flex flex-col gap-6"
           >
             <div class="flex items-center gap-4">
               <.user_avatar
                 id="settings-user-avatar"
                 user={@current_user}
-                name={@display_name}
+                name={@current_user.username}
                 class="h-14 w-14 text-lg"
                 tooltip={false}
               />
               <.input
                 container_class="flex-1 flex flex-col gap-2"
                 type="text"
-                id="display-name-input"
-                name="display_name"
-                value={@display_name}
+                id="username-input"
+                name="username"
+                value={@current_user.username}
                 label={gettext("Your name")}
                 placeholder={gettext("Your name")}
               />
             </div>
 
-            <div class="border-t border-tone-300 dark:border-tone-600 pt-6">
-              <.input
-                type="text"
-                id="room-name-input"
-                name="name"
-                value={@room.name}
-                label={gettext("Room name")}
-                placeholder={gettext("Room name")}
-              />
-            </div>
+            <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+              {gettext("Save")}
+            </.button>
+          </.form>
+        </div>
+
+        <div
+          :if={@tab == :room && @room}
+          phx-mounted={
+            JS.transition(
+              {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+               "opacity-100 translate-y-0"}
+            )
+          }
+        >
+          <.form
+            for={%{}}
+            id="room-settings-form"
+            phx-submit="save_room"
+            class="flex flex-col gap-6"
+          >
+            <.input
+              type="text"
+              id="room-name-input"
+              name="name"
+              value={@room.name}
+              label={gettext("Room name")}
+              placeholder={gettext("Room name")}
+            />
 
             <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
               {gettext("Save")}
@@ -280,10 +312,48 @@ defmodule LivedjWeb.SessionModals do
               }
             />
           </div>
+
+          <div class="border-t border-tone-300 dark:border-tone-600 pt-6 mt-6">
+            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+              <%= if @protected do %>
+                {gettext("This room is protected. Update or remove its password.")}
+              <% else %>
+                {gettext("Add a password to protect this room.")}
+              <% end %>
+            </p>
+
+            <.form
+              for={%{}}
+              id="room-password-form"
+              phx-submit="save_room_password"
+              class="mt-4 flex flex-col gap-4"
+            >
+              <.input
+                type="password"
+                name="password"
+                value=""
+                placeholder={gettext("New password")}
+              />
+              <div class="flex items-center justify-between gap-2">
+                <button
+                  :if={@protected}
+                  type="button"
+                  id="remove-room-password"
+                  phx-click="remove_room_password"
+                  class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-ignite rounded"
+                >
+                  {gettext("Remove password")}
+                </button>
+                <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+                  {gettext("Save")}
+                </.button>
+              </div>
+            </.form>
+          </div>
         </div>
 
         <div
-          :if={@tab == :security}
+          :if={@tab == :appearance}
           phx-mounted={
             JS.transition(
               {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
@@ -291,41 +361,7 @@ defmodule LivedjWeb.SessionModals do
             )
           }
         >
-          <p class="text-sm text-zinc-600 dark:text-zinc-400">
-            <%= if @protected do %>
-              {gettext("This room is protected. Update or remove its password.")}
-            <% else %>
-              {gettext("Add a password to protect this room.")}
-            <% end %>
-          </p>
-
-          <.form
-            for={%{}}
-            id="room-password-form"
-            phx-submit="save_room_password"
-            class="mt-4 flex flex-col gap-4"
-          >
-            <.input
-              type="password"
-              name="password"
-              value=""
-              placeholder={gettext("New password")}
-            />
-            <div class="flex items-center justify-between gap-2">
-              <button
-                :if={@protected}
-                type="button"
-                id="remove-room-password"
-                phx-click="remove_room_password"
-                class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-ignite rounded"
-              >
-                {gettext("Remove password")}
-              </button>
-              <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
-                {gettext("Save")}
-              </.button>
-            </div>
-          </.form>
+          <.theme_options theme={@theme} />
         </div>
       </div>
     </.modal>

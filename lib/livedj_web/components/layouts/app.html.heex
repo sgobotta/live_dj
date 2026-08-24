@@ -1,10 +1,42 @@
+<.settings_modal
+  show={assigns[:live_action] in [:settings_general, :settings_appearance]}
+  tab={
+    if assigns[:live_action] == :settings_appearance,
+      do: :appearance,
+      else: :general
+  }
+  theme={@theme}
+  current_user={assigns[:current_user]}
+/>
 <header class="px-4 sm:px-6 lg:px-8">
   <div class="
     grid grid-cols-3 items-center
     border-b border-zinc-300 dark:border-zinc-700 py-3 text-sm
   ">
     <div class="flex items-center justify-start">
-      <.toggle_theme_button theme={@theme} />
+      <.theme_hook_anchor />
+      <div
+        :if={
+          assigns[:live_action] in [
+            :index,
+            :new,
+            :settings_general,
+            :settings_appearance
+          ]
+        }
+        class="relative group"
+      >
+        <.link
+          id="settings-btn"
+          patch={~p"/sessions/rooms/settings/general"}
+          class="text-tone-700 dark:text-tone-300 hover:text-tone-900 dark:hover:text-tone-50 transition-colors duration-150 cursor-pointer rounded focus:outline-none focus-ignite"
+        >
+          <.icon name="hero-cog-6-tooth" class="h-5 w-5" />
+        </.link>
+        <.tooltip position={:below} class="left-1/2 -translate-x-[65%] z-30">
+          {gettext("Settings")}
+        </.tooltip>
+      </div>
     </div>
     <div class="flex items-center justify-center gap-3">
       <a href="/">

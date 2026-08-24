@@ -18,21 +18,29 @@
 
 <.settings_modal
   room={assigns[:room]}
-  show={assigns[:live_action] in [:settings_general, :settings_security]}
-  tab={
-    if assigns[:live_action] == :settings_security,
-      do: :security,
-      else: :general
+  show={
+    assigns[:live_action] in [
+      :settings_general,
+      :settings_room,
+      :settings_appearance
+    ]
   }
+  tab={
+    case assigns[:live_action] do
+      :settings_room -> :room
+      :settings_appearance -> :appearance
+      _ -> :general
+    end
+  }
+  theme={@theme}
   current_user={@current_user}
-  display_name={assigns[:display_name]}
 />
 
 <div class="flex flex-col h-dvh">
   <header class="px-4 sm:px-6 lg:px-8 static top-0 w-full">
     <div class="grid grid-cols-3 items-center  py-3 text-sm">
       <div class="flex items-center justify-start">
-        <.toggle_theme_button theme={@theme} />
+        <.theme_hook_anchor />
       </div>
       <div class="flex justify-center">
         <a
