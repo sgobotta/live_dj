@@ -217,114 +217,116 @@ defmodule LivedjWeb.SessionModals do
         />
       </div>
 
-      <div
-        :if={@tab == :general}
-        class="mt-6 min-h-96"
-        phx-mounted={
-          JS.transition(
-            {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
-             "opacity-100 translate-y-0"}
-          )
-        }
-      >
-        <.form
-          for={%{}}
-          id="general-settings-form"
-          phx-submit="save_general"
-          class="flex flex-col gap-6"
+      <div class="mt-6 h-96 overflow-y-auto overflow-x-hidden pr-2">
+        <div
+          :if={@tab == :general}
+          phx-mounted={
+            JS.transition(
+              {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+               "opacity-100 translate-y-0"}
+            )
+          }
         >
-          <div class="flex items-center gap-4">
-            <.user_avatar
-              id="settings-user-avatar"
-              user={@current_user}
-              name={@display_name}
-              class="h-14 w-14 text-lg"
-              tooltip={false}
-            />
-            <.input
-              container_class="flex-1 flex flex-col gap-2"
-              type="text"
-              id="display-name-input"
-              name="display_name"
-              value={@display_name}
-              label={gettext("Your name")}
-              placeholder={gettext("Your name")}
-            />
-          </div>
+          <.form
+            for={%{}}
+            id="general-settings-form"
+            phx-submit="save_general"
+            class="flex flex-col gap-6"
+          >
+            <div class="flex items-center gap-4">
+              <.user_avatar
+                id="settings-user-avatar"
+                user={@current_user}
+                name={@display_name}
+                class="h-14 w-14 text-lg"
+                tooltip={false}
+              />
+              <.input
+                container_class="flex-1 flex flex-col gap-2"
+                type="text"
+                id="display-name-input"
+                name="display_name"
+                value={@display_name}
+                label={gettext("Your name")}
+                placeholder={gettext("Your name")}
+              />
+            </div>
 
-          <div class="border-t border-tone-300 dark:border-tone-600 pt-6">
-            <.input
-              type="text"
-              id="room-name-input"
-              name="name"
-              value={@room.name}
-              label={gettext("Room name")}
-              placeholder={gettext("Room name")}
-            />
-          </div>
+            <div class="border-t border-tone-300 dark:border-tone-600 pt-6">
+              <.input
+                type="text"
+                id="room-name-input"
+                name="name"
+                value={@room.name}
+                label={gettext("Room name")}
+                placeholder={gettext("Room name")}
+              />
+            </div>
 
-          <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
-            {gettext("Save")}
-          </.button>
-        </.form>
-
-        <div class="border-t border-tone-300 dark:border-tone-600 pt-6 mt-6">
-          <.toggle_switch
-            id="track-notifications-toggle"
-            hook="NotificationsToggle"
-            label={gettext("Track notifications")}
-            description={
-              gettext("Show a browser notification when the playing track changes")
-            }
-          />
-        </div>
-      </div>
-
-      <div
-        :if={@tab == :security}
-        class="mt-6 min-h-96"
-        phx-mounted={
-          JS.transition(
-            {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
-             "opacity-100 translate-y-0"}
-          )
-        }
-      >
-        <p class="text-sm text-zinc-600 dark:text-zinc-400">
-          <%= if @protected do %>
-            {gettext("This room is protected. Update or remove its password.")}
-          <% else %>
-            {gettext("Add a password to protect this room.")}
-          <% end %>
-        </p>
-
-        <.form
-          for={%{}}
-          id="room-password-form"
-          phx-submit="save_room_password"
-          class="mt-4 flex flex-col gap-4"
-        >
-          <.input
-            type="password"
-            name="password"
-            value=""
-            placeholder={gettext("New password")}
-          />
-          <div class="flex items-center justify-between gap-2">
-            <button
-              :if={@protected}
-              type="button"
-              id="remove-room-password"
-              phx-click="remove_room_password"
-              class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-ignite rounded"
-            >
-              {gettext("Remove password")}
-            </button>
             <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
               {gettext("Save")}
             </.button>
+          </.form>
+
+          <div class="border-t border-tone-300 dark:border-tone-600 pt-6 mt-6">
+            <.toggle_switch
+              id="track-notifications-toggle"
+              hook="NotificationsToggle"
+              label={gettext("Track notifications")}
+              description={
+                gettext(
+                  "Show a browser notification when the playing track changes"
+                )
+              }
+            />
           </div>
-        </.form>
+        </div>
+
+        <div
+          :if={@tab == :security}
+          phx-mounted={
+            JS.transition(
+              {"transition-all ease-out duration-200", "opacity-0 translate-y-1",
+               "opacity-100 translate-y-0"}
+            )
+          }
+        >
+          <p class="text-sm text-zinc-600 dark:text-zinc-400">
+            <%= if @protected do %>
+              {gettext("This room is protected. Update or remove its password.")}
+            <% else %>
+              {gettext("Add a password to protect this room.")}
+            <% end %>
+          </p>
+
+          <.form
+            for={%{}}
+            id="room-password-form"
+            phx-submit="save_room_password"
+            class="mt-4 flex flex-col gap-4"
+          >
+            <.input
+              type="password"
+              name="password"
+              value=""
+              placeholder={gettext("New password")}
+            />
+            <div class="flex items-center justify-between gap-2">
+              <button
+                :if={@protected}
+                type="button"
+                id="remove-room-password"
+                phx-click="remove_room_password"
+                class="text-sm font-semibold text-red-600 dark:text-red-400 hover:underline focus:outline-none focus-ignite rounded"
+              >
+                {gettext("Remove password")}
+              </button>
+              <.button phx-disable-with={gettext("Saving...")} class="ml-auto">
+                {gettext("Save")}
+              </.button>
+            </div>
+          </.form>
+        </div>
       </div>
     </.modal>
     """
