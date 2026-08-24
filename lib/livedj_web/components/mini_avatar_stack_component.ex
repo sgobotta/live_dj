@@ -60,7 +60,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
           @dims.avatar,
           index > 0 && @dims.overlap
         ]}
-        style={"z-index: #{index + 1}"}
+        style={"z-index: #{length(@shown_users) - index}"}
       >
         <CustomComponents.avatar
           id={"#{@id}-avatar-#{index}"}
