@@ -125,10 +125,55 @@ defmodule LivedjWeb.CustomComponents do
   ]
 
   @doc """
-  Renders a circular avatar for the current user with a hover tooltip showing
-  the username. Displays the user's avatar image if present, otherwise shows
-  colored initials derived from the username.
+  Renders a circular avatar. Shows the user's avatar image if `avatar_url` is
+  present; otherwise generates a unique Multiavatar SVG client-side (seeded by
+  `label`), with colored initials kept in the DOM as a pre-hydration/no-JS
+  fallback.
   """
+  attr :id, :string, required: true
+  attr :label, :string, required: true
+  attr :avatar_url, :string, default: nil
+  attr :class, :string, default: "h-7 w-7 text-xs"
+
+  def avatar(assigns) do
+    assigns =
+      assigns
+      |> assign(:initials, String.slice(assigns.label, 0, 1))
+      |> assign(:color, avatar_color(assigns.label))
+
+    ~H"""
+    <%= if is_binary(@avatar_url) and @avatar_url != "" do %>
+      <img
+        class={["shrink-0 rounded-full object-cover", @class]}
+        src={@avatar_url}
+        alt={@label}
+      />
+    <% else %>
+      <div
+        id={@id}
+        phx-hook="Avatar"
+        phx-update="ignore"
+        data-seed={@label}
+        class={["shrink-0 overflow-hidden rounded-full", @class]}
+      >
+        <span class={[
+          "flex h-full w-full items-center justify-center",
+          "font-semibold uppercase text-tone-100 dark:text-tone-900",
+          @color
+        ]}>
+          {@initials}
+        </span>
+      </div>
+    <% end %>
+    """
+  end
+
+  @doc """
+  Renders a circular avatar for the current user with a hover tooltip showing
+  the username. Displays the user's avatar image if present, otherwise
+  generates a Multiavatar avatar derived from the username.
+  """
+  attr :id, :string, required: true
   attr :user, :any, required: true
   attr :name, :string, default: nil
   attr :class, :string, default: "h-7 w-7 text-xs"
@@ -143,28 +188,16 @@ defmodule LivedjWeb.CustomComponents do
     assigns =
       assigns
       |> assign(:label, label)
-      |> assign(:initials, String.slice(label, 0, 1))
-      |> assign(:color, avatar_color(label))
       |> assign(:avatar_url, user_avatar_url(assigns.user))
 
     ~H"""
     <div class="relative group cursor-default select-none">
-      <%= if @avatar_url != "" do %>
-        <img
-          class={["rounded-full object-cover", @class]}
-          src={@avatar_url}
-          alt={@label}
-        />
-      <% else %>
-        <span class={[
-          "flex items-center justify-center rounded-full",
-          "font-semibold uppercase text-tone-100 dark:text-tone-900",
-          @class,
-          @color
-        ]}>
-          {@initials}
-        </span>
-      <% end %>
+      <.avatar
+        id={@id}
+        label={@label}
+        avatar_url={@avatar_url}
+        class={@class}
+      />
       <div
         :if={@tooltip}
         class="

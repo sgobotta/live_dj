@@ -235,6 +235,7 @@ defmodule LivedjWeb.SessionModals do
         >
           <div class="flex items-center gap-4">
             <.user_avatar
+              id="settings-user-avatar"
               user={@current_user}
               name={@display_name}
               class="h-14 w-14 text-lg"

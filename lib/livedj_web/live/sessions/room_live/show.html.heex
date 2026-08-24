@@ -55,6 +55,7 @@
                 <% msg.type in [:text, :reaction, :announcement] -> %>
                   <div class="flex items-start gap-1.5">
                     <.user_avatar
+                      id={"chat-message-avatar-#{msg.id}"}
                       user={%{}}
                       name={msg.display_name}
                       class="h-5 w-5 text-[0.5rem] mt-0.5 shrink-0"

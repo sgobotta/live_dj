@@ -19,7 +19,12 @@ defmodule Livedj.Presence do
       self(),
       Channels.presence_topic(room_id),
       user.id,
-      %{username: user.username, email: user.email, avatar_url: nil}
+      %{
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        avatar_url: nil
+      }
     )
   end
 
@@ -28,7 +33,7 @@ defmodule Livedj.Presence do
       self(),
       Channels.presence_topic(room_id),
       guest.id,
-      %{username: guest.username, email: nil, avatar_url: nil}
+      %{id: guest.id, username: guest.username, email: nil, avatar_url: nil}
     )
   end
 

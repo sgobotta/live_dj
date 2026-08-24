@@ -4,6 +4,8 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   """
   use Phoenix.Component
 
+  alias LivedjWeb.CustomComponents
+
   import LivedjWeb.Gettext
 
   @max_visible 10
@@ -11,20 +13,30 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   @doc """
   Renders a row of overlapping mini avatars for room members.
 
-  Shows up to 8 slots. When there are more than 8 users, the last slot is a
-  `+N` badge where N is the number of users not shown as individual avatars.
+  Shows up to `max_visible` slots. When there are more members than that,
+  the last slot is a `+N` badge where N is the number of members not shown
+  as individual avatars.
+
+  When `current_user_id` is set, the matching member is sorted first (so
+  they're never the one hidden behind the overflow badge) and hovering the
+  stack opens a panel listing every member, with the current user's row
+  called out.
   """
+  attr :id, :string, required: true
   attr :users, :list, required: true
   attr :max_visible, :integer, default: @max_visible
   attr :size, :atom, values: [:sm, :md], default: :sm
   attr :class, :string, default: nil
+  attr :current_user_id, :string, default: nil
 
   def mini_avatar_stack(assigns) do
-    {shown_users, overflow} =
-      partition_avatar_users(assigns.users, assigns.max_visible)
+    users = reorder_current_user_first(assigns.users, assigns.current_user_id)
+
+    {shown_users, overflow} = partition_avatar_users(users, assigns.max_visible)
 
     assigns =
       assigns
+      |> assign(:users, users)
       |> assign(:shown_users, shown_users)
       |> assign(:overflow, overflow)
       |> assign(:dims, avatar_size_dims(assigns.size))
@@ -32,7 +44,14 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
     ~H"""
     <div
       :if={length(@users) > 0}
-      class={["flex items-center", @dims.stack_height, @class]}
+      id={@id}
+      tabindex={@current_user_id && "0"}
+      class={[
+        "relative group flex items-center",
+        @current_user_id && "focus:outline-none focus-ignite rounded-full",
+        @dims.stack_height,
+        @class
+      ]}
     >
       <div
         :for={{user, index} <- Enum.with_index(@shown_users)}
@@ -41,26 +60,14 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
           @dims.avatar,
           index > 0 && @dims.overlap
         ]}
-        style={"z-index: #{index + 1}"}
+        style={"z-index: #{length(@shown_users) - index}"}
       >
-        <%= if avatar_url(user) != "" do %>
-          <img
-            class={["rounded-full object-cover", @dims.avatar]}
-            src={avatar_url(user)}
-            alt={avatar_label(user)}
-          />
-        <% else %>
-          <span class={[
-            "flex items-center justify-center rounded-full",
-            @dims.avatar,
-            @dims.text,
-            "font-semibold uppercase",
-            "text-zinc-100 dark:text-zinc-900",
-            avatar_color_class(user)
-          ]}>
-            {avatar_initials(user)}
-          </span>
-        <% end %>
+        <CustomComponents.avatar
+          id={"#{@id}-avatar-#{index}"}
+          label={avatar_label(user)}
+          avatar_url={avatar_url(user)}
+          class={"h-full w-full #{@dims.text}"}
+        />
       </div>
       <div
         :if={@overflow > 0}
@@ -76,6 +83,45 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
         style={"z-index: #{length(@shown_users) + 1}"}
       >
         +{@overflow}
+      </div>
+      <div
+        :if={@current_user_id}
+        class="
+          invisible absolute right-0 top-full z-50 pt-2 opacity-0
+          transition-opacity duration-150
+          group-hover:visible group-hover:opacity-100
+          group-focus-visible:visible group-focus-visible:opacity-100
+          group-active:visible group-active:opacity-100
+        "
+      >
+        <div class="
+          w-56 max-h-72 overflow-y-auto rounded-lg py-1.5 shadow-lg
+          bg-tone-50 dark:bg-tone-800
+          border border-tone-200 dark:border-tone-700
+        ">
+          <div
+            :for={{user, index} <- Enum.with_index(@users)}
+            class="flex items-center gap-2 px-3 py-1.5"
+          >
+            <CustomComponents.avatar
+              id={"#{@id}-dialog-avatar-#{index}"}
+              label={avatar_label(user)}
+              avatar_url={avatar_url(user)}
+              class="h-6 w-6 text-[0.6rem] shrink-0"
+            />
+            <span class={[
+              "truncate text-sm text-tone-900 dark:text-tone-100 cursor-pointer",
+              current_user?(user, @current_user_id) && "font-semibold"
+            ]}>
+              {avatar_label(user)}
+            </span>
+            <span
+              :if={current_user?(user, @current_user_id)}
+              class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
       </div>
     </div>
     """
@@ -101,7 +147,10 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
     ~H"""
     <div class="flex flex-col gap-1 px-2 mb-2">
       <%= for count <- [0, 1, 2, 3, 7, 8, 16] do %>
-        <.mini_avatar_stack users={demo_avatar_users(count)} />
+        <.mini_avatar_stack
+          id={"mini-avatar-stack-demo-#{count}"}
+          users={demo_avatar_users(count)}
+        />
       <% end %>
     </div>
     """
@@ -145,24 +194,19 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   defp avatar_label(%{"email" => email}) when is_binary(email), do: email
   defp avatar_label(_user), do: gettext("User")
 
-  defp avatar_initials(user) do
-    user
-    |> avatar_label()
-    |> String.slice(0, 1)
+  defp avatar_id(%{id: id}), do: id
+  defp avatar_id(%{"id" => id}), do: id
+  defp avatar_id(_user), do: nil
+
+  defp current_user?(user, current_user_id) do
+    current_user_id != nil and avatar_id(user) == current_user_id
   end
 
-  @avatar_colors [
-    "bg-zinc-500",
-    "bg-green-600",
-    "bg-blue-600",
-    "bg-amber-600",
-    "bg-rose-600",
-    "bg-violet-600"
-  ]
+  defp reorder_current_user_first(users, nil), do: users
 
-  defp avatar_color_class(user) do
-    label = avatar_label(user)
-    index = :erlang.phash2(label, length(@avatar_colors))
-    Enum.at(@avatar_colors, index)
+  defp reorder_current_user_first(users, current_user_id) do
+    Enum.sort_by(users, fn user ->
+      if current_user?(user, current_user_id), do: 0, else: 1
+    end)
   end
 end
