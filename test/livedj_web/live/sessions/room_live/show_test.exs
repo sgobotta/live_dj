@@ -11,31 +11,6 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     %{room: room_fixture()}
   end
 
-  describe "display name on first (disconnected) render" do
-    test "uses the name stored in the per-room cookie", %{
-      conn: conn,
-      room: room
-    } do
-      conn =
-        conn
-        |> put_req_cookie("livedj_display_name_#{room.id}", "CustomName")
-        |> get(~p"/sessions/rooms/#{room}/settings/general")
-
-      # The chosen name must already be present in the very first HTML the
-      # server returns, so there is no default-name flash before connect.
-      assert html_response(conn, 200) =~ "CustomName"
-    end
-
-    test "a cookie for a different room is ignored", %{conn: conn, room: room} do
-      conn =
-        conn
-        |> put_req_cookie("livedj_display_name_some-other-room", "OtherRoom")
-        |> get(~p"/sessions/rooms/#{room}/settings/general")
-
-      refute html_response(conn, 200) =~ "OtherRoom"
-    end
-  end
-
   describe "password gate" do
     test "redirects an unauthorized visitor of a protected room to /unlock", %{
       conn: conn
@@ -67,10 +42,10 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     end
   end
 
-  describe "edit password modal" do
+  describe "edit room modal (password section)" do
     test "sets a password from the settings modal", %{conn: conn, room: room} do
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
       view
       |> form("#room-password-form", %{password: "secret1"})
@@ -78,8 +53,8 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
 
       assert Livedj.Sessions.room_protected?(Livedj.Sessions.get_room!(room.id))
 
-      # the modal stays open on the Security tab instead of closing
-      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/security")
+      # the modal stays open on the Room tab instead of closing
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/room")
       assert render(view) =~ "room-password-form"
     end
 
@@ -88,7 +63,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       room: room
     } do
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
       html =
         view
@@ -110,7 +85,7 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
         |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
 
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
       view |> element("#remove-room-password") |> render_click()
 
@@ -118,20 +93,20 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     end
   end
 
-  describe "edit general modal" do
+  describe "edit room modal (room name section)" do
     test "renames the room from the settings modal", %{conn: conn, room: room} do
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
       view
-      |> form("#general-settings-form", %{name: "New Room Name"})
+      |> form("#room-settings-form", %{name: "New Room Name"})
       |> render_submit()
 
       assert Livedj.Sessions.get_room!(room.id).name == "New Room Name"
 
-      # the modal stays open on the General tab instead of closing
-      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/general")
-      assert render(view) =~ "general-settings-form"
+      # the modal stays open on the Room tab instead of closing
+      assert_patch(view, ~p"/sessions/rooms/#{room}/settings/room")
+      assert render(view) =~ "room-settings-form"
     end
 
     test "shows the changeset error for a blank room name", %{
@@ -139,43 +114,48 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       room: room
     } do
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
       html =
         view
-        |> form("#general-settings-form", %{name: ""})
+        |> form("#room-settings-form", %{name: ""})
         |> render_submit()
 
       assert html =~ "no puede estar en blanco"
       assert Livedj.Sessions.get_room!(room.id).name == room.name
     end
+  end
 
-    test "updates the display name from the same form", %{
+  describe "edit general modal" do
+    test "updates the username from the general tab", %{
+      conn: conn,
+      room: room,
+      user: user
+    } do
+      {:ok, view, _html} =
+        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
+
+      view
+      |> form("#general-settings-form", %{username: "new_username"})
+      |> render_submit()
+
+      assert render(view) =~ "new_username"
+      assert Livedj.Accounts.get_user!(user.id).username == "new_username"
+    end
+
+    test "shows the changeset error for a blank username", %{
       conn: conn,
       room: room
     } do
       {:ok, view, _html} =
         live(conn, ~p"/sessions/rooms/#{room}/settings/general")
 
-      view
-      |> form("#general-settings-form", %{display_name: "New Display Name"})
-      |> render_submit()
-
-      assert render(view) =~ "New Display Name"
-    end
-
-    test "shows an error for a blank display name and leaves the room name untouched",
-         %{conn: conn, room: room} do
-      {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/general")
-
       html =
         view
-        |> form("#general-settings-form", %{display_name: ""})
+        |> form("#general-settings-form", %{username: ""})
         |> render_submit()
 
-      assert html =~ "El nombre no puede estar vacío"
-      assert Livedj.Sessions.get_room!(room.id).name == room.name
+      assert html =~ "no puede estar en blanco"
     end
   end
 
@@ -305,10 +285,6 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
       |> render_submit()
 
       assert Process.alive?(view.pid)
-
-      view |> element("#settings-btn") |> render_click()
-
-      assert render(view) =~ "Bob"
     end
   end
 
@@ -326,15 +302,18 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
     end
   end
 
-  describe "security tab icon" do
-    test "shows an open lock for a public room", %{conn: conn, room: room} do
+  describe "room password section" do
+    test "shows the unprotected copy for a public room", %{
+      conn: conn,
+      room: room
+    } do
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
-      assert render(view) =~ "hero-lock-open"
+      assert render(view) =~ "Añade una contraseña para proteger esta sala."
     end
 
-    test "shows a closed lock for a protected room", %{conn: conn} do
+    test "shows the protected copy for a password-protected room", %{conn: conn} do
       room = room_fixture(%{password: "secret1"})
       fingerprint = Livedj.Sessions.authorization_fingerprint(room)
 
@@ -344,9 +323,10 @@ defmodule LivedjWeb.Sessions.RoomLive.ShowTest do
         |> Plug.Conn.put_session("authorized_rooms", %{room.id => fingerprint})
 
       {:ok, view, _html} =
-        live(conn, ~p"/sessions/rooms/#{room}/settings/security")
+        live(conn, ~p"/sessions/rooms/#{room}/settings/room")
 
-      assert render(view) =~ "hero-lock-closed"
+      assert render(view) =~
+               "Esta sala está protegida. Actualiza o elimina su contraseña."
     end
   end
 end
