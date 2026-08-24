@@ -90,6 +90,7 @@ export default {
   },
 
   updated() {
+    if (this.focusedId === null) return
     if (document.activeElement !== document.body) return
     this.refocusLastItem()
   }
