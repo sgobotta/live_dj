@@ -15,6 +15,20 @@
   ">
     <div class="flex items-center justify-start">
       <.theme_hook_anchor />
+    </div>
+    <div class="flex items-center justify-center gap-3">
+      <a href="/">
+        <.livedj_logo theme={@theme} />
+      </a>
+      <.link
+        class="cursor-default"
+        target="_blank"
+        href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
+      >
+        <.version_pill version={Application.spec(:livedj, :vsn)} />
+      </.link>
+    </div>
+    <div class="flex items-center justify-end gap-4">
       <div
         :if={
           assigns[:live_action] in [
@@ -37,20 +51,6 @@
           {gettext("Settings")}
         </.tooltip>
       </div>
-    </div>
-    <div class="flex items-center justify-center gap-3">
-      <a href="/">
-        <.livedj_logo theme={@theme} />
-      </a>
-      <.link
-        class="cursor-default"
-        target="_blank"
-        href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
-      >
-        <.version_pill version={Application.spec(:livedj, :vsn)} />
-      </.link>
-    </div>
-    <div class="flex items-center justify-end">
       <.user_avatar id="current-user-avatar" user={assigns[:current_user]} />
     </div>
   </div>
