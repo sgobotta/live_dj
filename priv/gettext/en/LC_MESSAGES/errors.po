@@ -156,7 +156,7 @@ msgstr ""
 msgid "should be between %{min} and %{max} characters"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:212
+#: lib/livedj_web/components/core_components.ex:210
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
@@ -166,31 +166,31 @@ msgstr ""
 msgid "Could not fetch the video from youtube"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:224
+#: lib/livedj_web/components/core_components.ex:222
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
 #: lib/livedj/sessions.ex:84
-#: lib/livedj/sessions.ex:135
+#: lib/livedj/sessions.ex:138
 #, elixir-autogen, elixir-format
 msgid "The video is already added to the playlist"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:207
+#: lib/livedj_web/components/core_components.ex:205
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/livedj_web/components/core_components.ex:219
+#: lib/livedj_web/components/core_components.ex:217
 #: lib/livedj_web/live/sessions/room_live/list.ex:55
-#: lib/livedj_web/live/sessions/room_live/show.ex:144
+#: lib/livedj_web/live/sessions/room_live/show.ex:201
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
 #: lib/livedj_web/live/sessions/room_live/list.ex:48
-#: lib/livedj_web/live/sessions/room_live/show.ex:137
+#: lib/livedj_web/live/sessions/room_live/show.ex:194
 #, elixir-autogen, elixir-format
 msgid "The room doesn't exist"
 msgstr ""

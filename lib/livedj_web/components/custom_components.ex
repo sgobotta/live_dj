@@ -169,9 +169,13 @@ defmodule LivedjWeb.CustomComponents do
   end
 
   @doc """
-  Renders a circular avatar for the current user with a hover tooltip showing
-  the username. Displays the user's avatar image if present, otherwise
-  generates a Multiavatar avatar derived from the username.
+  Renders a circular avatar for the current user with a tooltip showing the
+  username. Displays the user's avatar image if present, otherwise generates
+  a Multiavatar avatar derived from the username.
+
+  The tooltip shows on hover for mouse users; since touch devices have no
+  hover state, tapping the avatar toggles it instead (and tapping elsewhere
+  dismisses it).
   """
   attr :id, :string, required: true
   attr :user, :any, required: true
@@ -191,7 +195,15 @@ defmodule LivedjWeb.CustomComponents do
       |> assign(:avatar_url, user_avatar_url(assigns.user))
 
     ~H"""
-    <div class="relative group cursor-default select-none">
+    <div
+      class="relative group cursor-default select-none"
+      phx-click={
+        @tooltip && JS.toggle_class("tooltip-visible", to: "##{@id}-tooltip")
+      }
+      phx-click-away={
+        @tooltip && JS.remove_class("tooltip-visible", to: "##{@id}-tooltip")
+      }
+    >
       <.avatar
         id={@id}
         label={@label}
@@ -200,9 +212,12 @@ defmodule LivedjWeb.CustomComponents do
       />
       <div
         :if={@tooltip}
+        id={"#{@id}-tooltip"}
         class="
         absolute right-0 top-full mt-1.5 z-50
-        hidden group-hover:block
+        opacity-0 pointer-events-none
+        group-hover:opacity-100 group-hover:pointer-events-auto
+        [&.tooltip-visible]:opacity-100 [&.tooltip-visible]:pointer-events-auto
         whitespace-nowrap rounded-md px-2 py-1
         bg-tone-800 dark:bg-tone-200
         text-xs text-tone-100 dark:text-tone-900
@@ -280,6 +295,97 @@ defmodule LivedjWeb.CustomComponents do
         />
       </button>
     </div>
+    """
+  end
+
+  @doc """
+  Invisible, persistent host for the `Theme` JS hook. Must stay mounted
+  continuously (unlike a modal's content, which mounts/unmounts per tab) so
+  the `window` listeners registered in `assets/js/theme/hook.js` are attached
+  once per LiveView connection, not re-attached on every modal open/close.
+  """
+  def theme_hook_anchor(assigns) do
+    ~H"""
+    <div id="theme-hook" phx-hook="Theme" class="hidden" aria-hidden="true" />
+    """
+  end
+
+  @doc """
+  Renders the Light/Dark theme choice as an exclusive-selection list of rows,
+  reactive off the `theme` assign (no client-owned visual-state hack needed,
+  unlike `toggle_switch/1` — `@theme` is already server-true).
+  """
+  attr :theme, :string, required: true
+
+  def theme_options(assigns) do
+    ~H"""
+    <div
+      class="flex flex-col gap-2"
+      role="radiogroup"
+      aria-label={gettext("Appearance")}
+    >
+      <.theme_radio_option
+        theme={@theme}
+        value="light"
+        label={gettext("Light")}
+        icon="hero-sun-solid"
+      />
+      <.theme_radio_option
+        theme={@theme}
+        value="dark"
+        label={gettext("Dark")}
+        icon="hero-moon-solid"
+      />
+    </div>
+    """
+  end
+
+  attr :theme, :string, required: true
+  attr :value, :string, required: true
+  attr :label, :string, required: true
+  attr :icon, :string, required: true
+
+  defp theme_radio_option(assigns) do
+    assigns = assign(assigns, :checked, assigns.theme == assigns.value)
+
+    ~H"""
+    <button
+      type="button"
+      role="radio"
+      aria-checked={to_string(@checked)}
+      phx-click={JS.dispatch("set-theme", detail: %{theme: @value})}
+      class={[
+        "flex items-center justify-between gap-4 rounded-xl px-4 py-3",
+        "border transition-colors duration-150 focus:outline-none focus-ignite",
+        @checked && "border-brand/40 bg-brand/5 dark:bg-brand/10",
+        !@checked &&
+          "border-tone-300 dark:border-tone-600 hover:bg-tone-100 dark:hover:bg-tone-700/40"
+      ]}
+    >
+      <span class="flex items-center gap-3">
+        <CoreComponents.icon
+          name={@icon}
+          class="h-5 w-5 text-tone-700 dark:text-tone-300"
+        />
+        <span class="text-sm font-semibold text-tone-700 dark:text-tone-300">
+          {@label}
+        </span>
+      </span>
+      <span class={[
+        "relative inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-300 ease-in-out",
+        @checked && "border-brand bg-brand",
+        !@checked && "border-tone-300 dark:border-tone-600 bg-transparent"
+      ]}>
+        <span
+          aria-hidden="true"
+          class={[
+            "pointer-events-none inline-block h-2.5 w-2.5 rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out",
+            @checked && "scale-100",
+            !@checked && "scale-0"
+          ]}
+        />
+      </span>
+    </button>
     """
   end
 

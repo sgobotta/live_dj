@@ -5,6 +5,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   use Phoenix.Component
 
   alias LivedjWeb.CustomComponents
+  alias Phoenix.LiveView.JS
 
   import LivedjWeb.Gettext
 
@@ -20,7 +21,9 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
   When `current_user_id` is set, the matching member is sorted first (so
   they're never the one hidden behind the overflow badge) and hovering the
   stack opens a panel listing every member, with the current user's row
-  called out.
+  called out. Since touch devices have no hover state, tapping the stack
+  toggles the panel instead (tapping anywhere else in it closes it), while
+  hover and keyboard focus keep working for mouse/keyboard users.
   """
   attr :id, :string, required: true
   attr :users, :list, required: true
@@ -52,46 +55,57 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
         @dims.stack_height,
         @class
       ]}
+      phx-click-away={
+        @current_user_id && JS.remove_class("panel-visible", to: "##{@id}-panel")
+      }
     >
       <div
-        :for={{user, index} <- Enum.with_index(@shown_users)}
-        class={[
-          "relative shrink-0 rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
-          @dims.avatar,
-          index > 0 && @dims.overlap
-        ]}
-        style={"z-index: #{length(@shown_users) - index}"}
+        class="flex items-center"
+        phx-click={
+          @current_user_id && JS.toggle_class("panel-visible", to: "##{@id}-panel")
+        }
       >
-        <CustomComponents.avatar
-          id={"#{@id}-avatar-#{index}"}
-          label={avatar_label(user)}
-          avatar_url={avatar_url(user)}
-          class={"h-full w-full #{@dims.text}"}
-        />
-      </div>
-      <div
-        :if={@overflow > 0}
-        class={[
-          "relative shrink-0 flex items-center justify-center",
-          @dims.avatar,
-          @dims.overlap,
-          @dims.text,
-          "rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
-          "bg-zinc-300 dark:bg-zinc-600",
-          "font-semibold text-zinc-800 dark:text-zinc-100"
-        ]}
-        style={"z-index: #{length(@shown_users) + 1}"}
-      >
-        +{@overflow}
+        <div
+          :for={{user, index} <- Enum.with_index(@shown_users)}
+          class={[
+            "relative shrink-0 rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
+            @dims.avatar,
+            index > 0 && @dims.overlap
+          ]}
+          style={"z-index: #{length(@shown_users) - index}"}
+        >
+          <CustomComponents.avatar
+            id={"#{@id}-avatar-#{index}"}
+            label={avatar_label(user)}
+            avatar_url={avatar_url(user)}
+            class={"h-full w-full #{@dims.text}"}
+          />
+        </div>
+        <div
+          :if={@overflow > 0}
+          class={[
+            "relative shrink-0 flex items-center justify-center",
+            @dims.avatar,
+            @dims.overlap,
+            @dims.text,
+            "rounded-full ring-2 ring-zinc-50 dark:ring-zinc-800",
+            "bg-zinc-300 dark:bg-zinc-600",
+            "font-semibold text-zinc-800 dark:text-zinc-100"
+          ]}
+          style={"z-index: #{length(@shown_users) + 1}"}
+        >
+          +{@overflow}
+        </div>
       </div>
       <div
         :if={@current_user_id}
+        id={"#{@id}-panel"}
         class="
           invisible absolute right-0 top-full z-50 pt-2 opacity-0
           transition-opacity duration-150
           group-hover:visible group-hover:opacity-100
           group-focus-visible:visible group-focus-visible:opacity-100
-          group-active:visible group-active:opacity-100
+          [&.panel-visible]:visible [&.panel-visible]:opacity-100
         "
       >
         <div class="

@@ -5,6 +5,7 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   alias Livedj.Presence
   alias Livedj.Sessions
   alias Livedj.Sessions.{Channels, Room}
+  alias LivedjWeb.Sessions.SettingsHandlers
 
   @impl true
   def mount(_params, _session, socket) do
@@ -70,6 +71,24 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  @impl true
+  def handle_event("save_username", %{"username" => username}, socket) do
+    case SettingsHandlers.update_username(
+           socket.assigns.current_user,
+           username
+         ) do
+      {:ok, updated_user} ->
+        {:noreply,
+         socket
+         |> assign(:current_user, updated_user)
+         |> put_flash(:info, gettext("Settings updated"))
+         |> push_patch(to: ~p"/sessions/rooms/settings/general")}
+
+      {:error, message} ->
+        {:noreply, put_flash(socket, :error, message)}
+    end
   end
 
   @impl true
@@ -142,6 +161,18 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
     socket
     |> assign(:page_title, gettext("New Room"))
     |> assign(:room, %Room{})
+  end
+
+  defp apply_action(socket, :settings_general, _params) do
+    socket
+    |> assign(:page_title, gettext("Settings"))
+    |> assign(:room, nil)
+  end
+
+  defp apply_action(socket, :settings_appearance, _params) do
+    socket
+    |> assign(:page_title, gettext("Settings"))
+    |> assign(:room, nil)
   end
 
   defp assign_player_by_room_id(socket, room_id, player) do
