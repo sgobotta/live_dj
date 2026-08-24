@@ -3,12 +3,12 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   alias Livedj.Sessions.Room
   use LivedjWeb, {:live_view, layout: {LivedjWeb.Layouts, :session}}
 
-  alias Livedj.Accounts
   alias Livedj.Presence
   alias Livedj.Sessions
   alias Livedj.Sessions.Chat.Commands.Dispatcher, as: ChatDispatcher
   alias Livedj.Sessions.Exceptions.SessionRoomError
   alias LivedjWeb.RoomAuth
+  alias LivedjWeb.Sessions.SettingsHandlers
 
   import Phoenix.Component
 
@@ -432,9 +432,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
   end
 
   defp save_username(socket, username) do
-    case Accounts.update_user_username(socket.assigns.current_user, %{
-           "username" => username
-         }) do
+    case SettingsHandlers.update_username(
+           socket.assigns.current_user,
+           username
+         ) do
       {:ok, updated_user} ->
         :ok =
           Sessions.chat_update_display_name(
@@ -453,8 +454,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
            to: ~p"/sessions/rooms/#{socket.assigns.room}/settings/general"
          )}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, put_flash(socket, :error, username_error_message(changeset))}
+      {:error, message} ->
+        {:noreply, put_flash(socket, :error, message)}
     end
   end
 
@@ -469,19 +470,6 @@ defmodule LivedjWeb.Sessions.RoomLive.Show do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, put_flash(socket, :error, name_error_message(changeset))}
-    end
-  end
-
-  defp username_error_message(changeset) do
-    changeset
-    |> Ecto.Changeset.traverse_errors(fn error ->
-      LivedjWeb.CoreComponents.translate_error(error)
-    end)
-    |> Map.get(:username, [])
-    |> Enum.join(", ")
-    |> case do
-      "" -> gettext("Invalid username")
-      message -> message
     end
   end
 

@@ -2,10 +2,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
   @moduledoc false
   use LivedjWeb, :live_view
 
-  alias Livedj.Accounts
   alias Livedj.Presence
   alias Livedj.Sessions
   alias Livedj.Sessions.{Channels, Room}
+  alias LivedjWeb.Sessions.SettingsHandlers
 
   @impl true
   def mount(_params, _session, socket) do
@@ -75,9 +75,10 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
 
   @impl true
   def handle_event("save_username", %{"username" => username}, socket) do
-    case Accounts.update_user_username(socket.assigns.current_user, %{
-           "username" => username
-         }) do
+    case SettingsHandlers.update_username(
+           socket.assigns.current_user,
+           username
+         ) do
       {:ok, updated_user} ->
         {:noreply,
          socket
@@ -85,21 +86,8 @@ defmodule LivedjWeb.Sessions.RoomLive.Index do
          |> put_flash(:info, gettext("Settings updated"))
          |> push_patch(to: ~p"/sessions/rooms/settings/general")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, put_flash(socket, :error, username_error_message(changeset))}
-    end
-  end
-
-  defp username_error_message(changeset) do
-    changeset
-    |> Ecto.Changeset.traverse_errors(fn error ->
-      LivedjWeb.CoreComponents.translate_error(error)
-    end)
-    |> Map.get(:username, [])
-    |> Enum.join(", ")
-    |> case do
-      "" -> gettext("Invalid username")
-      message -> message
+      {:error, message} ->
+        {:noreply, put_flash(socket, :error, message)}
     end
   end
 
