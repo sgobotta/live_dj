@@ -125,7 +125,15 @@ export default {
         arrowright: (event) => move('right', event),
         arrowup: (event) => move('up', event)
       },
-      id: 'player-controls'
+      id: 'player-controls',
+      // The registry's default input guard blocks any scope whenever the
+      // event target's tag is INPUT - which the seek bar and volume
+      // slider both are, being <input type="range">. That's not the
+      // "don't hijack a shortcut while someone's typing" case it exists
+      // for, so opt out; move()'s own this.el.contains(active) check
+      // already scopes this correctly (nothing text-editable ever lives
+      // inside the player controls container).
+      ignoreInputs: false
     })
   }
 }

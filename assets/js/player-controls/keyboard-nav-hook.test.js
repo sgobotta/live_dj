@@ -1,5 +1,6 @@
-import {describe, expect, it, vi} from 'vitest'
-import {adjustSlider, nextNodeId} from './keyboard-nav-hook'
+import {beforeEach, describe, expect, it, vi} from 'vitest'
+import Hook, {adjustSlider, nextNodeId} from './keyboard-nav-hook'
+import {_resetForTests} from '../keyboard/registry'
 
 describe('nextNodeId', () => {
   it('moves through the transport row', () => {
@@ -105,5 +106,71 @@ describe('adjustSlider', () => {
     expect(onChange).toHaveBeenCalledTimes(1)
     document.removeEventListener('input', onInput)
     document.removeEventListener('change', onChange)
+  })
+})
+
+// Guards against the registry's default input guard (ignoreInputs: true)
+// silently blocking this scope on the seek bar/volume slider, which are
+// both <input> elements - that regression let plain arrow keys fall
+// straight through to the native range input behavior.
+describe('mounted (registered scope)', () => {
+  beforeEach(() => {
+    _resetForTests()
+    document.body.innerHTML = `
+      <div id="player-controls">
+        <a id="previous-track-btn" href="#" tabindex="0"></a>
+        <a id="play-pause-btn" href="#" tabindex="0"></a>
+        <a id="next-track-btn" href="#" tabindex="0"></a>
+        <a id="add-btn" href="#" tabindex="0"></a>
+        <button id="volume-mute-btn"></button>
+        <input
+          id="volume-slider" type="range" min="0" max="100" step="5" value="50"
+        />
+        <a id="fullscreen-btn" href="#" tabindex="0"></a>
+        <input
+          id="player-controls-time-slider"
+          type="range" min="0" max="100" step="any" value="20"
+        />
+      </div>
+    `
+    Hook.mounted.call({el: document.getElementById('player-controls')})
+  })
+
+  function pressArrow(el, key, extra) {
+    el.focus()
+    const event = new KeyboardEvent('keydown', {
+      bubbles: true,
+      cancelable: true,
+      key,
+      ...extra
+    })
+    el.dispatchEvent(event)
+    return event
+  }
+
+  it('claims a plain arrow on the volume slider, instead of adjusting', () => {
+    const slider = document.getElementById('volume-slider')
+    const event = pressArrow(slider, 'ArrowRight')
+
+    expect(event.defaultPrevented).toBe(true)
+    expect(slider.value).toBe('50')
+    expect(document.activeElement.id).toBe('fullscreen-btn')
+  })
+
+  it('claims a plain arrow on the seek bar instead of seeking', () => {
+    const seek = document.getElementById('player-controls-time-slider')
+    const event = pressArrow(seek, 'ArrowLeft')
+
+    expect(event.defaultPrevented).toBe(true)
+    expect(seek.value).toBe('20')
+    expect(document.activeElement).toBe(seek)
+  })
+
+  it('adjusts the volume on Shift+ArrowRight, instead of navigating', () => {
+    const slider = document.getElementById('volume-slider')
+    pressArrow(slider, 'ArrowRight', {shiftKey: true})
+
+    expect(slider.value).toBe('55')
+    expect(document.activeElement).toBe(slider)
   })
 })
