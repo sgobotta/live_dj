@@ -1,4 +1,5 @@
-import { bindings } from './bindings'
+import {bindings} from './bindings'
+import {pushScope} from '../keyboard'
 
 const actions = {
   'focus-chat': (hook) => hook.pushEvent('open_and_focus_chat', {}),
@@ -14,36 +15,61 @@ const actions = {
   'toggle-theme': () => window.dispatchEvent(new Event('toggle-theme'))
 }
 
-const IGNORED_TAGS = new Set(['INPUT', 'TEXTAREA', 'SELECT'])
+// Optional allow-list: `data-bindings="toggle-theme"` enables only those
+// actions. Absent means every binding is active (full show-page set).
+function parseAllowList(value) {
+  return value ? new Set(value.split(/[\s,]+/).filter(Boolean)) : null
+}
+
+function buildBindings(hook, allowed) {
+  const entries = {}
+
+  Object.entries(bindings).forEach(([key, action]) => {
+    const enabled = (!allowed || allowed.has(action)) && actions[action]
+    if (enabled) entries[key] = () => actions[action](hook)
+  })
+
+  return entries
+}
 
 export default {
   destroyed() {
-    window.removeEventListener('keydown', this._handler)
+    this.detach?.()
   },
+
   mounted() {
     this.handleEvent('focus_chat_input', () => {
       document.getElementById('chat-input')?.focus()
     })
 
-    // Optional allow-list: `data-bindings="toggle-theme"` enables only those
-    // actions. Absent means every binding is active (full show-page set).
-    const allowed = this.el.dataset.bindings
-      ? new Set(this.el.dataset.bindings.split(/[\s,]+/).filter(Boolean))
-      : null
+    this.isActive = false
+    this.syncScope()
+  },
 
-    this._handler = (e) => {
-      if (this.el.dataset.active !== 'true') return
-      if (IGNORED_TAGS.has(e.target.tagName) || e.target.isContentEditable) {
-        return
-      }
-      if (e.metaKey || e.ctrlKey || e.altKey) return
+  // The room/index pages toggle `data-active` on this same element (rather
+  // than remounting the hook) as their live_action changes - e.g. a modal
+  // opening. Mirror that as a real push/pop on the registry so the room's
+  // bindings genuinely suspend while a scope above it is on top, instead of
+  // relying on a per-keystroke flag check.
+  syncScope() {
+    const active = this.el.dataset.active === 'true'
+    if (active === this.isActive) return
+    this.isActive = active
 
-      const action = bindings[e.key.toLowerCase()]
-      if (action && actions[action] && (!allowed || allowed.has(action))) {
-        e.preventDefault()
-        actions[action](this)
-      }
+    if (!active) {
+      this.detach?.()
+      this.detach = null
+      return
     }
-    window.addEventListener('keydown', this._handler)
+
+    const allowed = parseAllowList(this.el.dataset.bindings)
+    this.detach = pushScope({
+      bindings: buildBindings(this, allowed),
+      id: this.el.id
+    })
+  },
+
+  updated() {
+    this.syncScope()
   }
 }
