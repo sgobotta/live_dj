@@ -106,6 +106,19 @@ describe('keyboard registry', () => {
     expect(handler).not.toHaveBeenCalled()
   })
 
+  it('falls through when a handler declines by returning false', () => {
+    const upper = vi.fn(() => false)
+    const lower = vi.fn()
+
+    pushScope({bindings: {escape: lower}, id: 'lower'})
+    pushScope({bindings: {escape: upper}, id: 'upper'})
+
+    dispatchKeydown(window, {key: 'Escape'})
+
+    expect(upper).toHaveBeenCalledTimes(1)
+    expect(lower).toHaveBeenCalledTimes(1)
+  })
+
   it('delegates arrow keys to the scope grid before bindings', () => {
     const move = vi.fn(() => true)
     const arrowBinding = vi.fn()

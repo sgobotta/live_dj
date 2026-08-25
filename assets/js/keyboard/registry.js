@@ -55,8 +55,13 @@ function tryScope(scope, event, key, editable, hasModifier) {
 
   const handler = scope.bindings[key]
   if (handler) {
+    // A handler can return `false` to decline after all (e.g. it only
+    // wants this key in some circumstance it alone can determine, like an
+    // input whose command palette isn't currently showing any options),
+    // letting resolution fall through to the next scope down instead of
+    // unconditionally treating "has a handler" as "claims the event".
+    if (handler(event) === false) return false
     event.preventDefault()
-    handler(event)
     return true
   }
 
