@@ -1,5 +1,6 @@
 import AddButton from './player-controls/add-button-hook'
 import Avatar from './avatar/hook'
+import AvatarStackPanel from './avatar-stack-panel/hook'
 import Chat from './chat/hook'
 import Clipboard from './clipboard/hook'
 import DisplayName from './display-name/hook'
@@ -20,6 +21,7 @@ import Youtube from './youtube/hook'
 export default {
   AddButton,
   Avatar,
+  AvatarStackPanel,
   Chat,
   Clipboard,
   DisplayName,
