@@ -10,11 +10,14 @@ import {pushScope} from '../keyboard'
 // tracks just enough of that history to resolve those two cases.
 //
 // The seek bar and volume slider are native <input type="range">
-// elements, which already respond to arrow keys by adjusting their
-// value. Only the specific directions listed per node are intercepted
-// here for navigation; every other direction is left alone, so e.g.
-// ArrowLeft still adjusts the seek position and ArrowUp/ArrowDown still
-// adjust the volume.
+// elements, which would otherwise respond to arrow keys by adjusting
+// their value instead of moving focus - fighting this scope's own
+// left/right/up/down navigation. Every direction on those two nodes is
+// therefore claimed, self-looping (focusing the element it's already
+// on) where there's nowhere else to go, which is enough for the
+// registry to preventDefault the native behavior without this scope
+// actually needing to move anywhere. Shift+Left/Shift+Right adjusts
+// the value directly instead - see adjustSlider() below.
 const NODES = {
   add: {left: (state) => state.beforeAdd, right: 'mute'},
   fullscreen: {left: 'volume'},
@@ -22,8 +25,13 @@ const NODES = {
   next: {down: 'seek', left: 'playPause', right: 'add'},
   playPause: {down: 'seek', left: 'previous', right: 'next'},
   previous: {down: 'seek', right: 'playPause'},
-  seek: {right: 'add', up: (state) => state.transport},
-  volume: {left: 'mute', right: 'fullscreen'}
+  seek: {
+    down: 'seek',
+    left: 'seek',
+    right: 'add',
+    up: (state) => state.transport
+  },
+  volume: {down: 'volume', left: 'mute', right: 'fullscreen', up: 'volume'}
 }
 
 const IDS = {
@@ -53,6 +61,30 @@ export function nextNodeId(id, direction, state) {
   return typeof target === 'function' ? target(state) : target
 }
 
+function isRangeInput(el) {
+  return el?.tagName === 'INPUT' && el.type === 'range'
+}
+
+// Replicates what the native arrow-key step on a range input would have
+// done, now that those keys are claimed for navigation instead - reads
+// step/min/max off the element itself and dispatches real input/change
+// events (rather than relying on the browser), so existing listeners
+// (the RangeSlider hook's visual sync, the volume form's phx-change, the
+// seek bar's document-level input/change listeners in youtube/hook.js)
+// all see it exactly as they would a genuine drag or native keypress.
+export function adjustSlider(el, direction) {
+  const min = Number(el.min) || 0
+  const max = Number(el.max) || 100
+  const step = Number(el.step)
+  const amount = Number.isFinite(step) && step > 0 ? step : 1
+  const value = Number(el.value) || 0
+  const delta = direction === 'right' ? amount : -amount
+
+  el.value = String(Math.min(max, Math.max(min, value + delta)))
+  el.dispatchEvent(new Event('input', {bubbles: true}))
+  el.dispatchEvent(new Event('change', {bubbles: true}))
+}
+
 export default {
   destroyed() {
     this.detach?.()
@@ -61,11 +93,20 @@ export default {
   mounted() {
     const state = {beforeAdd: 'next', transport: 'playPause'}
 
-    const move = (direction) => {
-      if (!this.el.contains(document.activeElement)) return false
+    const move = (direction, event) => {
+      const active = document.activeElement
+      if (!this.el.contains(active)) return false
 
-      const id = NODE_BY_ELEMENT_ID[document.activeElement.id]
-      const nextId = id && nextNodeId(id, direction, state)
+      const id = NODE_BY_ELEMENT_ID[active.id]
+      if (!id) return false
+
+      const isSlide = direction === 'left' || direction === 'right'
+      if (event.shiftKey && isSlide && isRangeInput(active)) {
+        adjustSlider(active, direction)
+        return true
+      }
+
+      const nextId = nextNodeId(id, direction, state)
       if (!nextId) return false
 
       const nextEl = document.getElementById(IDS[nextId])
@@ -79,10 +120,10 @@ export default {
 
     this.detach = pushScope({
       bindings: {
-        arrowdown: () => move('down'),
-        arrowleft: () => move('left'),
-        arrowright: () => move('right'),
-        arrowup: () => move('up')
+        arrowdown: (event) => move('down', event),
+        arrowleft: (event) => move('left', event),
+        arrowright: (event) => move('right', event),
+        arrowup: (event) => move('up', event)
       },
       id: 'player-controls'
     })

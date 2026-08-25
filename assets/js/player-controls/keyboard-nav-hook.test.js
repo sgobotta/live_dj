@@ -1,5 +1,5 @@
-import {describe, expect, it} from 'vitest'
-import {nextNodeId} from './keyboard-nav-hook'
+import {describe, expect, it, vi} from 'vitest'
+import {adjustSlider, nextNodeId} from './keyboard-nav-hook'
 
 describe('nextNodeId', () => {
   it('moves through the transport row', () => {
@@ -39,12 +39,71 @@ describe('nextNodeId', () => {
     expect(nextNodeId('fullscreen', 'left', {})).toBe('volume')
   })
 
-  it('declines unhandled directions, leaving native slider behavior', () => {
-    expect(nextNodeId('seek', 'left', {})).toBe(null)
-    expect(nextNodeId('seek', 'down', {})).toBe(null)
-    expect(nextNodeId('volume', 'up', {})).toBe(null)
-    expect(nextNodeId('volume', 'down', {})).toBe(null)
+  it('self-loops on the sliders where there is nowhere else to go', () => {
+    // Claiming these (rather than declining) is what stops the native
+    // range input from also adjusting its value on a plain arrow press.
+    expect(nextNodeId('seek', 'left', {})).toBe('seek')
+    expect(nextNodeId('seek', 'down', {})).toBe('seek')
+    expect(nextNodeId('volume', 'up', {})).toBe('volume')
+    expect(nextNodeId('volume', 'down', {})).toBe('volume')
+  })
+
+  it('declines directions that are genuinely unhandled', () => {
     expect(nextNodeId('previous', 'left', {})).toBe(null)
     expect(nextNodeId('fullscreen', 'right', {})).toBe(null)
+  })
+})
+
+describe('adjustSlider', () => {
+  function makeRangeInput({max = '100', min = '0', step = '5', value = '50'}) {
+    const el = document.createElement('input')
+    el.type = 'range'
+    el.min = min
+    el.max = max
+    el.step = step
+    el.value = value
+    return el
+  }
+
+  it('steps the value by the element\'s own step', () => {
+    const el = makeRangeInput({})
+    adjustSlider(el, 'right')
+    expect(el.value).toBe('55')
+
+    adjustSlider(el, 'left')
+    adjustSlider(el, 'left')
+    expect(el.value).toBe('45')
+  })
+
+  it('falls back to a step of 1 when step is "any"', () => {
+    const el = makeRangeInput({step: 'any', value: '10'})
+    adjustSlider(el, 'right')
+    expect(el.value).toBe('11')
+  })
+
+  it('clamps at min and max', () => {
+    const atMax = makeRangeInput({value: '100'})
+    adjustSlider(atMax, 'right')
+    expect(atMax.value).toBe('100')
+
+    const atMin = makeRangeInput({value: '0'})
+    adjustSlider(atMin, 'left')
+    expect(atMin.value).toBe('0')
+  })
+
+  it('dispatches bubbling input and change events', () => {
+    const el = makeRangeInput({})
+    document.body.appendChild(el)
+    const onInput = vi.fn()
+    const onChange = vi.fn()
+    document.addEventListener('input', onInput)
+    document.addEventListener('change', onChange)
+
+    adjustSlider(el, 'right')
+
+    expect(onInput).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledTimes(1)
+    document.removeEventListener('input', onInput)
+    document.removeEventListener('change', onChange)
   })
 })
