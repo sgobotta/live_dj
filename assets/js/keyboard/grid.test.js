@@ -86,6 +86,42 @@ describe('createGrid', () => {
     expect(document.activeElement).toBe(b1)
   })
 
+  it('declines the key when focus is outside its container', () => {
+    const a1 = addCell(0, 'a1')
+    const outside = document.createElement('button')
+    document.body.appendChild(outside)
+
+    const grid = createGrid({container, rows: () => [[a1]]})
+
+    outside.focus()
+    expect(grid.move('arrowdown')).toBe(false)
+    expect(document.activeElement).toBe(outside)
+  })
+
+  it('bootstraps to the first cell on a forward key from the container', () => {
+    const a1 = addCell(0, 'a1')
+    const b1 = addCell(1, 'b1')
+
+    const grid = createGrid({container, rows: () => [[a1], [b1]]})
+
+    container.tabIndex = 0
+    container.focus()
+    grid.move('arrowdown')
+    expect(document.activeElement).toBe(a1)
+  })
+
+  it('bootstraps to the last cell on a backward key from the container', () => {
+    const a1 = addCell(0, 'a1')
+    const a2 = addCell(0, 'a2')
+
+    const grid = createGrid({container, rows: () => [[a1, a2]]})
+
+    container.tabIndex = 0
+    container.focus()
+    grid.move('arrowleft')
+    expect(document.activeElement).toBe(a2)
+  })
+
   it('returns false and does nothing when the grid is empty', () => {
     const grid = createGrid({container, rows: () => []})
     expect(grid.move('arrowdown')).toBe(false)

@@ -8,6 +8,12 @@
 // reorder its elements without any cache-invalidation bookkeeping. Rows
 // may be ragged (different lengths); moving vertically clamps the column
 // to the target row's own length rather than requiring a rectangle.
+//
+// A grid only claims an arrow key while focus is already somewhere inside
+// its own container (the container itself counts, so tabbing onto an
+// otherwise-unfocused grid and then pressing an arrow still works). This
+// is what lets several grids/scopes coexist on one page without an
+// explicit stacking order between them - see registry.js's module doc.
 export function createGrid({
   container,
   edgeBehavior = 'clamp',
@@ -52,11 +58,17 @@ export function createGrid({
 
   return {
     move(key) {
+      const root = resolvedContainer()
+      if (!root || !root.contains(document.activeElement)) return false
+
       const grid = resolveGrid()
       if (grid.length === 0) return false
 
-      const [row, col] = currentCoords(grid) ?? [0, 0]
-      const [nextRow, nextCol] = nextCoords(key, row, col, grid, edgeBehavior)
+      const coords = currentCoords(grid)
+      const [row, col] = coords ?? bootstrapCoords(key, grid)
+      const [nextRow, nextCol] = coords
+        ? nextCoords(key, row, col, grid, edgeBehavior)
+        : [row, col]
       const cell = grid[nextRow]?.[nextCol]
       if (!cell) return false
 
@@ -77,6 +89,16 @@ export function createGrid({
       if (target) focusCell(target)
     }
   }
+}
+
+// When nothing inside the grid is focused yet (only its container is),
+// land on the first cell for a "forward" key and the last cell for a
+// "backward" one, rather than always starting from the top-left.
+export function bootstrapCoords(key, grid) {
+  const forward = key === 'arrowdown' || key === 'arrowright'
+  const row = forward ? 0 : grid.length - 1
+  const col = forward ? 0 : grid[row].length - 1
+  return [row, col]
 }
 
 export function stepIndex(index, delta, length, edgeBehavior) {

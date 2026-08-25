@@ -4,11 +4,20 @@
 // grid (see grid.js) for arrow-key navigation. Consumers push a scope when
 // they become the thing the user is interacting with (a page becomes
 // active, a modal opens, a panel expands) and pop it when that stops being
-// true. Only the topmost scope on the stack ever sees a keydown, which is
-// what gives suspend/restore behavior for free: a scope shadowed by one
-// pushed on top of it simply isn't consulted until it's on top again, and
-// its own state (grid cursor position, etc.) sits untouched in the
-// meantime since it's never popped, only shadowed.
+// true.
+//
+// A keydown resolves top-down through the stack, per key: the first scope
+// that actually claims the key (has a binding for it, or owns a grid whose
+// container currently contains focus) wins, and resolution stops there.
+// This is *not* "only the topmost scope is ever consulted" - that would
+// make an always-mounted, arrows-only scope (e.g. a playlist) permanently
+// block an always-mounted, letters-only scope (e.g. global shortcuts)
+// simply by being pushed after it, even though the two never actually
+// compete for the same key. Genuine exclusivity (a modal taking over the
+// whole keyboard) instead comes from the lower scope detaching itself
+// while the modal is open, per its own `data-active`/equivalent state -
+// see keybindings/hook.js - so there's nothing left below to fall through
+// to.
 const ARROW_KEYS = new Set(['arrowdown', 'arrowleft', 'arrowright', 'arrowup'])
 const IGNORED_TAGS = new Set(['INPUT', 'SELECT', 'TEXTAREA'])
 
@@ -34,29 +43,33 @@ function removeEntry(entry) {
   if (index !== -1) stack.splice(index, 1)
 }
 
-function handleKeydown(event) {
-  const scope = stack[stack.length - 1]
-  if (!scope) return
+// Returns true if `scope` claimed the event (and performed its effect).
+function tryScope(scope, event, key, editable, hasModifier) {
+  if (!scope.allowModifiers && hasModifier) return false
+  if (scope.ignoreInputs && editable) return false
 
-  const hasModifier = event.metaKey || event.ctrlKey || event.altKey
-  if (!scope.allowModifiers && hasModifier) {
-    return
-  }
-
-  if (scope.ignoreInputs && isEditableTarget(event.target)) return
-
-  const key = event.key.toLowerCase()
-
-  if (scope.grid && ARROW_KEYS.has(key)) {
-    if (scope.grid.move(key)) event.preventDefault()
-    return
+  if (ARROW_KEYS.has(key) && scope.grid && scope.grid.move(key)) {
+    event.preventDefault()
+    return true
   }
 
   const handler = scope.bindings[key]
   if (handler) {
     event.preventDefault()
     handler(event)
+    return true
   }
+
+  return false
+}
+
+function handleKeydown(event) {
+  const key = event.key.toLowerCase()
+  const editable = isEditableTarget(event.target)
+  const hasModifier = event.metaKey || event.ctrlKey || event.altKey
+
+  const topDown = stack.slice().reverse()
+  topDown.some((scope) => tryScope(scope, event, key, editable, hasModifier))
 }
 
 function ensureListener() {

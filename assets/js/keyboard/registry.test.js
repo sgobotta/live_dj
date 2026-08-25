@@ -12,7 +12,7 @@ describe('keyboard registry', () => {
     document.body.innerHTML = ''
   })
 
-  it('dispatches to the bindings of the topmost scope only', () => {
+  it('lets the topmost scope win when both bind the same key', () => {
     const lower = vi.fn()
     const upper = vi.fn()
 
@@ -23,6 +23,32 @@ describe('keyboard registry', () => {
 
     expect(lower).not.toHaveBeenCalled()
     expect(upper).toHaveBeenCalledTimes(1)
+  })
+
+  it('falls through to a lower scope for an unclaimed key', () => {
+    const lower = vi.fn()
+    const upper = vi.fn()
+
+    pushScope({bindings: {m: lower}, id: 'lower'})
+    pushScope({bindings: {a: upper}, id: 'upper'})
+
+    dispatchKeydown(window, {key: 'm'})
+
+    expect(lower).toHaveBeenCalledTimes(1)
+    expect(upper).not.toHaveBeenCalled()
+  })
+
+  it('falls through past a grid scope that declines an arrow key', () => {
+    const move = vi.fn(() => false)
+    const lowerArrow = vi.fn()
+
+    pushScope({bindings: {arrowdown: lowerArrow}, id: 'lower'})
+    pushScope({grid: {move}, id: 'upper-nav'})
+
+    dispatchKeydown(window, {key: 'ArrowDown'})
+
+    expect(move).toHaveBeenCalledWith('arrowdown')
+    expect(lowerArrow).toHaveBeenCalledTimes(1)
   })
 
   it('restores the scope below once the top one detaches', () => {
