@@ -1,10 +1,13 @@
 {
   "scripts": {
     "eslint": "node_modules/.bin/eslint --config .eslintrc.json js/",
-    "eslint:fix": "node_modules/.bin/eslint --fix --config .eslintrc.json js/"
+    "eslint:fix": "node_modules/.bin/eslint --fix --config .eslintrc.json js/",
+    "test": "vitest run"
   },
   "devDependencies": {
-    "eslint": "^8.46.0"
+    "eslint": "^8.46.0",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.11"
   },
   "dependencies": {
     "@multiavatar/multiavatar": "^1.0.7"

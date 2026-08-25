@@ -421,6 +421,7 @@ defmodule LivedjWeb.CustomComponents do
     ~H"""
     <div
       id={@id}
+      phx-hook="RoomGridKeyboardNav"
       class="
         grid gap-4 py-4
         grid-cols-2 sm:grid-cols-3

@@ -49,6 +49,7 @@ defmodule LivedjWeb.MiniAvatarStackComponent do
       :if={length(@users) > 0}
       id={@id}
       tabindex={@current_user_id && "0"}
+      phx-hook={@current_user_id && "AvatarStackPanel"}
       class={[
         "relative group flex items-center",
         @current_user_id && "focus:outline-none focus-ignite rounded-full",

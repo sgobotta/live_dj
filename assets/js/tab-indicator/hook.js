@@ -12,15 +12,29 @@
 // active tab changing on a LiveView patch without the container itself
 // resizing, which is where the indicator's own transition classes animate
 // the slide.
+import {createGrid, pushScope} from '../keyboard'
+
 export default {
   destroyed() {
     this.observer?.disconnect()
+    this.detach?.()
   },
 
   mounted() {
     this.observer = new ResizeObserver(() => this.position())
     this.observer.observe(this.el)
     this.position()
+
+    // Left/right move real focus between tabs, matching how the ARIA
+    // tablist pattern expects arrow-key navigation to work. This element
+    // only exists while the settings modal is open (see session_modals.ex),
+    // so pushing/popping here already matches the modal's own lifecycle.
+    const grid = createGrid({
+      container: this.el,
+      edgeBehavior: 'clamp',
+      rows: () => [Array.from(this.el.querySelectorAll('a[data-active]'))]
+    })
+    this.detach = pushScope({grid, id: 'settings-modal-tabs'})
   },
 
   position() {
