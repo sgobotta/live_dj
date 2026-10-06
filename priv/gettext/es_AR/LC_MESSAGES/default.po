@@ -749,7 +749,7 @@ msgstr "Invitá amigos"
 
 #: lib/livedj_web/controllers/page_html/home.html.heex:75
 #, elixir-autogen, elixir-format
-msgid "Make a room, queue up some videos and watch them together in real time. No dance floor required."
+msgid "Make a room, queue up some videos and watch them together in real time."
 msgstr "Creá una sala, armá la playlist de videos y miralos junto a tus amigos en tiempo real."
 
 #: lib/livedj_web/controllers/page_html/home.html.heex:89
