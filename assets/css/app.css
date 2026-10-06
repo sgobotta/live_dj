@@ -152,3 +152,47 @@
     animation: none;
   }
 }
+
+/* Home headline rotator: N stacked phrases, each visible for one --slot.
+   Tune the time each phrase stays on screen with --slot (set inline on .headline-rotator).
+   Keyframe percentages assume 10 phrases; change them if the count changes. */
+.headline-rotator > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  animation: headline-rotate calc(var(--slot) * 10) ease-in-out infinite both;
+  animation-delay: calc(var(--i) * var(--slot));
+}
+
+@keyframes headline-rotate {
+  0%    { opacity: 0; transform: translateY(0.4em);  filter: blur(6px); }
+  1.5%  { opacity: 1; transform: translateY(0);      filter: blur(0); }
+  8.5%  { opacity: 1; transform: translateY(0);      filter: blur(0); }
+  10%   { opacity: 0; transform: translateY(-0.4em); filter: blur(6px); }
+  100%  { opacity: 0; transform: translateY(-0.4em); filter: blur(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headline-rotator > span {
+    animation: none;
+  }
+  .headline-rotator > span:first-child {
+    opacity: 1;
+  }
+}
+
+/* Soft pulsing halo to draw the eye to the home call-to-action. */
+.cta-glow {
+  animation: cta-glow 2.5s ease-out infinite;
+}
+
+@keyframes cta-glow {
+  0%   { box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-brand) 40%, transparent), 0 0 0 0 color-mix(in srgb, var(--color-brand) 45%, transparent); }
+  70%  { box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-brand) 40%, transparent), 0 0 0 16px color-mix(in srgb, var(--color-brand) 0%, transparent); }
+  100% { box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-brand) 40%, transparent), 0 0 0 0 color-mix(in srgb, var(--color-brand) 0%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-glow {
+    animation: none;
+  }
+}

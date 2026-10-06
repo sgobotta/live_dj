@@ -7,6 +7,10 @@ defmodule LivedjWeb.PageControllerTest do
     conn = get(conn, ~p"/")
 
     assert html_response(conn, 200) =~
-             gettext("Shared youtube sessions")
+             gettext("Get started")
+  end
+
+  test "headline rotator CSS matches the phrase count" do
+    assert length(LivedjWeb.PageHTML.headline_phrases()) == 10
   end
 end
