@@ -750,7 +750,7 @@ msgstr "Invitá amigos"
 #: lib/livedj_web/controllers/page_html/home.html.heex:89
 #, elixir-autogen, elixir-format
 msgid "Make a room, queue up some videos and watch them together in real time. No dance floor required."
-msgstr "Creá una sala, armá la cola de videos y miralos junto a tus amigos en tiempo real. No hace falta pista de baile."
+msgstr "Creá una sala, armá la playlist de videos y miralos junto a tus amigos en tiempo real."
 
 #: lib/livedj_web/controllers/page_html/home.html.heex:102
 #, elixir-autogen, elixir-format
@@ -775,7 +775,7 @@ msgstr "Toda sala necesita un DJ. ¿Por qué no vos?"
 #: lib/livedj_web/controllers/page_html/home.html.heex:74
 #, elixir-autogen, elixir-format
 msgid "Movie night, minus the argument over what to watch."
-msgstr "Noche de películas, sin la discusión de qué ver."
+msgstr "Noche de películas, sin vueltas."
 
 #: lib/livedj_web/controllers/page_html/home.html.heex:72
 #, elixir-autogen, elixir-format
