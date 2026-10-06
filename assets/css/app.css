@@ -179,3 +179,20 @@
     opacity: 1;
   }
 }
+
+/* Soft pulsing halo to draw the eye to the home call-to-action. */
+.cta-glow {
+  animation: cta-glow 2.5s ease-out infinite;
+}
+
+@keyframes cta-glow {
+  0%   { box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-brand) 40%, transparent), 0 0 0 0 color-mix(in srgb, var(--color-brand) 45%, transparent); }
+  70%  { box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-brand) 40%, transparent), 0 0 0 16px color-mix(in srgb, var(--color-brand) 0%, transparent); }
+  100% { box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-brand) 40%, transparent), 0 0 0 0 color-mix(in srgb, var(--color-brand) 0%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-glow {
+    animation: none;
+  }
+}
