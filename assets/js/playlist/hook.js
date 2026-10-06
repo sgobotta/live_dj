@@ -1,12 +1,11 @@
-// Arrow-key navigation for the playlist. The list itself is the only Tab
-// stop (see the tabindex="0" on #lists); every track link inside sits at
+import {createListScope, pushScope} from '../keyboard'
+
+// Arrow-key navigation for the playlist, via the keyboard registry's list
+// scope (see assets/js/keyboard). The list itself is the only Tab stop
+// (see the tabindex="0" on #lists); every track link inside sits at
 // tabindex="-1" so Tab skips straight over them. ArrowDown/ArrowUp move
 // real DOM focus from track to track instead, letting Enter (native link
-// activation) play whichever one is focused. Each move scrolls the newly
-// focused track to the vertical center of the list when there's enough
-// room; scrollIntoView clamps at the list's own start/end instead of
-// forcing centering there, so top/bottom tracks just land as centered
-// as the available scroll room allows.
+// activation) play whichever one is focused.
 //
 // Playing a track (Enter, or a click) flips it to "current", which swaps
 // its markup from the play-button branch to the now-playing branch in
@@ -15,6 +14,10 @@
 // the browser drops focus to <body>. Track which track (by data-id) last
 // had focus and, if an update leaves focus stranded on <body>, reclaim it
 // on that track's new nav target so arrow-key navigation can continue.
+// (This stays bespoke rather than using the grid's own reconcileFocus():
+// the identity attribute here is data-id, which lives on the row wrapper
+// and not always on the actual [data-nav-item] target - see the branches
+// below.)
 //
 // #lists itself is also the Tab stop that wraps the whole list, so
 // Tab-ing away and back (or Shift+Tab-ing in) lands browser focus on the
@@ -36,8 +39,19 @@
 // focusin below stays as a fallback for the same case, in browsers/paths
 // where that trick doesn't apply.)
 export default {
+  destroyed() {
+    this.detach?.()
+  },
+
   mounted() {
     this.focusedId = null
+
+    const grid = createListScope({
+      container: this.el,
+      edgeBehavior: 'clamp',
+      items: () => Array.from(this.el.querySelectorAll('[data-nav-item]'))
+    })
+    this.detach = pushScope({grid, id: this.el.id})
 
     this.el.addEventListener('focusin', (e) => {
       if (e.target === this.el) {
@@ -55,24 +69,7 @@ export default {
       if (e.key === 'Tab' && e.shiftKey && document.activeElement !== this.el) {
         this.el.setAttribute('tabindex', '-1')
         setTimeout(() => this.el.setAttribute('tabindex', '0'), 0)
-        return
       }
-
-      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
-
-      const items = Array.from(this.el.querySelectorAll('[data-nav-item]'))
-      if (items.length === 0) return
-
-      e.preventDefault()
-
-      const currentIndex = items.indexOf(document.activeElement)
-      const delta = e.key === 'ArrowDown' ? 1 : -1
-      const nextIndex = currentIndex === -1
-        ? (e.key === 'ArrowDown' ? 0 : items.length - 1)
-        : Math.max(0, Math.min(items.length - 1, currentIndex + delta))
-
-      items[nextIndex].focus()
-      items[nextIndex].scrollIntoView({block: 'center'})
     })
   },
 

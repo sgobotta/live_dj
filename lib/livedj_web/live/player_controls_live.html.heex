@@ -5,6 +5,7 @@
     <% disabled? = not media_loaded?(@player.media_id) %>
     <div
       id={@player_controls_id}
+      phx-hook="PlayerControlsKeyboardNav"
       class="
         bg-tone-100 dark:bg-tone-900
         border-t-[1px] border-tone-300 dark:border-tone-700
@@ -69,6 +70,7 @@
         <div class="col-span-6 row-span-1 w-full flex justify-center items-center">
           <div class="flex items-center gap-4 h-10">
             <a
+              id="previous-track-btn"
               href="#"
               phx-click={unless disabled?, do: "previous"}
               aria-disabled={disabled?}
@@ -126,6 +128,7 @@
               </.tooltip>
             </div>
             <a
+              id="next-track-btn"
               href="#"
               phx-click={unless disabled?, do: "next"}
               aria-disabled={disabled?}

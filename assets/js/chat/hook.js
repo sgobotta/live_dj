@@ -1,3 +1,16 @@
+import {pushScope} from '../keyboard'
+
+// Only act while this input itself is focused - it's always mounted (not
+// conditionally rendered like a modal), so without this a scope pushed at
+// mount time would try to claim arrow/enter/escape keys anywhere on the
+// page, not just while the user is actually typing a chat command.
+function whenFocused(hook, fn) {
+  return (event) => {
+    if (document.activeElement !== hook.el) return false
+    return fn(event)
+  }
+}
+
 export default {
   commandOptions() {
     return Array.from(
@@ -7,6 +20,7 @@ export default {
 
   destroyed() {
     this.observer?.disconnect()
+    this.detach?.()
   },
 
   mounted() {
@@ -15,39 +29,33 @@ export default {
     // keys here and drive the highlighted option in the DOM.
     this.commandIndex = -1
 
-    this.el.addEventListener('keydown', (e) => {
-      const options = this.commandOptions()
-
-      if (options.length) {
-        if (e.key === 'ArrowDown') {
-          e.preventDefault()
+    this.detach = pushScope({
+      bindings: {
+        arrowdown: whenFocused(this, () => {
+          const options = this.commandOptions()
+          if (!options.length) return false
           this.moveHighlight(1, options)
-          return
-        }
-
-        if (e.key === 'ArrowUp') {
-          e.preventDefault()
+        }),
+        arrowup: whenFocused(this, () => {
+          const options = this.commandOptions()
+          if (!options.length) return false
           this.moveHighlight(-1, options)
-          return
-        }
-
-        if (e.key === 'Enter' && this.commandIndex >= 0) {
-          // Select the highlighted command instead of submitting the form.
-          // Blur first so the input isn't focused when the server patches its
-          // value (LiveView won't overwrite a focused input); the server then
-          // refocuses it via the focus_chat_input event. This mirrors what a
-          // real mouse click does, where focus leaves the input on mousedown.
-          e.preventDefault()
+        }),
+        // Select the highlighted command instead of submitting the form.
+        // Blur first so the input isn't focused when the server patches its
+        // value (LiveView won't overwrite a focused input); the server then
+        // refocuses it via the focus_chat_input event. This mirrors what a
+        // real mouse click does, where focus leaves the input on mousedown.
+        enter: whenFocused(this, () => {
+          const options = this.commandOptions()
+          if (!options.length || this.commandIndex < 0) return false
           this.el.blur()
           options[this.commandIndex].click()
-          return
-        }
-      }
-
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        this.el.blur()
-      }
+        }),
+        escape: whenFocused(this, () => this.el.blur())
+      },
+      id: 'chat-command-palette',
+      ignoreInputs: false
     })
 
     // Whenever the server re-renders the palette (open, filter, close),

@@ -1,6 +1,12 @@
+import {createListScope, pushScope} from '../keyboard'
+
 // This is optional phoenix client hook. It allows to use key down and up to select results.
 
 export default {
+  destroyed() {
+    this.detach?.()
+  },
+
   mounted() {
     const searchBarContainer = (this as any).el as HTMLDivElement
     this.focusedId = null
@@ -66,41 +72,22 @@ export default {
       clearForKeyboard()
     })
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-        return
-      }
-
-      const focusElemnt = document.querySelector(':focus') as HTMLElement
-
-      if (!focusElemnt) {
-        return
-      }
-
-      if (!searchBarContainer.contains(focusElemnt)) {
-        return
-      }
-
-      event.preventDefault()
-
-      const tabElements = document.querySelectorAll(
-        '#search-input, #searchbox__results_list button',
-      ) as NodeListOf<HTMLElement>
-      const focusIndex = Array.from(tabElements).indexOf(focusElemnt)
-      const tabElementsCount = tabElements.length - 1
-
-      if (event.key === 'ArrowUp') {
-        const target = tabElements[focusIndex > 0 ? focusIndex - 1 : tabElementsCount]
-        target.focus()
-        target.scrollIntoView({ block: 'center' })
-      }
-
-      if (event.key === 'ArrowDown') {
-        const target = tabElements[focusIndex < tabElementsCount ? focusIndex + 1 : 0]
-        target.focus()
-        target.scrollIntoView({ block: 'center' })
-      }
+    // Arrow up/down move real focus between the search input and every
+    // still-addable result button, wrapping at both ends - the browse
+    // modal (and this component with it) only exists while it's open, so
+    // pushing/popping the scope on mounted()/destroyed() already matches
+    // the modal's own lifecycle.
+    const grid = createListScope({
+      container: searchBarContainer,
+      edgeBehavior: 'wrap',
+      items: () =>
+        Array.from(
+          document.querySelectorAll<HTMLElement>(
+            '#search-input, #searchbox__results_list button'
+          )
+        )
     })
+    this.detach = pushScope({grid, id: 'search-bar'})
   },
 
   // Adding a track swaps its "+" button for a checkmark, so the button that
