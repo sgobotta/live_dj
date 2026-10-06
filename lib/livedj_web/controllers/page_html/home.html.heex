@@ -64,21 +64,7 @@
       style="--slot: 5s"
     >
       <span
-        :for={
-          {phrase, i} <-
-            Enum.with_index([
-              gettext("Be the DJ of your friends' screen"),
-              gettext("Your friends, your music, your rules."),
-              gettext("Pass the aux. Everyone's watching."),
-              gettext("Press play together."),
-              gettext("Movie night, minus the argument over what to watch."),
-              gettext("Drop the video. Own the room."),
-              gettext("Every room needs a DJ. Why not you?"),
-              gettext("Queue it up. Watch it together."),
-              gettext("Watch YouTube together, in sync."),
-              gettext("Your living room, wherever your friends are.")
-            ])
-        }
+        :for={{phrase, i} <- Enum.with_index(headline_phrases())}
         style={"--i: #{i}"}
         aria-hidden={if i > 0, do: "true"}
       >
@@ -104,9 +90,9 @@
       </p>
     </div>
     <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400">
-      <li>🎵 {gettext("Add videos")}</li>
-      <li>👯 {gettext("Invite friends")}</li>
-      <li>▶️ {gettext("Watch in sync")}</li>
+      <li><span aria-hidden="true">🎵</span> {gettext("Add videos")}</li>
+      <li><span aria-hidden="true">👯</span> {gettext("Invite friends")}</li>
+      <li><span aria-hidden="true">▶️</span> {gettext("Watch in sync")}</li>
     </ul>
   </div>
 </div>

@@ -727,82 +727,82 @@ msgstr ""
 msgid "Your playlist is empty"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:106
+#: lib/livedj_web/controllers/page_html/home.html.heex:93
 #, elixir-autogen, elixir-format
 msgid "Add videos"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:70
+#: lib/livedj_web/controllers/page_html.ex:12
 #, elixir-autogen, elixir-format
 msgid "Be the DJ of your friends' screen"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:98
+#: lib/livedj_web/controllers/page_html/home.html.heex:84
 #, elixir-autogen, elixir-format
 msgid "Get started"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:107
+#: lib/livedj_web/controllers/page_html/home.html.heex:94
 #, elixir-autogen, elixir-format
 msgid "Invite friends"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:89
+#: lib/livedj_web/controllers/page_html/home.html.heex:75
 #, elixir-autogen, elixir-format
 msgid "Make a room, queue up some videos and watch them together in real time. No dance floor required."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:102
+#: lib/livedj_web/controllers/page_html/home.html.heex:89
 #, elixir-autogen, elixir-format
 msgid "Press play. We'll handle the vibes."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:108
+#: lib/livedj_web/controllers/page_html/home.html.heex:95
 #, elixir-autogen, elixir-format
 msgid "Watch in sync"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:75
+#: lib/livedj_web/controllers/page_html.ex:17
 #, elixir-autogen, elixir-format
 msgid "Drop the video. Own the room."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:76
+#: lib/livedj_web/controllers/page_html.ex:18
 #, elixir-autogen, elixir-format
 msgid "Every room needs a DJ. Why not you?"
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:74
+#: lib/livedj_web/controllers/page_html.ex:16
 #, elixir-autogen, elixir-format
 msgid "Movie night, minus the argument over what to watch."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:72
+#: lib/livedj_web/controllers/page_html.ex:14
 #, elixir-autogen, elixir-format
 msgid "Pass the aux. Everyone's watching."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:73
+#: lib/livedj_web/controllers/page_html.ex:15
 #, elixir-autogen, elixir-format
 msgid "Press play together."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:77
+#: lib/livedj_web/controllers/page_html.ex:19
 #, elixir-autogen, elixir-format
 msgid "Queue it up. Watch it together."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:78
+#: lib/livedj_web/controllers/page_html.ex:20
 #, elixir-autogen, elixir-format
 msgid "Watch YouTube together, in sync."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:71
+#: lib/livedj_web/controllers/page_html.ex:13
 #, elixir-autogen, elixir-format
 msgid "Your friends, your music, your rules."
 msgstr ""
 
-#: lib/livedj_web/controllers/page_html/home.html.heex:79
+#: lib/livedj_web/controllers/page_html.ex:21
 #, elixir-autogen, elixir-format
 msgid "Your living room, wherever your friends are."
 msgstr ""

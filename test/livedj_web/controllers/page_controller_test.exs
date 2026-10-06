@@ -9,4 +9,8 @@ defmodule LivedjWeb.PageControllerTest do
     assert html_response(conn, 200) =~
              gettext("Get started")
   end
+
+  test "headline rotator CSS matches the phrase count" do
+    assert length(LivedjWeb.PageHTML.headline_phrases()) == 10
+  end
 end

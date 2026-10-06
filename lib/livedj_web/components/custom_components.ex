@@ -105,13 +105,13 @@ defmodule LivedjWeb.CustomComponents do
 
   def version_pill(assigns) do
     ~H"""
-    <p class="
+    <span class="
       bg-brand/5 dark:bg-brand/100
       text-brand dark:text-white
-      rounded-full px-2 font-medium leading-6 text-xs
+      inline-block rounded-full px-2 font-medium leading-6 text-xs
     ">
       v{@version}
-    </p>
+    </span>
     """
   end
 
