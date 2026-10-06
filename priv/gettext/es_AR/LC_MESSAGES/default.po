@@ -780,7 +780,7 @@ msgstr "Noche de películas, sin la discusión de qué ver."
 #: lib/livedj_web/controllers/page_html/home.html.heex:72
 #, elixir-autogen, elixir-format
 msgid "Pass the aux. Everyone's watching."
-msgstr "Pasá el aux. Todos están mirando."
+msgstr "Tirá un tema. Todos miran."
 
 #: lib/livedj_web/controllers/page_html/home.html.heex:73
 #, elixir-autogen, elixir-format
