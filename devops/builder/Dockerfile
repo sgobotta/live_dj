@@ -77,6 +77,9 @@ RUN mix compile
 # step down so that `lib` is available.
 COPY assets assets
 
+# Install JS dependencies (e.g. @multiavatar/multiavatar) before bundling
+RUN npm ci --omit=dev --prefix assets
+
 # Compile assets
 RUN mix assets.deploy
 
