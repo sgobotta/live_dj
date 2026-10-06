@@ -20,13 +20,7 @@
       <a href="/">
         <.livedj_logo theme={@theme} />
       </a>
-      <.link
-        class="cursor-default"
-        target="_blank"
-        href={"https://github.com/sgobotta/live_dj/releases/tag/v#{Application.spec(:livedj, :vsn)}"}
-      >
-        <.version_pill version={Application.spec(:livedj, :vsn)} />
-      </.link>
+      <.version_pill version={Application.spec(:livedj, :vsn)} />
     </div>
     <div class="flex items-center justify-end gap-4">
       <div
